@@ -11,7 +11,8 @@
     "swagger-ui-watcher": "^2.1.11"
   },
   "scripts": {
-    "test": "openapi-examples-validator ./openapi.json --no-additional-properties",
-    "serve": "swagger-ui-watcher ./openapi.json"
+    "test": "openapi-examples-validator ./openapi.json --no-additional-properties && openapi-examples-validator -m tests.json ./openapi.json",
+    "serve": "swagger-ui-watcher ./openapi.json",
+    "bundle": "swagger-ui-watcher ./openapi.json --bundle=./bundle.json"
   }
 }
