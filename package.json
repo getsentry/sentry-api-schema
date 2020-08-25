@@ -1,0 +1,18 @@
+{
+  "name": "sentry-api-schema",
+  "version": "1.0.0",
+  "description": "Sentry API",
+  "repository": "git@github.com:getsentry/sentry-api-schema.git",
+  "author": "partners@sentry.io",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "openapi-examples-validator": "^4.0.0",
+    "swagger-ui-watcher": "^2.1.11"
+  },
+  "scripts": {
+    "test": "openapi-examples-validator ./openapi.json --no-additional-properties && openapi-examples-validator -m tests.json ./openapi.json",
+    "serve": "swagger-ui-watcher ./openapi.json",
+    "bundle": "swagger-ui-watcher ./openapi.json --bundle=./openapi-derefed.json"
+  }
+}
