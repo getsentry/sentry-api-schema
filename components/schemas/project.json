@@ -1,6 +1,7 @@
 {
   "Project": {
     "type": "object",
+    "required": ["avatar", "color", "dateCreated", "features", "firstEvent", "hasAccess", "id", "isBookmarked", "isInternal", "isMember", "isPublic", "name", "platform", "slug", "status"],
     "properties": {
       "avatar": {
         "$ref": "avatar.json#/Avatar"
@@ -71,20 +72,20 @@
       },
       "status": {
         "type": "string",
+        "enum": [
+          "active",
+          "disabled",
+          "pending_deletion",
+          "deletion_in_progress"
+        ],
         "example": "active"
       }
     }
   },
   "TeamProjects": {
     "type": "object",
+    "required": ["dateCreated", "features", "firstEvent", "hasAccess", "id", "isBookmarked", "isMember", "name", "platform", "slug", "team", "teams", "latestDeploys"],
     "properties": {
-      "avatar": {
-        "$ref": "avatar.json#/Avatar"
-      },
-      "color": {
-        "type": "string",
-        "example": "#bf5b3f"
-      },
       "dateCreated": {
         "type": "string",
         "format": "date-time",
@@ -121,17 +122,9 @@
         "type": "boolean",
         "example": false
       },
-      "isInternal": {
-        "type": "boolean",
-        "example": false
-      },
       "isMember": {
         "type": "boolean",
         "example": true
-      },
-      "isPublic": {
-        "type": "boolean",
-        "example": false
       },
       "name": {
         "type": "string",
@@ -144,10 +137,6 @@
       "slug": {
         "type": "string",
         "example": "prime-mover"
-      },
-      "status": {
-        "type": "string",
-        "example": "active"
       },
       "team": {
         "$ref": "team.json#/TeamMinimal"

@@ -1,6 +1,7 @@
 {
   "TeamMinimal": {
     "type": "object",
+    "required": ["id", "name", "slug"],
     "properties": {
       "id": {
         "type": "string"
@@ -15,6 +16,50 @@
   },
   "Team": {
     "type": "object",
+    "required": ["avatar", "dateCreated", "hasAccess", "id", "isMember", "isPending", "memberCount", "name", "slug"],
+    "properties": {
+      "avatar": {
+        "$ref": "avatar.json#/Avatar"
+      },
+      "dateCreated": {
+        "type": "string",
+        "format": "date-time",
+        "example": "2018-11-06T21:20:08.115Z"
+      },
+      "hasAccess": {
+        "type": "boolean",
+        "example": true
+      },
+      "id": {
+        "type": "string",
+        "example": "3"
+      },
+      "isMember": {
+        "type": "boolean",
+        "example": true
+      },
+      "isPending": {
+        "type": "boolean",
+        "example": false
+      },
+      "memberCount": {
+        "type": "integer",
+        "format": "int64",
+        "example": 1
+      },
+      "name": {
+        "type": "string",
+        "example": "Ancient Gabelers"
+      },
+      "slug": {
+        "type": "string",
+        "example": "ancient-gabelers"
+      }
+    }
+  },
+  "TeamWithOrganization": {
+    "type": "object",
+    "required": ["avatar", "dateCreated", "hasAccess", "id", "isMember", "isPending", "memberCount", "name", "slug", "organization"],
     "properties": {
       "avatar": {
         "$ref": "avatar.json#/Avatar"
@@ -60,6 +105,7 @@
   },
   "TeamWithProjects": {
     "type": "object",
+    "required": ["avatar", "dateCreated", "hasAccess", "id", "isMember", "isPending", "memberCount", "name", "projects", "slug"],
     "properties": {
       "avatar": {
         "$ref": "avatar.json#/Avatar"
@@ -89,9 +135,6 @@
         "type": "integer",
         "format": "int64",
         "example": 1
-      },
-      "organization": {
-        "$ref": "organization.json#/Organization"
       },
       "name": {
         "type": "string",
