@@ -1,53 +1,64 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "API Reference",
-    "description": "Sentry Public API",
-    "termsOfService": "http://sentry.io/terms/",
-    "contact": {
-      "email": "partners@sentry.io"
-    },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "version": "v0"
-  },
-  "servers": [
-    {
-      "url": "https://sentry.io/"
-    }
-  ],
-  "tags": [
-    {
-      "name": "Teams",
-      "description": "Endpoints for teams",
-      "externalDocs": {
-        "description": "Found an error? Let us know.",
-        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/teams/&template=api_error_template.md"
+   "openapi":"3.0.1",
+   "info":{
+      "title":"API Reference",
+      "description":"Sentry Public API",
+      "termsOfService":"http://sentry.io/terms/",
+      "contact":{
+         "email":"partners@sentry.io"
+      },
+      "license":{
+         "name":"Apache 2.0",
+         "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
+      },
+      "version":"v0"
+   },
+   "servers":[
+      {
+         "url":"https://sentry.io/"
       }
-    }
-  ],
-  "paths": {
-    "/api/0/organizations/{organization_slug}/teams/": {
-      "$ref": "paths/teams/index.json"
-    },
-    "/api/0/teams/{organization_slug}/{team_slug}/": {
-      "$ref": "paths/teams/by-slug.json"
-    },
-    "/api/0/teams/{organization_slug}/{team_slug}/projects/": {
-      "$ref": "paths/teams/projects.json"
-    },
-    "/api/0/teams/{organization_slug}/{team_slug}/stats/": {
-      "$ref": "paths/teams/stats.json"
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "auth_token": {
-        "type": "http",
-        "scheme": "bearer"
+   ],
+   "tags":[
+      {
+         "name":"Teams",
+         "description":"Endpoints for teams",
+         "externalDocs":{
+            "description":"Found an error? Let us know.",
+            "url":"https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/teams/&template=api_error_template.md"
+         }
+      },
+      {
+         "name":"Organizations",
+         "description":"Endpoints for organizations",
+         "externalDocs":{
+            "description":"Found an error? Let us know.",
+            "url":"https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/organizations/&template=api_error_template.md"
+         }
       }
-    }
-  }
+   ],
+   "paths":{
+      "/api/0/organizations/{organization_slug}/teams/":{
+         "$ref":"paths/teams/index.json"
+      },
+      "/api/0/teams/{organization_slug}/{team_slug}/":{
+         "$ref":"paths/teams/by-slug.json"
+      },
+      "/api/0/teams/{organization_slug}/{team_slug}/projects/":{
+         "$ref":"paths/teams/projects.json"
+      },
+      "/api/0/teams/{organization_slug}/{team_slug}/stats/":{
+         "$ref":"paths/teams/stats.json"
+      },
+      "/api/0/organizations/":{
+         "$ref":"paths/organizations/index.json"
+      }
+   },
+   "components":{
+      "securitySchemes":{
+         "auth_token":{
+            "type":"http",
+            "scheme":"bearer"
+         }
+      }
+   }
 }
