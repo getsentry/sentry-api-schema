@@ -15,7 +15,4 @@ a=$1
 xpath=${a%/*}
 filename=$(basename $a)
 
-echo $xpath
-echo $filename
-
 docker run -v $xpath:/usr/src/output -t openapispec3-converter /usr/src/output/$filename /usr/src/output/output.json
