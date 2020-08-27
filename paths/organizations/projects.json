@@ -1,0 +1,144 @@
+{
+   "get": {
+      "tags": [
+         "Organizations"
+      ],
+      "description": "Return a list of projects bound to a organization.",
+      "operationId": "List an Organization's Projects",
+      "parameters": [
+         {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the slug of the organization for which the projects should be listed.",
+            "required": true,
+            "schema": {
+               "type": "string"
+            }
+         }
+      ],
+      "responses": {
+         "200": {
+            "description": "Success.",
+            "content": {
+               "application/json": {
+                "schema": {
+                   "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "dateCreated": {
+                                "type": "string",
+                            },
+                            "firstEvent": {
+                                "type": "string",
+                                "nullable": true,
+                            },
+                            "hasAccess": {
+                                "type": "boolean",
+                            },
+                            "id": {
+                                "type": "string",
+                            },
+                            "isBookmarked": {
+                                "type": "boolean",
+                            },
+                            "isMember": {
+                                "type": "boolean",
+                            },
+                            "latestDeploys": {
+                                "type": "string",
+                                "nullable": true,
+                            },
+                            "name": {
+                                "type": "string",
+                            },
+                            "platform": {
+                                "type": "string",
+                                "nullable": true,
+                            },
+                            "platforms": {
+                                "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                            },
+                            "slug": {
+                                "type": "string"
+                            },
+                            "team": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "slug": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "teams": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "slug": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": [
+                  {
+                    "dateCreated": "2018-11-06T21:19:58.536Z", 
+                    "firstEvent": null, 
+                    "hasAccess": true, 
+                    "id": "3", 
+                    "isBookmarked": false, 
+                    "isMember": true, 
+                    "latestDeploys": null, 
+                    "name": "Prime Mover", 
+                    "platform": null, 
+                    "platforms": [], 
+                    "slug": "prime-mover", 
+                    "team": {
+                      "id": "2", 
+                      "name": "Powerful Abolitionist", 
+                      "slug": "powerful-abolitionist"
+                    }, 
+                    "teams": [
+                      {
+                        "id": "2", 
+                        "name": "Powerful Abolitionist", 
+                        "slug": "powerful-abolitionist"
+                      }
+                    ]
+                  }, 
+                ]
+               }
+            }
+         },
+         "403": {
+            "description": "Forbidden"
+         },
+      },
+      "security": [
+         {
+            "auth_token": [
+               "org: read"
+            ]
+         }
+      ]
+   }
+}
