@@ -1,0 +1,131 @@
+{
+   "get": {
+      "tags": [
+         "Organizations"
+      ],
+      "summary": "Caution\nThis endpoint may change in the future without  notice.",
+      "description": "Return a set of points representing a normalized timestamp and the number of events seen in the period.",
+      "operationId": "Retrieve Event Counts for an Organization",
+      "parameters": [
+         {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the slug of the organization the event ID should be looked up in.",
+            "required": true,
+            "schema": {
+               "type": "string"
+            }
+         },
+          {
+            "name": "stat",
+            "in": "query",
+            "description": "the name of the stat to query `(\"received\", \"rejected\", \"blacklisted\")`",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "received",
+                "rejected",
+                "blacklisted"
+              ]
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "A timestamp to set the start of the query in seconds since UNIX epoch.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "description": "A timestamp to set the end of the query in seconds since UNIX epoch.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "resolution",
+            "in": "query",
+            "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "10s",
+                "1h",
+                "1d"
+              ]
+            }
+          }
+      ],
+      "responses": {
+         "200": {
+            "description": "Success.",
+            "content": {
+               "application/json": {
+               "schema": {
+                 "type": "array",
+                 "example": [
+                  {
+                    "dateCreated": "2019-05-09T18:06:01.728Z", 
+                    "user": { 
+                      "username": "testEmail@test.com", 
+                      "lastLogin": "2019-09-16T02:56:06.806Z", 
+                      "isSuperuser": false, 
+                      "isManaged": false, 
+                      "lastActive": "2019-10-08T15:05:38.715Z", 
+                      "isStaff": false, 
+                      "id": "433307", 
+                      "isActive": true, 
+                      "has2fa": false, 
+                      "name": "OtherTest McTestuser", 
+                      "avatarUrl": "https://secure.gravatar.com/avatar/1eb103c0e899f372a85eb0a44f0a0f42?s=32&d=mm", 
+                      "dateJoined": "2019-05-09T18:06:01.443Z", 
+                      "emails": [
+                        { 
+                          "is_verified": true, 
+                          "id": "468229", 
+                          "email": "testEmail@test.com" 
+                        } 
+                      ], 
+                      "avatar": { 
+                        "avatarUuid": null, 
+                        "avatarType": "letter_avatar"
+                      }, 
+                      "hasPasswordAuth": false, 
+                      "email": "testEmail@test.com"  
+                    }, 
+                    "roleName": "Organization Owner", 
+                    "expired": false, 
+                    "id": "9376061", 
+                    "projects": ["buggy-sentry-project"], 
+                    "name": "OtherTest McTestuser", 
+                    "role": "owner", 
+                    "flags": { 
+                      "sso:linked": false, 
+                      "sso:invalid": false 
+                    }, 
+                    "email": "testEmail@test.com", 
+                    "pending": false 
+                  }
+                ]
+               }
+               }
+            }
+         },
+         "403": {
+            "description": "Forbidden"
+         },
+      },
+      "security": [
+         {
+            "auth_token": [
+               "org: read"
+            ]
+         }
+      ]
+   }
+}
