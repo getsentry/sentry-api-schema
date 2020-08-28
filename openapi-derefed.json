@@ -1720,104 +1720,135 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "example": [
-                    [
-                      1541455200,
-                      3302
-                    ],
-                    [
-                      1541458800,
-                      3832
-                    ],
-                    [
-                      1541462400,
-                      3669
-                    ],
-                    [
-                      1541466000,
-                      3533
-                    ],
-                    [
-                      1541469600,
-                      3499
-                    ],
-                    [
-                      1541473200,
-                      3201
-                    ],
-                    [
-                      1541476800,
-                      3769
-                    ],
-                    [
-                      1541480400,
-                      2706
-                    ],
-                    [
-                      1541484000,
-                      2698
-                    ],
-                    [
-                      1541487600,
-                      3747
-                    ],
-                    [
-                      1541491200,
-                      3261
-                    ],
-                    [
-                      1541494800,
-                      2860
-                    ],
-                    [
-                      1541498400,
-                      4350
-                    ],
-                    [
-                      1541502000,
-                      2924
-                    ],
-                    [
-                      1541505600,
-                      3389
-                    ],
-                    [
-                      1541509200,
-                      2931
-                    ],
-                    [
-                      1541512800,
-                      3132
-                    ],
-                    [
-                      1541516400,
-                      3213
-                    ],
-                    [
-                      1541520000,
-                      3650
-                    ],
-                    [
-                      1541523600,
-                      3096
-                    ],
-                    [
-                      1541527200,
-                      3845
-                    ],
-                    [
-                      1541530800,
-                      3545
-                    ],
-                    [
-                      1541534400,
-                      2880
-                    ],
-                    [
-                      1541538000,
-                      4057
+                  "items": {
+                    "properties": {
+                      "event": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "eventId": {
+                        "type": "string"
+                      },
+                      "groupId": {
+                        "type": "string"
+                      },
+                      "organizationSlug": {
+                        "type": "string"
+                      },
+                      "projectSlug": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "example": {
+                    "eventId": "1",
+                    "groupId": "1",
+                    "organizationSlug": "the-interstellar-jurisdiction",
+                    "projectSlug": "pump-station",
+                    "event": [
+                      [
+                        1541455200,
+                        8264
+                      ],
+                      [
+                        1541458800,
+                        6564
+                      ],
+                      [
+                        1541462400,
+                        8652
+                      ],
+                      [
+                        1541466000,
+                        7436
+                      ],
+                      [
+                        1541469600,
+                        8127
+                      ],
+                      [
+                        1541473200,
+                        7643
+                      ],
+                      [
+                        1541476800,
+                        6518
+                      ],
+                      [
+                        1541480400,
+                        6752
+                      ],
+                      [
+                        1541484000,
+                        6559
+                      ],
+                      [
+                        1541487600,
+                        7039
+                      ],
+                      [
+                        1541491200,
+                        7384
+                      ],
+                      [
+                        1541494800,
+                        6265
+                      ],
+                      [
+                        1541498400,
+                        8390
+                      ],
+                      [
+                        1541502000,
+                        6393
+                      ],
+                      [
+                        1541505600,
+                        7298
+                      ],
+                      [
+                        1541509200,
+                        7422
+                      ],
+                      [
+                        1541512800,
+                        5603
+                      ],
+                      [
+                        1541516400,
+                        6846
+                      ],
+                      [
+                        1541520000,
+                        8886
+                      ],
+                      [
+                        1541523600,
+                        6544
+                      ],
+                      [
+                        1541527200,
+                        8812
+                      ],
+                      [
+                        1541530800,
+                        8172
+                      ],
+                      [
+                        1541534400,
+                        5733
+                      ],
+                      [
+                        1541538000,
+                        9435
+                      ]
                     ]
-                  ]
+                  }
                 }
               }
             }
@@ -2009,7 +2040,8 @@
                       "type": "object"
                     },
                     "storeCrashReports": {
-                      "type": "boolean"
+                      "type": "integer",
+                      "format": "int64"
                     },
                     "teams": {
                       "type": "array",
@@ -2236,7 +2268,7 @@
                     "id": "active",
                     "name": "active"
                   },
-                  "storeCrashReports": false,
+                  "storeCrashReports": 0,
                   "teams": [
                     {
                       "avatar": {
@@ -2337,16 +2369,53 @@
                 "schema": {
                   "type": "object",
                   "required": [
+                    "access",
+                    "allowSharedIssues",
+                    "availableRoles",
                     "avatar",
+                    "dataScrubber",
+                    "dataScrubberDefaults",
                     "dateCreated",
+                    "defaultRole",
+                    "enhancedPrivacy",
+                    "experiments",
+                    "features",
                     "id",
+                    "isDefault",
                     "isEarlyAdopter",
                     "name",
+                    "onboardingTasks",
+                    "openMembership",
+                    "pendingAccessRequests",
+                    "projects",
+                    "quota",
                     "require2FA",
+                    "safeFields",
+                    "scrapeJavaScript",
+                    "scrubIPAddresses",
+                    "sensitiveFields",
                     "slug",
-                    "status"
+                    "status",
+                    "storeCrashReports",
+                    "teams",
+                    "trustedRelays"
                   ],
                   "properties": {
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "allowSharedIssues": {
+                      "type": "boolean"
+                    },
+                    "availableRoles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
                     "avatar": {
                       "type": "object",
                       "properties": {
@@ -2361,77 +2430,249 @@
                         }
                       }
                     },
+                    "dataScrubber": {
+                      "type": "boolean"
+                    },
+                    "dataScrubberDefaults": {
+                      "type": "boolean"
+                    },
                     "dateCreated": {
                       "type": "string",
-                      "format": "date-time",
-                      "example": "2018-11-06T21:20:08.115Z"
+                      "format": "date-time"
+                    },
+                    "defaultRole": {
+                      "type": "string"
+                    },
+                    "enhancedPrivacy": {
+                      "type": "boolean"
+                    },
+                    "experiments": {
+                      "type": "object"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     },
                     "id": {
-                      "type": "string",
-                      "example": "3"
+                      "type": "string"
+                    },
+                    "isDefault": {
+                      "type": "boolean"
                     },
                     "isEarlyAdopter": {
-                      "type": "boolean",
-                      "example": false
+                      "type": "boolean"
                     },
                     "name": {
-                      "type": "string",
-                      "example": "The Interstellar Jurisdiction"
+                      "type": "string"
+                    },
+                    "onboardingTasks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "openMembership": {
+                      "type": "boolean"
+                    },
+                    "pendingAccessRequests": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "quota": {
+                      "type": "object"
                     },
                     "require2FA": {
-                      "type": "boolean",
-                      "example": false
+                      "type": "boolean"
+                    },
+                    "safeFields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "scrapeJavaScript": {
+                      "type": "boolean"
+                    },
+                    "scrubIPAddresses": {
+                      "type": "boolean"
+                    },
+                    "sensitiveFields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     },
                     "slug": {
-                      "type": "string",
-                      "example": "the-interstellar-jurisdiction"
+                      "type": "string"
                     },
                     "status": {
-                      "type": "object",
-                      "required": [
-                        "id",
-                        "name"
-                      ],
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "example": "active"
-                        },
-                        "name": {
-                          "type": "string",
-                          "example": "active"
+                      "type": "object"
+                    },
+                    "storeCrashReports": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "avatar",
+                          "dateCreated",
+                          "hasAccess",
+                          "id",
+                          "isMember",
+                          "isPending",
+                          "memberCount",
+                          "name",
+                          "slug"
+                        ],
+                        "properties": {
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string",
+                                "example": "letter_avatar"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true,
+                                "example": null
+                              }
+                            }
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2018-11-06T21:20:08.115Z"
+                          },
+                          "hasAccess": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "3"
+                          },
+                          "isMember": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "isPending": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "memberCount": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Ancient Gabelers"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "example": "ancient-gabelers"
+                          }
                         }
+                      }
+                    },
+                    "trustedRelays": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
                       }
                     }
                   }
                 },
                 "example": {
+                  "access": [],
+                  "allowSharedIssues": true,
+                  "availableRoles": [
+                    {
+                      "id": "member",
+                      "name": "Member"
+                    },
+                    {
+                      "id": "admin",
+                      "name": "Admin"
+                    },
+                    {
+                      "id": "manager",
+                      "name": "Manager"
+                    },
+                    {
+                      "id": "owner",
+                      "name": "Owner"
+                    }
+                  ],
+                  "avatar": {
+                    "avatarType": "letter_avatar",
+                    "avatarUuid": null
+                  },
+                  "dataScrubber": false,
+                  "dataScrubberDefaults": false,
+                  "dateCreated": "2018-11-06T21:20:19.548Z",
+                  "defaultRole": "member",
+                  "enhancedPrivacy": false,
+                  "experiments": {},
+                  "features": [
+                    "new-teams",
+                    "shared-issues",
+                    "new-issue-ui",
+                    "repos",
+                    "open-membership",
+                    "invite-members",
+                    "sso-saml2",
+                    "sso-basic",
+                    "suggested-commits"
+                  ],
+                  "id": "3",
+                  "isDefault": false,
+                  "isEarlyAdopter": false,
+                  "name": "Impeccably Designated",
+                  "onboardingTasks": [],
+                  "openMembership": true,
+                  "pendingAccessRequests": 0,
+                  "projects": [],
+                  "quota": {
+                    "accountLimit": 0,
+                    "maxRate": 0,
+                    "maxRateInterval": 60,
+                    "projectLimit": 100
+                  },
+                  "require2FA": false,
+                  "safeFields": [],
+                  "scrapeJavaScript": true,
+                  "scrubIPAddresses": false,
+                  "sensitiveFields": [],
+                  "slug": "impeccably-designated",
                   "status": {
                     "id": "active",
                     "name": "active"
                   },
-                  "require2FA": false,
-                  "dateCreated": "2020-06-25T23:40:27.852927Z",
-                  "id": "412711",
-                  "isEarlyAdopter": false,
-                  "name": "helllboiii",
-                  "slug": "helllboiii",
-                  "avatar": {
-                    "avatarUuid": null,
-                    "avatarType": "letter_avatar"
-                  }
+                  "storeCrashReports": 0,
+                  "teams": [],
+                  "trustedRelays": []
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Input"
           },
           "403": {
             "description": "Forbidden"
           },
           "404": {
-            "description": "Team not found"
+            "description": "The requested resource does not exist"
           }
         },
         "security": [
@@ -2792,6 +3033,12 @@
               "application/json": {
                 "schema": {
                   "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
                   "example": [
                     [
                       1541455200,
@@ -2909,15 +3156,11 @@
     },
     "/api/0/organizations/{organization_slug}/users/": {
       "get": {
-        "403": {
-          "description": "Forbidden"
-        },
         "tags": [
           "Organizations"
         ],
-        "summary": "Caution\nThis endpoint may change in the future without  notice.",
-        "description": "Return a set of points representing a normalized timestamp and the number of events seen in the period.",
-        "operationId": "Retrieve Event Counts for an Organization",
+        "description": "Return a list of users that belong to a given organization.",
+        "operationId": "List an Organization's Users",
         "parameters": [
           {
             "name": "organization_slug",
@@ -2929,47 +3172,11 @@
             }
           },
           {
-            "name": "stat",
+            "name": "project",
             "in": "query",
-            "description": "the name of the stat to query `(\"received\", \"rejected\", \"blacklisted\")`",
+            "description": "restrict results to users who have access to a given project ID",
             "schema": {
-              "type": "string",
-              "enum": [
-                "received",
-                "rejected",
-                "blacklisted"
-              ]
-            }
-          },
-          {
-            "name": "since",
-            "in": "query",
-            "description": "A timestamp to set the start of the query in seconds since UNIX epoch.",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "until",
-            "in": "query",
-            "description": "A timestamp to set the end of the query in seconds since UNIX epoch.",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "resolution",
-            "in": "query",
-            "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "10s",
-                "1h",
-                "1d"
-              ]
+              "type": "string"
             }
           }
         ],
@@ -3101,10 +3308,10 @@
                       "flags": {
                         "type": "object",
                         "properties": {
-                          "sso:linked": {
+                          "sso: linked": {
                             "type": "boolean"
                           },
-                          "sso:invalid": {
+                          "sso: invalid": {
                             "type": "boolean"
                           }
                         }
@@ -3132,7 +3339,7 @@
                       "isActive": true,
                       "has2fa": false,
                       "name": "OtherTest McTestuser",
-                      "avatarUrl": "https://secure.gravatar.com/avatar/1eb103c0e899f372a85eb0a44f0a0f42?s=32&d=mm",
+                      "avatarUrl": "https:  //secure.gravatar.com/avatar/1eb103c0e899f372a85eb0a44f0a0f42?s=32&d=mm",
                       "dateJoined": "2019-05-09T18:06:01.443Z",
                       "emails": [
                         {
@@ -3157,8 +3364,8 @@
                     "name": "OtherTest McTestuser",
                     "role": "owner",
                     "flags": {
-                      "sso:linked": false,
-                      "sso:invalid": false
+                      "sso: linked": false,
+                      "sso: invalid": false
                     },
                     "email": "testEmail@test.com",
                     "pending": false
@@ -3166,16 +3373,19 @@
                 ]
               }
             }
+          },
+          "403": {
+            "description": "Forbidden"
           }
-        }
-      },
-      "security": [
-        {
-          "auth_token": [
-            "org: read"
-          ]
-        }
-      ]
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
     },
     "/api/0/organizations/{organization_slug}/shortids/{short_id}/": {
       "get": {
@@ -3187,16 +3397,18 @@
         "parameters": [
           {
             "name": "organization_slug",
-            "in": "query",
+            "in": "path",
             "description": "the slug of the organization the short ID should be looked up in.",
+            "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "short_id",
-            "in": "query",
+            "in": "path",
             "description": "the short ID to look up.",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3266,7 +3478,10 @@
                           "type": "string"
                         },
                         "annotations": {
-                          "type": "array"
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         },
                         "metadata": {
                           "type": "object",
