@@ -175,7 +175,7 @@
                          "id": "active", 
                          "name": "active"
                        }, 
-                       "storeCrashReports": false, 
+                       "storeCrashReports": 0, 
                        "teams": [
                          {
                            "avatar": {
@@ -273,35 +273,86 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "../../components/schemas/organization.json#/Organization"
+              "$ref": "../../components/schemas/organization-details.json#/OrganizationDetails"
             },
             "example": {
-              "status": {
-                  "id": "active",
+                "access": [], 
+                "allowSharedIssues": true, 
+                "availableRoles": [
+                  {
+                    "id": "member", 
+                    "name": "Member"
+                  }, 
+                  {
+                    "id": "admin", 
+                    "name": "Admin"
+                  }, 
+                  {
+                    "id": "manager", 
+                    "name": "Manager"
+                  }, 
+                  {
+                    "id": "owner", 
+                    "name": "Owner"
+                  }
+                ], 
+                "avatar": {
+                  "avatarType": "letter_avatar", 
+                  "avatarUuid": null
+                }, 
+                "dataScrubber": false, 
+                "dataScrubberDefaults": false, 
+                "dateCreated": "2018-11-06T21:20:19.548Z", 
+                "defaultRole": "member", 
+                "enhancedPrivacy": false, 
+                "experiments": {}, 
+                "features": [
+                  "new-teams", 
+                  "shared-issues", 
+                  "new-issue-ui", 
+                  "repos", 
+                  "open-membership", 
+                  "invite-members", 
+                  "sso-saml2", 
+                  "sso-basic", 
+                  "suggested-commits"
+                ], 
+                "id": "3", 
+                "isDefault": false, 
+                "isEarlyAdopter": false, 
+                "name": "Impeccably Designated", 
+                "onboardingTasks": [], 
+                "openMembership": true, 
+                "pendingAccessRequests": 0, 
+                "projects": [], 
+                "quota": {
+                  "accountLimit": 0, 
+                  "maxRate": 0, 
+                  "maxRateInterval": 60, 
+                  "projectLimit": 100
+                }, 
+                "require2FA": false, 
+                "safeFields": [], 
+                "scrapeJavaScript": true, 
+                "scrubIPAddresses": false, 
+                "sensitiveFields": [], 
+                "slug": "impeccably-designated", 
+                "status": {
+                  "id": "active", 
                   "name": "active"
-              },
-              "require2FA": false,
-              "dateCreated": "2020-06-25T23:40:27.852927Z",
-              "id": "412711",
-              "isEarlyAdopter": false,
-              "name": "helllboiii",
-              "slug": "helllboiii",
-              "avatar": {
-                  "avatarUuid": null,
-                  "avatarType": "letter_avatar"
-              },
-          }
+                }, 
+                "storeCrashReports": 0, 
+                "teams": [], 
+                "trustedRelays": []
+              }
           }
         }
-      },
-      "400": {
-        "description": "Bad Input"
       },
       "403": {
         "description": "Forbidden"
       },
       "404": {
-        "description": "Team not found"
+        "description": "The requested resource does not exist"
       }
     },
     "security": [{
