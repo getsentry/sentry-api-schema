@@ -8,16 +8,18 @@
       "parameters": [
          {
             "name": "organization_slug",
-            "in": "query",
+            "in": "path",
             "description": "the slug of the organization the short ID should be looked up in.",
+            "required": true,
             "schema": {
                "type": "string"
             }
          },
          {
             "name": "short_id",
-            "in": "query",
+            "in": "path",
             "description": "the short ID to look up.",
+            "required": true,
             "schema": {
                "type": "string"
             }
@@ -87,7 +89,10 @@
                                       "type": "string"
                                   },
                                   "annotations": {
-                                      "type": "array"
+                                      "type": "array",
+                                       "items": {
+                                         "type": "string"
+                                        }, 
                                   },
                                   "metadata": {
                                       "type": "object",
