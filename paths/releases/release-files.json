@@ -1,0 +1,101 @@
+{
+    "get": {
+      "tags": [
+        "Releases"
+      ],
+      "description": "Return a list of files for a given release.",
+      "operationId": "List an Organization's Release Files",
+      "parameters": [{
+          "name": "organization_slug",
+          "in": "path",
+          "description": "The slug of the organization.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "version",
+          "in": "path",
+          "description": "The version identifier of the release.",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success."
+        },
+        "403": {
+          "description": "Forbidden"
+        }
+      },
+      "security": [{
+        "auth_token": ["project:releases"]
+      }]
+    },
+    "post": {
+        "tags": [
+            "Releases"
+        ],
+        "description": "Upload a new organization release file.",
+        "operationId": "Upload a New Organization Release File.",
+        "parameters": [{
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "The version identifier of the release.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "required": ["version", "projects"],
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name (full path) of the file."
+                            },
+                            "file": {
+                                "type": "string",
+                                "format": "binary",
+                                "description": "The multipart encoded file."
+                            },
+                            "dist": {
+                                "type": "object",
+                                "description": "The name of the dist"
+                            },
+                            "header": {
+                                "type": "string",
+                                "description": "This parameter can be supplied multiple times to attach headers to the file. Each header is a string in the format `key:value`. For instance it can be used to define a content type."
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "201": {
+                "description": "Success."
+            }
+        },
+        "security": [{
+            "auth_token": ["project:releases"]
+        }]
+    }
+  }
+  

@@ -1,0 +1,102 @@
+{
+    "get": {
+      "tags": [
+        "Releases"
+      ],
+      "description": "Retrieve a file for a given release.",
+      "operationId": "Retrieve an Organization Release's File",
+      "parameters": [{
+          "name": "organization_slug",
+          "in": "path",
+          "description": "The slug of the organization.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "version",
+          "in": "path",
+          "description": "The version identifier of the release.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "file_id",
+          "in": "path",
+          "string": "The ID of the file to retrieve."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success."
+        },
+        "403": {
+          "description": "Forbidden"
+        }
+      },
+      "security": [{
+        "auth_token": ["project:releases"]
+      }]
+    },
+    "put": {
+        "tags": [
+            "Releases"
+        ],
+        "description": "Upload an organization release file.",
+        "operationId": "Update an Organization Release File.",
+        "parameters": [{
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "The version identifier of the release.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "file_id",
+            "in": "path",
+            "string": "The ID of the file to retrieve."
+          }
+        ],
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "required": ["version", "projects"],
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The new name (full path) of the file."
+                            },
+                            "dist": {
+                                "type": "object",
+                                "description": "The new name of the dist"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "201": {
+                "description": "Success."
+            }
+        },
+        "security": [{
+            "auth_token": ["project:releases"]
+        }]
+    }
+  }
+  
