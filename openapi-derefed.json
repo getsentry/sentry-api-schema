@@ -1723,13 +1723,7 @@
                   "items": {
                     "properties": {
                       "event": {
-                        "type": "array",
-                        "items": {
-                          "type": "array",
-                          "items": {
-                            "type": "integer"
-                          }
-                        }
+                        "type": "object"
                       },
                       "eventId": {
                         "type": "string"
@@ -1750,104 +1744,7 @@
                     "groupId": "1",
                     "organizationSlug": "the-interstellar-jurisdiction",
                     "projectSlug": "pump-station",
-                    "event": [
-                      [
-                        1541455200,
-                        8264
-                      ],
-                      [
-                        1541458800,
-                        6564
-                      ],
-                      [
-                        1541462400,
-                        8652
-                      ],
-                      [
-                        1541466000,
-                        7436
-                      ],
-                      [
-                        1541469600,
-                        8127
-                      ],
-                      [
-                        1541473200,
-                        7643
-                      ],
-                      [
-                        1541476800,
-                        6518
-                      ],
-                      [
-                        1541480400,
-                        6752
-                      ],
-                      [
-                        1541484000,
-                        6559
-                      ],
-                      [
-                        1541487600,
-                        7039
-                      ],
-                      [
-                        1541491200,
-                        7384
-                      ],
-                      [
-                        1541494800,
-                        6265
-                      ],
-                      [
-                        1541498400,
-                        8390
-                      ],
-                      [
-                        1541502000,
-                        6393
-                      ],
-                      [
-                        1541505600,
-                        7298
-                      ],
-                      [
-                        1541509200,
-                        7422
-                      ],
-                      [
-                        1541512800,
-                        5603
-                      ],
-                      [
-                        1541516400,
-                        6846
-                      ],
-                      [
-                        1541520000,
-                        8886
-                      ],
-                      [
-                        1541523600,
-                        6544
-                      ],
-                      [
-                        1541527200,
-                        8812
-                      ],
-                      [
-                        1541530800,
-                        8172
-                      ],
-                      [
-                        1541534400,
-                        5733
-                      ],
-                      [
-                        1541538000,
-                        9435
-                      ]
-                    ]
+                    "event": {}
                   }
                 }
               }
@@ -1936,7 +1833,15 @@
                     "availableRoles": {
                       "type": "array",
                       "items": {
-                        "type": "object"
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        }
                       }
                     },
                     "avatar": {
@@ -2006,7 +1911,94 @@
                     "projects": {
                       "type": "array",
                       "items": {
-                        "type": "object"
+                        "type": "object",
+                        "required": [
+                          "dateCreated",
+                          "firstEvent",
+                          "hasAccess",
+                          "id",
+                          "isBookmarked",
+                          "isMember",
+                          "latestDeploys",
+                          "name",
+                          "platform",
+                          "platforms",
+                          "slug",
+                          "team",
+                          "teams"
+                        ],
+                        "properties": {
+                          "dateCreated": {
+                            "type": "string"
+                          },
+                          "firstEvent": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "hasAccess": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "isBookmarked": {
+                            "type": "boolean"
+                          },
+                          "isMember": {
+                            "type": "boolean"
+                          },
+                          "latestDeploys": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "platforms": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "team": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "teams": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     },
                     "quota": {
@@ -2037,7 +2029,15 @@
                       "type": "string"
                     },
                     "status": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "storeCrashReports": {
                       "type": "integer",
@@ -2413,7 +2413,15 @@
                     "availableRoles": {
                       "type": "array",
                       "items": {
-                        "type": "object"
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        }
                       }
                     },
                     "avatar": {
@@ -2483,7 +2491,94 @@
                     "projects": {
                       "type": "array",
                       "items": {
-                        "type": "object"
+                        "type": "object",
+                        "required": [
+                          "dateCreated",
+                          "firstEvent",
+                          "hasAccess",
+                          "id",
+                          "isBookmarked",
+                          "isMember",
+                          "latestDeploys",
+                          "name",
+                          "platform",
+                          "platforms",
+                          "slug",
+                          "team",
+                          "teams"
+                        ],
+                        "properties": {
+                          "dateCreated": {
+                            "type": "string"
+                          },
+                          "firstEvent": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "hasAccess": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "isBookmarked": {
+                            "type": "boolean"
+                          },
+                          "isMember": {
+                            "type": "boolean"
+                          },
+                          "latestDeploys": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "platforms": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "team": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "teams": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     },
                     "quota": {
@@ -2514,7 +2609,15 @@
                       "type": "string"
                     },
                     "status": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "storeCrashReports": {
                       "type": "integer",
@@ -3202,21 +3305,21 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "required": [
-                    "dateCreated",
-                    "user",
-                    "roleName",
-                    "expired",
-                    "id",
-                    "projects",
-                    "name",
-                    "role",
-                    "flags",
-                    "email",
-                    "pending"
-                  ],
                   "items": {
                     "type": "object",
+                    "required": [
+                      "dateCreated",
+                      "user",
+                      "roleName",
+                      "expired",
+                      "id",
+                      "projects",
+                      "name",
+                      "role",
+                      "flags",
+                      "email",
+                      "pending"
+                    ],
                     "properties": {
                       "dateCreated": {
                         "type": "string"
@@ -3336,7 +3439,14 @@
                         "type": "string"
                       },
                       "role": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                          "owner",
+                          "manager",
+                          "admin",
+                          "member",
+                          "billing"
+                        ]
                       },
                       "flags": {
                         "type": "object",
@@ -3537,7 +3647,12 @@
                           }
                         },
                         "status": {
-                          "type": "string"
+                          "type": "string",
+                          "enum": [
+                            "resolved",
+                            "unresolved",
+                            "ignored"
+                          ]
                         },
                         "subscriptionDetails": {
                           "type": "object",
@@ -3582,9 +3697,6 @@
                         "project": {
                           "type": "object",
                           "properties": {
-                            "platform": {
-                              "type": "string"
-                            },
                             "slug": {
                               "type": "string"
                             },

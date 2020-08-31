@@ -1,9 +1,9 @@
 {
   "Users": {
       "type": "array",
-      "required": ["dateCreated", "user", "roleName", "expired", "id", "projects", "name", "role", "flags", "email", "pending"],
       "items": {
           "type": "object",
+          "required": ["dateCreated", "user", "roleName", "expired", "id", "projects", "name", "role", "flags", "email", "pending"],
           "properties": {
               "dateCreated": {
                   "type": "string"
@@ -30,7 +30,14 @@
                   "type": "string"
               },
               "role": {
-                  "type": "string"
+                  "type": "string",
+                  "enum": [
+                    "owner",
+                    "manager",
+                    "admin",
+                    "member",
+                    "billing"
+                  ],
               },
               "flags": {
                   "type": "object",
