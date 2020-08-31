@@ -9,71 +9,7 @@
                   "type": "string"
               },
               "user": {
-                  "type": "object",
-                  "properties": {
-                      "username": {
-                          "type": "string"
-                      },
-                      "lastLogin": {
-                          "type": "string"
-                      },
-                      "isSuperuser": {
-                          "type": "boolean"
-                      },
-                      "isManaged": {
-                          "type": "boolean"
-                      },
-                      "lastActive": {
-                          "type": "string"
-                      },
-                      "isStaff": {
-                          "type": "boolean"
-                      },
-                      "id": {
-                          "type": "string"
-                      },
-                      "isActive": {
-                          "type": "boolean"
-                      },
-                      "has2fa": {
-                          "type": "boolean"
-                      },
-                      "name": {
-                          "type": "string"
-                      },
-                      "avatarUrl": {
-                          "type": "string"
-                      },
-                      "dateJoined": {
-                          "type": "string"
-                      },
-                      "emails": {
-                          "type": "array",
-                          "items": {
-                              "type": "object",
-                              "properties": {
-                                  "is_verified": {
-                                      "type": "boolean"
-                                  },
-                                  "id": {
-                                      "type": "string"
-                                  },
-                                  "email": {
-                                      "type": "string"
-                                  }
-                              }
-                          }
-                      },
-                      "avatar": {
-                        "$ref": "avatar.json#/Avatar"
-                      },
-                      "hasPasswordAuth": {
-                          "type": "boolean"
-                      },
-                      "email": {
-                          "type": "string"
-                      }
-                  }
+                "$ref": "users.json#/User"
               },
               "roleName": {
                   "type": "string"
@@ -115,5 +51,73 @@
               }
           }
       }
-  }
+  },
+  "User": {
+      "type": "object",
+      "required": ["username", "lastLogin", "isSuperuser", "isManaged", "lastActive", "isStaff", "id", "isActive", "has2fa", "name", "avatarUrl", "dateJoined", "emails", "avatar", "hasPasswordAuth", "email"],
+      "properties": {
+          "username": {
+              "type": "string"
+          },
+          "lastLogin": {
+              "type": "string"
+          },
+          "isSuperuser": {
+              "type": "boolean"
+          },
+          "isManaged": {
+              "type": "boolean"
+          },
+          "lastActive": {
+              "type": "string"
+          },
+          "isStaff": {
+              "type": "boolean"
+          },
+          "id": {
+              "type": "string"
+          },
+          "isActive": {
+              "type": "boolean"
+          },
+          "has2fa": {
+              "type": "boolean"
+          },
+          "name": {
+              "type": "string"
+          },
+          "avatarUrl": {
+              "type": "string"
+          },
+          "dateJoined": {
+              "type": "string"
+          },
+          "emails": {
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "is_verified": {
+                          "type": "boolean"
+                      },
+                      "id": {
+                          "type": "string"
+                      },
+                      "email": {
+                          "type": "string"
+                      }
+                  }
+              }
+          },
+          "avatar": {
+            "$ref": "avatar.json#/Avatar"
+          },
+          "hasPasswordAuth": {
+              "type": "boolean"
+          },
+          "email": {
+              "type": "string"
+          }
+      }
+  },
 }
