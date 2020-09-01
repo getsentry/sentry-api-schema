@@ -4,11 +4,21 @@
         "Releases"
       ],
       "description": "Retrieve a file for a given release.",
-      "operationId": "Retrieve an Organization Release's File",
-      "parameters": [{
+      "operationId": "Retrieve an Project Release's File",
+      "parameters": [
+        {
           "name": "organization_slug",
           "in": "path",
           "description": "The slug of the organization.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "project_slug",
+          "in": "path",
+          "description": "The slug of the project.",
           "required": true,
           "schema": {
             "type": "string"
@@ -62,8 +72,8 @@
         "tags": [
             "Releases"
         ],
-        "description": "Upload an organization release file.",
-        "operationId": "Update an Organization Release File.",
+        "description": "Upload a project release file.",
+        "operationId": "Update a Project Release File.",
         "parameters": [{
             "name": "organization_slug",
             "in": "path",
@@ -73,6 +83,15 @@
               "type": "string"
             }
           },
+          {
+            "name": "project_slug",
+            "in": "path",
+            "description": "The slug of the project.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+         },
           {
             "name": "version",
             "in": "path",
@@ -139,7 +158,7 @@
         "Releases"
       ],
       "description": "Delete a file for a given release.",
-      "operationId": "Delete an Organization Release's File",
+      "operationId": "Delete an Project Release's File",
       "parameters": [{
           "name": "organization_slug",
           "in": "path",
@@ -149,6 +168,15 @@
             "type": "string"
           }
         },
+        {
+            "name": "project_slug",
+            "in": "path",
+            "description": "The slug of the project.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+         },
         {
           "name": "version",
           "in": "path",
