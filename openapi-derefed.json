@@ -26,6 +26,14 @@
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/teams/&template=api_error_template.md"
       }
+    },
+    {
+      "name": "Organizations",
+      "description": "Endpoints for organizations",
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/organizations/&template=api_error_template.md"
+      }
     }
   ],
   "paths": {
@@ -1543,6 +1551,2299 @@
           {
             "auth_token": [
               "team:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "Return a list of organizations available to the authenticated session.  This is particularly useful for requests with an user bound context.  For API key based requests this will only return the organization that belongs to the key.",
+        "operationId": "List your Organizations",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "query",
+            "description": "restrict results to organizations in which you are an organization owner",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "avatar",
+                      "dateCreated",
+                      "id",
+                      "isEarlyAdopter",
+                      "name",
+                      "require2FA",
+                      "slug",
+                      "status"
+                    ],
+                    "properties": {
+                      "avatar": {
+                        "type": "object",
+                        "properties": {
+                          "avatarType": {
+                            "type": "string",
+                            "example": "letter_avatar"
+                          },
+                          "avatarUuid": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": null
+                          }
+                        }
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2018-11-06T21:20:08.115Z"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "3"
+                      },
+                      "isEarlyAdopter": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "The Interstellar Jurisdiction"
+                      },
+                      "require2FA": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "slug": {
+                        "type": "string",
+                        "example": "the-interstellar-jurisdiction"
+                      },
+                      "status": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "active"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "active"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "avatar": {
+                      "avatarType": "letter_avatar",
+                      "avatarUuid": null
+                    },
+                    "dateCreated": "2018-11-06T21:19:55.101Z",
+                    "id": "2",
+                    "isEarlyAdopter": false,
+                    "name": "The Interstellar Jurisdiction",
+                    "require2FA": false,
+                    "slug": "the-interstellar-jurisdiction",
+                    "status": {
+                      "id": "active",
+                      "name": "active"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/eventids/{event_id}/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "This resolves an event ID to the project slug and internal issue ID and internal event ID.",
+        "operationId": "Resolve an Event ID",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the slug of the organization the event ID should be looked up in.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "the event ID to look up.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "event",
+                    "eventId",
+                    "groupId",
+                    "organizationSlug",
+                    "projectSlug"
+                  ],
+                  "properties": {
+                    "event": {
+                      "type": "object"
+                    },
+                    "eventId": {
+                      "type": "string"
+                    },
+                    "groupId": {
+                      "type": "string"
+                    },
+                    "organizationSlug": {
+                      "type": "string"
+                    },
+                    "projectSlug": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "eventId": "1",
+                  "groupId": "1",
+                  "organizationSlug": "the-interstellar-jurisdiction",
+                  "projectSlug": "pump-station",
+                  "event": {}
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "Return details on an individual organization including various details such as membership access, features, and teams.",
+        "operationId": "Retrieve an Organization",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the slug of the organization to look up.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "access",
+                    "allowSharedIssues",
+                    "availableRoles",
+                    "avatar",
+                    "dataScrubber",
+                    "dataScrubberDefaults",
+                    "dateCreated",
+                    "defaultRole",
+                    "enhancedPrivacy",
+                    "experiments",
+                    "features",
+                    "id",
+                    "isDefault",
+                    "isEarlyAdopter",
+                    "name",
+                    "onboardingTasks",
+                    "openMembership",
+                    "pendingAccessRequests",
+                    "projects",
+                    "quota",
+                    "require2FA",
+                    "safeFields",
+                    "scrapeJavaScript",
+                    "scrubIPAddresses",
+                    "sensitiveFields",
+                    "slug",
+                    "status",
+                    "storeCrashReports",
+                    "teams",
+                    "trustedRelays"
+                  ],
+                  "properties": {
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "allowSharedIssues": {
+                      "type": "boolean"
+                    },
+                    "availableRoles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string",
+                          "example": "letter_avatar"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        }
+                      }
+                    },
+                    "dataScrubber": {
+                      "type": "boolean"
+                    },
+                    "dataScrubberDefaults": {
+                      "type": "boolean"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "defaultRole": {
+                      "type": "string"
+                    },
+                    "enhancedPrivacy": {
+                      "type": "boolean"
+                    },
+                    "experiments": {
+                      "type": "object"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "isDefault": {
+                      "type": "boolean"
+                    },
+                    "isEarlyAdopter": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "onboardingTasks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "openMembership": {
+                      "type": "boolean"
+                    },
+                    "pendingAccessRequests": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "dateCreated",
+                          "firstEvent",
+                          "hasAccess",
+                          "id",
+                          "isBookmarked",
+                          "isMember",
+                          "latestDeploys",
+                          "name",
+                          "platform",
+                          "platforms",
+                          "slug",
+                          "team",
+                          "teams"
+                        ],
+                        "properties": {
+                          "dateCreated": {
+                            "type": "string"
+                          },
+                          "firstEvent": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "hasAccess": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "isBookmarked": {
+                            "type": "boolean"
+                          },
+                          "isMember": {
+                            "type": "boolean"
+                          },
+                          "latestDeploys": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "platforms": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "team": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "name",
+                              "slug"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "teams": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "id",
+                                "name",
+                                "slug"
+                              ],
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "quota": {
+                      "type": "object"
+                    },
+                    "require2FA": {
+                      "type": "boolean"
+                    },
+                    "safeFields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "scrapeJavaScript": {
+                      "type": "boolean"
+                    },
+                    "scrubIPAddresses": {
+                      "type": "boolean"
+                    },
+                    "sensitiveFields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "storeCrashReports": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "avatar",
+                          "dateCreated",
+                          "hasAccess",
+                          "id",
+                          "isMember",
+                          "isPending",
+                          "memberCount",
+                          "name",
+                          "slug"
+                        ],
+                        "properties": {
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string",
+                                "example": "letter_avatar"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true,
+                                "example": null
+                              }
+                            }
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2018-11-06T21:20:08.115Z"
+                          },
+                          "hasAccess": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "3"
+                          },
+                          "isMember": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "isPending": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "memberCount": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Ancient Gabelers"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "example": "ancient-gabelers"
+                          }
+                        }
+                      }
+                    },
+                    "trustedRelays": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "access": [],
+                  "allowSharedIssues": true,
+                  "availableRoles": [
+                    {
+                      "id": "member",
+                      "name": "Member"
+                    },
+                    {
+                      "id": "admin",
+                      "name": "Admin"
+                    },
+                    {
+                      "id": "manager",
+                      "name": "Manager"
+                    },
+                    {
+                      "id": "owner",
+                      "name": "Owner"
+                    }
+                  ],
+                  "avatar": {
+                    "avatarType": "letter_avatar",
+                    "avatarUuid": null
+                  },
+                  "dataScrubber": false,
+                  "dataScrubberDefaults": false,
+                  "dateCreated": "2018-11-06T21:19:55.101Z",
+                  "defaultRole": "member",
+                  "enhancedPrivacy": false,
+                  "experiments": {},
+                  "features": [
+                    "new-teams",
+                    "shared-issues",
+                    "new-issue-ui",
+                    "repos",
+                    "open-membership",
+                    "invite-members",
+                    "sso-saml2",
+                    "sso-basic",
+                    "suggested-commits"
+                  ],
+                  "id": "2",
+                  "isDefault": false,
+                  "isEarlyAdopter": false,
+                  "name": "The Interstellar Jurisdiction",
+                  "onboardingTasks": [
+                    {
+                      "data": {},
+                      "dateCompleted": "2018-11-06T21:20:08.089Z",
+                      "status": "complete",
+                      "task": 1,
+                      "user": ""
+                    }
+                  ],
+                  "openMembership": true,
+                  "pendingAccessRequests": 0,
+                  "projects": [
+                    {
+                      "dateCreated": "2018-11-06T21:19:58.536Z",
+                      "firstEvent": null,
+                      "hasAccess": true,
+                      "id": "3",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "latestDeploys": null,
+                      "name": "Prime Mover",
+                      "platform": null,
+                      "platforms": [],
+                      "slug": "prime-mover",
+                      "team": {
+                        "id": "2",
+                        "name": "Powerful Abolitionist",
+                        "slug": "powerful-abolitionist"
+                      },
+                      "teams": [
+                        {
+                          "id": "2",
+                          "name": "Powerful Abolitionist",
+                          "slug": "powerful-abolitionist"
+                        }
+                      ]
+                    },
+                    {
+                      "dateCreated": "2018-11-06T21:19:55.121Z",
+                      "firstEvent": null,
+                      "hasAccess": true,
+                      "id": "2",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "latestDeploys": null,
+                      "name": "Pump Station",
+                      "platform": null,
+                      "platforms": [],
+                      "slug": "pump-station",
+                      "team": {
+                        "id": "2",
+                        "name": "Powerful Abolitionist",
+                        "slug": "powerful-abolitionist"
+                      },
+                      "teams": [
+                        {
+                          "id": "2",
+                          "name": "Powerful Abolitionist",
+                          "slug": "powerful-abolitionist"
+                        }
+                      ]
+                    },
+                    {
+                      "dateCreated": "2018-11-06T21:20:08.064Z",
+                      "firstEvent": null,
+                      "hasAccess": true,
+                      "id": "4",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "latestDeploys": null,
+                      "name": "The Spoiled Yoghurt",
+                      "platform": null,
+                      "platforms": [],
+                      "slug": "the-spoiled-yoghurt",
+                      "team": {
+                        "id": "2",
+                        "name": "Powerful Abolitionist",
+                        "slug": "powerful-abolitionist"
+                      },
+                      "teams": [
+                        {
+                          "id": "2",
+                          "name": "Powerful Abolitionist",
+                          "slug": "powerful-abolitionist"
+                        }
+                      ]
+                    }
+                  ],
+                  "quota": {
+                    "accountLimit": 0,
+                    "maxRate": 0,
+                    "maxRateInterval": 60,
+                    "projectLimit": 100
+                  },
+                  "require2FA": false,
+                  "safeFields": [],
+                  "scrapeJavaScript": true,
+                  "scrubIPAddresses": false,
+                  "sensitiveFields": [],
+                  "slug": "the-interstellar-jurisdiction",
+                  "status": {
+                    "id": "active",
+                    "name": "active"
+                  },
+                  "storeCrashReports": 0,
+                  "teams": [
+                    {
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      },
+                      "dateCreated": "2018-11-06T21:20:08.115Z",
+                      "hasAccess": true,
+                      "id": "3",
+                      "isMember": true,
+                      "isPending": false,
+                      "memberCount": 1,
+                      "name": "Ancient Gabelers",
+                      "slug": "ancient-gabelers"
+                    },
+                    {
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      },
+                      "dateCreated": "2018-11-06T21:19:55.114Z",
+                      "hasAccess": true,
+                      "id": "2",
+                      "isMember": true,
+                      "isPending": false,
+                      "memberCount": 1,
+                      "name": "Powerful Abolitionist",
+                      "slug": "powerful-abolitionist"
+                    }
+                  ],
+                  "trustedRelays": []
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The requested resource does not exist"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "Update various attributes and configurable settings for the given organization.",
+        "operationId": "Update an Organization",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "an optional new name for the organization.",
+                    "example": "Impeccably Designated"
+                  },
+                  "slug": {
+                    "type": "string",
+                    "description": "an optional new slug for the organization. Needs to be available and unique.",
+                    "example": "impeccably-designated"
+                  }
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "access",
+                    "allowSharedIssues",
+                    "availableRoles",
+                    "avatar",
+                    "dataScrubber",
+                    "dataScrubberDefaults",
+                    "dateCreated",
+                    "defaultRole",
+                    "enhancedPrivacy",
+                    "experiments",
+                    "features",
+                    "id",
+                    "isDefault",
+                    "isEarlyAdopter",
+                    "name",
+                    "onboardingTasks",
+                    "openMembership",
+                    "pendingAccessRequests",
+                    "projects",
+                    "quota",
+                    "require2FA",
+                    "safeFields",
+                    "scrapeJavaScript",
+                    "scrubIPAddresses",
+                    "sensitiveFields",
+                    "slug",
+                    "status",
+                    "storeCrashReports",
+                    "teams",
+                    "trustedRelays"
+                  ],
+                  "properties": {
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "allowSharedIssues": {
+                      "type": "boolean"
+                    },
+                    "availableRoles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string",
+                          "example": "letter_avatar"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        }
+                      }
+                    },
+                    "dataScrubber": {
+                      "type": "boolean"
+                    },
+                    "dataScrubberDefaults": {
+                      "type": "boolean"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "defaultRole": {
+                      "type": "string"
+                    },
+                    "enhancedPrivacy": {
+                      "type": "boolean"
+                    },
+                    "experiments": {
+                      "type": "object"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "isDefault": {
+                      "type": "boolean"
+                    },
+                    "isEarlyAdopter": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "onboardingTasks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "openMembership": {
+                      "type": "boolean"
+                    },
+                    "pendingAccessRequests": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "dateCreated",
+                          "firstEvent",
+                          "hasAccess",
+                          "id",
+                          "isBookmarked",
+                          "isMember",
+                          "latestDeploys",
+                          "name",
+                          "platform",
+                          "platforms",
+                          "slug",
+                          "team",
+                          "teams"
+                        ],
+                        "properties": {
+                          "dateCreated": {
+                            "type": "string"
+                          },
+                          "firstEvent": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "hasAccess": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "isBookmarked": {
+                            "type": "boolean"
+                          },
+                          "isMember": {
+                            "type": "boolean"
+                          },
+                          "latestDeploys": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "platforms": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "team": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "name",
+                              "slug"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "teams": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "id",
+                                "name",
+                                "slug"
+                              ],
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "quota": {
+                      "type": "object"
+                    },
+                    "require2FA": {
+                      "type": "boolean"
+                    },
+                    "safeFields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "scrapeJavaScript": {
+                      "type": "boolean"
+                    },
+                    "scrubIPAddresses": {
+                      "type": "boolean"
+                    },
+                    "sensitiveFields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "storeCrashReports": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "avatar",
+                          "dateCreated",
+                          "hasAccess",
+                          "id",
+                          "isMember",
+                          "isPending",
+                          "memberCount",
+                          "name",
+                          "slug"
+                        ],
+                        "properties": {
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string",
+                                "example": "letter_avatar"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true,
+                                "example": null
+                              }
+                            }
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2018-11-06T21:20:08.115Z"
+                          },
+                          "hasAccess": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "3"
+                          },
+                          "isMember": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "isPending": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "memberCount": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Ancient Gabelers"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "example": "ancient-gabelers"
+                          }
+                        }
+                      }
+                    },
+                    "trustedRelays": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "access": [],
+                  "allowSharedIssues": true,
+                  "availableRoles": [
+                    {
+                      "id": "member",
+                      "name": "Member"
+                    },
+                    {
+                      "id": "admin",
+                      "name": "Admin"
+                    },
+                    {
+                      "id": "manager",
+                      "name": "Manager"
+                    },
+                    {
+                      "id": "owner",
+                      "name": "Owner"
+                    }
+                  ],
+                  "avatar": {
+                    "avatarType": "letter_avatar",
+                    "avatarUuid": null
+                  },
+                  "dataScrubber": false,
+                  "dataScrubberDefaults": false,
+                  "dateCreated": "2018-11-06T21:20:19.548Z",
+                  "defaultRole": "member",
+                  "enhancedPrivacy": false,
+                  "experiments": {},
+                  "features": [
+                    "new-teams",
+                    "shared-issues",
+                    "new-issue-ui",
+                    "repos",
+                    "open-membership",
+                    "invite-members",
+                    "sso-saml2",
+                    "sso-basic",
+                    "suggested-commits"
+                  ],
+                  "id": "3",
+                  "isDefault": false,
+                  "isEarlyAdopter": false,
+                  "name": "Impeccably Designated",
+                  "onboardingTasks": [],
+                  "openMembership": true,
+                  "pendingAccessRequests": 0,
+                  "projects": [],
+                  "quota": {
+                    "accountLimit": 0,
+                    "maxRate": 0,
+                    "maxRateInterval": 60,
+                    "projectLimit": 100
+                  },
+                  "require2FA": false,
+                  "safeFields": [],
+                  "scrapeJavaScript": true,
+                  "scrubIPAddresses": false,
+                  "sensitiveFields": [],
+                  "slug": "impeccably-designated",
+                  "status": {
+                    "id": "active",
+                    "name": "active"
+                  },
+                  "storeCrashReports": 0,
+                  "teams": [],
+                  "trustedRelays": []
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The requested resource does not exist"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/projects/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "Return a list of projects bound to a organization.",
+        "operationId": "List an Organization's Projects",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the slug of the organization for which the projects should be listed.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "dateCreated",
+                      "firstEvent",
+                      "hasAccess",
+                      "id",
+                      "isBookmarked",
+                      "isMember",
+                      "latestDeploys",
+                      "name",
+                      "platform",
+                      "platforms",
+                      "slug",
+                      "team",
+                      "teams"
+                    ],
+                    "properties": {
+                      "dateCreated": {
+                        "type": "string"
+                      },
+                      "firstEvent": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "hasAccess": {
+                        "type": "boolean"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "isBookmarked": {
+                        "type": "boolean"
+                      },
+                      "isMember": {
+                        "type": "boolean"
+                      },
+                      "latestDeploys": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "platform": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "platforms": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "team": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "teams": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "name",
+                            "slug"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "slug": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "dateCreated": "2018-11-06T21:19:58.536Z",
+                    "firstEvent": null,
+                    "hasAccess": true,
+                    "id": "3",
+                    "isBookmarked": false,
+                    "isMember": true,
+                    "latestDeploys": null,
+                    "name": "Prime Mover",
+                    "platform": null,
+                    "platforms": [],
+                    "slug": "prime-mover",
+                    "team": {
+                      "id": "2",
+                      "name": "Powerful Abolitionist",
+                      "slug": "powerful-abolitionist"
+                    },
+                    "teams": [
+                      {
+                        "id": "2",
+                        "name": "Powerful Abolitionist",
+                        "slug": "powerful-abolitionist"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/repos/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "Return a list of version control repositories for a given organization.",
+        "operationId": "List an Organization's Repositories",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the organization short name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "name"
+                    ],
+                    "properties": {
+                      "dateCreated": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "dateCreated": "2018-11-06T21:19:58.536Z",
+                    "id": "3",
+                    "name": "sentry/sentry"
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/repos/{repo_id}/commits/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "Return a list of commits for a given repository.",
+        "operationId": "List a Repository's Commits",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the organization short name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo_id",
+            "in": "path",
+            "description": "the repository ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "message"
+                    ],
+                    "properties": {
+                      "dateCreated": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "dateCreated": "2018-11-06T21:19:58.536Z",
+                    "id": "acbafc639127fd89d10f474520104517ff1d709e",
+                    "message": "Initial commit from Create Next App"
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/stats/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Caution\nThis endpoint may change in the future without  notice.",
+        "description": "Return a set of points representing a normalized timestamp and the number of events seen in the period.",
+        "operationId": "Retrieve Event Counts for an Organization",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the slug of the organization the event ID should be looked up in.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stat",
+            "in": "query",
+            "description": "the name of the stat to query `(\"received\", \"rejected\", \"blacklisted\")`",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "received",
+                "rejected",
+                "blacklisted"
+              ]
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "A timestamp to set the start of the query in seconds since UNIX epoch.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "description": "A timestamp to set the end of the query in seconds since UNIX epoch.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "resolution",
+            "in": "query",
+            "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "10s",
+                "1h",
+                "1d"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "example": [
+                    [
+                      1541455200,
+                      8264
+                    ],
+                    [
+                      1541458800,
+                      6564
+                    ],
+                    [
+                      1541462400,
+                      8652
+                    ],
+                    [
+                      1541466000,
+                      7436
+                    ],
+                    [
+                      1541469600,
+                      8127
+                    ],
+                    [
+                      1541473200,
+                      7643
+                    ],
+                    [
+                      1541476800,
+                      6518
+                    ],
+                    [
+                      1541480400,
+                      6752
+                    ],
+                    [
+                      1541484000,
+                      6559
+                    ],
+                    [
+                      1541487600,
+                      7039
+                    ],
+                    [
+                      1541491200,
+                      7384
+                    ],
+                    [
+                      1541494800,
+                      6265
+                    ],
+                    [
+                      1541498400,
+                      8390
+                    ],
+                    [
+                      1541502000,
+                      6393
+                    ],
+                    [
+                      1541505600,
+                      7298
+                    ],
+                    [
+                      1541509200,
+                      7422
+                    ],
+                    [
+                      1541512800,
+                      5603
+                    ],
+                    [
+                      1541516400,
+                      6846
+                    ],
+                    [
+                      1541520000,
+                      8886
+                    ],
+                    [
+                      1541523600,
+                      6544
+                    ],
+                    [
+                      1541527200,
+                      8812
+                    ],
+                    [
+                      1541530800,
+                      8172
+                    ],
+                    [
+                      1541534400,
+                      5733
+                    ],
+                    [
+                      1541538000,
+                      9435
+                    ]
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/users/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "Return a list of users that belong to a given organization.",
+        "operationId": "List an Organization's Users",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the slug of the organization the event ID should be looked up in.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "description": "restrict results to users who have access to a given project ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "dateCreated",
+                      "user",
+                      "roleName",
+                      "expired",
+                      "id",
+                      "projects",
+                      "name",
+                      "role",
+                      "flags",
+                      "email",
+                      "pending"
+                    ],
+                    "properties": {
+                      "dateCreated": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "type": "object",
+                        "required": [
+                          "username",
+                          "lastLogin",
+                          "isSuperuser",
+                          "isManaged",
+                          "lastActive",
+                          "isStaff",
+                          "id",
+                          "isActive",
+                          "has2fa",
+                          "name",
+                          "avatarUrl",
+                          "dateJoined",
+                          "emails",
+                          "avatar",
+                          "hasPasswordAuth",
+                          "email"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          },
+                          "lastLogin": {
+                            "type": "string"
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "type": "string"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "dateJoined": {
+                            "type": "string"
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "is_verified": {
+                                  "type": "boolean"
+                                },
+                                "id": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string",
+                                "example": "letter_avatar"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true,
+                                "example": null
+                              }
+                            }
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "email": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "roleName": {
+                        "type": "string"
+                      },
+                      "expired": {
+                        "type": "boolean"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "projects": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "role": {
+                        "type": "string",
+                        "enum": [
+                          "owner",
+                          "manager",
+                          "admin",
+                          "member",
+                          "billing"
+                        ]
+                      },
+                      "flags": {
+                        "type": "object",
+                        "properties": {
+                          "sso: linked": {
+                            "type": "boolean"
+                          },
+                          "sso: invalid": {
+                            "type": "boolean"
+                          }
+                        }
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "pending": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "dateCreated": "2019-05-09T18:06:01.728Z",
+                    "user": {
+                      "username": "testEmail@test.com",
+                      "lastLogin": "2019-09-16T02:56:06.806Z",
+                      "isSuperuser": false,
+                      "isManaged": false,
+                      "lastActive": "2019-10-08T15:05:38.715Z",
+                      "isStaff": false,
+                      "id": "433307",
+                      "isActive": true,
+                      "has2fa": false,
+                      "name": "OtherTest McTestuser",
+                      "avatarUrl": "https:  //secure.gravatar.com/avatar/1eb103c0e899f372a85eb0a44f0a0f42?s=32&d=mm",
+                      "dateJoined": "2019-05-09T18:06:01.443Z",
+                      "emails": [
+                        {
+                          "is_verified": true,
+                          "id": "468229",
+                          "email": "testEmail@test.com"
+                        }
+                      ],
+                      "avatar": {
+                        "avatarUuid": null,
+                        "avatarType": "letter_avatar"
+                      },
+                      "hasPasswordAuth": false,
+                      "email": "testEmail@test.com"
+                    },
+                    "roleName": "Organization Owner",
+                    "expired": false,
+                    "id": "9376061",
+                    "projects": [
+                      "buggy-sentry-project"
+                    ],
+                    "name": "OtherTest McTestuser",
+                    "role": "owner",
+                    "flags": {
+                      "sso: linked": false,
+                      "sso: invalid": false
+                    },
+                    "email": "testEmail@test.com",
+                    "pending": false
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/shortids/{short_id}/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "This resolves a short ID to the project slug and internal issue ID.",
+        "operationId": "Resolve a Short ID",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "the slug of the organization the short ID should be looked up in.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "short_id",
+            "in": "path",
+            "description": "the short ID to look up.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "organizationSlug",
+                    "projectSlug",
+                    "shortId",
+                    "group",
+                    "groupId"
+                  ],
+                  "properties": {
+                    "organizationSlug": {
+                      "type": "string"
+                    },
+                    "projectSlug": {
+                      "type": "string"
+                    },
+                    "shortId": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "required": [
+                        "lastSeen",
+                        "numComments",
+                        "userCount",
+                        "culprit",
+                        "title",
+                        "id",
+                        "assignedTo",
+                        "logger",
+                        "type",
+                        "annotations",
+                        "metadata",
+                        "status",
+                        "subscriptionDetails",
+                        "isPublic",
+                        "hasSeen",
+                        "shortId",
+                        "shareId",
+                        "firstSeen",
+                        "count",
+                        "permalink",
+                        "level",
+                        "isSubscribed",
+                        "isBookmarked",
+                        "project",
+                        "statusDetails"
+                      ],
+                      "properties": {
+                        "lastSeen": {
+                          "type": "string"
+                        },
+                        "numComments": {
+                          "type": "integer"
+                        },
+                        "userCount": {
+                          "type": "integer"
+                        },
+                        "culprit": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "assignedTo": {
+                          "type": "object",
+                          "nullable": true,
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "logger": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "annotations": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "properties": {
+                            "function": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            },
+                            "filename": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "resolved",
+                            "unresolved",
+                            "ignored"
+                          ]
+                        },
+                        "subscriptionDetails": {
+                          "type": "object",
+                          "nullable": true,
+                          "properties": {
+                            "reason": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "isPublic": {
+                          "type": "boolean"
+                        },
+                        "hasSeen": {
+                          "type": "boolean"
+                        },
+                        "shortId": {
+                          "type": "string"
+                        },
+                        "shareId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "firstSeen": {
+                          "type": "string"
+                        },
+                        "count": {
+                          "type": "string"
+                        },
+                        "permalink": {
+                          "type": "string"
+                        },
+                        "level": {
+                          "type": "string"
+                        },
+                        "isSubscribed": {
+                          "type": "boolean"
+                        },
+                        "isBookmarked": {
+                          "type": "boolean"
+                        },
+                        "project": {
+                          "type": "object",
+                          "properties": {
+                            "slug": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "statusDetails": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "groupId": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "group": {
+                    "annotations": [],
+                    "assignedTo": null,
+                    "count": "1",
+                    "culprit": "raven.scripts.runner in main",
+                    "firstSeen": "2018-11-06T21:19:55Z",
+                    "hasSeen": false,
+                    "id": "1",
+                    "isBookmarked": false,
+                    "isPublic": false,
+                    "isSubscribed": true,
+                    "lastSeen": "2018-11-06T21:19:55Z",
+                    "level": "error",
+                    "logger": null,
+                    "metadata": {
+                      "title": "This is an example Python exception"
+                    },
+                    "numComments": 0,
+                    "permalink": "https://sentry.io/the-interstellar-jurisdiction/pump-station/issues/1/",
+                    "project": {
+                      "id": "2",
+                      "name": "Pump Station",
+                      "slug": "pump-station"
+                    },
+                    "shareId": null,
+                    "shortId": "PUMP-STATION-1",
+                    "status": "unresolved",
+                    "statusDetails": {},
+                    "subscriptionDetails": null,
+                    "title": "This is an example Python exception",
+                    "type": "default",
+                    "userCount": 0
+                  },
+                  "groupId": "1",
+                  "organizationSlug": "the-interstellar-jurisdiction",
+                  "projectSlug": "pump-station",
+                  "shortId": "PUMP-STATION-1"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
             ]
           }
         ]
