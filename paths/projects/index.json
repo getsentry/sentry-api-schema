@@ -1,0 +1,172 @@
+{
+  "get": {
+    "tags": ["Projects"],
+    "description": "Return a list of projects available to the authenticated session.",
+    "operationId": "List your Projects",
+    "responses": {
+      "200": {
+        "description": "Success.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "$ref": "../../components/schemas/project.json#/Project"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "organization": {
+                        "$ref": "../../components/schemas/organization.json#/Organization"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "example": [
+              {
+                "avatar": {
+                  "avatarType": "letter_avatar",
+                  "avatarUuid": null
+                },
+                "color": "#bf6e3f",
+                "dateCreated": "2018-11-06T21:20:08.064Z",
+                "features": [
+                  "servicehooks",
+                  "sample-events",
+                  "data-forwarding",
+                  "rate-limits",
+                  "minidump"
+                ],
+                "firstEvent": null,
+                "hasAccess": true,
+                "id": "4",
+                "isBookmarked": false,
+                "isInternal": false,
+                "isMember": true,
+                "isPublic": false,
+                "name": "The Spoiled Yoghurt",
+                "organization": {
+                  "avatar": {
+                    "avatarType": "letter_avatar",
+                    "avatarUuid": null
+                  },
+                  "dateCreated": "2018-11-06T21:19:55.101Z",
+                  "id": "2",
+                  "isEarlyAdopter": false,
+                  "name": "The Interstellar Jurisdiction",
+                  "require2FA": false,
+                  "slug": "the-interstellar-jurisdiction",
+                  "status": {
+                    "id": "active",
+                    "name": "active"
+                  }
+                },
+                "platform": null,
+                "slug": "the-spoiled-yoghurt",
+                "status": "active"
+              },
+              {
+                "avatar": {
+                  "avatarType": "letter_avatar",
+                  "avatarUuid": null
+                },
+                "color": "#bf5b3f",
+                "dateCreated": "2018-11-06T21:19:58.536Z",
+                "features": [
+                  "releases",
+                  "sample-events",
+                  "minidump",
+                  "servicehooks",
+                  "rate-limits",
+                  "data-forwarding"
+                ],
+                "firstEvent": null,
+                "hasAccess": true,
+                "id": "3",
+                "isBookmarked": false,
+                "isInternal": false,
+                "isMember": true,
+                "isPublic": false,
+                "name": "Prime Mover",
+                "organization": {
+                  "avatar": {
+                    "avatarType": "letter_avatar",
+                    "avatarUuid": null
+                  },
+                  "dateCreated": "2018-11-06T21:19:55.101Z",
+                  "id": "2",
+                  "isEarlyAdopter": false,
+                  "name": "The Interstellar Jurisdiction",
+                  "require2FA": false,
+                  "slug": "the-interstellar-jurisdiction",
+                  "status": {
+                    "id": "active",
+                    "name": "active"
+                  }
+                },
+                "platform": null,
+                "slug": "prime-mover",
+                "status": "active"
+              },
+              {
+                "avatar": {
+                  "avatarType": "letter_avatar",
+                  "avatarUuid": null
+                },
+                "color": "#3fbf7f",
+                "dateCreated": "2018-11-06T21:19:55.121Z",
+                "features": [
+                  "releases",
+                  "sample-events",
+                  "minidump",
+                  "servicehooks",
+                  "rate-limits",
+                  "data-forwarding"
+                ],
+                "firstEvent": null,
+                "hasAccess": true,
+                "id": "2",
+                "isBookmarked": false,
+                "isInternal": false,
+                "isMember": true,
+                "isPublic": false,
+                "name": "Pump Station",
+                "organization": {
+                  "avatar": {
+                    "avatarType": "letter_avatar",
+                    "avatarUuid": null
+                  },
+                  "dateCreated": "2018-11-06T21:19:55.101Z",
+                  "id": "2",
+                  "isEarlyAdopter": false,
+                  "name": "The Interstellar Jurisdiction",
+                  "require2FA": false,
+                  "slug": "the-interstellar-jurisdiction",
+                  "status": {
+                    "id": "active",
+                    "name": "active"
+                  }
+                },
+                "platform": null,
+                "slug": "pump-station",
+                "status": "active"
+              }
+            ]
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden"
+      }
+    },
+    "security": [
+      {
+        "auth_token": ["project:read"]
+      }
+    ]
+  }
+}
