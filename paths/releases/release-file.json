@@ -97,6 +97,44 @@
         "security": [{
             "auth_token": ["project:releases"]
         }]
+    },
+    "delete": {
+      "tags": [
+        "Releases"
+      ],
+      "description": "Delete a file for a given release.",
+      "operationId": "Delete an Organization Release's File",
+      "parameters": [{
+          "name": "organization_slug",
+          "in": "path",
+          "description": "The slug of the organization the release belongs to.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "version",
+          "in": "path",
+          "description": "The version identifier of the release.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "file_id",
+          "in": "path",
+          "string": "The ID of the file to delete."
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Success."
+        }
+      },
+      "security": [{
+        "auth_token": ["project:releases"]
+      }]
     }
   }
   
