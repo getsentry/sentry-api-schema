@@ -1,182 +1,182 @@
 {
-    "get": {
-      "tags": [
-        "Releases"
-      ],
-      "description": "Return a list of releases for a given organization.",
-      "operationId": "List an Organization's Releases",
-      "parameters": [{
-          "name": "organization_slug",
-          "in": "path",
-          "description": "The slug of the organization.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "query",
-          "in": "query",
-          "description": "This parameter can be used to create a \"starts with\" filter for the version.",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "responses": {
-        "200": {
-          "description": "Success.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                    "$ref": "../../components/schemas/releases/organization-release.json#/OrganizationRelease"
-                }
-              },
-              "example": [
-                    {
-                      "authors": [], 
-                      "commitCount": 0, 
-                      "data": {}, 
-                      "dateCreated": "2018-11-06T21:20:08.033Z", 
-                      "dateReleased": null, 
-                      "deployCount": 0, 
-                      "firstEvent": null, 
-                      "lastCommit": null, 
-                      "lastDeploy": null, 
-                      "lastEvent": null, 
-                      "newGroups": 0, 
-                      "owner": null, 
-                      "projects": [
-                        {
-                          "name": "Pump Station", 
-                          "slug": "pump-station"
-                        }
-                      ], 
-                      "ref": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb", 
-                      "shortVersion": "2.0rc2", 
-                      "url": null, 
-                      "version": "2.0rc2"
-                    }, 
-                    {
-                      "authors": [], 
-                      "commitCount": 0, 
-                      "data": {}, 
-                      "dateCreated": "2018-11-06T21:19:58.559Z", 
-                      "dateReleased": null, 
-                      "deployCount": 0, 
-                      "firstEvent": "2018-11-06T21:19:58.639Z", 
-                      "lastCommit": null, 
-                      "lastDeploy": null, 
-                      "lastEvent": "2018-11-06T21:19:58.639Z", 
-                      "newGroups": 0, 
-                      "owner": null, 
-                      "projects": [
-                        {
-                          "name": "Prime Mover", 
-                          "slug": "prime-mover"
-                        }
-                      ], 
-                      "ref": null, 
-                      "shortVersion": "2b6af31", 
-                      "url": null, 
-                      "version": "2b6af31b2edccc73a629108b17344dfe20858780"
-                    }
-                ]
-            }
-          }
-        },
-        "403": {
-          "description": "Forbidden"
+  "get": {
+    "tags": ["Releases"],
+    "description": "Return a list of releases for a given organization.",
+    "operationId": "List an Organization's Releases",
+    "parameters": [
+      {
+        "name": "organization_slug",
+        "in": "path",
+        "description": "The slug of the organization.",
+        "required": true,
+        "schema": {
+          "type": "string"
         }
       },
-      "security": [{
-        "auth_token": ["project:releases"]
-      }]
+      {
+        "name": "query",
+        "in": "query",
+        "description": "This parameter can be used to create a \"starts with\" filter for the version.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "../../components/schemas/releases/organization-release.json#/OrganizationRelease"
+              }
+            },
+            "example": [
+              {
+                "authors": [],
+                "commitCount": 0,
+                "data": {},
+                "dateCreated": "2018-11-06T21:20:08.033Z",
+                "dateReleased": null,
+                "deployCount": 0,
+                "firstEvent": null,
+                "lastCommit": null,
+                "lastDeploy": null,
+                "lastEvent": null,
+                "newGroups": 0,
+                "owner": null,
+                "projects": [
+                  {
+                    "name": "Pump Station",
+                    "slug": "pump-station"
+                  }
+                ],
+                "ref": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb",
+                "shortVersion": "2.0rc2",
+                "url": null,
+                "version": "2.0rc2"
+              },
+              {
+                "authors": [],
+                "commitCount": 0,
+                "data": {},
+                "dateCreated": "2018-11-06T21:19:58.559Z",
+                "dateReleased": null,
+                "deployCount": 0,
+                "firstEvent": "2018-11-06T21:19:58.639Z",
+                "lastCommit": null,
+                "lastDeploy": null,
+                "lastEvent": "2018-11-06T21:19:58.639Z",
+                "newGroups": 0,
+                "owner": null,
+                "projects": [
+                  {
+                    "name": "Prime Mover",
+                    "slug": "prime-mover"
+                  }
+                ],
+                "ref": null,
+                "shortVersion": "2b6af31",
+                "url": null,
+                "version": "2b6af31b2edccc73a629108b17344dfe20858780"
+              }
+            ]
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden"
+      }
     },
-    "post": {
-        "tags": [
-            "Releases"
-        ],
-        "description": "Create a new release for the given Organization.  Releases are used by\nSentry to improve its error reporting abilities by correlating\nfirst seen events with the release that might have introduced the\nproblem.\nReleases are also necessary for sourcemaps and other debug features\nthat require manual upload for functioning well.",
-        "operationId": "Create a New Release for an Organization.",
-        "parameters": [
-            {
-                "name": "organization_slug",
-                "in": "path",
-                "description": "The slug of the organization.",
-                "required": true,
-                "schema": {
-                    "type": "string"
+    "security": [
+      {
+        "auth_token": ["project:releases"]
+      }
+    ]
+  },
+  "post": {
+    "tags": ["Releases"],
+    "description": "Create a new release for the given Organization.  Releases are used by\nSentry to improve its error reporting abilities by correlating\nfirst seen events with the release that might have introduced the\nproblem.\nReleases are also necessary for sourcemaps and other debug features\nthat require manual upload for functioning well.",
+    "operationId": "Create a New Release for an Organization.",
+    "parameters": [
+      {
+        "name": "organization_slug",
+        "in": "path",
+        "description": "The slug of the organization.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["version", "projects"],
+            "properties": {
+              "version": {
+                "type": "string",
+                "description": "A version identifier for this release. Can be a version number, a commit hash etc."
+              },
+              "url": {
+                "type": "string",
+                "description": "A URL that points to the release. This can be the path to an online interface to the sourcecode for instance"
+              },
+              "projects": {
+                "type": "array",
+                "items": {
+                  "type": "string"
                 }
+              }
             }
-        ],
-        "requestBody": {
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "object",
-                        "required": ["version", "projects"],
-                        "properties": {
-                            "version": {
-                                "type": "string",
-                                "description": "A version identifier for this release. Can be a version number, a commit hash etc."
-                            },
-                            "url": {
-                                "type": "string",
-                                "description": "A URL that points to the release. This can be the path to an online interface to the sourcecode for instance"
-                            },
-                            "projects": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Success.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../components/schemas/releases/organization-release.json#/OrganizationRelease"
+            },
+            "example": {
+              "authors": [],
+              "commitCount": 0,
+              "data": {},
+              "dateCreated": "2019-01-03T00:12:55.109Z",
+              "dateReleased": null,
+              "deployCount": 0,
+              "firstEvent": null,
+              "lastCommit": null,
+              "lastDeploy": null,
+              "lastEvent": null,
+              "newGroups": 0,
+              "owner": null,
+              "projects": [
+                {
+                  "name": "Pump Station",
+                  "slug": "pump-station"
                 }
+              ],
+              "ref": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb",
+              "shortVersion": "2.0rc2",
+              "url": null,
+              "version": "2.0rc2"
             }
-        },
-        "responses": {
-            "201": {
-                "description": "Success.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "../../components/schemas/releases/organization-release.json#/OrganizationRelease"
-                        },
-                        "example": {
-                            "authors": [], 
-                            "commitCount": 0, 
-                            "data": {}, 
-                            "dateCreated": "2019-01-03T00:12:55.109Z", 
-                            "dateReleased": null, 
-                            "deployCount": 0, 
-                            "firstEvent": null, 
-                            "lastCommit": null, 
-                            "lastDeploy": null, 
-                            "lastEvent": null, 
-                            "newGroups": 0, 
-                            "owner": null, 
-                            "projects": [
-                              {
-                                "name": "Pump Station", 
-                                "slug": "pump-station"
-                              }
-                            ], 
-                            "ref": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb", 
-                            "shortVersion": "2.0rc2", 
-                            "url": null, 
-                            "version": "2.0rc2"
-                          }
-                    }
-                }
-            }
-        },
-        "security": [{
-            "auth_token": ["project:releases"]
-        }]
-    }
+          }
+        }
+      }
+    },
+    "security": [
+      {
+        "auth_token": ["project:releases"]
+      }
+    ]
   }
-  
+}
