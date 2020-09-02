@@ -1,0 +1,35 @@
+{
+    "get": {
+        "tags": ["Releases"],
+        "description": "List an organization release's commits.",
+        "operationId": "List an Organization Release's Commits",
+        "parameters": [
+            {
+                "name": "organization_slug",
+                "in": "path",
+                "description": "The slug of the organization the release belongs to.",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "version",
+                "in": "path",
+                "description": "The version identifier of the release.",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success."
+            }
+        },
+        "security": [{
+            "auth_token": ["project:releases"]
+        }]
+    }
+}
