@@ -1,0 +1,150 @@
+
+{
+  "put": {
+    "tags": [
+      "Projects"
+    ],
+    "description": "Update a client key.  This can be used to rename a key.",
+    "operationId": "Update a Client Key",
+    "parameters": [
+      {
+        "name": "organization_slug",
+        "in": "path",
+        "description": "the slug of the organization the client keys belong to.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "project_slug",
+        "in": "path",
+        "description": "the slug of the project the client keys belong to.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "key_id",
+        "in": "path",
+        "description": "the ID of the key to update.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the new name for the client key.",
+              }
+            }
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "description": "Success.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["dateCreated", "id", "name"],
+              "properties": {
+                  "dateCreated": {
+                      "type": "string",
+                  },
+                  "id": {
+                      "type": "string",
+                  },
+                  "name": {
+                      "type": "string",
+                  },
+              }
+            },
+            "example": {
+              "dateCreated": "2019-05-24T00:12:28.720749Z",
+              "id": "5d0ad1da55464d9e822c593677e76435",
+              "name": "Fluffy Key",
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Input"
+      },
+      "403": {
+        "description": "Forbidden"
+      },
+      "404": {
+        "description": "Project not found"
+      }
+    },
+    "security": [
+      {
+        "auth_token": ["project:write"]
+      }
+    ]
+  },
+  "delete": {
+    "tags": [
+      "Projects"
+    ],
+    "description": "Delete a client key.",
+    "operationId": "Delete a Client Key",
+    "parameters": [
+      {
+        "name": "organization_slug",
+        "in": "path",
+        "description": "the slug of the organization the client keys belong to.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "project_slug",
+        "in": "path",
+        "description": "the slug of the project the client keys belong to.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "key_id",
+        "in": "path",
+        "description": "the ID of the key to delete.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "204": {
+        "description": "Success."
+      },
+      "403": {
+        "description": "Forbidden"
+      },
+      "404": {
+        "description": "Project not found"
+      }
+    },
+    "security": [
+      {
+        "auth_token": ["project:admin"]
+      }
+    ]
+  }
+}
