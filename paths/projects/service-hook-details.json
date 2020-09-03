@@ -3,13 +3,13 @@
     "tags": [
       "Projects"
     ],
-    "description": "Retrieve a list of debug information files for a given project.",
-    "operationId": "List a Project's Debug Information Files",
+    "description": "Return a service hook bound to a project.",
+    "operationId": "Retrieve a Service Hook",
     "parameters": [
       {
         "name": "organization_slug",
         "in": "path",
-        "description": "The slug of the organization the file belongs to.",
+        "description": "the slug of the organization the client keys belong to.",
         "required": true,
         "schema": {
           "type": "string"
@@ -18,7 +18,16 @@
       {
         "name": "project_slug",
         "in": "path",
-        "description": "The slug of the project to list the DIFs of.",
+        "description": "the slug of the project the client keys belong to.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "hook_id",
+        "in": "path",
+        "description": "the guid of the service hook.",
         "required": true,
         "schema": {
           "type": "string"
@@ -31,29 +40,24 @@
         "content": {
           "application/json": {
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "required": [
-                  "dateCreated",
-                  "id"
-                ],
-                "properties": {
-                  "dateCreated": {
-                    "type": "string"
-                  },
-                  "id": {
-                    "type": "string"
-                  }
+              "type": "object",
+              "required": [
+                "dateCreated",
+                "id"
+              ],
+              "properties": {
+                "dateCreated": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
                 }
               }
             },
-            "example": [
-              {
-                "dateCreated": "2020-04-30T00:44:54.905848Z",
-                "id": "65218816"
-              }
-            ]
+            "example": {
+              "dateCreated": "2020-04-30T00:44:54.905848Z",
+              "id": "65218816"
+            }
           }
         }
       },
@@ -72,17 +76,17 @@
       }
     ]
   },
-  "post": {
+  "put": {
     "tags": [
       "Projects"
     ],
-    "description": "Upload a new debug information file for the given release.\n\nUnlike other API requests, files must be uploaded using the\ntraditional multipart/form-data content-type.\n\nThe file uploaded is a zip archive of an Apple .dSYM folder which\ncontains the individual debug images.  Uploading through this endpoint\nwill create different files for the contained images.",
-    "operationId": "Upload a New File",
+    "description": "Update a Service Hook",
+    "operationId": "Update a Service Hook",
     "parameters": [
       {
         "name": "organization_slug",
         "in": "path",
-        "description": "The slug of the organization the release belongs to.",
+        "description": "the slug of the organization the client keys belong to.",
         "required": true,
         "schema": {
           "type": "string"
@@ -91,7 +95,16 @@
       {
         "name": "project_slug",
         "in": "path",
-        "description": "The slug of the project to change upload a file to.",
+        "description": "the slug of the project the client keys belong to.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "hook_id",
+        "in": "path",
+        "description": "the guid of the service hook.",
         "required": true,
         "schema": {
           "type": "string"
@@ -100,23 +113,30 @@
     ],
     "requestBody": {
       "content": {
-        "multipart/form-data": {
+        "application/json": {
           "schema": {
             "required": [
-              "file"
+              "url",
+              "events"
             ],
             "type": "object",
             "properties": {
-              "file": {
+              "url": {
                 "type": "string",
-                "format": "binary",
-                "description": "The multipart encoded file."
+                "description": "the url for the webhook"
+              },
+              "events": {
+                "type": "array",
+                "description": "the events to subscribe to",
+                "items": {
+                  "type": "string"
+                }
               }
             }
           }
         }
       },
-      "required": true
+      "required": false
     },
     "responses": {
       "200": {
@@ -124,34 +144,26 @@
         "content": {
           "application/json": {
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "required": [
-                  "dateCreated",
-                  "id"
-                ],
-                "properties": {
-                  "dateCreated": {
-                    "type": "string"
-                  },
-                  "id": {
-                    "type": "string"
-                  }
+              "type": "object",
+              "required": [
+                "dateCreated",
+                "id"
+              ],
+              "properties": {
+                "dateCreated": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
                 }
               }
             },
-            "example": [
-              {
-                "dateCreated": "2020-04-30T00:44:54.905848Z",
-                "id": "65218816"
-              }
-            ]
+            "example": {
+              "dateCreated": "2020-04-30T00:44:54.905848Z",
+              "id": "65218816"
+            }
           }
         }
-      },
-      "400": {
-        "description": "Missing uploaded file"
       },
       "403": {
         "description": "Forbidden"
@@ -172,13 +184,13 @@
     "tags": [
       "Projects"
     ],
-    "description": "Delete a debug information file for a given project.",
-    "operationId": "Delete a specific project's Debug Information File",
+    "description": "Remove a Service Hook",
+    "operationId": "Remove a Service Hook",
     "parameters": [
       {
         "name": "organization_slug",
         "in": "path",
-        "description": "The slug of the organization the file belongs to.",
+        "description": "the slug of the organization the client keys belong to.",
         "required": true,
         "schema": {
           "type": "string"
@@ -187,16 +199,16 @@
       {
         "name": "project_slug",
         "in": "path",
-        "description": "The slug of the project to delete the DIF.",
+        "description": "the slug of the project the client keys belong to.",
         "required": true,
         "schema": {
           "type": "string"
         }
       },
       {
-        "name": "id",
-        "in": "query",
-        "description": "The id of the DIF to delete.",
+        "name": "hook_id",
+        "in": "path",
+        "description": "the guid of the service hook.",
         "required": true,
         "schema": {
           "type": "string"

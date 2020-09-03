@@ -1,90 +1,90 @@
 {
-   "get": {
-      "tags": [
-         "Projects"
-      ],
-      "description": "Return a list of client keys bound to a project.",
-      "operationId": "List a Project's Client Keys",
-      "parameters": [
-         {
-            "name": "organization_slug",
-            "in": "path",
-            "description": "the slug of the organization the client keys belong to.",
-            "required": true,
-            "schema": {
-               "type": "string"
-            }
-         },
-         {
-            "name": "project_slug",
-            "in": "path",
-            "description": "the slug of the project the client keys belong to.",
-            "required": true,
-            "schema": {
-               "type": "string"
-            }
-         }
-      ],
-      "responses": {
-         "200": {
-            "description": "Success.",
-            "content": {
-               "application/json": {
-                "schema": {
-                   "type": "array",
-                    "items": {
-                      "$ref": "../../components/schemas/key.json#/Key"
-                    }
-                },
-                "example": [
-                  {
-                    "browserSdk": {
-                      "choices": [
-                        [
-                          "latest", 
-                          "latest"
-                        ], 
-                        [
-                          "4.x", 
-                          "4.x"
-                        ]
-                      ]
-                    }, 
-                    "browserSdkVersion": "4.x", 
-                    "dateCreated": "2018-11-06T21:20:07.941Z", 
-                    "dsn": {
-                      "cdn": "https://sentry.io/js-sdk-loader/cec9dfceb0b74c1c9a5e3c135585f364.min.js", 
-                      "csp": "https://sentry.io/api/2/csp-report/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364", 
-                      "minidump": "https://sentry.io/api/2/minidump/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364", 
-                      "public": "https://cec9dfceb0b74c1c9a5e3c135585f364@sentry.io/2", 
-                      "secret": "https://cec9dfceb0b74c1c9a5e3c135585f364:4f6a592349e249c5906918393766718d@sentry.io/2", 
-                      "security": "https://sentry.io/api/2/security/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364"
-                    }, 
-                    "id": "cec9dfceb0b74c1c9a5e3c135585f364", 
-                    "isActive": true, 
-                    "label": "Fabulous Key", 
-                    "name": "Fabulous Key", 
-                    "projectId": 2, 
-                    "public": "cec9dfceb0b74c1c9a5e3c135585f364", 
-                    "rateLimit": null, 
-                    "secret": "4f6a592349e249c5906918393766718d"
-                  }
-                ]
-               }
-            }
-         },
-         "403": {
-            "description": "Forbidden"
-         },
+  "get": {
+    "tags": [
+      "Projects"
+    ],
+    "description": "Return a list of client keys bound to a project.",
+    "operationId": "List a Project's Client Keys",
+    "parameters": [
+      {
+        "name": "organization_slug",
+        "in": "path",
+        "description": "the slug of the organization the client keys belong to.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
       },
-      "security": [
-         {
-            "auth_token": [
-               "project: read"
+      {
+        "name": "project_slug",
+        "in": "path",
+        "description": "the slug of the project the client keys belong to.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "../../components/schemas/key.json#/Key"
+              }
+            },
+            "example": [
+              {
+                "browserSdk": {
+                  "choices": [
+                    [
+                      "latest",
+                      "latest"
+                    ],
+                    [
+                      "4.x",
+                      "4.x"
+                    ]
+                  ]
+                },
+                "browserSdkVersion": "4.x",
+                "dateCreated": "2018-11-06T21:20:07.941Z",
+                "dsn": {
+                  "cdn": "https://sentry.io/js-sdk-loader/cec9dfceb0b74c1c9a5e3c135585f364.min.js",
+                  "csp": "https://sentry.io/api/2/csp-report/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364",
+                  "minidump": "https://sentry.io/api/2/minidump/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364",
+                  "public": "https://cec9dfceb0b74c1c9a5e3c135585f364@sentry.io/2",
+                  "secret": "https://cec9dfceb0b74c1c9a5e3c135585f364:4f6a592349e249c5906918393766718d@sentry.io/2",
+                  "security": "https://sentry.io/api/2/security/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364"
+                },
+                "id": "cec9dfceb0b74c1c9a5e3c135585f364",
+                "isActive": true,
+                "label": "Fabulous Key",
+                "name": "Fabulous Key",
+                "projectId": 2,
+                "public": "cec9dfceb0b74c1c9a5e3c135585f364",
+                "rateLimit": null,
+                "secret": "4f6a592349e249c5906918393766718d"
+              }
             ]
-         }
-      ]
-   },
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden"
+      }
+    },
+    "security": [
+      {
+        "auth_token": [
+          "project: read"
+        ]
+      }
+    ]
+  },
   "post": {
     "tags": [
       "Projects"
@@ -115,13 +115,15 @@
       "content": {
         "application/json": {
           "schema": {
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "type": "object",
             "properties": {
               "name": {
                 "type": "string",
-                "description": "the name for the new key.",
-              },
+                "description": "the name for the new key."
+              }
             }
           }
         }
@@ -140,32 +142,32 @@
               "browserSdk": {
                 "choices": [
                   [
-                    "latest", 
+                    "latest",
                     "latest"
-                  ], 
+                  ],
                   [
-                    "4.x", 
+                    "4.x",
                     "4.x"
                   ]
                 ]
-              }, 
-              "browserSdkVersion": "4.x", 
-              "dateCreated": "2018-11-06T21:20:07.941Z", 
+              },
+              "browserSdkVersion": "4.x",
+              "dateCreated": "2018-11-06T21:20:07.941Z",
               "dsn": {
-                "cdn": "https://sentry.io/js-sdk-loader/cec9dfceb0b74c1c9a5e3c135585f364.min.js", 
-                "csp": "https://sentry.io/api/2/csp-report/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364", 
-                "minidump": "https://sentry.io/api/2/minidump/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364", 
-                "public": "https://cec9dfceb0b74c1c9a5e3c135585f364@sentry.io/2", 
-                "secret": "https://cec9dfceb0b74c1c9a5e3c135585f364:4f6a592349e249c5906918393766718d@sentry.io/2", 
+                "cdn": "https://sentry.io/js-sdk-loader/cec9dfceb0b74c1c9a5e3c135585f364.min.js",
+                "csp": "https://sentry.io/api/2/csp-report/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364",
+                "minidump": "https://sentry.io/api/2/minidump/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364",
+                "public": "https://cec9dfceb0b74c1c9a5e3c135585f364@sentry.io/2",
+                "secret": "https://cec9dfceb0b74c1c9a5e3c135585f364:4f6a592349e249c5906918393766718d@sentry.io/2",
                 "security": "https://sentry.io/api/2/security/?sentry_key=cec9dfceb0b74c1c9a5e3c135585f364"
-              }, 
-              "id": "cec9dfceb0b74c1c9a5e3c135585f364", 
-              "isActive": true, 
-              "label": "Fabulous Key", 
-              "name": "Fabulous Key", 
-              "projectId": 2, 
-              "public": "cec9dfceb0b74c1c9a5e3c135585f364", 
-              "rateLimit": null, 
+              },
+              "id": "cec9dfceb0b74c1c9a5e3c135585f364",
+              "isActive": true,
+              "label": "Fabulous Key",
+              "name": "Fabulous Key",
+              "projectId": 2,
+              "public": "cec9dfceb0b74c1c9a5e3c135585f364",
+              "rateLimit": null,
               "secret": "4f6a592349e249c5906918393766718d"
             }
           }
@@ -178,8 +180,12 @@
         "description": "The requested resource does not exist"
       }
     },
-    "security": [{
-      "auth_token": ["project:write"]
-    }]
+    "security": [
+      {
+        "auth_token": [
+          "project:write"
+        ]
+      }
+    ]
   }
 }
