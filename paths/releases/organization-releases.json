@@ -122,6 +122,10 @@
                 "type": "string",
                 "description": "A version identifier for this release. Can be a version number, a commit hash etc."
               },
+              "ref": {
+                "type": "string",
+                "description": "An optional commit reference. This is useful if a tagged version has been provided."
+              },
               "url": {
                 "type": "string",
                 "description": "A URL that points to the release. This can be the path to an online interface to the sourcecode for instance"
@@ -131,6 +135,25 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "dateReleased": {
+                "type": "string",
+                "format": "date-time",
+                "description": "An optional date that indicates when the release went live. If not provided the current time is assumed."
+              },
+              "commits": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "An optional list of commit data to be associated with the release. Commits must include parameters `id` (the sha of the commit), and can optionally include `repository`, `message`, `patch_set`, `author_name`, `author_email`, and `timestamp`."
+              },
+              "refs": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "An optional way to indicate the start and end commits for each repository included in a release. Head commits must include parameters `repository` and `commit` (the HEAD sha). They can optionally include `previousCommit` (the sha of the HEAD of the previous release), which should be specified if this is the first time you've sent commit data. `commit` may contain a range in the form of `previousCommit..commit`."
               }
             }
           }
