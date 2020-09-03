@@ -1,71 +1,74 @@
 {
-   "get": {
-      "tags": [
-         "Projects"
-      ],
-      "description": "Return a list of user feedback items within this project.",
-      "operationId": "List a Project's User Feedback",
-      "parameters": [
-         {
-            "name": "organization_slug",
-            "in": "path",
-            "description": "the slug of the organization.",
-            "required": true,
-            "schema": {
-               "type": "string"
-            }
-         },
-         {
-            "name": "project_slug",
-            "in": "path",
-            "description": "the slug of the project.",
-            "required": true,
-            "schema": {
-               "type": "string"
-            }
-         }
-      ],
-      "responses": {
-         "200": {
-            "description": "Success.",
-            "content": {
-               "application/json": {
-                "schema": {
-                   "type": "array",
-                    "items": {
-                        "type": "object",
-                        "required": ["dateCreated", "id"],
-                        "properties": {
-                            "dateCreated": {
-                                "type": "string",
-                            },
-                            "id": {
-                                "type": "string",
-                            },
-                        }
-                    }
-                },
-                "example": [
-                  {
-                    "dateCreated": "2018-11-06T21:19:58.536Z", 
-                    "id": "3", 
-                  }, 
-                ]
-               }
-            }
-         },
-         "403": {
-            "description": "Forbidden"
-         },
+  "get": {
+    "tags": [
+      "Projects"
+    ],
+    "description": "Return a list of user feedback items within this project.",
+    "operationId": "List a Project's User Feedback",
+    "parameters": [
+      {
+        "name": "organization_slug",
+        "in": "path",
+        "description": "the slug of the organization.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
       },
-      "security": [
-         {
-            "auth_token": [
-               "project: read"
+      {
+        "name": "project_slug",
+        "in": "path",
+        "description": "the slug of the project.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "dateCreated",
+                  "id"
+                ],
+                "properties": {
+                  "dateCreated": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "example": [
+              {
+                "dateCreated": "2018-11-06T21:19:58.536Z",
+                "id": "3"
+              }
             ]
-         }
-      ]
-   },
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden"
+      }
+    },
+    "security": [
+      {
+        "auth_token": [
+          "project: read"
+        ]
+      }
+    ]
+  },
   "post": {
     "tags": [
       "Projects"
@@ -96,26 +99,37 @@
       "content": {
         "application/json": {
           "schema": {
-            "required": ["event_id", "name", "email", "comments"],
+            "required": [
+              "event_id",
+              "name",
+              "email",
+              "comments"
+            ],
             "type": "object",
             "properties": {
               "event_id": {
                 "type": "string",
-                "description": "the event ID",
+                "description": "the event ID"
               },
               "name": {
                 "type": "string",
-                "description": "user's name",
+                "description": "user's name"
               },
               "email": {
                 "type": "string",
-                "description": "user's email address",
+                "description": "user's email address"
               },
               "comments": {
                 "type": "string",
-                "description": "comments supplied by user",
+                "description": "comments supplied by user"
               }
             }
+          },
+          "example": {
+            "comments": "It broke!",
+            "email": "jane@example.com",
+            "event_id": "14bad9a2e3774046977a21440ddb39b2",
+            "name": "Jane Smith"
           }
         }
       },
@@ -127,61 +141,71 @@
         "content": {
           "application/json": {
             "schema": {
-                "type": "object",
-                "required": ["comments", "dateCreated", "email", "event", "eventID", "id", "issue", "name", "user"],
-                "properties": {
-                    "comments": {
-                        "type": "string",
-                    },
-                    "dateCreated": {
-                        "type": "string",
-                    },
-                    "email": {
-                        "type": "string",
-                    },
-                    "event": {
-                        "type": "object",
-                        "properties": {
-                          "eventID": {
-                            "type": "string"
-                          },
-                          "id": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                    },
+              "type": "object",
+              "required": [
+                "comments",
+                "dateCreated",
+                "email",
+                "event",
+                "eventID",
+                "id",
+                "issue",
+                "name",
+                "user"
+              ],
+              "properties": {
+                "comments": {
+                  "type": "string"
+                },
+                "dateCreated": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "object",
+                  "properties": {
                     "eventID": {
-                        "type": "string",
+                      "type": "string"
                     },
                     "id": {
-                        "type": "string",
-                    },
-                    "issue": {
-                        "type": "object",
-                        "nullable": true
-                    },
-                    "name": {
-                        "type": "string",
-                    },
-                    "user": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                }            
-              },
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "eventID": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "issue": {
+                  "type": "object",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            },
             "example": {
-              "comments": "It broke!", 
-              "dateCreated": "2018-11-06T21:20:11.468Z", 
-              "email": "jane@example.com", 
+              "comments": "It broke!",
+              "dateCreated": "2018-11-06T21:20:11.468Z",
+              "email": "jane@example.com",
               "event": {
-                "eventID": "14bad9a2e3774046977a21440ddb39b2", 
+                "eventID": "14bad9a2e3774046977a21440ddb39b2",
                 "id": null
-              }, 
-              "eventID": "14bad9a2e3774046977a21440ddb39b2", 
-              "id": "1", 
-              "issue": null, 
-              "name": "Jane Smith", 
+              },
+              "eventID": "14bad9a2e3774046977a21440ddb39b2",
+              "id": "1",
+              "issue": null,
+              "name": "Jane Smith",
               "user": null
             }
           }
@@ -194,8 +218,12 @@
         "description": "The requested resource does not exist"
       }
     },
-    "security": [{
-      "auth_token": ["project:write"]
-    }]
+    "security": [
+      {
+        "auth_token": [
+          "project:write"
+        ]
+      }
+    ]
   }
 }
