@@ -33,25 +33,23 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "object",
-                "required": [
-                  "dateCreated",
-                  "id"
-                ],
-                "properties": {
-                  "dateCreated": {
-                    "type": "string"
-                  },
-                  "id": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "../../components/schemas/user-feedback.json#/UserFeedback"
               }
             },
             "example": [
               {
-                "dateCreated": "2018-11-06T21:19:58.536Z",
-                "id": "3"
+                "comments": "It broke!",
+                "dateCreated": "2018-11-06T21:20:11.468Z",
+                "email": "jane@example.com",
+                "event": {
+                  "eventID": "14bad9a2e3774046977a21440ddb39b2",
+                  "id": null
+                },
+                "eventID": "14bad9a2e3774046977a21440ddb39b2",
+                "id": "1",
+                "issue": null,
+                "name": "Jane Smith",
+                "user": null
               }
             ]
           }
@@ -136,63 +134,12 @@
       "required": false
     },
     "responses": {
-      "200": {
+      "201": {
         "description": "Success.",
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "required": [
-                "comments",
-                "dateCreated",
-                "email",
-                "event",
-                "eventID",
-                "id",
-                "issue",
-                "name",
-                "user"
-              ],
-              "properties": {
-                "comments": {
-                  "type": "string"
-                },
-                "dateCreated": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                },
-                "event": {
-                  "type": "object",
-                  "properties": {
-                    "eventID": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "string",
-                      "nullable": true
-                    }
-                  }
-                },
-                "eventID": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "string"
-                },
-                "issue": {
-                  "type": "object",
-                  "nullable": true
-                },
-                "name": {
-                  "type": "string"
-                },
-                "user": {
-                  "type": "string",
-                  "nullable": true
-                }
-              }
+              "$ref": "../../components/schemas/user-feedback.json#/UserFeedback"
             },
             "example": {
               "comments": "It broke!",
