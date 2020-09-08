@@ -42,6 +42,14 @@
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/organizations/&template=api_error_template.md"
       }
+    },
+    {
+      "name": "Events",
+      "description": "Endpoints for events",
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/organizations/&template=api_error_template.md"
+      }
     }
   ],
   "paths": {
@@ -6994,6 +7002,1906 @@
         "security": [
           {
             "auth_token": ["project:admin"]
+          }
+        ]
+      }
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/events/{event_id}/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Return details on an individual event.",
+        "operationId": "Retrieve an Event for a Project",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the event belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "project_slug",
+            "in": "path",
+            "description": "The slug of the project the event belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "The ID of the event to retrieve (either the numeric primary-key or the hexadecimal ID as reported by the client)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/events/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Return a list of events bound to a project.",
+        "operationId": "List a Project's Events",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the groups belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "project_slug",
+            "in": "path",
+            "description": "The slug of the project the groups belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "full",
+            "in": "query",
+            "description": "If this is set to true then the event payload will include the full event body, including the stacktrace. \nSet to 1 to enable.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/issues/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Return a list of issues (groups) bound to a project.  All parameters are supplied as query string parameters.",
+        "operationId": "List a Project's Issues",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issues belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "project_slug",
+            "in": "path",
+            "description": "The slug of the project the issues belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "statsPeriod",
+            "in": "query",
+            "description": "An optional stat period (can be one of `\"24h\"`, `\"14d\"`, and `\"\"`).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "shortIdLookup",
+            "in": "query",
+            "description": "If this is set to true then short IDs are looked up by this function as well. This can cause the return value of the function to return an event issue of a different project which is why this is an opt-in. Set to 1 to enable.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "An optional Sentry structured search query. If not provided an implied `\"is:unresolved\"` is assumed.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "lastSeen",
+                      "numComments",
+                      "userCount",
+                      "culprit",
+                      "title",
+                      "id",
+                      "assignedTo",
+                      "logger",
+                      "stats",
+                      "type",
+                      "annotations",
+                      "metadata",
+                      "status",
+                      "subscriptionDetails",
+                      "isPublic",
+                      "hasSeen",
+                      "shortId",
+                      "shareId",
+                      "firstSeen",
+                      "count",
+                      "permalink",
+                      "level",
+                      "isSubscribed",
+                      "isBookmarked",
+                      "project",
+                      "statusDetails"
+                    ],
+                    "properties": {
+                      "annotations": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "assignedTo": {
+                        "type": "object",
+                        "nullable": true
+                      },
+                      "count": {
+                        "type": "string"
+                      },
+                      "culprit": {
+                        "type": "string"
+                      },
+                      "firstSeen": {
+                        "type": "string"
+                      },
+                      "hasSeen": {
+                        "type": "boolean"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "isBookmarked": {
+                        "type": "boolean"
+                      },
+                      "isPublic": {
+                        "type": "boolean"
+                      },
+                      "isSubscribed": {
+                        "type": "boolean"
+                      },
+                      "lastSeen": {
+                        "type": "string"
+                      },
+                      "level": {
+                        "type": "string"
+                      },
+                      "logger": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "metadata": {
+                        "type": "object",
+                        "properties": {
+                          "filename": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "numComments": {
+                        "type": "integer"
+                      },
+                      "permalink": {
+                        "type": "string"
+                      },
+                      "project": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "shareId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "shortId": {
+                        "type": "string"
+                      },
+                      "stats": {
+                        "type": "object",
+                        "properties": {
+                          "24h": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "statusDetails": {
+                        "type": "object"
+                      },
+                      "subscriptionDetails": {
+                        "type": "object",
+                        "nullable": true
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "userCount": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "annotations": [],
+                    "assignedTo": null,
+                    "count": "1",
+                    "culprit": "raven.scripts.runner in main",
+                    "firstSeen": "2018-11-06T21:19:55Z",
+                    "hasSeen": false,
+                    "id": "1",
+                    "isBookmarked": false,
+                    "isPublic": false,
+                    "isSubscribed": true,
+                    "lastSeen": "2018-11-06T21:19:55Z",
+                    "level": "error",
+                    "logger": null,
+                    "metadata": {
+                      "title": "This is an example Python exception"
+                    },
+                    "numComments": 0,
+                    "permalink": "https://sentry.io/the-interstellar-jurisdiction/pump-station/issues/1/",
+                    "project": {
+                      "id": "2",
+                      "name": "Pump Station",
+                      "slug": "pump-station"
+                    },
+                    "shareId": null,
+                    "shortId": "PUMP-STATION-1",
+                    "stats": {
+                      "24h": [
+                        [
+                          1541455200,
+                          473
+                        ],
+                        [
+                          1541458800,
+                          914
+                        ],
+                        [
+                          1541462400,
+                          991
+                        ],
+                        [
+                          1541466000,
+                          925
+                        ],
+                        [
+                          1541469600,
+                          881
+                        ],
+                        [
+                          1541473200,
+                          182
+                        ],
+                        [
+                          1541476800,
+                          490
+                        ],
+                        [
+                          1541480400,
+                          820
+                        ],
+                        [
+                          1541484000,
+                          322
+                        ],
+                        [
+                          1541487600,
+                          836
+                        ],
+                        [
+                          1541491200,
+                          565
+                        ],
+                        [
+                          1541494800,
+                          758
+                        ],
+                        [
+                          1541498400,
+                          880
+                        ],
+                        [
+                          1541502000,
+                          677
+                        ],
+                        [
+                          1541505600,
+                          381
+                        ],
+                        [
+                          1541509200,
+                          814
+                        ],
+                        [
+                          1541512800,
+                          329
+                        ],
+                        [
+                          1541516400,
+                          446
+                        ],
+                        [
+                          1541520000,
+                          731
+                        ],
+                        [
+                          1541523600,
+                          111
+                        ],
+                        [
+                          1541527200,
+                          926
+                        ],
+                        [
+                          1541530800,
+                          772
+                        ],
+                        [
+                          1541534400,
+                          400
+                        ],
+                        [
+                          1541538000,
+                          943
+                        ]
+                      ]
+                    },
+                    "status": "unresolved",
+                    "statusDetails": {},
+                    "subscriptionDetails": null,
+                    "title": "This is an example Python exception",
+                    "type": "default",
+                    "userCount": 0
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project: read"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Bulk mutate various attributes on issues.  The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be modified.\n\n- For non-status updates, the `id` query parameter is required.\n- For status updates, the `id` query parameter may be omitted\nfor a batch \"update all\" query.- An optional `status` query parameter may be used to restrict\nmutations to only events with the given status.\n\nThe following attributes can be modified and are supplied as JSON object in the body:\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
+        "operationId": "Bulk Mutate a List of Issues",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issues belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "project_slug",
+            "in": "path",
+            "description": "The slug of the project the issues belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "A list of IDs of the issues to be mutated. This parameter shall be repeated for each issue. It is optional only if a status is mutated in which case an implicit update all is assumed.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Optionally limits the query to issues of the specified status. Valid values are `\"resolved\"`, `\"unresolved\"` and `\"ignored\"`.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "The new status for the issues. Valid values are `\"resolved\"`, `\"resolvedInNextRelease\"`, `\"unresolved\"`, and `\"ignored\"`.",
+                    "example": "unresolved"
+                  },
+                  "statusDetails": {
+                    "type": "object",
+                    "description": "Additional details about the resolution. Valid values are `\"inRelease\"`, `\"inNextRelease\"`, `\"inCommit\"`, `\"ignoreDuration\"`, `\"ignoreCount\"`, `\"ignoreWindow\"`, `\"ignoreUserCount\"`, and `\"ignoreUserWindow\"`."
+                  },
+                  "ignoreDuration": {
+                    "type": "integer",
+                    "description": "The number of minutes to ignore this issue."
+                  },
+                  "isPublic": {
+                    "type": "boolean",
+                    "description": "Sets the issue to public or private.",
+                    "example": false
+                  },
+                  "merge": {
+                    "type": "boolean",
+                    "description": "Allows to merge or unmerge different issues."
+                  },
+                  "assignedTo": {
+                    "type": "string",
+                    "description": "The actor id (or username) of the user or team that should be assigned to this issue."
+                  },
+                  "hasSeen": {
+                    "type": "boolean",
+                    "description": "In case this API call is invoked with a user context this allows changing of the flag that indicates if the user has seen the event."
+                  },
+                  "isBookmarked": {
+                    "type": "boolean",
+                    "description": "In case this API call is invoked with a user context this allows changing of the bookmark flag."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "statusDetails": {
+                      "type": "object"
+                    }
+                  }
+                },
+                "example": {
+                  "isPublic": false,
+                  "status": "unresolved",
+                  "statusDetails": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Input"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Team not found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team:write"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Permanently remove the given issues. The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be removed.\n\nOnly queries by 'id' are accepted.\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
+        "operationId": "Bulk Remove a List of Issues",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issues belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "project_slug",
+            "in": "path",
+            "description": "The slug of the project the issues belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "A list of IDs of the issues to be removed. This parameter shall be repeated for each issue.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/issues/{issue_id}/tags/{key}/values/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Returns details for given tag key related to an issue.",
+        "operationId": "List a Tag's Values",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The ID of the issue to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The tag key to look the values up for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "key",
+                      "value"
+                    ],
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "key": "ice_cream",
+                      "value": "mint_choco"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/issues/{issue_id}/tags/{key}/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Returns details for given tag key related to an issue.",
+        "operationId": "Retrieve Tag Details",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The ID of the issue to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The tag key to look the values up for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "key",
+                    "totalValues"
+                  ],
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "totalValues": {
+                      "type": "integer"
+                    }
+                  },
+                  "example": [
+                    {
+                      "key": "ice_cream",
+                      "totalValues": 6
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/issues/{issue_id}/hashes/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "This endpoint lists an issue's hashes, which are the generated checksums used to aggregate individual events.",
+        "operationId": "List an Issue's Hashes",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The ID of the issue to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/issues/{issue_id}/events/oldest/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Retrieves the details of the oldest event for an issue.",
+        "operationId": "Retrieve the Oldest Event for an Issue",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The ID of the issue.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/issues/{issue_id}/events/latest/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Retrieves the details of the latest event for an issue.",
+        "operationId": "Retrieve the Latest Event for an Issue",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The ID of the issue.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/issues/{issue_id}/events/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "This endpoint lists an issue's events.",
+        "operationId": "List a Issue's Events",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The ID of the issue to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "full",
+            "in": "query",
+            "description": "If this is set to true then the event payload will include the full event body, including the stacktrace. \nSet to 1 to enable.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/issues/{issue_id}/": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Return details on an individual issue. This returns the basic stats for the issue (title, last seen, first seen), some overall numbers (number of comments, user reports) as well as the summarized event data.",
+        "operationId": "Retrieve an Issue",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The ID of the issue to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "activity",
+                    "annotations",
+                    "assignedTo",
+                    "count",
+                    "culprit",
+                    "firstRelease",
+                    "firstSeen",
+                    "hasSeen",
+                    "id",
+                    "isBookmarked",
+                    "isPublic",
+                    "isSubscribed",
+                    "lastRelease",
+                    "lastSeen",
+                    "level",
+                    "logger",
+                    "metadata",
+                    "numComments",
+                    "participants",
+                    "permalink",
+                    "pluginActions",
+                    "pluginContexts",
+                    "pluginIssues",
+                    "project",
+                    "seenBy",
+                    "shareId",
+                    "shortId",
+                    "stats",
+                    "status",
+                    "statusDetails",
+                    "subscriptionDetails",
+                    "tags",
+                    "title",
+                    "type",
+                    "userCount",
+                    "userReportCount"
+                  ],
+                  "properties": {
+                    "activity": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "object"
+                          },
+                          "dateCreated": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "user": {
+                            "type": "object",
+                            "nullable": true
+                          }
+                        }
+                      }
+                    },
+                    "annotations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "assignedTo": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "count": {
+                      "type": "string"
+                    },
+                    "culprit": {
+                      "type": "string"
+                    },
+                    "firstRelease": {
+                      "type": "object",
+                      "nullable": true,
+                      "properties": {
+                        "authors": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "commitCount": {
+                          "type": "integer"
+                        },
+                        "data": {
+                          "type": "object",
+                          "nullable": true
+                        },
+                        "dateCreated": {
+                          "type": "string"
+                        },
+                        "dateReleased": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "deployCount": {
+                          "type": "integer"
+                        },
+                        "firstEvent": {
+                          "type": "string"
+                        },
+                        "lastCommit": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "lastDeploy": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "lastEvent": {
+                          "type": "string"
+                        },
+                        "newGroups": {
+                          "type": "integer"
+                        },
+                        "owner": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "projects": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "ref": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "shortVersion": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "firstSeen": {
+                      "type": "string"
+                    },
+                    "hasSeen": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "isSubscribed": {
+                      "type": "boolean"
+                    },
+                    "lastRelease": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "lastSeen": {
+                      "type": "string"
+                    },
+                    "level": {
+                      "type": "string"
+                    },
+                    "logger": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "numComments": {
+                      "type": "integer"
+                    },
+                    "participants": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "permalink": {
+                      "type": "string"
+                    },
+                    "pluginActions": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "pluginContexts": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "pluginIssues": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "project": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "seenBy": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "shareId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "shortId": {
+                      "type": "string"
+                    },
+                    "stats": {
+                      "type": "object",
+                      "properties": {
+                        "24h": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "30d": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "statusDetails": {
+                      "type": "object"
+                    },
+                    "subscriptionDetails": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "userCount": {
+                      "type": "integer"
+                    },
+                    "userReportCount": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "example": {
+                  "activity": [
+                    {
+                      "data": {},
+                      "dateCreated": "2018-11-06T21:19:55Z",
+                      "id": "0",
+                      "type": "first_seen",
+                      "user": null
+                    }
+                  ],
+                  "annotations": [],
+                  "assignedTo": null,
+                  "count": "1",
+                  "culprit": "raven.scripts.runner in main",
+                  "firstRelease": {
+                    "authors": [],
+                    "commitCount": 0,
+                    "data": {},
+                    "dateCreated": "2018-11-06T21:19:55.146Z",
+                    "dateReleased": null,
+                    "deployCount": 0,
+                    "firstEvent": "2018-11-06T21:19:55.271Z",
+                    "lastCommit": null,
+                    "lastDeploy": null,
+                    "lastEvent": "2018-11-06T21:19:55.271Z",
+                    "newGroups": 0,
+                    "owner": null,
+                    "projects": [
+                      {
+                        "name": "Pump Station",
+                        "slug": "pump-station"
+                      }
+                    ],
+                    "ref": null,
+                    "shortVersion": "1764232",
+                    "url": null,
+                    "version": "17642328ead24b51867165985996d04b29310337"
+                  },
+                  "firstSeen": "2018-11-06T21:19:55Z",
+                  "hasSeen": false,
+                  "id": "1",
+                  "isBookmarked": false,
+                  "isPublic": false,
+                  "isSubscribed": true,
+                  "lastRelease": null,
+                  "lastSeen": "2018-11-06T21:19:55Z",
+                  "level": "error",
+                  "logger": null,
+                  "metadata": {
+                    "title": "This is an example Python exception"
+                  },
+                  "numComments": 0,
+                  "participants": [],
+                  "permalink": "https://sentry.io/the-interstellar-jurisdiction/pump-station/issues/1/",
+                  "pluginActions": [],
+                  "pluginContexts": [],
+                  "pluginIssues": [],
+                  "project": {
+                    "id": "2",
+                    "name": "Pump Station",
+                    "slug": "pump-station"
+                  },
+                  "seenBy": [],
+                  "shareId": null,
+                  "shortId": "PUMP-STATION-1",
+                  "stats": {
+                    "24h": [
+                      [
+                        1541451600,
+                        557
+                      ],
+                      [
+                        1541455200,
+                        473
+                      ],
+                      [
+                        1541458800,
+                        914
+                      ],
+                      [
+                        1541462400,
+                        991
+                      ],
+                      [
+                        1541466000,
+                        925
+                      ],
+                      [
+                        1541469600,
+                        881
+                      ],
+                      [
+                        1541473200,
+                        182
+                      ],
+                      [
+                        1541476800,
+                        490
+                      ],
+                      [
+                        1541480400,
+                        820
+                      ],
+                      [
+                        1541484000,
+                        322
+                      ],
+                      [
+                        1541487600,
+                        836
+                      ],
+                      [
+                        1541491200,
+                        565
+                      ],
+                      [
+                        1541494800,
+                        758
+                      ],
+                      [
+                        1541498400,
+                        880
+                      ],
+                      [
+                        1541502000,
+                        677
+                      ],
+                      [
+                        1541505600,
+                        381
+                      ],
+                      [
+                        1541509200,
+                        814
+                      ],
+                      [
+                        1541512800,
+                        329
+                      ],
+                      [
+                        1541516400,
+                        446
+                      ],
+                      [
+                        1541520000,
+                        731
+                      ],
+                      [
+                        1541523600,
+                        111
+                      ],
+                      [
+                        1541527200,
+                        926
+                      ],
+                      [
+                        1541530800,
+                        772
+                      ],
+                      [
+                        1541534400,
+                        400
+                      ],
+                      [
+                        1541538000,
+                        943
+                      ]
+                    ],
+                    "30d": [
+                      [
+                        1538870400,
+                        565
+                      ],
+                      [
+                        1538956800,
+                        12862
+                      ],
+                      [
+                        1539043200,
+                        15617
+                      ],
+                      [
+                        1539129600,
+                        10809
+                      ],
+                      [
+                        1539216000,
+                        15065
+                      ],
+                      [
+                        1539302400,
+                        12927
+                      ],
+                      [
+                        1539388800,
+                        12994
+                      ],
+                      [
+                        1539475200,
+                        13139
+                      ],
+                      [
+                        1539561600,
+                        11838
+                      ],
+                      [
+                        1539648000,
+                        12088
+                      ],
+                      [
+                        1539734400,
+                        12338
+                      ],
+                      [
+                        1539820800,
+                        12768
+                      ],
+                      [
+                        1539907200,
+                        12816
+                      ],
+                      [
+                        1539993600,
+                        15356
+                      ],
+                      [
+                        1540080000,
+                        10910
+                      ],
+                      [
+                        1540166400,
+                        12306
+                      ],
+                      [
+                        1540252800,
+                        12912
+                      ],
+                      [
+                        1540339200,
+                        14700
+                      ],
+                      [
+                        1540425600,
+                        11890
+                      ],
+                      [
+                        1540512000,
+                        11684
+                      ],
+                      [
+                        1540598400,
+                        13510
+                      ],
+                      [
+                        1540684800,
+                        12625
+                      ],
+                      [
+                        1540771200,
+                        12811
+                      ],
+                      [
+                        1540857600,
+                        13180
+                      ],
+                      [
+                        1540944000,
+                        14651
+                      ],
+                      [
+                        1541030400,
+                        14161
+                      ],
+                      [
+                        1541116800,
+                        12612
+                      ],
+                      [
+                        1541203200,
+                        14316
+                      ],
+                      [
+                        1541289600,
+                        14742
+                      ],
+                      [
+                        1541376000,
+                        12505
+                      ],
+                      [
+                        1541462400,
+                        14180
+                      ]
+                    ]
+                  },
+                  "status": "unresolved",
+                  "statusDetails": {},
+                  "subscriptionDetails": null,
+                  "tags": [],
+                  "title": "This is an example Python exception",
+                  "type": "default",
+                  "userCount": 0,
+                  "userReportCount": 0
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event: read"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Updates an individual issues's attributes.  Only the attributes submitted are modified.",
+        "operationId": "Update an Issue",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The ID of the group to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "The new status for the issues. Valid values are `\"resolved\"`, `\"resolvedInNextRelease\"`, `\"unresolved\"`, and `\"ignored\"`.",
+                    "example": "unresolved"
+                  },
+                  "assignedTo": {
+                    "type": "string",
+                    "description": "The actor id (or username) of the user or team that should be assigned to this issue."
+                  },
+                  "hasSeen": {
+                    "type": "boolean",
+                    "description": "In case this API call is invoked with a user context this allows changing of the flag that indicates if the user has seen the event."
+                  },
+                  "isBookmarked": {
+                    "type": "boolean",
+                    "description": "In case this API call is invoked with a user context this allows changing of the bookmark flag."
+                  },
+                  "isSubscribed": {
+                    "type": "boolean"
+                  },
+                  "isPublic": {
+                    "type": "boolean",
+                    "description": "Sets the issue to public or private."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "annotations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "assignedTo": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "count": {
+                      "type": "string"
+                    },
+                    "culprit": {
+                      "type": "string"
+                    },
+                    "firstSeen": {
+                      "type": "string"
+                    },
+                    "hasSeen": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "isSubscribed": {
+                      "type": "boolean"
+                    },
+                    "lastSeen": {
+                      "type": "string"
+                    },
+                    "level": {
+                      "type": "string"
+                    },
+                    "logger": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "numComments": {
+                      "type": "integer"
+                    },
+                    "permalink": {
+                      "type": "string"
+                    },
+                    "project": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "shareId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "shortId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "statusDetails": {
+                      "type": "object"
+                    },
+                    "subscriptionDetails": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "userCount": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "example": {
+                  "annotations": [],
+                  "assignedTo": null,
+                  "count": "1",
+                  "culprit": "raven.scripts.runner in main",
+                  "firstSeen": "2018-11-06T21:19:55Z",
+                  "hasSeen": false,
+                  "id": "1",
+                  "isBookmarked": false,
+                  "isPublic": false,
+                  "isSubscribed": true,
+                  "lastSeen": "2018-11-06T21:19:55Z",
+                  "level": "error",
+                  "logger": null,
+                  "metadata": {
+                    "title": "This is an example Python exception"
+                  },
+                  "numComments": 0,
+                  "permalink": "https://sentry.io/the-interstellar-jurisdiction/pump-station/issues/1/",
+                  "project": {
+                    "id": "2",
+                    "name": "Pump Station",
+                    "slug": "pump-station"
+                  },
+                  "shareId": null,
+                  "shortId": "PUMP-STATION-1",
+                  "status": "unresolved",
+                  "statusDetails": {},
+                  "subscriptionDetails": null,
+                  "title": "This is an example Python exception",
+                  "type": "default",
+                  "userCount": 0
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The requested resource does not exist"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:write"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Removes an individual issue.",
+        "operationId": "Remove an Issue",
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "Yhe ID of the issue to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Success."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The requested resource does not exist"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:admin"
+            ]
           }
         ]
       }
