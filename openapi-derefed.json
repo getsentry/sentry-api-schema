@@ -47,9 +47,7 @@
   "paths": {
     "/api/0/organizations/{organization_slug}/teams/": {
       "get": {
-        "tags": [
-          "Teams"
-        ],
+        "tags": ["Teams"],
         "description": "Returns a list of teams bound to a organization.",
         "operationId": "List an Organization's Teams",
         "parameters": [
@@ -339,16 +337,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "team:read"
-            ]
+            "auth_token": ["team:read"]
           }
         ]
       },
       "post": {
-        "tags": [
-          "Teams"
-        ],
+        "tags": ["Teams"],
         "description": "Create a new team bound to an organization. Only the name of the team is needed to create it, the slug can be auto generated.",
         "operationId": "Create a New Team",
         "parameters": [
@@ -366,9 +360,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name"
-                ],
+                "required": ["name"],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -475,18 +467,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "team:write"
-            ]
+            "auth_token": ["team:write"]
           }
         ]
       }
     },
     "/api/0/teams/{organization_slug}/{team_slug}/": {
       "get": {
-        "tags": [
-          "Teams"
-        ],
+        "tags": ["Teams"],
         "description": "Return details on an individual team.",
         "operationId": "Retrieve a Team",
         "parameters": [
@@ -607,10 +595,7 @@
                         },
                         "status": {
                           "type": "object",
-                          "required": [
-                            "id",
-                            "name"
-                          ],
+                          "required": ["id", "name"],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -672,16 +657,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "team:read"
-            ]
+            "auth_token": ["team:read"]
           }
         ]
       },
       "put": {
-        "tags": [
-          "Teams"
-        ],
+        "tags": ["Teams"],
         "description": "Update various attributes and configurable settings for the given team.",
         "operationId": "Update a Team",
         "parameters": [
@@ -708,9 +689,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name"
-                ],
+                "required": ["name"],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -816,16 +795,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "team:write"
-            ]
+            "auth_token": ["team:write"]
           }
         ]
       },
       "delete": {
-        "tags": [
-          "Teams"
-        ],
+        "tags": ["Teams"],
         "description": "Schedules a team for deletion.\n\nNote: Deletion happens asynchronously and therefor is not immediate. However once deletion has begun the state of a project changes and will be hidden from most public views.",
         "operationId": "Delete a Team",
         "parameters": [
@@ -861,18 +836,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "team:admin"
-            ]
+            "auth_token": ["team:admin"]
           }
         ]
       }
     },
     "/api/0/teams/{organization_slug}/{team_slug}/projects/": {
       "get": {
-        "tags": [
-          "Teams"
-        ],
+        "tags": ["Teams"],
         "description": "Return a list of projects bound to a team.",
         "operationId": "List a Team's Projects",
         "parameters": [
@@ -958,11 +929,7 @@
                       },
                       "team": {
                         "type": "object",
-                        "required": [
-                          "id",
-                          "name",
-                          "slug"
-                        ],
+                        "required": ["id", "name", "slug"],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -979,11 +946,7 @@
                         "type": "array",
                         "items": {
                           "type": "object",
-                          "required": [
-                            "id",
-                            "name",
-                            "slug"
-                          ],
+                          "required": ["id", "name", "slug"],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -1053,16 +1016,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:read"
-            ]
+            "auth_token": ["project:read"]
           }
         ]
       },
       "post": {
-        "tags": [
-          "Teams"
-        ],
+        "tags": ["Teams"],
         "description": "Create a new project bound to a team.",
         "operationId": "Create a New Project",
         "parameters": [
@@ -1089,9 +1048,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name"
-                ],
+                "required": ["name"],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -1251,18 +1208,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:write"
-            ]
+            "auth_token": ["project:write"]
           }
         ]
       }
     },
     "/api/0/teams/{organization_slug}/{team_slug}/stats/": {
       "get": {
-        "tags": [
-          "Teams"
-        ],
+        "tags": ["Teams"],
         "summary": "Caution\nThis endpoint may change in the future without notice.",
         "description": "Return a set of points representing a normalized timestamp and the number of events seen in the period.\n\nQuery ranges are limited to Sentry’s configured time-series resolutions.",
         "operationId": "Retrieve Event Counts for a Team",
@@ -1291,10 +1244,7 @@
             "description": "the name of the stat to query `(\"received\", \"rejected\")`",
             "schema": {
               "type": "string",
-              "enum": [
-                "received",
-                "rejected"
-              ]
+              "enum": ["received", "rejected"]
             }
           },
           {
@@ -1321,11 +1271,7 @@
             "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
             "schema": {
               "type": "string",
-              "enum": [
-                "10s",
-                "1h",
-                "1d"
-              ]
+              "enum": ["10s", "1h", "1d"]
             }
           }
         ],
@@ -1337,102 +1283,30 @@
                 "schema": {
                   "type": "object",
                   "example": [
-                    [
-                      1541455200,
-                      3302
-                    ],
-                    [
-                      1541458800,
-                      3832
-                    ],
-                    [
-                      1541462400,
-                      3669
-                    ],
-                    [
-                      1541466000,
-                      3533
-                    ],
-                    [
-                      1541469600,
-                      3499
-                    ],
-                    [
-                      1541473200,
-                      3201
-                    ],
-                    [
-                      1541476800,
-                      3769
-                    ],
-                    [
-                      1541480400,
-                      2706
-                    ],
-                    [
-                      1541484000,
-                      2698
-                    ],
-                    [
-                      1541487600,
-                      3747
-                    ],
-                    [
-                      1541491200,
-                      3261
-                    ],
-                    [
-                      1541494800,
-                      2860
-                    ],
-                    [
-                      1541498400,
-                      4350
-                    ],
-                    [
-                      1541502000,
-                      2924
-                    ],
-                    [
-                      1541505600,
-                      3389
-                    ],
-                    [
-                      1541509200,
-                      2931
-                    ],
-                    [
-                      1541512800,
-                      3132
-                    ],
-                    [
-                      1541516400,
-                      3213
-                    ],
-                    [
-                      1541520000,
-                      3650
-                    ],
-                    [
-                      1541523600,
-                      3096
-                    ],
-                    [
-                      1541527200,
-                      3845
-                    ],
-                    [
-                      1541530800,
-                      3545
-                    ],
-                    [
-                      1541534400,
-                      2880
-                    ],
-                    [
-                      1541538000,
-                      4057
-                    ]
+                    [1541455200, 3302],
+                    [1541458800, 3832],
+                    [1541462400, 3669],
+                    [1541466000, 3533],
+                    [1541469600, 3499],
+                    [1541473200, 3201],
+                    [1541476800, 3769],
+                    [1541480400, 2706],
+                    [1541484000, 2698],
+                    [1541487600, 3747],
+                    [1541491200, 3261],
+                    [1541494800, 2860],
+                    [1541498400, 4350],
+                    [1541502000, 2924],
+                    [1541505600, 3389],
+                    [1541509200, 2931],
+                    [1541512800, 3132],
+                    [1541516400, 3213],
+                    [1541520000, 3650],
+                    [1541523600, 3096],
+                    [1541527200, 3845],
+                    [1541530800, 3545],
+                    [1541534400, 2880],
+                    [1541538000, 4057]
                   ]
                 }
               }
@@ -1447,18 +1321,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "team:read"
-            ]
+            "auth_token": ["team:read"]
           }
         ]
       }
     },
     "/api/0/organizations/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "Return a list of organizations available to the authenticated session.  This is particularly useful for requests with an user bound context.  For API key based requests this will only return the organization that belongs to the key.",
         "operationId": "List your Organizations",
         "parameters": [
@@ -1524,10 +1394,7 @@
                       },
                       "status": {
                         "type": "object",
-                        "required": [
-                          "id",
-                          "name"
-                        ],
+                        "required": ["id", "name"],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -1567,18 +1434,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/eventids/{event_id}/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "This resolves an event ID to the project slug and internal issue ID and internal event ID.",
         "operationId": "Resolve an Event ID",
         "parameters": [
@@ -1649,18 +1512,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "Return details on an individual organization including various details such as membership access, features, and teams.",
         "operationId": "Retrieve an Organization",
         "parameters": [
@@ -1860,11 +1719,7 @@
                           },
                           "team": {
                             "type": "object",
-                            "required": [
-                              "id",
-                              "name",
-                              "slug"
-                            ],
+                            "required": ["id", "name", "slug"],
                             "properties": {
                               "id": {
                                 "type": "string"
@@ -1881,11 +1736,7 @@
                             "type": "array",
                             "items": {
                               "type": "object",
-                              "required": [
-                                "id",
-                                "name",
-                                "slug"
-                              ],
+                              "required": ["id", "name", "slug"],
                               "properties": {
                                 "id": {
                                   "type": "string"
@@ -2204,16 +2055,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       },
       "put": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "Update various attributes and configurable settings for the given organization.",
         "operationId": "Update an Organization",
         "parameters": [
@@ -2231,9 +2078,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name"
-                ],
+                "required": ["name"],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -2438,11 +2283,7 @@
                           },
                           "team": {
                             "type": "object",
-                            "required": [
-                              "id",
-                              "name",
-                              "slug"
-                            ],
+                            "required": ["id", "name", "slug"],
                             "properties": {
                               "id": {
                                 "type": "string"
@@ -2459,11 +2300,7 @@
                             "type": "array",
                             "items": {
                               "type": "object",
-                              "required": [
-                                "id",
-                                "name",
-                                "slug"
-                              ],
+                              "required": ["id", "name", "slug"],
                               "properties": {
                                 "id": {
                                   "type": "string"
@@ -2669,18 +2506,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org:write"
-            ]
+            "auth_token": ["org:write"]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/projects/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "Return a list of projects bound to a organization.",
         "operationId": "List an Organization's Projects",
         "parameters": [
@@ -2760,11 +2593,7 @@
                       },
                       "team": {
                         "type": "object",
-                        "required": [
-                          "id",
-                          "name",
-                          "slug"
-                        ],
+                        "required": ["id", "name", "slug"],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -2781,11 +2610,7 @@
                         "type": "array",
                         "items": {
                           "type": "object",
-                          "required": [
-                            "id",
-                            "name",
-                            "slug"
-                          ],
+                          "required": ["id", "name", "slug"],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -2838,18 +2663,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/repos/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "Return a list of version control repositories for a given organization.",
         "operationId": "List an Organization's Repositories",
         "parameters": [
@@ -2872,11 +2693,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "dateCreated",
-                      "id",
-                      "name"
-                    ],
+                    "required": ["dateCreated", "id", "name"],
                     "properties": {
                       "dateCreated": {
                         "type": "string"
@@ -2906,18 +2723,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/repos/{repo_id}/commits/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "Return a list of commits for a given repository.",
         "operationId": "List a Repository's Commits",
         "parameters": [
@@ -2949,11 +2762,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "dateCreated",
-                      "id",
-                      "message"
-                    ],
+                    "required": ["dateCreated", "id", "message"],
                     "properties": {
                       "dateCreated": {
                         "type": "string"
@@ -2983,18 +2792,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/stats/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "summary": "Caution\nThis endpoint may change in the future without  notice.",
         "description": "Return a set of points representing a normalized timestamp and the number of events seen in the period.",
         "operationId": "Retrieve Event Counts for an Organization",
@@ -3014,11 +2819,7 @@
             "description": "the name of the stat to query `(\"received\", \"rejected\", \"blacklisted\")`",
             "schema": {
               "type": "string",
-              "enum": [
-                "received",
-                "rejected",
-                "blacklisted"
-              ]
+              "enum": ["received", "rejected", "blacklisted"]
             }
           },
           {
@@ -3045,11 +2846,7 @@
             "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
             "schema": {
               "type": "string",
-              "enum": [
-                "10s",
-                "1h",
-                "1d"
-              ]
+              "enum": ["10s", "1h", "1d"]
             }
           }
         ],
@@ -3067,102 +2864,30 @@
                     }
                   },
                   "example": [
-                    [
-                      1541455200,
-                      8264
-                    ],
-                    [
-                      1541458800,
-                      6564
-                    ],
-                    [
-                      1541462400,
-                      8652
-                    ],
-                    [
-                      1541466000,
-                      7436
-                    ],
-                    [
-                      1541469600,
-                      8127
-                    ],
-                    [
-                      1541473200,
-                      7643
-                    ],
-                    [
-                      1541476800,
-                      6518
-                    ],
-                    [
-                      1541480400,
-                      6752
-                    ],
-                    [
-                      1541484000,
-                      6559
-                    ],
-                    [
-                      1541487600,
-                      7039
-                    ],
-                    [
-                      1541491200,
-                      7384
-                    ],
-                    [
-                      1541494800,
-                      6265
-                    ],
-                    [
-                      1541498400,
-                      8390
-                    ],
-                    [
-                      1541502000,
-                      6393
-                    ],
-                    [
-                      1541505600,
-                      7298
-                    ],
-                    [
-                      1541509200,
-                      7422
-                    ],
-                    [
-                      1541512800,
-                      5603
-                    ],
-                    [
-                      1541516400,
-                      6846
-                    ],
-                    [
-                      1541520000,
-                      8886
-                    ],
-                    [
-                      1541523600,
-                      6544
-                    ],
-                    [
-                      1541527200,
-                      8812
-                    ],
-                    [
-                      1541530800,
-                      8172
-                    ],
-                    [
-                      1541534400,
-                      5733
-                    ],
-                    [
-                      1541538000,
-                      9435
-                    ]
+                    [1541455200, 8264],
+                    [1541458800, 6564],
+                    [1541462400, 8652],
+                    [1541466000, 7436],
+                    [1541469600, 8127],
+                    [1541473200, 7643],
+                    [1541476800, 6518],
+                    [1541480400, 6752],
+                    [1541484000, 6559],
+                    [1541487600, 7039],
+                    [1541491200, 7384],
+                    [1541494800, 6265],
+                    [1541498400, 8390],
+                    [1541502000, 6393],
+                    [1541505600, 7298],
+                    [1541509200, 7422],
+                    [1541512800, 5603],
+                    [1541516400, 6846],
+                    [1541520000, 8886],
+                    [1541523600, 6544],
+                    [1541527200, 8812],
+                    [1541530800, 8172],
+                    [1541534400, 5733],
+                    [1541538000, 9435]
                   ]
                 }
               }
@@ -3174,18 +2899,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/users/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "Return a list of users that belong to a given organization.",
         "operationId": "List an Organization's Users",
         "parameters": [
@@ -3408,9 +3129,7 @@
                     "roleName": "Organization Owner",
                     "expired": false,
                     "id": "9376061",
-                    "projects": [
-                      "buggy-sentry-project"
-                    ],
+                    "projects": ["buggy-sentry-project"],
                     "name": "OtherTest McTestuser",
                     "role": "owner",
                     "flags": {
@@ -3430,18 +3149,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/shortids/{short_id}/": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "description": "This resolves a short ID to the project slug and internal issue ID.",
         "operationId": "Resolve a Short ID",
         "parameters": [
@@ -3586,11 +3301,7 @@
                         },
                         "status": {
                           "type": "string",
-                          "enum": [
-                            "resolved",
-                            "unresolved",
-                            "ignored"
-                          ]
+                          "enum": ["resolved", "unresolved", "ignored"]
                         },
                         "subscriptionDetails": {
                           "type": "object",
@@ -3704,18 +3415,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "org: read"
-            ]
+            "auth_token": ["org: read"]
           }
         ]
       }
     },
     "/api/0/projects/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Return a list of projects available to the authenticated session.",
         "operationId": "List your Projects",
         "responses": {
@@ -3841,10 +3548,7 @@
                           },
                           "status": {
                             "type": "object",
-                            "required": [
-                              "id",
-                              "name"
-                            ],
+                            "required": ["id", "name"],
                             "properties": {
                               "id": {
                                 "type": "string"
@@ -4014,18 +3718,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:read"
-            ]
+            "auth_token": ["project:read"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Return details on an individual project.",
         "operationId": "Retrieve a Project",
         "parameters": [
@@ -4346,10 +4046,7 @@
                         },
                         "status": {
                           "type": "object",
-                          "required": [
-                            "id",
-                            "name"
-                          ],
+                          "required": ["id", "name"],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -4531,11 +4228,7 @@
                     },
                     "team": {
                       "type": "object",
-                      "required": [
-                        "id",
-                        "name",
-                        "slug"
-                      ],
+                      "required": ["id", "name", "slug"],
                       "properties": {
                         "id": {
                           "type": "string"
@@ -4552,11 +4245,7 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": [
-                          "id",
-                          "name",
-                          "slug"
-                        ],
+                        "required": ["id", "name", "slug"],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -4576,9 +4265,7 @@
                   }
                 },
                 "example": {
-                  "allowedDomains": [
-                    "*"
-                  ],
+                  "allowedDomains": ["*"],
                   "avatar": {
                     "avatarType": "letter_avatar",
                     "avatarUuid": null
@@ -4731,16 +4418,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:read"
-            ]
+            "auth_token": ["project:read"]
           }
         ]
       },
       "put": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Update various attributes and configurable settings for the given project.  Only supplied values are updated.",
         "operationId": "Update a Project",
         "parameters": [
@@ -5110,10 +4793,7 @@
                         },
                         "status": {
                           "type": "object",
-                          "required": [
-                            "id",
-                            "name"
-                          ],
+                          "required": ["id", "name"],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -5295,11 +4975,7 @@
                     },
                     "team": {
                       "type": "object",
-                      "required": [
-                        "id",
-                        "name",
-                        "slug"
-                      ],
+                      "required": ["id", "name", "slug"],
                       "properties": {
                         "id": {
                           "type": "string"
@@ -5316,11 +4992,7 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": [
-                          "id",
-                          "name",
-                          "slug"
-                        ],
+                        "required": ["id", "name", "slug"],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -5499,16 +5171,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:write"
-            ]
+            "auth_token": ["project:write"]
           }
         ]
       },
       "delete": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Schedules a project for deletion.\n\nDeletion happens asynchronously and therefore is not immediate.\nHowever once deletion has begun the state of a project changes and\nwill be hidden from most public views.",
         "operationId": "Delete a Project",
         "parameters": [
@@ -5544,18 +5212,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:admin"
-            ]
+            "auth_token": ["project:admin"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/files/dsyms/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Retrieve a list of debug information files for a given project.",
         "operationId": "List a Project's Debug Information Files",
         "parameters": [
@@ -5594,16 +5258,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:read"
-            ]
+            "auth_token": ["project:read"]
           }
         ]
       },
       "post": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Upload a new debug information file for the given release.\n\nUnlike other API requests, files must be uploaded using the\ntraditional multipart/form-data content-type.\n\nThe file uploaded is a zip archive of an Apple .dSYM folder which\ncontains the individual debug images.  Uploading through this endpoint\nwill create different files for the contained images.",
         "operationId": "Upload a new File",
         "parameters": [
@@ -5630,9 +5290,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "required": [
-                  "file"
-                ],
+                "required": ["file"],
                 "type": "object",
                 "properties": {
                   "file": {
@@ -5665,16 +5323,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:write"
-            ]
+            "auth_token": ["project:write"]
           }
         ]
       },
       "delete": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Delete a debug information file for a given project.",
         "operationId": "Delete a specific project's Debug Information File",
         "parameters": [
@@ -5719,18 +5373,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:admin"
-            ]
+            "auth_token": ["project:admin"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/users/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Return a list of users seen within this project.",
         "operationId": "List a project's users",
         "parameters": [
@@ -5770,12 +5420,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "dateCreated",
-                      "id",
-                      "username",
-                      "email"
-                    ],
+                    "required": ["dateCreated", "id", "username", "email"],
                     "properties": {
                       "dateCreated": {
                         "type": "string"
@@ -5811,18 +5456,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:  read"
-            ]
+            "auth_token": ["project:  read"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/tags/{key}/values/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Return a list of values associated with this key.  The `query`\nparameter can be used to to perform a \"contains\" match on\nvalues.",
         "operationId": "List a tag's values",
         "parameters": [
@@ -5863,9 +5504,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "name"
-                    ],
+                    "required": ["name"],
                     "properties": {
                       "name": {
                         "type": "string"
@@ -5887,18 +5526,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:  read"
-            ]
+            "auth_token": ["project:  read"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/stats/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "summary": "Caution\nThis endpoint may change in the future without  notice.",
         "description": "Return a set of points representing a normalized timestamp and the\nnumber of events seen in the period.\n\nQuery ranges are limited to Sentry's configured time-series resolutions.",
         "operationId": "Retrieve event counts for a poject",
@@ -5927,12 +5562,7 @@
             "description": "The name of the stat to query `(\"received\", \"rejected\", \"blacklisted\", \"generated\")`",
             "schema": {
               "type": "string",
-              "enum": [
-                "received",
-                "rejected",
-                "blacklisted",
-                "generated"
-              ]
+              "enum": ["received", "rejected", "blacklisted", "generated"]
             }
           },
           {
@@ -5959,11 +5589,7 @@
             "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
             "schema": {
               "type": "string",
-              "enum": [
-                "10s",
-                "1h",
-                "1d"
-              ]
+              "enum": ["10s", "1h", "1d"]
             }
           }
         ],
@@ -5981,102 +5607,30 @@
                     }
                   },
                   "example": [
-                    [
-                      1541455200,
-                      1184
-                    ],
-                    [
-                      1541458800,
-                      1410
-                    ],
-                    [
-                      1541462400,
-                      1440
-                    ],
-                    [
-                      1541466000,
-                      1682
-                    ],
-                    [
-                      1541469600,
-                      1203
-                    ],
-                    [
-                      1541473200,
-                      497
-                    ],
-                    [
-                      1541476800,
-                      661
-                    ],
-                    [
-                      1541480400,
-                      1481
-                    ],
-                    [
-                      1541484000,
-                      678
-                    ],
-                    [
-                      1541487600,
-                      1857
-                    ],
-                    [
-                      1541491200,
-                      819
-                    ],
-                    [
-                      1541494800,
-                      1013
-                    ],
-                    [
-                      1541498400,
-                      1883
-                    ],
-                    [
-                      1541502000,
-                      1450
-                    ],
-                    [
-                      1541505600,
-                      1102
-                    ],
-                    [
-                      1541509200,
-                      1317
-                    ],
-                    [
-                      1541512800,
-                      1017
-                    ],
-                    [
-                      1541516400,
-                      813
-                    ],
-                    [
-                      1541520000,
-                      1189
-                    ],
-                    [
-                      1541523600,
-                      496
-                    ],
-                    [
-                      1541527200,
-                      1936
-                    ],
-                    [
-                      1541530800,
-                      1405
-                    ],
-                    [
-                      1541534400,
-                      617
-                    ],
-                    [
-                      1541538000,
-                      1533
-                    ]
+                    [1541455200, 1184],
+                    [1541458800, 1410],
+                    [1541462400, 1440],
+                    [1541466000, 1682],
+                    [1541469600, 1203],
+                    [1541473200, 497],
+                    [1541476800, 661],
+                    [1541480400, 1481],
+                    [1541484000, 678],
+                    [1541487600, 1857],
+                    [1541491200, 819],
+                    [1541494800, 1013],
+                    [1541498400, 1883],
+                    [1541502000, 1450],
+                    [1541505600, 1102],
+                    [1541509200, 1317],
+                    [1541512800, 1017],
+                    [1541516400, 813],
+                    [1541520000, 1189],
+                    [1541523600, 496],
+                    [1541527200, 1936],
+                    [1541530800, 1405],
+                    [1541534400, 617],
+                    [1541538000, 1533]
                   ]
                 }
               }
@@ -6088,18 +5642,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project: read"
-            ]
+            "auth_token": ["project: read"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/user-feedback/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Return a list of user feedback items within this project.",
         "operationId": "List a project's user feedback",
         "parameters": [
@@ -6209,16 +5759,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project: read"
-            ]
+            "auth_token": ["project: read"]
           }
         ]
       },
       "post": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Submit and associate user feedback with an issue.\n\nFeedback must be received by the server no more than 30 minutes after the event was saved.\n\nAdditionally, within 5 minutes of submitting feedback it may also be overwritten. This is useful in situations where you may need to retry sending a request due to network failures.\n\nIf feedback is rejected due to a mutability threshold, a 409 status code will be returned.\n\nNote: Feedback may be submitted with DSN authentication (see auth documentation).",
         "operationId": "Submit user feedback",
         "parameters": [
@@ -6245,12 +5791,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "event_id",
-                  "name",
-                  "email",
-                  "comments"
-                ],
+                "required": ["event_id", "name", "email", "comments"],
                 "type": "object",
                 "properties": {
                   "event_id": {
@@ -6366,9 +5907,7 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:write"
-            ]
+            "auth_token": ["project:write"]
           },
           {
             "dsn": []
@@ -6378,9 +5917,7 @@
     },
     "/api/0/projects/{organization_slug}/{project_slug}/keys/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Return a list of client keys bound to a project.",
         "operationId": "List a project's client keys",
         "parameters": [
@@ -6510,14 +6047,8 @@
                   {
                     "browserSdk": {
                       "choices": [
-                        [
-                          "latest",
-                          "latest"
-                        ],
-                        [
-                          "4.x",
-                          "4.x"
-                        ]
+                        ["latest", "latest"],
+                        ["4.x", "4.x"]
                       ]
                     },
                     "browserSdkVersion": "4.x",
@@ -6549,16 +6080,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project: read"
-            ]
+            "auth_token": ["project: read"]
           }
         ]
       },
       "post": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Create a new client key bound to a project.  The key's secret and public key are generated by the server.",
         "operationId": "Create a new client key",
         "parameters": [
@@ -6585,9 +6112,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name"
-                ],
+                "required": ["name"],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -6706,14 +6231,8 @@
                 "example": {
                   "browserSdk": {
                     "choices": [
-                      [
-                        "latest",
-                        "latest"
-                      ],
-                      [
-                        "4.x",
-                        "4.x"
-                      ]
+                      ["latest", "latest"],
+                      ["4.x", "4.x"]
                     ]
                   },
                   "browserSdkVersion": "4.x",
@@ -6747,18 +6266,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:write"
-            ]
+            "auth_token": ["project:write"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/keys/{key_id}/": {
       "put": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Update a client key.  This can be used to rename a key.",
         "operationId": "Update a client Key",
         "parameters": [
@@ -6912,14 +6427,8 @@
                 "example": {
                   "browserSdk": {
                     "choices": [
-                      [
-                        "latest",
-                        "latest"
-                      ],
-                      [
-                        "4.x",
-                        "4.x"
-                      ]
+                      ["latest", "latest"],
+                      ["4.x", "4.x"]
                     ]
                   },
                   "browserSdkVersion": "4.x",
@@ -6956,16 +6465,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:write"
-            ]
+            "auth_token": ["project:write"]
           }
         ]
       },
       "delete": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Delete a client key.",
         "operationId": "Delete a client Key",
         "parameters": [
@@ -7010,18 +6515,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:admin"
-            ]
+            "auth_token": ["project:admin"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/hooks/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Return a list of service hooks bound to a project.",
         "operationId": "List a project's service hooks",
         "parameters": [
@@ -7089,10 +6590,7 @@
                 "example": [
                   {
                     "dateCreated": "2018-11-06T21:20:08.143Z",
-                    "events": [
-                      "event.alert",
-                      "event.created"
-                    ],
+                    "events": ["event.alert", "event.created"],
                     "id": "4f9d73e63b7144ecb8944c41620a090b",
                     "secret": "8fcac28aaa4c4f5fa572b61d40a8e084364db25fd37449c299e5a41c0504cbc2",
                     "status": "active",
@@ -7108,16 +6606,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project: read"
-            ]
+            "auth_token": ["project: read"]
           }
         ]
       },
       "post": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Register a new service hook on a project.\n\nEvents include:\n\n- event.alert: An alert is generated for an event (via rules).\n- event.created: A new event has been processed.\n\nThis endpoint requires the 'servicehooks' feature to be enabled for your project.",
         "operationId": "Register a new service hook",
         "parameters": [
@@ -7144,10 +6638,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "url",
-                  "events"
-                ],
+                "required": ["url", "events"],
                 "type": "object",
                 "properties": {
                   "url": {
@@ -7164,10 +6655,7 @@
                 }
               },
               "example": {
-                "events": [
-                  "event.alert",
-                  "event.created"
-                ],
+                "events": ["event.alert", "event.created"],
                 "url": "https://example.com/sentry-hook"
               }
             }
@@ -7215,10 +6703,7 @@
                 },
                 "example": {
                   "dateCreated": "2018-11-06T21:20:08.143Z",
-                  "events": [
-                    "event.alert",
-                    "event.created"
-                  ],
+                  "events": ["event.alert", "event.created"],
                   "id": "4f9d73e63b7144ecb8944c41620a090b",
                   "secret": "8fcac28aaa4c4f5fa572b61d40a8e084364db25fd37449c299e5a41c0504cbc2",
                   "status": "active",
@@ -7236,18 +6721,14 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:write"
-            ]
+            "auth_token": ["project:write"]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/hooks/{hook_id}/": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Return a service hook bound to a project.",
         "operationId": "Retrieve a service hook",
         "parameters": [
@@ -7320,10 +6801,7 @@
                 },
                 "example": {
                   "dateCreated": "2018-11-06T21:20:08.143Z",
-                  "events": [
-                    "event.alert",
-                    "event.created"
-                  ],
+                  "events": ["event.alert", "event.created"],
                   "id": "4f9d73e63b7144ecb8944c41620a090b",
                   "secret": "8fcac28aaa4c4f5fa572b61d40a8e084364db25fd37449c299e5a41c0504cbc2",
                   "status": "active",
@@ -7341,16 +6819,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:read"
-            ]
+            "auth_token": ["project:read"]
           }
         ]
       },
       "put": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Update a service hook",
         "operationId": "Update a service hook",
         "parameters": [
@@ -7386,10 +6860,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "url",
-                  "events"
-                ],
+                "required": ["url", "events"],
                 "type": "object",
                 "properties": {
                   "url": {
@@ -7406,10 +6877,7 @@
                 }
               },
               "example": {
-                "events": [
-                  "event.alert",
-                  "event.created"
-                ],
+                "events": ["event.alert", "event.created"],
                 "url": "https://example.com/sentry-hook"
               }
             }
@@ -7457,10 +6925,7 @@
                 },
                 "example": {
                   "dateCreated": "2018-11-06T21:20:08.143Z",
-                  "events": [
-                    "event.alert",
-                    "event.created"
-                  ],
+                  "events": ["event.alert", "event.created"],
                   "id": "4f9d73e63b7144ecb8944c41620a090b",
                   "secret": "8fcac28aaa4c4f5fa572b61d40a8e084364db25fd37449c299e5a41c0504cbc2",
                   "status": "active",
@@ -7478,16 +6943,12 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:write"
-            ]
+            "auth_token": ["project:write"]
           }
         ]
       },
       "delete": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "description": "Remove a service hook",
         "operationId": "Remove a service hook",
         "parameters": [
@@ -7532,9 +6993,7 @@
         },
         "security": [
           {
-            "auth_token": [
-              "project:admin"
-            ]
+            "auth_token": ["project:admin"]
           }
         ]
       }

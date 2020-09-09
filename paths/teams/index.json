@@ -1,19 +1,19 @@
 {
   "get": {
-    "tags": [
-      "Teams"
-    ],
+    "tags": ["Teams"],
     "description": "Returns a list of teams bound to a organization.",
     "operationId": "List an Organization's Teams",
-    "parameters": [{
-      "name": "organization_slug",
-      "in": "path",
-      "description": "The slug of the organization for which the teams should be listed.",
-      "required": true,
-      "schema": {
-        "type": "string"
+    "parameters": [
+      {
+        "name": "organization_slug",
+        "in": "path",
+        "description": "The slug of the organization for which the teams should be listed.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
       }
-    }],
+    ],
     "responses": {
       "200": {
         "description": "Success.",
@@ -25,7 +25,8 @@
                 "$ref": "../../components/schemas/team.json#/TeamWithProjects"
               }
             },
-            "example": [{
+            "example": [
+              {
                 "avatar": {
                   "avatarType": "letter_avatar",
                   "avatarUuid": null
@@ -52,7 +53,8 @@
                 "isPending": false,
                 "memberCount": 1,
                 "name": "Powerful Abolitionist",
-                "projects": [{
+                "projects": [
+                  {
                     "avatar": {
                       "avatarType": "letter_avatar",
                       "avatarUuid": null
@@ -143,32 +145,32 @@
         "description": "Forbidden"
       }
     },
-    "security": [{
-      "auth_token": ["team:read"]
-    }]
+    "security": [
+      {
+        "auth_token": ["team:read"]
+      }
+    ]
   },
   "post": {
-    "tags": [
-      "Teams"
-    ],
+    "tags": ["Teams"],
     "description": "Create a new team bound to an organization. Only the name of the team is needed to create it, the slug can be auto generated.",
     "operationId": "Create a New Team",
-    "parameters": [{
-      "name": "organization_slug",
-      "in": "path",
-      "description": "The slug of the organization the team should be created for.",
-      "required": true,
-      "schema": {
-        "type": "string"
+    "parameters": [
+      {
+        "name": "organization_slug",
+        "in": "path",
+        "description": "The slug of the organization the team should be created for.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
       }
-    }],
+    ],
     "requestBody": {
       "content": {
         "application/json": {
           "schema": {
-            "required": [
-              "name"
-            ],
+            "required": ["name"],
             "type": "object",
             "properties": {
               "name": {
@@ -222,8 +224,10 @@
         "description": "Team slug already exists"
       }
     },
-    "security": [{
-      "auth_token": ["team:write"]
-    }]
+    "security": [
+      {
+        "auth_token": ["team:write"]
+      }
+    ]
   }
 }

@@ -1,11 +1,10 @@
 {
   "get": {
-    "tags": [
-      "Teams"
-    ],
+    "tags": ["Teams"],
     "description": "Return details on an individual team.",
     "operationId": "Retrieve a Team",
-    "parameters": [{
+    "parameters": [
+      {
         "name": "organization_slug",
         "in": "path",
         "description": "The slug of the organization the team belongs to.",
@@ -72,17 +71,18 @@
         "description": "Team not found"
       }
     },
-    "security": [{
-      "auth_token": ["team:read"]
-    }]
+    "security": [
+      {
+        "auth_token": ["team:read"]
+      }
+    ]
   },
   "put": {
-    "tags": [
-      "Teams"
-    ],
+    "tags": ["Teams"],
     "description": "Update various attributes and configurable settings for the given team.",
     "operationId": "Update a Team",
-    "parameters": [{
+    "parameters": [
+      {
         "name": "organization_slug",
         "in": "path",
         "description": "The slug of the organization the team belongs to.",
@@ -105,9 +105,7 @@
       "content": {
         "application/json": {
           "schema": {
-            "required": [
-              "name"
-            ],
+            "required": ["name"],
             "type": "object",
             "properties": {
               "name": {
@@ -160,17 +158,18 @@
         "description": "Team not found"
       }
     },
-    "security": [{
-      "auth_token": ["team:write"]
-    }]
+    "security": [
+      {
+        "auth_token": ["team:write"]
+      }
+    ]
   },
   "delete": {
-    "tags": [
-      "Teams"
-    ],
+    "tags": ["Teams"],
     "description": "Schedules a team for deletion.\n\nNote: Deletion happens asynchronously and therefor is not immediate. However once deletion has begun the state of a project changes and will be hidden from most public views.",
     "operationId": "Delete a Team",
-    "parameters": [{
+    "parameters": [
+      {
         "name": "organization_slug",
         "in": "path",
         "description": "The slug of the organization the team belongs to.",
@@ -200,8 +199,10 @@
         "description": "Team not found"
       }
     },
-    "security": [{
-      "auth_token": ["team:admin"]
-    }]
+    "security": [
+      {
+        "auth_token": ["team:admin"]
+      }
+    ]
   }
 }
