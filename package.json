@@ -7,12 +7,20 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "husky": "^4.3.0",
     "openapi-examples-validator": "^4.0.0",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.0",
     "swagger-ui-watcher": "^2.1.11"
   },
   "scripts": {
     "test": "openapi-examples-validator ./openapi.json --no-additional-properties && openapi-examples-validator -m tests.json ./openapi.json",
     "serve": "swagger-ui-watcher ./openapi.json",
     "bundle": "swagger-ui-watcher ./openapi.json --bundle=./openapi-derefed.json"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }

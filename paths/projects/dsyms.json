@@ -1,8 +1,6 @@
 {
   "get": {
-    "tags": [
-      "Projects"
-    ],
+    "tags": ["Projects"],
     "description": "Retrieve a list of debug information files for a given project.",
     "operationId": "List a Project's Debug Information Files",
     "parameters": [
@@ -29,8 +27,7 @@
       "200": {
         "description": "Success.",
         "content": {
-          "application/json": {
-          }
+          "application/json": {}
         }
       },
       "403": {
@@ -42,16 +39,12 @@
     },
     "security": [
       {
-        "auth_token": [
-          "project:read"
-        ]
+        "auth_token": ["project:read"]
       }
     ]
   },
   "post": {
-    "tags": [
-      "Projects"
-    ],
+    "tags": ["Projects"],
     "description": "Upload a new debug information file for the given release.\n\nUnlike other API requests, files must be uploaded using the\ntraditional multipart/form-data content-type.\n\nThe file uploaded is a zip archive of an Apple .dSYM folder which\ncontains the individual debug images.  Uploading through this endpoint\nwill create different files for the contained images.",
     "operationId": "Upload a new File",
     "parameters": [
@@ -78,9 +71,7 @@
       "content": {
         "multipart/form-data": {
           "schema": {
-            "required": [
-              "file"
-            ],
+            "required": ["file"],
             "type": "object",
             "properties": {
               "file": {
@@ -98,8 +89,7 @@
       "201": {
         "description": "Success.",
         "content": {
-          "application/json": {
-          }
+          "application/json": {}
         }
       },
       "400": {
@@ -114,16 +104,12 @@
     },
     "security": [
       {
-        "auth_token": [
-          "project:write"
-        ]
+        "auth_token": ["project:write"]
       }
     ]
   },
   "delete": {
-    "tags": [
-      "Projects"
-    ],
+    "tags": ["Projects"],
     "description": "Delete a debug information file for a given project.",
     "operationId": "Delete a specific project's Debug Information File",
     "parameters": [
@@ -168,9 +154,7 @@
     },
     "security": [
       {
-        "auth_token": [
-          "project:admin"
-        ]
+        "auth_token": ["project:admin"]
       }
     ]
   }

@@ -1,8 +1,6 @@
 {
   "get": {
-    "tags": [
-        "Projects"
-    ],
+    "tags": ["Projects"],
     "description": "Return a list of users seen within this project.",
     "operationId": "List a project's users",
     "parameters": [
@@ -12,7 +10,7 @@
         "description": "The slug of the organization.",
         "required": true,
         "schema": {
-            "type": "string"
+          "type": "string"
         }
       },
       {
@@ -21,7 +19,7 @@
         "description": "The slug of the project.",
         "required": true,
         "schema": {
-            "type": "string"
+          "type": "string"
         }
       },
       {
@@ -29,7 +27,7 @@
         "in": "query",
         "description": "Limit results to users matching the given query. Prefixes should be used to suggest the field to match on: `id`, `email`, `username`, `ip`. For example, `query=email:foo@example.com`",
         "schema": {
-            "type": "string"
+          "type": "string"
         }
       }
     ],
@@ -71,16 +69,14 @@
             }
           }
         }
-        },
+      },
       "403": {
         "description": "Forbidden"
       }
     },
     "security": [
       {
-        "auth_token": [
-          "project:  read"
-        ]
+        "auth_token": ["project:  read"]
       }
     ]
   }

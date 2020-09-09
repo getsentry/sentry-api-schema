@@ -1,8 +1,6 @@
 {
   "get": {
-    "tags": [
-      "Projects"
-    ],
+    "tags": ["Projects"],
     "description": "Return a list of user feedback items within this project.",
     "operationId": "List a project's user feedback",
     "parameters": [
@@ -61,16 +59,12 @@
     },
     "security": [
       {
-        "auth_token": [
-          "project: read"
-        ]
+        "auth_token": ["project: read"]
       }
     ]
   },
   "post": {
-    "tags": [
-      "Projects"
-    ],
+    "tags": ["Projects"],
     "description": "Submit and associate user feedback with an issue.\n\nFeedback must be received by the server no more than 30 minutes after the event was saved.\n\nAdditionally, within 5 minutes of submitting feedback it may also be overwritten. This is useful in situations where you may need to retry sending a request due to network failures.\n\nIf feedback is rejected due to a mutability threshold, a 409 status code will be returned.\n\nNote: Feedback may be submitted with DSN authentication (see auth documentation).",
     "operationId": "Submit user feedback",
     "parameters": [
@@ -97,12 +91,7 @@
       "content": {
         "application/json": {
           "schema": {
-            "required": [
-              "event_id",
-              "name",
-              "email",
-              "comments"
-            ],
+            "required": ["event_id", "name", "email", "comments"],
             "type": "object",
             "properties": {
               "event_id": {
@@ -167,9 +156,7 @@
     },
     "security": [
       {
-        "auth_token": [
-          "project:write"
-        ]
+        "auth_token": ["project:write"]
       },
       {
         "dsn": []

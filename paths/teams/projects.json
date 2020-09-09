@@ -1,11 +1,10 @@
 {
   "get": {
-    "tags": [
-      "Teams"
-    ],
+    "tags": ["Teams"],
     "description": "Return a list of projects bound to a team.",
     "operationId": "List a Team's Projects",
-    "parameters": [{
+    "parameters": [
+      {
         "name": "organization_slug",
         "in": "path",
         "description": "The slug of the organization the team belongs to.",
@@ -35,39 +34,43 @@
                 "$ref": "../../components/schemas/project.json#/TeamProjects"
               }
             },
-            "example": [{
-              "slug": "the-spoiled-yoghurt",
-              "name": "The Spoiled Yoghurt",
-              "hasAccess": true,
-              "teams": [{
-                "id": "542609",
-                "name": "Powerful Abolitionist",
-                "slug": "powerful-abolitionist"
-              }],
-              "platform": null,
-              "firstEvent": null,
-              "isMember": false,
-              "team": {
-                "id": "542609",
-                "name": "Powerful Abolitionist",
-                "slug": "powerful-abolitionist"
-              },
-              "dateCreated": "2020-08-20T14:36:34.171255Z",
-              "isBookmarked": false,
-              "id": "5398494",
-              "latestDeploys": null,
-              "features": [
-                "custom-inbound-filters",
-                "discard-groups",
-                "rate-limits",
-                "data-forwarding",
-                "similarity-view",
-                "issue-alerts-targeting",
-                "servicehooks",
-                "minidump",
-                "similarity-indexing"
-              ]
-            }]
+            "example": [
+              {
+                "slug": "the-spoiled-yoghurt",
+                "name": "The Spoiled Yoghurt",
+                "hasAccess": true,
+                "teams": [
+                  {
+                    "id": "542609",
+                    "name": "Powerful Abolitionist",
+                    "slug": "powerful-abolitionist"
+                  }
+                ],
+                "platform": null,
+                "firstEvent": null,
+                "isMember": false,
+                "team": {
+                  "id": "542609",
+                  "name": "Powerful Abolitionist",
+                  "slug": "powerful-abolitionist"
+                },
+                "dateCreated": "2020-08-20T14:36:34.171255Z",
+                "isBookmarked": false,
+                "id": "5398494",
+                "latestDeploys": null,
+                "features": [
+                  "custom-inbound-filters",
+                  "discard-groups",
+                  "rate-limits",
+                  "data-forwarding",
+                  "similarity-view",
+                  "issue-alerts-targeting",
+                  "servicehooks",
+                  "minidump",
+                  "similarity-indexing"
+                ]
+              }
+            ]
           }
         }
       },
@@ -78,17 +81,18 @@
         "description": "Team not found"
       }
     },
-    "security": [{
-      "auth_token": ["project:read"]
-    }]
+    "security": [
+      {
+        "auth_token": ["project:read"]
+      }
+    ]
   },
   "post": {
-    "tags": [
-      "Teams"
-    ],
+    "tags": ["Teams"],
     "description": "Create a new project bound to a team.",
     "operationId": "Create a New Project",
-    "parameters": [{
+    "parameters": [
+      {
         "name": "organization_slug",
         "in": "path",
         "description": "The slug of the organization the team belongs to.",
@@ -111,9 +115,7 @@
       "content": {
         "application/json": {
           "schema": {
-            "required": [
-              "name"
-            ],
+            "required": ["name"],
             "type": "object",
             "properties": {
               "name": {
@@ -186,8 +188,10 @@
         "description": "Team already exists"
       }
     },
-    "security": [{
-      "auth_token": ["project:write"]
-    }]
+    "security": [
+      {
+        "auth_token": ["project:write"]
+      }
+    ]
   }
 }
