@@ -1,8 +1,360 @@
 {
   "Event": {
-    "type": "object"
+    "type": "object",
+    "properties": {
+      "eventID": {
+        "type": "string"
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "key": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "dateCreated": {
+        "type": "string"
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "ip_address": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "isStaff": {
+                "type": "boolean"
+              }
+            }
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "message": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string"
+      },
+      "platform": {
+        "type": "string"
+      },
+      "event.type": {
+        "type": "string"
+      },
+      "groupID": {
+        "type": "string"
+      }
+    }
   },
   "EventDetailed": {
-    "type": "object"
+    "type": "object",
+    "properties": {
+      "eventID": {
+        "type": "string"
+      },
+      "dist": {
+        "type": "string",
+        "nullable": true
+      },
+      "userReport": {
+        "type": "string",
+        "nullable": true
+      },
+      "previousEventID": {
+        "type": "string",
+        "nullable": true
+      },
+      "message": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "errors": {
+        "type": "array"
+      },
+      "platform": {
+        "type": "string"
+      },
+      "location": {
+        "type": "string",
+        "nullable": true
+      },
+      "nextEventID": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "metadata": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "key": {
+              "type": "string"
+            },
+            "_meta": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
+      },
+      "dateCreated": {
+        "type": "string"
+      },
+      "dateReceived": {
+        "type": "string"
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "ip_address": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "isStaff": {
+                "type": "boolean"
+              }
+            }
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "entries": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "category": {
+                        "type": "string"
+                      },
+                      "level": {
+                        "type": "string"
+                      },
+                      "event_id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "timestamp": {
+                        "type": "string"
+                      },
+                      "data": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "packages": {
+        "type": "array"
+      },
+      "sdk": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "_meta": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "nullable": true
+          },
+          "context": {
+            "type": "string",
+            "nullable": true
+          },
+          "entries": {
+            "type": "array"
+          },
+          "contexts": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "packages": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "array"
+          },
+          "sdk": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "contexts": {
+        "type": "array"
+      },
+      "fingerprints": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "context": {
+        "type": "array"
+      },
+      "release": {
+        "type": "object",
+        "properties": {
+          "dateReleased": {
+            "type": "string"
+          },
+          "newGroups": {
+            "type": "integer"
+          },
+          "commitCount": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array"
+          },
+          "lastDeploy": {
+            "type": "array"
+          },
+          "deployCount": {
+            "type": "integer"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "lastEvent": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "firstEvent": {
+            "type": "string"
+          },
+          "lastCommit": {
+            "type": "array"
+          },
+          "shortVersion": {
+            "type": "string"
+          },
+          "authors": {
+            "type": "array"
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true
+          },
+          "ref": {
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "groupID": {
+        "type": "string"
+      }
+    }
   }
-}
+} 
