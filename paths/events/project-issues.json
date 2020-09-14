@@ -333,12 +333,18 @@
           "application/json": {
             "schema": {
               "type": "object",
+              "required": ["isPublic", "status", "statusDetails"],
               "properties": {
                 "isPublic": {
                   "type": "boolean"
                 },
                 "status": {
-                  "type": "string"
+                  "type": "string",
+                  "enum": [
+                    "resolved",
+                    "unresolved",
+                    "ignored"
+                  ]
                 },
                 "statusDetails": {
                   "type": "object"

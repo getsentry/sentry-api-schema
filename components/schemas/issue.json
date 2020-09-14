@@ -75,21 +75,38 @@
         "nullable": true
       },
       "metadata": {
-        "type": "object",
-        "properties": {
-          "filename": {
-            "type": "string"
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "filename",
+              "type",
+              "value"
+            ],
+            "properties": {
+              "filename": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
           },
-          "type": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
+          {
+            "type": "object",
+            "required": [
+              "title"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              }
+            }
           }
-        }
+        ]
       },
       "numComments": {
         "type": "integer"
@@ -133,7 +150,12 @@
         }
       },
       "status": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "resolved",
+          "unresolved",
+          "ignored"
+        ]
       },
       "statusDetails": {
         "type": "object"
@@ -345,12 +367,38 @@
         "nullable": true
       },
       "metadata": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "filename",
+              "type",
+              "value"
+            ],
+            "properties": {
+              "filename": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "title"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              }
+            }
           }
-        }
+        ]
       },
       "numComments": {
         "type": "integer"
@@ -436,7 +484,12 @@
         }
       },
       "status": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "resolved",
+          "unresolved",
+          "ignored"
+        ]
       },
       "statusDetails": {
         "type": "object"
@@ -461,6 +514,167 @@
         "type": "integer"
       },
       "userReportCount": {
+        "type": "integer"
+      }
+    }
+  },
+  "IssueNoStats": {
+    "type": "object",
+    "required": [
+      "lastSeen",
+      "numComments",
+      "userCount",
+      "culprit",
+      "title",
+      "id",
+      "assignedTo",
+      "logger",
+      "type",
+      "annotations",
+      "metadata",
+      "status",
+      "subscriptionDetails",
+      "isPublic",
+      "hasSeen",
+      "shortId",
+      "shareId",
+      "firstSeen",
+      "count",
+      "permalink",
+      "level",
+      "isSubscribed",
+      "isBookmarked",
+      "project",
+      "statusDetails"
+    ],
+    "properties": {
+      "annotations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assignedTo": {
+        "type": "object",
+        "nullable": true
+      },
+      "count": {
+        "type": "string"
+      },
+      "culprit": {
+        "type": "string"
+      },
+      "firstSeen": {
+        "type": "string"
+      },
+      "hasSeen": {
+        "type": "boolean"
+      },
+      "id": {
+        "type": "string"
+      },
+      "isBookmarked": {
+        "type": "boolean"
+      },
+      "isPublic": {
+        "type": "boolean"
+      },
+      "isSubscribed": {
+        "type": "boolean"
+      },
+      "lastSeen": {
+        "type": "string"
+      },
+      "level": {
+        "type": "string"
+      },
+      "logger": {
+        "type": "string",
+        "nullable": true
+      },
+      "metadata": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "filename",
+              "type",
+              "value"
+            ],
+            "properties": {
+              "filename": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "title"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "numComments": {
+        "type": "integer"
+      },
+      "permalink": {
+        "type": "string"
+      },
+      "project": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          }
+        }
+      },
+      "shareId": {
+        "type": "string",
+        "nullable": true
+      },
+      "shortId": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "resolved",
+          "unresolved",
+          "ignored"
+        ]
+      },
+      "statusDetails": {
+        "type": "object"
+      },
+      "subscriptionDetails": {
+        "type": "object",
+        "nullable": true
+      },
+      "title": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "userCount": {
         "type": "integer"
       }
     }

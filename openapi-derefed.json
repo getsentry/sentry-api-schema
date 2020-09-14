@@ -7636,7 +7636,7 @@
           {
             "name": "full",
             "in": "query",
-            "description": "If this is set to true then the event payload will include the full event body, including the stacktrace. \nSet to 1 to enable.",
+            "description": "If this is set to true then the event payload will include the full event body, including the stacktrace. \nSet to true to enable.",
             "schema": {
               "type": "boolean"
             }
@@ -7803,21 +7803,38 @@
                         "nullable": true
                       },
                       "metadata": {
-                        "type": "object",
-                        "properties": {
-                          "filename": {
-                            "type": "string"
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "required": [
+                              "filename",
+                              "type",
+                              "value"
+                            ],
+                            "properties": {
+                              "filename": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            }
                           },
-                          "type": {
-                            "type": "string"
-                          },
-                          "value": {
-                            "type": "string"
-                          },
-                          "title": {
-                            "type": "string"
+                          {
+                            "type": "object",
+                            "required": [
+                              "title"
+                            ],
+                            "properties": {
+                              "title": {
+                                "type": "string"
+                              }
+                            }
                           }
-                        }
+                        ]
                       },
                       "numComments": {
                         "type": "integer"
@@ -7861,7 +7878,12 @@
                         }
                       },
                       "status": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                          "resolved",
+                          "unresolved",
+                          "ignored"
+                        ]
                       },
                       "statusDetails": {
                         "type": "object"
@@ -8089,6 +8111,32 @@
                   },
                   "statusDetails": {
                     "type": "object",
+                    "properties": {
+                      "inRelease": {
+                        "type": "string"
+                      },
+                      "inNextRelease": {
+                        "type": "boolean"
+                      },
+                      "inCommit": {
+                        "type": "string"
+                      },
+                      "ignoreDuration": {
+                        "type": "integer"
+                      },
+                      "ignoreCount": {
+                        "type": "integer"
+                      },
+                      "ignoreWindow": {
+                        "type": "integer"
+                      },
+                      "ignoreUserCount": {
+                        "type": "integer"
+                      },
+                      "ignoreUserWindow": {
+                        "type": "integer"
+                      }
+                    },
                     "description": "Additional details about the resolution. Valid values are `\"inRelease\"`, `\"inNextRelease\"`, `\"inCommit\"`, `\"ignoreDuration\"`, `\"ignoreCount\"`, `\"ignoreWindow\"`, `\"ignoreUserCount\"`, and `\"ignoreUserWindow\"`."
                   },
                   "ignoreDuration": {
@@ -8129,12 +8177,22 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "isPublic",
+                    "status",
+                    "statusDetails"
+                  ],
                   "properties": {
                     "isPublic": {
                       "type": "boolean"
                     },
                     "status": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "resolved",
+                        "unresolved",
+                        "ignored"
+                      ]
                     },
                     "statusDetails": {
                       "type": "object"
@@ -8156,7 +8214,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "Team not found"
+            "description": "The requested resource does not exist"
           }
         },
         "security": [
@@ -8519,7 +8577,7 @@
           {
             "name": "full",
             "in": "query",
-            "description": "If this is set to true then the event payload will include the full event body, including the stacktrace. \nSet to 1 to enable.",
+            "description": "If this is set to true then the event payload will include the full event body, including the stacktrace. \nSet to true to enable.",
             "schema": {
               "type": "boolean"
             }
@@ -8767,12 +8825,38 @@
                       "nullable": true
                     },
                     "metadata": {
-                      "type": "object",
-                      "properties": {
-                        "title": {
-                          "type": "string"
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "filename",
+                            "type",
+                            "value"
+                          ],
+                          "properties": {
+                            "filename": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "title"
+                          ],
+                          "properties": {
+                            "title": {
+                              "type": "string"
+                            }
+                          }
                         }
-                      }
+                      ]
                     },
                     "numComments": {
                       "type": "integer"
@@ -8858,7 +8942,12 @@
                       }
                     },
                     "status": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "resolved",
+                        "unresolved",
+                        "ignored"
+                      ]
                     },
                     "statusDetails": {
                       "type": "object"
@@ -9266,6 +9355,33 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "lastSeen",
+                    "numComments",
+                    "userCount",
+                    "culprit",
+                    "title",
+                    "id",
+                    "assignedTo",
+                    "logger",
+                    "type",
+                    "annotations",
+                    "metadata",
+                    "status",
+                    "subscriptionDetails",
+                    "isPublic",
+                    "hasSeen",
+                    "shortId",
+                    "shareId",
+                    "firstSeen",
+                    "count",
+                    "permalink",
+                    "level",
+                    "isSubscribed",
+                    "isBookmarked",
+                    "project",
+                    "statusDetails"
+                  ],
                   "properties": {
                     "annotations": {
                       "type": "array",
@@ -9312,12 +9428,38 @@
                       "nullable": true
                     },
                     "metadata": {
-                      "type": "object",
-                      "properties": {
-                        "title": {
-                          "type": "string"
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "filename",
+                            "type",
+                            "value"
+                          ],
+                          "properties": {
+                            "filename": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "title"
+                          ],
+                          "properties": {
+                            "title": {
+                              "type": "string"
+                            }
+                          }
                         }
-                      }
+                      ]
                     },
                     "numComments": {
                       "type": "integer"
@@ -9347,7 +9489,12 @@
                       "type": "string"
                     },
                     "status": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "resolved",
+                        "unresolved",
+                        "ignored"
+                      ]
                     },
                     "statusDetails": {
                       "type": "object"
