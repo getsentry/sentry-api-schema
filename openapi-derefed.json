@@ -7601,7 +7601,7 @@
         "security": [
           {
             "auth_token": [
-              "project: read"
+              "project:read"
             ]
           }
         ]
@@ -7663,7 +7663,7 @@
         "security": [
           {
             "auth_token": [
-              "project: read"
+              "project:read"
             ]
           }
         ]
@@ -8049,7 +8049,7 @@
         "security": [
           {
             "auth_token": [
-              "project: read"
+              "project:read"
             ]
           }
         ]
@@ -8083,7 +8083,7 @@
             "name": "id",
             "in": "query",
             "description": "A list of IDs of the issues to be mutated. This parameter shall be repeated for each issue. It is optional only if a status is mutated in which case an implicit update all is assumed.",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "integer"
             }
@@ -8092,7 +8092,7 @@
             "name": "status",
             "in": "query",
             "description": "Optionally limits the query to issues of the specified status. Valid values are `\"resolved\"`, `\"unresolved\"` and `\"ignored\"`.",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -8453,6 +8453,13 @@
                       },
                       "id": {
                         "type": "string"
+                      },
+                      "state": {
+                        "type": "string",
+                        "enum": [
+                          "unlocked",
+                          "locked_in_migration"
+                        ]
                       }
                     }
                   }
@@ -8467,7 +8474,7 @@
         "security": [
           {
             "auth_token": [
-              "event: read"
+              "event:read"
             ]
           }
         ]
@@ -8509,7 +8516,7 @@
         "security": [
           {
             "auth_token": [
-              "event: read"
+              "event:read"
             ]
           }
         ]
@@ -8551,7 +8558,7 @@
         "security": [
           {
             "auth_token": [
-              "event: read"
+              "event:read"
             ]
           }
         ]
@@ -8604,7 +8611,7 @@
         "security": [
           {
             "auth_token": [
-              "event: read"
+              "event:read"
             ]
           }
         ]
@@ -9290,7 +9297,7 @@
         "security": [
           {
             "auth_token": [
-              "event: read"
+              "event:read"
             ]
           }
         ]
