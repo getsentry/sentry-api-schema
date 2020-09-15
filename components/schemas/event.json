@@ -1,6 +1,17 @@
 {
   "Event": {
     "type": "object",
+    "required": [
+      "eventID",
+      "tags",
+      "dateCreated",
+      "user",
+      "message",
+      "id",
+      "platform",
+      "event.type",
+      "groupID"
+    ],
     "properties": {
       "eventID": {
         "type": "string"
@@ -24,6 +35,14 @@
       },
       "user": {
         "type": "object",
+        "required": [
+          "username",
+          "name",
+          "ip_address",
+          "email",
+          "data",
+          "id"
+        ],
         "properties": {
           "username": {
             "type": "string",
@@ -97,7 +116,21 @@
         "type": "integer"
       },
       "errors": {
-        "type": "array"
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "data": {
+              "type": "object"
+            }
+          }
+        }
       },
       "platform": {
         "type": "string"
@@ -113,15 +146,34 @@
         "type": "string"
       },
       "metadata": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
           },
-          "value": {
-            "type": "string"
+          {
+            "type": "object",
+            "required": [
+              "title"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              }
+            }
           }
-        }
+        ]
       },
       "tags": {
         "type": "array",
@@ -185,46 +237,143 @@
               "type": "string"
             },
             "data": {
-              "type": "object",
-              "properties": {
-                "values": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "category": {
-                        "type": "string"
-                      },
-                      "level": {
-                        "type": "string"
-                      },
-                      "event_id": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "timestamp": {
-                        "type": "string"
-                      },
-                      "data": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "message": {
-                        "type": "string"
-                      },
-                      "type": {
-                        "type": "string"
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "values"
+                  ],
+                  "properties": {
+                    "values": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "category",
+                          "level",
+                          "event_id",
+                          "timestamp",
+                          "data",
+                          "message",
+                          "type"
+                        ],
+                        "properties": {
+                          "category": {
+                            "type": "string"
+                          },
+                          "level": {
+                            "type": "string"
+                          },
+                          "event_id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "timestamp": {
+                            "type": "string"
+                          },
+                          "data": {
+                            "type": "object",
+                            "nullable": true,
+                          },
+                          "message": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        }
                       }
                     }
                   }
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "fragment",
+                    "cookies",
+                    "inferredContentType",
+                    "env",
+                    "headers",
+                    "url",
+                    "query",
+                    "data",
+                    "method"
+                  ],
+                  "properties": {
+                    "fragment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "cookies": {
+                      "type": "array",
+                      "nullable": true,
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "inferredContentType": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "env": {
+                      "type": "object",
+                      "nullable": true,
+                      "properties": {
+                        "ENV": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "headers": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "query": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true,
+                    },
+                    "method": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "formatted": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "type": "object"
                 }
-              }
+              ]
             }
           }
         }
       },
       "packages": {
-        "type": "array"
+        "type": "object"
       },
       "sdk": {
         "type": "object",
@@ -249,7 +398,7 @@
             "nullable": true
           },
           "entries": {
-            "type": "array"
+            "type": "object"
           },
           "contexts": {
             "type": "string",
@@ -264,7 +413,7 @@
             "nullable": true
           },
           "tags": {
-            "type": "array"
+            "type": "object"
           },
           "sdk": {
             "type": "string",
@@ -273,7 +422,7 @@
         }
       },
       "contexts": {
-        "type": "array"
+        "type": "object"
       },
       "fingerprints": {
         "type": "array",
@@ -282,7 +431,7 @@
         }
       },
       "context": {
-        "type": "array"
+        "type": "object"
       },
       "release": {
         "type": "object",
@@ -300,10 +449,11 @@
             "type": "string"
           },
           "data": {
-            "type": "array"
+            "type": "object"
           },
           "lastDeploy": {
-            "type": "array"
+            "type": "object",
+            "nullable": true
           },
           "deployCount": {
             "type": "integer"
@@ -321,13 +471,17 @@
             "type": "string"
           },
           "lastCommit": {
-            "type": "array"
+            "type": "object",
+            "nullable": true
           },
           "shortVersion": {
             "type": "string"
           },
           "authors": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "owner": {
             "type": "string",
@@ -357,4 +511,4 @@
       }
     }
   }
-} 
+}
