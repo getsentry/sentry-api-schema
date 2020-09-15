@@ -7677,6 +7677,34 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "eventID",
+                    "dist",
+                    "userReport",
+                    "previousEventID",
+                    "message",
+                    "id",
+                    "size",
+                    "errors",
+                    "platform",
+                    "location",
+                    "nextEventID",
+                    "type",
+                    "metadata",
+                    "tags",
+                    "dateCreated",
+                    "dateReceived",
+                    "user",
+                    "entries",
+                    "packages",
+                    "sdk",
+                    "_meta",
+                    "contexts",
+                    "fingerprints",
+                    "context",
+                    "release",
+                    "groupID"
+                  ],
                   "properties": {
                     "eventID": {
                       "type": "string"
@@ -7952,7 +7980,189 @@
                                 }
                               },
                               {
-                                "type": "object"
+                                "type": "object",
+                                "required": [
+                                  "excOmitted",
+                                  "hasSystemFrames",
+                                  "values"
+                                ],
+                                "properties": {
+                                  "excOmitted": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "items": {
+                                      "type": "integer"
+                                    }
+                                  },
+                                  "hasSystemFrames": {
+                                    "type": "boolean"
+                                  },
+                                  "values": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "required": [
+                                        "stacktrace",
+                                        "module",
+                                        "rawStacktrace",
+                                        "mechanism",
+                                        "threadId",
+                                        "value",
+                                        "type"
+                                      ],
+                                      "properties": {
+                                        "stacktrace": {
+                                          "type": "object",
+                                          "nullable": true,
+                                          "required": [
+                                            "frames",
+                                            "framesOmitted",
+                                            "registers",
+                                            "hasSystemFrames"
+                                          ],
+                                          "properties": {
+                                            "frames": {
+                                              "type": "array",
+                                              "items": {
+                                                "type": "object",
+                                                "required": [
+                                                  "function",
+                                                  "errors",
+                                                  "colNo",
+                                                  "vars",
+                                                  "package",
+                                                  "absPath",
+                                                  "inApp",
+                                                  "lineNo",
+                                                  "module",
+                                                  "filename",
+                                                  "platform",
+                                                  "instructionAddr",
+                                                  "context",
+                                                  "symbolAddr",
+                                                  "trust",
+                                                  "symbol"
+                                                ],
+                                                "properties": {
+                                                  "function": {
+                                                    "type": "string"
+                                                  },
+                                                  "errors": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "colNo": {
+                                                    "type": "integer"
+                                                  },
+                                                  "vars": {
+                                                    "type": "object",
+                                                    "nullable": true
+                                                  },
+                                                  "package": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "absPath": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "inApp": {
+                                                    "type": "boolean"
+                                                  },
+                                                  "lineNo": {
+                                                    "type": "integer"
+                                                  },
+                                                  "module": {
+                                                    "type": "string"
+                                                  },
+                                                  "filename": {
+                                                    "type": "string"
+                                                  },
+                                                  "platform": {
+                                                    "type": "string"
+                                                  },
+                                                  "instructionAddr": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "context": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "array",
+                                                      "items": {
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "integer"
+                                                          },
+                                                          {
+                                                            "type": "string"
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  },
+                                                  "symbolAddr": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "trust": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "symbol": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "framesOmitted": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "registers": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "hasSystemFrames": {
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        },
+                                        "module": {
+                                          "type": "string",
+                                          "nullable": true
+                                        },
+                                        "rawStacktrace": {
+                                          "type": "object",
+                                          "nullable": true
+                                        },
+                                        "mechanism": {
+                                          "type": "object",
+                                          "nullable": true,
+                                          "properties": {
+                                            "type": {
+                                              "type": "string"
+                                            },
+                                            "handled": {
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        },
+                                        "threadId": {
+                                          "type": "string",
+                                          "nullable": true
+                                        },
+                                        "value": {
+                                          "type": "string"
+                                        },
+                                        "type": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                               }
                             ]
                           }
@@ -9073,6 +9283,34 @@
                     "properties": {
                       "latestEvent": {
                         "type": "object",
+                        "required": [
+                          "eventID",
+                          "dist",
+                          "userReport",
+                          "previousEventID",
+                          "message",
+                          "id",
+                          "size",
+                          "errors",
+                          "platform",
+                          "location",
+                          "nextEventID",
+                          "type",
+                          "metadata",
+                          "tags",
+                          "dateCreated",
+                          "dateReceived",
+                          "user",
+                          "entries",
+                          "packages",
+                          "sdk",
+                          "_meta",
+                          "contexts",
+                          "fingerprints",
+                          "context",
+                          "release",
+                          "groupID"
+                        ],
                         "properties": {
                           "eventID": {
                             "type": "string"
@@ -9348,7 +9586,189 @@
                                       }
                                     },
                                     {
-                                      "type": "object"
+                                      "type": "object",
+                                      "required": [
+                                        "excOmitted",
+                                        "hasSystemFrames",
+                                        "values"
+                                      ],
+                                      "properties": {
+                                        "excOmitted": {
+                                          "type": "array",
+                                          "nullable": true,
+                                          "items": {
+                                            "type": "integer"
+                                          }
+                                        },
+                                        "hasSystemFrames": {
+                                          "type": "boolean"
+                                        },
+                                        "values": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "required": [
+                                              "stacktrace",
+                                              "module",
+                                              "rawStacktrace",
+                                              "mechanism",
+                                              "threadId",
+                                              "value",
+                                              "type"
+                                            ],
+                                            "properties": {
+                                              "stacktrace": {
+                                                "type": "object",
+                                                "nullable": true,
+                                                "required": [
+                                                  "frames",
+                                                  "framesOmitted",
+                                                  "registers",
+                                                  "hasSystemFrames"
+                                                ],
+                                                "properties": {
+                                                  "frames": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "object",
+                                                      "required": [
+                                                        "function",
+                                                        "errors",
+                                                        "colNo",
+                                                        "vars",
+                                                        "package",
+                                                        "absPath",
+                                                        "inApp",
+                                                        "lineNo",
+                                                        "module",
+                                                        "filename",
+                                                        "platform",
+                                                        "instructionAddr",
+                                                        "context",
+                                                        "symbolAddr",
+                                                        "trust",
+                                                        "symbol"
+                                                      ],
+                                                      "properties": {
+                                                        "function": {
+                                                          "type": "string"
+                                                        },
+                                                        "errors": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        },
+                                                        "colNo": {
+                                                          "type": "integer"
+                                                        },
+                                                        "vars": {
+                                                          "type": "object",
+                                                          "nullable": true
+                                                        },
+                                                        "package": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        },
+                                                        "absPath": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        },
+                                                        "inApp": {
+                                                          "type": "boolean"
+                                                        },
+                                                        "lineNo": {
+                                                          "type": "integer"
+                                                        },
+                                                        "module": {
+                                                          "type": "string"
+                                                        },
+                                                        "filename": {
+                                                          "type": "string"
+                                                        },
+                                                        "platform": {
+                                                          "type": "string"
+                                                        },
+                                                        "instructionAddr": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        },
+                                                        "context": {
+                                                          "type": "array",
+                                                          "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                              "oneOf": [
+                                                                {
+                                                                  "type": "integer"
+                                                                },
+                                                                {
+                                                                  "type": "string"
+                                                                }
+                                                              ]
+                                                            }
+                                                          }
+                                                        },
+                                                        "symbolAddr": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        },
+                                                        "trust": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        },
+                                                        "symbol": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "framesOmitted": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "registers": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "hasSystemFrames": {
+                                                    "type": "boolean"
+                                                  }
+                                                }
+                                              },
+                                              "module": {
+                                                "type": "string",
+                                                "nullable": true
+                                              },
+                                              "rawStacktrace": {
+                                                "type": "object",
+                                                "nullable": true
+                                              },
+                                              "mechanism": {
+                                                "type": "object",
+                                                "nullable": true,
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string"
+                                                  },
+                                                  "handled": {
+                                                    "type": "boolean"
+                                                  }
+                                                }
+                                              },
+                                              "threadId": {
+                                                "type": "string",
+                                                "nullable": true
+                                              },
+                                              "value": {
+                                                "type": "string"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                   ]
                                 }
@@ -9548,6 +9968,34 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "eventID",
+                    "dist",
+                    "userReport",
+                    "previousEventID",
+                    "message",
+                    "id",
+                    "size",
+                    "errors",
+                    "platform",
+                    "location",
+                    "nextEventID",
+                    "type",
+                    "metadata",
+                    "tags",
+                    "dateCreated",
+                    "dateReceived",
+                    "user",
+                    "entries",
+                    "packages",
+                    "sdk",
+                    "_meta",
+                    "contexts",
+                    "fingerprints",
+                    "context",
+                    "release",
+                    "groupID"
+                  ],
                   "properties": {
                     "eventID": {
                       "type": "string"
@@ -9823,7 +10271,189 @@
                                 }
                               },
                               {
-                                "type": "object"
+                                "type": "object",
+                                "required": [
+                                  "excOmitted",
+                                  "hasSystemFrames",
+                                  "values"
+                                ],
+                                "properties": {
+                                  "excOmitted": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "items": {
+                                      "type": "integer"
+                                    }
+                                  },
+                                  "hasSystemFrames": {
+                                    "type": "boolean"
+                                  },
+                                  "values": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "required": [
+                                        "stacktrace",
+                                        "module",
+                                        "rawStacktrace",
+                                        "mechanism",
+                                        "threadId",
+                                        "value",
+                                        "type"
+                                      ],
+                                      "properties": {
+                                        "stacktrace": {
+                                          "type": "object",
+                                          "nullable": true,
+                                          "required": [
+                                            "frames",
+                                            "framesOmitted",
+                                            "registers",
+                                            "hasSystemFrames"
+                                          ],
+                                          "properties": {
+                                            "frames": {
+                                              "type": "array",
+                                              "items": {
+                                                "type": "object",
+                                                "required": [
+                                                  "function",
+                                                  "errors",
+                                                  "colNo",
+                                                  "vars",
+                                                  "package",
+                                                  "absPath",
+                                                  "inApp",
+                                                  "lineNo",
+                                                  "module",
+                                                  "filename",
+                                                  "platform",
+                                                  "instructionAddr",
+                                                  "context",
+                                                  "symbolAddr",
+                                                  "trust",
+                                                  "symbol"
+                                                ],
+                                                "properties": {
+                                                  "function": {
+                                                    "type": "string"
+                                                  },
+                                                  "errors": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "colNo": {
+                                                    "type": "integer"
+                                                  },
+                                                  "vars": {
+                                                    "type": "object",
+                                                    "nullable": true
+                                                  },
+                                                  "package": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "absPath": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "inApp": {
+                                                    "type": "boolean"
+                                                  },
+                                                  "lineNo": {
+                                                    "type": "integer"
+                                                  },
+                                                  "module": {
+                                                    "type": "string"
+                                                  },
+                                                  "filename": {
+                                                    "type": "string"
+                                                  },
+                                                  "platform": {
+                                                    "type": "string"
+                                                  },
+                                                  "instructionAddr": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "context": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "array",
+                                                      "items": {
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "integer"
+                                                          },
+                                                          {
+                                                            "type": "string"
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  },
+                                                  "symbolAddr": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "trust": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "symbol": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "framesOmitted": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "registers": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "hasSystemFrames": {
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        },
+                                        "module": {
+                                          "type": "string",
+                                          "nullable": true
+                                        },
+                                        "rawStacktrace": {
+                                          "type": "object",
+                                          "nullable": true
+                                        },
+                                        "mechanism": {
+                                          "type": "object",
+                                          "nullable": true,
+                                          "properties": {
+                                            "type": {
+                                              "type": "string"
+                                            },
+                                            "handled": {
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        },
+                                        "threadId": {
+                                          "type": "string",
+                                          "nullable": true
+                                        },
+                                        "value": {
+                                          "type": "string"
+                                        },
+                                        "type": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                               }
                             ]
                           }
@@ -10010,6 +10640,34 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "eventID",
+                    "dist",
+                    "userReport",
+                    "previousEventID",
+                    "message",
+                    "id",
+                    "size",
+                    "errors",
+                    "platform",
+                    "location",
+                    "nextEventID",
+                    "type",
+                    "metadata",
+                    "tags",
+                    "dateCreated",
+                    "dateReceived",
+                    "user",
+                    "entries",
+                    "packages",
+                    "sdk",
+                    "_meta",
+                    "contexts",
+                    "fingerprints",
+                    "context",
+                    "release",
+                    "groupID"
+                  ],
                   "properties": {
                     "eventID": {
                       "type": "string"
@@ -10285,7 +10943,189 @@
                                 }
                               },
                               {
-                                "type": "object"
+                                "type": "object",
+                                "required": [
+                                  "excOmitted",
+                                  "hasSystemFrames",
+                                  "values"
+                                ],
+                                "properties": {
+                                  "excOmitted": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "items": {
+                                      "type": "integer"
+                                    }
+                                  },
+                                  "hasSystemFrames": {
+                                    "type": "boolean"
+                                  },
+                                  "values": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "required": [
+                                        "stacktrace",
+                                        "module",
+                                        "rawStacktrace",
+                                        "mechanism",
+                                        "threadId",
+                                        "value",
+                                        "type"
+                                      ],
+                                      "properties": {
+                                        "stacktrace": {
+                                          "type": "object",
+                                          "nullable": true,
+                                          "required": [
+                                            "frames",
+                                            "framesOmitted",
+                                            "registers",
+                                            "hasSystemFrames"
+                                          ],
+                                          "properties": {
+                                            "frames": {
+                                              "type": "array",
+                                              "items": {
+                                                "type": "object",
+                                                "required": [
+                                                  "function",
+                                                  "errors",
+                                                  "colNo",
+                                                  "vars",
+                                                  "package",
+                                                  "absPath",
+                                                  "inApp",
+                                                  "lineNo",
+                                                  "module",
+                                                  "filename",
+                                                  "platform",
+                                                  "instructionAddr",
+                                                  "context",
+                                                  "symbolAddr",
+                                                  "trust",
+                                                  "symbol"
+                                                ],
+                                                "properties": {
+                                                  "function": {
+                                                    "type": "string"
+                                                  },
+                                                  "errors": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "colNo": {
+                                                    "type": "integer"
+                                                  },
+                                                  "vars": {
+                                                    "type": "object",
+                                                    "nullable": true
+                                                  },
+                                                  "package": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "absPath": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "inApp": {
+                                                    "type": "boolean"
+                                                  },
+                                                  "lineNo": {
+                                                    "type": "integer"
+                                                  },
+                                                  "module": {
+                                                    "type": "string"
+                                                  },
+                                                  "filename": {
+                                                    "type": "string"
+                                                  },
+                                                  "platform": {
+                                                    "type": "string"
+                                                  },
+                                                  "instructionAddr": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "context": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "array",
+                                                      "items": {
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "integer"
+                                                          },
+                                                          {
+                                                            "type": "string"
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  },
+                                                  "symbolAddr": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "trust": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "symbol": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "framesOmitted": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "registers": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "hasSystemFrames": {
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        },
+                                        "module": {
+                                          "type": "string",
+                                          "nullable": true
+                                        },
+                                        "rawStacktrace": {
+                                          "type": "object",
+                                          "nullable": true
+                                        },
+                                        "mechanism": {
+                                          "type": "object",
+                                          "nullable": true,
+                                          "properties": {
+                                            "type": {
+                                              "type": "string"
+                                            },
+                                            "handled": {
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        },
+                                        "threadId": {
+                                          "type": "string",
+                                          "nullable": true
+                                        },
+                                        "value": {
+                                          "type": "string"
+                                        },
+                                        "type": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                               }
                             ]
                           }

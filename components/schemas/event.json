@@ -90,6 +90,34 @@
   },
   "EventDetailed": {
     "type": "object",
+    "required": [
+      "eventID",
+      "dist",
+      "userReport",
+      "previousEventID",
+      "message",
+      "id",
+      "size",
+      "errors",
+      "platform",
+      "location",
+      "nextEventID",
+      "type",
+      "metadata",
+      "tags",
+      "dateCreated",
+      "dateReceived",
+      "user",
+      "entries",
+      "packages",
+      "sdk",
+      "_meta",
+      "contexts",
+      "fingerprints",
+      "context",
+      "release",
+      "groupID"
+    ],
     "properties": {
       "eventID": {
         "type": "string"
@@ -348,7 +376,7 @@
                     },
                     "data": {
                       "type": "object",
-                      "nullable": true,
+                      "nullable": true
                     },
                     "method": {
                       "type": "string",
@@ -366,7 +394,11 @@
                 },
                 {
                   "type": "object",
-                  "required": ["excOmitted", "hasSystemFrames", "values"],
+                  "required": [
+                    "excOmitted",
+                    "hasSystemFrames",
+                    "values"
+                  ],
                   "properties": {
                     "excOmitted": {
                       "type": "array",
@@ -382,18 +414,48 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": ["stacktrace", "module", "rawStacktrace", "mechanism", "threadId", "value", "type"],
+                        "required": [
+                          "stacktrace",
+                          "module",
+                          "rawStacktrace",
+                          "mechanism",
+                          "threadId",
+                          "value",
+                          "type"
+                        ],
                         "properties": {
                           "stacktrace": {
                             "type": "object",
                             "nullable": true,
-                            "required": ["frames", "framesOmitted", "registers", "hasSystemFrames"],
+                            "required": [
+                              "frames",
+                              "framesOmitted",
+                              "registers",
+                              "hasSystemFrames"
+                            ],
                             "properties": {
                               "frames": {
                                 "type": "array",
                                 "items": {
                                   "type": "object",
-                                  "required": ["function", "errors", "colNo", "vars", "package", "absPath", "inApp", "lineNo", "module", "filename", "platform", "instructionAddr", "context", "symbolAddr", "trust", "symbol"],
+                                  "required": [
+                                    "function",
+                                    "errors",
+                                    "colNo",
+                                    "vars",
+                                    "package",
+                                    "absPath",
+                                    "inApp",
+                                    "lineNo",
+                                    "module",
+                                    "filename",
+                                    "platform",
+                                    "instructionAddr",
+                                    "context",
+                                    "symbolAddr",
+                                    "trust",
+                                    "symbol"
+                                  ],
                                   "properties": {
                                     "function": {
                                       "type": "string"
@@ -446,7 +508,7 @@
                                               "type": "integer"
                                             },
                                             {
-                                             "type": "string"                                              
+                                              "type": "string"
                                             }
                                           ]
                                         }
@@ -490,17 +552,25 @@
                           },
                           "mechanism": {
                             "type": "object",
-                            "nullable": true
+                            "nullable": true,
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "handled": {
+                                "type": "boolean"
+                              }
+                            }
                           },
-                          "threadId" :{
+                          "threadId": {
                             "type": "string",
                             "nullable": true
                           },
                           "value": {
-                            "type": "string",
+                            "type": "string"
                           },
                           "type": {
-                            "type": "string",
+                            "type": "string"
                           }
                         }
                       }
