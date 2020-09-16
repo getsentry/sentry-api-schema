@@ -9378,7 +9378,6 @@
                           "size",
                           "errors",
                           "platform",
-                          "location",
                           "type",
                           "metadata",
                           "tags",
@@ -9430,10 +9429,6 @@
                           },
                           "platform": {
                             "type": "string"
-                          },
-                          "location": {
-                            "type": "string",
-                            "nullable": true
                           },
                           "type": {
                             "type": "string"
@@ -9525,18 +9520,19 @@
                           "entries": {
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "string"
-                                },
-                                "data": {
-                                  "oneOf": [
-                                    {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "required": [
+                                    "type",
+                                    "data"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "data": {
                                       "type": "object",
-                                      "required": [
-                                        "values"
-                                      ],
                                       "properties": {
                                         "values": {
                                           "type": "array",
@@ -9580,8 +9576,20 @@
                                           }
                                         }
                                       }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "object",
+                                  "required": [
+                                    "type",
+                                    "data"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "type": "string"
                                     },
-                                    {
+                                    "data": {
                                       "type": "object",
                                       "required": [
                                         "fragment",
@@ -9637,7 +9645,10 @@
                                         "query": {
                                           "type": "array",
                                           "items": {
-                                            "type": "string"
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
                                           }
                                         },
                                         "data": {
@@ -9649,16 +9660,40 @@
                                           "nullable": true
                                         }
                                       }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "object",
+                                  "required": [
+                                    "type",
+                                    "data"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "type": "string"
                                     },
-                                    {
+                                    "data": {
                                       "type": "object",
                                       "properties": {
                                         "formatted": {
                                           "type": "string"
                                         }
                                       }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "object",
+                                  "required": [
+                                    "type",
+                                    "data"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "type": "string"
                                     },
-                                    {
+                                    "data": {
                                       "type": "object",
                                       "required": [
                                         "excOmitted",
@@ -9731,7 +9766,8 @@
                                                           "nullable": true
                                                         },
                                                         "colNo": {
-                                                          "type": "integer"
+                                                          "type": "integer",
+                                                          "nullable": true
                                                         },
                                                         "vars": {
                                                           "type": "object",
@@ -9758,7 +9794,8 @@
                                                           "type": "string"
                                                         },
                                                         "platform": {
-                                                          "type": "string"
+                                                          "type": "string",
+                                                          "nullable": true
                                                         },
                                                         "instructionAddr": {
                                                           "type": "string",
@@ -9843,9 +9880,9 @@
                                         }
                                       }
                                     }
-                                  ]
+                                  }
                                 }
-                              }
+                              ]
                             }
                           },
                           "packages": {
