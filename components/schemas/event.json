@@ -257,18 +257,19 @@
       "entries": {
         "type": "array",
         "items": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string"
-            },
-            "data": {
-              "oneOf": [
-                {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "data"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "data": {
                   "type": "object",
-                  "required": [
-                    "values"
-                  ],
                   "properties": {
                     "values": {
                       "type": "array",
@@ -312,8 +313,20 @@
                       }
                     }
                   }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "data"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string"
                 },
-                {
+                "data": {
                   "type": "object",
                   "required": [
                     "fragment",
@@ -381,16 +394,40 @@
                       "nullable": true
                     }
                   }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "data"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string"
                 },
-                {
+                "data": {
                   "type": "object",
                   "properties": {
                     "formatted": {
                       "type": "string"
                     }
                   }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "data"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string"
                 },
-                {
+                "data": {
                   "type": "object",
                   "required": [
                     "excOmitted",
@@ -575,9 +612,9 @@
                     }
                   }
                 }
-              ]
+              }
             }
-          }
+          ]
         }
       },
       "packages": {
