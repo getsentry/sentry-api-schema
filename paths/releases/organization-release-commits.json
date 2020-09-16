@@ -1,22 +1,22 @@
 {
   "get": {
-    "tags": ["Organizations"],
-    "description": "Return a list of commits for a given repository.",
-    "operationId": "List a Repository's Commits",
+    "tags": ["Releases"],
+    "description": "List an organization release's commits.",
+    "operationId": "List an Organization Release's Commits",
     "parameters": [
       {
         "name": "organization_slug",
         "in": "path",
-        "description": "the organization short name",
+        "description": "The slug of the organization the release belongs to.",
         "required": true,
         "schema": {
           "type": "string"
         }
       },
       {
-        "name": "repo_id",
+        "name": "version",
         "in": "path",
-        "description": "the repository ID",
+        "description": "The version identifier of the release.",
         "required": true,
         "schema": {
           "type": "string"
@@ -43,14 +43,11 @@
             ]
           }
         }
-      },
-      "403": {
-        "description": "Forbidden"
       }
     },
     "security": [
       {
-        "auth_token": ["org: read"]
+        "auth_token": ["project:releases"]
       }
     ]
   }

@@ -50,6 +50,14 @@
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/organizations/&template=api_error_template.md"
       }
+    },
+    {
+      "name": "Releases",
+      "description": "Endpoints for releases",
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/teams/&template=api_error_template.md"
+      }
     }
   ],
   "paths": {
@@ -154,6 +162,39 @@
     },
     "/api/0/issues/{issue_id}/": {
       "$ref": "paths/events/issue-details.json"
+    },
+    "/api/0/organizations/{organization_slug}/releases/": {
+      "$ref": "paths/releases/organization-releases.json"
+    },
+    "/api/0/organizations/{organization_slug}/releases/{version}/": {
+      "$ref": "paths/releases/organization-release.json"
+    },
+    "/api/0/organizations/{organization_slug}/releases/{version}/files/": {
+      "$ref": "paths/releases/release-files.json"
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/files/": {
+      "$ref": "paths/releases/project-release-files.json"
+    },
+    "/api/0/organizations/{organization_slug}/releases/{version}/files/{file_id}/": {
+      "$ref": "paths/releases/release-file.json"
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/files/{file_id}/": {
+      "$ref": "paths/releases/project-release-file.json"
+    },
+    "/api/0/organizations/{organization_slug}/releases/{version}/commits/": {
+      "$ref": "paths/releases/organization-release-commits.json"
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/commits/": {
+      "$ref": "paths/releases/project-release-commits.json"
+    },
+    "/api/0/organizations/{organization_slug}/releases/{version}/commitfiles/": {
+      "$ref": "paths/releases/organization-release-commit-files.json"
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/resolved/": {
+      "$ref": "paths/releases/project-issues-resolved-in-release.json"
+    },
+    "/api/0/organizations/{organization_slug}/releases/{version}/deploys/": {
+      "$ref": "paths/releases/deploys.json"
     }
   },
   "components": {
