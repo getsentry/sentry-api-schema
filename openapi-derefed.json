@@ -1669,7 +1669,574 @@
                   ],
                   "properties": {
                     "event": {
-                      "type": "object"
+                      "type": "object",
+                      "required": [
+                        "_meta",
+                        "context",
+                        "contexts",
+                        "dateCreated",
+                        "dateReceived",
+                        "dist",
+                        "entries",
+                        "errors",
+                        "eventID",
+                        "fingerprints",
+                        "groupID",
+                        "id",
+                        "message",
+                        "metadata",
+                        "packages",
+                        "platform",
+                        "sdk",
+                        "size",
+                        "tags",
+                        "type",
+                        "user"
+                      ],
+                      "properties": {
+                        "_meta": {
+                          "type": "object",
+                          "properties": {
+                            "context": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "contexts": {
+                              "type": "object",
+                              "nullable": true
+                            },
+                            "entries": {
+                              "type": "object"
+                            },
+                            "message": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "packages": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "sdk": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "tags": {
+                              "type": "object"
+                            },
+                            "user": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "context": {
+                          "type": "object",
+                          "properties": {
+                            "emptyList": {
+                              "type": "array"
+                            },
+                            "emptyMap": {
+                              "type": "object"
+                            },
+                            "length": {
+                              "type": "integer"
+                            },
+                            "results": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer"
+                              }
+                            },
+                            "session": {
+                              "type": "object",
+                              "properties": {
+                                "foo": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "unauthorized": {
+                              "type": "boolean"
+                            },
+                            "url": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "contexts": {
+                          "type": "object"
+                        },
+                        "dateCreated": {
+                          "type": "string"
+                        },
+                        "dateReceived": {
+                          "type": "string"
+                        },
+                        "dist": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "entries": {
+                          "type": "array",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "required": [
+                                  "type",
+                                  "data"
+                                ],
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "data": {
+                                    "type": "object",
+                                    "properties": {
+                                      "values": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "required": [
+                                            "category",
+                                            "level",
+                                            "event_id",
+                                            "timestamp",
+                                            "data",
+                                            "message",
+                                            "type"
+                                          ],
+                                          "properties": {
+                                            "category": {
+                                              "type": "string"
+                                            },
+                                            "level": {
+                                              "type": "string"
+                                            },
+                                            "event_id": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "timestamp": {
+                                              "type": "string"
+                                            },
+                                            "data": {
+                                              "type": "object",
+                                              "nullable": true
+                                            },
+                                            "message": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "type": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "type",
+                                  "data"
+                                ],
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "data": {
+                                    "type": "object",
+                                    "required": [
+                                      "fragment",
+                                      "cookies",
+                                      "inferredContentType",
+                                      "env",
+                                      "headers",
+                                      "url",
+                                      "query",
+                                      "data",
+                                      "method"
+                                    ],
+                                    "properties": {
+                                      "fragment": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "cookies": {
+                                        "type": "array",
+                                        "nullable": true,
+                                        "items": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      },
+                                      "inferredContentType": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "env": {
+                                        "type": "object",
+                                        "nullable": true,
+                                        "properties": {
+                                          "ENV": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      },
+                                      "headers": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      },
+                                      "data": {
+                                        "type": "object",
+                                        "nullable": true
+                                      },
+                                      "method": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "type",
+                                  "data"
+                                ],
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "data": {
+                                    "type": "object",
+                                    "properties": {
+                                      "formatted": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "type",
+                                  "data"
+                                ],
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "data": {
+                                    "type": "object",
+                                    "required": [
+                                      "excOmitted",
+                                      "hasSystemFrames",
+                                      "values"
+                                    ],
+                                    "properties": {
+                                      "excOmitted": {
+                                        "type": "array",
+                                        "nullable": true,
+                                        "items": {
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "hasSystemFrames": {
+                                        "type": "boolean"
+                                      },
+                                      "values": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "required": [
+                                            "stacktrace",
+                                            "module",
+                                            "rawStacktrace",
+                                            "mechanism",
+                                            "threadId",
+                                            "value",
+                                            "type"
+                                          ],
+                                          "properties": {
+                                            "stacktrace": {
+                                              "type": "object",
+                                              "nullable": true,
+                                              "required": [
+                                                "frames",
+                                                "framesOmitted",
+                                                "registers",
+                                                "hasSystemFrames"
+                                              ],
+                                              "properties": {
+                                                "frames": {
+                                                  "type": "array",
+                                                  "items": {
+                                                    "type": "object",
+                                                    "required": [
+                                                      "function",
+                                                      "errors",
+                                                      "colNo",
+                                                      "vars",
+                                                      "package",
+                                                      "absPath",
+                                                      "inApp",
+                                                      "lineNo",
+                                                      "module",
+                                                      "filename",
+                                                      "platform",
+                                                      "instructionAddr",
+                                                      "context",
+                                                      "symbolAddr",
+                                                      "trust",
+                                                      "symbol"
+                                                    ],
+                                                    "properties": {
+                                                      "function": {
+                                                        "type": "string"
+                                                      },
+                                                      "errors": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                      },
+                                                      "colNo": {
+                                                        "type": "integer",
+                                                        "nullable": true
+                                                      },
+                                                      "vars": {
+                                                        "type": "object",
+                                                        "nullable": true
+                                                      },
+                                                      "package": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                      },
+                                                      "absPath": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                      },
+                                                      "inApp": {
+                                                        "type": "boolean"
+                                                      },
+                                                      "lineNo": {
+                                                        "type": "integer"
+                                                      },
+                                                      "module": {
+                                                        "type": "string"
+                                                      },
+                                                      "filename": {
+                                                        "type": "string"
+                                                      },
+                                                      "platform": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                      },
+                                                      "instructionAddr": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                      },
+                                                      "context": {
+                                                        "type": "array",
+                                                        "items": {
+                                                          "type": "array",
+                                                          "items": {
+                                                            "oneOf": [
+                                                              {
+                                                                "type": "integer"
+                                                              },
+                                                              {
+                                                                "type": "string"
+                                                              }
+                                                            ]
+                                                          }
+                                                        }
+                                                      },
+                                                      "symbolAddr": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                      },
+                                                      "trust": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                      },
+                                                      "symbol": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "framesOmitted": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                },
+                                                "registers": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                },
+                                                "hasSystemFrames": {
+                                                  "type": "boolean"
+                                                }
+                                              }
+                                            },
+                                            "module": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "rawStacktrace": {
+                                              "type": "object",
+                                              "nullable": true
+                                            },
+                                            "mechanism": {
+                                              "type": "object",
+                                              "nullable": true,
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string"
+                                                },
+                                                "handled": {
+                                                  "type": "boolean"
+                                                }
+                                              }
+                                            },
+                                            "threadId": {
+                                              "type": "string",
+                                              "nullable": true
+                                            },
+                                            "value": {
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "errors": {
+                          "type": "array"
+                        },
+                        "eventID": {
+                          "type": "string"
+                        },
+                        "fingerprints": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "groupID": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "packages": {
+                          "type": "object",
+                          "properties": {
+                            "my.package": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "platform": {
+                          "type": "string"
+                        },
+                        "sdk": {
+                          "type": "object",
+                          "nullable": true
+                        },
+                        "size": {
+                          "type": "integer"
+                        },
+                        "tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_meta": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "key": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "type": "object",
+                          "nullable": true,
+                          "properties": {
+                            "data": {
+                              "type": "object"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "ip_address": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "username": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
                     },
                     "eventId": {
                       "type": "string"
@@ -1686,11 +2253,127 @@
                   }
                 },
                 "example": {
+                  "event": {
+                    "_meta": {
+                      "context": null,
+                      "contexts": null,
+                      "entries": {},
+                      "message": null,
+                      "packages": null,
+                      "sdk": null,
+                      "tags": {},
+                      "user": null
+                    },
+                    "context": {
+                      "emptyList": [],
+                      "emptyMap": {},
+                      "length": 10837790,
+                      "results": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                      ],
+                      "session": {
+                        "foo": "bar"
+                      },
+                      "unauthorized": false,
+                      "url": "http://example.org/foo/bar/"
+                    },
+                    "contexts": {},
+                    "dateCreated": "2018-11-06T21:19:55Z",
+                    "dateReceived": "2018-11-06T21:19:55Z",
+                    "dist": null,
+                    "entries": [
+                      {
+                        "type": "request",
+                        "data": {
+                          "fragment": null,
+                          "cookies": [],
+                          "inferredContentType": null,
+                          "env": null,
+                          "headers": [
+                            [
+                              "User-Agent",
+                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
+                            ]
+                          ],
+                          "url": "http://example.com/foo",
+                          "query": [],
+                          "data": null,
+                          "method": null
+                        }
+                      }
+                    ],
+                    "errors": [],
+                    "eventID": "9fac2ceed9344f2bbfdd1fdacb0ed9b1",
+                    "fingerprints": [
+                      "c4a4d06bc314205bb3b6bdb612dde7f1"
+                    ],
+                    "groupID": "1",
+                    "id": "1",
+                    "message": "This is an example Python exception",
+                    "metadata": {
+                      "title": "This is an example Python exception"
+                    },
+                    "packages": {
+                      "my.package": "1.0.0"
+                    },
+                    "platform": "python",
+                    "sdk": null,
+                    "size": 7055,
+                    "tags": [
+                      {
+                        "_meta": null,
+                        "key": "browser",
+                        "value": "Chrome 28.0"
+                      },
+                      {
+                        "_meta": null,
+                        "key": "device",
+                        "value": "Other"
+                      },
+                      {
+                        "_meta": null,
+                        "key": "level",
+                        "value": "error"
+                      },
+                      {
+                        "_meta": null,
+                        "key": "os",
+                        "value": "Windows 8"
+                      },
+                      {
+                        "_meta": null,
+                        "key": "release",
+                        "value": "17642328ead24b51867165985996d04b29310337"
+                      },
+                      {
+                        "_meta": null,
+                        "key": "url",
+                        "value": "http://example.com/foo"
+                      },
+                      {
+                        "_meta": null,
+                        "key": "user",
+                        "value": "id:1"
+                      }
+                    ],
+                    "type": "default",
+                    "user": {
+                      "data": {},
+                      "email": "sentry@example.com",
+                      "id": "1",
+                      "ip_address": "127.0.0.1",
+                      "name": "Sentry",
+                      "username": "sentry"
+                    }
+                  },
                   "eventId": "1",
                   "groupId": "1",
                   "organizationSlug": "the-interstellar-jurisdiction",
-                  "projectSlug": "pump-station",
-                  "event": {}
+                  "projectSlug": "pump-station"
                 }
               }
             }

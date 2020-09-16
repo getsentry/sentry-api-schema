@@ -647,4 +647,225 @@
       }
     }
   },
+  "OrganizationEvent": {
+    "type": "object",
+    "required": [
+      "_meta",
+      "context",
+      "contexts",
+      "dateCreated",
+      "dateReceived",
+      "dist",
+      "entries",
+      "errors",
+      "eventID",
+      "fingerprints",
+      "groupID",
+      "id",
+      "message",
+      "metadata",
+      "packages",
+      "platform",
+      "sdk",
+      "size",
+      "tags",
+      "type",
+      "user"
+    ],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "nullable": true
+          },
+          "contexts": {
+            "type": "object",
+            "nullable": true
+          },
+          "entries": {
+            "type": "object"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "packages": {
+            "type": "string",
+            "nullable": true
+          },
+          "sdk": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "object"
+          },
+          "user": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "context": {
+        "type": "object",
+        "properties": {
+          "emptyList": {
+            "type": "array"
+          },
+          "emptyMap": {
+            "type": "object"
+          },
+          "length": {
+            "type": "integer"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "session": {
+            "type": "object",
+            "properties": {
+              "foo": {
+                "type": "string"
+              }
+            }
+          },
+          "unauthorized": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "contexts": {
+        "type": "object"
+      },
+      "dateCreated": {
+        "type": "string"
+      },
+      "dateReceived": {
+        "type": "string"
+      },
+      "dist": {
+        "type": "string",
+        "nullable": true
+      },
+      "entries": {
+        "type": "array",
+        "items": {
+          "anyOf": [
+            {
+              "$ref": "entries.json#/Breadcrumbs"
+            },
+            {
+              "$ref": "entries.json#/Request"
+            },
+            {
+              "$ref": "entries.json#/Message"
+            },
+            {
+              "$ref": "entries.json#/Exception"
+            }
+          ]
+        }
+      },
+      "errors": {
+        "type": "array"
+      },
+      "eventID": {
+        "type": "string"
+      },
+      "fingerprints": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "groupID": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string"
+      },
+      "message": {
+        "type": "string"
+      },
+      "metadata": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "packages": {
+        "type": "object",
+        "properties": {
+          "my.package": {
+            "type": "string"
+          }
+        }
+      },
+      "platform": {
+        "type": "string"
+      },
+      "sdk": {
+        "type": "object",
+        "nullable": true
+      },
+      "size": {
+        "type": "integer"
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_meta": {
+              "type": "string",
+              "nullable": true
+            },
+            "key": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "type": {
+        "type": "string"
+      },
+      "user": {
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "data": {
+            "type": "object"
+          },
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "ip_address": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
 }
