@@ -1,8 +1,6 @@
 {
   "get": {
-    "tags": [
-      "Events"
-    ],
+    "tags": ["Events"],
     "description": "This endpoint lists an issue's hashes, which are the generated checksums used to aggregate individual events.",
     "operationId": "List an issue's hashes",
     "parameters": [
@@ -14,6 +12,9 @@
         "schema": {
           "type": "string"
         }
+      },
+      {
+        "$ref": "../../components/parameters/pagination-cursor.json#/PaginationCursor"
       }
     ],
     "responses": {
@@ -27,17 +28,14 @@
                 "type": "object",
                 "properties": {
                   "latestEvent": {
-                      "$ref": "../../components/schemas/event.json#/EventDetailed"
+                    "$ref": "../../components/schemas/event.json#/EventDetailed"
                   },
                   "id": {
                     "type": "string"
                   },
                   "state": {
                     "type": "string",
-                    "enum": [
-                      "unlocked",
-                      "locked_in_migration",
-                    ]
+                    "enum": ["unlocked", "locked_in_migration"]
                   }
                 }
               }
@@ -51,9 +49,7 @@
     },
     "security": [
       {
-        "auth_token": [
-          "event:read"
-        ]
+        "auth_token": ["event:read"]
       }
     ]
   }
