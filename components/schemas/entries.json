@@ -1,16 +1,14 @@
 {
   "Breadcrumbs": {
     "type": "object",
-    "required": [
-      "type",
-      "data"
-    ],
+    "required": ["type", "data"],
     "properties": {
       "type": {
         "type": "string"
       },
       "data": {
         "type": "object",
+        "required": ["values"],
         "properties": {
           "values": {
             "type": "array",
@@ -37,7 +35,8 @@
                   "nullable": true
                 },
                 "timestamp": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "date-time"
                 },
                 "data": {
                   "type": "object",
@@ -59,10 +58,7 @@
   },
   "Request": {
     "type": "object",
-    "required": [
-      "type",
-      "data"
-    ],
+    "required": ["type", "data"],
     "properties": {
       "type": {
         "type": "string"
@@ -143,16 +139,14 @@
   },
   "Message": {
     "type": "object",
-    "required": [
-      "type",
-      "data"
-    ],
+    "required": ["type", "data"],
     "properties": {
       "type": {
         "type": "string"
       },
       "data": {
         "type": "object",
+        "required": ["formatted"],
         "properties": {
           "formatted": {
             "type": "string"
@@ -163,21 +157,14 @@
   },
   "Exception": {
     "type": "object",
-    "required": [
-      "type",
-      "data"
-    ],
+    "required": ["type", "data"],
     "properties": {
       "type": {
         "type": "string"
       },
       "data": {
         "type": "object",
-        "required": [
-          "excOmitted",
-          "hasSystemFrames",
-          "values"
-        ],
+        "required": ["excOmitted", "hasSystemFrames", "values"],
         "properties": {
           "excOmitted": {
             "type": "array",

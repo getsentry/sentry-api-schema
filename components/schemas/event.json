@@ -35,43 +35,7 @@
         "type": "string"
       },
       "user": {
-        "type": "object",
-        "nullable": true,
-        "required": [
-          "username",
-          "name",
-          "ip_address",
-          "email",
-          "data",
-          "id"
-        ],
-        "properties": {
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string"
-          },
-          "ip_address": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "data": {
-            "type": "object",
-            "nullable": true,
-            "properties": {
-              "isStaff": {
-                "type": "boolean"
-              }
-            }
-          },
-          "id": {
-            "type": "string"
-          }
-        }
+        "$ref": "users.json#/EventUser"
       },
       "message": {
         "type": "string"
@@ -90,7 +54,7 @@
       },
       "title": {
         "type": "string"
-      },
+      }
     }
   },
   "EventDetailed": {
@@ -179,10 +143,7 @@
         "oneOf": [
           {
             "type": "object",
-            "required": [
-              "type",
-              "value"
-            ],
+            "required": ["type", "value"],
             "properties": {
               "type": {
                 "type": "string"
@@ -194,9 +155,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "title"
-            ],
+            "required": ["title"],
             "properties": {
               "title": {
                 "type": "string"
@@ -230,34 +189,7 @@
         "type": "string"
       },
       "user": {
-        "type": "object",
-        "nullable": true,
-        "properties": {
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string"
-          },
-          "ip_address": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "isStaff": {
-                "type": "boolean"
-              }
-            }
-          },
-          "id": {
-            "type": "string"
-          }
-        }
+        "$ref": "users.json#/EventUser"
       },
       "entries": {
         "type": "array",
@@ -340,85 +272,15 @@
         "type": "object"
       },
       "release": {
-        "type": "object",
-        "nullable": true,
-        "properties": {
-          "dateReleased": {
-            "type": "string"
-          },
-          "newGroups": {
-            "type": "integer"
-          },
-          "commitCount": {
-            "type": "integer"
-          },
-          "url": {
-            "type": "string"
-          },
-          "data": {
-            "type": "object"
-          },
-          "lastDeploy": {
-            "type": "object",
-            "nullable": true
-          },
-          "deployCount": {
-            "type": "integer"
-          },
-          "dateCreated": {
-            "type": "string"
-          },
-          "lastEvent": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
-          },
-          "firstEvent": {
-            "type": "string"
-          },
-          "lastCommit": {
-            "type": "object",
-            "nullable": true
-          },
-          "shortVersion": {
-            "type": "string"
-          },
-          "authors": {
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          },
-          "owner": {
-            "type": "string",
-            "nullable": true
-          },
-          "ref": {
-            "type": "string"
-          },
-          "projects": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+        "$ref": "releases/organization-release.json#/OrganizationRelease",
+        "nullable": true
       },
       "groupID": {
         "type": "string"
       },
       "title": {
         "type": "string"
-      },
+      }
     }
   },
   "Hash": {
@@ -491,10 +353,7 @@
         "oneOf": [
           {
             "type": "object",
-            "required": [
-              "type",
-              "value"
-            ],
+            "required": ["type", "value"],
             "properties": {
               "type": {
                 "type": "string"
@@ -506,9 +365,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "title"
-            ],
+            "required": ["title"],
             "properties": {
               "title": {
                 "type": "string"
@@ -542,34 +399,7 @@
         "type": "string"
       },
       "user": {
-        "type": "object",
-        "nullable": true,
-        "properties": {
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string"
-          },
-          "ip_address": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "isStaff": {
-                "type": "boolean"
-              }
-            }
-          },
-          "id": {
-            "type": "string"
-          }
-        }
+        "$ref": "users.json#/EventUser"
       },
       "entries": {
         "type": "array",
@@ -656,7 +486,7 @@
       },
       "title": {
         "type": "string"
-      },
+      }
     }
   },
   "OrganizationEvent": {
@@ -726,8 +556,7 @@
         "properties": {
           "emptyList": {
             "type": "array",
-            "items": {
-            },
+            "items": {}
           },
           "emptyMap": {
             "type": "object"
@@ -791,8 +620,7 @@
       },
       "errors": {
         "type": "array",
-        "items": {
-        }
+        "items": {}
       },
       "eventID": {
         "type": "string"
@@ -860,32 +688,11 @@
         "type": "string"
       },
       "user": {
-        "type": "object",
-        "nullable": true,
-        "properties": {
-          "data": {
-            "type": "object"
-          },
-          "email": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          },
-          "ip_address": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          }
-        }
+        "$ref": "users.json#/EventUser"
       },
       "title": {
         "type": "string"
-      },
+      }
     }
   }
 }
