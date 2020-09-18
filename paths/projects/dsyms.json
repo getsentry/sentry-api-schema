@@ -69,7 +69,7 @@
     ],
     "requestBody": {
       "content": {
-        "multipart/form-data": {
+        "application/xml": {
           "schema": {
             "required": ["file"],
             "type": "object",
@@ -80,7 +80,8 @@
                 "description": "The multipart encoded file."
               }
             }
-          }
+          },
+          "example": "--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"header\"\r\n\r\nContent-Type:text/plain; encoding=utf-8\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\n/demo/hello.zip\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"file\"; filename=\"hello.zip\"\r\n\r\nprint \"Hello World!\"\r\n--b70ee85f83c8410fa00416e35b90581a--\r\n"
         }
       },
       "required": true
