@@ -827,7 +827,7 @@
       },
       "delete": {
         "tags": ["Teams"],
-        "description": "Schedules a team for deletion.\n\nNote: Deletion happens asynchronously and therefor is not immediate. However once deletion has begun the state of a project changes and will be hidden from most public views.",
+        "description": "Schedules a team for deletion.\n\nNote: Deletion happens asynchronously and therefore is not immediate. However once deletion has begun the state of a project changes and will be hidden from most public views.",
         "operationId": "Delete a Team",
         "parameters": [
           {
@@ -1094,7 +1094,7 @@
                   },
                   "slug": {
                     "type": "string",
-                    "description": "Optionally a slug for the new project. If it’s not provided a slug is generated from the name.",
+                    "description": "Optional slug for the new project. If not provided a slug is generated from the name.",
                     "example": "the-spoiled-yoghurt"
                   }
                 }
@@ -1277,7 +1277,7 @@
           {
             "name": "stat",
             "in": "query",
-            "description": "the name of the stat to query `(\"received\", \"rejected\")`",
+            "description": "The name of the stat to query `(\"received\", \"rejected\")`",
             "schema": {
               "type": "string",
               "enum": ["received", "rejected"]
@@ -1372,12 +1372,12 @@
       "get": {
         "tags": ["Organizations"],
         "description": "Return a list of organizations available to the authenticated session.  This is particularly useful for requests with an user bound context.  For API key based requests this will only return the organization that belongs to the key.",
-        "operationId": "List your Organizations",
+        "operationId": "List Your Organizations",
         "parameters": [
           {
             "name": "owner",
             "in": "query",
-            "description": "restrict results to organizations in which you are an organization owner",
+            "description": "Restrict results to organizations in which you are an organization owner.",
             "schema": {
               "type": "boolean"
             }
@@ -1500,7 +1500,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "the slug of the organization the event ID should be looked up in.",
+            "description": "The slug of the organization the event ID should be looked up in.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1509,7 +1509,7 @@
           {
             "name": "event_id",
             "in": "path",
-            "description": "the event ID to look up.",
+            "description": "The event ID to look up.",
             "required": true,
             "schema": {
               "type": "string"
@@ -2269,7 +2269,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "the slug of the organization to look up.",
+            "description": "The slug of the organization to look up.",
             "required": true,
             "schema": {
               "type": "string"
@@ -2826,12 +2826,12 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "an optional new name for the organization.",
+                    "description": "An optional new name for the organization.",
                     "example": "Impeccably Designated"
                   },
                   "slug": {
                     "type": "string",
-                    "description": "an optional new slug for the organization. Needs to be available and unique.",
+                    "description": "An optional new slug for the organization. Needs to be available and unique.",
                     "example": "impeccably-designated"
                   }
                 }
@@ -3263,7 +3263,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "the slug of the organization for which the projects should be listed.",
+            "description": "The slug of the organization for which the projects should be listed.",
             "required": true,
             "schema": {
               "type": "string"
@@ -3430,7 +3430,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "the organization short name",
+            "description": "The organization short name.",
             "required": true,
             "schema": {
               "type": "string"
@@ -3490,7 +3490,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "the organization short name",
+            "description": "The organization short name.",
             "required": true,
             "schema": {
               "type": "string"
@@ -3499,7 +3499,7 @@
           {
             "name": "repo_id",
             "in": "path",
-            "description": "the repository ID",
+            "description": "The repository ID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -3561,7 +3561,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "the slug of the organization the event ID should be looked up in.",
+            "description": "The slug of the organization the event ID should be looked up in.",
             "required": true,
             "schema": {
               "type": "string"
@@ -3570,7 +3570,7 @@
           {
             "name": "stat",
             "in": "query",
-            "description": "the name of the stat to query `(\"received\", \"rejected\", \"blacklisted\")`",
+            "description": "The name of the stat to query `(\"received\", \"rejected\", \"blacklisted\")`.",
             "schema": {
               "type": "string",
               "enum": ["received", "rejected", "blacklisted"]
@@ -3667,7 +3667,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "the slug of the organization the event ID should be looked up in.",
+            "description": "The slug of the organization the event ID should be looked up in.",
             "required": true,
             "schema": {
               "type": "string"
@@ -3676,7 +3676,7 @@
           {
             "name": "project",
             "in": "query",
-            "description": "restrict results to users who have access to a given project ID",
+            "description": "Restrict results to users who have access to a given project ID",
             "schema": {
               "type": "string"
             }
@@ -3917,7 +3917,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "the slug of the organization the short ID should be looked up in.",
+            "description": "The slug of the organization the short ID should be looked up in.",
             "required": true,
             "schema": {
               "type": "string"
@@ -3926,7 +3926,7 @@
           {
             "name": "short_id",
             "in": "path",
-            "description": "the short ID to look up.",
+            "description": "The short ID to look up.",
             "required": true,
             "schema": {
               "type": "string"
@@ -6031,7 +6031,7 @@
       "post": {
         "tags": ["Projects"],
         "description": "Upload a new debug information file for the given release.\n\nUnlike other API requests, files must be uploaded using the\ntraditional multipart/form-data content-type.\n\nThe file uploaded is a zip archive of an Apple .dSYM folder which\ncontains the individual debug images.  Uploading through this endpoint\nwill create different files for the contained images.",
-        "operationId": "Upload a new File",
+        "operationId": "Upload a New File",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6096,7 +6096,7 @@
       "delete": {
         "tags": ["Projects"],
         "description": "Delete a debug information file for a given project.",
-        "operationId": "Delete a specific project's Debug Information File",
+        "operationId": "Delete a Specific Project's Debug Information File",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6148,7 +6148,7 @@
       "get": {
         "tags": ["Projects"],
         "description": "Return a list of users seen within this project.",
-        "operationId": "List a project's users",
+        "operationId": "List a Project's Users",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6231,7 +6231,7 @@
       "get": {
         "tags": ["Projects"],
         "description": "Return a list of values associated with this key.  The `query`\nparameter can be used to to perform a \"contains\" match on\nvalues.",
-        "operationId": "List a tag's values",
+        "operationId": "List a Tag's Values",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6302,7 +6302,7 @@
         "tags": ["Projects"],
         "summary": "Caution\nThis endpoint may change in the future without  notice.",
         "description": "Return a set of points representing a normalized timestamp and the\nnumber of events seen in the period.\n\nQuery ranges are limited to Sentry's configured time-series resolutions.",
-        "operationId": "Retrieve event counts for a project",
+        "operationId": "Retrieve Event Counts for a Project",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6325,7 +6325,7 @@
           {
             "name": "stat",
             "in": "query",
-            "description": "The name of the stat to query `(\"received\", \"rejected\", \"blacklisted\", \"generated\")`",
+            "description": "The name of the stat to query `(\"received\", \"rejected\", \"blacklisted\", \"generated\")`.",
             "schema": {
               "type": "string",
               "enum": ["received", "rejected", "blacklisted", "generated"]
@@ -6417,7 +6417,7 @@
       "get": {
         "tags": ["Projects"],
         "description": "Return a list of user feedback items within this project.",
-        "operationId": "List a project's user feedback",
+        "operationId": "List a Project's User Feedback",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6532,7 +6532,7 @@
       "post": {
         "tags": ["Projects"],
         "description": "Submit and associate user feedback with an issue.\n\nFeedback must be received by the server no more than 30 minutes after the event was saved.\n\nAdditionally, within 5 minutes of submitting feedback it may also be overwritten. This is useful in situations where you may need to retry sending a request due to network failures.\n\nIf feedback is rejected due to a mutability threshold, a 409 status code will be returned.\n\nNote: Feedback may be submitted with DSN authentication (see auth documentation).",
-        "operationId": "Submit user feedback",
+        "operationId": "Submit User Feedback",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6562,27 +6562,25 @@
                 "properties": {
                   "event_id": {
                     "type": "string",
-                    "description": "The event ID."
+                    "description": "The event ID.",
+                    "example": "14bad9a2e3774046977a21440ddb39b2"
                   },
                   "name": {
                     "type": "string",
-                    "description": "User's name."
+                    "description": "User's name.",
+                    "example": "Jane Smith"
                   },
                   "email": {
                     "type": "string",
-                    "description": "User's email address."
+                    "description": "User's email address.",
+                    "example": "jane@example.com"
                   },
                   "comments": {
                     "type": "string",
-                    "description": "Comments supplied by user."
+                    "description": "Comments supplied by user.",
+                    "example": "It broke!"
                   }
                 }
-              },
-              "example": {
-                "comments": "It broke!",
-                "email": "jane@example.com",
-                "event_id": "14bad9a2e3774046977a21440ddb39b2",
-                "name": "Jane Smith"
               }
             }
           },
@@ -6685,7 +6683,7 @@
       "get": {
         "tags": ["Projects"],
         "description": "Return a list of client keys bound to a project.",
-        "operationId": "List a project's client keys",
+        "operationId": "List a Project's Client Keys",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6863,7 +6861,7 @@
       "post": {
         "tags": ["Projects"],
         "description": "Create a new client key bound to a project.  The key's secret and public key are generated by the server.",
-        "operationId": "Create a new client key",
+        "operationId": "Create a New Client Key",
         "parameters": [
           {
             "name": "organization_slug",
@@ -6893,12 +6891,10 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The name for the new key."
+                    "description": "The name for the new key.",
+                    "example": "Fabulous Key"
                   }
                 }
-              },
-              "example": {
-                "name": "Fabulous Key"
               }
             }
           },
@@ -7051,7 +7047,7 @@
       "put": {
         "tags": ["Projects"],
         "description": "Update a client key.  This can be used to rename a key.",
-        "operationId": "Update a client Key",
+        "operationId": "Update a Client Key",
         "parameters": [
           {
             "name": "organization_slug",
@@ -7089,12 +7085,10 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The new name for the client key."
+                    "description": "The new name for the client key.",
+                    "example": "Fluffy Key"
                   }
                 }
-              },
-              "example": {
-                "name": "Fluffy Key"
               }
             }
           },
@@ -7219,8 +7213,8 @@
                   },
                   "id": "cec9dfceb0b74c1c9a5e3c135585f364",
                   "isActive": true,
-                  "label": "Fabulous Key",
-                  "name": "Fabulous Key",
+                  "label": "Fluffy Key",
+                  "name": "Fluffy Key",
                   "projectId": 2,
                   "public": "cec9dfceb0b74c1c9a5e3c135585f364",
                   "rateLimit": null,
@@ -7248,7 +7242,7 @@
       "delete": {
         "tags": ["Projects"],
         "description": "Delete a client key.",
-        "operationId": "Delete a client Key",
+        "operationId": "Delete a Client Key",
         "parameters": [
           {
             "name": "organization_slug",
@@ -7300,7 +7294,7 @@
       "get": {
         "tags": ["Projects"],
         "description": "Return a list of service hooks bound to a project.",
-        "operationId": "List a project's service hooks",
+        "operationId": "List a Project's Service Hooks",
         "parameters": [
           {
             "name": "organization_slug",
@@ -7399,7 +7393,7 @@
       "post": {
         "tags": ["Projects"],
         "description": "Register a new service hook on a project.\n\nEvents include:\n\n- event.alert: An alert is generated for an event (via rules).\n- event.created: A new event has been processed.\n\nThis endpoint requires the 'servicehooks' feature to be enabled for your project.",
-        "operationId": "Register a new service hook",
+        "operationId": "Register a New Service Hook",
         "parameters": [
           {
             "name": "organization_slug",
@@ -7429,20 +7423,18 @@
                 "properties": {
                   "url": {
                     "type": "string",
-                    "description": "The url for the webhook."
+                    "description": "The URL for the webhook.",
+                    "example": "https://example.com/sentry-hook"
                   },
                   "events": {
                     "type": "array",
                     "description": "The events to subscribe to.",
+                    "example": ["event.alert", "event.created"],
                     "items": {
                       "type": "string"
                     }
                   }
                 }
-              },
-              "example": {
-                "events": ["event.alert", "event.created"],
-                "url": "https://example.com/sentry-hook"
               }
             }
           },
@@ -7516,7 +7508,7 @@
       "get": {
         "tags": ["Projects"],
         "description": "Return a service hook bound to a project.",
-        "operationId": "Retrieve a service hook",
+        "operationId": "Retrieve a Service Hook",
         "parameters": [
           {
             "name": "organization_slug",
@@ -7612,7 +7604,7 @@
       "put": {
         "tags": ["Projects"],
         "description": "Update a service hook",
-        "operationId": "Update a service hook",
+        "operationId": "Update a Service Hook",
         "parameters": [
           {
             "name": "organization_slug",
@@ -7651,20 +7643,18 @@
                 "properties": {
                   "url": {
                     "type": "string",
-                    "description": "The url for the webhook."
+                    "description": "The URL for the webhook.",
+                    "example": "https://example.com/sentry-hook"
                   },
                   "events": {
                     "type": "array",
                     "description": "The events to subscribe to.",
+                    "example": ["event.alert", "event.created"],
                     "items": {
                       "type": "string"
                     }
                   }
                 }
-              },
-              "example": {
-                "events": ["event.alert", "event.created"],
-                "url": "https://example.com/sentry-hook"
               }
             }
           },
@@ -7736,7 +7726,7 @@
       "delete": {
         "tags": ["Projects"],
         "description": "Remove a service hook",
-        "operationId": "Remove a service hook",
+        "operationId": "Remove a Service Hook",
         "parameters": [
           {
             "name": "organization_slug",
@@ -7788,7 +7778,7 @@
       "get": {
         "tags": ["Events"],
         "description": "Return details on an individual event.",
-        "operationId": "Retrieve an event for a project",
+        "operationId": "Retrieve an Event for a Project",
         "parameters": [
           {
             "name": "organization_slug",
@@ -9084,7 +9074,7 @@
       "get": {
         "tags": ["Events"],
         "description": "Return a list of events bound to a project.",
-        "operationId": "List a project's events",
+        "operationId": "List a Project's Events",
         "parameters": [
           {
             "name": "organization_slug",
@@ -9293,7 +9283,7 @@
       "get": {
         "tags": ["Events"],
         "description": "Return a list of issues (groups) bound to a project.  All parameters are supplied as query string parameters. \n\n A default query of ``is:unresolved`` is applied. To return results with other statuses send an new query value (i.e. ``?query=`` for all results).\n\nThe ``statsPeriod`` parameter can be used to select the timeline stats which should be present. Possible values are: ``\"\"`` (disable),``\"24h\"``, ``\"14d\"``",
-        "operationId": "List a project's issues",
+        "operationId": "List a Project's Issues",
         "parameters": [
           {
             "name": "organization_slug",
@@ -9707,6 +9697,10 @@
                     "description": "In case this API call is invoked with a user context this allows changing of the bookmark flag."
                   }
                 }
+              },
+              "example": {
+                "isPublic": false,
+                "status": "unresolved"
               }
             }
           },
@@ -9811,7 +9805,7 @@
       "get": {
         "tags": ["Events"],
         "description": "Returns details for given tag key related to an issue.",
-        "operationId": "List a tag's values related to an issue",
+        "operationId": "List a Tag's Values Related to an Issue",
         "parameters": [
           {
             "name": "issue_id",
@@ -9850,14 +9844,14 @@
                         "type": "string"
                       }
                     }
-                  },
-                  "example": [
-                    {
-                      "key": "ice_cream",
-                      "value": "mint_choco"
-                    }
-                  ]
-                }
+                  }
+                },
+                "example": [
+                  {
+                    "key": "ice_cream",
+                    "value": "mint_choco"
+                  }
+                ]
               }
             }
           },
@@ -9876,7 +9870,7 @@
       "get": {
         "tags": ["Events"],
         "description": "Returns details for given tag key related to an issue.",
-        "operationId": "Retrieve tag details",
+        "operationId": "Retrieve Tag Details",
         "parameters": [
           {
             "name": "issue_id",
@@ -9912,14 +9906,14 @@
                     "totalValues": {
                       "type": "integer"
                     }
-                  },
-                  "example": [
-                    {
-                      "key": "ice_cream",
-                      "totalValues": 6
-                    }
-                  ]
-                }
+                  }
+                },
+                "example": [
+                  {
+                    "key": "ice_cream",
+                    "totalValues": 6
+                  }
+                ]
               }
             }
           },
@@ -9938,7 +9932,7 @@
       "get": {
         "tags": ["Events"],
         "description": "This endpoint lists an issue's hashes, which are the generated checksums used to aggregate individual events.",
-        "operationId": "List an issue's hashes",
+        "operationId": "List an Issue's Hashes",
         "parameters": [
           {
             "name": "issue_id",
@@ -10991,7 +10985,7 @@
       "get": {
         "tags": ["Events"],
         "description": "Retrieves the details of the oldest event for an issue.",
-        "operationId": "Retrieve the oldest event for an issue",
+        "operationId": "Retrieve the Oldest Event for an Issue",
         "parameters": [
           {
             "name": "issue_id",
@@ -12269,7 +12263,7 @@
       "get": {
         "tags": ["Events"],
         "description": "Retrieves the details of the latest event for an issue.",
-        "operationId": "Retrieve the latest event for an issue",
+        "operationId": "Retrieve the Latest Event for an Issue",
         "parameters": [
           {
             "name": "issue_id",
@@ -13547,7 +13541,7 @@
       "get": {
         "tags": ["Events"],
         "description": "This endpoint lists an issue's events.",
-        "operationId": "List a issue's events",
+        "operationId": "List an Issue's Events",
         "parameters": [
           {
             "name": "issue_id",
@@ -13737,7 +13731,7 @@
       "get": {
         "tags": ["Events"],
         "description": "Return details on an individual issue. This returns the basic stats for the issue (title, last seen, first seen), some overall numbers (number of comments, user reports) as well as the summarized event data.",
-        "operationId": "Retrieve an issue",
+        "operationId": "Retrieve an Issue",
         "parameters": [
           {
             "name": "issue_id",
@@ -14239,7 +14233,7 @@
       "put": {
         "tags": ["Events"],
         "description": "Updates an individual issue's attributes.  Only the attributes submitted are modified.",
-        "operationId": "Update an issue",
+        "operationId": "Update an Issue",
         "parameters": [
           {
             "name": "issue_id",
@@ -14282,6 +14276,9 @@
                     "description": "Sets the issue to public or private."
                   }
                 }
+              },
+              "example": {
+                "status": "unresolved"
               }
             }
           },
@@ -14758,8 +14755,8 @@
       },
       "post": {
         "tags": ["Releases"],
-        "description": "Create a new release for the given Organization.  Releases are used by\nSentry to improve its error reporting abilities by correlating\nfirst seen events with the release that might have introduced the\nproblem.\nReleases are also necessary for sourcemaps and other debug features\nthat require manual upload for functioning well.",
-        "operationId": "Create a New Release for an Organization.",
+        "description": "Create a new release for the given Organization.  Releases are used by\nSentry to improve its error reporting abilities by correlating\nfirst seen events with the release that might have introduced the\nproblem.\nReleases are also necessary for source maps and other debug features\nthat require manual upload for functioning well.",
+        "operationId": "Create a New Release for an Organization",
         "parameters": [
           {
             "name": "organization_slug",
@@ -14780,19 +14777,22 @@
                 "properties": {
                   "version": {
                     "type": "string",
-                    "description": "A version identifier for this release. Can be a version number, a commit hash etc."
+                    "description": "A version identifier for this release. Can be a version number, a commit hash, etc.",
+                    "example": "2.0rc2"
                   },
                   "ref": {
                     "type": "string",
-                    "description": "An optional commit reference. This is useful if a tagged version has been provided."
+                    "description": "An optional commit reference. This is useful if a tagged version has been provided.",
+                    "example": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb"
                   },
                   "url": {
                     "type": "string",
-                    "description": "A URL that points to the release. This can be the path to an online interface to the sourcecode for instance"
+                    "description": "A URL that points to the release. This can be the path to an online interface to the source code for instance"
                   },
                   "projects": {
                     "type": "array",
                     "description": "A list of project slugs that are involved in this release.",
+                    "example": ["pump-station"],
                     "items": {
                       "type": "string"
                     }
@@ -14849,11 +14849,11 @@
                         },
                         "id": {
                           "type": "string",
-                          "description": "The commit id (the commit sha)."
+                          "description": "The commit ID (the commit SHA)."
                         }
                       }
                     },
-                    "description": "An optional list of commit data to be associated with the release. Commits must include parameters `id` (the sha of the commit), and can optionally include `repository`, `message`, `patch_set`, `author_name`, `author_email`, and `timestamp`."
+                    "description": "An optional list of commit data to be associated with the release. Commits must include parameters `id` (the SHA of the commit), and can optionally include `repository`, `message`, `patch_set`, `author_name`, `author_email`, and `timestamp`."
                   },
                   "refs": {
                     "type": "array",
@@ -14877,11 +14877,6 @@
                     "description": "An optional way to indicate the start and end commits for each repository included in a release. Head commits must include parameters `repository` and `commit` (the HEAD sha). They can optionally include `previousCommit` (the sha of the HEAD of the previous release), which should be specified if this is the first time you've sent commit data. `commit` may contain a range in the form of `previousCommit..commit`."
                   }
                 }
-              },
-              "example": {
-                "version": "2.0rc2",
-                "ref": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb",
-                "projects": ["pump-station"]
               }
             }
           }
@@ -15267,8 +15262,8 @@
       },
       "put": {
         "tags": ["Releases"],
-        "description": "Update a release for a give organization.",
-        "operationId": "Update an Organization's Release.",
+        "description": "Update a release for a given organization.",
+        "operationId": "Update an Organization's Release",
         "parameters": [
           {
             "name": "organization_slug",
@@ -15297,11 +15292,13 @@
                 "properties": {
                   "ref": {
                     "type": "string",
-                    "description": "An optional commit reference. This is useful if a tagged version has been provided."
+                    "description": "An optional commit reference. This is useful if a tagged version has been provided.",
+                    "example": "freshtofu"
                   },
                   "url": {
                     "type": "string",
-                    "description": "A URL that points to the release. This can be the path to an online interface to the sourcecode for instance."
+                    "description": "A URL that points to the release. This can be the path to an online interface to the source code for instance.",
+                    "example": "https://vcshub.invalid/user/project/refs/freshtofu"
                   },
                   "dateReleased": {
                     "type": "string",
@@ -15505,7 +15502,7 @@
       "delete": {
         "tags": ["Releases"],
         "description": "Delete a release for a given organization.",
-        "operationId": "Delete an Organization's Release.",
+        "operationId": "Delete an Organization's Release",
         "parameters": [
           {
             "name": "organization_slug",
@@ -15637,7 +15634,7 @@
       "post": {
         "tags": ["Releases"],
         "description": "Upload a new organization release file.",
-        "operationId": "Upload a New Organization Release File.",
+        "operationId": "Upload a New Organization Release File",
         "parameters": [
           {
             "name": "organization_slug",
@@ -15676,7 +15673,7 @@
                   },
                   "dist": {
                     "type": "string",
-                    "description": "The name of the dist"
+                    "description": "The name of the dist."
                   },
                   "header": {
                     "type": "string",
@@ -15703,7 +15700,7 @@
       "get": {
         "tags": ["Releases"],
         "description": "Return a list of files for a given release.",
-        "operationId": "List an Project's Release Files",
+        "operationId": "List a Project's Release Files",
         "parameters": [
           {
             "name": "organization_slug",
@@ -15807,7 +15804,7 @@
       "post": {
         "tags": ["Releases"],
         "description": "Upload a new project release file.",
-        "operationId": "Upload a New Project Release File.",
+        "operationId": "Upload a New Project Release File",
         "parameters": [
           {
             "name": "organization_slug",
@@ -15855,7 +15852,7 @@
                   },
                   "dist": {
                     "type": "string",
-                    "description": "The name of the dist"
+                    "description": "The name of the dist."
                   },
                   "header": {
                     "type": "string",
@@ -16032,8 +16029,8 @@
       },
       "put": {
         "tags": ["Releases"],
-        "description": "Upload an organization release file.",
-        "operationId": "Update an Organization Release File.",
+        "description": "Update an organization release file.",
+        "operationId": "Update an Organization Release File",
         "parameters": [
           {
             "name": "organization_slug",
@@ -16072,11 +16069,12 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The new name (full path) of the file."
+                    "description": "The new name (full path) of the file.",
+                    "example": "/demo/goodbye.txt"
                   },
                   "dist": {
                     "type": "string",
-                    "description": "The new name of the dist"
+                    "description": "The new name of the dist."
                   }
                 }
               }
@@ -16195,7 +16193,7 @@
       "get": {
         "tags": ["Releases"],
         "description": "Retrieve a file for a given release.",
-        "operationId": "Retrieve an Project Release's File",
+        "operationId": "Retrieve a Project Release's File",
         "parameters": [
           {
             "name": "organization_slug",
@@ -16302,8 +16300,8 @@
       },
       "put": {
         "tags": ["Releases"],
-        "description": "Upload a project release file.",
-        "operationId": "Update a Project Release File.",
+        "description": "Update a project release file.",
+        "operationId": "Update a Project Release File",
         "parameters": [
           {
             "name": "organization_slug",
@@ -16351,11 +16349,12 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The new name (full path) of the file."
+                    "description": "The new name (full path) of the file.",
+                    "example": "/demo/goodbye.txt"
                   },
                   "dist": {
                     "type": "string",
-                    "description": "The new name of the dist"
+                    "description": "The new name of the dist."
                   }
                 }
               }
@@ -16428,7 +16427,7 @@
       "delete": {
         "tags": ["Releases"],
         "description": "Delete a file for a given release.",
-        "operationId": "Delete an Project Release's File",
+        "operationId": "Delete a Project Release's File",
         "parameters": [
           {
             "name": "organization_slug",
@@ -16549,8 +16548,8 @@
     "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/commits/": {
       "get": {
         "tags": ["Releases"],
-        "description": "List an project release's commits.",
-        "operationId": "List an Project Release's Commits",
+        "description": "List a project release's commits.",
+        "operationId": "List a Project Release's Commits",
         "parameters": [
           {
             "name": "organization_slug",
@@ -16663,7 +16662,7 @@
       "get": {
         "tags": ["Releases"],
         "description": "List issues to be resolved in a particular release.",
-        "operationId": "List Issues to be Resolved in a Particular Release.",
+        "operationId": "List Issues to be Resolved in a Particular Release",
         "parameters": [
           {
             "name": "organization_slug",
@@ -16802,8 +16801,8 @@
       },
       "post": {
         "tags": ["Releases"],
-        "description": "Create a Deploy.",
-        "operationId": "Create a New Deploy for an Organization.",
+        "description": "Create a deploy.",
+        "operationId": "Create a New Deploy for an Organization",
         "parameters": [
           {
             "name": "organization_slug",
@@ -16833,11 +16832,12 @@
                 "properties": {
                   "environment": {
                     "type": "string",
-                    "description": "The environment you're deploying to."
+                    "description": "The environment you're deploying to.",
+                    "example": "prod"
                   },
                   "url": {
                     "type": "string",
-                    "description": "The optional url that points to the deploy."
+                    "description": "The optional URL that points to the deploy."
                   },
                   "name": {
                     "type": "string",
@@ -16854,9 +16854,6 @@
                     "description": "An optional date that indicates when the deploy ended. If not provided, the current time is used."
                   }
                 }
-              },
-              "example": {
-                "environment": "prod"
               }
             }
           }
