@@ -6062,11 +6062,11 @@
                   "file": {
                     "type": "string",
                     "format": "binary",
-                    "description": "The multipart encoded file."
+                    "description": "The multipart encoded file.",
+                    "example": "--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"header\"\r\n\r\nContent-Type:text/plain; encoding=utf-8\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\n/demo/hello.zip\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"file\"; filename=\"hello.zip\"\r\n\r\nprint \"Hello World!\"\r\n--b70ee85f83c8410fa00416e35b90581a--\r\n"
                   }
                 }
-              },
-              "example": "--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"header\"\r\n\r\nContent-Type:text/plain; encoding=utf-8\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\n/demo/hello.zip\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"file\"; filename=\"hello.zip\"\r\n\r\nprint \"Hello World!\"\r\n--b70ee85f83c8410fa00416e35b90581a--\r\n"
+              }
             }
           },
           "required": true
@@ -6563,27 +6563,25 @@
                 "properties": {
                   "event_id": {
                     "type": "string",
-                    "description": "The event ID."
+                    "description": "The event ID.",
+                    "example": "14bad9a2e3774046977a21440ddb39b2"
                   },
                   "name": {
                     "type": "string",
-                    "description": "User's name."
+                    "description": "User's name.",
+                    "example": "Jane Smith"
                   },
                   "email": {
                     "type": "string",
-                    "description": "User's email address."
+                    "description": "User's email address.",
+                    "example": "jane@example.com"
                   },
                   "comments": {
                     "type": "string",
-                    "description": "Comments supplied by user."
+                    "description": "Comments supplied by user.",
+                    "example": "It broke!"
                   }
                 }
-              },
-              "example": {
-                "comments": "It broke!",
-                "email": "jane@example.com",
-                "event_id": "14bad9a2e3774046977a21440ddb39b2",
-                "name": "Jane Smith"
               }
             }
           },
@@ -6894,12 +6892,10 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The name for the new key."
+                    "description": "The name for the new key.",
+                    "example": "Fabulous Key"
                   }
                 }
-              },
-              "example": {
-                "name": "Fabulous Key"
               }
             }
           },
@@ -7090,12 +7086,10 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The new name for the client key."
+                    "description": "The new name for the client key.",
+                    "example": "Fluffy Key"
                   }
                 }
-              },
-              "example": {
-                "name": "Fluffy Key"
               }
             }
           },
@@ -7430,20 +7424,18 @@
                 "properties": {
                   "url": {
                     "type": "string",
-                    "description": "The URL for the webhook."
+                    "description": "The URL for the webhook.",
+                    "example": "https://example.com/sentry-hook"
                   },
                   "events": {
                     "type": "array",
                     "description": "The events to subscribe to.",
+                    "example": ["event.alert", "event.created"],
                     "items": {
                       "type": "string"
                     }
                   }
                 }
-              },
-              "example": {
-                "events": ["event.alert", "event.created"],
-                "url": "https://example.com/sentry-hook"
               }
             }
           },
@@ -7652,20 +7644,18 @@
                 "properties": {
                   "url": {
                     "type": "string",
-                    "description": "The URL for the webhook."
+                    "description": "The URL for the webhook.",
+                    "example": "https://example.com/sentry-hook"
                   },
                   "events": {
                     "type": "array",
                     "description": "The events to subscribe to.",
+                    "example": ["event.alert", "event.created"],
                     "items": {
                       "type": "string"
                     }
                   }
                 }
-              },
-              "example": {
-                "events": ["event.alert", "event.created"],
-                "url": "https://example.com/sentry-hook"
               }
             }
           },
@@ -14788,11 +14778,13 @@
                 "properties": {
                   "version": {
                     "type": "string",
-                    "description": "A version identifier for this release. Can be a version number, a commit hash, etc."
+                    "description": "A version identifier for this release. Can be a version number, a commit hash, etc.",
+                    "example": "2.0rc2"
                   },
                   "ref": {
                     "type": "string",
-                    "description": "An optional commit reference. This is useful if a tagged version has been provided."
+                    "description": "An optional commit reference. This is useful if a tagged version has been provided.",
+                    "example": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb"
                   },
                   "url": {
                     "type": "string",
@@ -14801,6 +14793,7 @@
                   "projects": {
                     "type": "array",
                     "description": "A list of project slugs that are involved in this release.",
+                    "example": ["pump-station"],
                     "items": {
                       "type": "string"
                     }
@@ -14885,11 +14878,6 @@
                     "description": "An optional way to indicate the start and end commits for each repository included in a release. Head commits must include parameters `repository` and `commit` (the HEAD sha). They can optionally include `previousCommit` (the sha of the HEAD of the previous release), which should be specified if this is the first time you've sent commit data. `commit` may contain a range in the form of `previousCommit..commit`."
                   }
                 }
-              },
-              "example": {
-                "version": "2.0rc2",
-                "ref": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb",
-                "projects": ["pump-station"]
               }
             }
           }
@@ -15305,11 +15293,13 @@
                 "properties": {
                   "ref": {
                     "type": "string",
-                    "description": "An optional commit reference. This is useful if a tagged version has been provided."
+                    "description": "An optional commit reference. This is useful if a tagged version has been provided.",
+                    "example": "freshtofu"
                   },
                   "url": {
                     "type": "string",
-                    "description": "A URL that points to the release. This can be the path to an online interface to the source code for instance."
+                    "description": "A URL that points to the release. This can be the path to an online interface to the source code for instance.",
+                    "example": "https://vcshub.invalid/user/project/refs/freshtofu"
                   },
                   "dateReleased": {
                     "type": "string",
@@ -15331,10 +15321,6 @@
                     "description": "An optional way to indicate the start and end commits for each repository included in a release. Head commits must include parameters `repository` and `commit` (the HEAD sha). They can optionally include `previousCommit` (the sha of the HEAD of the previous release), which should be specified if this is the first time you've sent commit data."
                   }
                 }
-              },
-              "example": {
-                "ref": "freshtofu",
-                "url": "https://vcshub.invalid/user/project/refs/freshtofu"
               }
             }
           }
@@ -15684,7 +15670,8 @@
                   "file": {
                     "type": "string",
                     "format": "binary",
-                    "description": "The multipart encoded file."
+                    "description": "The multipart encoded file.",
+                    "example": "--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"header\"\r\n\r\nContent-Type:text/plain; encoding=utf-8\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\n/demo/hello.min.js.map\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"file\"; filename=\"hello.min.js.map\"\r\n\r\nprint \"Hello World!\"\r\n--b70ee85f83c8410fa00416e35b90581a--\r\n"
                   },
                   "dist": {
                     "type": "string",
@@ -15695,8 +15682,7 @@
                     "description": "This parameter can be supplied multiple times to attach headers to the file. Each header is a string in the format `key:value`. For instance it can be used to define a content type."
                   }
                 }
-              },
-              "example": "--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"header\"\r\n\r\nContent-Type:text/plain; encoding=utf-8\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\n/demo/hello.min.js.map\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"file\"; filename=\"hello.min.js.map\"\r\n\r\nprint \"Hello World!\"\r\n--b70ee85f83c8410fa00416e35b90581a--\r\n"
+              }
             }
           }
         },
@@ -15864,7 +15850,8 @@
                   "file": {
                     "type": "string",
                     "format": "binary",
-                    "description": "The multipart encoded file."
+                    "description": "The multipart encoded file.",
+                    "example": "--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"header\"\r\n\r\nContent-Type:text/plain; encoding=utf-8\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\n/demo/hello.py\r\n--b70ee85f83c8410fa00416e35b90581a\r\nContent-Disposition: form-data; name=\"file\"; filename=\"hello.py\"\r\n\r\nprint \"Hello World!\"\r\n--b70ee85f83c8410fa00416e35b90581a--\r\n"
                   },
                   "dist": {
                     "type": "string",
@@ -15875,9 +15862,6 @@
                     "description": "This parameter can be supplied multiple times to attach headers to the file. Each header is a string in the format `key:value`. For instance it can be used to define a content type."
                   }
                 }
-              },
-              "example": {
-                "test": "ytho"
               }
             }
           }
@@ -16088,16 +16072,14 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The new name (full path) of the file."
+                    "description": "The new name (full path) of the file.",
+                    "example": "/demo/goodbye.txt"
                   },
                   "dist": {
                     "type": "string",
                     "description": "The new name of the dist."
                   }
                 }
-              },
-              "example": {
-                "name": "/demo/goodbye.txt"
               }
             }
           }
@@ -16370,16 +16352,14 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The new name (full path) of the file."
+                    "description": "The new name (full path) of the file.",
+                    "example": "/demo/goodbye.txt"
                   },
                   "dist": {
                     "type": "string",
                     "description": "The new name of the dist."
                   }
                 }
-              },
-              "example": {
-                "name": "/demo/goodbye.txt"
               }
             }
           }
