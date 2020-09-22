@@ -44,8 +44,8 @@
       }
     },
     {
-      "name": "Events",
-      "description": "Endpoints for events",
+      "name": "Events & Issues",
+      "description": "Endpoints for events and issues",
       "externalDocs": {
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/organizations/&template=api_error_template.md"
@@ -63,7 +63,9 @@
   "paths": {
     "/api/0/organizations/{organization_slug}/teams/": {
       "get": {
-        "tags": ["Teams"],
+        "tags": [
+          "Teams"
+        ],
         "description": "Returns a list of teams bound to a organization.",
         "operationId": "List an Organization's Teams",
         "parameters": [
@@ -363,12 +365,16 @@
         },
         "security": [
           {
-            "auth_token": ["team:read"]
+            "auth_token": [
+              "team:read"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Teams"],
+        "tags": [
+          "Teams"
+        ],
         "description": "Create a new team bound to an organization. Only the name of the team is needed to create it, the slug can be auto generated.",
         "operationId": "Create a New Team",
         "parameters": [
@@ -386,7 +392,9 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -493,14 +501,18 @@
         },
         "security": [
           {
-            "auth_token": ["team:write"]
+            "auth_token": [
+              "team:write"
+            ]
           }
         ]
       }
     },
     "/api/0/teams/{organization_slug}/{team_slug}/": {
       "get": {
-        "tags": ["Teams"],
+        "tags": [
+          "Teams"
+        ],
         "description": "Return details on an individual team.",
         "operationId": "Retrieve a Team",
         "parameters": [
@@ -621,7 +633,10 @@
                         },
                         "status": {
                           "type": "object",
-                          "required": ["id", "name"],
+                          "required": [
+                            "id",
+                            "name"
+                          ],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -683,12 +698,16 @@
         },
         "security": [
           {
-            "auth_token": ["team:read"]
+            "auth_token": [
+              "team:read"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Teams"],
+        "tags": [
+          "Teams"
+        ],
         "description": "Update various attributes and configurable settings for the given team.",
         "operationId": "Update a Team",
         "parameters": [
@@ -715,7 +734,9 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -821,12 +842,16 @@
         },
         "security": [
           {
-            "auth_token": ["team:write"]
+            "auth_token": [
+              "team:write"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Teams"],
+        "tags": [
+          "Teams"
+        ],
         "description": "Schedules a team for deletion.\n\nNote: Deletion happens asynchronously and therefore is not immediate. However once deletion has begun the state of a project changes and will be hidden from most public views.",
         "operationId": "Delete a Team",
         "parameters": [
@@ -862,14 +887,18 @@
         },
         "security": [
           {
-            "auth_token": ["team:admin"]
+            "auth_token": [
+              "team:admin"
+            ]
           }
         ]
       }
     },
     "/api/0/teams/{organization_slug}/{team_slug}/projects/": {
       "get": {
-        "tags": ["Teams"],
+        "tags": [
+          "Teams"
+        ],
         "description": "Return a list of projects bound to a team.",
         "operationId": "List a Team's Projects",
         "parameters": [
@@ -965,7 +994,11 @@
                       },
                       "team": {
                         "type": "object",
-                        "required": ["id", "name", "slug"],
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -982,7 +1015,11 @@
                         "type": "array",
                         "items": {
                           "type": "object",
-                          "required": ["id", "name", "slug"],
+                          "required": [
+                            "id",
+                            "name",
+                            "slug"
+                          ],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -1052,12 +1089,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Teams"],
+        "tags": [
+          "Teams"
+        ],
         "description": "Create a new project bound to a team.",
         "operationId": "Create a New Project",
         "parameters": [
@@ -1084,7 +1125,9 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -1244,14 +1287,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           }
         ]
       }
     },
     "/api/0/teams/{organization_slug}/{team_slug}/stats/": {
       "get": {
-        "tags": ["Teams"],
+        "tags": [
+          "Teams"
+        ],
         "summary": "Caution\nThis endpoint may change in the future without notice.",
         "description": "Return a set of points representing a normalized timestamp and the number of events seen in the period.\n\nQuery ranges are limited to Sentry’s configured time-series resolutions.",
         "operationId": "Retrieve Event Counts for a Team",
@@ -1280,7 +1327,10 @@
             "description": "The name of the stat to query `(\"received\", \"rejected\")`",
             "schema": {
               "type": "string",
-              "enum": ["received", "rejected"]
+              "enum": [
+                "received",
+                "rejected"
+              ]
             }
           },
           {
@@ -1307,7 +1357,11 @@
             "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
             "schema": {
               "type": "string",
-              "enum": ["10s", "1h", "1d"]
+              "enum": [
+                "10s",
+                "1h",
+                "1d"
+              ]
             }
           }
         ],
@@ -1326,30 +1380,102 @@
                   }
                 },
                 "example": [
-                  [1541455200, 3302],
-                  [1541458800, 3832],
-                  [1541462400, 3669],
-                  [1541466000, 3533],
-                  [1541469600, 3499],
-                  [1541473200, 3201],
-                  [1541476800, 3769],
-                  [1541480400, 2706],
-                  [1541484000, 2698],
-                  [1541487600, 3747],
-                  [1541491200, 3261],
-                  [1541494800, 2860],
-                  [1541498400, 4350],
-                  [1541502000, 2924],
-                  [1541505600, 3389],
-                  [1541509200, 2931],
-                  [1541512800, 3132],
-                  [1541516400, 3213],
-                  [1541520000, 3650],
-                  [1541523600, 3096],
-                  [1541527200, 3845],
-                  [1541530800, 3545],
-                  [1541534400, 2880],
-                  [1541538000, 4057]
+                  [
+                    1541455200,
+                    3302
+                  ],
+                  [
+                    1541458800,
+                    3832
+                  ],
+                  [
+                    1541462400,
+                    3669
+                  ],
+                  [
+                    1541466000,
+                    3533
+                  ],
+                  [
+                    1541469600,
+                    3499
+                  ],
+                  [
+                    1541473200,
+                    3201
+                  ],
+                  [
+                    1541476800,
+                    3769
+                  ],
+                  [
+                    1541480400,
+                    2706
+                  ],
+                  [
+                    1541484000,
+                    2698
+                  ],
+                  [
+                    1541487600,
+                    3747
+                  ],
+                  [
+                    1541491200,
+                    3261
+                  ],
+                  [
+                    1541494800,
+                    2860
+                  ],
+                  [
+                    1541498400,
+                    4350
+                  ],
+                  [
+                    1541502000,
+                    2924
+                  ],
+                  [
+                    1541505600,
+                    3389
+                  ],
+                  [
+                    1541509200,
+                    2931
+                  ],
+                  [
+                    1541512800,
+                    3132
+                  ],
+                  [
+                    1541516400,
+                    3213
+                  ],
+                  [
+                    1541520000,
+                    3650
+                  ],
+                  [
+                    1541523600,
+                    3096
+                  ],
+                  [
+                    1541527200,
+                    3845
+                  ],
+                  [
+                    1541530800,
+                    3545
+                  ],
+                  [
+                    1541534400,
+                    2880
+                  ],
+                  [
+                    1541538000,
+                    4057
+                  ]
                 ]
               }
             }
@@ -1363,14 +1489,18 @@
         },
         "security": [
           {
-            "auth_token": ["team:read"]
+            "auth_token": [
+              "team:read"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "Return a list of organizations available to the authenticated session.  This is particularly useful for requests with an user bound context.  For API key based requests this will only return the organization that belongs to the key.",
         "operationId": "List Your Organizations",
         "parameters": [
@@ -1446,7 +1576,10 @@
                       },
                       "status": {
                         "type": "object",
-                        "required": ["id", "name"],
+                        "required": [
+                          "id",
+                          "name"
+                        ],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -1486,14 +1619,18 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/eventids/{event_id}/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "This resolves an event ID to the project slug and internal issue ID and internal event ID.",
         "operationId": "Resolve an Event ID",
         "parameters": [
@@ -1647,14 +1784,19 @@
                             "anyOf": [
                               {
                                 "type": "object",
-                                "required": ["type", "data"],
+                                "required": [
+                                  "type",
+                                  "data"
+                                ],
                                 "properties": {
                                   "type": {
                                     "type": "string"
                                   },
                                   "data": {
                                     "type": "object",
-                                    "required": ["values"],
+                                    "required": [
+                                      "values"
+                                    ],
                                     "properties": {
                                       "values": {
                                         "type": "array",
@@ -1704,7 +1846,10 @@
                               },
                               {
                                 "type": "object",
-                                "required": ["type", "data"],
+                                "required": [
+                                  "type",
+                                  "data"
+                                ],
                                 "properties": {
                                   "type": {
                                     "type": "string"
@@ -1785,14 +1930,19 @@
                               },
                               {
                                 "type": "object",
-                                "required": ["type", "data"],
+                                "required": [
+                                  "type",
+                                  "data"
+                                ],
                                 "properties": {
                                   "type": {
                                     "type": "string"
                                   },
                                   "data": {
                                     "type": "object",
-                                    "required": ["formatted"],
+                                    "required": [
+                                      "formatted"
+                                    ],
                                     "properties": {
                                       "formatted": {
                                         "type": "string"
@@ -1803,7 +1953,10 @@
                               },
                               {
                                 "type": "object",
-                                "required": ["type", "data"],
+                                "required": [
+                                  "type",
+                                  "data"
+                                ],
                                 "properties": {
                                   "type": {
                                     "type": "string"
@@ -2146,7 +2299,13 @@
                       "emptyList": [],
                       "emptyMap": {},
                       "length": 10837790,
-                      "results": [1, 2, 3, 4, 5],
+                      "results": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                      ],
                       "session": {
                         "foo": "bar"
                       },
@@ -2180,7 +2339,9 @@
                     ],
                     "errors": [],
                     "eventID": "9fac2ceed9344f2bbfdd1fdacb0ed9b1",
-                    "fingerprints": ["c4a4d06bc314205bb3b6bdb612dde7f1"],
+                    "fingerprints": [
+                      "c4a4d06bc314205bb3b6bdb612dde7f1"
+                    ],
                     "groupID": "1",
                     "id": "1",
                     "message": "",
@@ -2255,14 +2416,18 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "Return details on an individual organization including various details such as membership access, features, and teams.",
         "operationId": "Retrieve an Organization",
         "parameters": [
@@ -2462,7 +2627,11 @@
                           },
                           "team": {
                             "type": "object",
-                            "required": ["id", "name", "slug"],
+                            "required": [
+                              "id",
+                              "name",
+                              "slug"
+                            ],
                             "properties": {
                               "id": {
                                 "type": "string"
@@ -2479,7 +2648,11 @@
                             "type": "array",
                             "items": {
                               "type": "object",
-                              "required": ["id", "name", "slug"],
+                              "required": [
+                                "id",
+                                "name",
+                                "slug"
+                              ],
                               "properties": {
                                 "id": {
                                   "type": "string"
@@ -2798,12 +2971,16 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "Update various attributes and configurable settings for the given organization.",
         "operationId": "Update an Organization",
         "parameters": [
@@ -2821,7 +2998,9 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -3026,7 +3205,11 @@
                           },
                           "team": {
                             "type": "object",
-                            "required": ["id", "name", "slug"],
+                            "required": [
+                              "id",
+                              "name",
+                              "slug"
+                            ],
                             "properties": {
                               "id": {
                                 "type": "string"
@@ -3043,7 +3226,11 @@
                             "type": "array",
                             "items": {
                               "type": "object",
-                              "required": ["id", "name", "slug"],
+                              "required": [
+                                "id",
+                                "name",
+                                "slug"
+                              ],
                               "properties": {
                                 "id": {
                                   "type": "string"
@@ -3249,14 +3436,18 @@
         },
         "security": [
           {
-            "auth_token": ["org:write"]
+            "auth_token": [
+              "org:write"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/projects/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "Return a list of projects bound to a organization.",
         "operationId": "List an Organization's Projects",
         "parameters": [
@@ -3346,7 +3537,11 @@
                       },
                       "team": {
                         "type": "object",
-                        "required": ["id", "name", "slug"],
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -3363,7 +3558,11 @@
                         "type": "array",
                         "items": {
                           "type": "object",
-                          "required": ["id", "name", "slug"],
+                          "required": [
+                            "id",
+                            "name",
+                            "slug"
+                          ],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -3416,14 +3615,18 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/repos/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "Return a list of version control repositories for a given organization.",
         "operationId": "List an Organization's Repositories",
         "parameters": [
@@ -3446,7 +3649,11 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": ["dateCreated", "id", "name"],
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "name"
+                    ],
                     "properties": {
                       "dateCreated": {
                         "type": "string"
@@ -3476,14 +3683,18 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/repos/{repo_id}/commits/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "Return a list of commits for a given repository.",
         "operationId": "List a Repository's Commits",
         "parameters": [
@@ -3515,7 +3726,11 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": ["dateCreated", "id", "message"],
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "message"
+                    ],
                     "properties": {
                       "dateCreated": {
                         "type": "string",
@@ -3546,14 +3761,18 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/stats/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "summary": "Caution\nThis endpoint may change in the future without  notice.",
         "description": "Return a set of points representing a normalized timestamp and the number of events seen in the period.",
         "operationId": "Retrieve Event Counts for an Organization",
@@ -3573,7 +3792,11 @@
             "description": "The name of the stat to query `(\"received\", \"rejected\", \"blacklisted\")`.",
             "schema": {
               "type": "string",
-              "enum": ["received", "rejected", "blacklisted"]
+              "enum": [
+                "received",
+                "rejected",
+                "blacklisted"
+              ]
             }
           },
           {
@@ -3600,7 +3823,11 @@
             "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
             "schema": {
               "type": "string",
-              "enum": ["10s", "1h", "1d"]
+              "enum": [
+                "10s",
+                "1h",
+                "1d"
+              ]
             }
           }
         ],
@@ -3619,30 +3846,102 @@
                   }
                 },
                 "example": [
-                  [1541455200, 8264],
-                  [1541458800, 6564],
-                  [1541462400, 8652],
-                  [1541466000, 7436],
-                  [1541469600, 8127],
-                  [1541473200, 7643],
-                  [1541476800, 6518],
-                  [1541480400, 6752],
-                  [1541484000, 6559],
-                  [1541487600, 7039],
-                  [1541491200, 7384],
-                  [1541494800, 6265],
-                  [1541498400, 8390],
-                  [1541502000, 6393],
-                  [1541505600, 7298],
-                  [1541509200, 7422],
-                  [1541512800, 5603],
-                  [1541516400, 6846],
-                  [1541520000, 8886],
-                  [1541523600, 6544],
-                  [1541527200, 8812],
-                  [1541530800, 8172],
-                  [1541534400, 5733],
-                  [1541538000, 9435]
+                  [
+                    1541455200,
+                    8264
+                  ],
+                  [
+                    1541458800,
+                    6564
+                  ],
+                  [
+                    1541462400,
+                    8652
+                  ],
+                  [
+                    1541466000,
+                    7436
+                  ],
+                  [
+                    1541469600,
+                    8127
+                  ],
+                  [
+                    1541473200,
+                    7643
+                  ],
+                  [
+                    1541476800,
+                    6518
+                  ],
+                  [
+                    1541480400,
+                    6752
+                  ],
+                  [
+                    1541484000,
+                    6559
+                  ],
+                  [
+                    1541487600,
+                    7039
+                  ],
+                  [
+                    1541491200,
+                    7384
+                  ],
+                  [
+                    1541494800,
+                    6265
+                  ],
+                  [
+                    1541498400,
+                    8390
+                  ],
+                  [
+                    1541502000,
+                    6393
+                  ],
+                  [
+                    1541505600,
+                    7298
+                  ],
+                  [
+                    1541509200,
+                    7422
+                  ],
+                  [
+                    1541512800,
+                    5603
+                  ],
+                  [
+                    1541516400,
+                    6846
+                  ],
+                  [
+                    1541520000,
+                    8886
+                  ],
+                  [
+                    1541523600,
+                    6544
+                  ],
+                  [
+                    1541527200,
+                    8812
+                  ],
+                  [
+                    1541530800,
+                    8172
+                  ],
+                  [
+                    1541534400,
+                    5733
+                  ],
+                  [
+                    1541538000,
+                    9435
+                  ]
                 ]
               }
             }
@@ -3653,14 +3952,18 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/users/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "Return a list of users that belong to a given organization.",
         "operationId": "List an Organization's Users",
         "parameters": [
@@ -3883,7 +4186,9 @@
                     "roleName": "Organization Owner",
                     "expired": false,
                     "id": "9376061",
-                    "projects": ["buggy-sentry-project"],
+                    "projects": [
+                      "buggy-sentry-project"
+                    ],
                     "name": "OtherTest McTestuser",
                     "role": "owner",
                     "flags": {
@@ -3903,14 +4208,18 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/shortids/{short_id}/": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "description": "This resolves a short ID to the project slug and internal issue ID.",
         "operationId": "Resolve a Short ID",
         "parameters": [
@@ -4055,7 +4364,11 @@
                         },
                         "status": {
                           "type": "string",
-                          "enum": ["resolved", "unresolved", "ignored"]
+                          "enum": [
+                            "resolved",
+                            "unresolved",
+                            "ignored"
+                          ]
                         },
                         "subscriptionDetails": {
                           "type": "object",
@@ -4169,14 +4482,18 @@
         },
         "security": [
           {
-            "auth_token": ["org: read"]
+            "auth_token": [
+              "org: read"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Return a list of projects available to the authenticated session.",
         "operationId": "List your Projects",
         "parameters": [
@@ -4314,7 +4631,10 @@
                           },
                           "status": {
                             "type": "object",
-                            "required": ["id", "name"],
+                            "required": [
+                              "id",
+                              "name"
+                            ],
                             "properties": {
                               "id": {
                                 "type": "string"
@@ -4484,14 +4804,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Return details on an individual project.",
         "operationId": "Retrieve a Project",
         "parameters": [
@@ -4812,7 +5136,10 @@
                         },
                         "status": {
                           "type": "object",
-                          "required": ["id", "name"],
+                          "required": [
+                            "id",
+                            "name"
+                          ],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -4994,7 +5321,11 @@
                     },
                     "team": {
                       "type": "object",
-                      "required": ["id", "name", "slug"],
+                      "required": [
+                        "id",
+                        "name",
+                        "slug"
+                      ],
                       "properties": {
                         "id": {
                           "type": "string"
@@ -5011,7 +5342,11 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": ["id", "name", "slug"],
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -5031,7 +5366,9 @@
                   }
                 },
                 "example": {
-                  "allowedDomains": ["*"],
+                  "allowedDomains": [
+                    "*"
+                  ],
                   "avatar": {
                     "avatarType": "letter_avatar",
                     "avatarUuid": null
@@ -5184,12 +5521,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Update various attributes and configurable settings for the given project.  Only supplied values are updated.",
         "operationId": "Update a Project",
         "parameters": [
@@ -5559,7 +5900,10 @@
                         },
                         "status": {
                           "type": "object",
-                          "required": ["id", "name"],
+                          "required": [
+                            "id",
+                            "name"
+                          ],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -5741,7 +6085,11 @@
                     },
                     "team": {
                       "type": "object",
-                      "required": ["id", "name", "slug"],
+                      "required": [
+                        "id",
+                        "name",
+                        "slug"
+                      ],
                       "properties": {
                         "id": {
                           "type": "string"
@@ -5758,7 +6106,11 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": ["id", "name", "slug"],
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -5937,12 +6289,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Schedules a project for deletion.\n\nDeletion happens asynchronously and therefore is not immediate.\nHowever once deletion has begun the state of a project changes and\nwill be hidden from most public views.",
         "operationId": "Delete a Project",
         "parameters": [
@@ -5978,14 +6334,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:admin"]
+            "auth_token": [
+              "project:admin"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/files/dsyms/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Retrieve a list of debug information files for a given project.",
         "operationId": "List a Project's Debug Information Files",
         "parameters": [
@@ -6024,12 +6384,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Upload a new debug information file for the given release.\n\nUnlike other API requests, files must be uploaded using the\ntraditional multipart/form-data content-type.\n\nThe file uploaded is a zip archive of an Apple .dSYM folder which\ncontains the individual debug images.  Uploading through this endpoint\nwill create different files for the contained images.",
         "operationId": "Upload a New File",
         "parameters": [
@@ -6056,7 +6420,9 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "required": ["file"],
+                "required": [
+                  "file"
+                ],
                 "type": "object",
                 "properties": {
                   "file": {
@@ -6089,12 +6455,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Delete a debug information file for a given project.",
         "operationId": "Delete a Specific Project's Debug Information File",
         "parameters": [
@@ -6139,14 +6509,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:admin"]
+            "auth_token": [
+              "project:admin"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/users/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Return a list of users seen within this project.",
         "operationId": "List a Project's Users",
         "parameters": [
@@ -6186,7 +6560,12 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": ["dateCreated", "id", "username", "email"],
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "username",
+                      "email"
+                    ],
                     "properties": {
                       "dateCreated": {
                         "type": "string"
@@ -6222,14 +6601,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/tags/{key}/values/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Return a list of values associated with this key.  The `query`\nparameter can be used to to perform a \"contains\" match on\nvalues.",
         "operationId": "List a Tag's Values",
         "parameters": [
@@ -6270,7 +6653,9 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": ["name"],
+                    "required": [
+                      "name"
+                    ],
                     "properties": {
                       "name": {
                         "type": "string"
@@ -6292,14 +6677,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/stats/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Caution\nThis endpoint may change in the future without  notice.",
         "description": "Return a set of points representing a normalized timestamp and the\nnumber of events seen in the period.\n\nQuery ranges are limited to Sentry's configured time-series resolutions.",
         "operationId": "Retrieve Event Counts for a Project",
@@ -6328,7 +6717,12 @@
             "description": "The name of the stat to query `(\"received\", \"rejected\", \"blacklisted\", \"generated\")`.",
             "schema": {
               "type": "string",
-              "enum": ["received", "rejected", "blacklisted", "generated"]
+              "enum": [
+                "received",
+                "rejected",
+                "blacklisted",
+                "generated"
+              ]
             }
           },
           {
@@ -6355,7 +6749,11 @@
             "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
             "schema": {
               "type": "string",
-              "enum": ["10s", "1h", "1d"]
+              "enum": [
+                "10s",
+                "1h",
+                "1d"
+              ]
             }
           }
         ],
@@ -6374,30 +6772,102 @@
                   }
                 },
                 "example": [
-                  [1541455200, 1184],
-                  [1541458800, 1410],
-                  [1541462400, 1440],
-                  [1541466000, 1682],
-                  [1541469600, 1203],
-                  [1541473200, 497],
-                  [1541476800, 661],
-                  [1541480400, 1481],
-                  [1541484000, 678],
-                  [1541487600, 1857],
-                  [1541491200, 819],
-                  [1541494800, 1013],
-                  [1541498400, 1883],
-                  [1541502000, 1450],
-                  [1541505600, 1102],
-                  [1541509200, 1317],
-                  [1541512800, 1017],
-                  [1541516400, 813],
-                  [1541520000, 1189],
-                  [1541523600, 496],
-                  [1541527200, 1936],
-                  [1541530800, 1405],
-                  [1541534400, 617],
-                  [1541538000, 1533]
+                  [
+                    1541455200,
+                    1184
+                  ],
+                  [
+                    1541458800,
+                    1410
+                  ],
+                  [
+                    1541462400,
+                    1440
+                  ],
+                  [
+                    1541466000,
+                    1682
+                  ],
+                  [
+                    1541469600,
+                    1203
+                  ],
+                  [
+                    1541473200,
+                    497
+                  ],
+                  [
+                    1541476800,
+                    661
+                  ],
+                  [
+                    1541480400,
+                    1481
+                  ],
+                  [
+                    1541484000,
+                    678
+                  ],
+                  [
+                    1541487600,
+                    1857
+                  ],
+                  [
+                    1541491200,
+                    819
+                  ],
+                  [
+                    1541494800,
+                    1013
+                  ],
+                  [
+                    1541498400,
+                    1883
+                  ],
+                  [
+                    1541502000,
+                    1450
+                  ],
+                  [
+                    1541505600,
+                    1102
+                  ],
+                  [
+                    1541509200,
+                    1317
+                  ],
+                  [
+                    1541512800,
+                    1017
+                  ],
+                  [
+                    1541516400,
+                    813
+                  ],
+                  [
+                    1541520000,
+                    1189
+                  ],
+                  [
+                    1541523600,
+                    496
+                  ],
+                  [
+                    1541527200,
+                    1936
+                  ],
+                  [
+                    1541530800,
+                    1405
+                  ],
+                  [
+                    1541534400,
+                    617
+                  ],
+                  [
+                    1541538000,
+                    1533
+                  ]
                 ]
               }
             }
@@ -6408,14 +6878,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/user-feedback/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Return a list of user feedback items within this project.",
         "operationId": "List a Project's User Feedback",
         "parameters": [
@@ -6525,12 +6999,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Submit and associate user feedback with an issue.\n\nFeedback must be received by the server no more than 30 minutes after the event was saved.\n\nAdditionally, within 5 minutes of submitting feedback it may also be overwritten. This is useful in situations where you may need to retry sending a request due to network failures.\n\nIf feedback is rejected due to a mutability threshold, a 409 status code will be returned.\n\nNote: Feedback may be submitted with DSN authentication (see auth documentation).",
         "operationId": "Submit User Feedback",
         "parameters": [
@@ -6557,7 +7035,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": ["event_id", "name", "email", "comments"],
+                "required": [
+                  "event_id",
+                  "name",
+                  "email",
+                  "comments"
+                ],
                 "type": "object",
                 "properties": {
                   "event_id": {
@@ -6671,7 +7154,9 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           },
           {
             "dsn": []
@@ -6681,7 +7166,9 @@
     },
     "/api/0/projects/{organization_slug}/{project_slug}/keys/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Return a list of client keys bound to a project.",
         "operationId": "List a Project's Client Keys",
         "parameters": [
@@ -6821,8 +7308,14 @@
                   {
                     "browserSdk": {
                       "choices": [
-                        ["latest", "latest"],
-                        ["4.x", "4.x"]
+                        [
+                          "latest",
+                          "latest"
+                        ],
+                        [
+                          "4.x",
+                          "4.x"
+                        ]
                       ]
                     },
                     "browserSdkVersion": "4.x",
@@ -6854,12 +7347,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Create a new client key bound to a project.  The key's secret and public key are generated by the server.",
         "operationId": "Create a New Client Key",
         "parameters": [
@@ -6886,7 +7383,9 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "type": "object",
                 "properties": {
                   "name": {
@@ -7003,8 +7502,14 @@
                 "example": {
                   "browserSdk": {
                     "choices": [
-                      ["latest", "latest"],
-                      ["4.x", "4.x"]
+                      [
+                        "latest",
+                        "latest"
+                      ],
+                      [
+                        "4.x",
+                        "4.x"
+                      ]
                     ]
                   },
                   "browserSdkVersion": "4.x",
@@ -7038,14 +7543,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/keys/{key_id}/": {
       "put": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Update a client key.  This can be used to rename a key.",
         "operationId": "Update a Client Key",
         "parameters": [
@@ -7197,8 +7706,14 @@
                 "example": {
                   "browserSdk": {
                     "choices": [
-                      ["latest", "latest"],
-                      ["4.x", "4.x"]
+                      [
+                        "latest",
+                        "latest"
+                      ],
+                      [
+                        "4.x",
+                        "4.x"
+                      ]
                     ]
                   },
                   "browserSdkVersion": "4.x",
@@ -7235,12 +7750,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Delete a client key.",
         "operationId": "Delete a Client Key",
         "parameters": [
@@ -7285,14 +7804,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:admin"]
+            "auth_token": [
+              "project:admin"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/hooks/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Return a list of service hooks bound to a project.",
         "operationId": "List a Project's Service Hooks",
         "parameters": [
@@ -7370,7 +7893,10 @@
                 "example": [
                   {
                     "dateCreated": "2018-11-06T21:20:08.143Z",
-                    "events": ["event.alert", "event.created"],
+                    "events": [
+                      "event.alert",
+                      "event.created"
+                    ],
                     "id": "4f9d73e63b7144ecb8944c41620a090b",
                     "secret": "8fcac28aaa4c4f5fa572b61d40a8e084364db25fd37449c299e5a41c0504cbc2",
                     "status": "active",
@@ -7386,12 +7912,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Register a new service hook on a project.\n\nEvents include:\n\n- event.alert: An alert is generated for an event (via rules).\n- event.created: A new event has been processed.\n\nThis endpoint requires the 'servicehooks' feature to be enabled for your project.",
         "operationId": "Register a New Service Hook",
         "parameters": [
@@ -7418,7 +7948,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": ["url", "events"],
+                "required": [
+                  "url",
+                  "events"
+                ],
                 "type": "object",
                 "properties": {
                   "url": {
@@ -7429,7 +7962,10 @@
                   "events": {
                     "type": "array",
                     "description": "The events to subscribe to.",
-                    "example": ["event.alert", "event.created"],
+                    "example": [
+                      "event.alert",
+                      "event.created"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -7481,7 +8017,10 @@
                 },
                 "example": {
                   "dateCreated": "2018-11-06T21:20:08.143Z",
-                  "events": ["event.alert", "event.created"],
+                  "events": [
+                    "event.alert",
+                    "event.created"
+                  ],
                   "id": "4f9d73e63b7144ecb8944c41620a090b",
                   "secret": "8fcac28aaa4c4f5fa572b61d40a8e084364db25fd37449c299e5a41c0504cbc2",
                   "status": "active",
@@ -7499,14 +8038,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/hooks/{hook_id}/": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Return a service hook bound to a project.",
         "operationId": "Retrieve a Service Hook",
         "parameters": [
@@ -7579,7 +8122,10 @@
                 },
                 "example": {
                   "dateCreated": "2018-11-06T21:20:08.143Z",
-                  "events": ["event.alert", "event.created"],
+                  "events": [
+                    "event.alert",
+                    "event.created"
+                  ],
                   "id": "4f9d73e63b7144ecb8944c41620a090b",
                   "secret": "8fcac28aaa4c4f5fa572b61d40a8e084364db25fd37449c299e5a41c0504cbc2",
                   "status": "active",
@@ -7597,12 +8143,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Update a service hook",
         "operationId": "Update a Service Hook",
         "parameters": [
@@ -7638,7 +8188,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": ["url", "events"],
+                "required": [
+                  "url",
+                  "events"
+                ],
                 "type": "object",
                 "properties": {
                   "url": {
@@ -7649,7 +8202,10 @@
                   "events": {
                     "type": "array",
                     "description": "The events to subscribe to.",
-                    "example": ["event.alert", "event.created"],
+                    "example": [
+                      "event.alert",
+                      "event.created"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -7701,7 +8257,10 @@
                 },
                 "example": {
                   "dateCreated": "2018-11-06T21:20:08.143Z",
-                  "events": ["event.alert", "event.created"],
+                  "events": [
+                    "event.alert",
+                    "event.created"
+                  ],
                   "id": "4f9d73e63b7144ecb8944c41620a090b",
                   "secret": "8fcac28aaa4c4f5fa572b61d40a8e084364db25fd37449c299e5a41c0504cbc2",
                   "status": "active",
@@ -7719,12 +8278,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "description": "Remove a service hook",
         "operationId": "Remove a Service Hook",
         "parameters": [
@@ -7769,14 +8332,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:admin"]
+            "auth_token": [
+              "project:admin"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/events/{event_id}/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Return details on an individual event.",
         "operationId": "Retrieve an Event for a Project",
         "parameters": [
@@ -7899,7 +8466,10 @@
                       "oneOf": [
                         {
                           "type": "object",
-                          "required": ["type", "value"],
+                          "required": [
+                            "type",
+                            "value"
+                          ],
                           "properties": {
                             "type": {
                               "type": "string"
@@ -7911,7 +8481,9 @@
                         },
                         {
                           "type": "object",
-                          "required": ["title"],
+                          "required": [
+                            "title"
+                          ],
                           "properties": {
                             "title": {
                               "type": "string"
@@ -7992,14 +8564,19 @@
                         "anyOf": [
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
                               },
                               "data": {
                                 "type": "object",
-                                "required": ["values"],
+                                "required": [
+                                  "values"
+                                ],
                                 "properties": {
                                   "values": {
                                     "type": "array",
@@ -8049,7 +8626,10 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
@@ -8130,14 +8710,19 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
                               },
                               "data": {
                                 "type": "object",
-                                "required": ["formatted"],
+                                "required": [
+                                  "formatted"
+                                ],
                                 "properties": {
                                   "formatted": {
                                     "type": "string"
@@ -8148,7 +8733,10 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
@@ -8643,7 +9231,10 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [66, "            }"],
+                                    [
+                                      66,
+                                      "            }"
+                                    ],
                                     [
                                       67,
                                       "            // Attempt to invoke user-land function"
@@ -8668,9 +9259,18 @@
                                       72,
                                       "            // tslint:enable:no-unsafe-any"
                                     ],
-                                    [73, "        }"],
-                                    [74, "        catch (ex) {"],
-                                    [75, "            ignoreNextOnError();"],
+                                    [
+                                      73,
+                                      "        }"
+                                    ],
+                                    [
+                                      74,
+                                      "        catch (ex) {"
+                                    ],
+                                    [
+                                      75,
+                                      "            ignoreNextOnError();"
+                                    ],
                                     [
                                       76,
                                       "            withScope(function (scope) {"
@@ -8694,22 +9294,46 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [69, "     */"],
+                                    [
+                                      69,
+                                      "     */"
+                                    ],
                                     [
                                       70,
                                       "    triggerAsync: function triggerAsync() {"
                                     ],
-                                    [71, "        var args = arguments,"],
-                                    [72, "            me = this;"],
-                                    [73, "        _.nextTick(function () {"],
+                                    [
+                                      71,
+                                      "        var args = arguments,"
+                                    ],
+                                    [
+                                      72,
+                                      "            me = this;"
+                                    ],
+                                    [
+                                      73,
+                                      "        _.nextTick(function () {"
+                                    ],
                                     [
                                       74,
                                       "            me.trigger.apply(me, args);"
                                     ],
-                                    [75, "        });"],
-                                    [76, "    },"],
-                                    [77, ""],
-                                    [78, "    /**"],
+                                    [
+                                      75,
+                                      "        });"
+                                    ],
+                                    [
+                                      76,
+                                      "    },"
+                                    ],
+                                    [
+                                      77,
+                                      ""
+                                    ],
+                                    [
+                                      78,
+                                      "    /**"
+                                    ],
                                     [
                                       79,
                                       "     * Wraps the trigger mechanism with a deferral function."
@@ -8741,8 +9365,14 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [76, "/*!"],
-                                    [77, "  Copyright (c) 2018 Jed Watson."],
+                                    [
+                                      76,
+                                      "/*!"
+                                    ],
+                                    [
+                                      77,
+                                      "  Copyright (c) 2018 Jed Watson."
+                                    ],
                                     [
                                       78,
                                       "  Licensed under the MIT License (MIT), see"
@@ -8751,18 +9381,30 @@
                                       79,
                                       "  http://jedwatson.github.io/react-select"
                                     ],
-                                    [80, "*/"],
+                                    [
+                                      80,
+                                      "*/"
+                                    ],
                                     [
                                       81,
                                       "{snip} e,t)}));return e.handleEvent?e.handleEvent.apply(this,s):e.apply(this,s)}catch(e){throw c(),Object(o.m)((function(n){n.addEventProcessor((fu {snip}"
                                     ],
-                                    [82, "/*!"],
-                                    [83, " * JavaScript Cookie v2.2.1"],
+                                    [
+                                      82,
+                                      "/*!"
+                                    ],
+                                    [
+                                      83,
+                                      " * JavaScript Cookie v2.2.1"
+                                    ],
                                     [
                                       84,
                                       " * https://github.com/js-cookie/js-cookie"
                                     ],
-                                    [85, " *"],
+                                    [
+                                      85,
+                                      " *"
+                                    ],
                                     [
                                       86,
                                       " * Copyright 2006, 2015 Klaus Hartl & Fagner Brack"
@@ -8786,22 +9428,46 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [114, "/* @license"],
-                                    [115, "Papa Parse"],
-                                    [116, "v5.2.0"],
-                                    [117, "https://github.com/mholt/PapaParse"],
-                                    [118, "License: MIT"],
+                                    [
+                                      114,
+                                      "/* @license"
+                                    ],
+                                    [
+                                      115,
+                                      "Papa Parse"
+                                    ],
+                                    [
+                                      116,
+                                      "v5.2.0"
+                                    ],
+                                    [
+                                      117,
+                                      "https://github.com/mholt/PapaParse"
+                                    ],
+                                    [
+                                      118,
+                                      "License: MIT"
+                                    ],
                                     [
                                       119,
                                       "{snip} (){var e=arguments,t=this;r.nextTick((function(){t.trigger.apply(t,e)}))},deferWith:function(e){var t=this.trigger,n=this,r=function(){t.app {snip}"
                                     ],
-                                    [120, "/**!"],
+                                    [
+                                      120,
+                                      "/**!"
+                                    ],
                                     [
                                       121,
                                       " * @fileOverview Kickass library to create and place poppers near their reference elements."
                                     ],
-                                    [122, " * @version 1.16.1"],
-                                    [123, " * @license"],
+                                    [
+                                      122,
+                                      " * @version 1.16.1"
+                                    ],
+                                    [
+                                      123,
+                                      " * @license"
+                                    ],
                                     [
                                       124,
                                       " * Copyright (c) 2016 Federico Zivolo and contributors"
@@ -8881,7 +9547,12 @@
                           ]
                         ],
                         "url": "https://sentry.io/organizations/hellboy-meowmeow/issues/",
-                        "query": [["project", "5236886"]],
+                        "query": [
+                          [
+                            "project",
+                            "5236886"
+                          ]
+                        ],
                         "data": null,
                         "method": null
                       }
@@ -8933,7 +9604,9 @@
                       "slug": "hellboy-meowmeow"
                     }
                   },
-                  "fingerprints": ["fbe908cc63d63ea9763fd84cb6bad177"],
+                  "fingerprints": [
+                    "fbe908cc63d63ea9763fd84cb6bad177"
+                  ],
                   "context": {
                     "resp": {
                       "status": 403,
@@ -9065,14 +9738,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/events/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Return a list of events bound to a project.",
         "operationId": "List a Project's Events",
         "parameters": [
@@ -9274,14 +9951,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/issues/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Return a list of issues (groups) bound to a project.  All parameters are supplied as query string parameters. \n\n A default query of ``is:unresolved`` is applied. To return results with other statuses send an new query value (i.e. ``?query=`` for all results).\n\nThe ``statsPeriod`` parameter can be used to select the timeline stats which should be present. Possible values are: ``\"\"`` (disable),``\"24h\"``, ``\"14d\"``",
         "operationId": "List a Project's Issues",
         "parameters": [
@@ -9424,7 +10105,11 @@
                         "oneOf": [
                           {
                             "type": "object",
-                            "required": ["filename", "type", "value"],
+                            "required": [
+                              "filename",
+                              "type",
+                              "value"
+                            ],
                             "properties": {
                               "filename": {
                                 "type": "string"
@@ -9439,7 +10124,9 @@
                           },
                           {
                             "type": "object",
-                            "required": ["title"],
+                            "required": [
+                              "title"
+                            ],
                             "properties": {
                               "title": {
                                 "type": "string"
@@ -9491,7 +10178,11 @@
                       },
                       "status": {
                         "type": "string",
-                        "enum": ["resolved", "unresolved", "ignored"]
+                        "enum": [
+                          "resolved",
+                          "unresolved",
+                          "ignored"
+                        ]
                       },
                       "statusDetails": {
                         "type": "object"
@@ -9541,30 +10232,102 @@
                     "shortId": "PUMP-STATION-1",
                     "stats": {
                       "24h": [
-                        [1541455200, 473],
-                        [1541458800, 914],
-                        [1541462400, 991],
-                        [1541466000, 925],
-                        [1541469600, 881],
-                        [1541473200, 182],
-                        [1541476800, 490],
-                        [1541480400, 820],
-                        [1541484000, 322],
-                        [1541487600, 836],
-                        [1541491200, 565],
-                        [1541494800, 758],
-                        [1541498400, 880],
-                        [1541502000, 677],
-                        [1541505600, 381],
-                        [1541509200, 814],
-                        [1541512800, 329],
-                        [1541516400, 446],
-                        [1541520000, 731],
-                        [1541523600, 111],
-                        [1541527200, 926],
-                        [1541530800, 772],
-                        [1541534400, 400],
-                        [1541538000, 943]
+                        [
+                          1541455200,
+                          473
+                        ],
+                        [
+                          1541458800,
+                          914
+                        ],
+                        [
+                          1541462400,
+                          991
+                        ],
+                        [
+                          1541466000,
+                          925
+                        ],
+                        [
+                          1541469600,
+                          881
+                        ],
+                        [
+                          1541473200,
+                          182
+                        ],
+                        [
+                          1541476800,
+                          490
+                        ],
+                        [
+                          1541480400,
+                          820
+                        ],
+                        [
+                          1541484000,
+                          322
+                        ],
+                        [
+                          1541487600,
+                          836
+                        ],
+                        [
+                          1541491200,
+                          565
+                        ],
+                        [
+                          1541494800,
+                          758
+                        ],
+                        [
+                          1541498400,
+                          880
+                        ],
+                        [
+                          1541502000,
+                          677
+                        ],
+                        [
+                          1541505600,
+                          381
+                        ],
+                        [
+                          1541509200,
+                          814
+                        ],
+                        [
+                          1541512800,
+                          329
+                        ],
+                        [
+                          1541516400,
+                          446
+                        ],
+                        [
+                          1541520000,
+                          731
+                        ],
+                        [
+                          1541523600,
+                          111
+                        ],
+                        [
+                          1541527200,
+                          926
+                        ],
+                        [
+                          1541530800,
+                          772
+                        ],
+                        [
+                          1541534400,
+                          400
+                        ],
+                        [
+                          1541538000,
+                          943
+                        ]
                       ]
                     },
                     "status": "unresolved",
@@ -9584,12 +10347,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:read"]
+            "auth_token": [
+              "project:read"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Bulk mutate various attributes on issues.  The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be modified.\n\n- For non-status updates, the `id` query parameter is required.\n- For status updates, the `id` query parameter may be omitted\nfor a batch \"update all\" query.\n- An optional `status` query parameter may be used to restrict\nmutations to only events with the given status.\n\nThe following attributes can be modified and are supplied as JSON object in the body:\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
         "operationId": "Bulk Mutate a List of Issues",
         "parameters": [
@@ -9713,14 +10480,22 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["isPublic", "status", "statusDetails"],
+                  "required": [
+                    "isPublic",
+                    "status",
+                    "statusDetails"
+                  ],
                   "properties": {
                     "isPublic": {
                       "type": "boolean"
                     },
                     "status": {
                       "type": "string",
-                      "enum": ["resolved", "unresolved", "ignored"]
+                      "enum": [
+                        "resolved",
+                        "unresolved",
+                        "ignored"
+                      ]
                     },
                     "statusDetails": {
                       "type": "object"
@@ -9747,12 +10522,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:write"]
+            "auth_token": [
+              "project:write"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Permanently remove the given issues. The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be removed.\n\nOnly queries by 'id' are accepted.\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
         "operationId": "Bulk Remove a List of Issues",
         "parameters": [
@@ -9796,14 +10575,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:admin"]
+            "auth_token": [
+              "project:admin"
+            ]
           }
         ]
       }
     },
     "/api/0/issues/{issue_id}/tags/{key}/values/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Returns details for given tag key related to an issue.",
         "operationId": "List a Tag's Values Related to an Issue",
         "parameters": [
@@ -9835,7 +10618,10 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": ["key", "value"],
+                    "required": [
+                      "key",
+                      "value"
+                    ],
                     "properties": {
                       "key": {
                         "type": "string"
@@ -9861,14 +10647,18 @@
         },
         "security": [
           {
-            "auth_token": ["event:read"]
+            "auth_token": [
+              "event:read"
+            ]
           }
         ]
       }
     },
     "/api/0/issues/{issue_id}/tags/{key}/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Returns details for given tag key related to an issue.",
         "operationId": "Retrieve Tag Details",
         "parameters": [
@@ -9898,7 +10688,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["key", "totalValues"],
+                  "required": [
+                    "key",
+                    "totalValues"
+                  ],
                   "properties": {
                     "key": {
                       "type": "string"
@@ -9923,14 +10716,18 @@
         },
         "security": [
           {
-            "auth_token": ["event:read"]
+            "auth_token": [
+              "event:read"
+            ]
           }
         ]
       }
     },
     "/api/0/issues/{issue_id}/hashes/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "This endpoint lists an issue's hashes, which are the generated checksums used to aggregate individual events.",
         "operationId": "List an Issue's Hashes",
         "parameters": [
@@ -10034,7 +10831,10 @@
                             "oneOf": [
                               {
                                 "type": "object",
-                                "required": ["type", "value"],
+                                "required": [
+                                  "type",
+                                  "value"
+                                ],
                                 "properties": {
                                   "type": {
                                     "type": "string"
@@ -10046,7 +10846,9 @@
                               },
                               {
                                 "type": "object",
-                                "required": ["title"],
+                                "required": [
+                                  "title"
+                                ],
                                 "properties": {
                                   "title": {
                                     "type": "string"
@@ -10127,14 +10929,19 @@
                               "anyOf": [
                                 {
                                   "type": "object",
-                                  "required": ["type", "data"],
+                                  "required": [
+                                    "type",
+                                    "data"
+                                  ],
                                   "properties": {
                                     "type": {
                                       "type": "string"
                                     },
                                     "data": {
                                       "type": "object",
-                                      "required": ["values"],
+                                      "required": [
+                                        "values"
+                                      ],
                                       "properties": {
                                         "values": {
                                           "type": "array",
@@ -10184,7 +10991,10 @@
                                 },
                                 {
                                   "type": "object",
-                                  "required": ["type", "data"],
+                                  "required": [
+                                    "type",
+                                    "data"
+                                  ],
                                   "properties": {
                                     "type": {
                                       "type": "string"
@@ -10265,14 +11075,19 @@
                                 },
                                 {
                                   "type": "object",
-                                  "required": ["type", "data"],
+                                  "required": [
+                                    "type",
+                                    "data"
+                                  ],
                                   "properties": {
                                     "type": {
                                       "type": "string"
                                     },
                                     "data": {
                                       "type": "object",
-                                      "required": ["formatted"],
+                                      "required": [
+                                        "formatted"
+                                      ],
                                       "properties": {
                                         "formatted": {
                                           "type": "string"
@@ -10283,7 +11098,10 @@
                                 },
                                 {
                                   "type": "object",
-                                  "required": ["type", "data"],
+                                  "required": [
+                                    "type",
+                                    "data"
+                                  ],
                                   "properties": {
                                     "type": {
                                       "type": "string"
@@ -10648,7 +11466,10 @@
                                       "platform": null,
                                       "instructionAddr": null,
                                       "context": [
-                                        [66, "            }"],
+                                        [
+                                          66,
+                                          "            }"
+                                        ],
                                         [
                                           67,
                                           "            // Attempt to invoke user-land function"
@@ -10673,8 +11494,14 @@
                                           72,
                                           "            // tslint:enable:no-unsafe-any"
                                         ],
-                                        [73, "        }"],
-                                        [74, "        catch (ex) {"],
+                                        [
+                                          73,
+                                          "        }"
+                                        ],
+                                        [
+                                          74,
+                                          "        catch (ex) {"
+                                        ],
                                         [
                                           75,
                                           "            ignoreNextOnError();"
@@ -10702,13 +11529,22 @@
                                       "platform": null,
                                       "instructionAddr": null,
                                       "context": [
-                                        [69, "     */"],
+                                        [
+                                          69,
+                                          "     */"
+                                        ],
                                         [
                                           70,
                                           "    triggerAsync: function triggerAsync() {"
                                         ],
-                                        [71, "        var args = arguments,"],
-                                        [72, "            me = this;"],
+                                        [
+                                          71,
+                                          "        var args = arguments,"
+                                        ],
+                                        [
+                                          72,
+                                          "            me = this;"
+                                        ],
                                         [
                                           73,
                                           "        _.nextTick(function () {"
@@ -10717,10 +11553,22 @@
                                           74,
                                           "            me.trigger.apply(me, args);"
                                         ],
-                                        [75, "        });"],
-                                        [76, "    },"],
-                                        [77, ""],
-                                        [78, "    /**"],
+                                        [
+                                          75,
+                                          "        });"
+                                        ],
+                                        [
+                                          76,
+                                          "    },"
+                                        ],
+                                        [
+                                          77,
+                                          ""
+                                        ],
+                                        [
+                                          78,
+                                          "    /**"
+                                        ],
                                         [
                                           79,
                                           "     * Wraps the trigger mechanism with a deferral function."
@@ -10752,7 +11600,10 @@
                                       "platform": null,
                                       "instructionAddr": null,
                                       "context": [
-                                        [76, "/*!"],
+                                        [
+                                          76,
+                                          "/*!"
+                                        ],
                                         [
                                           77,
                                           "  Copyright (c) 2018 Jed Watson."
@@ -10765,18 +11616,30 @@
                                           79,
                                           "  http://jedwatson.github.io/react-select"
                                         ],
-                                        [80, "*/"],
+                                        [
+                                          80,
+                                          "*/"
+                                        ],
                                         [
                                           81,
                                           "{snip} e,t)}));return e.handleEvent?e.handleEvent.apply(this,s):e.apply(this,s)}catch(e){throw c(),Object(o.m)((function(n){n.addEventProcessor((fu {snip}"
                                         ],
-                                        [82, "/*!"],
-                                        [83, " * JavaScript Cookie v2.2.1"],
+                                        [
+                                          82,
+                                          "/*!"
+                                        ],
+                                        [
+                                          83,
+                                          " * JavaScript Cookie v2.2.1"
+                                        ],
                                         [
                                           84,
                                           " * https://github.com/js-cookie/js-cookie"
                                         ],
-                                        [85, " *"],
+                                        [
+                                          85,
+                                          " *"
+                                        ],
                                         [
                                           86,
                                           " * Copyright 2006, 2015 Klaus Hartl & Fagner Brack"
@@ -10800,25 +11663,46 @@
                                       "platform": null,
                                       "instructionAddr": null,
                                       "context": [
-                                        [114, "/* @license"],
-                                        [115, "Papa Parse"],
-                                        [116, "v5.2.0"],
+                                        [
+                                          114,
+                                          "/* @license"
+                                        ],
+                                        [
+                                          115,
+                                          "Papa Parse"
+                                        ],
+                                        [
+                                          116,
+                                          "v5.2.0"
+                                        ],
                                         [
                                           117,
                                           "https://github.com/mholt/PapaParse"
                                         ],
-                                        [118, "License: MIT"],
+                                        [
+                                          118,
+                                          "License: MIT"
+                                        ],
                                         [
                                           119,
                                           "{snip} (){var e=arguments,t=this;r.nextTick((function(){t.trigger.apply(t,e)}))},deferWith:function(e){var t=this.trigger,n=this,r=function(){t.app {snip}"
                                         ],
-                                        [120, "/**!"],
+                                        [
+                                          120,
+                                          "/**!"
+                                        ],
                                         [
                                           121,
                                           " * @fileOverview Kickass library to create and place poppers near their reference elements."
                                         ],
-                                        [122, " * @version 1.16.1"],
-                                        [123, " * @license"],
+                                        [
+                                          122,
+                                          " * @version 1.16.1"
+                                        ],
+                                        [
+                                          123,
+                                          " * @license"
+                                        ],
                                         [
                                           124,
                                           " * Copyright (c) 2016 Federico Zivolo and contributors"
@@ -10898,7 +11782,12 @@
                               ]
                             ],
                             "url": "https://sentry.io/organizations/hellboy-meowmeow/issues/",
-                            "query": [["project", "5236886"]],
+                            "query": [
+                              [
+                                "project",
+                                "5236886"
+                              ]
+                            ],
                             "data": null,
                             "method": null
                           }
@@ -10950,7 +11839,9 @@
                           "slug": "hellboy-meowmeow"
                         }
                       },
-                      "fingerprints": ["fbe908cc63d63ea9763fd84cb6bad177"],
+                      "fingerprints": [
+                        "fbe908cc63d63ea9763fd84cb6bad177"
+                      ],
                       "context": {
                         "resp": {
                           "status": 403,
@@ -10976,14 +11867,18 @@
         },
         "security": [
           {
-            "auth_token": ["event:read"]
+            "auth_token": [
+              "event:read"
+            ]
           }
         ]
       }
     },
     "/api/0/issues/{issue_id}/events/oldest/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Retrieves the details of the oldest event for an issue.",
         "operationId": "Retrieve the Oldest Event for an Issue",
         "parameters": [
@@ -11088,7 +11983,10 @@
                       "oneOf": [
                         {
                           "type": "object",
-                          "required": ["type", "value"],
+                          "required": [
+                            "type",
+                            "value"
+                          ],
                           "properties": {
                             "type": {
                               "type": "string"
@@ -11100,7 +11998,9 @@
                         },
                         {
                           "type": "object",
-                          "required": ["title"],
+                          "required": [
+                            "title"
+                          ],
                           "properties": {
                             "title": {
                               "type": "string"
@@ -11181,14 +12081,19 @@
                         "anyOf": [
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
                               },
                               "data": {
                                 "type": "object",
-                                "required": ["values"],
+                                "required": [
+                                  "values"
+                                ],
                                 "properties": {
                                   "values": {
                                     "type": "array",
@@ -11238,7 +12143,10 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
@@ -11319,14 +12227,19 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
                               },
                               "data": {
                                 "type": "object",
-                                "required": ["formatted"],
+                                "required": [
+                                  "formatted"
+                                ],
                                 "properties": {
                                   "formatted": {
                                     "type": "string"
@@ -11337,7 +12250,10 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
@@ -11832,7 +12748,10 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [66, "            }"],
+                                    [
+                                      66,
+                                      "            }"
+                                    ],
                                     [
                                       67,
                                       "            // Attempt to invoke user-land function"
@@ -11857,9 +12776,18 @@
                                       72,
                                       "            // tslint:enable:no-unsafe-any"
                                     ],
-                                    [73, "        }"],
-                                    [74, "        catch (ex) {"],
-                                    [75, "            ignoreNextOnError();"],
+                                    [
+                                      73,
+                                      "        }"
+                                    ],
+                                    [
+                                      74,
+                                      "        catch (ex) {"
+                                    ],
+                                    [
+                                      75,
+                                      "            ignoreNextOnError();"
+                                    ],
                                     [
                                       76,
                                       "            withScope(function (scope) {"
@@ -11883,22 +12811,46 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [69, "     */"],
+                                    [
+                                      69,
+                                      "     */"
+                                    ],
                                     [
                                       70,
                                       "    triggerAsync: function triggerAsync() {"
                                     ],
-                                    [71, "        var args = arguments,"],
-                                    [72, "            me = this;"],
-                                    [73, "        _.nextTick(function () {"],
+                                    [
+                                      71,
+                                      "        var args = arguments,"
+                                    ],
+                                    [
+                                      72,
+                                      "            me = this;"
+                                    ],
+                                    [
+                                      73,
+                                      "        _.nextTick(function () {"
+                                    ],
                                     [
                                       74,
                                       "            me.trigger.apply(me, args);"
                                     ],
-                                    [75, "        });"],
-                                    [76, "    },"],
-                                    [77, ""],
-                                    [78, "    /**"],
+                                    [
+                                      75,
+                                      "        });"
+                                    ],
+                                    [
+                                      76,
+                                      "    },"
+                                    ],
+                                    [
+                                      77,
+                                      ""
+                                    ],
+                                    [
+                                      78,
+                                      "    /**"
+                                    ],
                                     [
                                       79,
                                       "     * Wraps the trigger mechanism with a deferral function."
@@ -11930,8 +12882,14 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [76, "/*!"],
-                                    [77, "  Copyright (c) 2018 Jed Watson."],
+                                    [
+                                      76,
+                                      "/*!"
+                                    ],
+                                    [
+                                      77,
+                                      "  Copyright (c) 2018 Jed Watson."
+                                    ],
                                     [
                                       78,
                                       "  Licensed under the MIT License (MIT), see"
@@ -11940,18 +12898,30 @@
                                       79,
                                       "  http://jedwatson.github.io/react-select"
                                     ],
-                                    [80, "*/"],
+                                    [
+                                      80,
+                                      "*/"
+                                    ],
                                     [
                                       81,
                                       "{snip} e,t)}));return e.handleEvent?e.handleEvent.apply(this,s):e.apply(this,s)}catch(e){throw c(),Object(o.m)((function(n){n.addEventProcessor((fu {snip}"
                                     ],
-                                    [82, "/*!"],
-                                    [83, " * JavaScript Cookie v2.2.1"],
+                                    [
+                                      82,
+                                      "/*!"
+                                    ],
+                                    [
+                                      83,
+                                      " * JavaScript Cookie v2.2.1"
+                                    ],
                                     [
                                       84,
                                       " * https://github.com/js-cookie/js-cookie"
                                     ],
-                                    [85, " *"],
+                                    [
+                                      85,
+                                      " *"
+                                    ],
                                     [
                                       86,
                                       " * Copyright 2006, 2015 Klaus Hartl & Fagner Brack"
@@ -11975,22 +12945,46 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [114, "/* @license"],
-                                    [115, "Papa Parse"],
-                                    [116, "v5.2.0"],
-                                    [117, "https://github.com/mholt/PapaParse"],
-                                    [118, "License: MIT"],
+                                    [
+                                      114,
+                                      "/* @license"
+                                    ],
+                                    [
+                                      115,
+                                      "Papa Parse"
+                                    ],
+                                    [
+                                      116,
+                                      "v5.2.0"
+                                    ],
+                                    [
+                                      117,
+                                      "https://github.com/mholt/PapaParse"
+                                    ],
+                                    [
+                                      118,
+                                      "License: MIT"
+                                    ],
                                     [
                                       119,
                                       "{snip} (){var e=arguments,t=this;r.nextTick((function(){t.trigger.apply(t,e)}))},deferWith:function(e){var t=this.trigger,n=this,r=function(){t.app {snip}"
                                     ],
-                                    [120, "/**!"],
+                                    [
+                                      120,
+                                      "/**!"
+                                    ],
                                     [
                                       121,
                                       " * @fileOverview Kickass library to create and place poppers near their reference elements."
                                     ],
-                                    [122, " * @version 1.16.1"],
-                                    [123, " * @license"],
+                                    [
+                                      122,
+                                      " * @version 1.16.1"
+                                    ],
+                                    [
+                                      123,
+                                      " * @license"
+                                    ],
                                     [
                                       124,
                                       " * Copyright (c) 2016 Federico Zivolo and contributors"
@@ -12070,7 +13064,12 @@
                           ]
                         ],
                         "url": "https://sentry.io/organizations/hellboy-meowmeow/issues/",
-                        "query": [["project", "5236886"]],
+                        "query": [
+                          [
+                            "project",
+                            "5236886"
+                          ]
+                        ],
                         "data": null,
                         "method": null
                       }
@@ -12122,7 +13121,9 @@
                       "slug": "hellboy-meowmeow"
                     }
                   },
-                  "fingerprints": ["fbe908cc63d63ea9763fd84cb6bad177"],
+                  "fingerprints": [
+                    "fbe908cc63d63ea9763fd84cb6bad177"
+                  ],
                   "context": {
                     "resp": {
                       "status": 403,
@@ -12254,14 +13255,18 @@
         },
         "security": [
           {
-            "auth_token": ["event:read"]
+            "auth_token": [
+              "event:read"
+            ]
           }
         ]
       }
     },
     "/api/0/issues/{issue_id}/events/latest/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Retrieves the details of the latest event for an issue.",
         "operationId": "Retrieve the Latest Event for an Issue",
         "parameters": [
@@ -12366,7 +13371,10 @@
                       "oneOf": [
                         {
                           "type": "object",
-                          "required": ["type", "value"],
+                          "required": [
+                            "type",
+                            "value"
+                          ],
                           "properties": {
                             "type": {
                               "type": "string"
@@ -12378,7 +13386,9 @@
                         },
                         {
                           "type": "object",
-                          "required": ["title"],
+                          "required": [
+                            "title"
+                          ],
                           "properties": {
                             "title": {
                               "type": "string"
@@ -12459,14 +13469,19 @@
                         "anyOf": [
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
                               },
                               "data": {
                                 "type": "object",
-                                "required": ["values"],
+                                "required": [
+                                  "values"
+                                ],
                                 "properties": {
                                   "values": {
                                     "type": "array",
@@ -12516,7 +13531,10 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
@@ -12597,14 +13615,19 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
                               },
                               "data": {
                                 "type": "object",
-                                "required": ["formatted"],
+                                "required": [
+                                  "formatted"
+                                ],
                                 "properties": {
                                   "formatted": {
                                     "type": "string"
@@ -12615,7 +13638,10 @@
                           },
                           {
                             "type": "object",
-                            "required": ["type", "data"],
+                            "required": [
+                              "type",
+                              "data"
+                            ],
                             "properties": {
                               "type": {
                                 "type": "string"
@@ -13110,7 +14136,10 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [66, "            }"],
+                                    [
+                                      66,
+                                      "            }"
+                                    ],
                                     [
                                       67,
                                       "            // Attempt to invoke user-land function"
@@ -13135,9 +14164,18 @@
                                       72,
                                       "            // tslint:enable:no-unsafe-any"
                                     ],
-                                    [73, "        }"],
-                                    [74, "        catch (ex) {"],
-                                    [75, "            ignoreNextOnError();"],
+                                    [
+                                      73,
+                                      "        }"
+                                    ],
+                                    [
+                                      74,
+                                      "        catch (ex) {"
+                                    ],
+                                    [
+                                      75,
+                                      "            ignoreNextOnError();"
+                                    ],
                                     [
                                       76,
                                       "            withScope(function (scope) {"
@@ -13161,22 +14199,46 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [69, "     */"],
+                                    [
+                                      69,
+                                      "     */"
+                                    ],
                                     [
                                       70,
                                       "    triggerAsync: function triggerAsync() {"
                                     ],
-                                    [71, "        var args = arguments,"],
-                                    [72, "            me = this;"],
-                                    [73, "        _.nextTick(function () {"],
+                                    [
+                                      71,
+                                      "        var args = arguments,"
+                                    ],
+                                    [
+                                      72,
+                                      "            me = this;"
+                                    ],
+                                    [
+                                      73,
+                                      "        _.nextTick(function () {"
+                                    ],
                                     [
                                       74,
                                       "            me.trigger.apply(me, args);"
                                     ],
-                                    [75, "        });"],
-                                    [76, "    },"],
-                                    [77, ""],
-                                    [78, "    /**"],
+                                    [
+                                      75,
+                                      "        });"
+                                    ],
+                                    [
+                                      76,
+                                      "    },"
+                                    ],
+                                    [
+                                      77,
+                                      ""
+                                    ],
+                                    [
+                                      78,
+                                      "    /**"
+                                    ],
                                     [
                                       79,
                                       "     * Wraps the trigger mechanism with a deferral function."
@@ -13208,8 +14270,14 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [76, "/*!"],
-                                    [77, "  Copyright (c) 2018 Jed Watson."],
+                                    [
+                                      76,
+                                      "/*!"
+                                    ],
+                                    [
+                                      77,
+                                      "  Copyright (c) 2018 Jed Watson."
+                                    ],
                                     [
                                       78,
                                       "  Licensed under the MIT License (MIT), see"
@@ -13218,18 +14286,30 @@
                                       79,
                                       "  http://jedwatson.github.io/react-select"
                                     ],
-                                    [80, "*/"],
+                                    [
+                                      80,
+                                      "*/"
+                                    ],
                                     [
                                       81,
                                       "{snip} e,t)}));return e.handleEvent?e.handleEvent.apply(this,s):e.apply(this,s)}catch(e){throw c(),Object(o.m)((function(n){n.addEventProcessor((fu {snip}"
                                     ],
-                                    [82, "/*!"],
-                                    [83, " * JavaScript Cookie v2.2.1"],
+                                    [
+                                      82,
+                                      "/*!"
+                                    ],
+                                    [
+                                      83,
+                                      " * JavaScript Cookie v2.2.1"
+                                    ],
                                     [
                                       84,
                                       " * https://github.com/js-cookie/js-cookie"
                                     ],
-                                    [85, " *"],
+                                    [
+                                      85,
+                                      " *"
+                                    ],
                                     [
                                       86,
                                       " * Copyright 2006, 2015 Klaus Hartl & Fagner Brack"
@@ -13253,22 +14333,46 @@
                                   "platform": null,
                                   "instructionAddr": null,
                                   "context": [
-                                    [114, "/* @license"],
-                                    [115, "Papa Parse"],
-                                    [116, "v5.2.0"],
-                                    [117, "https://github.com/mholt/PapaParse"],
-                                    [118, "License: MIT"],
+                                    [
+                                      114,
+                                      "/* @license"
+                                    ],
+                                    [
+                                      115,
+                                      "Papa Parse"
+                                    ],
+                                    [
+                                      116,
+                                      "v5.2.0"
+                                    ],
+                                    [
+                                      117,
+                                      "https://github.com/mholt/PapaParse"
+                                    ],
+                                    [
+                                      118,
+                                      "License: MIT"
+                                    ],
                                     [
                                       119,
                                       "{snip} (){var e=arguments,t=this;r.nextTick((function(){t.trigger.apply(t,e)}))},deferWith:function(e){var t=this.trigger,n=this,r=function(){t.app {snip}"
                                     ],
-                                    [120, "/**!"],
+                                    [
+                                      120,
+                                      "/**!"
+                                    ],
                                     [
                                       121,
                                       " * @fileOverview Kickass library to create and place poppers near their reference elements."
                                     ],
-                                    [122, " * @version 1.16.1"],
-                                    [123, " * @license"],
+                                    [
+                                      122,
+                                      " * @version 1.16.1"
+                                    ],
+                                    [
+                                      123,
+                                      " * @license"
+                                    ],
                                     [
                                       124,
                                       " * Copyright (c) 2016 Federico Zivolo and contributors"
@@ -13348,7 +14452,12 @@
                           ]
                         ],
                         "url": "https://sentry.io/organizations/hellboy-meowmeow/issues/",
-                        "query": [["project", "5236886"]],
+                        "query": [
+                          [
+                            "project",
+                            "5236886"
+                          ]
+                        ],
                         "data": null,
                         "method": null
                       }
@@ -13400,7 +14509,9 @@
                       "slug": "hellboy-meowmeow"
                     }
                   },
-                  "fingerprints": ["fbe908cc63d63ea9763fd84cb6bad177"],
+                  "fingerprints": [
+                    "fbe908cc63d63ea9763fd84cb6bad177"
+                  ],
                   "context": {
                     "resp": {
                       "status": 403,
@@ -13532,14 +14643,18 @@
         },
         "security": [
           {
-            "auth_token": ["event:read"]
+            "auth_token": [
+              "event:read"
+            ]
           }
         ]
       }
     },
     "/api/0/issues/{issue_id}/events/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "This endpoint lists an issue's events.",
         "operationId": "List an Issue's Events",
         "parameters": [
@@ -13722,14 +14837,18 @@
         },
         "security": [
           {
-            "auth_token": ["event:read"]
+            "auth_token": [
+              "event:read"
+            ]
           }
         ]
       }
     },
     "/api/0/issues/{issue_id}/": {
       "get": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Return details on an individual issue. This returns the basic stats for the issue (title, last seen, first seen), some overall numbers (number of comments, user reports) as well as the summarized event data.",
         "operationId": "Retrieve an Issue",
         "parameters": [
@@ -13943,7 +15062,11 @@
                       "oneOf": [
                         {
                           "type": "object",
-                          "required": ["filename", "type", "value"],
+                          "required": [
+                            "filename",
+                            "type",
+                            "value"
+                          ],
                           "properties": {
                             "filename": {
                               "type": "string"
@@ -13958,7 +15081,9 @@
                         },
                         {
                           "type": "object",
-                          "required": ["title"],
+                          "required": [
+                            "title"
+                          ],
                           "properties": {
                             "title": {
                               "type": "string"
@@ -14052,7 +15177,11 @@
                     },
                     "status": {
                       "type": "string",
-                      "enum": ["resolved", "unresolved", "ignored"]
+                      "enum": [
+                        "resolved",
+                        "unresolved",
+                        "ignored"
+                      ]
                     },
                     "statusDetails": {
                       "type": "object"
@@ -14148,64 +15277,232 @@
                   "shortId": "PUMP-STATION-1",
                   "stats": {
                     "24h": [
-                      [1541451600, 557],
-                      [1541455200, 473],
-                      [1541458800, 914],
-                      [1541462400, 991],
-                      [1541466000, 925],
-                      [1541469600, 881],
-                      [1541473200, 182],
-                      [1541476800, 490],
-                      [1541480400, 820],
-                      [1541484000, 322],
-                      [1541487600, 836],
-                      [1541491200, 565],
-                      [1541494800, 758],
-                      [1541498400, 880],
-                      [1541502000, 677],
-                      [1541505600, 381],
-                      [1541509200, 814],
-                      [1541512800, 329],
-                      [1541516400, 446],
-                      [1541520000, 731],
-                      [1541523600, 111],
-                      [1541527200, 926],
-                      [1541530800, 772],
-                      [1541534400, 400],
-                      [1541538000, 943]
+                      [
+                        1541451600,
+                        557
+                      ],
+                      [
+                        1541455200,
+                        473
+                      ],
+                      [
+                        1541458800,
+                        914
+                      ],
+                      [
+                        1541462400,
+                        991
+                      ],
+                      [
+                        1541466000,
+                        925
+                      ],
+                      [
+                        1541469600,
+                        881
+                      ],
+                      [
+                        1541473200,
+                        182
+                      ],
+                      [
+                        1541476800,
+                        490
+                      ],
+                      [
+                        1541480400,
+                        820
+                      ],
+                      [
+                        1541484000,
+                        322
+                      ],
+                      [
+                        1541487600,
+                        836
+                      ],
+                      [
+                        1541491200,
+                        565
+                      ],
+                      [
+                        1541494800,
+                        758
+                      ],
+                      [
+                        1541498400,
+                        880
+                      ],
+                      [
+                        1541502000,
+                        677
+                      ],
+                      [
+                        1541505600,
+                        381
+                      ],
+                      [
+                        1541509200,
+                        814
+                      ],
+                      [
+                        1541512800,
+                        329
+                      ],
+                      [
+                        1541516400,
+                        446
+                      ],
+                      [
+                        1541520000,
+                        731
+                      ],
+                      [
+                        1541523600,
+                        111
+                      ],
+                      [
+                        1541527200,
+                        926
+                      ],
+                      [
+                        1541530800,
+                        772
+                      ],
+                      [
+                        1541534400,
+                        400
+                      ],
+                      [
+                        1541538000,
+                        943
+                      ]
                     ],
                     "30d": [
-                      [1538870400, 565],
-                      [1538956800, 12862],
-                      [1539043200, 15617],
-                      [1539129600, 10809],
-                      [1539216000, 15065],
-                      [1539302400, 12927],
-                      [1539388800, 12994],
-                      [1539475200, 13139],
-                      [1539561600, 11838],
-                      [1539648000, 12088],
-                      [1539734400, 12338],
-                      [1539820800, 12768],
-                      [1539907200, 12816],
-                      [1539993600, 15356],
-                      [1540080000, 10910],
-                      [1540166400, 12306],
-                      [1540252800, 12912],
-                      [1540339200, 14700],
-                      [1540425600, 11890],
-                      [1540512000, 11684],
-                      [1540598400, 13510],
-                      [1540684800, 12625],
-                      [1540771200, 12811],
-                      [1540857600, 13180],
-                      [1540944000, 14651],
-                      [1541030400, 14161],
-                      [1541116800, 12612],
-                      [1541203200, 14316],
-                      [1541289600, 14742],
-                      [1541376000, 12505],
-                      [1541462400, 14180]
+                      [
+                        1538870400,
+                        565
+                      ],
+                      [
+                        1538956800,
+                        12862
+                      ],
+                      [
+                        1539043200,
+                        15617
+                      ],
+                      [
+                        1539129600,
+                        10809
+                      ],
+                      [
+                        1539216000,
+                        15065
+                      ],
+                      [
+                        1539302400,
+                        12927
+                      ],
+                      [
+                        1539388800,
+                        12994
+                      ],
+                      [
+                        1539475200,
+                        13139
+                      ],
+                      [
+                        1539561600,
+                        11838
+                      ],
+                      [
+                        1539648000,
+                        12088
+                      ],
+                      [
+                        1539734400,
+                        12338
+                      ],
+                      [
+                        1539820800,
+                        12768
+                      ],
+                      [
+                        1539907200,
+                        12816
+                      ],
+                      [
+                        1539993600,
+                        15356
+                      ],
+                      [
+                        1540080000,
+                        10910
+                      ],
+                      [
+                        1540166400,
+                        12306
+                      ],
+                      [
+                        1540252800,
+                        12912
+                      ],
+                      [
+                        1540339200,
+                        14700
+                      ],
+                      [
+                        1540425600,
+                        11890
+                      ],
+                      [
+                        1540512000,
+                        11684
+                      ],
+                      [
+                        1540598400,
+                        13510
+                      ],
+                      [
+                        1540684800,
+                        12625
+                      ],
+                      [
+                        1540771200,
+                        12811
+                      ],
+                      [
+                        1540857600,
+                        13180
+                      ],
+                      [
+                        1540944000,
+                        14651
+                      ],
+                      [
+                        1541030400,
+                        14161
+                      ],
+                      [
+                        1541116800,
+                        12612
+                      ],
+                      [
+                        1541203200,
+                        14316
+                      ],
+                      [
+                        1541289600,
+                        14742
+                      ],
+                      [
+                        1541376000,
+                        12505
+                      ],
+                      [
+                        1541462400,
+                        14180
+                      ]
                     ]
                   },
                   "status": "unresolved",
@@ -14226,12 +15523,16 @@
         },
         "security": [
           {
-            "auth_token": ["event:read"]
+            "auth_token": [
+              "event:read"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Updates an individual issue's attributes.  Only the attributes submitted are modified.",
         "operationId": "Update an Issue",
         "parameters": [
@@ -14367,7 +15668,11 @@
                       "oneOf": [
                         {
                           "type": "object",
-                          "required": ["filename", "type", "value"],
+                          "required": [
+                            "filename",
+                            "type",
+                            "value"
+                          ],
                           "properties": {
                             "filename": {
                               "type": "string"
@@ -14382,7 +15687,9 @@
                         },
                         {
                           "type": "object",
-                          "required": ["title"],
+                          "required": [
+                            "title"
+                          ],
                           "properties": {
                             "title": {
                               "type": "string"
@@ -14420,7 +15727,11 @@
                     },
                     "status": {
                       "type": "string",
-                      "enum": ["resolved", "unresolved", "ignored"]
+                      "enum": [
+                        "resolved",
+                        "unresolved",
+                        "ignored"
+                      ]
                     },
                     "statusDetails": {
                       "type": "object"
@@ -14485,12 +15796,16 @@
         },
         "security": [
           {
-            "auth_token": ["event:write"]
+            "auth_token": [
+              "event:write"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Events"],
+        "tags": [
+          "Events & Issues"
+        ],
         "description": "Removes an individual issue.",
         "operationId": "Remove an Issue",
         "parameters": [
@@ -14517,14 +15832,18 @@
         },
         "security": [
           {
-            "auth_token": ["event:admin"]
+            "auth_token": [
+              "event:admin"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/releases/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Return a list of releases for a given organization.",
         "operationId": "List an Organization's Releases",
         "parameters": [
@@ -14749,12 +16068,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Create a new release for the given Organization.  Releases are used by\nSentry to improve its error reporting abilities by correlating\nfirst seen events with the release that might have introduced the\nproblem.\nReleases are also necessary for source maps and other debug features\nthat require manual upload for functioning well.",
         "operationId": "Create a New Release for an Organization",
         "parameters": [
@@ -14773,7 +16096,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["version", "projects"],
+                "required": [
+                  "version",
+                  "projects"
+                ],
                 "properties": {
                   "version": {
                     "type": "string",
@@ -14792,7 +16118,9 @@
                   "projects": {
                     "type": "array",
                     "description": "A list of project slugs that are involved in this release.",
-                    "example": ["pump-station"],
+                    "example": [
+                      "pump-station"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -14812,7 +16140,10 @@
                           "description": "A list of the files that have been changed in the commit. Specifying the patch_set is necessary to power suspect commits and suggested assignees.",
                           "items": {
                             "type": "object",
-                            "required": ["path", "type"],
+                            "required": [
+                              "path",
+                              "type"
+                            ],
                             "properties": {
                               "path": {
                                 "type": "string",
@@ -14820,7 +16151,11 @@
                               },
                               "type": {
                                 "type": "string",
-                                "enum": ["A", "M", "D"],
+                                "enum": [
+                                  "A",
+                                  "M",
+                                  "D"
+                                ],
                                 "description": "The type of change that happened in the commit."
                               }
                             }
@@ -15052,14 +16387,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/releases/{version}/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Return a release for a given organization.",
         "operationId": "Retrieve an Organization's Releases",
         "parameters": [
@@ -15256,12 +16595,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Update a release for a given organization.",
         "operationId": "Update an Organization's Release",
         "parameters": [
@@ -15495,12 +16838,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Delete a release for a given organization.",
         "operationId": "Delete an Organization's Release",
         "parameters": [
@@ -15530,14 +16877,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/releases/{version}/files/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Return a list of files for a given release.",
         "operationId": "List an Organization's Release Files",
         "parameters": [
@@ -15627,12 +16978,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Upload a new organization release file.",
         "operationId": "Upload a New Organization Release File",
         "parameters": [
@@ -15660,7 +17015,9 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["file"],
+                "required": [
+                  "file"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -15691,14 +17048,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/files/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Return a list of files for a given release.",
         "operationId": "List a Project's Release Files",
         "parameters": [
@@ -15797,12 +17158,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Upload a new project release file.",
         "operationId": "Upload a New Project Release File",
         "parameters": [
@@ -15839,7 +17204,9 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["file"],
+                "required": [
+                  "file"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -15922,14 +17289,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/releases/{version}/files/{file_id}/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Retrieve a file for a given release.",
         "operationId": "Retrieve an Organization Release's File",
         "parameters": [
@@ -16023,12 +17394,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Update an organization release file.",
         "operationId": "Update an Organization Release File",
         "parameters": [
@@ -16065,7 +17440,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["version", "projects"],
+                "required": [
+                  "version",
+                  "projects"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -16140,12 +17518,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Delete a file for a given release.",
         "operationId": "Delete an Organization Release's File",
         "parameters": [
@@ -16184,14 +17566,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/files/{file_id}/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Retrieve a file for a given release.",
         "operationId": "Retrieve a Project Release's File",
         "parameters": [
@@ -16294,12 +17680,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "put": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Update a project release file.",
         "operationId": "Update a Project Release File",
         "parameters": [
@@ -16345,7 +17735,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["version", "projects"],
+                "required": [
+                  "version",
+                  "projects"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -16420,12 +17813,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "delete": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Delete a file for a given release.",
         "operationId": "Delete a Project Release's File",
         "parameters": [
@@ -16473,14 +17870,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/releases/{version}/commits/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "List an organization release's commits.",
         "operationId": "List an Organization Release's Commits",
         "parameters": [
@@ -16512,7 +17913,11 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": ["dateCreated", "id", "message"],
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "message"
+                    ],
                     "properties": {
                       "dateCreated": {
                         "type": "string",
@@ -16540,14 +17945,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/commits/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "List a project release's commits.",
         "operationId": "List a Project Release's Commits",
         "parameters": [
@@ -16588,7 +17997,11 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": ["dateCreated", "id", "message"],
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "message"
+                    ],
                     "properties": {
                       "dateCreated": {
                         "type": "string",
@@ -16616,14 +18029,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/releases/{version}/commitfiles/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Retrieve files changed in a release's commits",
         "operationId": "Retrieve Files Changed in a Release's Commits",
         "parameters": [
@@ -16653,14 +18070,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/resolved/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "List issues to be resolved in a particular release.",
         "operationId": "List Issues to be Resolved in a Particular Release",
         "parameters": [
@@ -16702,14 +18123,18 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
     },
     "/api/0/organizations/{organization_slug}/releases/{version}/deploys/": {
       "get": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Return a list of deploys for a given release.",
         "operationId": "List a Release's Deploys",
         "parameters": [
@@ -16795,12 +18220,16 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       },
       "post": {
-        "tags": ["Releases"],
+        "tags": [
+          "Releases"
+        ],
         "description": "Create a deploy.",
         "operationId": "Create a New Deploy for an Organization",
         "parameters": [
@@ -16828,7 +18257,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["environment"],
+                "required": [
+                  "environment"
+                ],
                 "properties": {
                   "environment": {
                     "type": "string",
@@ -16913,7 +18344,9 @@
         },
         "security": [
           {
-            "auth_token": ["project:releases"]
+            "auth_token": [
+              "project:releases"
+            ]
           }
         ]
       }
