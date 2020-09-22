@@ -44,7 +44,8 @@
       }
     },
     {
-      "name": "Events & Issues",
+      "name": "Events",
+      "x-sidebar-name": "Events & Issues",
       "description": "Endpoints for events and issues",
       "externalDocs": {
         "description": "Found an error? Let us know.",
@@ -8349,7 +8350,7 @@
     "/api/0/projects/{organization_slug}/{project_slug}/events/{event_id}/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Return details on an individual event.",
         "operationId": "Retrieve an Event for a Project",
@@ -9755,7 +9756,7 @@
     "/api/0/projects/{organization_slug}/{project_slug}/events/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Return a list of events bound to a project.",
         "operationId": "List a Project's Events",
@@ -9968,7 +9969,7 @@
     "/api/0/projects/{organization_slug}/{project_slug}/issues/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Return a list of issues (groups) bound to a project.  All parameters are supplied as query string parameters. \n\n A default query of ``is:unresolved`` is applied. To return results with other statuses send an new query value (i.e. ``?query=`` for all results).\n\nThe ``statsPeriod`` parameter can be used to select the timeline stats which should be present. Possible values are: ``\"\"`` (disable),``\"24h\"``, ``\"14d\"``",
         "operationId": "List a Project's Issues",
@@ -10362,7 +10363,7 @@
       },
       "put": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Bulk mutate various attributes on issues.  The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be modified.\n\n- For non-status updates, the `id` query parameter is required.\n- For status updates, the `id` query parameter may be omitted\nfor a batch \"update all\" query.\n- An optional `status` query parameter may be used to restrict\nmutations to only events with the given status.\n\nThe following attributes can be modified and are supplied as JSON object in the body:\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
         "operationId": "Bulk Mutate a List of Issues",
@@ -10537,7 +10538,7 @@
       },
       "delete": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Permanently remove the given issues. The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be removed.\n\nOnly queries by 'id' are accepted.\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
         "operationId": "Bulk Remove a List of Issues",
@@ -10592,7 +10593,7 @@
     "/api/0/issues/{issue_id}/tags/{key}/values/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Returns details for given tag key related to an issue.",
         "operationId": "List a Tag's Values Related to an Issue",
@@ -10664,7 +10665,7 @@
     "/api/0/issues/{issue_id}/tags/{key}/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Returns details for given tag key related to an issue.",
         "operationId": "Retrieve Tag Details",
@@ -10733,7 +10734,7 @@
     "/api/0/issues/{issue_id}/hashes/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "This endpoint lists an issue's hashes, which are the generated checksums used to aggregate individual events.",
         "operationId": "List an Issue's Hashes",
@@ -11884,7 +11885,7 @@
     "/api/0/issues/{issue_id}/events/oldest/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Retrieves the details of the oldest event for an issue.",
         "operationId": "Retrieve the Oldest Event for an Issue",
@@ -13272,7 +13273,7 @@
     "/api/0/issues/{issue_id}/events/latest/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Retrieves the details of the latest event for an issue.",
         "operationId": "Retrieve the Latest Event for an Issue",
@@ -14660,7 +14661,7 @@
     "/api/0/issues/{issue_id}/events/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "This endpoint lists an issue's events.",
         "operationId": "List an Issue's Events",
@@ -14854,7 +14855,7 @@
     "/api/0/issues/{issue_id}/": {
       "get": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Return details on an individual issue. This returns the basic stats for the issue (title, last seen, first seen), some overall numbers (number of comments, user reports) as well as the summarized event data.",
         "operationId": "Retrieve an Issue",
@@ -15538,7 +15539,7 @@
       },
       "put": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Updates an individual issue's attributes.  Only the attributes submitted are modified.",
         "operationId": "Update an Issue",
@@ -15811,7 +15812,7 @@
       },
       "delete": {
         "tags": [
-          "Events & Issues"
+          "Events"
         ],
         "description": "Removes an individual issue.",
         "operationId": "Remove an Issue",
