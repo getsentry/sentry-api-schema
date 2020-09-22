@@ -1,6 +1,6 @@
 {
   "get": {
-    "tags": ["Events"],
+    "tags": ["Events & Issues"],
     "description": "Return a list of issues (groups) bound to a project.  All parameters are supplied as query string parameters. \n\n A default query of ``is:unresolved`` is applied. To return results with other statuses send an new query value (i.e. ``?query=`` for all results).\n\nThe ``statsPeriod`` parameter can be used to select the timeline stats which should be present. Possible values are: ``\"\"`` (disable),``\"24h\"``, ``\"14d\"``",
     "operationId": "List a Project's Issues",
     "parameters": [
@@ -138,7 +138,7 @@
     ]
   },
   "put": {
-    "tags": ["Events"],
+    "tags": ["Events & Issues"],
     "description": "Bulk mutate various attributes on issues.  The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be modified.\n\n- For non-status updates, the `id` query parameter is required.\n- For status updates, the `id` query parameter may be omitted\nfor a batch \"update all\" query.\n- An optional `status` query parameter may be used to restrict\nmutations to only events with the given status.\n\nThe following attributes can be modified and are supplied as JSON object in the body:\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
     "operationId": "Bulk Mutate a List of Issues",
     "parameters": [
@@ -301,7 +301,7 @@
     ]
   },
   "delete": {
-    "tags": ["Events"],
+    "tags": ["Events & Issues"],
     "description": "Permanently remove the given issues. The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be removed.\n\nOnly queries by 'id' are accepted.\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
     "operationId": "Bulk Remove a List of Issues",
     "parameters": [
