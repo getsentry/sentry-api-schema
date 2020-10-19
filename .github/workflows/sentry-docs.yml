@@ -1,0 +1,47 @@
+name: openapi-diff
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  check-diff:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout getsentry/sentry-api-schema
+        uses: actions/checkout@v2
+        with:
+          ref: 'main'
+          path: sentry-api-schema
+
+      - name: Getsentry Token
+        id: getsentry
+        uses: getsentry/action-github-app-token@v1
+        with:
+          app_id: ${{ secrets.SENTRY_INTERNAL_APP_ID }}
+          private_key: ${{ secrets.SENTRY_INTERNAL_APP_PRIVATE_KEY }}
+
+      - name: Checkout getsentry/sentry-docs
+        uses: actions/checkout@v2
+        with:
+          ref: 'master'
+          repository: getsentry/sentry-docs
+          path: sentry-docs
+          token: ${{ steps.getsentry.outputs.token }}
+
+      - name: Copy latest SHA into getsentry/sentry-docs
+        run: |
+          cd sentry-api-schema
+          PREV_SHA=$(git rev-parse HEAD^1)
+          HEAD=$(git rev-parse HEAD)
+          cd ../sentry-docs
+          sed -i "" 's|'"$PREV_SHA"'|'"$HEAD"'|g' src/gatsby/utils/resolveOpenAPI.ts
+
+      - name: Git Commit & Push
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          repository: sentry-docs
+          branch: master
+          commit_message: Latest SHA from getsentry/sentry-api-schema
+          commit_user_email: bot@getsentry.com
+          commit_user_name: openapi-getsentry-bot
