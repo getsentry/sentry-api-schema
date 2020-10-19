@@ -15,7 +15,7 @@ jobs:
           path: sentry-api-schema
 
       - name: Getsentry Token
-        id: getsentry
+        id: getsentry-token
         uses: getsentry/action-github-app-token@v1
         with:
           app_id: ${{ secrets.SENTRY_INTERNAL_APP_ID }}
@@ -27,7 +27,7 @@ jobs:
           ref: 'master'
           repository: getsentry/sentry-docs
           path: sentry-docs
-          token: ${{ steps.getsentry.outputs.token }}
+          token: ${{ steps.getsentry-token.outputs.token }}
 
       - name: Copy latest SHA into getsentry/sentry-docs
         run: |
