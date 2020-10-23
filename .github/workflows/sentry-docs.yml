@@ -7,21 +7,13 @@ on:
 jobs:
   
   bump:
-    if: ${{ github.ref != 'refs/heads/master' }}
     runs-on: ubuntu-18.04
     steps:
-      - name: getsentry token
-        id: getsentry-token
-        uses: getsentry/action-github-app-token@v1
-        with:
-          app_id: ${{ secrets.SENTRY_INTERNAL_APP_ID }}
-          private_key: ${{ secrets.SENTRY_INTERNAL_APP_PRIVATE_KEY }}
-
       # Notify sentry-docs
       - name: Dispatch to sentry-docs
         uses: actions/github-script@v3
         with:
-          github-token: ${{ steps.getsentry-token.outputs.token }}
+          github-token: ${{ secrets.GH_SENTRY_BOT_PAT }}
           script: |
             github.actions.createWorkflowDispatch({
               owner: 'getsentry',
