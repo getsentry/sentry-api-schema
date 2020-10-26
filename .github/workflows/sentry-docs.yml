@@ -14,12 +14,9 @@ jobs:
           token: ${{ secrets.GH_SENTRY_BOT_PAT }}
           path: sentry-docs
       
-      - name: Bump to Latest SHA
-        uses: actions/github-script@v3
-          with:
-            github-token: ${{ secrets.GH_SENTRY_BOT_PAT }}
-            script: |
-              sed -i -e 's|^const SENTRY_API_SCHEMA_SHA =.*$|const SENTRY_API_SCHEMA_SHA = "$GITHUB_SHA"|g' src/gatsby/utils/resolveOpenAPI.ts          
+      - name: Bump latest SHA
+        run: |
+          sed -i -e 's|^const SENTRY_API_SCHEMA_SHA =.*$|const SENTRY_API_SCHEMA_SHA = "$GITHUB_SHA"|g' src/gatsby/utils/resolveOpenAPI.ts
 
       - name: Git Commit & Push
         run: |
@@ -28,3 +25,4 @@ jobs:
           git add src/gatsby/utils/resolveOpenAPI.ts
           git commit -m "Latest SHA from getsentry/sentry-api-schema"
           git push
+          
