@@ -16,7 +16,7 @@ jobs:
       
       - name: Bump latest SHA
         run: |
-          sed -i -e 's|^const SENTRY_API_SCHEMA_SHA =.*$|const SENTRY_API_SCHEMA_SHA = "$GITHUB_SHA"|g' sentry-docs/src/gatsby/utils/resolveOpenAPI.ts
+          sed -i -e 's|^const SENTRY_API_SCHEMA_SHA =.*$|const SENTRY_API_SCHEMA_SHA = '$GITHUB_SHA'|g' sentry-docs/src/gatsby/utils/resolveOpenAPI.ts
 
       - name: Git Commit & Push
         run: |
