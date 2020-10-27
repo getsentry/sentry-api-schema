@@ -8,18 +8,21 @@ jobs:
   bump:
     runs-on: ubuntu-18.04
     steps:
-      # Notify sentry-docs
-      - name: Dispatch to sentry-docs
-        uses: actions/github-script@v3
+      - uses: actions/checkout@v2
         with:
-          github-token: ${{ secrets.GH_SENTRY_BOT_PAT }}
-          script: |
-            github.actions.createWorkflowDispatch({
-              owner: 'getsentry',
-              repo: 'sentry-docs',
-              workflow_id: 'bump-openapi.yml',
-              ref: 'master',
-              inputs: {
-                'sentry-api-schema-sha': '${{ github.sha }}',
-              }
-            })
+          repository: 'getsentry/sentry-docs'
+          token: ${{ secrets.GH_SENTRY_BOT_PAT }}
+          path: sentry-docs
+      
+      - name: Bump latest SHA
+        run: |
+          sed -i -e 's|^const SENTRY_API_SCHEMA_SHA =.*$|const SENTRY_API_SCHEMA_SHA = "$GITHUB_SHA"|g' src/gatsby/utils/resolveOpenAPI.ts
+
+      - name: Git Commit & Push
+        run: |
+          git config user.name openapi-getsentry-bot
+          git config user.email bot@getsentry.com
+          git add src/gatsby/utils/resolveOpenAPI.ts
+          git commit -m "upgrade: getsentry/sentry-api-schema to latest"
+          git push
+          
