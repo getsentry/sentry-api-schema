@@ -59,6 +59,15 @@
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/releases/&template=api_error_template.md"
       }
+    },
+    {
+      "name": "Integration",
+      "x-sidebar-name": "Integration Platform",
+      "description": "Endpoints for the integration platform",
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
     }
   ],
   "paths": {
@@ -19231,6 +19240,271 @@
           {
             "auth_token": [
               "project:releases"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/sentry-app-installations/": {
+      "get": {
+        "tags": [
+          "Integration"
+        ],
+        "description": "Return a list of integration platform installations for a given organization.",
+        "operationId": "List an Organization's Integration Platform Installations",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The organization short name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "app",
+                      "organization",
+                      "uuid",
+                      "status"
+                    ],
+                    "properties": {
+                      "app": {
+                        "type": "object",
+                        "required": [
+                          "uuid",
+                          "slug"
+                        ],
+                        "properties": {
+                          "uuid": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "organization": {
+                        "type": "object",
+                        "required": [
+                          "slug"
+                        ],
+                        "properties": {
+                          "slug": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "uuid": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "app": {
+                      "uuid": "a9988ad6-meow-4905-bb93-f7cbf4c96bbb",
+                      "slug": "cat-75c19a"
+                    },
+                    "organization": {
+                      "slug": "sentry"
+                    },
+                    "uuid": "01635075-m30w-4f96-8fc8-ff9680780a13",
+                    "status": "installed"
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:read",
+              "org:integrations"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/sentry-app-installations/{uuid}/external-issues/": {
+      "post": {
+        "tags": [
+          "Integration"
+        ],
+        "description": "Create an external issue from an integration platform integration.",
+        "operationId": "Create an External Issue",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "The uuid of the integration platform integration.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "issueId",
+                  "webUrl",
+                  "project",
+                  "identifier"
+                ],
+                "type": "object",
+                "properties": {
+                  "issueId": {
+                    "type": "integer",
+                    "description": "The ID of the Sentry issue to link the external issue to."
+                  },
+                  "webUrl": {
+                    "type": "string",
+                    "description": "The URL of the external service to link the issue to."
+                  },
+                  "project": {
+                    "type": "string",
+                    "description": "The external service's project."
+                  },
+                  "identifier": {
+                    "type": "string",
+                    "description": "A unique identifier of the external issue."
+                  }
+                }
+              },
+              "example": {
+                "issueId": 1,
+                "webUrl": "https://somerandom.io/project/issue-id",
+                "project": "ExternalProj",
+                "identifier": "issue-1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "issueId",
+                    "serviceType",
+                    "displayName",
+                    "webUrl"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "issueId": {
+                      "type": "string"
+                    },
+                    "serviceType": {
+                      "type": "string"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    },
+                    "webUrl": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "1",
+                  "issueId": "1",
+                  "serviceType": "testing",
+                  "displayName": "ExternalProj#issue-1",
+                  "webUrl": "https://somerandom.io/project/issue-id"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/": {
+      "delete": {
+        "tags": [
+          "Integration"
+        ],
+        "description": "Delete an external issue.",
+        "operationId": "Delete an External Issue",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "The uuid of the integration platform integration.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "external_issue_id",
+            "in": "path",
+            "description": "The id of the external issue.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "External issue not found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:admin"
             ]
           }
         ]
