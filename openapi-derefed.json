@@ -20219,6 +20219,581 @@
           }
         ]
       }
+    },
+    "/api/0/organizations/{organization_slug}/scim/v2/Groups": {
+      "get": {
+        "tags": [
+          "SCIM"
+        ],
+        "description": "Returns a paginated list of teams bound to a organization with a SCIM Groups GET Request.\n- Note that the members field will only contain up to 10000 members.",
+        "operationId": "List an Organization's Paginated Teams",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "description": "The slug of the organization.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "description": "SCIM 1-offset based index for pagination.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "A SCIM filter expression. The only operator currently supported is `eq`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "description": "The maximum number of results the query should return, maximum of 100.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "excludedAttributes",
+            "in": "query",
+            "required": false,
+            "description": "Fields that should be left off of return values. Right now the only supported field for this query is `members`.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "totalResults",
+                    "itemsPerPage",
+                    "startIndex",
+                    "Resources"
+                  ],
+                  "properties": {
+                    "schemas": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "totalResults": {
+                      "type": "integer"
+                    },
+                    "itemsPerPage": {
+                      "type": "integer"
+                    },
+                    "startIndex": {
+                      "type": "integer"
+                    },
+                    "Resources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "schemas",
+                          "id",
+                          "displayName",
+                          "members",
+                          "meta"
+                        ],
+                        "properties": {
+                          "schemas": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "members": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "display"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "string"
+                                },
+                                "display": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "properties": {
+                              "resourceType": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "schemas": [
+                    "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+                  ],
+                  "totalResults": 1,
+                  "startIndex": 1,
+                  "itemsPerPage": 1,
+                  "Resources": [
+                    {
+                      "schemas": [
+                        "urn:ietf:params:scim:schemas:core:2.0:Group"
+                      ],
+                      "id": "23232",
+                      "displayName": "test-scimv2",
+                      "members": [],
+                      "meta": {
+                        "resourceType": "Group"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Permission Denied"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team:read"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "SCIM"
+        ],
+        "description": "Create a new team bound to an organization via a SCIM Groups POST Request. Note that teams are always created with an empty member set. The endpoint will also do a normalization of uppercase / spaces to lowercase and dashes.",
+        "operationId": "Provision a New Team",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "description": "The slug of the organization.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "schemas",
+                  "displayName"
+                ],
+                "type": "object",
+                "properties": {
+                  "schemas": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "displayName": {
+                    "type": "string"
+                  },
+                  "members": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "display"
+                      ],
+                      "properties": {
+                        "value": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "schemas": [
+                  "urn:ietf:params:scim:schemas:core:2.0:Group"
+                ],
+                "displayName": "Test SCIMv2",
+                "members": []
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "schemas",
+                    "id",
+                    "displayName",
+                    "members",
+                    "meta"
+                  ],
+                  "properties": {
+                    "schemas": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "display"
+                        ],
+                        "properties": {
+                          "value": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "resourceType": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "schemas": [
+                    "urn:ietf:params:scim:schemas:core:2.0:Group"
+                  ],
+                  "displayName": "Test SCIMv2",
+                  "members": [],
+                  "meta": {
+                    "resourceType": "Group"
+                  },
+                  "id": "123"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad input"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Team slug already exists"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team:write"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/scim/v2/Groups/{team_id}": {
+      "get": {
+        "tags": [
+          "SCIM"
+        ],
+        "description": "Query an individual team with a SCIM Group GET Request.\n- Note that the members field will only contain up to 10000 members.",
+        "operationId": "Query an Individual Team",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "description": "The slug of the organization.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the team you'd like to query.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "schemas",
+                    "id",
+                    "displayName",
+                    "members",
+                    "meta"
+                  ],
+                  "properties": {
+                    "schemas": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "display"
+                        ],
+                        "properties": {
+                          "value": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "resourceType": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "schemas": [
+                    "urn:ietf:params:scim:schemas:core:2.0:Group"
+                  ],
+                  "id": "23232",
+                  "displayName": "test-scimv2",
+                  "members": [],
+                  "meta": {
+                    "resourceType": "Group"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team: read"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "SCIM"
+        ],
+        "description": "Update a team's attributes with a SCIM Group PATCH Request. Valid Operations are:\n* Renaming a team: \n```json\n{\n    \"op\": \"replace\",\n    \"value\": {\n        \"id\": 23,\n        \"displayName\": \"newName\"\n    }\n}\n```\n* Adding a member to a team: \n```json\n{\n    \"op\": \"add\",\n    \"path\": \"members\",\n    \"value\": [\n        {\n            \"value\": 23,\n            \"display\": \"testexample@example.com\"\n        }\n    ]\n}\n```\n* Removing a member from a team: \n```json\n{\n    \"op\": \"remove\",\n    \"path\": \"members[value eq \\\"23\\\"]\"\n}\n``` \n*  Replacing an entire member set of a team: \n```json\n{\n    \"op\": \"replace\",\n    \"path\": \"members\",\n    \"value\": [\n        {\n            \"value\": 23,\n            \"display\": \"testexample2@sentry.io\"\n        },\n        {\n            \"value\": 24,\n            \"display\": \"testexample3@sentry.io\"\n        }\n    ]\n}\n```",
+        "operationId": "Update a Team's Attributes",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "description": "The slug of the organization.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the team you'd like to query.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "schemas",
+                  "Operations"
+                ],
+                "type": "object",
+                "properties": {
+                  "schemas": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "Operations": {
+                    "type": "array"
+                  }
+                }
+              },
+              "example": {
+                "schemas": [
+                  "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+                ],
+                "Operations": [
+                  {
+                    "op": "replace",
+                    "value": {
+                      "active": false
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found."
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team:write"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "SCIM"
+        ],
+        "description": "Delete a team with a SCIM Group DELETE Request.",
+        "operationId": "Delete an Individual Team",
+        "parameters": [
+          {
+            "name": "organization_slug",
+            "description": "The slug of the organization.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the team you'd like to delete.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team: admin"
+            ]
+          }
+        ]
+      }
     }
   },
   "components": {
