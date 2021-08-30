@@ -6,24 +6,8 @@ on:
 
 jobs:
   bump:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: 'getsentry/sentry-docs'
-          token: ${{ secrets.GH_SENTRY_BOT_PAT }}
-          path: sentry-docs
-      
-      - name: Bump latest SHA
-        run: |
-          sed -i -e 's|^const SENTRY_API_SCHEMA_SHA =.*$|const SENTRY_API_SCHEMA_SHA = "'$GITHUB_SHA'"|g' sentry-docs/src/gatsby/utils/resolveOpenAPI.ts
-
-      - name: Git Commit & Push
-        run: |
-          cd sentry-docs
-          git config user.name openapi-getsentry-bot
-          git config user.email bot@getsentry.com
-          git add src/gatsby/utils/resolveOpenAPI.ts
-          git commit -m "upgrade: getsentry/sentry-api-schema to latest"
-          git push
+      - name: Trigger new docs deploy
+        run: curl -X POST "${{ secrets.DOCS_DEPLOY_URL }}"
           
