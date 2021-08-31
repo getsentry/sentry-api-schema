@@ -1,29 +1,14 @@
 name: sentry-docs
 on:
+  workflow_dispatch:
   push:
     branches:
       - "main"
 
 jobs:
-  bump:
-    runs-on: ubuntu-18.04
+  trigger_docs_release:
     steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: 'getsentry/sentry-docs'
-          token: ${{ secrets.GH_SENTRY_BOT_PAT }}
-          path: sentry-docs
-      
-      - name: Bump latest SHA
-        run: |
-          sed -i -e 's|^const SENTRY_API_SCHEMA_SHA =.*$|const SENTRY_API_SCHEMA_SHA = "'$GITHUB_SHA'"|g' sentry-docs/src/gatsby/utils/resolveOpenAPI.ts
-
-      - name: Git Commit & Push
-        run: |
-          cd sentry-docs
-          git config user.name openapi-getsentry-bot
-          git config user.email bot@getsentry.com
-          git add src/gatsby/utils/resolveOpenAPI.ts
-          git commit -m "upgrade: getsentry/sentry-api-schema to latest"
-          git push
-          
+      - name: Trigger new docs release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_RELEASE_PAT }}
+        run: gh -R getsentry/sentry-docs run workflow release
