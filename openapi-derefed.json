@@ -20725,17 +20725,36 @@
   },
   "components": {
     "schemas": {
-      "SCIMMember": {
+      "OrganizationMemberSCIM": {
         "type": "object",
+        "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
         "properties": {
           "schemas": {
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "id": {
             "type": "string"
           },
           "userName": {
             "type": "string"
+          },
+          "name": {
+            "type": "object",
+            "properties": {
+              "givenName": {
+                "type": "string"
+              },
+              "familyName": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "familyName",
+              "givenName"
+            ]
           },
           "emails": {
             "type": "array",
@@ -20758,32 +20777,29 @@
                 "value"
               ]
             }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "resourceType": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "resourceType"
+            ]
+          },
+          "active": {
+            "type": "boolean"
           }
         },
         "required": [
           "emails",
           "id",
+          "meta",
+          "name",
           "schemas",
           "userName"
-        ]
-      },
-      "SCIMMemberEmails": {
-        "type": "object",
-        "properties": {
-          "primary": {
-            "type": "boolean"
-          },
-          "value": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "primary",
-          "type",
-          "value"
         ]
       }
     },
