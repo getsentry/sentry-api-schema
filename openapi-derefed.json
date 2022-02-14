@@ -20801,6 +20801,62 @@
           "schemas",
           "userName"
         ]
+      },
+      "SCIMPatchOperation": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "enum": [
+              "replace"
+            ],
+            "type": "string"
+          },
+          "value": {},
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "op",
+          "value"
+        ]
+      },
+      "SCIMPatchRequest": {
+        "type": "object",
+        "properties": {
+          "schemas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Operations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "enum": [
+                    "replace"
+                  ],
+                  "type": "string"
+                },
+                "value": {},
+                "path": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "op",
+                "value"
+              ]
+            },
+            "maxItems": 100
+          }
+        },
+        "required": [
+          "Operations"
+        ]
       }
     },
     "securitySchemes": {
