@@ -21058,6 +21058,81 @@
         "required": [
           "Operations"
         ]
+      },
+      "SCIMTeamRequestBody": {
+        "type": "object",
+        "properties": {
+          "schemas": {
+            "type": "array",
+            "items": {},
+            "readOnly": true
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {},
+            "readOnly": true
+          }
+        },
+        "required": [
+          "displayName",
+          "members",
+          "schemas"
+        ]
+      },
+      "TeamSCIM": {
+        "type": "object",
+        "properties": {
+          "schemas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "resourceType": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "resourceType"
+            ]
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string"
+                },
+                "display": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "display",
+                "value"
+              ]
+            }
+          }
+        },
+        "required": [
+          "displayName",
+          "id",
+          "meta",
+          "schemas"
+        ]
       }
     },
     "securitySchemes": {
