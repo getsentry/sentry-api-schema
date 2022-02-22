@@ -349,13 +349,13 @@
         ]
       }
     },
-    "/api/0/organizations/{organization_slug}/scim/v2/Users": {
+    "/api/0/organizations/{organization_slug}/scim/v2/Groups/{team_id}": {
       "get": {
         "tags": [
           "SCIM"
         ],
-        "description": "Returns a paginated list of members bound to a organization with a SCIM Users GET Request.",
-        "operationId": "List an Organization's Members",
+        "description": "Query an individual team with a SCIM Group GET Request.\n- Note that the members field will only contain up to 10000 members.",
+        "operationId": "Query an Individual Team",
         "parameters": [
           {
             "name": "organization_slug",
@@ -367,28 +367,10 @@
             }
           },
           {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "description": "SCIM 1-offset based index for pagination.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "filter",
-            "in": "query",
-            "required": false,
-            "description": "A SCIM filter expression. The only operator currently supported is `eq`.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "description": "The maximum number of results the query should return, maximum of 100.",
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the team you'd like to query.",
             "schema": {
               "type": "integer"
             }
@@ -402,283 +384,40 @@
                 "schema": {
                   "type": "object",
                   "required": [
-                    "totalResults",
-                    "itemsPerPage",
-                    "startIndex",
-                    "Resources"
+                    "schemas",
+                    "id",
+                    "displayName",
+                    "members",
+                    "meta"
                   ],
                   "properties": {
-                    "totalResults": {
-                      "type": "integer"
-                    },
-                    "itemsPerPage": {
-                      "type": "integer"
-                    },
-                    "startIndex": {
-                      "type": "integer"
-                    },
                     "schemas": {
                       "type": "array",
                       "items": {
                         "type": "string"
                       }
                     },
-                    "Resources": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    },
+                    "members": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "required": [
-                          "schemas",
-                          "id",
-                          "active",
-                          "userName",
-                          "name",
-                          "meta",
-                          "emails"
+                          "value",
+                          "display"
                         ],
                         "properties": {
-                          "schemas": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "id": {
+                          "value": {
                             "type": "string"
                           },
-                          "active": {
-                            "type": "boolean"
-                          },
-                          "userName": {
+                          "display": {
                             "type": "string"
-                          },
-                          "name": {
-                            "type": "object",
-                            "properties": {
-                              "givenName": {
-                                "type": "string"
-                              },
-                              "familyName": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "meta": {
-                            "type": "object",
-                            "properties": {
-                              "resourceType": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "emails": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "string"
-                                },
-                                "value": {
-                                  "type": "string"
-                                },
-                                "primary": {
-                                  "type": "boolean"
-                                }
-                              }
-                            }
                           }
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "schemas": [
-                    "urn:ietf:params:scim:api:messages:2.0:ListResponse"
-                  ],
-                  "totalResults": 1,
-                  "startIndex": 1,
-                  "itemsPerPage": 1,
-                  "Resources": [
-                    {
-                      "schemas": [
-                        "urn:ietf:params:scim:schemas:core:2.0:User"
-                      ],
-                      "id": "102",
-                      "userName": "test.user@okta.local",
-                      "emails": [
-                        {
-                          "primary": true,
-                          "value": "test.user@okta.local",
-                          "type": "work"
-                        }
-                      ],
-                      "name": {
-                        "familyName": "N/A",
-                        "givenName": "N/A"
-                      },
-                      "active": true,
-                      "meta": {
-                        "resourceType": "User"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Permission Denied"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "member:read"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "SCIM"
-        ],
-        "description": "Create a new Organization Member via a SCIM Users POST Request. `userName` should be set to the SAML field used for email, and active should be set to `true`. Sentry's SCIM API doesn't currently support setting users to inactive and the member will be deleted if inactive is set to `false`. The API also does not support setting secondary emails.",
-        "operationId": "Provision a New Organization Member",
-        "parameters": [
-          {
-            "name": "organization_slug",
-            "description": "The slug of the organization.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "required": [
-                  "schemas",
-                  "userName",
-                  "active"
-                ],
-                "type": "object",
-                "properties": {
-                  "schemas": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "userName": {
-                    "type": "string"
-                  },
-                  "active": {
-                    "type": "boolean"
-                  },
-                  "emails": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string"
-                        },
-                        "value": {
-                          "type": "string"
-                        },
-                        "primary": {
-                          "type": "boolean"
-                        }
-                      }
-                    }
-                  },
-                  "displayName": {
-                    "type": "string"
-                  },
-                  "locale": {
-                    "type": "string"
-                  },
-                  "externalId": {
-                    "type": "string"
-                  },
-                  "groups": {
-                    "type": "array"
-                  }
-                }
-              },
-              "example": {
-                "schemas": [
-                  "urn:ietf:params:scim:schemas:core:2.0:User"
-                ],
-                "userName": "test.user@okta.local",
-                "emails": [
-                  {
-                    "primary": true,
-                    "value": "test.user@okta.local",
-                    "type": "work"
-                  }
-                ],
-                "displayName": "Test User",
-                "locale": "en-US",
-                "externalId": "00ujl29u0le5T6Aj10h7",
-                "groups": [],
-                "active": true
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "schemas",
-                    "id",
-                    "active",
-                    "userName",
-                    "name",
-                    "meta",
-                    "emails"
-                  ],
-                  "properties": {
-                    "schemas": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "active": {
-                      "type": "boolean"
-                    },
-                    "userName": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "object",
-                      "properties": {
-                        "givenName": {
-                          "type": "string"
-                        },
-                        "familyName": {
-                          "type": "string"
                         }
                       }
                     },
@@ -689,187 +428,18 @@
                           "type": "string"
                         }
                       }
-                    },
-                    "emails": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string"
-                          },
-                          "value": {
-                            "type": "string"
-                          },
-                          "primary": {
-                            "type": "boolean"
-                          }
-                        }
-                      }
                     }
                   }
                 },
                 "example": {
                   "schemas": [
-                    "urn:ietf:params:scim:schemas:core:2.0:User"
+                    "urn:ietf:params:scim:schemas:core:2.0:Group"
                   ],
-                  "id": "242",
-                  "userName": "test.user@okta.local",
-                  "emails": [
-                    {
-                      "primary": true,
-                      "value": "test.user@okta.local",
-                      "type": "work"
-                    }
-                  ],
-                  "active": true,
-                  "name": {
-                    "familyName": "N/A",
-                    "givenName": "N/A"
-                  },
+                  "id": "23232",
+                  "displayName": "test-scimv2",
+                  "members": [],
                   "meta": {
-                    "resourceType": "User"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad input"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "409": {
-            "description": "User already exists in the database."
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "member:write"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/0/organizations/{organization_slug}/scim/v2/Users/{member_id}": {
-      "get": {
-        "tags": [
-          "SCIM"
-        ],
-        "description": "Query an individual organization member with a SCIM User GET Request.\n- The `name` object will contain fields `firstName` and `lastName` with the values of `N/A`. Sentry's SCIM API does not currently support these fields but returns them for compatibility purposes.",
-        "operationId": "Query an Individual Organization Member",
-        "parameters": [
-          {
-            "name": "organization_slug",
-            "description": "The slug of the organization.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "member_id",
-            "in": "path",
-            "required": true,
-            "description": "The id of the member you'd like to query.",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "schemas",
-                    "id",
-                    "active",
-                    "userName",
-                    "name",
-                    "meta",
-                    "emails"
-                  ],
-                  "properties": {
-                    "schemas": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "active": {
-                      "type": "boolean"
-                    },
-                    "userName": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "object",
-                      "properties": {
-                        "givenName": {
-                          "type": "string"
-                        },
-                        "familyName": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "resourceType": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "emails": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string"
-                          },
-                          "value": {
-                            "type": "string"
-                          },
-                          "primary": {
-                            "type": "boolean"
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "schemas": [
-                    "urn:ietf:params:scim:schemas:core:2.0:User"
-                  ],
-                  "id": "102",
-                  "userName": "test.user@okta.local",
-                  "emails": [
-                    {
-                      "primary": true,
-                      "value": "test.user@okta.local",
-                      "type": "work"
-                    }
-                  ],
-                  "name": {
-                    "familyName": "N/A",
-                    "givenName": "N/A"
-                  },
-                  "active": true,
-                  "meta": {
-                    "resourceType": "User"
+                    "resourceType": "Group"
                   }
                 }
               }
@@ -885,7 +455,7 @@
         "security": [
           {
             "auth_token": [
-              "member:read"
+              "team: read"
             ]
           }
         ]
@@ -894,8 +464,8 @@
         "tags": [
           "SCIM"
         ],
-        "description": "Update an organization member's attributes with a SCIM PATCH Request. The only supported attribute is `active`. After setting `active` to false Sentry will permanently delete the Organization Member.",
-        "operationId": "Update an Organization Member's Attributes",
+        "description": "Update a team's attributes with a SCIM Group PATCH Request. Valid Operations are:\n* Renaming a team: \n```json\n{\n    \"op\": \"replace\",\n    \"value\": {\n        \"id\": 23,\n        \"displayName\": \"newName\"\n    }\n}\n```\n* Adding a member to a team: \n```json\n{\n    \"op\": \"add\",\n    \"path\": \"members\",\n    \"value\": [\n        {\n            \"value\": 23,\n            \"display\": \"testexample@example.com\"\n        }\n    ]\n}\n```\n* Removing a member from a team: \n```json\n{\n    \"op\": \"remove\",\n    \"path\": \"members[value eq \\\"23\\\"]\"\n}\n``` \n*  Replacing an entire member set of a team: \n```json\n{\n    \"op\": \"replace\",\n    \"path\": \"members\",\n    \"value\": [\n        {\n            \"value\": 23,\n            \"display\": \"testexample2@sentry.io\"\n        },\n        {\n            \"value\": 24,\n            \"display\": \"testexample3@sentry.io\"\n        }\n    ]\n}\n```",
+        "operationId": "Update a Team's Attributes",
         "parameters": [
           {
             "name": "organization_slug",
@@ -907,10 +477,10 @@
             }
           },
           {
-            "name": "member_id",
+            "name": "team_id",
             "in": "path",
             "required": true,
-            "description": "The id of the member you'd like to update.",
+            "description": "The id of the team you'd like to query.",
             "schema": {
               "type": "integer"
             }
@@ -933,10 +503,7 @@
                     }
                   },
                   "Operations": {
-                    "type": "array",
-                    "items": {
-                      "type": "object"
-                    }
+                    "type": "array"
                   }
                 }
               },
@@ -974,7 +541,7 @@
         "security": [
           {
             "auth_token": [
-              "member:write"
+              "team:write"
             ]
           }
         ]
@@ -983,8 +550,8 @@
         "tags": [
           "SCIM"
         ],
-        "description": "Delete an organization member with a SCIM User DELETE Request.",
-        "operationId": "Delete an Organization Member",
+        "description": "Delete a team with a SCIM Group DELETE Request.",
+        "operationId": "Delete an Individual Team",
         "parameters": [
           {
             "name": "organization_slug",
@@ -996,13 +563,683 @@
             }
           },
           {
-            "name": "member_id",
+            "name": "team_id",
             "in": "path",
             "required": true,
-            "description": "The id of the member you'd like to delete.",
+            "description": "The id of the team you'd like to delete.",
             "schema": {
               "type": "integer"
             }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team: admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_slug}/scim/v2/Users": {
+      "get": {
+        "operationId": "List an Organization's Members",
+        "description": "Returns a paginated list of members bound to a organization with a SCIM Users GET Request.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "count",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 100
+            },
+            "description": "The maximum number of results the query should return, maximum of 100."
+          },
+          {
+            "in": "query",
+            "name": "excludedAttributes",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "description": "Fields that should be left off of return values. Right now the only supported field for this query is members."
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A SCIM filter expression. The only operator currently supported is `eq`."
+          },
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "startIndex",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "description": "SCIM 1-offset based index for pagination."
+          }
+        ],
+        "tags": [
+          "SCIM"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:write",
+              "member:read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "schemas": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "totalResults": {
+                      "type": "integer"
+                    },
+                    "startIndex": {
+                      "type": "integer"
+                    },
+                    "itemsPerPage": {
+                      "type": "integer"
+                    },
+                    "Resources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
+                        "properties": {
+                          "active": {
+                            "type": "boolean"
+                          },
+                          "schemas": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "userName": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "object",
+                            "properties": {
+                              "givenName": {
+                                "type": "string"
+                              },
+                              "familyName": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "familyName",
+                              "givenName"
+                            ]
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "primary": {
+                                  "type": "boolean"
+                                },
+                                "value": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "primary",
+                                "type",
+                                "value"
+                              ]
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "properties": {
+                              "resourceType": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "resourceType"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "emails",
+                          "id",
+                          "meta",
+                          "name",
+                          "schemas",
+                          "userName"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "Resources",
+                    "itemsPerPage",
+                    "schemas",
+                    "startIndex",
+                    "totalResults"
+                  ]
+                },
+                "examples": {
+                  "ListAnOrganization'sMembers": {
+                    "value": {
+                      "schemas": [
+                        "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+                      ],
+                      "totalResults": 1,
+                      "startIndex": 1,
+                      "itemsPerPage": 1,
+                      "Resources": [
+                        {
+                          "schemas": [
+                            "urn:ietf:params:scim:schemas:core:2.0:User"
+                          ],
+                          "id": "102",
+                          "userName": "test.user@okta.local",
+                          "emails": [
+                            {
+                              "primary": true,
+                              "value": "test.user@okta.local",
+                              "type": "work"
+                            }
+                          ],
+                          "name": {
+                            "familyName": "N/A",
+                            "givenName": "N/A"
+                          },
+                          "active": true,
+                          "meta": {
+                            "resourceType": "User"
+                          }
+                        }
+                      ]
+                    },
+                    "summary": "List an Organization's Members"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Provision a New Organization Member",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "SCIM"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                },
+                "required": [
+                  "userName"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    },
+                    "schemas": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "userName": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "object",
+                      "properties": {
+                        "givenName": {
+                          "type": "string"
+                        },
+                        "familyName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "familyName",
+                        "givenName"
+                      ]
+                    },
+                    "emails": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "primary": {
+                            "type": "boolean"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "primary",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "resourceType": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "resourceType"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "emails",
+                    "id",
+                    "meta",
+                    "name",
+                    "schemas",
+                    "userName"
+                  ]
+                },
+                "examples": {
+                  "ProvisionNewMember": {
+                    "value": {
+                      "schemas": [
+                        "urn:ietf:params:scim:schemas:core:2.0:User"
+                      ],
+                      "id": "242",
+                      "userName": "test.user@okta.local",
+                      "emails": [
+                        {
+                          "primary": true,
+                          "value": "test.user@okta.local",
+                          "type": "work"
+                        }
+                      ],
+                      "active": true,
+                      "name": {
+                        "familyName": "N/A",
+                        "givenName": "N/A"
+                      },
+                      "meta": {
+                        "resourceType": "User"
+                      }
+                    },
+                    "summary": "Provision new member"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_slug}/scim/v2/Users/{member_id}": {
+      "get": {
+        "operationId": "Query an Individual Organization Member",
+        "description": "Query an individual organization member with a SCIM User GET Request.\n- The `name` object will contain fields `firstName` and `lastName` with the values of `N/A`.\nSentry's SCIM API does not currently support these fields but returns them for compatibility purposes.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The id of the member you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "SCIM"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:write",
+              "member:read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    },
+                    "schemas": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "userName": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "object",
+                      "properties": {
+                        "givenName": {
+                          "type": "string"
+                        },
+                        "familyName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "familyName",
+                        "givenName"
+                      ]
+                    },
+                    "emails": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "primary": {
+                            "type": "boolean"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "primary",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "resourceType": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "resourceType"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "emails",
+                    "id",
+                    "meta",
+                    "name",
+                    "schemas",
+                    "userName"
+                  ]
+                },
+                "examples": {
+                  "SuccessfulResponse": {
+                    "value": {
+                      "schemas": [
+                        "urn:ietf:params:scim:schemas:core:2.0:User"
+                      ],
+                      "id": "102",
+                      "userName": "test.user@okta.local",
+                      "emails": [
+                        {
+                          "primary": true,
+                          "value": "test.user@okta.local",
+                          "type": "work"
+                        }
+                      ],
+                      "name": {
+                        "familyName": "N/A",
+                        "givenName": "N/A"
+                      },
+                      "active": true,
+                      "meta": {
+                        "resourceType": "User"
+                      }
+                    },
+                    "summary": "Successful response"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "Update an Organization Member's Attributes",
+        "description": "Update an organization member's attributes with a SCIM PATCH Request.\nThe only supported attribute is `active`. After setting `active` to false\nSentry will permanently delete the Organization Member.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The id of the member you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "SCIM"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "schemas": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "Operations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "op": {
+                          "enum": [
+                            "replace"
+                          ],
+                          "type": "string"
+                        },
+                        "value": {},
+                        "path": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "op",
+                        "value"
+                      ]
+                    },
+                    "maxItems": 100
+                  }
+                },
+                "required": [
+                  "Operations"
+                ]
+              },
+              "examples": {
+                "SetMemberInactive": {
+                  "value": {
+                    "schemas": [
+                      "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+                    ],
+                    "Operations": [
+                      {
+                        "op": "replace",
+                        "value": {
+                          "active": false
+                        }
+                      }
+                    ]
+                  },
+                  "summary": "Set member inactive"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:write"
+            ]
           }
         ],
         "responses": {
@@ -1016,16 +1253,57 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "Not Found."
+            "description": "Not Found"
           }
-        },
+        }
+      },
+      "delete": {
+        "operationId": "Delete an Organization Member",
+        "description": "Delete an organization member with a SCIM User DELETE Request.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The id of the member you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "SCIM"
+        ],
         "security": [
           {
             "auth_token": [
               "member:admin"
             ]
           }
-        ]
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/api/0/organizations/{organization_slug}/teams/": {
@@ -20477,246 +20755,6 @@
           {
             "auth_token": [
               "event:admin"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/0/organizations/{organization_slug}/scim/v2/Groups/{team_id}": {
-      "get": {
-        "tags": [
-          "SCIM"
-        ],
-        "description": "Query an individual team with a SCIM Group GET Request.\n- Note that the members field will only contain up to 10000 members.",
-        "operationId": "Query an Individual Team",
-        "parameters": [
-          {
-            "name": "organization_slug",
-            "description": "The slug of the organization.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "team_id",
-            "in": "path",
-            "required": true,
-            "description": "The id of the team you'd like to query.",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "schemas",
-                    "id",
-                    "displayName",
-                    "members",
-                    "meta"
-                  ],
-                  "properties": {
-                    "schemas": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "displayName": {
-                      "type": "string"
-                    },
-                    "members": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "value",
-                          "display"
-                        ],
-                        "properties": {
-                          "value": {
-                            "type": "string"
-                          },
-                          "display": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "resourceType": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "schemas": [
-                    "urn:ietf:params:scim:schemas:core:2.0:Group"
-                  ],
-                  "id": "23232",
-                  "displayName": "test-scimv2",
-                  "members": [],
-                  "meta": {
-                    "resourceType": "Group"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "team: read"
-            ]
-          }
-        ]
-      },
-      "patch": {
-        "tags": [
-          "SCIM"
-        ],
-        "description": "Update a team's attributes with a SCIM Group PATCH Request. Valid Operations are:\n* Renaming a team: \n```json\n{\n    \"op\": \"replace\",\n    \"value\": {\n        \"id\": 23,\n        \"displayName\": \"newName\"\n    }\n}\n```\n* Adding a member to a team: \n```json\n{\n    \"op\": \"add\",\n    \"path\": \"members\",\n    \"value\": [\n        {\n            \"value\": 23,\n            \"display\": \"testexample@example.com\"\n        }\n    ]\n}\n```\n* Removing a member from a team: \n```json\n{\n    \"op\": \"remove\",\n    \"path\": \"members[value eq \\\"23\\\"]\"\n}\n``` \n*  Replacing an entire member set of a team: \n```json\n{\n    \"op\": \"replace\",\n    \"path\": \"members\",\n    \"value\": [\n        {\n            \"value\": 23,\n            \"display\": \"testexample2@sentry.io\"\n        },\n        {\n            \"value\": 24,\n            \"display\": \"testexample3@sentry.io\"\n        }\n    ]\n}\n```",
-        "operationId": "Update a Team's Attributes",
-        "parameters": [
-          {
-            "name": "organization_slug",
-            "description": "The slug of the organization.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "team_id",
-            "in": "path",
-            "required": true,
-            "description": "The id of the team you'd like to query.",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "required": [
-                  "schemas",
-                  "Operations"
-                ],
-                "type": "object",
-                "properties": {
-                  "schemas": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "Operations": {
-                    "type": "array"
-                  }
-                }
-              },
-              "example": {
-                "schemas": [
-                  "urn:ietf:params:scim:api:messages:2.0:PatchOp"
-                ],
-                "Operations": [
-                  {
-                    "op": "replace",
-                    "value": {
-                      "active": false
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found."
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "team:write"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "SCIM"
-        ],
-        "description": "Delete a team with a SCIM Group DELETE Request.",
-        "operationId": "Delete an Individual Team",
-        "parameters": [
-          {
-            "name": "organization_slug",
-            "description": "The slug of the organization.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "team_id",
-            "in": "path",
-            "required": true,
-            "description": "The id of the team you'd like to delete.",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "team: admin"
             ]
           }
         ]
