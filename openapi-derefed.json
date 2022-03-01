@@ -595,37 +595,6 @@
         "description": "Returns a paginated list of members bound to a organization with a SCIM Users GET Request.",
         "parameters": [
           {
-            "in": "query",
-            "name": "count",
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 100
-            },
-            "description": "The maximum number of results the query should return, maximum of 100."
-          },
-          {
-            "in": "query",
-            "name": "excludedAttributes",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "default": []
-            },
-            "description": "Fields that should be left off of return values. Right now the only supported field for this query is members."
-          },
-          {
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "A SCIM filter expression. The only operator currently supported is `eq`."
-          },
-          {
             "in": "path",
             "name": "organization_slug",
             "schema": {
@@ -643,6 +612,37 @@
               "default": 1
             },
             "description": "SCIM 1-offset based index for pagination."
+          },
+          {
+            "in": "query",
+            "name": "count",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 100
+            },
+            "description": "The maximum number of results the query should return, maximum of 100."
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A SCIM filter expression. The only operator currently supported is `eq`."
+          },
+          {
+            "in": "query",
+            "name": "excludedAttributes",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "description": "Fields that should be left off of return values. Right now the only supported field for this query is members."
           }
         ],
         "tags": [
@@ -995,20 +995,20 @@
         "parameters": [
           {
             "in": "path",
-            "name": "member_id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The id of the member you'd like to query.",
-            "required": true
-          },
-          {
-            "in": "path",
             "name": "organization_slug",
             "schema": {
               "type": "string"
             },
             "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The id of the member you'd like to query.",
             "required": true
           }
         ],
@@ -1153,20 +1153,20 @@
         "parameters": [
           {
             "in": "path",
-            "name": "member_id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The id of the member you'd like to query.",
-            "required": true
-          },
-          {
-            "in": "path",
             "name": "organization_slug",
             "schema": {
               "type": "string"
             },
             "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The id of the member you'd like to query.",
             "required": true
           }
         ],
@@ -1264,20 +1264,20 @@
         "parameters": [
           {
             "in": "path",
-            "name": "member_id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The id of the member you'd like to query.",
-            "required": true
-          },
-          {
-            "in": "path",
             "name": "organization_slug",
             "schema": {
               "type": "string"
             },
             "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The id of the member you'd like to query.",
             "required": true
           }
         ],
@@ -1300,6 +1300,242 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_slug}/stats_v2/": {
+      "get": {
+        "operationId": "Retrieve Event Counts for an Organization (v2)",
+        "description": "Query event counts for your Organization.\nSelect a field, define a date range, and group or filter by columns.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "This defines the range of the time series, relative to now. The range is given in a `<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for minutes, `h` for hours, `d` for days and `w` for weeks."
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "This is the resolution of the time series, given in the same format as `statsPeriod`. The default resolution is `1h` and the minimum resolution is currently restricted to `1h` as well. Intervals larger than `1d` are not supported, and the interval has to cleanly divide one day."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the start of the time series range as an explicit datetime."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the end of the time series range as an explicit datetime."
+          },
+          {
+            "in": "query",
+            "name": "groupBy",
+            "schema": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "outcome",
+                  "category",
+                  "reason",
+                  "project"
+                ],
+                "type": "string"
+              }
+            },
+            "description": "can pass multiple groupBy parameters to group by multiple, e.g. `groupBy=project&groupBy=outcome` to group by multiple dimensions. Note that grouping by project can cause missing rows if the number of projects / interval is large. If you have a large number of projects, we recommend filtering and querying by them individually.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "enum": [
+                "sum(quantity)",
+                "sum(times_seen)"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "the `sum(quantity)` field is bytes for attachments, and all others the 'event' count for those types of events.\n\n`sum(times_seen)` sums the number of times an event has been seen. For 'normal' event types, this will be equal to `sum(quantity)` for now. For sessions, quantity will sum the total number of events seen in a session, while `times_seen` will be the unique number of sessions. and for attachments, `times_seen` will be the total number of attachments, while quantity will be the total sum of attachment bytes.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {}
+            },
+            "description": "The ID of the projects to filter by.\n\nUse `-1` to include all accessible projects."
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "enum": [
+                "error",
+                "transaction",
+                "attachment"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "If filtering by attachments, you cannot filter by any other category due to quantity values becoming non-sensical (combining bytes and event counts).\n\nIf filtering by `error`, it will automatically add `default` and `security` as we currently roll those two categories into `error` for displaying."
+          },
+          {
+            "in": "query",
+            "name": "outcome",
+            "schema": {
+              "enum": [
+                "accepted",
+                "filtered",
+                "rate_limited",
+                "invalid",
+                "abuse",
+                "client_discard"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "See https://docs.sentry.io/product/stats/ for more information on outcome statuses."
+          },
+          {
+            "in": "query",
+            "name": "reason",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The reason field will contain why an event was filtered/dropped."
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "type": "string"
+                    },
+                    "end": {
+                      "type": "string"
+                    },
+                    "intervals": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "groups": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "by": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "totals": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "series": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "required": [
+                          "by",
+                          "series",
+                          "totals"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "end",
+                    "groups",
+                    "intervals",
+                    "start"
+                  ]
+                },
+                "examples": {
+                  "SuccessfulResponse": {
+                    "value": {
+                      "start": "2022-02-14T19:00:00Z",
+                      "end": "2022-02-28T18:03:00Z",
+                      "intervals": [
+                        "2022-02-28T00:00:00Z"
+                      ],
+                      "groups": [
+                        {
+                          "by": {
+                            "outcome": "invalid"
+                          },
+                          "totals": {
+                            "sum(quantity)": 165665
+                          },
+                          "series": {
+                            "sum(quantity)": [
+                              165665
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "summary": "Successful response"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Not Found"
@@ -5167,8 +5403,8 @@
         "tags": [
           "Organizations"
         ],
-        "summary": "Caution\nThis endpoint may change in the future without  notice.",
-        "description": "Return a set of points representing a normalized timestamp and the number of events seen in the period.",
+        "deprecated": true,
+        "description": "This endpoint is deprecated in favor of [Organization Stats V2](/api/organizations/retrieve-event-counts-for-an-organization-v2/).",
         "operationId": "Retrieve Event Counts for an Organization",
         "parameters": [
           {
@@ -20839,6 +21075,54 @@
           "name",
           "schemas",
           "userName"
+        ]
+      },
+      "Outcomes Response": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "intervals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "by": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "totals": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "series": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "by",
+                "series",
+                "totals"
+              ]
+            }
+          }
+        },
+        "required": [
+          "end",
+          "groups",
+          "intervals",
+          "start"
         ]
       },
       "SCIMListResponseEnvelopeSCIMMemberIndexResponse": {
