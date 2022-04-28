@@ -402,6 +402,268 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/projects/": {
+      "get": {
+        "operationId": "List an Organization's Projects",
+        "description": "Return a list of projects bound to a organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its' sort order; used to retrieve the next or previous results."
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "latestDeploys": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "nullable": true
+                      },
+                      "stats": {},
+                      "transactionStats": {},
+                      "sessionStats": {},
+                      "team": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ],
+                        "nullable": true
+                      },
+                      "teams": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "slug": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "slug"
+                          ]
+                        }
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "isBookmarked": {
+                        "type": "boolean"
+                      },
+                      "isMember": {
+                        "type": "boolean"
+                      },
+                      "hasAccess": {
+                        "type": "boolean"
+                      },
+                      "dateCreated": {
+                        "type": "string"
+                      },
+                      "eventProcessing": {
+                        "type": "object",
+                        "properties": {
+                          "symbolicationDegraded": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "symbolicationDegraded"
+                        ]
+                      },
+                      "features": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "firstTransactionEvent": {
+                        "type": "boolean"
+                      },
+                      "hasSessions": {
+                        "type": "boolean"
+                      },
+                      "platform": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "platforms": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "hasUserReports": {
+                        "type": "boolean"
+                      },
+                      "firstEvent": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "environments": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "latestRelease": {
+                        "type": "object",
+                        "properties": {
+                          "version": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "version"
+                        ],
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "dateCreated",
+                      "environments",
+                      "eventProcessing",
+                      "features",
+                      "firstEvent",
+                      "firstTransactionEvent",
+                      "hasAccess",
+                      "hasSessions",
+                      "hasUserReports",
+                      "id",
+                      "isBookmarked",
+                      "isMember",
+                      "latestRelease",
+                      "name",
+                      "platform",
+                      "platforms",
+                      "slug",
+                      "team",
+                      "teams"
+                    ]
+                  }
+                },
+                "examples": {
+                  "Success": {
+                    "value": [
+                      {
+                        "dateCreated": "2018-11-06T21:19:58.536Z",
+                        "firstEvent": null,
+                        "hasAccess": true,
+                        "id": "3",
+                        "isBookmarked": false,
+                        "isMember": true,
+                        "name": "Prime Mover",
+                        "platform": "",
+                        "platforms": [],
+                        "slug": "prime-mover",
+                        "team": {
+                          "id": "2",
+                          "name": "Powerful Abolitionist",
+                          "slug": "powerful-abolitionist"
+                        },
+                        "teams": [
+                          {
+                            "id": "2",
+                            "name": "Powerful Abolitionist",
+                            "slug": "powerful-abolitionist"
+                          }
+                        ],
+                        "environments": [
+                          "local"
+                        ],
+                        "eventProcessing": {
+                          "symbolicationDegraded": false
+                        },
+                        "features": [
+                          "releases"
+                        ],
+                        "firstTransactionEvent": true,
+                        "hasSessions": true,
+                        "latestRelease": null,
+                        "hasUserReports": false
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/scim/v2/Groups": {
       "get": {
         "tags": [
@@ -5405,220 +5667,6 @@
           {
             "auth_token": [
               "org:write"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/0/organizations/{organization_slug}/projects/": {
-      "get": {
-        "tags": [
-          "Organizations"
-        ],
-        "description": "Return a list of projects bound to a organization.",
-        "operationId": "List an Organization's Projects",
-        "parameters": [
-          {
-            "name": "organization_slug",
-            "in": "path",
-            "description": "The slug of the organization for which the projects should be listed.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "description": "A pointer to the last object fetched and its' sort order; used to retrieve the next or previous results.",
-            "x-learn-more": "https://docs.sentry.io/api/pagination/",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "dateCreated",
-                      "firstEvent",
-                      "hasAccess",
-                      "id",
-                      "isBookmarked",
-                      "isMember",
-                      "latestDeploys",
-                      "name",
-                      "platform",
-                      "platforms",
-                      "slug",
-                      "team",
-                      "teams"
-                    ],
-                    "properties": {
-                      "dateCreated": {
-                        "type": "string"
-                      },
-                      "firstEvent": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "hasAccess": {
-                        "type": "boolean"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "isBookmarked": {
-                        "type": "boolean"
-                      },
-                      "isMember": {
-                        "type": "boolean"
-                      },
-                      "latestDeploys": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "platform": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "platforms": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "slug": {
-                        "type": "string"
-                      },
-                      "team": {
-                        "type": "object",
-                        "nullable": true,
-                        "oneOf": [
-                          {
-                            "type": "object",
-                            "required": [
-                              "id",
-                              "name",
-                              "slug"
-                            ],
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "slug": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          {
-                            "nullable": true,
-                            "not": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "number"
-                                },
-                                {
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "object"
-                                },
-                                {
-                                  "type": "array",
-                                  "items": {}
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      },
-                      "teams": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "required": [
-                            "id",
-                            "name",
-                            "slug"
-                          ],
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "slug": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "dateCreated": "2018-11-06T21:19:58.536Z",
-                    "firstEvent": null,
-                    "hasAccess": true,
-                    "id": "3",
-                    "isBookmarked": false,
-                    "isMember": true,
-                    "latestDeploys": null,
-                    "name": "Prime Mover",
-                    "platform": null,
-                    "platforms": [],
-                    "slug": "prime-mover",
-                    "team": {
-                      "id": "2",
-                      "name": "Powerful Abolitionist",
-                      "slug": "powerful-abolitionist"
-                    },
-                    "teams": [
-                      {
-                        "id": "2",
-                        "name": "Powerful Abolitionist",
-                        "slug": "powerful-abolitionist"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "org: read"
             ]
           }
         ]
@@ -21738,6 +21786,169 @@
           "teams",
           "user"
         ]
+      },
+      "OrganizationProjectResponseDict": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "latestDeploys": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "nullable": true
+            },
+            "stats": {},
+            "transactionStats": {},
+            "sessionStats": {},
+            "team": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "slug"
+              ],
+              "nullable": true
+            },
+            "teams": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "slug"
+                ]
+              }
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "slug": {
+              "type": "string"
+            },
+            "isBookmarked": {
+              "type": "boolean"
+            },
+            "isMember": {
+              "type": "boolean"
+            },
+            "hasAccess": {
+              "type": "boolean"
+            },
+            "dateCreated": {
+              "type": "string"
+            },
+            "eventProcessing": {
+              "type": "object",
+              "properties": {
+                "symbolicationDegraded": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "symbolicationDegraded"
+              ]
+            },
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "firstTransactionEvent": {
+              "type": "boolean"
+            },
+            "hasSessions": {
+              "type": "boolean"
+            },
+            "platform": {
+              "type": "string",
+              "nullable": true
+            },
+            "platforms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "hasUserReports": {
+              "type": "boolean"
+            },
+            "firstEvent": {
+              "type": "string",
+              "nullable": true
+            },
+            "environments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "latestRelease": {
+              "type": "object",
+              "properties": {
+                "version": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "version"
+              ],
+              "nullable": true
+            }
+          },
+          "required": [
+            "dateCreated",
+            "environments",
+            "eventProcessing",
+            "features",
+            "firstEvent",
+            "firstTransactionEvent",
+            "hasAccess",
+            "hasSessions",
+            "hasUserReports",
+            "id",
+            "isBookmarked",
+            "isMember",
+            "latestRelease",
+            "name",
+            "platform",
+            "platforms",
+            "slug",
+            "team",
+            "teams"
+          ]
+        }
       },
       "Outcomes Response": {
         "type": "object",
