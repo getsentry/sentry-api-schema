@@ -318,6 +318,87 @@
                       "items": {
                         "type": "string"
                       }
+                    },
+                    "invite_link": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "isOnlyOwner": {
+                      "type": "boolean"
+                    },
+                    "roles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "is_global": {
+                            "type": "boolean"
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "is_global",
+                          "name",
+                          "scopes"
+                        ]
+                      }
+                    },
+                    "teamRoles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "is_global": {
+                            "type": "boolean"
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "is_global",
+                          "name",
+                          "scopes"
+                        ]
+                      }
                     }
                   },
                   "required": [
@@ -327,11 +408,15 @@
                     "flags",
                     "id",
                     "inviteStatus",
+                    "invite_link",
                     "inviterName",
+                    "isOnlyOwner",
                     "name",
                     "pending",
                     "role",
                     "roleName",
+                    "roles",
+                    "teamRoles",
                     "teams",
                     "user"
                   ]
@@ -21505,7 +21590,7 @@
           "userName"
         ]
       },
-      "OrganizationMemberWithTeams": {
+      "OrganizationMemberWithRoles": {
         "type": "object",
         "properties": {
           "externalUsers": {
@@ -21769,6 +21854,87 @@
             "items": {
               "type": "string"
             }
+          },
+          "invite_link": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOnlyOwner": {
+            "type": "boolean"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "desc": {
+                  "type": "string"
+                },
+                "scopes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "is_global": {
+                  "type": "boolean"
+                },
+                "allowed": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "allowed",
+                "desc",
+                "id",
+                "is_global",
+                "name",
+                "scopes"
+              ]
+            }
+          },
+          "teamRoles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "desc": {
+                  "type": "string"
+                },
+                "scopes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "is_global": {
+                  "type": "boolean"
+                },
+                "allowed": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "allowed",
+                "desc",
+                "id",
+                "is_global",
+                "name",
+                "scopes"
+              ]
+            }
           }
         },
         "required": [
@@ -21778,11 +21944,15 @@
           "flags",
           "id",
           "inviteStatus",
+          "invite_link",
           "inviterName",
+          "isOnlyOwner",
           "name",
           "pending",
           "role",
           "roleName",
+          "roles",
+          "teamRoles",
           "teams",
           "user"
         ]
