@@ -14,6 +14,198 @@
     }
   },
   "paths": {
+    "/api/0/organizations/{organization_slug}/events/": {
+      "get": {
+        "operationId": "Query Discover Events in Table Format",
+        "description": "Retrieves discover (also known as events) data for a given organization.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^\\/]+$"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/)\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The fields, functions, or equations to request for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions)\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](https://docs.sentry.io/product/discover-queries/query-builder/query-equations/)\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            },
+            "description": "What to order the results of the query by. Must be something in the `field` list, excluding equations."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`"
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`"
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The ids of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'"
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "fields"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": [
+                        {
+                          "count_if(transaction.duration,greater,300)": 5,
+                          "count()": 10,
+                          "equation|count_if(transaction.duration,greater,300) / count() * 100": 50,
+                          "transaction": "foo"
+                        },
+                        {
+                          "count_if(transaction.duration,greater,300)": 3,
+                          "count()": 20,
+                          "equation|count_if(transaction.duration,greater,300) / count() * 100": 15,
+                          "transaction": "bar"
+                        },
+                        {
+                          "count_if(transaction.duration,greater,300)": 8,
+                          "count()": 40,
+                          "equation|count_if(transaction.duration,greater,300) / count() * 100": 20,
+                          "transaction": "baz"
+                        }
+                      ],
+                      "meta": {
+                        "fields": {
+                          "count_if(transaction.duration,greater,300)": "integer",
+                          "count()": "integer",
+                          "equation|count_if(transaction.duration,greater,300) / count() * 100": "number",
+                          "transaction": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Invalid Query"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/members/{member_id}/": {
       "get": {
         "operationId": "Retrieve an Organization Member",
@@ -21515,6 +21707,36 @@
   },
   "components": {
     "schemas": {
+      "OrganizationEventsResponseDict": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "fields": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "fields"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
       "OrganizationMemberSCIM": {
         "type": "object",
         "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
@@ -22640,6 +22862,16 @@
       "name": "SCIM",
       "x-sidebar-name": "SCIM (Beta)",
       "description": "System for Cross-Domain Identity Management ([SCIM](http://www.simplecloud.info/)) is a standard implemented by Identity Providers and applications in order to facilitate federated identity management. Through these APIs you can add and delete members as well as teams. Sentry SaaS customers must be on a Business Plan with SAML2 Enabled. SCIM uses a bearer token for authentication that is created when SCIM is enabled. For how to enable SCIM, see our docs [here](/product/accounts/sso/#scim-provisioning).\n Sentry's SCIM API does not currently support syncing passwords, or setting any User attributes other than `active`.",
+      "x-display-description": true,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Discover",
+      "x-sidebar-name": "Discover & Performance",
+      "description": "Discover and Performance allow you to slice and dice your Error and Transaction events",
       "x-display-description": true,
       "externalDocs": {
         "description": "Found an error? Let us know.",
