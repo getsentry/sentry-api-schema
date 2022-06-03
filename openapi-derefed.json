@@ -20,21 +20,61 @@
         "description": "Retrieves discover (also known as events) data for a given organization.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested",
         "parameters": [
           {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`"
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
             "in": "path",
             "name": "organization_slug",
             "schema": {
-              "type": "string",
-              "pattern": "^[^\\/]+$"
+              "type": "string"
             },
+            "description": "The slug of the organization the resource belongs to.",
             "required": true
           },
           {
             "in": "query",
-            "name": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The ids of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'"
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`"
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
             "schema": {
               "type": "string"
             },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/)\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example `24h`, to mean query data starting from 24 hours ago to now."
           },
           {
             "in": "query",
@@ -50,14 +90,6 @@
           },
           {
             "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string"
-            },
-            "description": "What to order the results of the query by. Must be something in the `field` list, excluding equations."
-          },
-          {
-            "in": "query",
             "name": "per_page",
             "schema": {
               "type": "integer"
@@ -66,51 +98,19 @@
           },
           {
             "in": "query",
-            "name": "statsPeriod",
+            "name": "query",
             "schema": {
               "type": "string"
             },
-            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example `24h`, to mean query data starting from 24 hours ago to now."
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/)\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
           },
           {
             "in": "query",
-            "name": "start",
+            "name": "sort",
             "schema": {
-              "type": "string",
-              "format": "date-time"
+              "type": "string"
             },
-            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`"
-          },
-          {
-            "in": "query",
-            "name": "end",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`"
-          },
-          {
-            "in": "query",
-            "name": "project",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer"
-              }
-            },
-            "description": "The ids of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'"
-          },
-          {
-            "in": "query",
-            "name": "environment",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "The name of environments to filter by."
+            "description": "What to order the results of the query by. Must be something in the `field` list, excluding equations."
           }
         ],
         "tags": [
