@@ -469,6 +469,9 @@
                     "roleName": {
                       "type": "string"
                     },
+                    "orgRole": {
+                      "type": "string"
+                    },
                     "pending": {
                       "type": "boolean"
                     },
@@ -555,7 +558,44 @@
                         ]
                       }
                     },
-                    "teamRoles": {
+                    "orgRoleList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "is_global": {
+                            "type": "boolean"
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "is_global",
+                          "name",
+                          "scopes"
+                        ]
+                      }
+                    },
+                    "teamRoleList": {
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -604,11 +644,13 @@
                     "inviterName",
                     "isOnlyOwner",
                     "name",
+                    "orgRole",
+                    "orgRoleList",
                     "pending",
                     "role",
                     "roleName",
                     "roles",
-                    "teamRoles",
+                    "teamRoleList",
                     "teams",
                     "user"
                   ]
@@ -22037,6 +22079,9 @@
           "roleName": {
             "type": "string"
           },
+          "orgRole": {
+            "type": "string"
+          },
           "pending": {
             "type": "boolean"
           },
@@ -22123,7 +22168,44 @@
               ]
             }
           },
-          "teamRoles": {
+          "orgRoleList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "desc": {
+                  "type": "string"
+                },
+                "scopes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "is_global": {
+                  "type": "boolean"
+                },
+                "allowed": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "allowed",
+                "desc",
+                "id",
+                "is_global",
+                "name",
+                "scopes"
+              ]
+            }
+          },
+          "teamRoleList": {
             "type": "array",
             "items": {
               "type": "object",
@@ -22172,11 +22254,13 @@
           "inviterName",
           "isOnlyOwner",
           "name",
+          "orgRole",
+          "orgRoleList",
           "pending",
           "role",
           "roleName",
           "roles",
-          "teamRoles",
+          "teamRoleList",
           "teams",
           "user"
         ]
