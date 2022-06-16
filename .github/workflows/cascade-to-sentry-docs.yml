@@ -1,14 +1,14 @@
-name: sentry-docs
+name: Cascade to sentry-docs
 on:
   push:
     branches:
       - "main"
   workflow_dispatch:  # temp for testing, remove if you like
 jobs:
-  bump_api_schema_sha:
+  cascade-to-sentry-docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Bump API schema SHA in sentry-docs
+      - name: Cascade to sentry-docs
         env:
           GITHUB_TOKEN: ${{ secrets.GH_RELEASE_PAT }}
         run: gh workflow run "Bump API Schema SHA" -R getsentry/sentry-docs
