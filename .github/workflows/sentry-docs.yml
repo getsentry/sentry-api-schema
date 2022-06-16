@@ -3,12 +3,12 @@ on:
   push:
     branches:
       - "main"
-
+  workflow_dispatch:  # temp for testing, remove if you like
 jobs:
-  trigger_docs_release:
+  bump_api_schema_sha:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger new docs release
+      - name: Bump API schema SHA in sentry-docs
         env:
           GITHUB_TOKEN: ${{ secrets.GH_RELEASE_PAT }}
-        run: gh workflow run release -R getsentry/sentry-docs
+        run: gh workflow run bump-api-schema-sha -R getsentry/sentry-docs
