@@ -1351,45 +1351,46 @@
     },
     "/api/0/organizations/{organization_slug}/scim/v2/Groups/{team_id}": {
       "get": {
+        "operationId": "Query an Individual Team",
+        "description": "Query an individual team with a SCIM Group GET Request.\n- Note that the members field will only contain up to 10000 members.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "team_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The id of the team you'd like to query / update.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
         "tags": [
           "SCIM"
         ],
-        "description": "Query an individual team with a SCIM Group GET Request.\n- Note that the members field will only contain up to 10000 members.",
-        "operationId": "Query an Individual Team",
-        "parameters": [
+        "security": [
           {
-            "name": "organization_slug",
-            "description": "The slug of the organization.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "team_id",
-            "in": "path",
-            "required": true,
-            "description": "The id of the team you'd like to query.",
-            "schema": {
-              "type": "integer"
-            }
+            "auth_token": [
+              "team:admin",
+              "team:read",
+              "team:write"
+            ]
           }
         ],
         "responses": {
           "200": {
-            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "schemas",
-                    "id",
-                    "displayName",
-                    "members",
-                    "meta"
-                  ],
                   "properties": {
                     "schemas": {
                       "type": "array",
@@ -1403,14 +1404,21 @@
                     "displayName": {
                       "type": "string"
                     },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "resourceType": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "resourceType"
+                      ]
+                    },
                     "members": {
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": [
-                          "value",
-                          "display"
-                        ],
                         "properties": {
                           "value": {
                             "type": "string"
@@ -1418,82 +1426,82 @@
                           "display": {
                             "type": "string"
                           }
-                        }
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "resourceType": {
-                          "type": "string"
-                        }
+                        },
+                        "required": [
+                          "display",
+                          "value"
+                        ]
                       }
                     }
-                  }
+                  },
+                  "required": [
+                    "displayName",
+                    "id",
+                    "meta",
+                    "schemas"
+                  ]
                 },
-                "example": {
-                  "schemas": [
-                    "urn:ietf:params:scim:schemas:core:2.0:Group"
-                  ],
-                  "id": "23232",
-                  "displayName": "test-scimv2",
-                  "members": [],
-                  "meta": {
-                    "resourceType": "Group"
+                "examples": {
+                  "SuccessfulResponse": {
+                    "value": {
+                      "schemas": [
+                        "urn:ietf:params:scim:schemas:core:2.0:Group"
+                      ],
+                      "id": "23232",
+                      "displayName": "test-scimv2",
+                      "members": [],
+                      "meta": {
+                        "resourceType": "Group"
+                      }
+                    },
+                    "summary": "Successful response"
                   }
                 }
               }
-            }
+            },
+            "description": ""
           },
           "401": {
             "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "team: read"
-            ]
-          }
-        ]
+        }
       },
       "patch": {
-        "tags": [
-          "SCIM"
-        ],
-        "description": "Update a team's attributes with a SCIM Group PATCH Request. Valid Operations are:\n* Renaming a team: \n```json\n{\n    \"op\": \"replace\",\n    \"value\": {\n        \"id\": 23,\n        \"displayName\": \"newName\"\n    }\n}\n```\n* Adding a member to a team: \n```json\n{\n    \"op\": \"add\",\n    \"path\": \"members\",\n    \"value\": [\n        {\n            \"value\": 23,\n            \"display\": \"testexample@example.com\"\n        }\n    ]\n}\n```\n* Removing a member from a team: \n```json\n{\n    \"op\": \"remove\",\n    \"path\": \"members[value eq \\\"23\\\"]\"\n}\n``` \n*  Replacing an entire member set of a team: \n```json\n{\n    \"op\": \"replace\",\n    \"path\": \"members\",\n    \"value\": [\n        {\n            \"value\": 23,\n            \"display\": \"testexample2@sentry.io\"\n        },\n        {\n            \"value\": 24,\n            \"display\": \"testexample3@sentry.io\"\n        }\n    ]\n}\n```",
         "operationId": "Update a Team's Attributes",
+        "description": "Update a team's attributes with a SCIM Group PATCH Request. Valid operations are:\n\n* Renaming a team:\n```json\n{\n    \"Operations\": {\n        \"op\": \"replace\",\n        \"value\": {\n            \"id\": 23,\n            \"displayName\": \"newName\"\n        }\n    }\n}\n```\n* Adding a member to a team:\n```json\n{\n    \"Operations\": {\n        \"op\": \"add\",\n        \"path\": \"members\",\n        \"value\": [\n            {\n                \"value\": 23,\n                \"display\": \"testexample@example.com\"\n            }\n        ]\n    }\n}\n```\n* Removing a member from a team:\n```json\n{\n    \"Operations\": {\n        \"op\": \"remove\",\n        \"path\": \"members[value eq \"23\"]\"\n    }\n}\n```\n* Replacing an entire member set of a team:\n```json\n{\n    \"Operations\": {\n        \"op\": \"replace\",\n        \"path\": \"members\",\n        \"value\": [\n            {\n                \"value\": 23,\n                \"display\": \"testexample2@sentry.io\"\n            },\n            {\n                \"value\": 24,\n                \"display\": \"testexample3@sentry.io\"\n            }\n        ]\n    }\n}\n```",
         "parameters": [
           {
-            "name": "organization_slug",
-            "description": "The slug of the organization.",
             "in": "path",
-            "required": true,
+            "name": "organization_slug",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
           },
           {
-            "name": "team_id",
             "in": "path",
-            "required": true,
-            "description": "The id of the team you'd like to query.",
+            "name": "team_id",
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "The id of the team you'd like to query / update.",
+            "required": true
           }
+        ],
+        "tags": [
+          "SCIM"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "schemas",
-                  "Operations"
-                ],
                 "type": "object",
                 "properties": {
                   "schemas": {
@@ -1505,28 +1513,46 @@
                   "Operations": {
                     "type": "array",
                     "items": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "op": {
+                          "enum": [
+                            "replace",
+                            "remove",
+                            "add"
+                          ],
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "array",
+                          "items": {},
+                          "readOnly": true
+                        }
+                      },
+                      "required": [
+                        "op",
+                        "value"
+                      ]
                     }
                   }
-                }
-              },
-              "example": {
-                "schemas": [
-                  "urn:ietf:params:scim:api:messages:2.0:PatchOp"
-                ],
-                "Operations": [
-                  {
-                    "op": "replace",
-                    "value": {
-                      "active": false
-                    }
-                  }
+                },
+                "required": [
+                  "Operations",
+                  "schemas"
                 ]
               }
             }
           },
           "required": true
         },
+        "security": [
+          {
+            "auth_token": [
+              "team:admin",
+              "team:write"
+            ]
+          }
+        ],
         "responses": {
           "204": {
             "description": "Success"
@@ -1538,58 +1564,57 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "Not Found."
+            "description": "Not Found"
           }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "team:write"
-            ]
-          }
-        ]
+        }
       },
       "delete": {
+        "operationId": "Delete an Individual Team",
+        "description": "Delete a team with a SCIM Group DELETE Request.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The id of the team you'd like to query / update.",
+            "required": true
+          }
+        ],
         "tags": [
           "SCIM"
         ],
-        "description": "Delete a team with a SCIM Group DELETE Request.",
-        "operationId": "Delete an Individual Team",
-        "parameters": [
+        "security": [
           {
-            "name": "organization_slug",
-            "description": "The slug of the organization.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "team_id",
-            "in": "path",
-            "required": true,
-            "description": "The id of the team you'd like to delete.",
-            "schema": {
-              "type": "integer"
-            }
+            "auth_token": [
+              "team:admin"
+            ]
           }
         ],
         "responses": {
           "204": {
             "description": "Success"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Not Found"
           }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "team: admin"
-            ]
-          }
-        ]
+        }
       }
     },
     "/api/0/organizations/{organization_slug}/scim/v2/Users": {
