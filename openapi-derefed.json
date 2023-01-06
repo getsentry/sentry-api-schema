@@ -751,7 +751,7 @@
     "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/": {
       "get": {
         "operationId": "Retrieve a monitor",
-        "description": "Retrieve a monitor\n``````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required",
+        "description": "Retrieves details for a monitor.",
         "parameters": [
           {
             "in": "path",
@@ -938,7 +938,7 @@
       },
       "put": {
         "operationId": "Update a monitor",
-        "description": "Update a monitor\n````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required",
+        "description": "Update a monitor.",
         "parameters": [
           {
             "in": "path",
@@ -1164,7 +1164,7 @@
       },
       "delete": {
         "operationId": "Delete a monitor",
-        "description": "Delete a monitor\n````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required",
+        "description": "Delete a monitor.",
         "parameters": [
           {
             "in": "path",
@@ -1217,7 +1217,7 @@
     "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/checkins/": {
       "get": {
         "operationId": "Retrieve check-ins for a monitor",
-        "description": "Retrieve check-ins for a monitor\n````````````````````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required",
+        "description": "Retrieve a list of check-ins for a monitor",
         "parameters": [
           {
             "in": "path",
@@ -1309,7 +1309,7 @@
       },
       "post": {
         "operationId": "Create a new check-in",
-        "description": "Create a new check-in for a monitor\n```````````````````````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required\n\nNote: If a DSN is utilized for authentication, the response will be limited in details.",
+        "description": "Creates a new check-in for a monitor.\n\nIf `status` is not present, it will be assumed that the check-in is starting, and be marked as `in_progress`.\n\nTo achieve a ping-like behavior, you can simply define `status` and optionally `duration` and\nthis check-in will be automatically marked as finished.\n\nNote: If a DSN is utilized for authentication, the response will be limited in details.",
         "parameters": [
           {
             "in": "path",
@@ -1442,6 +1442,219 @@
               }
             },
             "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/checkins/{checkin_id}/": {
+      "get": {
+        "operationId": "Retrieve a check-in",
+        "description": "Retrieves details for a check-in.\n\nYou may use `latest` for the `checkin_id` parameter in order to retrieve\nthe most recent (by creation date) check-in which is still mutable (not marked as finished).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "monitor_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the monitor",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "checkin_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the check-in",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Crons"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "integer"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "duration",
+                    "id",
+                    "status"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update a check-in",
+        "description": "Updates a check-in.\n\nOnce a check-in is finished (indicated via an `ok` or `error` status) it can no longer be changed.\n\nIf you simply wish to update that the task is still running, you can simply send an empty payload.\n\nYou may use `latest` for the `checkin_id` parameter in order to retrieve\nthe most recent (by creation date) check-in which is still mutable (not marked as finished).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "monitor_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the monitor",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "checkin_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the check-in",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Crons"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "ok",
+                      "error",
+                      "in_progress"
+                    ],
+                    "type": "string"
+                  },
+                  "duration": {
+                    "type": "integer",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "integer"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "duration",
+                    "id",
+                    "status"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "208": {
+            "description": "Already Reported"
           },
           "400": {
             "description": "Bad Request"
