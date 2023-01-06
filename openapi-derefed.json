@@ -748,6 +748,716 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/": {
+      "get": {
+        "operationId": "Retrieve a monitor",
+        "description": "Retrieve a monitor\n``````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "monitor_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the monitor",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Crons"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "config": {},
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "lastCheckIn": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "nextCheckIn": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "project": {
+                      "type": "object",
+                      "properties": {
+                        "stats": {},
+                        "transactionStats": {},
+                        "sessionStats": {},
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "isBookmarked": {
+                          "type": "boolean"
+                        },
+                        "isMember": {
+                          "type": "boolean"
+                        },
+                        "hasAccess": {
+                          "type": "boolean"
+                        },
+                        "dateCreated": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "features": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "firstTransactionEvent": {
+                          "type": "boolean"
+                        },
+                        "hasSessions": {
+                          "type": "boolean"
+                        },
+                        "hasProfiles": {
+                          "type": "boolean"
+                        },
+                        "hasReplays": {
+                          "type": "boolean"
+                        },
+                        "platform": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "firstEvent": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "isPublic": {
+                          "type": "boolean"
+                        },
+                        "color": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "isInternal": {
+                          "type": "boolean"
+                        },
+                        "avatar": {}
+                      },
+                      "required": [
+                        "avatar",
+                        "color",
+                        "dateCreated",
+                        "features",
+                        "firstEvent",
+                        "firstTransactionEvent",
+                        "hasAccess",
+                        "hasProfiles",
+                        "hasReplays",
+                        "hasSessions",
+                        "id",
+                        "isBookmarked",
+                        "isInternal",
+                        "isMember",
+                        "isPublic",
+                        "name",
+                        "platform",
+                        "slug",
+                        "status"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "config",
+                    "dateCreated",
+                    "id",
+                    "lastCheckIn",
+                    "name",
+                    "nextCheckIn",
+                    "project",
+                    "status",
+                    "type"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update a monitor",
+        "description": "Update a monitor\n````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "monitor_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the monitor",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Crons"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "project": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "enum": [
+                      "active",
+                      "disabled"
+                    ],
+                    "type": "string",
+                    "default": "active"
+                  },
+                  "type": {
+                    "enum": [
+                      "cron_job"
+                    ],
+                    "type": "string"
+                  },
+                  "config": {}
+                },
+                "required": [
+                  "config",
+                  "name",
+                  "project",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "config": {},
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "lastCheckIn": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "nextCheckIn": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "project": {
+                      "type": "object",
+                      "properties": {
+                        "stats": {},
+                        "transactionStats": {},
+                        "sessionStats": {},
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "isBookmarked": {
+                          "type": "boolean"
+                        },
+                        "isMember": {
+                          "type": "boolean"
+                        },
+                        "hasAccess": {
+                          "type": "boolean"
+                        },
+                        "dateCreated": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "features": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "firstTransactionEvent": {
+                          "type": "boolean"
+                        },
+                        "hasSessions": {
+                          "type": "boolean"
+                        },
+                        "hasProfiles": {
+                          "type": "boolean"
+                        },
+                        "hasReplays": {
+                          "type": "boolean"
+                        },
+                        "platform": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "firstEvent": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "isPublic": {
+                          "type": "boolean"
+                        },
+                        "color": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "isInternal": {
+                          "type": "boolean"
+                        },
+                        "avatar": {}
+                      },
+                      "required": [
+                        "avatar",
+                        "color",
+                        "dateCreated",
+                        "features",
+                        "firstEvent",
+                        "firstTransactionEvent",
+                        "hasAccess",
+                        "hasProfiles",
+                        "hasReplays",
+                        "hasSessions",
+                        "id",
+                        "isBookmarked",
+                        "isInternal",
+                        "isMember",
+                        "isPublic",
+                        "name",
+                        "platform",
+                        "slug",
+                        "status"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "config",
+                    "dateCreated",
+                    "id",
+                    "lastCheckIn",
+                    "name",
+                    "nextCheckIn",
+                    "project",
+                    "status",
+                    "type"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a monitor",
+        "description": "Delete a monitor\n````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "monitor_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the monitor",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Crons"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/checkins/": {
+      "get": {
+        "operationId": "Retrieve check-ins for a monitor",
+        "description": "Retrieve check-ins for a monitor\n````````````````````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "monitor_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the monitor",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "checkin_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the check-in",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Crons"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "duration": {
+                        "type": "integer"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "dateCreated",
+                      "duration",
+                      "id",
+                      "status"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a new check-in",
+        "description": "Create a new check-in for a monitor\n```````````````````````````````````\n\n:pparam string monitor_id: the id of the monitor.\n:auth: required\n\nNote: If a DSN is utilized for authentication, the response will be limited in details.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "monitor_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the monitor",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "checkin_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the check-in",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Crons"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "ok",
+                      "error",
+                      "in_progress"
+                    ],
+                    "type": "string"
+                  },
+                  "duration": {
+                    "type": "integer",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "integer"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "duration",
+                    "id",
+                    "status"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "integer"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "duration",
+                    "id",
+                    "status"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/projects/": {
       "get": {
         "operationId": "List an Organization's Projects",
@@ -21829,6 +22539,241 @@
   },
   "components": {
     "schemas": {
+      "CheckInList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "duration": {
+              "type": "integer"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "dateCreated",
+            "duration",
+            "id",
+            "status"
+          ]
+        }
+      },
+      "Monitor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "config": {},
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastCheckIn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nextCheckIn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "project": {
+            "type": "object",
+            "properties": {
+              "stats": {},
+              "transactionStats": {},
+              "sessionStats": {},
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "isBookmarked": {
+                "type": "boolean"
+              },
+              "isMember": {
+                "type": "boolean"
+              },
+              "hasAccess": {
+                "type": "boolean"
+              },
+              "dateCreated": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "firstTransactionEvent": {
+                "type": "boolean"
+              },
+              "hasSessions": {
+                "type": "boolean"
+              },
+              "hasProfiles": {
+                "type": "boolean"
+              },
+              "hasReplays": {
+                "type": "boolean"
+              },
+              "platform": {
+                "type": "string",
+                "nullable": true
+              },
+              "firstEvent": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "isPublic": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "isInternal": {
+                "type": "boolean"
+              },
+              "avatar": {}
+            },
+            "required": [
+              "avatar",
+              "color",
+              "dateCreated",
+              "features",
+              "firstEvent",
+              "firstTransactionEvent",
+              "hasAccess",
+              "hasProfiles",
+              "hasReplays",
+              "hasSessions",
+              "id",
+              "isBookmarked",
+              "isInternal",
+              "isMember",
+              "isPublic",
+              "name",
+              "platform",
+              "slug",
+              "status"
+            ]
+          }
+        },
+        "required": [
+          "config",
+          "dateCreated",
+          "id",
+          "lastCheckIn",
+          "name",
+          "nextCheckIn",
+          "project",
+          "status",
+          "type"
+        ]
+      },
+      "MonitorCheckIn": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "dateCreated",
+          "duration",
+          "id",
+          "status"
+        ]
+      },
+      "MonitorCheckInValidator": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "error",
+              "in_progress"
+            ],
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "nullable": true
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "MonitorValidator": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "disabled"
+            ],
+            "type": "string",
+            "default": "active"
+          },
+          "type": {
+            "enum": [
+              "cron_job"
+            ],
+            "type": "string"
+          },
+          "config": {}
+        },
+        "required": [
+          "config",
+          "name",
+          "project",
+          "type"
+        ]
+      },
       "OrganizationEventsResponseDict": {
         "type": "object",
         "properties": {
@@ -23071,6 +24016,16 @@
       "name": "Discover",
       "x-sidebar-name": "Discover & Performance",
       "description": "Discover and Performance allow you to slice and dice your Error and Transaction events",
+      "x-display-description": true,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Crons",
+      "x-sidebar-name": "Crons (Beta)",
+      "description": "Endpoints for Crons",
       "x-display-description": true,
       "externalDocs": {
         "description": "Found an error? Let us know.",
