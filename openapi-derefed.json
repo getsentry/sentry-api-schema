@@ -3502,6 +3502,113 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/events/{event_id}/source-map-debug/": {
+      "get": {
+        "operationId": "Debug issues related to source maps for a given event",
+        "description": "Retrieve information about source maps for a given event.\n```````````````````````````````````````````\nReturn a list of source map errors for a given event.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "event_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The id of the event",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "frame_idx",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Index of the frame that should be used for source map resolution.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "data": {
+                            "type": "object",
+                            "additionalProperties": {},
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "data",
+                          "message",
+                          "type"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/teams/": {
       "get": {
         "tags": [
@@ -24091,6 +24198,38 @@
           "displayName",
           "members",
           "schemas"
+        ]
+      },
+      "SourceMapDebug": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": {},
+                  "nullable": true
+                }
+              },
+              "required": [
+                "data",
+                "message",
+                "type"
+              ]
+            }
+          }
+        },
+        "required": [
+          "errors"
         ]
       },
       "TeamSCIM": {
