@@ -2781,7 +2781,7 @@
       },
       "post": {
         "operationId": "Provision a New Organization Member",
-        "description": "Create a new Organization Member via a SCIM Users POST Request.\n- `userName` should be set to the SAML field used for email, and active should be set to `true`.\n- Sentry's SCIM API doesn't currently support setting users to inactive,\nand the member will be deleted if active is set to `false`.\n- The API also does not support setting secondary emails.",
+        "description": "Create a new Organization Member via a SCIM Users POST Request.\n- `userName` should be set to the SAML field used for email, and active should be set to `true`.\n- `sentryOrgRole` can only be `admin`, `manager`, `billing`, or `member`.\n- Sentry's SCIM API doesn't currently support setting users to inactive,\nand the member will be deleted if active is set to `false`.\n- The API also does not support setting secondary emails.",
         "parameters": [
           {
             "in": "path",
@@ -2805,6 +2805,9 @@
                   "userName": {
                     "type": "string",
                     "format": "email"
+                  },
+                  "sentryOrgRole": {
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -24062,6 +24065,9 @@
           "userName": {
             "type": "string",
             "format": "email"
+          },
+          "sentryOrgRole": {
+            "type": "string"
           }
         },
         "required": [
