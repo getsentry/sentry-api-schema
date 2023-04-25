@@ -1911,8 +1911,8 @@
         }
       },
       "delete": {
-        "operationId": "Delete a monitor or monitor environment",
-        "description": "Delete a monitor or monitor environment.",
+        "operationId": "Delete a monitor or monitor environments",
+        "description": "Delete a monitor or monitor environments.",
         "parameters": [
           {
             "in": "path",
@@ -1931,6 +1931,17 @@
             },
             "description": "The slug of the monitor",
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
           }
         ],
         "tags": [
