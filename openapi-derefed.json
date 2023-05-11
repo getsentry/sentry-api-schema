@@ -2700,6 +2700,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                 "properties": {
                   "project": {
                     "type": "string"
@@ -3354,6 +3355,35 @@
                     "required": [
                       "schedule"
                     ]
+                  },
+                  "alert_rule": {
+                    "type": "object",
+                    "properties": {
+                      "targets": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "target_identifier": {
+                              "type": "integer",
+                              "description": "ID of target object"
+                            },
+                            "target_type": {
+                              "type": "string",
+                              "description": "One of [Member, Team]"
+                            }
+                          },
+                          "required": [
+                            "target_identifier",
+                            "target_type"
+                          ]
+                        },
+                        "description": "Array of dictionaries with information of the user or team to be notified"
+                      }
+                    },
+                    "required": [
+                      "targets"
+                    ]
                   }
                 },
                 "required": [
@@ -3832,6 +3862,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                 "properties": {
                   "project": {
                     "type": "string"
@@ -4485,6 +4516,35 @@
                     },
                     "required": [
                       "schedule"
+                    ]
+                  },
+                  "alert_rule": {
+                    "type": "object",
+                    "properties": {
+                      "targets": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "target_identifier": {
+                              "type": "integer",
+                              "description": "ID of target object"
+                            },
+                            "target_type": {
+                              "type": "string",
+                              "description": "One of [Member, Team]"
+                            }
+                          },
+                          "required": [
+                            "target_identifier",
+                            "target_type"
+                          ]
+                        },
+                        "description": "Array of dictionaries with information of the user or team to be notified"
+                      }
+                    },
+                    "required": [
+                      "targets"
                     ]
                   }
                 },
@@ -26831,6 +26891,52 @@
           "type"
         ]
       },
+      "MonitorAlertRuleTargetValidator": {
+        "type": "object",
+        "properties": {
+          "target_identifier": {
+            "type": "integer",
+            "description": "ID of target object"
+          },
+          "target_type": {
+            "type": "string",
+            "description": "One of [Member, Team]"
+          }
+        },
+        "required": [
+          "target_identifier",
+          "target_type"
+        ]
+      },
+      "MonitorAlertRuleValidator": {
+        "type": "object",
+        "properties": {
+          "targets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "target_identifier": {
+                  "type": "integer",
+                  "description": "ID of target object"
+                },
+                "target_type": {
+                  "type": "string",
+                  "description": "One of [Member, Team]"
+                }
+              },
+              "required": [
+                "target_identifier",
+                "target_type"
+              ]
+            },
+            "description": "Array of dictionaries with information of the user or team to be notified"
+          }
+        },
+        "required": [
+          "targets"
+        ]
+      },
       "MonitorCheckIn": {
         "type": "object",
         "properties": {
@@ -27689,6 +27795,7 @@
       },
       "MonitorValidator": {
         "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
         "properties": {
           "project": {
             "type": "string"
@@ -28342,6 +28449,35 @@
             },
             "required": [
               "schedule"
+            ]
+          },
+          "alert_rule": {
+            "type": "object",
+            "properties": {
+              "targets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "target_identifier": {
+                      "type": "integer",
+                      "description": "ID of target object"
+                    },
+                    "target_type": {
+                      "type": "string",
+                      "description": "One of [Member, Team]"
+                    }
+                  },
+                  "required": [
+                    "target_identifier",
+                    "target_type"
+                  ]
+                },
+                "description": "Array of dictionaries with information of the user or team to be notified"
+              }
+            },
+            "required": [
+              "targets"
             ]
           }
         },
