@@ -2601,6 +2601,9 @@
                           "hasAccess": {
                             "type": "boolean"
                           },
+                          "hasMinifiedStackTrace": {
+                            "type": "boolean"
+                          },
                           "hasMonitors": {
                             "type": "boolean"
                           },
@@ -2636,6 +2639,7 @@
                           "firstEvent",
                           "firstTransactionEvent",
                           "hasAccess",
+                          "hasMinifiedStackTrace",
                           "hasMonitors",
                           "hasProfiles",
                           "hasReplays",
@@ -3523,6 +3527,9 @@
                         "hasAccess": {
                           "type": "boolean"
                         },
+                        "hasMinifiedStackTrace": {
+                          "type": "boolean"
+                        },
                         "hasMonitors": {
                           "type": "boolean"
                         },
@@ -3558,6 +3565,7 @@
                         "firstEvent",
                         "firstTransactionEvent",
                         "hasAccess",
+                        "hasMinifiedStackTrace",
                         "hasMonitors",
                         "hasProfiles",
                         "hasReplays",
@@ -3761,6 +3769,9 @@
                         "hasAccess": {
                           "type": "boolean"
                         },
+                        "hasMinifiedStackTrace": {
+                          "type": "boolean"
+                        },
                         "hasMonitors": {
                           "type": "boolean"
                         },
@@ -3796,6 +3807,7 @@
                         "firstEvent",
                         "firstTransactionEvent",
                         "hasAccess",
+                        "hasMinifiedStackTrace",
                         "hasMonitors",
                         "hasProfiles",
                         "hasReplays",
@@ -4691,6 +4703,9 @@
                         "hasAccess": {
                           "type": "boolean"
                         },
+                        "hasMinifiedStackTrace": {
+                          "type": "boolean"
+                        },
                         "hasMonitors": {
                           "type": "boolean"
                         },
@@ -4726,6 +4741,7 @@
                         "firstEvent",
                         "firstTransactionEvent",
                         "hasAccess",
+                        "hasMinifiedStackTrace",
                         "hasMonitors",
                         "hasProfiles",
                         "hasReplays",
@@ -4968,6 +4984,9 @@
                       "hasAccess": {
                         "type": "boolean"
                       },
+                      "hasMinifiedStackTrace": {
+                        "type": "boolean"
+                      },
                       "hasMonitors": {
                         "type": "boolean"
                       },
@@ -5070,6 +5089,7 @@
                       "firstEvent",
                       "firstTransactionEvent",
                       "hasAccess",
+                      "hasMinifiedStackTrace",
                       "hasMonitors",
                       "hasProfiles",
                       "hasReplays",
@@ -5128,6 +5148,7 @@
                         "hasSessions": true,
                         "hasProfiles": true,
                         "hasReplays": true,
+                        "hasMinifiedStackTrace": false,
                         "hasMonitors": true,
                         "hasUserReports": false,
                         "latestRelease": null
@@ -6390,24 +6411,6 @@
                 "required": [
                   "Operations"
                 ]
-              },
-              "examples": {
-                "SetMemberInactive": {
-                  "value": {
-                    "schemas": [
-                      "urn:ietf:params:scim:api:messages:2.0:PatchOp"
-                    ],
-                    "Operations": [
-                      {
-                        "op": "replace",
-                        "value": {
-                          "active": false
-                        }
-                      }
-                    ]
-                  },
-                  "summary": "Set member inactive"
-                }
               }
             }
           },
@@ -6839,69 +6842,93 @@
     },
     "/api/0/teams/{organization_slug}/{team_slug}/projects/": {
       "get": {
+        "operationId": "List a Team's Projects",
+        "description": "Return a list of projects bound to a team.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the team the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          }
+        ],
         "tags": [
           "Teams"
         ],
-        "description": "Return a list of projects bound to a team.",
-        "operationId": "List a Team's Projects",
-        "parameters": [
+        "security": [
           {
-            "name": "organization_slug",
-            "in": "path",
-            "description": "The slug of the organization the team belongs to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "team_slug",
-            "in": "path",
-            "description": "The slug of the team to get.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
-            "x-learn-more": "https://docs.sentry.io/api/pagination/",
-            "schema": {
-              "type": "string"
-            }
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
           }
         ],
         "responses": {
           "200": {
-            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "dateCreated",
-                      "features",
-                      "firstEvent",
-                      "hasAccess",
-                      "id",
-                      "isBookmarked",
-                      "isMember",
-                      "name",
-                      "platform",
-                      "slug",
-                      "team",
-                      "teams",
-                      "latestDeploys"
-                    ],
                     "properties": {
+                      "latestDeploys": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "nullable": true
+                      },
+                      "stats": {},
+                      "transactionStats": {},
+                      "sessionStats": {},
+                      "id": {
+                        "type": "string"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "platform": {
+                        "type": "string",
+                        "nullable": true
+                      },
                       "dateCreated": {
                         "type": "string",
                         "format": "date-time"
+                      },
+                      "isBookmarked": {
+                        "type": "boolean"
+                      },
+                      "isMember": {
+                        "type": "boolean"
                       },
                       "features": {
                         "type": "array",
@@ -6911,37 +6938,38 @@
                       },
                       "firstEvent": {
                         "type": "string",
+                        "format": "date-time",
                         "nullable": true
+                      },
+                      "firstTransactionEvent": {
+                        "type": "boolean"
+                      },
+                      "access": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
                       },
                       "hasAccess": {
                         "type": "boolean"
                       },
-                      "id": {
-                        "type": "string"
-                      },
-                      "isBookmarked": {
+                      "hasMinifiedStackTrace": {
                         "type": "boolean"
                       },
-                      "isMember": {
+                      "hasMonitors": {
                         "type": "boolean"
                       },
-                      "name": {
-                        "type": "string"
+                      "hasProfiles": {
+                        "type": "boolean"
                       },
-                      "platform": {
-                        "type": "string",
-                        "nullable": true
+                      "hasReplays": {
+                        "type": "boolean"
                       },
-                      "slug": {
-                        "type": "string"
+                      "hasSessions": {
+                        "type": "boolean"
                       },
                       "team": {
                         "type": "object",
-                        "required": [
-                          "id",
-                          "name",
-                          "slug"
-                        ],
                         "properties": {
                           "id": {
                             "type": "string"
@@ -6952,17 +6980,18 @@
                           "slug": {
                             "type": "string"
                           }
-                        }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ],
+                        "nullable": true
                       },
                       "teams": {
                         "type": "array",
                         "items": {
                           "type": "object",
-                          "required": [
-                            "id",
-                            "name",
-                            "slug"
-                          ],
                           "properties": {
                             "id": {
                               "type": "string"
@@ -6973,70 +7002,520 @@
                             "slug": {
                               "type": "string"
                             }
-                          }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "slug"
+                          ]
                         }
                       },
-                      "latestDeploys": {
-                        "type": "string",
+                      "eventProcessing": {
+                        "type": "object",
+                        "properties": {
+                          "symbolicationDegraded": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "symbolicationDegraded"
+                        ]
+                      },
+                      "platforms": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "hasUserReports": {
+                        "type": "boolean"
+                      },
+                      "environments": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "latestRelease": {
+                        "type": "object",
+                        "properties": {
+                          "version": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "version"
+                        ],
                         "nullable": true
                       }
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "slug": "the-spoiled-yoghurt",
-                    "name": "The Spoiled Yoghurt",
-                    "hasAccess": true,
-                    "teams": [
-                      {
-                        "id": "542609",
-                        "name": "Powerful Abolitionist",
-                        "slug": "powerful-abolitionist"
-                      }
-                    ],
-                    "platform": null,
-                    "firstEvent": null,
-                    "isMember": false,
-                    "team": {
-                      "id": "542609",
-                      "name": "Powerful Abolitionist",
-                      "slug": "powerful-abolitionist"
                     },
-                    "dateCreated": "2020-08-20T14:36:34.171255Z",
-                    "isBookmarked": false,
-                    "id": "5398494",
-                    "latestDeploys": null,
-                    "features": [
-                      "custom-inbound-filters",
-                      "discard-groups",
-                      "rate-limits",
-                      "data-forwarding",
-                      "similarity-view",
-                      "issue-alerts-targeting",
-                      "servicehooks",
-                      "minidump",
-                      "similarity-indexing"
+                    "required": [
+                      "access",
+                      "dateCreated",
+                      "environments",
+                      "eventProcessing",
+                      "features",
+                      "firstEvent",
+                      "firstTransactionEvent",
+                      "hasAccess",
+                      "hasMinifiedStackTrace",
+                      "hasMonitors",
+                      "hasProfiles",
+                      "hasReplays",
+                      "hasSessions",
+                      "hasUserReports",
+                      "id",
+                      "isBookmarked",
+                      "isMember",
+                      "latestRelease",
+                      "name",
+                      "platform",
+                      "platforms",
+                      "slug",
+                      "team",
+                      "teams"
                     ]
                   }
-                ]
+                },
+                "examples": {
+                  "GetListOfTeam'sProjects": {
+                    "value": [
+                      {
+                        "team": {
+                          "id": "2349234102",
+                          "name": "Prime Mover",
+                          "slug": "prime-mover"
+                        },
+                        "teams": [
+                          {
+                            "id": "2349234102",
+                            "name": "Prime Mover",
+                            "slug": "prime-mover"
+                          },
+                          {
+                            "id": "47584447",
+                            "name": "Powerful Abolitionist",
+                            "slug": "powerful-abolitionist"
+                          }
+                        ],
+                        "id": "6758470122493650",
+                        "name": "the-spoiled-yoghurt",
+                        "slug": "The Spoiled Yoghurt",
+                        "isBookmarked": false,
+                        "isMember": true,
+                        "access": [
+                          "project:read",
+                          "event:read",
+                          "team:read",
+                          "alerts:read",
+                          "org:read",
+                          "event:write",
+                          "project:releases",
+                          "member:read"
+                        ],
+                        "hasAccess": true,
+                        "dateCreated": "2023-03-29T15:25:21.344565Z",
+                        "environments": [
+                          "production"
+                        ],
+                        "eventProcessing": {
+                          "symbolicationDegraded": false
+                        },
+                        "features": [
+                          "alert-filters",
+                          "custom-inbound-filters",
+                          "data-forwarding",
+                          "discard-groups",
+                          "minidump",
+                          "race-free-group-creation",
+                          "rate-limits",
+                          "servicehooks",
+                          "similarity-indexing",
+                          "similarity-indexing-v2",
+                          "similarity-view",
+                          "similarity-view-v2"
+                        ],
+                        "firstEvent": null,
+                        "firstTransactionEvent": true,
+                        "hasSessions": false,
+                        "hasProfiles": false,
+                        "hasReplays": false,
+                        "hasMonitors": false,
+                        "hasMinifiedStackTrace": false,
+                        "platform": "node-express",
+                        "platforms": [],
+                        "latestRelease": null,
+                        "hasUserReports": false,
+                        "latestDeploys": null
+                      },
+                      {
+                        "team": {
+                          "id": "2349234102",
+                          "name": "Prime Mover",
+                          "slug": "prime-mover"
+                        },
+                        "teams": [
+                          {
+                            "id": "2349234102",
+                            "name": "Prime Mover",
+                            "slug": "prime-mover"
+                          }
+                        ],
+                        "id": "1829334501859481",
+                        "name": "Pump Station",
+                        "slug": "pump-station",
+                        "isBookmarked": false,
+                        "isMember": true,
+                        "access": [
+                          "project:read",
+                          "event:read",
+                          "team:read",
+                          "alerts:read",
+                          "org:read",
+                          "event:write",
+                          "project:releases",
+                          "member:read"
+                        ],
+                        "hasAccess": true,
+                        "dateCreated": "2023-03-29T15:21:49.943746Z",
+                        "environments": [
+                          "production"
+                        ],
+                        "eventProcessing": {
+                          "symbolicationDegraded": false
+                        },
+                        "features": [
+                          "alert-filters",
+                          "custom-inbound-filters",
+                          "data-forwarding",
+                          "discard-groups",
+                          "minidump",
+                          "race-free-group-creation",
+                          "rate-limits",
+                          "servicehooks",
+                          "similarity-indexing",
+                          "similarity-indexing-v2",
+                          "similarity-view",
+                          "similarity-view-v2"
+                        ],
+                        "firstEvent": "2023-04-05T21:02:08.054000Z",
+                        "firstTransactionEvent": false,
+                        "hasSessions": false,
+                        "hasProfiles": false,
+                        "hasReplays": false,
+                        "hasMonitors": false,
+                        "hasMinifiedStackTrace": true,
+                        "platform": "javascript",
+                        "platforms": [
+                          "javascript"
+                        ],
+                        "latestRelease": null,
+                        "hasUserReports": false,
+                        "latestDeploys": null
+                      }
+                    ],
+                    "summary": "Get list of team's projects"
+                  }
+                }
               }
-            }
+            },
+            "description": ""
           },
           "403": {
             "description": "Forbidden"
           },
           "404": {
-            "description": "Team not found"
+            "description": "Team not found."
           }
+        }
+      },
+      "post": {
+        "operationId": "Create a New Project",
+        "description": "Create a new project bound to a team.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the team the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the project.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional slug for the project. If not provided a slug is generated from the name."
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The platform for the project."
+          },
+          {
+            "in": "query",
+            "name": "default_rules",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Defaults to true where the behavior is to alert the user on every new issue. Setting this to false will turn this off and the user must create their own alerts to be notified of new issues."
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 50
+                  },
+                  "slug": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 50,
+                    "pattern": "^[a-z0-9_\\-]+$"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "default_rules": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
         },
         "security": [
           {
             "auth_token": [
-              "project:read"
+              "project:admin",
+              "project:write"
             ]
           }
-        ]
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stats": {},
+                    "transactionStats": {},
+                    "sessionStats": {},
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isMember": {
+                      "type": "boolean"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "firstEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "firstTransactionEvent": {
+                      "type": "boolean"
+                    },
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasAccess": {
+                      "type": "boolean"
+                    },
+                    "hasMinifiedStackTrace": {
+                      "type": "boolean"
+                    },
+                    "hasMonitors": {
+                      "type": "boolean"
+                    },
+                    "hasProfiles": {
+                      "type": "boolean"
+                    },
+                    "hasReplays": {
+                      "type": "boolean"
+                    },
+                    "hasSessions": {
+                      "type": "boolean"
+                    },
+                    "isInternal": {
+                      "type": "boolean"
+                    },
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "avatar": {},
+                    "color": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "avatar",
+                    "color",
+                    "dateCreated",
+                    "features",
+                    "firstEvent",
+                    "firstTransactionEvent",
+                    "hasAccess",
+                    "hasMinifiedStackTrace",
+                    "hasMonitors",
+                    "hasProfiles",
+                    "hasReplays",
+                    "hasSessions",
+                    "id",
+                    "isBookmarked",
+                    "isInternal",
+                    "isMember",
+                    "isPublic",
+                    "name",
+                    "platform",
+                    "slug",
+                    "status"
+                  ]
+                },
+                "examples": {
+                  "ProjectSuccessfullyCreated": {
+                    "value": {
+                      "id": "4505321021243392",
+                      "slug": "the-spoiled-yoghurt",
+                      "name": "The Spoiled Yoghurt",
+                      "platform": "python",
+                      "dateCreated": "2023-06-08T00:13:06.004534Z",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "features": [
+                        "alert-filters",
+                        "custom-inbound-filters",
+                        "data-forwarding",
+                        "discard-groups",
+                        "minidump",
+                        "race-free-group-creation",
+                        "rate-limits",
+                        "servicehooks",
+                        "similarity-indexing",
+                        "similarity-indexing-v2",
+                        "similarity-view",
+                        "similarity-view-v2"
+                      ],
+                      "firstEvent": null,
+                      "firstTransactionEvent": false,
+                      "access": [
+                        "member:read",
+                        "event:read",
+                        "project:admin",
+                        "team:write",
+                        "project:write",
+                        "team:admin",
+                        "project:read",
+                        "org:integrations",
+                        "org:read",
+                        "project:releases",
+                        "team:read",
+                        "alerts:write",
+                        "event:admin",
+                        "event:write",
+                        "alerts:read"
+                      ],
+                      "hasAccess": true,
+                      "hasMinifiedStackTrace": false,
+                      "hasMonitors": false,
+                      "hasProfiles": false,
+                      "hasReplays": false,
+                      "hasSessions": false,
+                      "isInternal": false,
+                      "isPublic": false,
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      },
+                      "color": "#3f70bf",
+                      "status": "active"
+                    },
+                    "summary": "Project successfully created"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Team not found."
+          },
+          "409": {
+            "description": "A project with this slug already exists."
+          }
+        }
       }
     },
     "/api/0/organizations/{organization_slug}/teams/": {
@@ -26574,6 +27053,194 @@
           "schedule"
         ]
       },
+      "ListTeamProjectResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "latestDeploys": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "nullable": true
+            },
+            "stats": {},
+            "transactionStats": {},
+            "sessionStats": {},
+            "id": {
+              "type": "string"
+            },
+            "slug": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "platform": {
+              "type": "string",
+              "nullable": true
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "isBookmarked": {
+              "type": "boolean"
+            },
+            "isMember": {
+              "type": "boolean"
+            },
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "firstEvent": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "firstTransactionEvent": {
+              "type": "boolean"
+            },
+            "access": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "hasAccess": {
+              "type": "boolean"
+            },
+            "hasMinifiedStackTrace": {
+              "type": "boolean"
+            },
+            "hasMonitors": {
+              "type": "boolean"
+            },
+            "hasProfiles": {
+              "type": "boolean"
+            },
+            "hasReplays": {
+              "type": "boolean"
+            },
+            "hasSessions": {
+              "type": "boolean"
+            },
+            "team": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "slug"
+              ],
+              "nullable": true
+            },
+            "teams": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "slug"
+                ]
+              }
+            },
+            "eventProcessing": {
+              "type": "object",
+              "properties": {
+                "symbolicationDegraded": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "symbolicationDegraded"
+              ]
+            },
+            "platforms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "hasUserReports": {
+              "type": "boolean"
+            },
+            "environments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "latestRelease": {
+              "type": "object",
+              "properties": {
+                "version": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "version"
+              ],
+              "nullable": true
+            }
+          },
+          "required": [
+            "access",
+            "dateCreated",
+            "environments",
+            "eventProcessing",
+            "features",
+            "firstEvent",
+            "firstTransactionEvent",
+            "hasAccess",
+            "hasMinifiedStackTrace",
+            "hasMonitors",
+            "hasProfiles",
+            "hasReplays",
+            "hasSessions",
+            "hasUserReports",
+            "id",
+            "isBookmarked",
+            "isMember",
+            "latestRelease",
+            "name",
+            "platform",
+            "platforms",
+            "slug",
+            "team",
+            "teams"
+          ]
+        }
+      },
       "Monitor": {
         "type": "object",
         "properties": {
@@ -26649,6 +27316,9 @@
               "hasAccess": {
                 "type": "boolean"
               },
+              "hasMinifiedStackTrace": {
+                "type": "boolean"
+              },
               "hasMonitors": {
                 "type": "boolean"
               },
@@ -26684,6 +27354,7 @@
               "firstEvent",
               "firstTransactionEvent",
               "hasAccess",
+              "hasMinifiedStackTrace",
               "hasMonitors",
               "hasProfiles",
               "hasReplays",
@@ -27565,6 +28236,9 @@
                 "hasAccess": {
                   "type": "boolean"
                 },
+                "hasMinifiedStackTrace": {
+                  "type": "boolean"
+                },
                 "hasMonitors": {
                   "type": "boolean"
                 },
@@ -27600,6 +28274,7 @@
                 "firstEvent",
                 "firstTransactionEvent",
                 "hasAccess",
+                "hasMinifiedStackTrace",
                 "hasMonitors",
                 "hasProfiles",
                 "hasReplays",
@@ -29009,6 +29684,9 @@
             "hasAccess": {
               "type": "boolean"
             },
+            "hasMinifiedStackTrace": {
+              "type": "boolean"
+            },
             "hasMonitors": {
               "type": "boolean"
             },
@@ -29111,6 +29789,7 @@
             "firstEvent",
             "firstTransactionEvent",
             "hasAccess",
+            "hasMinifiedStackTrace",
             "hasMonitors",
             "hasProfiles",
             "hasReplays",
@@ -29229,6 +29908,9 @@
           "hasAccess": {
             "type": "boolean"
           },
+          "hasMinifiedStackTrace": {
+            "type": "boolean"
+          },
           "hasMonitors": {
             "type": "boolean"
           },
@@ -29264,6 +29946,7 @@
           "firstEvent",
           "firstTransactionEvent",
           "hasAccess",
+          "hasMinifiedStackTrace",
           "hasMonitors",
           "hasProfiles",
           "hasReplays",
