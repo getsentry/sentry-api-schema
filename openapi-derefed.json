@@ -9331,7 +9331,90 @@
                           }
                         },
                         "contexts": {
-                          "type": "object"
+                          "type": "object",
+                          "properties": {
+                            "ForbiddenError": {
+                              "type": "object",
+                              "properties": {
+                                "status": {
+                                  "type": "integer"
+                                },
+                                "statusText": {
+                                  "type": "string"
+                                },
+                                "responseJSON": {
+                                  "type": "object",
+                                  "properties": {
+                                    "detail": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "browser": {
+                              "type": "object",
+                              "properties": {
+                                "version": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "os": {
+                              "type": "object",
+                              "properties": {
+                                "version": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "trace": {
+                              "type": "object",
+                              "properties": {
+                                "span_id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "trace_id": {
+                                  "type": "string"
+                                },
+                                "op": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "organization": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
                         },
                         "dateCreated": {
                           "type": "string"
@@ -10138,7 +10221,27 @@
                     "onboardingTasks": {
                       "type": "array",
                       "items": {
-                        "type": "object"
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "object",
+                            "nullable": true
+                          },
+                          "dateCompleted": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "task": {
+                            "type": "integer"
+                          },
+                          "user": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
                       }
                     },
                     "openMembership": {
@@ -10210,7 +10313,7 @@
                           "team": {
                             "type": "object",
                             "nullable": true,
-                            "oneOf": [
+                            "allOf": [
                               {
                                 "type": "object",
                                 "required": [
@@ -10228,29 +10331,6 @@
                                   "slug": {
                                     "type": "string"
                                   }
-                                }
-                              },
-                              {
-                                "nullable": true,
-                                "not": {
-                                  "anyOf": [
-                                    {
-                                      "type": "string"
-                                    },
-                                    {
-                                      "type": "number"
-                                    },
-                                    {
-                                      "type": "boolean"
-                                    },
-                                    {
-                                      "type": "object"
-                                    },
-                                    {
-                                      "type": "array",
-                                      "items": {}
-                                    }
-                                  ]
                                 }
                               }
                             ]
@@ -10281,7 +10361,26 @@
                       }
                     },
                     "quota": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "accountLimit": {
+                          "type": "integer",
+                          "format": "int64"
+                        },
+                        "maxRate": {
+                          "type": "integer",
+                          "format": "int64",
+                          "nullable": true
+                        },
+                        "maxRateInterval": {
+                          "type": "integer",
+                          "format": "int64"
+                        },
+                        "projectLimit": {
+                          "type": "integer",
+                          "format": "int64"
+                        }
+                      }
                     },
                     "require2FA": {
                       "type": "boolean"
@@ -10750,7 +10849,27 @@
                     "onboardingTasks": {
                       "type": "array",
                       "items": {
-                        "type": "object"
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "object",
+                            "nullable": true
+                          },
+                          "dateCompleted": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "task": {
+                            "type": "integer"
+                          },
+                          "user": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
                       }
                     },
                     "openMembership": {
@@ -10822,7 +10941,7 @@
                           "team": {
                             "type": "object",
                             "nullable": true,
-                            "oneOf": [
+                            "allOf": [
                               {
                                 "type": "object",
                                 "required": [
@@ -10840,29 +10959,6 @@
                                   "slug": {
                                     "type": "string"
                                   }
-                                }
-                              },
-                              {
-                                "nullable": true,
-                                "not": {
-                                  "anyOf": [
-                                    {
-                                      "type": "string"
-                                    },
-                                    {
-                                      "type": "number"
-                                    },
-                                    {
-                                      "type": "boolean"
-                                    },
-                                    {
-                                      "type": "object"
-                                    },
-                                    {
-                                      "type": "array",
-                                      "items": {}
-                                    }
-                                  ]
                                 }
                               }
                             ]
@@ -10893,7 +10989,26 @@
                       }
                     },
                     "quota": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "accountLimit": {
+                          "type": "integer",
+                          "format": "int64"
+                        },
+                        "maxRate": {
+                          "type": "integer",
+                          "format": "int64",
+                          "nullable": true
+                        },
+                        "maxRateInterval": {
+                          "type": "integer",
+                          "format": "int64"
+                        },
+                        "projectLimit": {
+                          "type": "integer",
+                          "format": "int64"
+                        }
+                      }
                     },
                     "require2FA": {
                       "type": "boolean"
@@ -11640,11 +11755,23 @@
                         "properties": {
                           "by": {
                             "type": "object",
-                            "description": "These are key/value pairs, the key being the requested `groupBy` property with its corresponding value."
+                            "description": "These are key/value pairs, the key being the requested `groupBy` property with its corresponding value.",
+                            "properties": {
+                              "session.status": {
+                                "type": "string",
+                                "description": "Example `groupBy` property"
+                              }
+                            }
                           },
                           "totals": {
                             "type": "object",
-                            "description": "These are key/value pairs, the key being the requested `field`, and the value the corresponding total over the requested time frame."
+                            "description": "These are key/value pairs, the key being the requested `field`, and the value the corresponding total over the requested time frame.",
+                            "properties": {
+                              "sum(session)": {
+                                "type": "integer",
+                                "description": "Example `field` value"
+                              }
+                            }
                           },
                           "series": {
                             "type": "object",
@@ -16288,7 +16415,18 @@
                             "type": "string"
                           },
                           "data": {
-                            "type": "object"
+                            "type": "object",
+                            "properties": {
+                              "column": {
+                                "type": "integer"
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "row": {
+                                "type": "integer"
+                              }
+                            }
                           }
                         }
                       }
@@ -16824,7 +16962,90 @@
                       }
                     },
                     "contexts": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "ForbiddenError": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "integer"
+                            },
+                            "statusText": {
+                              "type": "string"
+                            },
+                            "responseJSON": {
+                              "type": "object",
+                              "properties": {
+                                "detail": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "browser": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "os": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "trace": {
+                          "type": "object",
+                          "properties": {
+                            "span_id": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "trace_id": {
+                              "type": "string"
+                            },
+                            "op": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "organization": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "slug": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
                     },
                     "fingerprints": {
                       "type": "array",
@@ -16833,12 +17054,56 @@
                       }
                     },
                     "context": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "resp": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "integer"
+                            },
+                            "responseJSON": {
+                              "type": "object",
+                              "properties": {
+                                "detail": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "statusText": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "stack": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "session": {
+                          "type": "object",
+                          "properties": {
+                            "foo": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unauthorized": {
+                          "type": "boolean"
+                        },
+                        "url": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "release": {
                       "type": "object",
                       "nullable": true,
-                      "oneOf": [
+                      "allOf": [
                         {
                           "type": "object",
                           "required": [
@@ -16861,6 +17126,9 @@
                             "url"
                           ],
                           "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
                             "authors": {
                               "type": "array",
                               "items": {
@@ -16937,6 +17205,7 @@
                                   }
                                 },
                                 {
+                                  "type": "string",
                                   "nullable": true,
                                   "not": {
                                     "anyOf": [
@@ -17002,29 +17271,6 @@
                               "type": "string",
                               "nullable": true
                             }
-                          }
-                        },
-                        {
-                          "nullable": true,
-                          "not": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              },
-                              {
-                                "type": "boolean"
-                              },
-                              {
-                                "type": "object"
-                              },
-                              {
-                                "type": "array",
-                                "items": {}
-                              }
-                            ]
                           }
                         }
                       ]
@@ -18711,7 +18957,18 @@
                                   "type": "string"
                                 },
                                 "data": {
-                                  "type": "object"
+                                  "type": "object",
+                                  "properties": {
+                                    "column": {
+                                      "type": "integer"
+                                    },
+                                    "source": {
+                                      "type": "string"
+                                    },
+                                    "row": {
+                                      "type": "integer"
+                                    }
+                                  }
                                 }
                               }
                             }
@@ -19243,7 +19500,90 @@
                             }
                           },
                           "contexts": {
-                            "type": "object"
+                            "type": "object",
+                            "properties": {
+                              "ForbiddenError": {
+                                "type": "object",
+                                "properties": {
+                                  "status": {
+                                    "type": "integer"
+                                  },
+                                  "statusText": {
+                                    "type": "string"
+                                  },
+                                  "responseJSON": {
+                                    "type": "object",
+                                    "properties": {
+                                      "detail": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "browser": {
+                                "type": "object",
+                                "properties": {
+                                  "version": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "os": {
+                                "type": "object",
+                                "properties": {
+                                  "version": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "trace": {
+                                "type": "object",
+                                "properties": {
+                                  "span_id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "trace_id": {
+                                    "type": "string"
+                                  },
+                                  "op": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "slug": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
                           },
                           "fingerprints": {
                             "type": "array",
@@ -19252,7 +19592,51 @@
                             }
                           },
                           "context": {
-                            "type": "object"
+                            "type": "object",
+                            "properties": {
+                              "resp": {
+                                "type": "object",
+                                "properties": {
+                                  "status": {
+                                    "type": "integer"
+                                  },
+                                  "responseJSON": {
+                                    "type": "object",
+                                    "properties": {
+                                      "detail": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "statusText": {
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  },
+                                  "stack": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "session": {
+                                "type": "object",
+                                "properties": {
+                                  "foo": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "unauthorized": {
+                                "type": "boolean"
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            }
                           },
                           "groupID": {
                             "type": "string"
@@ -19859,7 +20243,18 @@
                             "type": "string"
                           },
                           "data": {
-                            "type": "object"
+                            "type": "object",
+                            "properties": {
+                              "column": {
+                                "type": "integer"
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "row": {
+                                "type": "integer"
+                              }
+                            }
                           }
                         }
                       }
@@ -20395,7 +20790,90 @@
                       }
                     },
                     "contexts": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "ForbiddenError": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "integer"
+                            },
+                            "statusText": {
+                              "type": "string"
+                            },
+                            "responseJSON": {
+                              "type": "object",
+                              "properties": {
+                                "detail": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "browser": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "os": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "trace": {
+                          "type": "object",
+                          "properties": {
+                            "span_id": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "trace_id": {
+                              "type": "string"
+                            },
+                            "op": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "organization": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "slug": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
                     },
                     "fingerprints": {
                       "type": "array",
@@ -20404,12 +20882,56 @@
                       }
                     },
                     "context": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "resp": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "integer"
+                            },
+                            "responseJSON": {
+                              "type": "object",
+                              "properties": {
+                                "detail": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "statusText": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "stack": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "session": {
+                          "type": "object",
+                          "properties": {
+                            "foo": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unauthorized": {
+                          "type": "boolean"
+                        },
+                        "url": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "release": {
                       "type": "object",
                       "nullable": true,
-                      "oneOf": [
+                      "allOf": [
                         {
                           "type": "object",
                           "required": [
@@ -20432,6 +20954,9 @@
                             "url"
                           ],
                           "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
                             "authors": {
                               "type": "array",
                               "items": {
@@ -20508,6 +21033,7 @@
                                   }
                                 },
                                 {
+                                  "type": "string",
                                   "nullable": true,
                                   "not": {
                                     "anyOf": [
@@ -20573,29 +21099,6 @@
                               "type": "string",
                               "nullable": true
                             }
-                          }
-                        },
-                        {
-                          "nullable": true,
-                          "not": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              },
-                              {
-                                "type": "boolean"
-                              },
-                              {
-                                "type": "object"
-                              },
-                              {
-                                "type": "array",
-                                "items": {}
-                              }
-                            ]
                           }
                         }
                       ]
@@ -21305,7 +21808,18 @@
                             "type": "string"
                           },
                           "data": {
-                            "type": "object"
+                            "type": "object",
+                            "properties": {
+                              "column": {
+                                "type": "integer"
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "row": {
+                                "type": "integer"
+                              }
+                            }
                           }
                         }
                       }
@@ -21841,7 +22355,90 @@
                       }
                     },
                     "contexts": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "ForbiddenError": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "integer"
+                            },
+                            "statusText": {
+                              "type": "string"
+                            },
+                            "responseJSON": {
+                              "type": "object",
+                              "properties": {
+                                "detail": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "browser": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "os": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "trace": {
+                          "type": "object",
+                          "properties": {
+                            "span_id": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "trace_id": {
+                              "type": "string"
+                            },
+                            "op": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "organization": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "slug": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
                     },
                     "fingerprints": {
                       "type": "array",
@@ -21850,12 +22447,56 @@
                       }
                     },
                     "context": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "resp": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "integer"
+                            },
+                            "responseJSON": {
+                              "type": "object",
+                              "properties": {
+                                "detail": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "statusText": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "stack": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "session": {
+                          "type": "object",
+                          "properties": {
+                            "foo": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unauthorized": {
+                          "type": "boolean"
+                        },
+                        "url": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "release": {
                       "type": "object",
                       "nullable": true,
-                      "oneOf": [
+                      "allOf": [
                         {
                           "type": "object",
                           "required": [
@@ -21878,6 +22519,9 @@
                             "url"
                           ],
                           "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
                             "authors": {
                               "type": "array",
                               "items": {
@@ -21954,6 +22598,7 @@
                                   }
                                 },
                                 {
+                                  "type": "string",
                                   "nullable": true,
                                   "not": {
                                     "anyOf": [
@@ -22019,29 +22664,6 @@
                               "type": "string",
                               "nullable": true
                             }
-                          }
-                        },
-                        {
-                          "nullable": true,
-                          "not": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              },
-                              {
-                                "type": "boolean"
-                              },
-                              {
-                                "type": "object"
-                              },
-                              {
-                                "type": "array",
-                                "items": {}
-                              }
-                            ]
                           }
                         }
                       ]
@@ -23904,6 +24526,9 @@
                       "url"
                     ],
                     "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
                       "authors": {
                         "type": "array",
                         "items": {
@@ -23980,6 +24605,7 @@
                             }
                           },
                           {
+                            "type": "string",
                             "nullable": true,
                             "not": {
                               "anyOf": [
@@ -24292,6 +24918,9 @@
                     "url"
                   ],
                   "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
                     "authors": {
                       "type": "array",
                       "items": {
@@ -24368,6 +24997,7 @@
                           }
                         },
                         {
+                          "type": "string",
                           "nullable": true,
                           "not": {
                             "anyOf": [
@@ -24533,6 +25163,9 @@
                     "url"
                   ],
                   "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
                     "authors": {
                       "type": "array",
                       "items": {
@@ -24609,6 +25242,7 @@
                           }
                         },
                         {
+                          "type": "string",
                           "nullable": true,
                           "not": {
                             "anyOf": [
@@ -24814,6 +25448,9 @@
                     "url"
                   ],
                   "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
                     "authors": {
                       "type": "array",
                       "items": {
@@ -24890,6 +25527,7 @@
                           }
                         },
                         {
+                          "type": "string",
                           "nullable": true,
                           "not": {
                             "anyOf": [
@@ -25101,7 +25739,12 @@
                         "format": "date-time"
                       },
                       "headers": {
-                        "type": "object"
+                        "type": "object",
+                        "properties": {
+                          "Content-Type": {
+                            "type": "string"
+                          }
+                        }
                       },
                       "id": {
                         "type": "string"
@@ -25294,7 +25937,12 @@
                         "format": "date-time"
                       },
                       "headers": {
-                        "type": "object"
+                        "type": "object",
+                        "properties": {
+                          "Content-Type": {
+                            "type": "string"
+                          }
+                        }
                       },
                       "id": {
                         "type": "string"
@@ -25438,7 +26086,12 @@
                       "format": "date-time"
                     },
                     "headers": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "Content-Type": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "id": {
                       "type": "string"
@@ -25554,7 +26207,12 @@
                       "format": "date-time"
                     },
                     "headers": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "Content-Type": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "id": {
                       "type": "string"
@@ -25682,7 +26340,12 @@
                       "format": "date-time"
                     },
                     "headers": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "Content-Type": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "id": {
                       "type": "string"
@@ -25861,7 +26524,12 @@
                       "format": "date-time"
                     },
                     "headers": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "Content-Type": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "id": {
                       "type": "string"
@@ -25998,7 +26666,12 @@
                       "format": "date-time"
                     },
                     "headers": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "Content-Type": {
+                          "type": "string"
+                        }
+                      }
                     },
                     "id": {
                       "type": "string"
