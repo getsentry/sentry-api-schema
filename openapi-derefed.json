@@ -800,10 +800,27 @@
                       "schedule"
                     ]
                   },
-                  "trace_id": {
-                    "type": "string",
-                    "nullable": true,
-                    "maxLength": 32
+                  "contexts": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "trace": {
+                            "type": "object",
+                            "properties": {
+                              "trace_id": {
+                                "type": "string",
+                                "maxLength": 32
+                              }
+                            },
+                            "required": [
+                              "trace_id"
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "nullable": true
                   }
                 },
                 "required": [
@@ -1621,10 +1638,27 @@
                       "schedule"
                     ]
                   },
-                  "trace_id": {
-                    "type": "string",
-                    "nullable": true,
-                    "maxLength": 32
+                  "contexts": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "trace": {
+                            "type": "object",
+                            "properties": {
+                              "trace_id": {
+                                "type": "string",
+                                "maxLength": 32
+                              }
+                            },
+                            "required": [
+                              "trace_id"
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "nullable": true
                   }
                 },
                 "required": [
@@ -28245,6 +28279,23 @@
           "schedule"
         ]
       },
+      "ContextsValidator": {
+        "type": "object",
+        "properties": {
+          "trace": {
+            "type": "object",
+            "properties": {
+              "trace_id": {
+                "type": "string",
+                "maxLength": 32
+              }
+            },
+            "required": [
+              "trace_id"
+            ]
+          }
+        }
+      },
       "ListOrgTeamResponse": {
         "type": "array",
         "items": {
@@ -29648,10 +29699,27 @@
               "schedule"
             ]
           },
-          "trace_id": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 32
+          "contexts": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "trace": {
+                    "type": "object",
+                    "properties": {
+                      "trace_id": {
+                        "type": "string",
+                        "maxLength": 32
+                      }
+                    },
+                    "required": [
+                      "trace_id"
+                    ]
+                  }
+                }
+              }
+            ],
+            "nullable": true
           }
         },
         "required": [
@@ -32227,6 +32295,18 @@
           "id",
           "meta",
           "schemas"
+        ]
+      },
+      "TraceContextValidator": {
+        "type": "object",
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "maxLength": 32
+          }
+        },
+        "required": [
+          "trace_id"
         ]
       }
     },
