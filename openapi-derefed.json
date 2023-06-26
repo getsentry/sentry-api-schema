@@ -7845,6 +7845,109 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/filters/{filter_id}/": {
+      "put": {
+        "operationId": "Update an Inbound Data Filter",
+        "description": "Update various inbound data filters for a project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "filter_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The type of filter toggle to update. The options are:\n- `browser-extensions`: Filter out errors known to be caused by browser extensions\n- `localhost`: Filter out events coming from localhost. This applies to both IPv4 (``127.0.0.1``)\nand IPv6 (``::1``) addresses.\n- `web-crawlers`: Filter out known web crawlers. Some crawlers may execute pages in incompatible\nways which then cause errors that are unlikely to be seen by a normal user.\n- `legacy-browser`: Filter out known errors from legacy browsers. Older browsers often give less\naccurate information, and while they may report valid issues, the context to understand them is\nincorrect or missing.\n",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "active",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Toggle the browser-extensions, localhost, or web-crawlers filter on or off"
+          },
+          {
+            "in": "query",
+            "name": "subfilters",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "A list specifying which legacy browser filters should be active. Anything excluded from\n                    the list will be turned off. The options are:\n- `ie_pre_9`: Internet Explorer Version 8 and lower\n- `ie9`: Internet Explorer Version 9\n- `ie10`: Internet Explorer Version 10\n- `ie11`: Internet Explorer Version 11\n- `safari_pre_6`: Safari Version 5 and lower\n- `opera_pre_15`: Opera Version 14 and lower\n- `opera_mini_pre_8`: Opera Mini Version 8 and lower\n- `android_pre_4`: Android Version 3 and lower\n"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "active": {
+                    "type": "string"
+                  },
+                  "subfilters": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "subfilters"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/teams/{organization_slug}/{team_slug}/projects/": {
       "get": {
         "operationId": "List a Team's Projects",
@@ -28295,6 +28398,23 @@
             ]
           }
         }
+      },
+      "FilterPut": {
+        "type": "object",
+        "properties": {
+          "active": {
+            "type": "string"
+          },
+          "subfilters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "subfilters"
+        ]
       },
       "ListOrgTeamResponse": {
         "type": "array",
