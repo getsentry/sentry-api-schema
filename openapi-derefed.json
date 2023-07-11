@@ -8956,6 +8956,28 @@
               "type": "boolean"
             },
             "description": "Enables starring the project within the projects tab."
+          },
+          {
+            "in": "query",
+            "name": "options",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "filters:react-hydration-errors": {
+                  "type": "boolean"
+                },
+                "filters:blacklisted_ips": {
+                  "type": "string"
+                },
+                "filters:releases": {
+                  "type": "string"
+                },
+                "filters:error_messages": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "\nConfigure various project filters:\n- `Hydration Errors`: Filter out react hydration errors that are often unactionable\n- `IP Addresses`: Filter events from these IP addresses separated with newlines.\n- `Releases`: Filter events from these releases separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n- `Error Message`: Filter events by error messages separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n```json\n{\n    options: {\n        filters:react-hydration-errors: true,\n        filters:blacklisted_ips: \"127.0.0.1\\n192.168. 0.1\"\n        filters:releases: \"[!3]\\n4\"\n        filters:error_messages: \"TypeError*\\n*ConnectionError*\"\n    }\n}\n```\n"
           }
         ],
         "tags": [
@@ -10328,7 +10350,7 @@
     "/api/0/projects/{organization_slug}/{project_slug}/filters/{filter_id}/": {
       "put": {
         "operationId": "Update an Inbound Data Filter",
-        "description": "Update various inbound data filters for a project.",
+        "description": "Update various inbound data filters for a project.\n\nNote that the hydration filter and custom inbound\nfilters must be updated using the [Update a\nProject](https://docs.sentry.io/api/projects/update-a-project/) endpoint.",
         "parameters": [
           {
             "in": "path",
@@ -33104,6 +33126,23 @@
           "project",
           "type"
         ]
+      },
+      "Options": {
+        "type": "object",
+        "properties": {
+          "filters:react-hydration-errors": {
+            "type": "boolean"
+          },
+          "filters:blacklisted_ips": {
+            "type": "string"
+          },
+          "filters:releases": {
+            "type": "string"
+          },
+          "filters:error_messages": {
+            "type": "string"
+          }
+        }
       },
       "OrganizationEventsResponseDict": {
         "type": "object",
