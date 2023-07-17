@@ -11669,6 +11669,587 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_slug}/": {
+      "post": {
+        "operationId": "Add a Team to a Project",
+        "description": "Give a team access to a project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the team the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stats": {},
+                    "transactionStats": {},
+                    "sessionStats": {},
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isMember": {
+                      "type": "boolean"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "firstEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "firstTransactionEvent": {
+                      "type": "boolean"
+                    },
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasAccess": {
+                      "type": "boolean"
+                    },
+                    "hasMinifiedStackTrace": {
+                      "type": "boolean"
+                    },
+                    "hasMonitors": {
+                      "type": "boolean"
+                    },
+                    "hasProfiles": {
+                      "type": "boolean"
+                    },
+                    "hasReplays": {
+                      "type": "boolean"
+                    },
+                    "hasSessions": {
+                      "type": "boolean"
+                    },
+                    "isInternal": {
+                      "type": "boolean"
+                    },
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "avatarType",
+                        "avatarUuid"
+                      ]
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "team": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "avatar",
+                    "color",
+                    "dateCreated",
+                    "features",
+                    "firstEvent",
+                    "firstTransactionEvent",
+                    "hasAccess",
+                    "hasMinifiedStackTrace",
+                    "hasMonitors",
+                    "hasProfiles",
+                    "hasReplays",
+                    "hasSessions",
+                    "id",
+                    "isBookmarked",
+                    "isInternal",
+                    "isMember",
+                    "isPublic",
+                    "name",
+                    "platform",
+                    "slug",
+                    "status",
+                    "team",
+                    "teams"
+                  ]
+                },
+                "examples": {
+                  "GiveATeamAccessToAProject": {
+                    "value": {
+                      "id": "6758470122493650",
+                      "slug": "The Spoiled Yoghurt",
+                      "name": "the-spoiled-yoghurt",
+                      "platform": "javascript",
+                      "dateCreated": "2023-03-29T15:25:21.344565Z",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "features": [
+                        "alert-filters",
+                        "custom-inbound-filters",
+                        "data-forwarding",
+                        "discard-groups",
+                        "minidump",
+                        "race-free-group-creation",
+                        "rate-limits",
+                        "servicehooks",
+                        "similarity-indexing",
+                        "similarity-view"
+                      ],
+                      "firstEvent": null,
+                      "firstTransactionEvent": true,
+                      "access": [
+                        "project:read",
+                        "event:read",
+                        "team:read",
+                        "alerts:read",
+                        "org:read",
+                        "event:write",
+                        "project:releases",
+                        "member:read"
+                      ],
+                      "hasAccess": true,
+                      "hasMinifiedStackTrace": false,
+                      "hasMonitors": false,
+                      "hasProfiles": false,
+                      "hasReplays": false,
+                      "hasSessions": false,
+                      "isInternal": false,
+                      "isPublic": false,
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      },
+                      "color": "#5cbf3f",
+                      "status": "active",
+                      "team": {
+                        "id": "2349234102",
+                        "name": "Prime Mover",
+                        "slug": "prime-mover"
+                      },
+                      "teams": [
+                        {
+                          "id": "2349234102",
+                          "name": "Prime Mover",
+                          "slug": "prime-mover"
+                        },
+                        {
+                          "id": "47584447",
+                          "name": "Powerful Abolitionist",
+                          "slug": "powerful-abolitionist"
+                        }
+                      ]
+                    },
+                    "summary": "Give a Team Access to a Project"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a Team from a Project",
+        "description": "Revoke a team's access to a project.\n\nNote that Team Admins can only revoke access to teams they are admins of.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the team the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stats": {},
+                    "transactionStats": {},
+                    "sessionStats": {},
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isMember": {
+                      "type": "boolean"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "firstEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "firstTransactionEvent": {
+                      "type": "boolean"
+                    },
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasAccess": {
+                      "type": "boolean"
+                    },
+                    "hasMinifiedStackTrace": {
+                      "type": "boolean"
+                    },
+                    "hasMonitors": {
+                      "type": "boolean"
+                    },
+                    "hasProfiles": {
+                      "type": "boolean"
+                    },
+                    "hasReplays": {
+                      "type": "boolean"
+                    },
+                    "hasSessions": {
+                      "type": "boolean"
+                    },
+                    "isInternal": {
+                      "type": "boolean"
+                    },
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "avatarType",
+                        "avatarUuid"
+                      ]
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "team": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "avatar",
+                    "color",
+                    "dateCreated",
+                    "features",
+                    "firstEvent",
+                    "firstTransactionEvent",
+                    "hasAccess",
+                    "hasMinifiedStackTrace",
+                    "hasMonitors",
+                    "hasProfiles",
+                    "hasReplays",
+                    "hasSessions",
+                    "id",
+                    "isBookmarked",
+                    "isInternal",
+                    "isMember",
+                    "isPublic",
+                    "name",
+                    "platform",
+                    "slug",
+                    "status",
+                    "team",
+                    "teams"
+                  ]
+                },
+                "examples": {
+                  "RevokeATeam'sAccessToAProject": {
+                    "value": {
+                      "id": "6758470122493650",
+                      "slug": "The Spoiled Yoghurt",
+                      "name": "the-spoiled-yoghurt",
+                      "platform": "javascript",
+                      "dateCreated": "2023-03-29T15:25:21.344565Z",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "features": [
+                        "alert-filters",
+                        "custom-inbound-filters",
+                        "data-forwarding",
+                        "discard-groups",
+                        "minidump",
+                        "race-free-group-creation",
+                        "rate-limits",
+                        "servicehooks",
+                        "similarity-indexing",
+                        "similarity-view"
+                      ],
+                      "firstEvent": null,
+                      "firstTransactionEvent": true,
+                      "access": [
+                        "project:read",
+                        "event:read",
+                        "team:read",
+                        "alerts:read",
+                        "org:read",
+                        "event:write",
+                        "project:releases",
+                        "member:read"
+                      ],
+                      "hasAccess": true,
+                      "hasMinifiedStackTrace": false,
+                      "hasMonitors": false,
+                      "hasProfiles": false,
+                      "hasReplays": false,
+                      "hasSessions": false,
+                      "isInternal": false,
+                      "isPublic": false,
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      },
+                      "color": "#5cbf3f",
+                      "status": "active",
+                      "team": {
+                        "id": "2349234102",
+                        "name": "Prime Mover",
+                        "slug": "prime-mover"
+                      },
+                      "teams": [
+                        {
+                          "id": "2349234102",
+                          "name": "Prime Mover",
+                          "slug": "prime-mover"
+                        }
+                      ]
+                    },
+                    "summary": "Revoke a Team's Access to a Project"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/teams/{organization_slug}/{team_slug}/projects/": {
       "get": {
         "operationId": "List a Team's Projects",
@@ -34527,6 +35108,170 @@
         },
         "required": [
           "name"
+        ]
+      },
+      "ProjectWithTeam": {
+        "type": "object",
+        "properties": {
+          "stats": {},
+          "transactionStats": {},
+          "sessionStats": {},
+          "id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isBookmarked": {
+            "type": "boolean"
+          },
+          "isMember": {
+            "type": "boolean"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "firstEvent": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "firstTransactionEvent": {
+            "type": "boolean"
+          },
+          "access": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hasAccess": {
+            "type": "boolean"
+          },
+          "hasMinifiedStackTrace": {
+            "type": "boolean"
+          },
+          "hasMonitors": {
+            "type": "boolean"
+          },
+          "hasProfiles": {
+            "type": "boolean"
+          },
+          "hasReplays": {
+            "type": "boolean"
+          },
+          "hasSessions": {
+            "type": "boolean"
+          },
+          "isInternal": {
+            "type": "boolean"
+          },
+          "isPublic": {
+            "type": "boolean"
+          },
+          "avatar": {
+            "type": "object",
+            "properties": {
+              "avatarType": {
+                "type": "string"
+              },
+              "avatarUuid": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "avatarType",
+              "avatarUuid"
+            ]
+          },
+          "color": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "team": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "slug"
+            ]
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "access",
+          "avatar",
+          "color",
+          "dateCreated",
+          "features",
+          "firstEvent",
+          "firstTransactionEvent",
+          "hasAccess",
+          "hasMinifiedStackTrace",
+          "hasMonitors",
+          "hasProfiles",
+          "hasReplays",
+          "hasSessions",
+          "id",
+          "isBookmarked",
+          "isInternal",
+          "isMember",
+          "isPublic",
+          "name",
+          "platform",
+          "slug",
+          "status",
+          "team",
+          "teams"
         ]
       },
       "RateLimit": {
