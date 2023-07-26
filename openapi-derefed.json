@@ -5316,6 +5316,846 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/replays/": {
+      "get": {
+        "operationId": "List an Organization's Replays",
+        "description": "Return a list of replays belonging to an organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "This defines the range of the time series, relative to now. The range is given in a `<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for minutes, `h` for hours, `d` for days and `w` for weeks.You must either provide a `statsPeriod`, or a `start` and `end`."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the start of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `end` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the inclusive end of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `start` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "sdk",
+                  "started_at",
+                  "count_errors",
+                  "finished_at",
+                  "activity",
+                  "id",
+                  "urls",
+                  "platform",
+                  "tags",
+                  "user",
+                  "count_urls",
+                  "clicks",
+                  "duration",
+                  "trace_ids",
+                  "project_id",
+                  "count_dead_clicks",
+                  "device",
+                  "is_archived",
+                  "os",
+                  "dist",
+                  "count_segments",
+                  "error_ids",
+                  "count_rage_clicks",
+                  "environment",
+                  "browser",
+                  "releases"
+                ],
+                "type": "string",
+                "description": "* `sdk` - sdk\n* `started_at` - started_at\n* `count_errors` - count_errors\n* `finished_at` - finished_at\n* `activity` - activity\n* `id` - id\n* `urls` - urls\n* `platform` - platform\n* `tags` - tags\n* `user` - user\n* `count_urls` - count_urls\n* `clicks` - clicks\n* `duration` - duration\n* `trace_ids` - trace_ids\n* `project_id` - project_id\n* `count_dead_clicks` - count_dead_clicks\n* `device` - device\n* `is_archived` - is_archived\n* `os` - os\n* `dist` - dist\n* `count_segments` - count_segments\n* `error_ids` - error_ids\n* `count_rage_clicks` - count_rage_clicks\n* `environment` - environment\n* `browser` - browser\n* `releases` - releases"
+              }
+            },
+            "description": "Specifies a field that should be marshaled in the output. Invalid fields will be rejected."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {}
+            },
+            "description": "The ID of the projects to filter by."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The environment to filter by."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The field to sort the output by."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A structured query string to filter the output by."
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "string"
+                      },
+                      "trace_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "error_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "environment": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "tags": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "array",
+                            "items": {}
+                          }
+                        ]
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "username": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "email": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "ip": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "sdk": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "os": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "browser": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "device": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "brand": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "model": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "family": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "is_archived": {
+                        "type": "boolean",
+                        "nullable": true
+                      },
+                      "urls": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "clicks": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "count_dead_clicks": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_rage_clicks": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_errors": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "duration": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "finished_at": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "started_at": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "activity": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_urls": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "replay_type": {
+                        "type": "string"
+                      },
+                      "count_segments": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "platform": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "releases": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "dist": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Success": {
+                    "value": [
+                      {
+                        "activity": 5,
+                        "browser": {
+                          "name": "Chome",
+                          "version": "103.0.38"
+                        },
+                        "count_dead_clicks": 6,
+                        "count_rage_clicks": 1,
+                        "count_errors": 1,
+                        "count_segments": 0,
+                        "count_urls": 1,
+                        "device": {
+                          "brand": "Apple",
+                          "family": "iPhone",
+                          "model": "11",
+                          "name": "iPhone 11"
+                        },
+                        "dist": null,
+                        "duration": 576,
+                        "environment": "production",
+                        "error_ids": [
+                          "7e07485f-12f9-416b-8b14-26260799b51f"
+                        ],
+                        "finished_at": "2022-07-07T14:15:33.201019",
+                        "id": "7e07485f-12f9-416b-8b14-26260799b51f",
+                        "is_archived": null,
+                        "os": {
+                          "name": "iOS",
+                          "version": "16.2"
+                        },
+                        "platform": "Sentry",
+                        "project_id": "639195",
+                        "releases": [
+                          "version@1.4"
+                        ],
+                        "sdk": {
+                          "name": "Thundercat",
+                          "version": "27.1"
+                        },
+                        "started_at": "2022-07-07T14:05:57.909921",
+                        "tags": {
+                          "hello": [
+                            "world",
+                            "Lionel Richie"
+                          ]
+                        },
+                        "trace_ids": [
+                          "7e07485f-12f9-416b-8b14-26260799b51f"
+                        ],
+                        "urls": [
+                          "/organizations/abc123/issues"
+                        ],
+                        "user": {
+                          "display_name": "John Doe",
+                          "email": "john.doe@example.com",
+                          "id": "30246326",
+                          "ip": "213.164.1.114",
+                          "username": "John Doe"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_slug}/replays/{replay_id}/": {
+      "get": {
+        "operationId": "Retrieve a Replay Instance",
+        "description": "Return details on an individual replay.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]+$"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "This defines the range of the time series, relative to now. The range is given in a `<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for minutes, `h` for hours, `d` for days and `w` for weeks.You must either provide a `statsPeriod`, or a `start` and `end`."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the start of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `end` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the inclusive end of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `start` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "sdk",
+                  "started_at",
+                  "count_errors",
+                  "finished_at",
+                  "activity",
+                  "id",
+                  "urls",
+                  "platform",
+                  "tags",
+                  "user",
+                  "count_urls",
+                  "clicks",
+                  "duration",
+                  "trace_ids",
+                  "project_id",
+                  "count_dead_clicks",
+                  "device",
+                  "is_archived",
+                  "os",
+                  "dist",
+                  "count_segments",
+                  "error_ids",
+                  "count_rage_clicks",
+                  "environment",
+                  "browser",
+                  "releases"
+                ],
+                "type": "string",
+                "description": "* `sdk` - sdk\n* `started_at` - started_at\n* `count_errors` - count_errors\n* `finished_at` - finished_at\n* `activity` - activity\n* `id` - id\n* `urls` - urls\n* `platform` - platform\n* `tags` - tags\n* `user` - user\n* `count_urls` - count_urls\n* `clicks` - clicks\n* `duration` - duration\n* `trace_ids` - trace_ids\n* `project_id` - project_id\n* `count_dead_clicks` - count_dead_clicks\n* `device` - device\n* `is_archived` - is_archived\n* `os` - os\n* `dist` - dist\n* `count_segments` - count_segments\n* `error_ids` - error_ids\n* `count_rage_clicks` - count_rage_clicks\n* `environment` - environment\n* `browser` - browser\n* `releases` - releases"
+              }
+            },
+            "description": "Specifies a field that should be marshaled in the output. Invalid fields will be rejected."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {}
+            },
+            "description": "The ID of the projects to filter by."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The environment to filter by."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The field to sort the output by."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A structured query string to filter the output by."
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "string"
+                      },
+                      "trace_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "error_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "environment": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "tags": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "array",
+                            "items": {}
+                          }
+                        ]
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "username": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "email": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "ip": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "sdk": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "os": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "browser": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "device": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "brand": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "model": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "family": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "is_archived": {
+                        "type": "boolean",
+                        "nullable": true
+                      },
+                      "urls": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "clicks": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "count_dead_clicks": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_rage_clicks": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_errors": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "duration": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "finished_at": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "started_at": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "activity": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_urls": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "replay_type": {
+                        "type": "string"
+                      },
+                      "count_segments": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "platform": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "releases": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "dist": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Success": {
+                    "value": [
+                      {
+                        "activity": 5,
+                        "browser": {
+                          "name": "Chome",
+                          "version": "103.0.38"
+                        },
+                        "count_dead_clicks": 6,
+                        "count_rage_clicks": 1,
+                        "count_errors": 1,
+                        "count_segments": 0,
+                        "count_urls": 1,
+                        "device": {
+                          "brand": "Apple",
+                          "family": "iPhone",
+                          "model": "11",
+                          "name": "iPhone 11"
+                        },
+                        "dist": null,
+                        "duration": 576,
+                        "environment": "production",
+                        "error_ids": [
+                          "7e07485f-12f9-416b-8b14-26260799b51f"
+                        ],
+                        "finished_at": "2022-07-07T14:15:33.201019",
+                        "id": "7e07485f-12f9-416b-8b14-26260799b51f",
+                        "os": {
+                          "name": "iOS",
+                          "version": "16.2"
+                        },
+                        "platform": "Sentry",
+                        "project_id": "639195",
+                        "releases": [
+                          "version@1.4"
+                        ],
+                        "sdk": {
+                          "name": "Thundercat",
+                          "version": "27.1"
+                        },
+                        "started_at": "2022-07-07T14:05:57.909921",
+                        "tags": {
+                          "hello": [
+                            "world",
+                            "Lionel Richie"
+                          ]
+                        },
+                        "trace_ids": [
+                          "7e07485f-12f9-416b-8b14-26260799b51f"
+                        ],
+                        "urls": [
+                          "/organizations/abc123/issues"
+                        ],
+                        "user": {
+                          "display_name": "John Doe",
+                          "email": "john.doe@example.com",
+                          "id": "30246326",
+                          "ip": "213.164.1.114",
+                          "username": "John Doe"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/scim/v2/Groups": {
       "get": {
         "tags": [
@@ -36098,6 +36938,209 @@
         "required": [
           "trace_id"
         ]
+      },
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "project_id": {
+              "type": "string"
+            },
+            "trace_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "error_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "environment": {
+              "type": "string",
+              "nullable": true
+            },
+            "tags": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "type": "array",
+                  "items": {}
+                }
+              ]
+            },
+            "user": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "username": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "email": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "ip": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "display_name": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            },
+            "sdk": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "version": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            },
+            "os": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "version": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            },
+            "browser": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "version": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            },
+            "device": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "brand": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "model": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "family": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            },
+            "is_archived": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            },
+            "clicks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "count_dead_clicks": {
+              "type": "integer",
+              "nullable": true
+            },
+            "count_rage_clicks": {
+              "type": "integer",
+              "nullable": true
+            },
+            "count_errors": {
+              "type": "integer",
+              "nullable": true
+            },
+            "duration": {
+              "type": "integer",
+              "nullable": true
+            },
+            "finished_at": {
+              "type": "string",
+              "nullable": true
+            },
+            "started_at": {
+              "type": "string",
+              "nullable": true
+            },
+            "activity": {
+              "type": "integer",
+              "nullable": true
+            },
+            "count_urls": {
+              "type": "integer",
+              "nullable": true
+            },
+            "replay_type": {
+              "type": "string"
+            },
+            "count_segments": {
+              "type": "integer",
+              "nullable": true
+            },
+            "platform": {
+              "type": "string",
+              "nullable": true
+            },
+            "releases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dist": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -36197,6 +37240,16 @@
       "name": "Crons",
       "x-sidebar-name": "Crons (Beta)",
       "description": "Endpoints for Crons",
+      "x-display-description": true,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Replays",
+      "x-sidebar-name": "Replays",
+      "description": "Endpoints for Replays",
       "x-display-description": true,
       "externalDocs": {
         "description": "Found an error? Let us know.",
