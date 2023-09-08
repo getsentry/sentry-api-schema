@@ -22733,7 +22733,7 @@
           {
             "name": "organization_slug",
             "in": "path",
-            "description": "The slug of the organization the groups belong to.",
+            "description": "The slug of the organization the events belong to.",
             "required": true,
             "schema": {
               "type": "string"
@@ -22742,7 +22742,7 @@
           {
             "name": "project_slug",
             "in": "path",
-            "description": "The slug of the project the groups belong to.",
+            "description": "The slug of the project the events belong to.",
             "required": true,
             "schema": {
               "type": "string"
@@ -23557,7 +23557,7 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/tags/{key}/values/": {
+    "/api/0/organizations/{organization_slug}/issues/{issue_id}/tags/{key}/values/": {
       "get": {
         "tags": [
           "Events"
@@ -23565,6 +23565,15 @@
         "description": "Returns details for given tag key related to an issue. \n\nWhen [paginated](/api/pagination) can return at most 1000 values.",
         "operationId": "List a Tag's Values Related to an Issue",
         "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issue belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "issue_id",
             "in": "path",
@@ -23629,7 +23638,7 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/tags/{key}/": {
+    "/api/0/organizations/{organization_slug}/issues/{issue_id}/tags/{key}/": {
       "get": {
         "tags": [
           "Events"
@@ -23637,6 +23646,15 @@
         "description": "Returns details for given tag key related to an issue.",
         "operationId": "Retrieve Tag Details",
         "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issue belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "issue_id",
             "in": "path",
@@ -23696,7 +23714,7 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/hashes/": {
+    "/api/0/organizations/{organization_slug}/issues/{issue_id}/hashes/": {
       "get": {
         "tags": [
           "Events"
@@ -23704,6 +23722,15 @@
         "description": "This endpoint lists an issue's hashes, which are the generated checksums used to aggregate individual events.",
         "operationId": "List an Issue's Hashes",
         "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issue belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "issue_id",
             "in": "path",
@@ -24985,7 +25012,7 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/events/oldest/": {
+    "/api/0/organizations/{organization_slug}/issues/{issue_id}/events/oldest/": {
       "get": {
         "tags": [
           "Events"
@@ -24994,6 +25021,15 @@
         "operationId": "Retrieve the Oldest Event for an Issue",
         "parameters": [
           {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issue belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "issue_id",
             "in": "path",
             "description": "The ID of the issue.",
@@ -26550,7 +26586,7 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/events/latest/": {
+    "/api/0/organizations/{organization_slug}/issues/{issue_id}/events/latest/": {
       "get": {
         "tags": [
           "Events"
@@ -26559,6 +26595,15 @@
         "operationId": "Retrieve the Latest Event for an Issue",
         "parameters": [
           {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issue belong to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "issue_id",
             "in": "path",
             "description": "The ID of the issue.",
@@ -28115,7 +28160,7 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/events/": {
+    "/api/0/organizations/{organization_slug}/issues/{issue_id}/events/": {
       "get": {
         "tags": [
           "Events"
@@ -28123,6 +28168,15 @@
         "description": "This endpoint lists an issue's events.",
         "operationId": "List an Issue's Events",
         "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issues belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "issue_id",
             "in": "path",
@@ -28309,7 +28363,7 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/": {
+    "/api/0/organizations/{organization_slug}/issues/{issue_id}/": {
       "get": {
         "tags": [
           "Events"
@@ -28317,6 +28371,15 @@
         "description": "Return details on an individual issue. This returns the basic stats for the issue (title, last seen, first seen), some overall numbers (number of comments, user reports) as well as the summarized event data.",
         "operationId": "Retrieve an Issue",
         "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issue belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "issue_id",
             "in": "path",
@@ -29002,6 +29065,15 @@
         "operationId": "Update an Issue",
         "parameters": [
           {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issue belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "issue_id",
             "in": "path",
             "description": "The ID of the group to retrieve.",
@@ -29273,6 +29345,15 @@
         "description": "Removes an individual issue.",
         "operationId": "Remove an Issue",
         "parameters": [
+          {
+            "name": "organization_slug",
+            "in": "path",
+            "description": "The slug of the organization the issue belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "issue_id",
             "in": "path",
