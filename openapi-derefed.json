@@ -11460,60 +11460,6 @@
             },
             "description": "The slug of the project the resource belongs to.",
             "required": true
-          },
-          {
-            "in": "query",
-            "name": "name",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The name for the project."
-          },
-          {
-            "in": "query",
-            "name": "slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug for the project."
-          },
-          {
-            "in": "query",
-            "name": "platform",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The platform for the project."
-          },
-          {
-            "in": "query",
-            "name": "isBookmarked",
-            "schema": {
-              "type": "boolean"
-            },
-            "description": "Enables starring the project within the projects tab."
-          },
-          {
-            "in": "query",
-            "name": "options",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "filters:react-hydration-errors": {
-                  "type": "boolean"
-                },
-                "filters:blacklisted_ips": {
-                  "type": "string"
-                },
-                "filters:releases": {
-                  "type": "string"
-                },
-                "filters:error_messages": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "\nConfigure various project filters:\n- `Hydration Errors`: Filter out react hydration errors that are often unactionable\n- `IP Addresses`: Filter events from these IP addresses separated with newlines.\n- `Releases`: Filter events from these releases separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n- `Error Message`: Filter events by error messages separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n```json\n{\n    options: {\n        filters:react-hydration-errors: true,\n        filters:blacklisted_ips: \"127.0.0.1\\n192.168. 0.1\"\n        filters:releases: \"[!3]\\n4\"\n        filters:error_messages: \"TypeError*\\n*ConnectionError*\"\n    }\n}\n```\n"
           }
         ],
         "tags": [
@@ -11525,213 +11471,35 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "isBookmarked": {
-                    "type": "boolean"
-                  },
-                  "isSubscribed": {
-                    "type": "boolean"
+                  "slug": {
+                    "type": "string",
+                    "description": "Uniquely identifies a project and is used for the interface.",
+                    "maxLength": 50,
+                    "pattern": "^[a-z0-9_\\-]+$"
                   },
                   "name": {
                     "type": "string",
+                    "description": "The name for the project.",
                     "maxLength": 200
-                  },
-                  "slug": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "pattern": "^[a-z0-9_\\-]+$"
-                  },
-                  "team": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "pattern": "^[a-z0-9_\\-]+$"
-                  },
-                  "digestsMinDelay": {
-                    "type": "integer",
-                    "maximum": 3600,
-                    "minimum": 60
-                  },
-                  "digestsMaxDelay": {
-                    "type": "integer",
-                    "maximum": 3600,
-                    "minimum": 60
-                  },
-                  "subjectPrefix": {
-                    "type": "string",
-                    "maxLength": 200
-                  },
-                  "subjectTemplate": {
-                    "type": "string",
-                    "maxLength": 200
-                  },
-                  "securityToken": {
-                    "type": "string",
-                    "maxLength": 255,
-                    "pattern": "^[-a-zA-Z0-9+/=\\s]+$"
-                  },
-                  "securityTokenHeader": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "pattern": "^[a-zA-Z0-9_\\-]+$"
-                  },
-                  "verifySSL": {
-                    "type": "boolean"
-                  },
-                  "defaultEnvironment": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "dataScrubber": {
-                    "type": "boolean"
-                  },
-                  "dataScrubberDefaults": {
-                    "type": "boolean"
-                  },
-                  "sensitiveFields": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "safeFields": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "storeCrashReports": {
-                    "type": "integer",
-                    "maximum": 100,
-                    "minimum": -1,
-                    "nullable": true
-                  },
-                  "relayPiiConfig": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "builtinSymbolSources": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "symbolSources": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "scrubIPAddresses": {
-                    "type": "boolean"
-                  },
-                  "groupingConfig": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "groupingEnhancements": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "fingerprintingRules": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "secondaryGroupingConfig": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "secondaryGroupingExpiry": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "nullable": true
-                  },
-                  "groupingAutoUpdate": {
-                    "type": "boolean"
-                  },
-                  "scrapeJavaScript": {
-                    "type": "boolean"
-                  },
-                  "allowedDomains": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "resolveAge": {
-                    "type": "integer",
-                    "nullable": true
                   },
                   "platform": {
                     "type": "string",
-                    "nullable": true
+                    "nullable": true,
+                    "description": "The platform for the project."
                   },
-                  "copy_from_project": {
-                    "type": "integer"
+                  "isBookmarked": {
+                    "type": "boolean",
+                    "description": "Enables starring the project within the projects tab."
                   },
-                  "dynamicSamplingBiases": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "enum": [
-                            "boostEnvironments",
-                            "boostKeyTransactions",
-                            "boostLatestRelease",
-                            "boostLowVolumeTransactions",
-                            "boostReplayId",
-                            "ignoreHealthChecks",
-                            "recalibrationRule"
-                          ],
-                          "type": "string",
-                          "description": "* `boostEnvironments` - boostEnvironments\n* `boostKeyTransactions` - boostKeyTransactions\n* `boostLatestRelease` - boostLatestRelease\n* `boostLowVolumeTransactions` - boostLowVolumeTransactions\n* `boostReplayId` - boostReplayId\n* `ignoreHealthChecks` - ignoreHealthChecks\n* `recalibrationRule` - recalibrationRule"
-                        },
-                        "active": {
-                          "type": "boolean",
-                          "default": false
-                        }
-                      },
-                      "required": [
-                        "id"
-                      ]
-                    }
-                  },
-                  "performanceIssueCreationRate": {
-                    "type": "number",
-                    "format": "double",
-                    "maximum": 1,
-                    "minimum": 0
-                  },
-                  "performanceIssueCreationThroughPlatform": {
-                    "type": "boolean"
-                  },
-                  "performanceIssueSendToPlatform": {
-                    "type": "boolean"
-                  },
-                  "recapServerUrl": {
-                    "type": "string",
-                    "format": "uri",
-                    "nullable": true
-                  },
-                  "recapServerToken": {
-                    "type": "string",
-                    "nullable": true
+                  "options": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "\nConfigure various project filters:\n- `Hydration Errors`: Filter out react hydration errors that are often unactionable\n- `IP Addresses`: Filter events from these IP addresses separated with newlines.\n- `Releases`: Filter events from these releases separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n- `Error Message`: Filter events by error messages separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n```json\n{\n    options: {\n        filters:react-hydration-errors: true,\n        filters:blacklisted_ips: \"127.0.0.1\\n192.168. 0.1\"\n        filters:releases: \"[!3]\\n4\"\n        filters:error_messages: \"TypeError*\\n*ConnectionError*\"\n    }\n}\n```\n"
                   }
-                },
-                "required": [
-                  "digestsMaxDelay",
-                  "digestsMinDelay",
-                  "isBookmarked",
-                  "isSubscribed",
-                  "name",
-                  "securityToken",
-                  "securityTokenHeader",
-                  "slug",
-                  "subjectPrefix",
-                  "subjectTemplate",
-                  "team"
-                ]
+                }
               }
             }
-          },
-          "required": true
+          }
         },
         "security": [
           {
@@ -33797,31 +33565,6 @@
           }
         }
       },
-      "DynamicSamplingBias": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "enum": [
-              "boostEnvironments",
-              "boostKeyTransactions",
-              "boostLatestRelease",
-              "boostLowVolumeTransactions",
-              "boostReplayId",
-              "ignoreHealthChecks",
-              "recalibrationRule"
-            ],
-            "type": "string",
-            "description": "* `boostEnvironments` - boostEnvironments\n* `boostKeyTransactions` - boostKeyTransactions\n* `boostLatestRelease` - boostLatestRelease\n* `boostLowVolumeTransactions` - boostLowVolumeTransactions\n* `boostReplayId` - boostReplayId\n* `ignoreHealthChecks` - ignoreHealthChecks\n* `recalibrationRule` - recalibrationRule"
-          },
-          "active": {
-            "type": "boolean",
-            "default": false
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
       "DynamicSdkLoaderOption": {
         "type": "object",
         "properties": {
@@ -37759,213 +37502,6 @@
           "status"
         ]
       },
-      "ProjectAdmin": {
-        "type": "object",
-        "properties": {
-          "isBookmarked": {
-            "type": "boolean"
-          },
-          "isSubscribed": {
-            "type": "boolean"
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "slug": {
-            "type": "string",
-            "maxLength": 50,
-            "pattern": "^[a-z0-9_\\-]+$"
-          },
-          "team": {
-            "type": "string",
-            "maxLength": 50,
-            "pattern": "^[a-z0-9_\\-]+$"
-          },
-          "digestsMinDelay": {
-            "type": "integer",
-            "maximum": 3600,
-            "minimum": 60
-          },
-          "digestsMaxDelay": {
-            "type": "integer",
-            "maximum": 3600,
-            "minimum": 60
-          },
-          "subjectPrefix": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "subjectTemplate": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "securityToken": {
-            "type": "string",
-            "maxLength": 255,
-            "pattern": "^[-a-zA-Z0-9+/=\\s]+$"
-          },
-          "securityTokenHeader": {
-            "type": "string",
-            "maxLength": 20,
-            "pattern": "^[a-zA-Z0-9_\\-]+$"
-          },
-          "verifySSL": {
-            "type": "boolean"
-          },
-          "defaultEnvironment": {
-            "type": "string",
-            "nullable": true
-          },
-          "dataScrubber": {
-            "type": "boolean"
-          },
-          "dataScrubberDefaults": {
-            "type": "boolean"
-          },
-          "sensitiveFields": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "safeFields": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "storeCrashReports": {
-            "type": "integer",
-            "maximum": 100,
-            "minimum": -1,
-            "nullable": true
-          },
-          "relayPiiConfig": {
-            "type": "string",
-            "nullable": true
-          },
-          "builtinSymbolSources": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "symbolSources": {
-            "type": "string",
-            "nullable": true
-          },
-          "scrubIPAddresses": {
-            "type": "boolean"
-          },
-          "groupingConfig": {
-            "type": "string",
-            "nullable": true
-          },
-          "groupingEnhancements": {
-            "type": "string",
-            "nullable": true
-          },
-          "fingerprintingRules": {
-            "type": "string",
-            "nullable": true
-          },
-          "secondaryGroupingConfig": {
-            "type": "string",
-            "nullable": true
-          },
-          "secondaryGroupingExpiry": {
-            "type": "integer",
-            "minimum": 1,
-            "nullable": true
-          },
-          "groupingAutoUpdate": {
-            "type": "boolean"
-          },
-          "scrapeJavaScript": {
-            "type": "boolean"
-          },
-          "allowedDomains": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "resolveAge": {
-            "type": "integer",
-            "nullable": true
-          },
-          "platform": {
-            "type": "string",
-            "nullable": true
-          },
-          "copy_from_project": {
-            "type": "integer"
-          },
-          "dynamicSamplingBiases": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "enum": [
-                    "boostEnvironments",
-                    "boostKeyTransactions",
-                    "boostLatestRelease",
-                    "boostLowVolumeTransactions",
-                    "boostReplayId",
-                    "ignoreHealthChecks",
-                    "recalibrationRule"
-                  ],
-                  "type": "string",
-                  "description": "* `boostEnvironments` - boostEnvironments\n* `boostKeyTransactions` - boostKeyTransactions\n* `boostLatestRelease` - boostLatestRelease\n* `boostLowVolumeTransactions` - boostLowVolumeTransactions\n* `boostReplayId` - boostReplayId\n* `ignoreHealthChecks` - ignoreHealthChecks\n* `recalibrationRule` - recalibrationRule"
-                },
-                "active": {
-                  "type": "boolean",
-                  "default": false
-                }
-              },
-              "required": [
-                "id"
-              ]
-            }
-          },
-          "performanceIssueCreationRate": {
-            "type": "number",
-            "format": "double",
-            "maximum": 1,
-            "minimum": 0
-          },
-          "performanceIssueCreationThroughPlatform": {
-            "type": "boolean"
-          },
-          "performanceIssueSendToPlatform": {
-            "type": "boolean"
-          },
-          "recapServerUrl": {
-            "type": "string",
-            "format": "uri",
-            "nullable": true
-          },
-          "recapServerToken": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "required": [
-          "digestsMaxDelay",
-          "digestsMinDelay",
-          "isBookmarked",
-          "isSubscribed",
-          "name",
-          "securityToken",
-          "securityTokenHeader",
-          "slug",
-          "subjectPrefix",
-          "subjectTemplate",
-          "team"
-        ]
-      },
       "ProjectKey": {
         "type": "object",
         "description": "This represents a Sentry Project Client Key.",
@@ -38176,23 +37712,6 @@
               }
             ],
             "nullable": true
-          }
-        }
-      },
-      "ProjectOptions": {
-        "type": "object",
-        "properties": {
-          "filters:react-hydration-errors": {
-            "type": "boolean"
-          },
-          "filters:blacklisted_ips": {
-            "type": "string"
-          },
-          "filters:releases": {
-            "type": "string"
-          },
-          "filters:error_messages": {
-            "type": "string"
           }
         }
       },
@@ -39201,6 +38720,36 @@
         "required": [
           "trace_id"
         ]
+      },
+      "UpdateProject": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Uniquely identifies a project and is used for the interface.",
+            "maxLength": 50,
+            "pattern": "^[a-z0-9_\\-]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name for the project.",
+            "maxLength": 200
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true,
+            "description": "The platform for the project."
+          },
+          "isBookmarked": {
+            "type": "boolean",
+            "description": "Enables starring the project within the projects tab."
+          },
+          "options": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "\nConfigure various project filters:\n- `Hydration Errors`: Filter out react hydration errors that are often unactionable\n- `IP Addresses`: Filter events from these IP addresses separated with newlines.\n- `Releases`: Filter events from these releases separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n- `Error Message`: Filter events by error messages separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n```json\n{\n    options: {\n        filters:react-hydration-errors: true,\n        filters:blacklisted_ips: \"127.0.0.1\\n192.168. 0.1\"\n        filters:releases: \"[!3]\\n4\"\n        filters:error_messages: \"TypeError*\\n*ConnectionError*\"\n    }\n}\n```\n"
+          }
+        }
       },
       "_LegacyBrowserFilter": {
         "type": "object",
