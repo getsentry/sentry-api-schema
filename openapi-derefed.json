@@ -15197,39 +15197,6 @@
             },
             "description": "The slug of the team the resource belongs to.",
             "required": true
-          },
-          {
-            "in": "query",
-            "name": "name",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The name for the project.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Optional slug for the project. If not provided a slug is generated from the name."
-          },
-          {
-            "in": "query",
-            "name": "platform",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The platform for the project."
-          },
-          {
-            "in": "query",
-            "name": "default_rules",
-            "schema": {
-              "type": "boolean"
-            },
-            "description": "Defaults to true where the behavior is to alert the user on every new issue. Setting this to false will turn this off and the user must create their own alerts to be notified of new issues."
           }
         ],
         "tags": [
@@ -15243,20 +15210,24 @@
                 "properties": {
                   "name": {
                     "type": "string",
+                    "description": "The name for the project.",
                     "maxLength": 50
                   },
                   "slug": {
                     "type": "string",
                     "nullable": true,
+                    "description": "Uniquely identifies a project and is used for the interface.\n        If not provided, it is automatically generated from the name.",
                     "maxLength": 50,
                     "pattern": "^[a-z0-9_\\-]+$"
                   },
                   "platform": {
                     "type": "string",
-                    "nullable": true
+                    "nullable": true,
+                    "description": "The platform for the project."
                   },
                   "default_rules": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "\nDefaults to true where the behavior is to alert the user on every new\nissue. Setting this to false will turn this off and the user must create\ntheir own alerts to be notified of new issues.\n        "
                   }
                 },
                 "required": [
@@ -38257,20 +38228,24 @@
         "properties": {
           "name": {
             "type": "string",
+            "description": "The name for the project.",
             "maxLength": 50
           },
           "slug": {
             "type": "string",
             "nullable": true,
+            "description": "Uniquely identifies a project and is used for the interface.\n        If not provided, it is automatically generated from the name.",
             "maxLength": 50,
             "pattern": "^[a-z0-9_\\-]+$"
           },
           "platform": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "The platform for the project."
           },
           "default_rules": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "\nDefaults to true where the behavior is to alert the user on every new\nissue. Setting this to false will turn this off and the user must create\ntheir own alerts to be notified of new issues.\n        "
           }
         },
         "required": [
