@@ -12914,25 +12914,6 @@
             },
             "description": "The type of filter toggle to update. The options are:\n- `browser-extensions`: Filter out errors known to be caused by browser extensions.\n- `localhost`: Filter out events coming from localhost. This applies to both IPv4 (``127.0.0.1``)\nand IPv6 (``::1``) addresses.\n- `filtered-transaction`: Filter out transactions for healthcheck and ping endpoints.\n- `web-crawlers`: Filter out known web crawlers. Some crawlers may execute pages in incompatible\nways which cause errors that are unlikely to be seen by a normal user.\n- `legacy-browser`: Filter out known errors from legacy browsers. Older browsers often give less\naccurate information, and while they may report valid issues, the context to understand them is\nincorrect or missing.\n",
             "required": true
-          },
-          {
-            "in": "query",
-            "name": "active",
-            "schema": {
-              "type": "boolean"
-            },
-            "description": "Toggle the browser-extensions, localhost, filtered-transaction, or web-crawlers filter on or off."
-          },
-          {
-            "in": "query",
-            "name": "subfilters",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "\nSpecifies which legacy browser filters should be active. Anything excluded from the list will be\ndisabled. The options are:\n- `ie_pre_9`: Internet Explorer Version 8 and lower\n- `ie9`: Internet Explorer Version 9\n- `ie10`: Internet Explorer Version 10\n- `ie11`: Internet Explorer Version 11\n- `safari_pre_6`: Safari Version 5 and lower\n- `opera_pre_15`: Opera Version 14 and lower\n- `opera_mini_pre_8`: Opera Mini Version 8 and lower\n- `android_pre_4`: Android Version 3 and lower\n"
           }
         ],
         "tags": [
@@ -12945,22 +12926,31 @@
                 "type": "object",
                 "properties": {
                   "active": {
-                    "type": "string"
+                    "type": "boolean",
+                    "description": "Toggle the browser-extensions, localhost, filtered-transaction, or web-crawlers filter on or off."
                   },
                   "subfilters": {
                     "type": "array",
                     "items": {
-                      "type": "string"
-                    }
+                      "enum": [
+                        "ie_pre_9",
+                        "ie9",
+                        "ie10",
+                        "ie11",
+                        "opera_pre_15",
+                        "android_pre_4",
+                        "safari_pre_6",
+                        "opera_mini_pre_8"
+                      ],
+                      "type": "string",
+                      "description": "* `ie_pre_9` - ie_pre_9\n* `ie9` - ie9\n* `ie10` - ie10\n* `ie11` - ie11\n* `opera_pre_15` - opera_pre_15\n* `android_pre_4` - android_pre_4\n* `safari_pre_6` - safari_pre_6\n* `opera_mini_pre_8` - opera_mini_pre_8"
+                    },
+                    "description": "\nSpecifies which legacy browser filters should be active. Anything excluded from the list will be\ndisabled. The options are:\n- `ie_pre_9`: Internet Explorer Version 8 and lower\n- `ie9`: Internet Explorer Version 9\n- `ie10`: Internet Explorer Version 10\n- `ie11`: Internet Explorer Version 11\n- `safari_pre_6`: Safari Version 5 and lower\n- `opera_pre_15`: Opera Version 14 and lower\n- `opera_mini_pre_8`: Opera Mini Version 8 and lower\n- `android_pre_4`: Android Version 3 and lower\n"
                   }
-                },
-                "required": [
-                  "subfilters"
-                ]
+                }
               }
             }
-          },
-          "required": true
+          }
         },
         "security": [
           {
@@ -33846,23 +33836,6 @@
           }
         }
       },
-      "FilterPut": {
-        "type": "object",
-        "properties": {
-          "active": {
-            "type": "string"
-          },
-          "subfilters": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "subfilters"
-        ]
-      },
       "ListClientKeysResponse": {
         "type": "array",
         "items": {
@@ -39228,6 +39201,33 @@
         "required": [
           "trace_id"
         ]
+      },
+      "_LegacyBrowserFilter": {
+        "type": "object",
+        "properties": {
+          "active": {
+            "type": "boolean",
+            "description": "Toggle the browser-extensions, localhost, filtered-transaction, or web-crawlers filter on or off."
+          },
+          "subfilters": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "ie_pre_9",
+                "ie9",
+                "ie10",
+                "ie11",
+                "opera_pre_15",
+                "android_pre_4",
+                "safari_pre_6",
+                "opera_mini_pre_8"
+              ],
+              "type": "string",
+              "description": "* `ie_pre_9` - ie_pre_9\n* `ie9` - ie9\n* `ie10` - ie10\n* `ie11` - ie11\n* `opera_pre_15` - opera_pre_15\n* `android_pre_4` - android_pre_4\n* `safari_pre_6` - safari_pre_6\n* `opera_mini_pre_8` - opera_mini_pre_8"
+            },
+            "description": "\nSpecifies which legacy browser filters should be active. Anything excluded from the list will be\ndisabled. The options are:\n- `ie_pre_9`: Internet Explorer Version 8 and lower\n- `ie9`: Internet Explorer Version 9\n- `ie10`: Internet Explorer Version 10\n- `ie11`: Internet Explorer Version 11\n- `safari_pre_6`: Safari Version 5 and lower\n- `opera_pre_15`: Opera Version 14 and lower\n- `opera_mini_pre_8`: Opera Mini Version 8 and lower\n- `android_pre_4`: Android Version 3 and lower\n"
+          }
+        }
       },
       "data": {
         "type": "array",
