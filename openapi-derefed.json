@@ -20,6 +20,27 @@
         "description": "Retrieves discover (also known as events) data for a given organization.\n\n**Eventsv2 Deprecation Note**: Users who may be using the `eventsv2` endpoint should update their requests to the `events` endpoint outline in this document.\nThe `eventsv2` endpoint is not a public endpoint and has no guaranteed availability. If you are not making any API calls to `eventsv2`, you can safely ignore this.\nChanges between `eventsv2` and `events` include:\n- Field keys in the response now match the keys in the requested `field` param exactly.\n- The `meta` object in the response now shows types in the nested `field` object.\n\nAside from the url change, there are no changes to the request payload itself.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested",
         "parameters": [
           {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The fields, functions, or equations to request for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](https://docs.sentry.io/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n",
+            "required": true
+          },
+          {
             "in": "query",
             "name": "end",
             "schema": {
@@ -38,15 +59,6 @@
               }
             },
             "description": "The name of environments to filter by."
-          },
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
           },
           {
             "in": "query",
@@ -75,18 +87,6 @@
               "type": "string"
             },
             "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example `24h`, to mean query data starting from 24 hours ago to now."
-          },
-          {
-            "in": "query",
-            "name": "field",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "The fields, functions, or equations to request for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](https://docs.sentry.io/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n",
-            "required": true
           },
           {
             "in": "query",
@@ -9179,6 +9179,39 @@
           },
           {
             "in": "query",
+            "name": "groupBy",
+            "schema": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "outcome",
+                  "category",
+                  "reason",
+                  "project"
+                ],
+                "type": "string",
+                "description": "* `outcome` - outcome\n* `category` - category\n* `reason` - reason\n* `project` - project"
+              }
+            },
+            "description": "can pass multiple groupBy parameters to group by multiple, e.g. `groupBy=project&groupBy=outcome` to group by multiple dimensions. Note that grouping by project can cause missing rows if the number of projects / interval is large. If you have a large number of projects, we recommend filtering and querying by them individually.Also note that grouping by projects does not currently support timeseries interval responses and will instead be a sum of the projectover the entire period specified.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "enum": [
+                "sum(quantity)",
+                "sum(times_seen)"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "the `sum(quantity)` field is bytes for attachments, and all others the 'event' count for those types of events.\n\n`sum(times_seen)` sums the number of times an event has been seen. For 'normal' event types, this will be equal to `sum(quantity)` for now. For sessions, quantity will sum the total number of events seen in a session, while `times_seen` will be the unique number of sessions. and for attachments, `times_seen` will be the total number of attachments, while quantity will be the total sum of attachment bytes.\n\n* `sum(quantity)` - sum(quantity)\n* `sum(times_seen)` - sum(times_seen)",
+            "required": true
+          },
+          {
+            "in": "query",
             "name": "statsPeriod",
             "schema": {
               "type": "string",
@@ -9212,39 +9245,6 @@
               "format": "date-time"
             },
             "description": "This defines the inclusive end of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `start` instead of `statsPeriod`."
-          },
-          {
-            "in": "query",
-            "name": "groupBy",
-            "schema": {
-              "type": "array",
-              "items": {
-                "enum": [
-                  "outcome",
-                  "category",
-                  "reason",
-                  "project"
-                ],
-                "type": "string",
-                "description": "* `outcome` - outcome\n* `category` - category\n* `reason` - reason\n* `project` - project"
-              }
-            },
-            "description": "can pass multiple groupBy parameters to group by multiple, e.g. `groupBy=project&groupBy=outcome` to group by multiple dimensions. Note that grouping by project can cause missing rows if the number of projects / interval is large. If you have a large number of projects, we recommend filtering and querying by them individually.Also note that grouping by projects does not currently support timeseries interval responses and will instead be a sum of the projectover the entire period specified.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "field",
-            "schema": {
-              "enum": [
-                "sum(quantity)",
-                "sum(times_seen)"
-              ],
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "the `sum(quantity)` field is bytes for attachments, and all others the 'event' count for those types of events.\n\n`sum(times_seen)` sums the number of times an event has been seen. For 'normal' event types, this will be equal to `sum(quantity)` for now. For sessions, quantity will sum the total number of events seen in a session, while `times_seen` will be the unique number of sessions. and for attachments, `times_seen` will be the total number of attachments, while quantity will be the total sum of attachment bytes.\n\n* `sum(quantity)` - sum(quantity)\n* `sum(times_seen)` - sum(times_seen)",
-            "required": true
           },
           {
             "in": "query",
@@ -29359,6 +29359,13 @@
                     "type": "string",
                     "description": "A version identifier for this release. Can be a version number, a commit hash, etc."
                   },
+                  "projects": {
+                    "type": "array",
+                    "description": "A list of project slugs that are involved in this release.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "ref": {
                     "type": "string",
                     "description": "An optional commit reference. This is useful if a tagged version has been provided."
@@ -29366,13 +29373,6 @@
                   "url": {
                     "type": "string",
                     "description": "A URL that points to the release. This can be the path to an online interface to the source code for instance"
-                  },
-                  "projects": {
-                    "type": "array",
-                    "description": "A list of project slugs that are involved in this release.",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "dateReleased": {
                     "type": "string",
@@ -30402,14 +30402,14 @@
                   "file"
                 ],
                 "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "The name (full path) of the file."
-                  },
                   "file": {
                     "type": "string",
                     "format": "binary",
                     "description": "The multipart encoded file."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The name (full path) of the file."
                   },
                   "dist": {
                     "type": "string",
@@ -30609,14 +30609,14 @@
                   "file"
                 ],
                 "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "The name (full path) of the file."
-                  },
                   "file": {
                     "type": "string",
                     "format": "binary",
                     "description": "The multipart encoded file."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The name (full path) of the file."
                   },
                   "dist": {
                     "type": "string",
