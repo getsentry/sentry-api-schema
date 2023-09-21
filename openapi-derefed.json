@@ -12757,6 +12757,14 @@
               "minLength": 1
             },
             "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            },
+            "description": "\nFilter client keys by `active` or `inactive`. Defaults to returning all\nkeys if not specified.\n"
           }
         ],
         "tags": [
@@ -13036,19 +13044,50 @@
             },
             "description": "The slug of the project the resource belongs to.",
             "required": true
-          },
-          {
-            "in": "query",
-            "name": "name",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The optional name of the key. If not provided a name will be automatically generated"
           }
         ],
         "tags": [
           "Projects"
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The optional name of the key. If not provided it will be automatically generated.",
+                    "maxLength": 64
+                  },
+                  "rateLimit": {
+                    "type": "object",
+                    "description": "Applies a rate limit to cap the number of errors accepted during a given time window. To\ndisable entirely set `rateLimit` to null.\n```json\n{\n    \"rateLimit\": {\n        \"window\": 7200, // time in seconds\n        \"count\": 1000 // error cap\n    }\n}\n```",
+                    "properties": {
+                      "count": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "nullable": true
+                      },
+                      "window": {
+                        "type": "integer",
+                        "maximum": 86400,
+                        "minimum": 0,
+                        "nullable": true
+                      }
+                    }
+                  },
+                  "secret": {
+                    "type": "string",
+                    "nullable": true,
+                    "pattern": "^[a-f0-9]{32}$"
+                  }
+                }
+              }
+            }
+          }
+        },
         "security": [
           {
             "auth_token": [
@@ -13507,7 +13546,7 @@
       },
       "put": {
         "operationId": "Update a Client Key",
-        "description": "Update a client key.",
+        "description": "Update various settings for a client key.",
         "parameters": [
           {
             "in": "path",
@@ -13535,65 +13574,6 @@
             },
             "description": "The ID of the key to update.",
             "required": true
-          },
-          {
-            "in": "query",
-            "name": "name",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The name for the client key"
-          },
-          {
-            "in": "query",
-            "name": "isActive",
-            "schema": {
-              "type": "boolean"
-            },
-            "description": "Activate or deactivate the client key."
-          },
-          {
-            "in": "query",
-            "name": "rateLimit",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "window": {
-                  "type": "integer"
-                },
-                "count": {
-                  "type": "integer"
-                }
-              }
-            },
-            "description": "\nApplies a rate limit to cap the number of errors accepted during a given time window. To\ndisable entirely set `rateLimit` to null.\n```json\n{\n    \"rateLimit\": {\n        \"window\": 7200, // time in seconds\n        \"count\": 1000 // error cap\n    }\n}\n```\n        "
-          },
-          {
-            "in": "query",
-            "name": "browserSdkVersion",
-            "schema": {
-              "type": "string"
-            },
-            "description": "\nThe Sentry Javascript SDK version to use. The currently supported options are:\n- `7.x`\n- `latest`\n"
-          },
-          {
-            "in": "query",
-            "name": "dynamicSdkLoaderOptions",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "hasReplay": {
-                  "type": "boolean"
-                },
-                "hasPerformance": {
-                  "type": "boolean"
-                },
-                "hasDebug": {
-                  "type": "boolean"
-                }
-              }
-            },
-            "description": "\nConfigures multiple options for the Javascript Loader Script.\n- `Performance Monitoring`\n- `Debug Bundles & Logging`\n- `Session Replay`: Note that the loader will load the ES6 bundle instead of the ES5 bundle.\n```json\n{\n    \"dynamicSdkLoaderOptions\": {\n        \"hasReplay\": true,\n        \"hasPerformance\": true,\n        \"hasDebug\": true\n    }\n}\n```\n"
           }
         ],
         "tags": [
@@ -13607,72 +13587,51 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "nullable": true,
-                    "maxLength": 64
-                  },
-                  "public": {
-                    "type": "string",
-                    "nullable": true,
-                    "pattern": "^[a-f0-9]{32}$"
-                  },
-                  "secret": {
-                    "type": "string",
-                    "nullable": true,
-                    "pattern": "^[a-f0-9]{32}$"
-                  },
-                  "rateLimit": {
-                    "allOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "count": {
-                            "type": "integer",
-                            "minimum": 0,
-                            "nullable": true
-                          },
-                          "window": {
-                            "type": "integer",
-                            "maximum": 86400,
-                            "minimum": 0,
-                            "nullable": true
-                          }
-                        }
-                      }
-                    ],
-                    "nullable": true
+                    "description": "The name for the client key"
                   },
                   "isActive": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "Activate or deactivate the client key."
+                  },
+                  "rateLimit": {
+                    "type": "object",
+                    "description": "Applies a rate limit to cap the number of errors accepted during a given time window. To\ndisable entirely set `rateLimit` to null.\n```json\n{\n    \"rateLimit\": {\n        \"window\": 7200, // time in seconds\n        \"count\": 1000 // error cap\n    }\n}\n```",
+                    "properties": {
+                      "count": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "nullable": true
+                      },
+                      "window": {
+                        "type": "integer",
+                        "maximum": 86400,
+                        "minimum": 0,
+                        "nullable": true
+                      }
+                    }
                   },
                   "browserSdkVersion": {
                     "enum": [
                       "latest",
-                      "7.x",
-                      "6.x",
-                      "5.x",
-                      "4.x"
+                      "7.x"
                     ],
                     "type": "string",
-                    "description": "* `latest` - latest\n* `7.x` - 7.x\n* `6.x` - 6.x\n* `5.x` - 5.x\n* `4.x` - 4.x"
+                    "description": "The Sentry Javascript SDK version to use. The currently supported options are:\n\n* `latest` - Most recent version\n* `7.x` - Version 7 releases"
                   },
                   "dynamicSdkLoaderOptions": {
-                    "allOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "hasReplay": {
-                            "type": "boolean"
-                          },
-                          "hasPerformance": {
-                            "type": "boolean"
-                          },
-                          "hasDebug": {
-                            "type": "boolean"
-                          }
-                        }
+                    "type": "object",
+                    "description": "Configures multiple options for the Javascript Loader Script.\n- `Performance Monitoring`\n- `Debug Bundles & Logging`\n- `Session Replay` - Note that the loader will load the ES6 bundle instead of the ES5 bundle.\n```json\n{\n    \"dynamicSdkLoaderOptions\": {\n        \"hasReplay\": true,\n        \"hasPerformance\": true,\n        \"hasDebug\": true\n    }\n}\n```",
+                    "properties": {
+                      "hasReplay": {
+                        "type": "boolean"
+                      },
+                      "hasPerformance": {
+                        "type": "boolean"
+                      },
+                      "hasDebug": {
+                        "type": "boolean"
                       }
-                    ],
-                    "nullable": true
+                    }
                   }
                 }
               }
@@ -33531,22 +33490,9 @@
           "verifySSL"
         ]
       },
-      "DynamicSDKLoaderOptions": {
-        "type": "object",
-        "properties": {
-          "hasReplay": {
-            "type": "boolean"
-          },
-          "hasPerformance": {
-            "type": "boolean"
-          },
-          "hasDebug": {
-            "type": "boolean"
-          }
-        }
-      },
       "DynamicSdkLoaderOption": {
         "type": "object",
+        "description": "Configures multiple options for the Javascript Loader Script.\n- `Performance Monitoring`\n- `Debug Bundles & Logging`\n- `Session Replay` - Note that the loader will load the ES6 bundle instead of the ES5 bundle.\n```json\n{\n    \"dynamicSdkLoaderOptions\": {\n        \"hasReplay\": true,\n        \"hasPerformance\": true,\n        \"hasDebug\": true\n    }\n}\n```",
         "properties": {
           "hasReplay": {
             "type": "boolean"
@@ -37621,77 +37567,36 @@
           "secret"
         ]
       },
-      "ProjectKeyRequest": {
+      "ProjectKeyPost": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
             "nullable": true,
+            "description": "The optional name of the key. If not provided it will be automatically generated.",
             "maxLength": 64
           },
-          "public": {
-            "type": "string",
-            "nullable": true,
-            "pattern": "^[a-f0-9]{32}$"
+          "rateLimit": {
+            "type": "object",
+            "description": "Applies a rate limit to cap the number of errors accepted during a given time window. To\ndisable entirely set `rateLimit` to null.\n```json\n{\n    \"rateLimit\": {\n        \"window\": 7200, // time in seconds\n        \"count\": 1000 // error cap\n    }\n}\n```",
+            "properties": {
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "nullable": true
+              },
+              "window": {
+                "type": "integer",
+                "maximum": 86400,
+                "minimum": 0,
+                "nullable": true
+              }
+            }
           },
           "secret": {
             "type": "string",
             "nullable": true,
             "pattern": "^[a-f0-9]{32}$"
-          },
-          "rateLimit": {
-            "allOf": [
-              {
-                "type": "object",
-                "properties": {
-                  "count": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "nullable": true
-                  },
-                  "window": {
-                    "type": "integer",
-                    "maximum": 86400,
-                    "minimum": 0,
-                    "nullable": true
-                  }
-                }
-              }
-            ],
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "browserSdkVersion": {
-            "enum": [
-              "latest",
-              "7.x",
-              "6.x",
-              "5.x",
-              "4.x"
-            ],
-            "type": "string",
-            "description": "* `latest` - latest\n* `7.x` - 7.x\n* `6.x` - 6.x\n* `5.x` - 5.x\n* `4.x` - 4.x"
-          },
-          "dynamicSdkLoaderOptions": {
-            "allOf": [
-              {
-                "type": "object",
-                "properties": {
-                  "hasReplay": {
-                    "type": "boolean"
-                  },
-                  "hasPerformance": {
-                    "type": "boolean"
-                  },
-                  "hasDebug": {
-                    "type": "boolean"
-                  }
-                }
-              }
-            ],
-            "nullable": true
           }
         }
       },
@@ -37890,6 +37795,7 @@
       },
       "RateLimit": {
         "type": "object",
+        "description": "Applies a rate limit to cap the number of errors accepted during a given time window. To\ndisable entirely set `rateLimit` to null.\n```json\n{\n    \"rateLimit\": {\n        \"window\": 7200, // time in seconds\n        \"count\": 1000 // error cap\n    }\n}\n```",
         "properties": {
           "count": {
             "type": "integer",
@@ -37901,17 +37807,6 @@
             "maximum": 86400,
             "minimum": 0,
             "nullable": true
-          }
-        }
-      },
-      "RateLimitParameter": {
-        "type": "object",
-        "properties": {
-          "window": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
           }
         }
       },
@@ -38699,6 +38594,59 @@
         "required": [
           "trace_id"
         ]
+      },
+      "UpdateClientKey": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name for the client key"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Activate or deactivate the client key."
+          },
+          "rateLimit": {
+            "type": "object",
+            "description": "Applies a rate limit to cap the number of errors accepted during a given time window. To\ndisable entirely set `rateLimit` to null.\n```json\n{\n    \"rateLimit\": {\n        \"window\": 7200, // time in seconds\n        \"count\": 1000 // error cap\n    }\n}\n```",
+            "properties": {
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "nullable": true
+              },
+              "window": {
+                "type": "integer",
+                "maximum": 86400,
+                "minimum": 0,
+                "nullable": true
+              }
+            }
+          },
+          "browserSdkVersion": {
+            "enum": [
+              "latest",
+              "7.x"
+            ],
+            "type": "string",
+            "description": "The Sentry Javascript SDK version to use. The currently supported options are:\n\n* `latest` - Most recent version\n* `7.x` - Version 7 releases"
+          },
+          "dynamicSdkLoaderOptions": {
+            "type": "object",
+            "description": "Configures multiple options for the Javascript Loader Script.\n- `Performance Monitoring`\n- `Debug Bundles & Logging`\n- `Session Replay` - Note that the loader will load the ES6 bundle instead of the ES5 bundle.\n```json\n{\n    \"dynamicSdkLoaderOptions\": {\n        \"hasReplay\": true,\n        \"hasPerformance\": true,\n        \"hasDebug\": true\n    }\n}\n```",
+            "properties": {
+              "hasReplay": {
+                "type": "boolean"
+              },
+              "hasPerformance": {
+                "type": "boolean"
+              },
+              "hasDebug": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
       },
       "UpdateProject": {
         "type": "object",
