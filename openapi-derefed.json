@@ -13800,6 +13800,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name for the rule.",
+                    "maxLength": 64
+                  },
                   "actionMatch": {
                     "enum": [
                       "all",
@@ -13809,14 +13814,6 @@
                     "type": "string",
                     "description": "A string determining which of the conditions need to be true before any filters are evaluated.\n\n* `all` - All conditions must evaluate to true.\n* `any` - At least one of the conditions must evaluate to true.\n* `none` - All conditions must evaluate to false."
                   },
-                  "actions": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    },
-                    "description": "\nA list of actions that take place when all required conditions and filters for the rule are met. See below for a list of possible actions.\n\n**Send a notification to Suggested Assignees**\n- `fallthroughType` - Who the notification should be sent to if there are no suggested assignees. Valid values are `ActiveMembers`, `AllMembers`, and `NoOne`.\n```json\n{\n    \"id\" - \"sentry.mail.actions.NotifyEmailAction\",\n    \"targetType\" - \"IssueOwners\",\n    \"fallthroughType\" - \"ActiveMembers\"\n}\n```\n\n**Send a notification to a Member or a Team**\n- `targetType` - One of `Member` or `Team`.\n- `fallthroughType` - Who the notification should be sent to if it cannot be sent to the original target. Valid values are `ActiveMembers`, `AllMembers`, and `NoOne`.\n- `targetIdentifier` - The ID of the Member or Team the notification should be sent to.\n```json\n{\n    \"id\": \"sentry.mail.actions.NotifyEmailAction\",\n    \"targetType\": \"Team\"\n    \"fallthroughType\": \"AllMembers\"\n    \"targetIdentifier\": 4524986223\n}\n```\n\n**Send a Discord notification**\n- `server` - The integration ID associated with the Discord server.\n- `channel_id` - The ID of the channel to send the notification to.\n- `tags` - A string of tags to show in the notification, separated by commas (e.g., \"environment, user, my_tag\").\n```json\n{\n    \"id\": \"sentry.integrations.discord.notify_action.DiscordNotifyServiceAction\",\n    \"server\": 63408298,\n    \"channel_id\": 94732897,\n    \"tags\": \"browser,user\"\n}\n```\n\n**Send a Microsoft Teams notification**\n- `team` - The integration ID associated with the Microsoft Teams team.\n- `channel` - The name of the channel to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.msteams.notify_action.MsTeamsNotifyServiceAction\",\n    \"team\": 23465424,\n    \"channel\": \"General\"\n}\n```\n\n**Send an Opsgenie notification**\n- `account` - The integration ID associated with the Opsgenie account.\n- `team` - The ID of the Opsgenie team to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.opsgenie.notify_action.OpsgenieNotifyTeamAction\",\n    \"account\": 8723897589,\n    \"team\": \"9438930258-fairy\"\n}\n```\n\n**Send a PagerDuty notification**\n- `account` - The integration ID associated with the PagerDuty account.\n- `service` - The ID of the service to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.pagerduty.notify_action.PagerDutyNotifyServiceAction\",\n    \"account\": 92385907,\n    \"service\": 9823924\n}\n```\n\n**Send a Slack notification**\n- `workspace` - The integration ID associated with the Slack workspace.\n- `channel` - The name of the channel to send the notification to (e.g., #critical, Jane Schmidt).\n- `channel_id` (optional) - The ID of the channel to send the notification to.\n- `tags` - A string of tags to show in the notification, separated by commas (e.g., \"environment, user, my_tag\").\n```json\n{\n    \"id\": \"sentry.integrations.slack.notify_action.SlackNotifyServiceAction\",\n    \"workspace\": 293854098,\n    \"channel\": \"#warning\",\n    \"tags\": \"environment,level\"\n}\n```\n\n**Send a notification to a service**\n- `service` - The plugin slug.\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event_service.NotifyEventServiceAction\",\n    \"service\": \"mail\"\n}\n```\n\n**Send a notification to a Sentry app with a custom webhook payload**\n- `settings` - A list of objects denoting the settings each action will be created with. All required fields must be included.\n- `sentryAppInstallationUuid` - The ID for the Sentry app\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event_sentry_app.NotifyEventSentryAppAction\",\n    \"settings\": [\n        {\"name\": \"title\", \"value\": \"Team Rocket\"},\n        {\"name\": \"summary\", \"value\": \"We're blasting off again.\"},\n    ],\n    \"sentryAppInstallationUuid\": 643522\n    \"hasSchemaFormConfig\": true\n}\n```\n\n**Send a notification (for all legacy integrations)**\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event.NotifyEventAction\"\n}\n```\n\n**Create an Azure DevOps work item**\n- `integration` - The integration ID.\n- `project` - The ID of the Azure DevOps project.\n- `work_item_type` - The type of work item to create.\n- `dynamic_form_fields` (optional) - A list of any custom fields you want to include in the work item as objects.\n```json\n{\n    \"id\": \"sentry.integrations.vsts.notify_action.AzureDevopsCreateTicketAction\",\n    \"integration\": 294838,\n    \"project\": \"0389485\",\n    \"work_item_type\": \"Microsoft.VSTS.WorkItemTypes.Task\",\n}\n```\n\n**Create a Jira Ticket**\n- `integration` - The integration ID associated with Jira.\n- `project` - The ID of the Jira project.\n- `issuetype` - The ID of the type of issue that the ticket should be created as.\n- `dynamic_form_fields` (optional) - A list of any custom fields you want to include in the ticket as objects.\n```json\n{\n    \"id\": \"sentry.integrations.jira.notify_action.JiraCreateTicketAction\",\n    \"integration\": 321424,\n    \"project\": \"349719\"\n    \"issueType\": \"1\"\n}\n```\n"
-                  },
                   "conditions": {
                     "type": "array",
                     "items": {
@@ -13825,16 +13822,19 @@
                     },
                     "description": "\nA list of triggers that determine when the rule fires. See below for a list of possible conditions.\n\n**A new issue is created**\n```json\n{\n    \"id\": \"sentry.rules.conditions.first_seen_event.FirstSeenEventCondition\"\n}\n```\n\n**The issue changes state from resolved to unresolved**\n```json\n{\n    \"id\": \"sentry.rules.conditions.regression_event.RegressionEventCondition\"\n}\n```\n\n**The issue is seen more than `value` times in `interval`**\n- `value` - An integer\n- `interval` - Valid values are `1m`, `5m`, `15m`, `1h`, `1d`, `1w` and `30d` (`m` for minutes, `h` for hours, `d` for days, and `w` for weeks).\n```json\n{\n    \"id\": \"sentry.rules.conditions.event_frequency.EventFrequencyCondition\",\n    \"value\": 500,\n    \"interval\": \"1h\"\n}\n```\n\n**The issue is seen by more than `value` users in `interval`**\n- `value` - An integer\n- `interval` - Valid values are `1m`, `5m`, `15m`, `1h`, `1d`, `1w` and `30d` (`m` for minutes, `h` for hours, `d` for days, and `w` for weeks).\n```json\n{\n    \"id\": \"sentry.rules.conditions.event_frequency.EventUniqueUserFrequencyCondition\",\n    \"value\": 1000,\n    \"interval\": \"15m\"\n}\n```\n\n**The issue affects more than `value` percent of sessions in `interval`**\n- `value` - An integer from 0 to 100\n- `interval` - Valid values are `5m`, `10m`, `30m`, and `1h` (`m` for minutes, `h` for hours).\n```json\n{\n    \"id\": \"sentry.rules.conditions.event_frequency.EventFrequencyPercentCondition\",\n    \"value\": 50,\n    \"interval\": \"10m\"\n}\n```\n"
                   },
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "description": "\nA list of actions that take place when all required conditions and filters for the rule are met. See below for a list of possible actions.\n\n**Send a notification to Suggested Assignees**\n- `fallthroughType` - Who the notification should be sent to if there are no suggested assignees. Valid values are `ActiveMembers`, `AllMembers`, and `NoOne`.\n```json\n{\n    \"id\" - \"sentry.mail.actions.NotifyEmailAction\",\n    \"targetType\" - \"IssueOwners\",\n    \"fallthroughType\" - \"ActiveMembers\"\n}\n```\n\n**Send a notification to a Member or a Team**\n- `targetType` - One of `Member` or `Team`.\n- `fallthroughType` - Who the notification should be sent to if it cannot be sent to the original target. Valid values are `ActiveMembers`, `AllMembers`, and `NoOne`.\n- `targetIdentifier` - The ID of the Member or Team the notification should be sent to.\n```json\n{\n    \"id\": \"sentry.mail.actions.NotifyEmailAction\",\n    \"targetType\": \"Team\"\n    \"fallthroughType\": \"AllMembers\"\n    \"targetIdentifier\": 4524986223\n}\n```\n\n**Send a Discord notification**\n- `server` - The integration ID associated with the Discord server.\n- `channel_id` - The ID of the channel to send the notification to.\n- `tags` - A string of tags to show in the notification, separated by commas (e.g., \"environment, user, my_tag\").\n```json\n{\n    \"id\": \"sentry.integrations.discord.notify_action.DiscordNotifyServiceAction\",\n    \"server\": 63408298,\n    \"channel_id\": 94732897,\n    \"tags\": \"browser,user\"\n}\n```\n\n**Send a Microsoft Teams notification**\n- `team` - The integration ID associated with the Microsoft Teams team.\n- `channel` - The name of the channel to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.msteams.notify_action.MsTeamsNotifyServiceAction\",\n    \"team\": 23465424,\n    \"channel\": \"General\"\n}\n```\n\n**Send an Opsgenie notification**\n- `account` - The integration ID associated with the Opsgenie account.\n- `team` - The ID of the Opsgenie team to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.opsgenie.notify_action.OpsgenieNotifyTeamAction\",\n    \"account\": 8723897589,\n    \"team\": \"9438930258-fairy\"\n}\n```\n\n**Send a PagerDuty notification**\n- `account` - The integration ID associated with the PagerDuty account.\n- `service` - The ID of the service to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.pagerduty.notify_action.PagerDutyNotifyServiceAction\",\n    \"account\": 92385907,\n    \"service\": 9823924\n}\n```\n\n**Send a Slack notification**\n- `workspace` - The integration ID associated with the Slack workspace.\n- `channel` - The name of the channel to send the notification to (e.g., #critical, Jane Schmidt).\n- `channel_id` (optional) - The ID of the channel to send the notification to.\n- `tags` - A string of tags to show in the notification, separated by commas (e.g., \"environment, user, my_tag\").\n```json\n{\n    \"id\": \"sentry.integrations.slack.notify_action.SlackNotifyServiceAction\",\n    \"workspace\": 293854098,\n    \"channel\": \"#warning\",\n    \"tags\": \"environment,level\"\n}\n```\n\n**Send a notification to a service**\n- `service` - The plugin slug.\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event_service.NotifyEventServiceAction\",\n    \"service\": \"mail\"\n}\n```\n\n**Send a notification to a Sentry app with a custom webhook payload**\n- `settings` - A list of objects denoting the settings each action will be created with. All required fields must be included.\n- `sentryAppInstallationUuid` - The ID for the Sentry app\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event_sentry_app.NotifyEventSentryAppAction\",\n    \"settings\": [\n        {\"name\": \"title\", \"value\": \"Team Rocket\"},\n        {\"name\": \"summary\", \"value\": \"We're blasting off again.\"},\n    ],\n    \"sentryAppInstallationUuid\": 643522\n    \"hasSchemaFormConfig\": true\n}\n```\n\n**Send a notification (for all legacy integrations)**\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event.NotifyEventAction\"\n}\n```\n\n**Create an Azure DevOps work item**\n- `integration` - The integration ID.\n- `project` - The ID of the Azure DevOps project.\n- `work_item_type` - The type of work item to create.\n- `dynamic_form_fields` (optional) - A list of any custom fields you want to include in the work item as objects.\n```json\n{\n    \"id\": \"sentry.integrations.vsts.notify_action.AzureDevopsCreateTicketAction\",\n    \"integration\": 294838,\n    \"project\": \"0389485\",\n    \"work_item_type\": \"Microsoft.VSTS.WorkItemTypes.Task\",\n}\n```\n\n**Create a Jira Ticket**\n- `integration` - The integration ID associated with Jira.\n- `project` - The ID of the Jira project.\n- `issuetype` - The ID of the type of issue that the ticket should be created as.\n- `dynamic_form_fields` (optional) - A list of any custom fields you want to include in the ticket as objects.\n```json\n{\n    \"id\": \"sentry.integrations.jira.notify_action.JiraCreateTicketAction\",\n    \"integration\": 321424,\n    \"project\": \"349719\"\n    \"issueType\": \"1\"\n}\n```\n"
+                  },
                   "frequency": {
                     "type": "integer",
                     "maximum": 43200,
                     "minimum": 5,
-                    "description": "How often to perform the actions once for an issue, in minutes."
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "The name for the rule.",
-                    "maxLength": 64
+                    "description": "How often to perform the actions once for an issue, in minutes. The valid range is `5` to `43200`."
                   },
                   "environment": {
                     "type": "string",
@@ -14048,6 +14048,596 @@
               }
             },
             "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/rules/{rule_id}/": {
+      "get": {
+        "operationId": "Retrieve an Issue Alert Rule for a Project",
+        "description": "Return details on an individual issue alert rule.\n\nAn issue alert rule triggers whenever a new event is received for any issue in a project that matches the specified alert conditions. These conditions can include a resolved issue re-appearing or an issue affecting many users. Alert conditions have three parts:\n- Triggers - specify what type of activity you'd like monitored or when an alert should be triggered.\n- Filters - help control noise by triggering an alert only if the issue matches the specified criteria.\n- Actions - specify what should happen when the trigger conditions are met and the filters match.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "rule_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the rule you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:read",
+              "alerts:write",
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "This represents a Sentry Rule.",
+                  "properties": {
+                    "owner": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "email",
+                        "id",
+                        "name"
+                      ],
+                      "nullable": true
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "lastTriggered": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "snoozeCreatedBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "snoozeForEveryone": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "filters": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "actions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "actionMatch": {
+                      "type": "string"
+                    },
+                    "filterMatch": {
+                      "type": "string"
+                    },
+                    "frequency": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "dateCreated": {
+                      "type": "string"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "snooze": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "actionMatch",
+                    "actions",
+                    "conditions",
+                    "dateCreated",
+                    "filterMatch",
+                    "filters",
+                    "frequency",
+                    "id",
+                    "name",
+                    "projects",
+                    "snooze",
+                    "status"
+                  ]
+                },
+                "examples": {
+                  "GetDetailedViewAboutAnIssueAlertRule": {
+                    "value": {
+                      "id": "7",
+                      "conditions": [
+                        {
+                          "id": "sentry.rules.conditions.regression_event.RegressionEventCondition"
+                        }
+                      ],
+                      "filters": [
+                        {
+                          "id": "sentry.rules.filters.age_comparison.AgeComparisonFilter",
+                          "comparison_type": "older",
+                          "value": 4,
+                          "time": "week"
+                        },
+                        {
+                          "id": "sentry.rules.filters.issue_occurrences.IssueOccurrencesFilter",
+                          "value": 1000
+                        }
+                      ],
+                      "actions": [
+                        {
+                          "id": "sentry.integrations.slack.notify_action.SlackNotifyServiceAction",
+                          "workspace": 976462356,
+                          "channel": "#fatal",
+                          "tags": "browser,release"
+                        }
+                      ],
+                      "actionMatch": "all",
+                      "filterMatch": "all",
+                      "frequency": 60,
+                      "name": "Many Old Regressions!",
+                      "dateCreated": "2023-02-17T18:31:14.246012Z",
+                      "owner": "user:635623",
+                      "createdBy": {
+                        "id": 635623,
+                        "name": "John Doe",
+                        "email": "john.doe@email.com"
+                      },
+                      "environment": null,
+                      "projects": [
+                        "javascript"
+                      ],
+                      "status": "active",
+                      "snooze": false
+                    },
+                    "summary": "Get detailed view about an issue alert rule"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update an Issue Alert Rule",
+        "description": "Updates an issue alert rule. Only the attributes submitted are modified.\n\nAn issue alert rule triggers whenever a new event is received for any issue in a project that matches the specified alert conditions. These conditions can include a resolved issue re-appearing or an issue affecting many users. Alert conditions have three parts:\n- Triggers - specify what type of activity you'd like monitored or when an alert should be triggered.\n- Filters - help control noise by triggering an alert only if the issue matches the specified criteria.\n- Actions - specify what should happen when the trigger conditions are met and the filters match.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "rule_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the rule you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name for the rule.",
+                    "maxLength": 64
+                  },
+                  "environment": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The name of the environment to filter by."
+                  },
+                  "actionMatch": {
+                    "enum": [
+                      "all",
+                      "any",
+                      "none"
+                    ],
+                    "type": "string",
+                    "description": "A string determining which of the conditions need to be true before any filters are evaluated.\n\n* `all` - All conditions must evaluate to true.\n* `any` - At least one of the conditions must evaluate to true.\n* `none` - All conditions must evaluate to false."
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "description": "A list of triggers that determine when the rule fires. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid conditions."
+                  },
+                  "filterMatch": {
+                    "enum": [
+                      "all",
+                      "any",
+                      "none"
+                    ],
+                    "type": "string",
+                    "description": "A string determining which filters need to be true before any actions take place.\n\n* `all` - All filters must evaluate to true.\n* `any` - At least one of the filters must evaluate to true.\n* `none` - All filters must evaluate to false."
+                  },
+                  "filters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "description": "A list of filters that determine if a rule fires after the necessary conditions have been met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid filters."
+                  },
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "description": "A list of actions that take place when all required conditions and filters for the rule are met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid actions."
+                  },
+                  "frequency": {
+                    "type": "integer",
+                    "maximum": 43200,
+                    "minimum": 5,
+                    "description": "How often to perform the actions once for an issue, in minutes. The valid range is `5` to `43200`."
+                  },
+                  "owner": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The ID of the team or user that owns the rule."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "This represents a Sentry Rule.",
+                  "properties": {
+                    "owner": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "email",
+                        "id",
+                        "name"
+                      ],
+                      "nullable": true
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "lastTriggered": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "snoozeCreatedBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "snoozeForEveryone": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "filters": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "actions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "actionMatch": {
+                      "type": "string"
+                    },
+                    "filterMatch": {
+                      "type": "string"
+                    },
+                    "frequency": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "dateCreated": {
+                      "type": "string"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "snooze": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "actionMatch",
+                    "actions",
+                    "conditions",
+                    "dateCreated",
+                    "filterMatch",
+                    "filters",
+                    "frequency",
+                    "id",
+                    "name",
+                    "projects",
+                    "snooze",
+                    "status"
+                  ]
+                },
+                "examples": {
+                  "GetDetailedViewAboutAnIssueAlertRule": {
+                    "value": {
+                      "id": "7",
+                      "conditions": [
+                        {
+                          "id": "sentry.rules.conditions.regression_event.RegressionEventCondition"
+                        }
+                      ],
+                      "filters": [
+                        {
+                          "id": "sentry.rules.filters.age_comparison.AgeComparisonFilter",
+                          "comparison_type": "older",
+                          "value": 4,
+                          "time": "week"
+                        },
+                        {
+                          "id": "sentry.rules.filters.issue_occurrences.IssueOccurrencesFilter",
+                          "value": 1000
+                        },
+                        {
+                          "id": "sentry.rules.filters.level.LevelFilter",
+                          "match": "gte",
+                          "level": "40"
+                        }
+                      ],
+                      "actions": [
+                        {
+                          "id": "sentry.integrations.slack.notify_action.SlackNotifyServiceAction",
+                          "workspace": 976462356,
+                          "channel": "#fatal",
+                          "tags": "browser,release"
+                        }
+                      ],
+                      "actionMatch": "all",
+                      "filterMatch": "all",
+                      "frequency": 60,
+                      "name": "Many Old Regressions!",
+                      "dateCreated": "2023-02-17T18:31:14.246012Z",
+                      "owner": "user:635623",
+                      "createdBy": {
+                        "id": 635623,
+                        "name": "John Doe",
+                        "email": "john.doe@email.com"
+                      },
+                      "environment": null,
+                      "projects": [
+                        "javascript"
+                      ],
+                      "status": "active",
+                      "snooze": false
+                    },
+                    "summary": "Get detailed view about an issue alert rule"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an Issue Alert Rule",
+        "description": "Delete a specific issue alert rule.\n\nAn issue alert rule triggers whenever a new event is received for any issue in a project that matches the specified alert conditions. These conditions can include a resolved issue re-appearing or an issue affecting many users. Alert conditions have three parts:\n- Triggers: specify what type of activity you'd like monitored or when an alert should be triggered.\n- Filters: help control noise by triggering an alert only if the issue matches the specified criteria.\n- Actions: specify what should happen when the trigger conditions are met and the filters match.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "rule_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the rule you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
           },
           "401": {
             "description": "Unauthorized"
@@ -37528,9 +38118,19 @@
           "name"
         ]
       },
-      "ProjectRulesPost": {
+      "ProjectRuleDetailsPut": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name for the rule.",
+            "maxLength": 64
+          },
+          "environment": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the environment to filter by."
+          },
           "actionMatch": {
             "enum": [
               "all",
@@ -37540,13 +38140,68 @@
             "type": "string",
             "description": "A string determining which of the conditions need to be true before any filters are evaluated.\n\n* `all` - All conditions must evaluate to true.\n* `any` - At least one of the conditions must evaluate to true.\n* `none` - All conditions must evaluate to false."
           },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "A list of triggers that determine when the rule fires. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid conditions."
+          },
+          "filterMatch": {
+            "enum": [
+              "all",
+              "any",
+              "none"
+            ],
+            "type": "string",
+            "description": "A string determining which filters need to be true before any actions take place.\n\n* `all` - All filters must evaluate to true.\n* `any` - At least one of the filters must evaluate to true.\n* `none` - All filters must evaluate to false."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "A list of filters that determine if a rule fires after the necessary conditions have been met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid filters."
+          },
           "actions": {
             "type": "array",
             "items": {
               "type": "object",
               "additionalProperties": {}
             },
-            "description": "\nA list of actions that take place when all required conditions and filters for the rule are met. See below for a list of possible actions.\n\n**Send a notification to Suggested Assignees**\n- `fallthroughType` - Who the notification should be sent to if there are no suggested assignees. Valid values are `ActiveMembers`, `AllMembers`, and `NoOne`.\n```json\n{\n    \"id\" - \"sentry.mail.actions.NotifyEmailAction\",\n    \"targetType\" - \"IssueOwners\",\n    \"fallthroughType\" - \"ActiveMembers\"\n}\n```\n\n**Send a notification to a Member or a Team**\n- `targetType` - One of `Member` or `Team`.\n- `fallthroughType` - Who the notification should be sent to if it cannot be sent to the original target. Valid values are `ActiveMembers`, `AllMembers`, and `NoOne`.\n- `targetIdentifier` - The ID of the Member or Team the notification should be sent to.\n```json\n{\n    \"id\": \"sentry.mail.actions.NotifyEmailAction\",\n    \"targetType\": \"Team\"\n    \"fallthroughType\": \"AllMembers\"\n    \"targetIdentifier\": 4524986223\n}\n```\n\n**Send a Discord notification**\n- `server` - The integration ID associated with the Discord server.\n- `channel_id` - The ID of the channel to send the notification to.\n- `tags` - A string of tags to show in the notification, separated by commas (e.g., \"environment, user, my_tag\").\n```json\n{\n    \"id\": \"sentry.integrations.discord.notify_action.DiscordNotifyServiceAction\",\n    \"server\": 63408298,\n    \"channel_id\": 94732897,\n    \"tags\": \"browser,user\"\n}\n```\n\n**Send a Microsoft Teams notification**\n- `team` - The integration ID associated with the Microsoft Teams team.\n- `channel` - The name of the channel to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.msteams.notify_action.MsTeamsNotifyServiceAction\",\n    \"team\": 23465424,\n    \"channel\": \"General\"\n}\n```\n\n**Send an Opsgenie notification**\n- `account` - The integration ID associated with the Opsgenie account.\n- `team` - The ID of the Opsgenie team to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.opsgenie.notify_action.OpsgenieNotifyTeamAction\",\n    \"account\": 8723897589,\n    \"team\": \"9438930258-fairy\"\n}\n```\n\n**Send a PagerDuty notification**\n- `account` - The integration ID associated with the PagerDuty account.\n- `service` - The ID of the service to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.pagerduty.notify_action.PagerDutyNotifyServiceAction\",\n    \"account\": 92385907,\n    \"service\": 9823924\n}\n```\n\n**Send a Slack notification**\n- `workspace` - The integration ID associated with the Slack workspace.\n- `channel` - The name of the channel to send the notification to (e.g., #critical, Jane Schmidt).\n- `channel_id` (optional) - The ID of the channel to send the notification to.\n- `tags` - A string of tags to show in the notification, separated by commas (e.g., \"environment, user, my_tag\").\n```json\n{\n    \"id\": \"sentry.integrations.slack.notify_action.SlackNotifyServiceAction\",\n    \"workspace\": 293854098,\n    \"channel\": \"#warning\",\n    \"tags\": \"environment,level\"\n}\n```\n\n**Send a notification to a service**\n- `service` - The plugin slug.\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event_service.NotifyEventServiceAction\",\n    \"service\": \"mail\"\n}\n```\n\n**Send a notification to a Sentry app with a custom webhook payload**\n- `settings` - A list of objects denoting the settings each action will be created with. All required fields must be included.\n- `sentryAppInstallationUuid` - The ID for the Sentry app\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event_sentry_app.NotifyEventSentryAppAction\",\n    \"settings\": [\n        {\"name\": \"title\", \"value\": \"Team Rocket\"},\n        {\"name\": \"summary\", \"value\": \"We're blasting off again.\"},\n    ],\n    \"sentryAppInstallationUuid\": 643522\n    \"hasSchemaFormConfig\": true\n}\n```\n\n**Send a notification (for all legacy integrations)**\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event.NotifyEventAction\"\n}\n```\n\n**Create an Azure DevOps work item**\n- `integration` - The integration ID.\n- `project` - The ID of the Azure DevOps project.\n- `work_item_type` - The type of work item to create.\n- `dynamic_form_fields` (optional) - A list of any custom fields you want to include in the work item as objects.\n```json\n{\n    \"id\": \"sentry.integrations.vsts.notify_action.AzureDevopsCreateTicketAction\",\n    \"integration\": 294838,\n    \"project\": \"0389485\",\n    \"work_item_type\": \"Microsoft.VSTS.WorkItemTypes.Task\",\n}\n```\n\n**Create a Jira Ticket**\n- `integration` - The integration ID associated with Jira.\n- `project` - The ID of the Jira project.\n- `issuetype` - The ID of the type of issue that the ticket should be created as.\n- `dynamic_form_fields` (optional) - A list of any custom fields you want to include in the ticket as objects.\n```json\n{\n    \"id\": \"sentry.integrations.jira.notify_action.JiraCreateTicketAction\",\n    \"integration\": 321424,\n    \"project\": \"349719\"\n    \"issueType\": \"1\"\n}\n```\n"
+            "description": "A list of actions that take place when all required conditions and filters for the rule are met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid actions."
+          },
+          "frequency": {
+            "type": "integer",
+            "maximum": 43200,
+            "minimum": 5,
+            "description": "How often to perform the actions once for an issue, in minutes. The valid range is `5` to `43200`."
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true,
+            "description": "The ID of the team or user that owns the rule."
+          }
+        }
+      },
+      "ProjectRulesPost": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name for the rule.",
+            "maxLength": 64
+          },
+          "actionMatch": {
+            "enum": [
+              "all",
+              "any",
+              "none"
+            ],
+            "type": "string",
+            "description": "A string determining which of the conditions need to be true before any filters are evaluated.\n\n* `all` - All conditions must evaluate to true.\n* `any` - At least one of the conditions must evaluate to true.\n* `none` - All conditions must evaluate to false."
           },
           "conditions": {
             "type": "array",
@@ -37556,16 +38211,19 @@
             },
             "description": "\nA list of triggers that determine when the rule fires. See below for a list of possible conditions.\n\n**A new issue is created**\n```json\n{\n    \"id\": \"sentry.rules.conditions.first_seen_event.FirstSeenEventCondition\"\n}\n```\n\n**The issue changes state from resolved to unresolved**\n```json\n{\n    \"id\": \"sentry.rules.conditions.regression_event.RegressionEventCondition\"\n}\n```\n\n**The issue is seen more than `value` times in `interval`**\n- `value` - An integer\n- `interval` - Valid values are `1m`, `5m`, `15m`, `1h`, `1d`, `1w` and `30d` (`m` for minutes, `h` for hours, `d` for days, and `w` for weeks).\n```json\n{\n    \"id\": \"sentry.rules.conditions.event_frequency.EventFrequencyCondition\",\n    \"value\": 500,\n    \"interval\": \"1h\"\n}\n```\n\n**The issue is seen by more than `value` users in `interval`**\n- `value` - An integer\n- `interval` - Valid values are `1m`, `5m`, `15m`, `1h`, `1d`, `1w` and `30d` (`m` for minutes, `h` for hours, `d` for days, and `w` for weeks).\n```json\n{\n    \"id\": \"sentry.rules.conditions.event_frequency.EventUniqueUserFrequencyCondition\",\n    \"value\": 1000,\n    \"interval\": \"15m\"\n}\n```\n\n**The issue affects more than `value` percent of sessions in `interval`**\n- `value` - An integer from 0 to 100\n- `interval` - Valid values are `5m`, `10m`, `30m`, and `1h` (`m` for minutes, `h` for hours).\n```json\n{\n    \"id\": \"sentry.rules.conditions.event_frequency.EventFrequencyPercentCondition\",\n    \"value\": 50,\n    \"interval\": \"10m\"\n}\n```\n"
           },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "\nA list of actions that take place when all required conditions and filters for the rule are met. See below for a list of possible actions.\n\n**Send a notification to Suggested Assignees**\n- `fallthroughType` - Who the notification should be sent to if there are no suggested assignees. Valid values are `ActiveMembers`, `AllMembers`, and `NoOne`.\n```json\n{\n    \"id\" - \"sentry.mail.actions.NotifyEmailAction\",\n    \"targetType\" - \"IssueOwners\",\n    \"fallthroughType\" - \"ActiveMembers\"\n}\n```\n\n**Send a notification to a Member or a Team**\n- `targetType` - One of `Member` or `Team`.\n- `fallthroughType` - Who the notification should be sent to if it cannot be sent to the original target. Valid values are `ActiveMembers`, `AllMembers`, and `NoOne`.\n- `targetIdentifier` - The ID of the Member or Team the notification should be sent to.\n```json\n{\n    \"id\": \"sentry.mail.actions.NotifyEmailAction\",\n    \"targetType\": \"Team\"\n    \"fallthroughType\": \"AllMembers\"\n    \"targetIdentifier\": 4524986223\n}\n```\n\n**Send a Discord notification**\n- `server` - The integration ID associated with the Discord server.\n- `channel_id` - The ID of the channel to send the notification to.\n- `tags` - A string of tags to show in the notification, separated by commas (e.g., \"environment, user, my_tag\").\n```json\n{\n    \"id\": \"sentry.integrations.discord.notify_action.DiscordNotifyServiceAction\",\n    \"server\": 63408298,\n    \"channel_id\": 94732897,\n    \"tags\": \"browser,user\"\n}\n```\n\n**Send a Microsoft Teams notification**\n- `team` - The integration ID associated with the Microsoft Teams team.\n- `channel` - The name of the channel to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.msteams.notify_action.MsTeamsNotifyServiceAction\",\n    \"team\": 23465424,\n    \"channel\": \"General\"\n}\n```\n\n**Send an Opsgenie notification**\n- `account` - The integration ID associated with the Opsgenie account.\n- `team` - The ID of the Opsgenie team to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.opsgenie.notify_action.OpsgenieNotifyTeamAction\",\n    \"account\": 8723897589,\n    \"team\": \"9438930258-fairy\"\n}\n```\n\n**Send a PagerDuty notification**\n- `account` - The integration ID associated with the PagerDuty account.\n- `service` - The ID of the service to send the notification to.\n```json\n{\n    \"id\": \"sentry.integrations.pagerduty.notify_action.PagerDutyNotifyServiceAction\",\n    \"account\": 92385907,\n    \"service\": 9823924\n}\n```\n\n**Send a Slack notification**\n- `workspace` - The integration ID associated with the Slack workspace.\n- `channel` - The name of the channel to send the notification to (e.g., #critical, Jane Schmidt).\n- `channel_id` (optional) - The ID of the channel to send the notification to.\n- `tags` - A string of tags to show in the notification, separated by commas (e.g., \"environment, user, my_tag\").\n```json\n{\n    \"id\": \"sentry.integrations.slack.notify_action.SlackNotifyServiceAction\",\n    \"workspace\": 293854098,\n    \"channel\": \"#warning\",\n    \"tags\": \"environment,level\"\n}\n```\n\n**Send a notification to a service**\n- `service` - The plugin slug.\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event_service.NotifyEventServiceAction\",\n    \"service\": \"mail\"\n}\n```\n\n**Send a notification to a Sentry app with a custom webhook payload**\n- `settings` - A list of objects denoting the settings each action will be created with. All required fields must be included.\n- `sentryAppInstallationUuid` - The ID for the Sentry app\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event_sentry_app.NotifyEventSentryAppAction\",\n    \"settings\": [\n        {\"name\": \"title\", \"value\": \"Team Rocket\"},\n        {\"name\": \"summary\", \"value\": \"We're blasting off again.\"},\n    ],\n    \"sentryAppInstallationUuid\": 643522\n    \"hasSchemaFormConfig\": true\n}\n```\n\n**Send a notification (for all legacy integrations)**\n```json\n{\n    \"id\": \"sentry.rules.actions.notify_event.NotifyEventAction\"\n}\n```\n\n**Create an Azure DevOps work item**\n- `integration` - The integration ID.\n- `project` - The ID of the Azure DevOps project.\n- `work_item_type` - The type of work item to create.\n- `dynamic_form_fields` (optional) - A list of any custom fields you want to include in the work item as objects.\n```json\n{\n    \"id\": \"sentry.integrations.vsts.notify_action.AzureDevopsCreateTicketAction\",\n    \"integration\": 294838,\n    \"project\": \"0389485\",\n    \"work_item_type\": \"Microsoft.VSTS.WorkItemTypes.Task\",\n}\n```\n\n**Create a Jira Ticket**\n- `integration` - The integration ID associated with Jira.\n- `project` - The ID of the Jira project.\n- `issuetype` - The ID of the type of issue that the ticket should be created as.\n- `dynamic_form_fields` (optional) - A list of any custom fields you want to include in the ticket as objects.\n```json\n{\n    \"id\": \"sentry.integrations.jira.notify_action.JiraCreateTicketAction\",\n    \"integration\": 321424,\n    \"project\": \"349719\"\n    \"issueType\": \"1\"\n}\n```\n"
+          },
           "frequency": {
             "type": "integer",
             "maximum": 43200,
             "minimum": 5,
-            "description": "How often to perform the actions once for an issue, in minutes."
-          },
-          "name": {
-            "type": "string",
-            "description": "The name for the rule.",
-            "maxLength": 64
+            "description": "How often to perform the actions once for an issue, in minutes. The valid range is `5` to `43200`."
           },
           "environment": {
             "type": "string",
