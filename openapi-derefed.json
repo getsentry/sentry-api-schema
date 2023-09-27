@@ -69,7 +69,7 @@
                 "type": "integer"
               }
             },
-            "description": "The ids of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'."
+            "description": "The IDs of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'."
           },
           {
             "in": "query",
@@ -226,7 +226,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The member ID.",
+            "description": "The ID of the member to delete.",
             "required": true
           }
         ],
@@ -814,7 +814,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The member ID.",
+            "description": "The ID of the member to update.",
             "required": true
           }
         ],
@@ -1681,7 +1681,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The member ID.",
+            "description": "The ID of the member to delete.",
             "required": true
           }
         ],
@@ -2085,7 +2085,7 @@
                 "type": "integer"
               }
             },
-            "description": "The ids of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'."
+            "description": "The IDs of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'."
           },
           {
             "in": "query",
@@ -4597,7 +4597,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The id of the check-in.",
+            "description": "The ID of the check-in.",
             "required": true
           }
         ],
@@ -5560,7 +5560,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The id of the check-in.",
+            "description": "The ID of the check-in.",
             "required": true
           }
         ],
@@ -7079,7 +7079,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The id of the replay you'd like to retrieve.",
+            "description": "The ID of the replay you'd like to retrieve.",
             "required": true
           },
           {
@@ -7834,7 +7834,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "The id of the team you'd like to query / update.",
+            "description": "The ID of the team you'd like to query / update.",
             "required": true
           },
           {
@@ -7965,7 +7965,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "The id of the team you'd like to query / update.",
+            "description": "The ID of the team you'd like to query / update.",
             "required": true
           }
         ],
@@ -8057,7 +8057,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "The id of the team you'd like to query / update.",
+            "description": "The ID of the team you'd like to query / update.",
             "required": true
           }
         ],
@@ -8517,9 +8517,9 @@
             "in": "path",
             "name": "member_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
-            "description": "The id of the member you'd like to query.",
+            "description": "The ID of the member to query.",
             "required": true
           }
         ],
@@ -8680,9 +8680,9 @@
             "in": "path",
             "name": "member_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
-            "description": "The id of the member you'd like to query.",
+            "description": "The ID of the member to update.",
             "required": true
           }
         ],
@@ -8770,9 +8770,9 @@
             "in": "path",
             "name": "member_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
-            "description": "The id of the member you'd like to query.",
+            "description": "The ID of the member to delete.",
             "required": true
           }
         ],
@@ -12186,7 +12186,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "The id of the event.",
+            "description": "The ID of the event.",
             "required": true
           },
           {
@@ -23158,7 +23158,7 @@
         "tags": [
           "Events"
         ],
-        "description": "Bulk mutate various attributes on issues.  The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be modified.\n\n- For non-status updates, the `id` query parameter is required.\n- For status updates, the `id` query parameter may be omitted\nfor a batch \"update all\" query.\n- An optional `status` query parameter may be used to restrict\nmutations to only events with the given status.\n\nThe following attributes can be modified and are supplied as JSON object in the body:\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
+        "description": "Bulk mutate various attributes on issues.  The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be modified.\n\n- For non-status updates, the `id` query parameter is required.\n- For status updates, the `id` query parameter may be omitted\nfor a batch \"update all\" query.\n- An optional `status` query parameter may be used to restrict\nmutations to only events with the given status.\n\nThe following attributes can be modified and are supplied as JSON object in the body:\n\nIf any IDs are out of scope this operation will succeed without any data mutation.",
         "operationId": "Bulk Mutate a List of Issues",
         "parameters": [
           {
@@ -23252,7 +23252,7 @@
                   },
                   "assignedTo": {
                     "type": "string",
-                    "description": "The actor id (or username) of the user or team that should be assigned to this issue."
+                    "description": "The actor ID (or username) of the user or team that should be assigned to this issue."
                   },
                   "hasSeen": {
                     "type": "boolean",
@@ -23331,7 +23331,7 @@
         "tags": [
           "Events"
         ],
-        "description": "Permanently remove the given issues. The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be removed.\n\nOnly queries by 'id' are accepted.\n\nIf any ids are out of scope this operation will succeed without any data mutation.",
+        "description": "Permanently remove the given issues. The list of issues to modify is given through the `id` query parameter.  It is repeated for each issue that should be removed.\n\nOnly queries by 'id' are accepted.\n\nIf any IDs are out of scope this operation will succeed without any data mutation.",
         "operationId": "Bulk Remove a List of Issues",
         "parameters": [
           {
@@ -32267,7 +32267,7 @@
           {
             "name": "external_issue_id",
             "in": "path",
-            "description": "The id of the external issue.",
+            "description": "The ID of the external issue.",
             "required": true,
             "schema": {
               "type": "string"
