@@ -14320,7 +14320,7 @@
       },
       "put": {
         "operationId": "Update an Issue Alert Rule",
-        "description": "Updates an issue alert rule. Only the attributes submitted are modified.\n\nAn issue alert rule triggers whenever a new event is received for any issue in a project that matches the specified alert conditions. These conditions can include a resolved issue re-appearing or an issue affecting many users. Alert conditions have three parts:\n- Triggers - specify what type of activity you'd like monitored or when an alert should be triggered.\n- Filters - help control noise by triggering an alert only if the issue matches the specified criteria.\n- Actions - specify what should happen when the trigger conditions are met and the filters match.",
+        "description": "Updates an issue alert rule.\n> Please note that this endpoint rewrites the specified issue alert rule completely.\n\nAn issue alert rule triggers whenever a new event is received for any issue in a project that matches the specified alert conditions. These conditions can include a resolved issue re-appearing or an issue affecting many users. Alert conditions have three parts:\n- Triggers - specify what type of activity you'd like monitored or when an alert should be triggered.\n- Filters - help control noise by triggering an alert only if the issue matches the specified criteria.\n- Actions - specify what should happen when the trigger conditions are met and the filters match.",
         "parameters": [
           {
             "in": "path",
@@ -14364,11 +14364,6 @@
                     "description": "The name for the rule.",
                     "maxLength": 64
                   },
-                  "environment": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "The name of the environment to filter by."
-                  },
                   "actionMatch": {
                     "enum": [
                       "all",
@@ -14385,6 +14380,25 @@
                       "additionalProperties": {}
                     },
                     "description": "A list of triggers that determine when the rule fires. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid conditions."
+                  },
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "description": "A list of actions that take place when all required conditions and filters for the rule are met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid actions."
+                  },
+                  "frequency": {
+                    "type": "integer",
+                    "maximum": 43200,
+                    "minimum": 5,
+                    "description": "How often to perform the actions once for an issue, in minutes. The valid range is `5` to `43200`."
+                  },
+                  "environment": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The name of the environment to filter by."
                   },
                   "filterMatch": {
                     "enum": [
@@ -14403,29 +14417,23 @@
                     },
                     "description": "A list of filters that determine if a rule fires after the necessary conditions have been met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid filters."
                   },
-                  "actions": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    },
-                    "description": "A list of actions that take place when all required conditions and filters for the rule are met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid actions."
-                  },
-                  "frequency": {
-                    "type": "integer",
-                    "maximum": 43200,
-                    "minimum": 5,
-                    "description": "How often to perform the actions once for an issue, in minutes. The valid range is `5` to `43200`."
-                  },
                   "owner": {
                     "type": "string",
                     "nullable": true,
                     "description": "The ID of the team or user that owns the rule."
                   }
-                }
+                },
+                "required": [
+                  "actionMatch",
+                  "actions",
+                  "conditions",
+                  "frequency",
+                  "name"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "security": [
           {
@@ -38156,11 +38164,6 @@
             "description": "The name for the rule.",
             "maxLength": 64
           },
-          "environment": {
-            "type": "string",
-            "nullable": true,
-            "description": "The name of the environment to filter by."
-          },
           "actionMatch": {
             "enum": [
               "all",
@@ -38177,6 +38180,25 @@
               "additionalProperties": {}
             },
             "description": "A list of triggers that determine when the rule fires. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid conditions."
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "A list of actions that take place when all required conditions and filters for the rule are met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid actions."
+          },
+          "frequency": {
+            "type": "integer",
+            "maximum": 43200,
+            "minimum": 5,
+            "description": "How often to perform the actions once for an issue, in minutes. The valid range is `5` to `43200`."
+          },
+          "environment": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the environment to filter by."
           },
           "filterMatch": {
             "enum": [
@@ -38195,26 +38217,19 @@
             },
             "description": "A list of filters that determine if a rule fires after the necessary conditions have been met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid filters."
           },
-          "actions": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": {}
-            },
-            "description": "A list of actions that take place when all required conditions and filters for the rule are met. See [Create an Issue Alert Rule](/api/events/create-an-issue-alert-rule-for-a-project) for valid actions."
-          },
-          "frequency": {
-            "type": "integer",
-            "maximum": 43200,
-            "minimum": 5,
-            "description": "How often to perform the actions once for an issue, in minutes. The valid range is `5` to `43200`."
-          },
           "owner": {
             "type": "string",
             "nullable": true,
             "description": "The ID of the team or user that owns the rule."
           }
-        }
+        },
+        "required": [
+          "actionMatch",
+          "actions",
+          "conditions",
+          "frequency",
+          "name"
+        ]
       },
       "ProjectRulesPost": {
         "type": "object",
