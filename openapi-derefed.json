@@ -9334,6 +9334,248 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/stats-summary/": {
+      "get": {
+        "operationId": "Retrieve an Organization's Events Count by Project",
+        "description": "Query summarized event counts by project for your Organization. Also see https://docs.sentry.io/api/organizations/retrieve-event-counts-for-an-organization-v2/ for reference.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "enum": [
+                "sum(quantity)",
+                "sum(times_seen)"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "the `sum(quantity)` field is bytes for attachments, and all others the 'event' count for those types of events.\n\n`sum(times_seen)` sums the number of times an event has been seen. For 'normal' event types, this will be equal to `sum(quantity)` for now. For sessions, quantity will sum the total number of events seen in a session, while `times_seen` will be the unique number of sessions. and for attachments, `times_seen` will be the total number of attachments, while quantity will be the total sum of attachment bytes.\n\n* `sum(quantity)` - sum(quantity)\n* `sum(times_seen)` - sum(times_seen)",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "This defines the range of the time series, relative to now. The range is given in a `<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for minutes, `h` for hours, `d` for days and `w` for weeks.You must either provide a `statsPeriod`, or a `start` and `end`."
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "This is the resolution of the time series, given in the same format as `statsPeriod`. The default resolution is `1h` and the minimum resolution is currently restricted to `1h` as well. Intervals larger than `1d` are not supported, and the interval has to cleanly divide one day."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the start of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `end` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the inclusive end of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `start` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {}
+            },
+            "description": "The ID of the projects to filter by."
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "enum": [
+                "error",
+                "transaction",
+                "attachment",
+                "replays",
+                "profiles"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "If filtering by attachments, you cannot filter by any other category due to quantity values becoming nonsensical (combining bytes and event counts).\n\nIf filtering by `error`, it will automatically add `default` and `security` as we currently roll those two categories into `error` for displaying.\n\n* `error` - error\n* `transaction` - transaction\n* `attachment` - attachment\n* `replays` - replays\n* `profiles` - profiles"
+          },
+          {
+            "in": "query",
+            "name": "outcome",
+            "schema": {
+              "enum": [
+                "accepted",
+                "filtered",
+                "rate_limited",
+                "invalid",
+                "abuse",
+                "client_discard"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "See https://docs.sentry.io/product/stats/ for more information on outcome statuses.\n\n* `accepted` - accepted\n* `filtered` - filtered\n* `rate_limited` - rate_limited\n* `invalid` - invalid\n* `abuse` - abuse\n* `client_discard` - client_discard"
+          },
+          {
+            "in": "query",
+            "name": "reason",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The reason field will contain why an event was filtered/dropped."
+          },
+          {
+            "in": "query",
+            "name": "download",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Download the API response in as a csv file"
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "type": "string"
+                    },
+                    "end": {
+                      "type": "string"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "stats": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "slug",
+                          "stats"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "end",
+                    "projects",
+                    "start"
+                  ]
+                },
+                "examples": {
+                  "GetEventCountsForProjectsInAnOrganization": {
+                    "value": {
+                      "start": "2023-09-19T13:00:00Z",
+                      "end": "2023-09-19T12:28:00Z",
+                      "projects": [
+                        {
+                          "id": "1",
+                          "slug": "android-project",
+                          "stats": [
+                            {
+                              "category": "error",
+                              "outcomes": {
+                                "accepted": 1930571,
+                                "filtered": 1934881,
+                                "rate_limited": 2506132,
+                                "invalid": 0,
+                                "abuse": 1938113,
+                                "client_discard": 1942414
+                              },
+                              "totals": {
+                                "dropped": 2506132,
+                                "sum(quantity)": 10252111
+                              }
+                            },
+                            {
+                              "category": "transaction",
+                              "outcomes": {
+                                "accepted": 1909849,
+                                "filtered": 1947142,
+                                "rate_limited": 2458946,
+                                "invalid": 0,
+                                "abuse": 1927179,
+                                "client_discard": 1931595
+                              },
+                              "totals": {
+                                "dropped": 2458946,
+                                "sum(quantity)": 10174711
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "summary": "Get event counts for projects in an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/stats_v2/": {
       "get": {
         "operationId": "Retrieve Event Counts for an Organization (v2)",
@@ -38516,6 +38758,48 @@
             "teams"
           ]
         }
+      },
+      "OrganizationStatsSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "stats": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "slug",
+                "stats"
+              ]
+            }
+          }
+        },
+        "required": [
+          "end",
+          "projects",
+          "start"
+        ]
       },
       "OutcomesResponse": {
         "type": "object",
