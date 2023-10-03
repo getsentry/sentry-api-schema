@@ -69,7 +69,7 @@
                 "type": "integer"
               }
             },
-            "description": "The IDs of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'."
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
           },
           {
             "in": "query",
@@ -2085,7 +2085,7 @@
                 "type": "integer"
               }
             },
-            "description": "The IDs of projects to filter by. `-1` means all available projects. If this parameter is omitted, the request will default to using 'My Projects'."
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
           },
           {
             "in": "query",
@@ -6341,6 +6341,318 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_slug}/notifications/actions/": {
+      "get": {
+        "operationId": "List Spike Protection Notifications",
+        "description": "Returns all Spike Protection Notification Actions for an organization.\n\nNotification Actions notify a set of members through a service such as Slack or Sentry when an action has been triggered. For example, you can email the organization owner when the spike protection threshold has been reached.\n\nYou can use either the `project` or `projectSlug` query parameter to filter for certain projects. Note that if both are present, `projectSlug` takes priority.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "project_slug",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The project slugs to filter by. Use `$all` to include all available projects. For example the following are valid parameters:\n- `/?projectSlug=$all`\n- `/?projectSlug=android&projectSlug=javascript-react`\n"
+          },
+          {
+            "in": "query",
+            "name": "triggerType",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Type of the trigger that causes the notification. The only supported value right now is: `spike-protection`"
+          }
+        ],
+        "tags": [
+          "Notifications"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "CreateANewEmailSpikeProtectionNotificationActionForTheProject,TheSpoiledYoghurt": {
+                    "value": {
+                      "id": "836501735",
+                      "organizationId": "62848264",
+                      "serviceType": "sentry_notification",
+                      "targetDisplay": "default",
+                      "targeyIdentifier": "default",
+                      "targetType": "specific",
+                      "triggerType": "spike-protection",
+                      "projects": [
+                        {
+                          "id": "4505321021243392",
+                          "slug": "the-spoiled-yoghurt",
+                          "name": "The Spoiled Yoghurt",
+                          "platform": "python",
+                          "dateCreated": "2023-06-08T00:13:06.004534Z",
+                          "isBookmarked": false,
+                          "isMember": true,
+                          "features": [
+                            "alert-filters",
+                            "custom-inbound-filters",
+                            "data-forwarding",
+                            "discard-groups",
+                            "minidump",
+                            "race-free-group-creation",
+                            "rate-limits",
+                            "servicehooks",
+                            "similarity-indexing",
+                            "similarity-indexing-v2",
+                            "similarity-view",
+                            "similarity-view-v2"
+                          ],
+                          "firstEvent": null,
+                          "firstTransactionEvent": false,
+                          "access": [
+                            "member:read",
+                            "event:read",
+                            "project:admin",
+                            "team:write",
+                            "project:write",
+                            "team:admin",
+                            "project:read",
+                            "org:integrations",
+                            "org:read",
+                            "project:releases",
+                            "team:read",
+                            "alerts:write",
+                            "event:admin",
+                            "event:write",
+                            "alerts:read"
+                          ],
+                          "hasAccess": true,
+                          "hasMinifiedStackTrace": false,
+                          "hasMonitors": false,
+                          "hasProfiles": false,
+                          "hasReplays": false,
+                          "hasSessions": false,
+                          "isInternal": false,
+                          "isPublic": false,
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null
+                          },
+                          "color": "#3f70bf",
+                          "status": "active"
+                        }
+                      ]
+                    },
+                    "summary": "Create a new email spike protection notification action for the project, The Spoiled Yoghurt"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a Spike Protection Notification Action",
+        "description": "Creates a new Notification Action for Spike Protection.\n\nNotification Actions notify a set of members through a service such as Slack or Sentry when an action has been triggered. For example, you can email the organization owner when the spike protection threshold has been reached.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Notifications"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Django Rest Framework serializer for incoming NotificationAction API payloads",
+                "properties": {
+                  "integration_id": {
+                    "type": "integer",
+                    "description": "ID of the integration used as the notification service. For example, this would\n            be the Slack Integration ID if the action has Slack notify organization members.\n            This field is required if **service_type** is `slack`, `pagerduty` or `opsgenie`."
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "List of projects slugs that Notificaton Action is created for"
+                  },
+                  "service_type": {
+                    "type": "string",
+                    "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
+                  },
+                  "trigger_type": {
+                    "type": "string",
+                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
+                  },
+                  "target_identifier": {
+                    "type": "string",
+                    "description": "ID of the notification target. For example, Slack channel ID. This is required when **service_type** is `slack` or `pagerduty`. "
+                  },
+                  "target_display": {
+                    "type": "string",
+                    "description": "Name of the notification target. For example, Slack channel name. This is required when **service_type** is `slack` or `pagerduty`"
+                  }
+                },
+                "required": [
+                  "service_type",
+                  "trigger_type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "CreateANewEmailSpikeProtectionNotificationActionForTheProject,TheSpoiledYoghurt": {
+                    "value": {
+                      "id": "836501735",
+                      "organizationId": "62848264",
+                      "serviceType": "sentry_notification",
+                      "targetDisplay": "default",
+                      "targeyIdentifier": "default",
+                      "targetType": "specific",
+                      "triggerType": "spike-protection",
+                      "projects": [
+                        {
+                          "id": "4505321021243392",
+                          "slug": "the-spoiled-yoghurt",
+                          "name": "The Spoiled Yoghurt",
+                          "platform": "python",
+                          "dateCreated": "2023-06-08T00:13:06.004534Z",
+                          "isBookmarked": false,
+                          "isMember": true,
+                          "features": [
+                            "alert-filters",
+                            "custom-inbound-filters",
+                            "data-forwarding",
+                            "discard-groups",
+                            "minidump",
+                            "race-free-group-creation",
+                            "rate-limits",
+                            "servicehooks",
+                            "similarity-indexing",
+                            "similarity-indexing-v2",
+                            "similarity-view",
+                            "similarity-view-v2"
+                          ],
+                          "firstEvent": null,
+                          "firstTransactionEvent": false,
+                          "access": [
+                            "member:read",
+                            "event:read",
+                            "project:admin",
+                            "team:write",
+                            "project:write",
+                            "team:admin",
+                            "project:read",
+                            "org:integrations",
+                            "org:read",
+                            "project:releases",
+                            "team:read",
+                            "alerts:write",
+                            "event:admin",
+                            "event:write",
+                            "alerts:read"
+                          ],
+                          "hasAccess": true,
+                          "hasMinifiedStackTrace": false,
+                          "hasMonitors": false,
+                          "hasProfiles": false,
+                          "hasReplays": false,
+                          "hasSessions": false,
+                          "isInternal": false,
+                          "isPublic": false,
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null
+                          },
+                          "color": "#3f70bf",
+                          "status": "active"
+                        }
+                      ]
+                    },
+                    "summary": "Create a new email spike protection notification action for the project, The Spoiled Yoghurt"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -37077,6 +37389,43 @@
           "type"
         ]
       },
+      "NotificationAction": {
+        "type": "object",
+        "description": "Django Rest Framework serializer for incoming NotificationAction API payloads",
+        "properties": {
+          "integration_id": {
+            "type": "integer",
+            "description": "ID of the integration used as the notification service. For example, this would\n            be the Slack Integration ID if the action has Slack notify organization members.\n            This field is required if **service_type** is `slack`, `pagerduty` or `opsgenie`."
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of projects slugs that Notificaton Action is created for"
+          },
+          "service_type": {
+            "type": "string",
+            "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
+          },
+          "trigger_type": {
+            "type": "string",
+            "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
+          },
+          "target_identifier": {
+            "type": "string",
+            "description": "ID of the notification target. For example, Slack channel ID. This is required when **service_type** is `slack` or `pagerduty`. "
+          },
+          "target_display": {
+            "type": "string",
+            "description": "Name of the notification target. For example, Slack channel name. This is required when **service_type** is `slack` or `pagerduty`"
+          }
+        },
+        "required": [
+          "service_type",
+          "trigger_type"
+        ]
+      },
       "OrganizationEventsResponseDict": {
         "type": "object",
         "properties": {
@@ -37957,6 +38306,10 @@
           "intervals",
           "start"
         ]
+      },
+      "OutgoingNotificationAction": {
+        "type": "object",
+        "additionalProperties": {}
       },
       "Project": {
         "type": "object",
@@ -39965,6 +40318,16 @@
       "name": "Replays",
       "x-sidebar-name": "Replays",
       "description": "Endpoints for Replays",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Notifications",
+      "x-sidebar-name": "Notifications",
+      "description": "Endpoints for Notifications",
       "x-display-description": false,
       "externalDocs": {
         "description": "Found an error? Let us know.",
