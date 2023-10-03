@@ -206,6 +206,196 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/integrations/": {
+      "get": {
+        "operationId": "List an Organization's Available Integrations",
+        "description": "Lists all the available Integrations for an Organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "providerKey",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Specific integration provider to filter by such as `slack`. See our [Integrations Documentation](/product/integrations/) for an updated list of providers."
+          },
+          {
+            "in": "query",
+            "name": "features",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Integration features to filter by. See our [Integrations Documentation](/product/integrations/) for an updated list of features. Current available ones are:\n- alert-rule\n- chat-unfurl\n- codeowners\n- commits\n- data-forwarding\n- deployment\n- enterprise-alert-rule\n- enterprise-incident-management\n- incident-management\n- issue-basic\n- issue-sync\n- mobile\n- serverless\n- session-replay\n- stacktrace-link\n- ticket-rules\n    "
+          },
+          {
+            "in": "query",
+            "name": "includeConfig",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Specify `True` to fetch third-party integration configurations. Note that this can add several seconds to the response time."
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "icon": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "domainName": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "accountType": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "provider": {},
+                      "configOrganization": {},
+                      "configData": {},
+                      "externalId": {
+                        "type": "string"
+                      },
+                      "organizationId": {
+                        "type": "integer"
+                      },
+                      "organizationIntegrationStatus": {
+                        "type": "string"
+                      },
+                      "gracePeriodEnd": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "accountType",
+                      "configData",
+                      "configOrganization",
+                      "domainName",
+                      "externalId",
+                      "gracePeriodEnd",
+                      "icon",
+                      "id",
+                      "name",
+                      "organizationId",
+                      "organizationIntegrationStatus",
+                      "provider",
+                      "scopes",
+                      "status"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAllAvailableIntegrationsForAlphabetSoupFactory": {
+                    "value": [
+                      {
+                        "id": "24817",
+                        "name": "Alphabet Soup Factory",
+                        "icon": "https://avatars.slack-edge.com/alphabet-soup",
+                        "domainName": "alphabet-soup.slack.com",
+                        "accountType": null,
+                        "scopes": [
+                          "channels:read",
+                          "chat:write",
+                          "chat:write.customize",
+                          "chat:write.public",
+                          "commands",
+                          "groups:read",
+                          "im:history",
+                          "im:read",
+                          "links:read",
+                          "links:write",
+                          "team:read",
+                          "users:read"
+                        ],
+                        "status": "active",
+                        "provider": {
+                          "key": "slack",
+                          "slug": "slack",
+                          "name": "Slack",
+                          "canAdd": true,
+                          "canDisable": false,
+                          "features": [
+                            "alert-rule",
+                            "chat-unfurl"
+                          ],
+                          "aspects": {
+                            "alerts": [
+                              {
+                                "type": "info",
+                                "text": "The Slack integration adds a new Alert Rule action to all projects. To enable automatic notifications sent to Slack you must create a rule using the slack workspace action in your project settings."
+                              }
+                            ]
+                          }
+                        },
+                        "configOrganization": [],
+                        "configData": {
+                          "installationType": "born_as_bot"
+                        },
+                        "externalId": "7252394",
+                        "organizationId": 6234528,
+                        "organizationIntegrationStatus": "active",
+                        "gracePeriodEnd": null
+                      }
+                    ],
+                    "summary": "List All Available Integrations for Alphabet Soup Factory"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/members/{member_id}/": {
       "get": {
         "operationId": "Retrieve an Organization Member",
@@ -35203,6 +35393,74 @@
           ]
         }
       },
+      "ListOrganizationIntegrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "icon": {
+              "type": "string",
+              "nullable": true
+            },
+            "domainName": {
+              "type": "string",
+              "nullable": true
+            },
+            "accountType": {
+              "type": "string",
+              "nullable": true
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            },
+            "status": {
+              "type": "string"
+            },
+            "provider": {},
+            "configOrganization": {},
+            "configData": {},
+            "externalId": {
+              "type": "string"
+            },
+            "organizationId": {
+              "type": "integer"
+            },
+            "organizationIntegrationStatus": {
+              "type": "string"
+            },
+            "gracePeriodEnd": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "required": [
+            "accountType",
+            "configData",
+            "configOrganization",
+            "domainName",
+            "externalId",
+            "gracePeriodEnd",
+            "icon",
+            "id",
+            "name",
+            "organizationId",
+            "organizationIntegrationStatus",
+            "provider",
+            "scopes",
+            "status"
+          ]
+        }
+      },
       "ListRules": {
         "type": "array",
         "items": {
@@ -40328,6 +40586,16 @@
       "name": "Notifications",
       "x-sidebar-name": "Notifications",
       "description": "Endpoints for Notifications",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Integrations",
+      "x-sidebar-name": "Integrations",
+      "description": "Endpoints for Integrations",
       "x-display-description": false,
       "externalDocs": {
         "description": "Found an error? Let us know.",
