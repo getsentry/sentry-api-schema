@@ -3084,20 +3084,6 @@
                     "type": "string",
                     "maxLength": 128
                   },
-                  "slug": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "pattern": "^[a-z0-9_\\-]+$"
-                  },
-                  "status": {
-                    "enum": [
-                      "active",
-                      "disabled"
-                    ],
-                    "type": "string",
-                    "description": "* `active` - active\n* `disabled` - disabled",
-                    "default": "active"
-                  },
                   "type": {
                     "enum": [
                       "cron_job"
@@ -3746,6 +3732,20 @@
                     "required": [
                       "schedule"
                     ]
+                  },
+                  "slug": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "pattern": "^[a-z0-9_\\-]+$"
+                  },
+                  "status": {
+                    "enum": [
+                      "active",
+                      "disabled"
+                    ],
+                    "type": "string",
+                    "description": "* `active` - active\n* `disabled` - disabled",
+                    "default": "active"
                   },
                   "alert_rule": {
                     "type": "object",
@@ -4308,20 +4308,6 @@
                     "type": "string",
                     "maxLength": 128
                   },
-                  "slug": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "pattern": "^[a-z0-9_\\-]+$"
-                  },
-                  "status": {
-                    "enum": [
-                      "active",
-                      "disabled"
-                    ],
-                    "type": "string",
-                    "description": "* `active` - active\n* `disabled` - disabled",
-                    "default": "active"
-                  },
                   "type": {
                     "enum": [
                       "cron_job"
@@ -4970,6 +4956,20 @@
                     "required": [
                       "schedule"
                     ]
+                  },
+                  "slug": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "pattern": "^[a-z0-9_\\-]+$"
+                  },
+                  "status": {
+                    "enum": [
+                      "active",
+                      "disabled"
+                    ],
+                    "type": "string",
+                    "description": "* `active` - active\n* `disabled` - disabled",
+                    "default": "active"
                   },
                   "alert_rule": {
                     "type": "object",
@@ -7195,6 +7195,14 @@
                 "type": "object",
                 "description": "Django Rest Framework serializer for incoming NotificationAction API payloads",
                 "properties": {
+                  "service_type": {
+                    "type": "string",
+                    "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
+                  },
+                  "trigger_type": {
+                    "type": "string",
+                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
+                  },
                   "integration_id": {
                     "type": "integer",
                     "description": "ID of the integration used as the notification service. For example, this would\n            be the Slack Integration ID if the action has Slack notify organization members.\n            This field is required if **service_type** is `slack`, `pagerduty` or `opsgenie`."
@@ -7205,14 +7213,6 @@
                       "type": "string"
                     },
                     "description": "List of projects slugs that Notificaton Action is created for"
-                  },
-                  "service_type": {
-                    "type": "string",
-                    "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
-                  },
-                  "trigger_type": {
-                    "type": "string",
-                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
                   },
                   "target_identifier": {
                     "type": "string",
@@ -7379,6 +7379,14 @@
                 "type": "object",
                 "description": "Django Rest Framework serializer for incoming NotificationAction API payloads",
                 "properties": {
+                  "service_type": {
+                    "type": "string",
+                    "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
+                  },
+                  "trigger_type": {
+                    "type": "string",
+                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
+                  },
                   "integration_id": {
                     "type": "integer",
                     "description": "ID of the integration used as the notification service. For example, this would\n            be the Slack Integration ID if the action has Slack notify organization members.\n            This field is required if **service_type** is `slack`, `pagerduty` or `opsgenie`."
@@ -7389,14 +7397,6 @@
                       "type": "string"
                     },
                     "description": "List of projects slugs that Notificaton Action is created for"
-                  },
-                  "service_type": {
-                    "type": "string",
-                    "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
-                  },
-                  "trigger_type": {
-                    "type": "string",
-                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
                   },
                   "target_identifier": {
                     "type": "string",
@@ -9881,12 +9881,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "schemas": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "Operations": {
                     "type": "array",
                     "items": {
@@ -9906,6 +9900,12 @@
                       ]
                     },
                     "maxItems": 100
+                  },
+                  "schemas": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
                   }
                 },
                 "required": [
@@ -38056,20 +38056,6 @@
             "type": "string",
             "maxLength": 128
           },
-          "slug": {
-            "type": "string",
-            "maxLength": 50,
-            "pattern": "^[a-z0-9_\\-]+$"
-          },
-          "status": {
-            "enum": [
-              "active",
-              "disabled"
-            ],
-            "type": "string",
-            "description": "* `active` - active\n* `disabled` - disabled",
-            "default": "active"
-          },
           "type": {
             "enum": [
               "cron_job"
@@ -38719,6 +38705,20 @@
               "schedule"
             ]
           },
+          "slug": {
+            "type": "string",
+            "maxLength": 50,
+            "pattern": "^[a-z0-9_\\-]+$"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "disabled"
+            ],
+            "type": "string",
+            "description": "* `active` - active\n* `disabled` - disabled",
+            "default": "active"
+          },
           "alert_rule": {
             "type": "object",
             "properties": {
@@ -38766,6 +38766,14 @@
         "type": "object",
         "description": "Django Rest Framework serializer for incoming NotificationAction API payloads",
         "properties": {
+          "service_type": {
+            "type": "string",
+            "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
+          },
+          "trigger_type": {
+            "type": "string",
+            "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
+          },
           "integration_id": {
             "type": "integer",
             "description": "ID of the integration used as the notification service. For example, this would\n            be the Slack Integration ID if the action has Slack notify organization members.\n            This field is required if **service_type** is `slack`, `pagerduty` or `opsgenie`."
@@ -38776,14 +38784,6 @@
               "type": "string"
             },
             "description": "List of projects slugs that Notificaton Action is created for"
-          },
-          "service_type": {
-            "type": "string",
-            "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
-          },
-          "trigger_type": {
-            "type": "string",
-            "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
           },
           "target_identifier": {
             "type": "string",
@@ -40818,12 +40818,6 @@
       "SCIMPatchRequest": {
         "type": "object",
         "properties": {
-          "schemas": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "Operations": {
             "type": "array",
             "items": {
@@ -40843,6 +40837,12 @@
               ]
             },
             "maxItems": 100
+          },
+          "schemas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": [
