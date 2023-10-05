@@ -14,6 +14,548 @@
     }
   },
   "paths": {
+    "/api/0/organizations/{organization_slug}/alert-rules/": {
+      "get": {
+        "operationId": "List an Organization's Metric Alert Rules",
+        "description": "Return a list of active metric alert rules bound to an organization.\n\nA metric alert rule is a configuration that defines the conditions for triggering an alert.\nIt specifies the metric type, function, time interval, and threshold\nvalues that determine when an alert should be triggered. Metric alert rules are used to monitor\nand notify you when certain metrics, like error count, latency, or failure rate, cross a\npredefined threshold. These rules help you proactively identify and address issues in your\nproject.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Alerts"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alert_rule:read",
+              "alerts:read",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "This represents a Sentry Metric Alert Rule.",
+                    "properties": {
+                      "environment": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "projects": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "queryType": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "resolveThreshold": {
+                        "type": "number",
+                        "format": "double",
+                        "nullable": true
+                      },
+                      "dataset": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "thresholdType": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "eventTypes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "owner": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "originalAlertRuleId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "comparisonDelta": {
+                        "type": "number",
+                        "format": "double",
+                        "nullable": true
+                      },
+                      "snooze": {
+                        "type": "boolean",
+                        "nullable": true
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "organizationId": {
+                        "type": "string"
+                      },
+                      "query": {
+                        "type": "string"
+                      },
+                      "aggregate": {
+                        "type": "string"
+                      },
+                      "timeWindow": {
+                        "type": "string"
+                      },
+                      "triggers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "dateModified": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "createdBy": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "aggregate",
+                      "createdBy",
+                      "dateCreated",
+                      "dateModified",
+                      "id",
+                      "name",
+                      "organizationId",
+                      "query",
+                      "timeWindow",
+                      "triggers"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListMetricAlertRulesForAnOrganization": {
+                    "value": [
+                      {
+                        "id": "7",
+                        "name": "Counting Bad Request and Unauthorized Errors in Prod",
+                        "organizationId": "237655244234",
+                        "queryType": 0,
+                        "dataset": "events",
+                        "query": "tags[http.status_code]:[400, 401]",
+                        "aggregate": "count()",
+                        "thresholdType": 0,
+                        "resolveThreshold": null,
+                        "timeWindow": "1440",
+                        "environment": "prod",
+                        "triggers": [
+                          {
+                            "id": "394289",
+                            "alertRuleId": "17723",
+                            "label": "critical",
+                            "thresholdType": 0,
+                            "alertThreshold": 100,
+                            "resolveThreshold": null,
+                            "dateCreated": "2023-09-25T22:15:26.375126Z",
+                            "actions": [
+                              {
+                                "id": "394280",
+                                "alertRuleTriggerId": "92481",
+                                "type": "slack",
+                                "targetType": "specific",
+                                "targetIdentifier": "30489048931789",
+                                "inputChannelId": "#my-channel",
+                                "integrationId": "8753467",
+                                "sentryAppId": null,
+                                "dateCreated": "2023-09-25T22:15:26.375126Z"
+                              }
+                            ]
+                          }
+                        ],
+                        "projects": [
+                          "super-cool-project"
+                        ],
+                        "owner": "user:53256",
+                        "originalAlertRuleId": null,
+                        "comparisonDelta": null,
+                        "dateModified": "2023-09-25T22:15:26.375126Z",
+                        "dateCreated": "2023-09-25T22:15:26.375126Z",
+                        "createdBy": {
+                          "id": 983948,
+                          "name": "John Doe",
+                          "email": "john.doe@sentry.io"
+                        }
+                      }
+                    ],
+                    "summary": "List metric alert rules for an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a Metric Alert Rule for an Organization",
+        "description": "Create a new metric alert rule for the given organization.\n\nA metric alert rule is a configuration that defines the conditions for triggering an alert.\nIt specifies the metric type, function, time interval, and threshold\nvalues that determine when an alert should be triggered. Metric alert rules are used to monitor\nand notify you when certain metrics, like error count, latency, or failure rate, cross a\npredefined threshold. These rules help you proactively identify and address issues in your\nproject.\n\n## Metric Alert Rule Types\nBelow are the types of metric alert rules you can create and the parameter values required\nto set them up. All other parameters can be customized based on how you want the alert\nrule to work. Scroll down to Body Parameters for more information. Visit the\n[Alert Types](/product/alerts/alert-types/#metric-alerts) docs for more details on each\nmetric alert rule type.\n\n### [Number of Errors](/product/alerts/alert-types/#number-of-errors)\n- `eventTypes`: Any of `error` or `default`.\n```json\n{\n    \"queryType\": 0,\n    \"dataset\": \"events\",\n    \"aggregate\": \"count()\",\n    \"eventTypes\": [\"error\", \"default\"]\n}\n```\n\n### [Users Experiencing Errors](/product/alerts/alert-types/#users-experiencing-errors)\n- `eventTypes`: Any of `error` or `default`.\n```json\n{\n    \"queryType\": 0,\n    \"dataset\": \"events\",\n    \"aggregate\": \"count_unique(user)\"\n}\n```\n\n### [Crash Free Session Rate](/product/alerts/alert-types/#crash-free-session-rate)\n```json\n{\n    \"queryType\": 2,\n    \"dataset\": \"metrics\",\n    \"aggregate\": \"percentage(sessions_crashed, sessions) AS _crash_rate_alert_aggregate\"\n}\n```\n\n### [Crash Free User Rate](/product/alerts/alert-types/#crash-free-user-rate)\n```json\n{\n    \"queryType\": 2,\n    \"dataset\": \"metrics\",\n    \"aggregate\": \"percentage(users_crashed, users) AS _crash_rate_alert_aggregate\"\n}\n```\n\n### [Throughput](/product/alerts/alert-types/#throughput)\n```json\n{\n    \"queryType\": 1,\n    \"dataset\": \"transactions\",\n    \"aggregate\": \"count()\"\n}\n```\n\n### [Transaction Duration](/product/alerts/alert-types/#transaction-duration)\n-  `dataset`: If a custom percentile is used, `dataset` is `transactions`. Otherwise, `dataset` is `generic_metrics`.\n-  `aggregate`: Valid values are `avg(transaction.duration)`, `p50(transaction.duration)`, `p75(transaction.duration)`, `p95(transaction.duration)`, `p99(transaction.duration)`, `p100(transaction.duration)`, and `percentile(transaction.duration,x)`, where `x` is your custom percentile.\n```json\n{\n    \"queryType\": 1,\n    \"dataset\": \"generic_metrics\",\n    \"aggregate\": \"avg(transaction.duration)\"\n}\n```\n\n### [Apdex](/product/alerts/alert-types/#apdex)\n- `aggregate`: `apdex(x)` where `x` is the value of the Apdex score.\n```json\n{\n    \"queryType\": 1,\n    \"dataset\": \"transactions\",\n    \"aggregate\": \"apdex(300)\"\n}\n```\n\n### [Failure Rate](/product/alerts/alert-types/#failure-rate)\n```json\n{\n    \"queryType\": 1,\n    \"dataset\": \"transactions\",\n    \"aggregate\": \"failure_rate()\"\n}\n```\n\n### [Largest Contentful Paint](/product/alerts/alert-types/#largest-contentful-display)\n- `dataset`: If a custom percentile is used, `dataset` is `transactions`. Otherwise, `dataset` is `generic_metrics`.\n- `aggregate`: Valid values are `avg(measurements.lcp)`, `p50(measurements.lcp)`, `p75(measurements.lcp)`, `p95(measurements.lcp)`, `p99(measurements.lcp)`, `p100(measurements.lcp)`, and `percentile(measurements.lcp,x)`, where `x` is your custom percentile.\n```json\n{\n    \"queryType\": 1,\n    \"dataset\": \"generic_metrics\",\n    \"aggregate\": \"p50(measurements.lcp)\"\n}\n```\n\n### [First Input Delay](/product/alerts/alert-types/#first-input-delay)\n- `dataset`: If a custom percentile is used, `dataset` is `transactions`. Otherwise, `dataset` is `generic_metrics`.\n- `aggregate`: Valid values are `avg(measurements.fid)`, `p50(measurements.fid)`, `p75(measurements.fid)`, `p95(measurements.fid)`, `p99(measurements.fid)`, `p100(measurements.fid)`, and `percentile(measurements.fid,x)`, where `x` is your custom percentile.\n```json\n{\n    \"queryType\": 1,\n    \"dataset\": \"generic_metrics\",\n    \"aggregate\": \"p100(measurements.fid)\"\n}\n```\n\n### [Cumulative Layout Shift](/product/alerts/alert-types/#cumulative-layout-shift)\n- `dataset`: If a custom percentile is used, `dataset` is `transactions`. Otherwise, `dataset` is `generic_metrics`.\n- `aggregate`: Valid values are `avg(measurements.cls)`, `p50(measurements.cls)`, `p75(measurements.cls)`, `p95(measurements.cls)`, `p99(measurements.cls)`, `p100(measurements.cls)`, and `percentile(measurements.cls,x)`, where `x` is your custom percentile.\n```json\n{\n    \"queryType\": 1,\n    \"dataset\": \"transactions\",\n    \"aggregate\": \"percentile(measurements.cls,0.2)\"\n}\n```\n\n### [Custom Metric](/product/alerts/alert-types/#custom-metric)\n- `dataset`: If a custom percentile is used, `dataset` is `transactions`. Otherwise, `dataset` is `generic_metrics`.\n- `aggregate`: Valid values are:\n    - `avg(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n    - `p50(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n    - `p75(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n    - `p95(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n    - `p99(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n    - `p100(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n    - `percentile(x,y)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`, and `y` is the custom percentile.\n    - `failure_rate()`\n    - `apdex(x)`, where `x` is the value of the Apdex score.\n    - `count()`\n```json\n{\n    \"queryType\": 1,\n    \"dataset\": \"generic_metrics\",\n    \"aggregate\": \"p75(measurements.ttfb)\"\n}\n```",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Alerts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name for the rule, which has a maximimum length of 64 characters.",
+                    "maxLength": 64
+                  },
+                  "aggregate": {
+                    "type": "string",
+                    "description": "A string representing the aggregate function used in this alert rule. Valid aggregate functions are `count`, `count_unique`, `percentage`, `avg`, `apdex`, `failure_rate`, `p50`, `p75`, `p95`, `p99`, `p100`, and `percentile`. See [Metric Alert Rule Types](#metric-alert-rule-types) for valid configurations."
+                  },
+                  "timeWindow": {
+                    "enum": [
+                      1,
+                      5,
+                      10,
+                      15,
+                      30,
+                      60,
+                      120,
+                      240,
+                      1440
+                    ],
+                    "type": "integer",
+                    "description": "The time period to aggregate over.\n\n* `1` - 1 minute\n* `5` - 5 minutes\n* `10` - 10 minutes\n* `15` - 15 minutes\n* `30` - 30 minutes\n* `60` - 1 hour\n* `120` - 2 hours\n* `240` - 4 hours\n* `1440` - 24 hours"
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The names of the projects to filter by."
+                  },
+                  "query": {
+                    "type": "string",
+                    "description": "An event search query to subscribe to and monitor for alerts. For example, to filter transactions so that only those with status code 400 are included, you could use `\"query\": \"http.status_code:400\"`. Use an empty string for no filter."
+                  },
+                  "thresholdType": {
+                    "enum": [
+                      0,
+                      1
+                    ],
+                    "type": "integer",
+                    "description": "The comparison operator for the critical and warning thresholds. The comparison operator for the resolved threshold is automatically set to the opposite operator. When a percentage change threshold is used, `0` is equivalent to \"Higher than\" and `1` is equivalent to \"Lower than\".\n\n* `0` - Above\n* `1` - Below"
+                  },
+                  "triggers": {
+                    "type": "array",
+                    "items": {},
+                    "description": "\nA list of triggers, where each trigger is an object with the following fields:\n- `label`: One of `critical` or `warning`. A `critical` trigger is always required.\n- `alertThreshold`: The value that the subscription needs to reach to trigger the\nalert rule.\n- `actions`: A list of actions that take place when the threshold is met. Set as an empty list if no actions are to take place.\n```json\ntriggers: [\n    {\n        \"label\": \"critical\",\n        \"alertThreshold\": 50,\n        \"actions\": [\n            {\n                \"type\": \"slack\",\n                \"targetType\": \"specific\",\n                \"targetIdentifier\": \"#get-crit\",\n                \"inputChannelId\": 2454362\n                \"integrationId\": 653532,\n            }\n        ]\n    },\n    {\n        \"label\": \"warning\",\n        \"alertThreshold\": 25,\n        \"actions\": []\n    }\n]\n```\nMetric alert rule trigger actions follow the following structure:\n- `type`: The type of trigger action. Valid values are `email`, `slack`, `msteams`, `pagerduty`, `sentry_app`, `sentry_notification`, and `opsgenie`.\n- `targetType`: The type of target the notification will be sent to. Valid values are `specific` (`targetIdentifier` is a direct reference used by the service, like an email address or a Slack channel ID), `user` (`targetIdentifier` is a Sentry user ID), `team` (`targetIdentifier` is a Sentry team ID), and `sentry_app` (`targetIdentifier` is a SentryApp ID).\n- `targetIdentifier`: The ID of the target. This must be an integer for PagerDuty and Sentry apps, and a string for all others. Examples of appropriate values include a Slack channel name (`#my-channel`), a user ID, a team ID, a Sentry app ID, etc.\n- `inputChannelId`: The ID of the Slack channel. This is only used for the Slack action, and can be used as an alternative to providing the `targetIdentifier`.\n- `integrationId`: The integration ID. This is required for every action type excluding `email` and `sentry_app.`\n- `sentryAppId`: The ID of the Sentry app. This is required when `type` is `sentry_app`.\n"
+                  },
+                  "environment": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The name of the environment to filter by. Defaults to all environments."
+                  },
+                  "dataset": {
+                    "type": "string",
+                    "description": "The name of the dataset that this query will be executed on. Valid values are `events`, `transactions`, `metrics`, `sessions`, and `generic-metrics`. Defaults to `events`. See [Metric Alert Rule Types](#metric-alert-rule-types) for valid configurations."
+                  },
+                  "queryType": {
+                    "enum": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "type": "integer",
+                    "description": "The `SnubaQuery.Type` of the query. If no value is provided, `queryType` is set to the default for the specified `dataset.` See [Metric Alert Rule Types](#metric-alert-rule-types) for valid configurations.\n\n* `0` - event.type:error\n* `1` - event.type:transaction\n* `2` - None"
+                  },
+                  "eventTypes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "List of event types that this alert will be related to. Valid values are `default` (events captured using [Capture Message](/product/sentry-basics/integrate-backend/capturing-errors/#capture-message)), `error` and `transaction`."
+                  },
+                  "comparisonDelta": {
+                    "type": "integer",
+                    "description": "An optional int representing the time delta to use as the comparison period, in minutes. Required when using a percentage change threshold (\"x%\" higher or lower compared to `comparisonDelta` minutes ago). A percentage change threshold cannot be used for [Crash Free Session Rate](#crash-free-session-rate) or [Crash Free User Rate](#crash-free-user-rate)."
+                  },
+                  "resolveThreshold": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "Optional value that the metric needs to reach to resolve the alert. If no value is provided, this is set automatically based on the lowest severity trigger's `alertThreshold`. For example, if the alert is set to trigger at the warning level when the number of errors is above 50, then the alert would be set to resolve when there are less than 50 errors. If `thresholdType` is `0`, `resolveThreshold` must be greater than the critical threshold, otherwise, it must be less than the critical threshold."
+                  },
+                  "owner": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The ID of the team or user that owns the rule."
+                  }
+                },
+                "required": [
+                  "aggregate",
+                  "name",
+                  "projects",
+                  "query",
+                  "thresholdType",
+                  "timeWindow",
+                  "triggers"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "alert_rule:write",
+              "alerts:write",
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "This represents a Sentry Metric Alert Rule.",
+                  "properties": {
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "queryType": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "resolveThreshold": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "dataset": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "thresholdType": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "eventTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "owner": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "originalAlertRuleId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "comparisonDelta": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "snooze": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "aggregate": {
+                      "type": "string"
+                    },
+                    "timeWindow": {
+                      "type": "string"
+                    },
+                    "triggers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "dateModified": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "aggregate",
+                    "createdBy",
+                    "dateCreated",
+                    "dateModified",
+                    "id",
+                    "name",
+                    "organizationId",
+                    "query",
+                    "timeWindow",
+                    "triggers"
+                  ]
+                },
+                "examples": {
+                  "CreateAMetricAlertRuleForAnOrganization": {
+                    "value": {
+                      "id": "177104",
+                      "name": "Apdex % Check",
+                      "organizationId": "4505676595200000",
+                      "queryType": 2,
+                      "dataset": "metrics",
+                      "query": "",
+                      "aggregate": "percentage(sessions_crashed, sessions) AS _crash_rate_alert_aggregate",
+                      "thresholdType": 0,
+                      "resolveThreshold": 80,
+                      "timeWindow": "120",
+                      "environment": null,
+                      "triggers": [
+                        {
+                          "id": "293990",
+                          "alertRuleId": "177104",
+                          "label": "critical",
+                          "thresholdType": 0,
+                          "alertThreshold": 75,
+                          "resolveThreshold": 80,
+                          "dateCreated": "2023-09-25T22:01:28.673305Z",
+                          "actions": [
+                            {
+                              "id": "281887",
+                              "alertRuleTriggerId": "293990",
+                              "type": "email",
+                              "targetType": "team",
+                              "targetIdentifier": "2378589792734981",
+                              "inputChannelId": null,
+                              "integrationId": null,
+                              "sentryAppId": null,
+                              "dateCreated": "2023-09-25T22:01:28.680793Z"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "492849",
+                          "alertRuleId": "482923",
+                          "label": "warning",
+                          "thresholdType": 1,
+                          "alertThreshold": 50,
+                          "resolveThreshold": 80,
+                          "dateCreated": "2023-09-25T22:01:28.673305Z",
+                          "actions": []
+                        }
+                      ],
+                      "projects": [
+                        "our-project"
+                      ],
+                      "owner": "team:4505676595200000",
+                      "originalAlertRuleId": null,
+                      "comparisonDelta": 10080,
+                      "dateModified": "2023-09-25T22:01:28.637506Z",
+                      "dateCreated": "2023-09-25T22:01:28.637514Z",
+                      "createdBy": {
+                        "id": 2837708,
+                        "name": "Jane Doe",
+                        "email": "jane.doe@sentry.io"
+                      }
+                    },
+                    "summary": "Create a metric alert rule for an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/events/": {
       "get": {
         "operationId": "Query Discover Events in Table Format",
@@ -33907,6 +34449,113 @@
   },
   "components": {
     "schemas": {
+      "AlertRule": {
+        "type": "object",
+        "description": "This represents a Sentry Metric Alert Rule.",
+        "properties": {
+          "environment": {
+            "type": "string",
+            "nullable": true
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "queryType": {
+            "type": "integer",
+            "nullable": true
+          },
+          "resolveThreshold": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "dataset": {
+            "type": "string",
+            "nullable": true
+          },
+          "thresholdType": {
+            "type": "integer",
+            "nullable": true
+          },
+          "eventTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true
+          },
+          "originalAlertRuleId": {
+            "type": "string",
+            "nullable": true
+          },
+          "comparisonDelta": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "snooze": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "aggregate": {
+            "type": "string"
+          },
+          "timeWindow": {
+            "type": "string"
+          },
+          "triggers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "dateModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "aggregate",
+          "createdBy",
+          "dateCreated",
+          "dateModified",
+          "id",
+          "name",
+          "organizationId",
+          "query",
+          "timeWindow",
+          "triggers"
+        ]
+      },
       "BaseTeam": {
         "type": "object",
         "properties": {
@@ -35410,6 +36059,116 @@
             "public",
             "rateLimit",
             "secret"
+          ]
+        }
+      },
+      "ListMetricAlertRules": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "This represents a Sentry Metric Alert Rule.",
+          "properties": {
+            "environment": {
+              "type": "string",
+              "nullable": true
+            },
+            "projects": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            },
+            "queryType": {
+              "type": "integer",
+              "nullable": true
+            },
+            "resolveThreshold": {
+              "type": "number",
+              "format": "double",
+              "nullable": true
+            },
+            "dataset": {
+              "type": "string",
+              "nullable": true
+            },
+            "thresholdType": {
+              "type": "integer",
+              "nullable": true
+            },
+            "eventTypes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            },
+            "owner": {
+              "type": "string",
+              "nullable": true
+            },
+            "originalAlertRuleId": {
+              "type": "string",
+              "nullable": true
+            },
+            "comparisonDelta": {
+              "type": "number",
+              "format": "double",
+              "nullable": true
+            },
+            "snooze": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "organizationId": {
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "aggregate": {
+              "type": "string"
+            },
+            "timeWindow": {
+              "type": "string"
+            },
+            "triggers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "dateModified": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "createdBy": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "aggregate",
+            "createdBy",
+            "dateCreated",
+            "dateModified",
+            "id",
+            "name",
+            "organizationId",
+            "query",
+            "timeWindow",
+            "triggers"
           ]
         }
       },
@@ -38038,6 +38797,107 @@
         "required": [
           "service_type",
           "trigger_type"
+        ]
+      },
+      "OrganizationAlertRuleIndexPost": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name for the rule, which has a maximimum length of 64 characters.",
+            "maxLength": 64
+          },
+          "aggregate": {
+            "type": "string",
+            "description": "A string representing the aggregate function used in this alert rule. Valid aggregate functions are `count`, `count_unique`, `percentage`, `avg`, `apdex`, `failure_rate`, `p50`, `p75`, `p95`, `p99`, `p100`, and `percentile`. See [Metric Alert Rule Types](#metric-alert-rule-types) for valid configurations."
+          },
+          "timeWindow": {
+            "enum": [
+              1,
+              5,
+              10,
+              15,
+              30,
+              60,
+              120,
+              240,
+              1440
+            ],
+            "type": "integer",
+            "description": "The time period to aggregate over.\n\n* `1` - 1 minute\n* `5` - 5 minutes\n* `10` - 10 minutes\n* `15` - 15 minutes\n* `30` - 30 minutes\n* `60` - 1 hour\n* `120` - 2 hours\n* `240` - 4 hours\n* `1440` - 24 hours"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The names of the projects to filter by."
+          },
+          "query": {
+            "type": "string",
+            "description": "An event search query to subscribe to and monitor for alerts. For example, to filter transactions so that only those with status code 400 are included, you could use `\"query\": \"http.status_code:400\"`. Use an empty string for no filter."
+          },
+          "thresholdType": {
+            "enum": [
+              0,
+              1
+            ],
+            "type": "integer",
+            "description": "The comparison operator for the critical and warning thresholds. The comparison operator for the resolved threshold is automatically set to the opposite operator. When a percentage change threshold is used, `0` is equivalent to \"Higher than\" and `1` is equivalent to \"Lower than\".\n\n* `0` - Above\n* `1` - Below"
+          },
+          "triggers": {
+            "type": "array",
+            "items": {},
+            "description": "\nA list of triggers, where each trigger is an object with the following fields:\n- `label`: One of `critical` or `warning`. A `critical` trigger is always required.\n- `alertThreshold`: The value that the subscription needs to reach to trigger the\nalert rule.\n- `actions`: A list of actions that take place when the threshold is met. Set as an empty list if no actions are to take place.\n```json\ntriggers: [\n    {\n        \"label\": \"critical\",\n        \"alertThreshold\": 50,\n        \"actions\": [\n            {\n                \"type\": \"slack\",\n                \"targetType\": \"specific\",\n                \"targetIdentifier\": \"#get-crit\",\n                \"inputChannelId\": 2454362\n                \"integrationId\": 653532,\n            }\n        ]\n    },\n    {\n        \"label\": \"warning\",\n        \"alertThreshold\": 25,\n        \"actions\": []\n    }\n]\n```\nMetric alert rule trigger actions follow the following structure:\n- `type`: The type of trigger action. Valid values are `email`, `slack`, `msteams`, `pagerduty`, `sentry_app`, `sentry_notification`, and `opsgenie`.\n- `targetType`: The type of target the notification will be sent to. Valid values are `specific` (`targetIdentifier` is a direct reference used by the service, like an email address or a Slack channel ID), `user` (`targetIdentifier` is a Sentry user ID), `team` (`targetIdentifier` is a Sentry team ID), and `sentry_app` (`targetIdentifier` is a SentryApp ID).\n- `targetIdentifier`: The ID of the target. This must be an integer for PagerDuty and Sentry apps, and a string for all others. Examples of appropriate values include a Slack channel name (`#my-channel`), a user ID, a team ID, a Sentry app ID, etc.\n- `inputChannelId`: The ID of the Slack channel. This is only used for the Slack action, and can be used as an alternative to providing the `targetIdentifier`.\n- `integrationId`: The integration ID. This is required for every action type excluding `email` and `sentry_app.`\n- `sentryAppId`: The ID of the Sentry app. This is required when `type` is `sentry_app`.\n"
+          },
+          "environment": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the environment to filter by. Defaults to all environments."
+          },
+          "dataset": {
+            "type": "string",
+            "description": "The name of the dataset that this query will be executed on. Valid values are `events`, `transactions`, `metrics`, `sessions`, and `generic-metrics`. Defaults to `events`. See [Metric Alert Rule Types](#metric-alert-rule-types) for valid configurations."
+          },
+          "queryType": {
+            "enum": [
+              0,
+              1,
+              2
+            ],
+            "type": "integer",
+            "description": "The `SnubaQuery.Type` of the query. If no value is provided, `queryType` is set to the default for the specified `dataset.` See [Metric Alert Rule Types](#metric-alert-rule-types) for valid configurations.\n\n* `0` - event.type:error\n* `1` - event.type:transaction\n* `2` - None"
+          },
+          "eventTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of event types that this alert will be related to. Valid values are `default` (events captured using [Capture Message](/product/sentry-basics/integrate-backend/capturing-errors/#capture-message)), `error` and `transaction`."
+          },
+          "comparisonDelta": {
+            "type": "integer",
+            "description": "An optional int representing the time delta to use as the comparison period, in minutes. Required when using a percentage change threshold (\"x%\" higher or lower compared to `comparisonDelta` minutes ago). A percentage change threshold cannot be used for [Crash Free Session Rate](#crash-free-session-rate) or [Crash Free User Rate](#crash-free-user-rate)."
+          },
+          "resolveThreshold": {
+            "type": "number",
+            "format": "double",
+            "description": "Optional value that the metric needs to reach to resolve the alert. If no value is provided, this is set automatically based on the lowest severity trigger's `alertThreshold`. For example, if the alert is set to trigger at the warning level when the number of errors is above 50, then the alert would be set to resolve when there are less than 50 errors. If `thresholdType` is `0`, `resolveThreshold` must be greater than the critical threshold, otherwise, it must be less than the critical threshold."
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true,
+            "description": "The ID of the team or user that owns the rule."
+          }
+        },
+        "required": [
+          "aggregate",
+          "name",
+          "projects",
+          "query",
+          "thresholdType",
+          "timeWindow",
+          "triggers"
         ]
       },
       "OrganizationEventsResponseDict": {
