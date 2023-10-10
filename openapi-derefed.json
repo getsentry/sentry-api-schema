@@ -15548,6 +15548,327 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/ownership/": {
+      "get": {
+        "operationId": "Retrieve Ownership Configuration for a Project",
+        "description": "Returns details on a project's ownership configuration.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "schema": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "raw": {
+                      "type": "string"
+                    },
+                    "fallthrough": {
+                      "type": "boolean"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "lastUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isActive": {
+                      "type": "boolean"
+                    },
+                    "autoAssignment": {
+                      "type": "string"
+                    },
+                    "codeownersAutoSync": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "autoAssignment",
+                    "codeownersAutoSync",
+                    "dateCreated",
+                    "fallthrough",
+                    "isActive",
+                    "lastUpdated",
+                    "raw"
+                  ]
+                },
+                "examples": {
+                  "GetOwnershipConfigurationForAProject": {
+                    "value": {
+                      "raw": "path:src/views/checkout jane.smith@org.com \nurl:https://example.com/checkout jane.smith@org.com\ntags.transaction:/checkout/:page jane.smith@org.com",
+                      "fallthrough": true,
+                      "dateCreated": "2023-10-03T20:25:18.539823Z",
+                      "lastUpdated": "2023-10-03T22:49:12.294741Z",
+                      "isActive": true,
+                      "autoAssignment": "Auto Assign to Issue Owner",
+                      "codeownersAutoSync": true,
+                      "schema": {
+                        "$version": 1,
+                        "rules": [
+                          {
+                            "matcher": {
+                              "type": "path",
+                              "pattern": "src/views/checkout"
+                            },
+                            "owners": [
+                              {
+                                "type": "user",
+                                "id": 2621754,
+                                "name": "jane.smith@org.com"
+                              }
+                            ]
+                          },
+                          {
+                            "matcher": {
+                              "type": "url",
+                              "pattern": "https://example.com/checkout"
+                            },
+                            "owners": [
+                              {
+                                "type": "user",
+                                "id": 2621754,
+                                "name": "jane.smith@org.com"
+                              }
+                            ]
+                          },
+                          {
+                            "matcher": {
+                              "type": "tags.transaction",
+                              "pattern": "/checkout/:page"
+                            },
+                            "owners": [
+                              {
+                                "type": "user",
+                                "id": 2621754,
+                                "name": "jane.smith@org.com"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "summary": "Get ownership configuration for a project"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update Ownership Configuration for a Project",
+        "description": "Updates ownership configurations for a project. Note that only the\nattributes submitted are modified.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "raw": {
+                    "type": "string",
+                    "description": "Raw input for ownership configuration. See the [Ownership Rules Documentation](/product/issues/ownership-rules/) to learn more."
+                  },
+                  "fallthrough": {
+                    "type": "boolean",
+                    "description": "A boolean determining who to assign ownership to when an ownership rule has no match. If set to `True`, all project members are made owners. Otherwise, no owners are set."
+                  },
+                  "autoAssignment": {
+                    "type": "string",
+                    "description": "Auto-assignment settings. The available options are:\n- Auto Assign to Issue Owner\n- Auto Assign to Suspect Commits\n- Turn off Auto-Assignment"
+                  },
+                  "codeownersAutoSync": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Set to `True` to sync issue owners with CODEOWNERS updates in a release."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "schema": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "raw": {
+                      "type": "string"
+                    },
+                    "fallthrough": {
+                      "type": "boolean"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "lastUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isActive": {
+                      "type": "boolean"
+                    },
+                    "autoAssignment": {
+                      "type": "string"
+                    },
+                    "codeownersAutoSync": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "autoAssignment",
+                    "codeownersAutoSync",
+                    "dateCreated",
+                    "fallthrough",
+                    "isActive",
+                    "lastUpdated",
+                    "raw"
+                  ]
+                },
+                "examples": {
+                  "UpdateOwnershipConfigurationForAProject": {
+                    "value": {
+                      "raw": "path:src/views/checkout jane.smith@org.com \nurl:https://example.com/checkout jane.smith@org.com\ntags.transaction:/checkout/:page jane.smith@org.com",
+                      "fallthrough": true,
+                      "dateCreated": "2023-10-03T20:25:18.539823Z",
+                      "lastUpdated": "2023-10-03T22:49:12.294741Z",
+                      "isActive": true,
+                      "autoAssignment": "Auto Assign to Issue Owner",
+                      "codeownersAutoSync": true,
+                      "schema": {
+                        "$version": 1,
+                        "rules": [
+                          {
+                            "matcher": {
+                              "type": "path",
+                              "pattern": "src/views/checkout"
+                            },
+                            "owners": [
+                              {
+                                "type": "user",
+                                "id": 2621754,
+                                "name": "jane.smith@org.com"
+                              }
+                            ]
+                          },
+                          {
+                            "matcher": {
+                              "type": "url",
+                              "pattern": "https://example.com/checkout"
+                            },
+                            "owners": [
+                              {
+                                "type": "user",
+                                "id": 2621754,
+                                "name": "jane.smith@org.com"
+                              }
+                            ]
+                          },
+                          {
+                            "matcher": {
+                              "type": "tags.transaction",
+                              "pattern": "/checkout/:page"
+                            },
+                            "owners": [
+                              {
+                                "type": "user",
+                                "id": 2621754,
+                                "name": "jane.smith@org.com"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "summary": "Update ownership configuration for a project"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_slug}/{project_slug}/rules/": {
       "get": {
         "operationId": "List a Project's Issue Alert Rules",
@@ -40792,6 +41113,69 @@
             "type": "string",
             "nullable": true,
             "pattern": "^[a-f0-9]{32}$"
+          }
+        }
+      },
+      "ProjectOwnership": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "raw": {
+            "type": "string"
+          },
+          "fallthrough": {
+            "type": "boolean"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "autoAssignment": {
+            "type": "string"
+          },
+          "codeownersAutoSync": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "autoAssignment",
+          "codeownersAutoSync",
+          "dateCreated",
+          "fallthrough",
+          "isActive",
+          "lastUpdated",
+          "raw"
+        ]
+      },
+      "ProjectOwnershipRequest": {
+        "type": "object",
+        "properties": {
+          "raw": {
+            "type": "string",
+            "description": "Raw input for ownership configuration. See the [Ownership Rules Documentation](/product/issues/ownership-rules/) to learn more."
+          },
+          "fallthrough": {
+            "type": "boolean",
+            "description": "A boolean determining who to assign ownership to when an ownership rule has no match. If set to `True`, all project members are made owners. Otherwise, no owners are set."
+          },
+          "autoAssignment": {
+            "type": "string",
+            "description": "Auto-assignment settings. The available options are:\n- Auto Assign to Issue Owner\n- Auto Assign to Suspect Commits\n- Turn off Auto-Assignment"
+          },
+          "codeownersAutoSync": {
+            "type": "boolean",
+            "default": true,
+            "description": "Set to `True` to sync issue owners with CODEOWNERS updates in a release."
           }
         }
       },
