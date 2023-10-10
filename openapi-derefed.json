@@ -13065,7 +13065,7 @@
       },
       "put": {
         "operationId": "Update a Project",
-        "description": "Update various attributes and configurable settings for the given project.\n\nNote that solely having the **`project:read`** scope restricts updatable settings to\n`isBookmarked` only.",
+        "description": "Update various attributes and configurable settings for the given project.\n\nNote that solely having the **`project:read`** scope restricts updatable settings to\n`isBookmarked` and `isSubscribed`.",
         "parameters": [
           {
             "in": "path",
@@ -13095,35 +13095,215 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "team": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "pattern": "^[a-z0-9_\\-]+$"
+                  },
+                  "digestsMinDelay": {
+                    "type": "integer",
+                    "maximum": 3600,
+                    "minimum": 60
+                  },
+                  "digestsMaxDelay": {
+                    "type": "integer",
+                    "maximum": 3600,
+                    "minimum": 60
+                  },
+                  "securityToken": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "pattern": "^[-a-zA-Z0-9+/=\\s]+$"
+                  },
+                  "securityTokenHeader": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "pattern": "^[a-zA-Z0-9_\\-]+$"
+                  },
+                  "isBookmarked": {
+                    "type": "boolean",
+                    "description": "Enables starring the project within the projects tab. Can be updated with **`project:read`** permission."
+                  },
+                  "isSubscribed": {
+                    "type": "boolean",
+                    "description": "Subscribes the member for notifications related to the project. Can be updated with **`project:read`** permission."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The name for the project",
+                    "maxLength": 200
+                  },
                   "slug": {
                     "type": "string",
                     "description": "Uniquely identifies a project and is used for the interface.",
                     "maxLength": 50,
                     "pattern": "^[a-z0-9_\\-]+$"
                   },
-                  "name": {
-                    "type": "string",
-                    "description": "The name for the project.",
-                    "maxLength": 200
-                  },
                   "platform": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The platform for the project."
+                    "description": "The platform for the project"
                   },
-                  "isBookmarked": {
-                    "type": "boolean",
-                    "description": "Enables starring the project within the projects tab."
+                  "subjectPrefix": {
+                    "type": "string",
+                    "description": "Custom prefix for emails from this project.",
+                    "maxLength": 200
                   },
-                  "options": {
-                    "type": "object",
-                    "additionalProperties": {},
-                    "description": "\nConfigure various project filters:\n- `Hydration Errors` - Filter out react hydration errors that are often unactionable\n- `IP Addresses` - Filter events from these IP addresses separated with newlines.\n- `Releases` - Filter events from these releases separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n- `Error Message` - Filter events by error messages separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n```json\n{\n    options: {\n        filters:react-hydration-errors: true,\n        filters:blacklisted_ips: \"127.0.0.1\\n192.168. 0.1\"\n        filters:releases: \"[!3]\\n4\"\n        filters:error_messages: \"TypeError*\\n*ConnectionError*\"\n    }\n}\n```\n"
+                  "subjectTemplate": {
+                    "type": "string",
+                    "description": "The email subject to use (excluding the prefix) for individual alerts. Here are the list of variables you can use:\n- `$title`\n- `$shortID`\n- `$projectID`\n- `$orgID`\n- `${tag:key}` - such as `${tag:environment}` or `${tag:release}`.",
+                    "maxLength": 200
+                  },
+                  "resolveAge": {
+                    "type": "integer",
+                    "nullable": true,
+                    "description": "Automatically resolve an issue if it hasn't been seen for this many hours. Set to `0` to disable auto-resolve."
+                  },
+                  "verifySSL": {
+                    "type": "boolean"
+                  },
+                  "defaultEnvironment": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "dataScrubber": {
+                    "type": "boolean"
+                  },
+                  "dataScrubberDefaults": {
+                    "type": "boolean"
+                  },
+                  "sensitiveFields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "safeFields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "storeCrashReports": {
+                    "type": "integer",
+                    "maximum": 100,
+                    "minimum": -1,
+                    "nullable": true
+                  },
+                  "relayPiiConfig": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "builtinSymbolSources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "symbolSources": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "scrubIPAddresses": {
+                    "type": "boolean"
+                  },
+                  "groupingConfig": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "groupingEnhancements": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "fingerprintingRules": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "secondaryGroupingConfig": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "secondaryGroupingExpiry": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "nullable": true
+                  },
+                  "groupingAutoUpdate": {
+                    "type": "boolean"
+                  },
+                  "scrapeJavaScript": {
+                    "type": "boolean"
+                  },
+                  "allowedDomains": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "copy_from_project": {
+                    "type": "integer"
+                  },
+                  "dynamicSamplingBiases": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "enum": [
+                            "boostEnvironments",
+                            "boostKeyTransactions",
+                            "boostLatestRelease",
+                            "boostLowVolumeTransactions",
+                            "boostReplayId",
+                            "ignoreHealthChecks",
+                            "recalibrationRule"
+                          ],
+                          "type": "string",
+                          "description": "* `boostEnvironments` - boostEnvironments\n* `boostKeyTransactions` - boostKeyTransactions\n* `boostLatestRelease` - boostLatestRelease\n* `boostLowVolumeTransactions` - boostLowVolumeTransactions\n* `boostReplayId` - boostReplayId\n* `ignoreHealthChecks` - ignoreHealthChecks\n* `recalibrationRule` - recalibrationRule"
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "default": false
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ]
+                    }
+                  },
+                  "performanceIssueCreationRate": {
+                    "type": "number",
+                    "format": "double",
+                    "maximum": 1,
+                    "minimum": 0
+                  },
+                  "performanceIssueCreationThroughPlatform": {
+                    "type": "boolean"
+                  },
+                  "performanceIssueSendToPlatform": {
+                    "type": "boolean"
+                  },
+                  "recapServerUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": true
+                  },
+                  "recapServerToken": {
+                    "type": "string",
+                    "nullable": true
                   }
-                }
+                },
+                "required": [
+                  "digestsMaxDelay",
+                  "digestsMinDelay",
+                  "securityToken",
+                  "securityTokenHeader",
+                  "team"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "security": [
           {
@@ -14279,7 +14459,7 @@
     "/api/0/projects/{organization_slug}/{project_slug}/filters/{filter_id}/": {
       "put": {
         "operationId": "Update an Inbound Data Filter",
-        "description": "Update various inbound data filters for a project.\n\nNote that the hydration filter and custom inbound\nfilters must be updated using the [Update a\nProject](https://docs.sentry.io/api/projects/update-a-project/) endpoint.",
+        "description": "Update various inbound data filters for a project.",
         "parameters": [
           {
             "in": "path",
@@ -36800,6 +36980,31 @@
           "verifySSL"
         ]
       },
+      "DynamicSamplingBias": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "enum": [
+              "boostEnvironments",
+              "boostKeyTransactions",
+              "boostLatestRelease",
+              "boostLowVolumeTransactions",
+              "boostReplayId",
+              "ignoreHealthChecks",
+              "recalibrationRule"
+            ],
+            "type": "string",
+            "description": "* `boostEnvironments` - boostEnvironments\n* `boostKeyTransactions` - boostKeyTransactions\n* `boostLatestRelease` - boostLatestRelease\n* `boostLowVolumeTransactions` - boostLowVolumeTransactions\n* `boostReplayId` - boostReplayId\n* `ignoreHealthChecks` - ignoreHealthChecks\n* `recalibrationRule` - recalibrationRule"
+          },
+          "active": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
       "DynamicSdkLoaderOption": {
         "type": "object",
         "description": "Configures multiple options for the Javascript Loader Script.\n- `Performance Monitoring`\n- `Debug Bundles & Logging`\n- `Session Replay` - Note that the loader will load the ES6 bundle instead of the ES5 bundle.\n```json\n{\n    \"dynamicSdkLoaderOptions\": {\n        \"hasReplay\": true,\n        \"hasPerformance\": true,\n        \"hasDebug\": true\n    }\n}\n```",
@@ -40944,6 +41149,215 @@
           "status"
         ]
       },
+      "ProjectAdmin": {
+        "type": "object",
+        "properties": {
+          "team": {
+            "type": "string",
+            "maxLength": 50,
+            "pattern": "^[a-z0-9_\\-]+$"
+          },
+          "digestsMinDelay": {
+            "type": "integer",
+            "maximum": 3600,
+            "minimum": 60
+          },
+          "digestsMaxDelay": {
+            "type": "integer",
+            "maximum": 3600,
+            "minimum": 60
+          },
+          "securityToken": {
+            "type": "string",
+            "maxLength": 255,
+            "pattern": "^[-a-zA-Z0-9+/=\\s]+$"
+          },
+          "securityTokenHeader": {
+            "type": "string",
+            "maxLength": 20,
+            "pattern": "^[a-zA-Z0-9_\\-]+$"
+          },
+          "isBookmarked": {
+            "type": "boolean",
+            "description": "Enables starring the project within the projects tab. Can be updated with **`project:read`** permission."
+          },
+          "isSubscribed": {
+            "type": "boolean",
+            "description": "Subscribes the member for notifications related to the project. Can be updated with **`project:read`** permission."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name for the project",
+            "maxLength": 200
+          },
+          "slug": {
+            "type": "string",
+            "description": "Uniquely identifies a project and is used for the interface.",
+            "maxLength": 50,
+            "pattern": "^[a-z0-9_\\-]+$"
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true,
+            "description": "The platform for the project"
+          },
+          "subjectPrefix": {
+            "type": "string",
+            "description": "Custom prefix for emails from this project.",
+            "maxLength": 200
+          },
+          "subjectTemplate": {
+            "type": "string",
+            "description": "The email subject to use (excluding the prefix) for individual alerts. Here are the list of variables you can use:\n- `$title`\n- `$shortID`\n- `$projectID`\n- `$orgID`\n- `${tag:key}` - such as `${tag:environment}` or `${tag:release}`.",
+            "maxLength": 200
+          },
+          "resolveAge": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Automatically resolve an issue if it hasn't been seen for this many hours. Set to `0` to disable auto-resolve."
+          },
+          "verifySSL": {
+            "type": "boolean"
+          },
+          "defaultEnvironment": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataScrubber": {
+            "type": "boolean"
+          },
+          "dataScrubberDefaults": {
+            "type": "boolean"
+          },
+          "sensitiveFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "safeFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "storeCrashReports": {
+            "type": "integer",
+            "maximum": 100,
+            "minimum": -1,
+            "nullable": true
+          },
+          "relayPiiConfig": {
+            "type": "string",
+            "nullable": true
+          },
+          "builtinSymbolSources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "symbolSources": {
+            "type": "string",
+            "nullable": true
+          },
+          "scrubIPAddresses": {
+            "type": "boolean"
+          },
+          "groupingConfig": {
+            "type": "string",
+            "nullable": true
+          },
+          "groupingEnhancements": {
+            "type": "string",
+            "nullable": true
+          },
+          "fingerprintingRules": {
+            "type": "string",
+            "nullable": true
+          },
+          "secondaryGroupingConfig": {
+            "type": "string",
+            "nullable": true
+          },
+          "secondaryGroupingExpiry": {
+            "type": "integer",
+            "minimum": 1,
+            "nullable": true
+          },
+          "groupingAutoUpdate": {
+            "type": "boolean"
+          },
+          "scrapeJavaScript": {
+            "type": "boolean"
+          },
+          "allowedDomains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "copy_from_project": {
+            "type": "integer"
+          },
+          "dynamicSamplingBiases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "enum": [
+                    "boostEnvironments",
+                    "boostKeyTransactions",
+                    "boostLatestRelease",
+                    "boostLowVolumeTransactions",
+                    "boostReplayId",
+                    "ignoreHealthChecks",
+                    "recalibrationRule"
+                  ],
+                  "type": "string",
+                  "description": "* `boostEnvironments` - boostEnvironments\n* `boostKeyTransactions` - boostKeyTransactions\n* `boostLatestRelease` - boostLatestRelease\n* `boostLowVolumeTransactions` - boostLowVolumeTransactions\n* `boostReplayId` - boostReplayId\n* `ignoreHealthChecks` - ignoreHealthChecks\n* `recalibrationRule` - recalibrationRule"
+                },
+                "active": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "performanceIssueCreationRate": {
+            "type": "number",
+            "format": "double",
+            "maximum": 1,
+            "minimum": 0
+          },
+          "performanceIssueCreationThroughPlatform": {
+            "type": "boolean"
+          },
+          "performanceIssueSendToPlatform": {
+            "type": "boolean"
+          },
+          "recapServerUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "recapServerToken": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "digestsMaxDelay",
+          "digestsMinDelay",
+          "securityToken",
+          "securityTokenHeader",
+          "team"
+        ]
+      },
       "ProjectKey": {
         "type": "object",
         "description": "This represents a Sentry Project Client Key.",
@@ -42510,36 +42924,6 @@
             "nullable": true,
             "default": [],
             "description": "\nConfigures the team role of the member. The two roles are:\n- `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.\n- `admin` - Has full management access to their team's membership and projects.\n```json\n{\n    \"teamRoles\": [\n        {\n            \"teamSlug\": \"ancient-gabelers\",\n            \"role\": \"admin\"\n        },\n        {\n            \"teamSlug\": \"powerful-abolitionist\",\n            \"role\": \"contributor\"\n        }\n    ]\n}\n```\n"
-          }
-        }
-      },
-      "UpdateProject": {
-        "type": "object",
-        "properties": {
-          "slug": {
-            "type": "string",
-            "description": "Uniquely identifies a project and is used for the interface.",
-            "maxLength": 50,
-            "pattern": "^[a-z0-9_\\-]+$"
-          },
-          "name": {
-            "type": "string",
-            "description": "The name for the project.",
-            "maxLength": 200
-          },
-          "platform": {
-            "type": "string",
-            "nullable": true,
-            "description": "The platform for the project."
-          },
-          "isBookmarked": {
-            "type": "boolean",
-            "description": "Enables starring the project within the projects tab."
-          },
-          "options": {
-            "type": "object",
-            "additionalProperties": {},
-            "description": "\nConfigure various project filters:\n- `Hydration Errors` - Filter out react hydration errors that are often unactionable\n- `IP Addresses` - Filter events from these IP addresses separated with newlines.\n- `Releases` - Filter events from these releases separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n- `Error Message` - Filter events by error messages separated with newlines. Allows [glob pattern matching](https://docs.sentry.io/product/data-management-settings/filtering/#glob-matching).\n```json\n{\n    options: {\n        filters:react-hydration-errors: true,\n        filters:blacklisted_ips: \"127.0.0.1\\n192.168. 0.1\"\n        filters:releases: \"[!3]\\n4\"\n        filters:error_messages: \"TypeError*\\n*ConnectionError*\"\n    }\n}\n```\n"
           }
         }
       },
