@@ -5037,24 +5037,17 @@
                 "type": "object",
                 "description": "Django Rest Framework serializer for incoming NotificationAction API payloads",
                 "properties": {
-                  "service_type": {
-                    "type": "string",
-                    "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
-                  },
                   "trigger_type": {
                     "type": "string",
-                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
+                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`."
+                  },
+                  "service_type": {
+                    "type": "string",
+                    "description": "Service that is used for sending the notification.\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
                   },
                   "integration_id": {
                     "type": "integer",
                     "description": "ID of the integration used as the notification service. See\n[List Integrations](https://docs.sentry.io/api/integrations/list-an-organizations-available-integrations/)\nto retrieve a full list of integrations.\n\nRequired if **service_type** is `slack`, `pagerduty` or `opsgenie`.\n"
-                  },
-                  "projects": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "List of projects slugs that the Notification Action is created for"
                   },
                   "target_identifier": {
                     "type": "string",
@@ -5063,6 +5056,13 @@
                   "target_display": {
                     "type": "string",
                     "description": "Name of the notification target, like a Slack channel name.\n\nRequired if **service_type** is `slack` or `opsgenie`.\n"
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "List of projects slugs that the Notification Action is created for."
                   }
                 },
                 "required": [
@@ -5221,24 +5221,17 @@
                 "type": "object",
                 "description": "Django Rest Framework serializer for incoming NotificationAction API payloads",
                 "properties": {
-                  "service_type": {
-                    "type": "string",
-                    "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
-                  },
                   "trigger_type": {
                     "type": "string",
-                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
+                    "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`."
+                  },
+                  "service_type": {
+                    "type": "string",
+                    "description": "Service that is used for sending the notification.\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
                   },
                   "integration_id": {
                     "type": "integer",
                     "description": "ID of the integration used as the notification service. See\n[List Integrations](https://docs.sentry.io/api/integrations/list-an-organizations-available-integrations/)\nto retrieve a full list of integrations.\n\nRequired if **service_type** is `slack`, `pagerduty` or `opsgenie`.\n"
-                  },
-                  "projects": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "List of projects slugs that the Notification Action is created for"
                   },
                   "target_identifier": {
                     "type": "string",
@@ -5247,6 +5240,13 @@
                   "target_display": {
                     "type": "string",
                     "description": "Name of the notification target, like a Slack channel name.\n\nRequired if **service_type** is `slack` or `opsgenie`.\n"
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "List of projects slugs that the Notification Action is created for."
                   }
                 },
                 "required": [
@@ -34850,24 +34850,17 @@
         "type": "object",
         "description": "Django Rest Framework serializer for incoming NotificationAction API payloads",
         "properties": {
-          "service_type": {
-            "type": "string",
-            "description": "Service that is used for sending the notification\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
-          },
           "trigger_type": {
             "type": "string",
-            "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`"
+            "description": "Type of the trigger that causes the notification. The only supported trigger right now is: `spike-protection`."
+          },
+          "service_type": {
+            "type": "string",
+            "description": "Service that is used for sending the notification.\n- `email`\n- `slack`\n- `sentry_notification`\n- `pagerduty`\n- `opsgenie`\n"
           },
           "integration_id": {
             "type": "integer",
             "description": "ID of the integration used as the notification service. See\n[List Integrations](https://docs.sentry.io/api/integrations/list-an-organizations-available-integrations/)\nto retrieve a full list of integrations.\n\nRequired if **service_type** is `slack`, `pagerduty` or `opsgenie`.\n"
-          },
-          "projects": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "List of projects slugs that the Notification Action is created for"
           },
           "target_identifier": {
             "type": "string",
@@ -34876,6 +34869,13 @@
           "target_display": {
             "type": "string",
             "description": "Name of the notification target, like a Slack channel name.\n\nRequired if **service_type** is `slack` or `opsgenie`.\n"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of projects slugs that the Notification Action is created for."
           }
         },
         "required": [
