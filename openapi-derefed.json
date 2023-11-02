@@ -14316,6 +14316,1578 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/symbol-sources/": {
+      "get": {
+        "operationId": "Retrieve a Project's Symbol Sources",
+        "description": "List custom symbol sources configured for a project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the source to look up. If this is not provided, all sources are returned."
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "http"
+                            ]
+                          },
+                          "url": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "object",
+                            "properties": {
+                              "hidden-secret": {
+                                "type": "boolean",
+                                "enum": [
+                                  true
+                                ]
+                              }
+                            }
+                          },
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "layout": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "native",
+                                  "symstore",
+                                  "symstore_index2",
+                                  "ssqp",
+                                  "unified",
+                                  "debuginfod"
+                                ]
+                              },
+                              "casing": {
+                                "type": "string",
+                                "enum": [
+                                  "lowercase",
+                                  "uppercase",
+                                  "default"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "filetypes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "pe",
+                                "pdb",
+                                "mach_debug",
+                                "mach_code",
+                                "elf_debug",
+                                "elf_code",
+                                "breakpad"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "id",
+                          "url",
+                          "layout"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "s3"
+                            ]
+                          },
+                          "bucket": {
+                            "type": "string"
+                          },
+                          "region": {
+                            "type": "string"
+                          },
+                          "access_key": {
+                            "type": "string"
+                          },
+                          "secret_key": {
+                            "type": "object",
+                            "properties": {
+                              "hidden-secret": {
+                                "type": "boolean",
+                                "enum": [
+                                  true
+                                ]
+                              }
+                            }
+                          },
+                          "prefix": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "layout": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "native",
+                                  "symstore",
+                                  "symstore_index2",
+                                  "ssqp",
+                                  "unified",
+                                  "debuginfod"
+                                ]
+                              },
+                              "casing": {
+                                "type": "string",
+                                "enum": [
+                                  "lowercase",
+                                  "uppercase",
+                                  "default"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "filetypes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "pe",
+                                "pdb",
+                                "mach_debug",
+                                "mach_code",
+                                "elf_debug",
+                                "elf_code",
+                                "breakpad"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "id",
+                          "bucket",
+                          "region",
+                          "access_key",
+                          "secret_key",
+                          "layout"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "gcs"
+                            ]
+                          },
+                          "bucket": {
+                            "type": "string"
+                          },
+                          "client_email": {
+                            "type": "string"
+                          },
+                          "private_key": {
+                            "type": "object",
+                            "properties": {
+                              "hidden-secret": {
+                                "type": "boolean",
+                                "enum": [
+                                  true
+                                ]
+                              }
+                            }
+                          },
+                          "prefix": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "layout": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "native",
+                                  "symstore",
+                                  "symstore_index2",
+                                  "ssqp",
+                                  "unified",
+                                  "debuginfod"
+                                ]
+                              },
+                              "casing": {
+                                "type": "string",
+                                "enum": [
+                                  "lowercase",
+                                  "uppercase",
+                                  "default"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "filetypes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "pe",
+                                "pdb",
+                                "mach_debug",
+                                "mach_code",
+                                "elf_debug",
+                                "elf_code",
+                                "breakpad"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "id",
+                          "bucket",
+                          "client_email",
+                          "private_key",
+                          "layout"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "appStoreConnect"
+                            ]
+                          },
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "appconnectIssuer": {
+                            "type": "string",
+                            "minLength": 36,
+                            "maxLength": 36
+                          },
+                          "appconnectKey": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 20
+                          },
+                          "appconnectPrivateKey": {
+                            "type": "string"
+                          },
+                          "appName": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 512
+                          },
+                          "appId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "bundleId": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "id",
+                          "name",
+                          "appconnectIssuer",
+                          "appconnectKey",
+                          "appconnectPrivateKey",
+                          "appName",
+                          "appId",
+                          "bundleId"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListCustomSymbolSourcesConfiguredForAProject.": {
+                    "value": [
+                      {
+                        "id": "honk",
+                        "name": "honk source",
+                        "layout": {
+                          "type": "native"
+                        },
+                        "type": "http",
+                        "url": "http://honk.beep",
+                        "username": "honkhonk",
+                        "password": {
+                          "hidden-secret": true
+                        }
+                      },
+                      {
+                        "id": "beep",
+                        "name": "beep source",
+                        "layout": {
+                          "type": "native"
+                        },
+                        "type": "gcs",
+                        "bucket": "mybucket",
+                        "client_email": "honk@beep.com",
+                        "private_key": {
+                          "hidden-secret": true
+                        }
+                      }
+                    ],
+                    "summary": "List custom symbol sources configured for a project."
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Add a Symbol Source to a Project",
+        "description": "Add a custom symbol source to a project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "appStoreConnect",
+                      "http",
+                      "gcs",
+                      "s3"
+                    ],
+                    "type": "string",
+                    "description": "The type of the source.\n\n* `appStoreConnect` - App Store Connect\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The human-readable name of the source."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "The internal ID of the source. Must be distinct from all other source IDs and cannot start with '`sentry:`'. If this is not provided, a new UUID will be generated."
+                  },
+                  "layout": {
+                    "type": "object",
+                    "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
+                    "properties": {
+                      "type": {
+                        "enum": [
+                          "native",
+                          "symstore",
+                          "symstore_index2",
+                          "ssqp",
+                          "unified",
+                          "debuginfod"
+                        ],
+                        "type": "string",
+                        "description": "The source's layout type.\n\n* `native` - native\n* `symstore` - symstore\n* `symstore_index2` - symstore_index2\n* `ssqp` - ssqp\n* `unified` - unified\n* `debuginfod` - debuginfod"
+                      },
+                      "casing": {
+                        "enum": [
+                          "lowercase",
+                          "uppercase",
+                          "default"
+                        ],
+                        "type": "string",
+                        "description": "The source's casing rules.\n\n* `lowercase` - lowercase\n* `uppercase` - uppercase\n* `default` - default"
+                      }
+                    },
+                    "required": [
+                      "casing",
+                      "type"
+                    ]
+                  },
+                  "appconnectIssuer": {
+                    "type": "string",
+                    "description": "The [App Store Connect Issuer ID](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests). Required for AppStoreConnect sources, invalid for all others.",
+                    "maxLength": 36,
+                    "minLength": 36
+                  },
+                  "appconnectPrivateKey": {
+                    "type": "string",
+                    "description": "The [App Store Connect API Private Key](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api). Required for AppStoreConnect sources, invalid for all others."
+                  },
+                  "appId": {
+                    "type": "string",
+                    "description": "The App Store Connect App ID. Required for AppStoreConnect sources, invalid for all others.",
+                    "minLength": 1
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "The source's URL. Optional for HTTP sources, invalid for all others."
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "The user name for accessing the source. Optional for HTTP sources, invalid for all others."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password for accessing the source. Optional for HTTP sources, invalid for all others."
+                  },
+                  "bucket": {
+                    "type": "string",
+                    "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+                  },
+                  "region": {
+                    "enum": [
+                      "us-east-2",
+                      "us-east-1",
+                      "us-west-1",
+                      "us-west-2",
+                      "ap-east-1",
+                      "ap-south-1",
+                      "ap-northeast-2",
+                      "ap-southeast-1",
+                      "ap-southeast-2",
+                      "ap-northeast-1",
+                      "ca-central-1",
+                      "cn-north-1",
+                      "cn-northwest-1",
+                      "eu-central-1",
+                      "eu-west-1",
+                      "eu-west-2",
+                      "eu-west-3",
+                      "eu-north-1",
+                      "sa-east-1",
+                      "us-gov-east-1",
+                      "us-gov-west-1"
+                    ],
+                    "type": "string",
+                    "description": "The source's [S3 region](https://docs.aws.amazon.com/general/latest/gr/s3.html). Required for S3 sources, invalid for all others.\n\n* `us-east-2` - US East (Ohio)\n* `us-east-1` - US East (N. Virginia)\n* `us-west-1` - US West (N. California)\n* `us-west-2` - US West (Oregon)\n* `ap-east-1` - Asia Pacific (Hong Kong)\n* `ap-south-1` - Asia Pacific (Mumbai)\n* `ap-northeast-2` - Asia Pacific (Seoul)\n* `ap-southeast-1` - Asia Pacific (Singapore)\n* `ap-southeast-2` - Asia Pacific (Sydney)\n* `ap-northeast-1` - Asia Pacific (Tokyo)\n* `ca-central-1` - Canada (Central)\n* `cn-north-1` - China (Beijing)\n* `cn-northwest-1` - China (Ningxia)\n* `eu-central-1` - EU (Frankfurt)\n* `eu-west-1` - EU (Ireland)\n* `eu-west-2` - EU (London)\n* `eu-west-3` - EU (Paris)\n* `eu-north-1` - EU (Stockholm)\n* `sa-east-1` - South America (São Paulo)\n* `us-gov-east-1` - AWS GovCloud (US-East)\n* `us-gov-west-1` - AWS GovCloud (US)"
+                  },
+                  "access_key": {
+                    "type": "string",
+                    "description": "The [AWS Access Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/security-creds.html#access-keys-and-secret-access-keys).Required for S3 sources, invalid for all others."
+                  },
+                  "secret_key": {
+                    "type": "string",
+                    "description": "The [AWS Secret Access Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/security-creds.html#access-keys-and-secret-access-keys).Required for S3 sources, invalid for all others."
+                  },
+                  "prefix": {
+                    "type": "string",
+                    "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+                  },
+                  "client_email": {
+                    "type": "string",
+                    "description": "The GCS email address for authentication. Required for GCS sources, invalid for all others."
+                  },
+                  "private_key": {
+                    "type": "string",
+                    "description": "The GCS private key. Required for GCS sources, invalid for all others."
+                  }
+                },
+                "required": [
+                  "name",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "http"
+                          ]
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "object",
+                          "properties": {
+                            "hidden-secret": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            }
+                          }
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "layout": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "native",
+                                "symstore",
+                                "symstore_index2",
+                                "ssqp",
+                                "unified",
+                                "debuginfod"
+                              ]
+                            },
+                            "casing": {
+                              "type": "string",
+                              "enum": [
+                                "lowercase",
+                                "uppercase",
+                                "default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "filetypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "pe",
+                              "pdb",
+                              "mach_debug",
+                              "mach_code",
+                              "elf_debug",
+                              "elf_code",
+                              "breakpad"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "url",
+                        "layout"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "s3"
+                          ]
+                        },
+                        "bucket": {
+                          "type": "string"
+                        },
+                        "region": {
+                          "type": "string"
+                        },
+                        "access_key": {
+                          "type": "string"
+                        },
+                        "secret_key": {
+                          "type": "object",
+                          "properties": {
+                            "hidden-secret": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            }
+                          }
+                        },
+                        "prefix": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "layout": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "native",
+                                "symstore",
+                                "symstore_index2",
+                                "ssqp",
+                                "unified",
+                                "debuginfod"
+                              ]
+                            },
+                            "casing": {
+                              "type": "string",
+                              "enum": [
+                                "lowercase",
+                                "uppercase",
+                                "default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "filetypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "pe",
+                              "pdb",
+                              "mach_debug",
+                              "mach_code",
+                              "elf_debug",
+                              "elf_code",
+                              "breakpad"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "bucket",
+                        "region",
+                        "access_key",
+                        "secret_key",
+                        "layout"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "gcs"
+                          ]
+                        },
+                        "bucket": {
+                          "type": "string"
+                        },
+                        "client_email": {
+                          "type": "string"
+                        },
+                        "private_key": {
+                          "type": "object",
+                          "properties": {
+                            "hidden-secret": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            }
+                          }
+                        },
+                        "prefix": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "layout": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "native",
+                                "symstore",
+                                "symstore_index2",
+                                "ssqp",
+                                "unified",
+                                "debuginfod"
+                              ]
+                            },
+                            "casing": {
+                              "type": "string",
+                              "enum": [
+                                "lowercase",
+                                "uppercase",
+                                "default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "filetypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "pe",
+                              "pdb",
+                              "mach_debug",
+                              "mach_code",
+                              "elf_debug",
+                              "elf_code",
+                              "breakpad"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "bucket",
+                        "client_email",
+                        "private_key",
+                        "layout"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "appStoreConnect"
+                          ]
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "appconnectIssuer": {
+                          "type": "string",
+                          "minLength": 36,
+                          "maxLength": 36
+                        },
+                        "appconnectKey": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 20
+                        },
+                        "appconnectPrivateKey": {
+                          "type": "string"
+                        },
+                        "appName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 512
+                        },
+                        "appId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "bundleId": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "name",
+                        "appconnectIssuer",
+                        "appconnectKey",
+                        "appconnectPrivateKey",
+                        "appName",
+                        "appId",
+                        "bundleId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "examples": {
+                  "AddACustomSymbolSourceToAProject.": {
+                    "value": {
+                      "id": "honk",
+                      "name": "honk source",
+                      "layout": {
+                        "type": "native"
+                      },
+                      "type": "http",
+                      "url": "http://honk.beep",
+                      "username": "honkhonk",
+                      "password": {
+                        "hidden-secret": true
+                      }
+                    },
+                    "summary": "Add a custom symbol source to a project."
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update a Project's Symbol Source",
+        "description": "Update a custom symbol source in a project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the source to update.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "appStoreConnect",
+                      "http",
+                      "gcs",
+                      "s3"
+                    ],
+                    "type": "string",
+                    "description": "The type of the source.\n\n* `appStoreConnect` - App Store Connect\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The human-readable name of the source."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "The internal ID of the source. Must be distinct from all other source IDs and cannot start with '`sentry:`'. If this is not provided, a new UUID will be generated."
+                  },
+                  "layout": {
+                    "type": "object",
+                    "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
+                    "properties": {
+                      "type": {
+                        "enum": [
+                          "native",
+                          "symstore",
+                          "symstore_index2",
+                          "ssqp",
+                          "unified",
+                          "debuginfod"
+                        ],
+                        "type": "string",
+                        "description": "The source's layout type.\n\n* `native` - native\n* `symstore` - symstore\n* `symstore_index2` - symstore_index2\n* `ssqp` - ssqp\n* `unified` - unified\n* `debuginfod` - debuginfod"
+                      },
+                      "casing": {
+                        "enum": [
+                          "lowercase",
+                          "uppercase",
+                          "default"
+                        ],
+                        "type": "string",
+                        "description": "The source's casing rules.\n\n* `lowercase` - lowercase\n* `uppercase` - uppercase\n* `default` - default"
+                      }
+                    },
+                    "required": [
+                      "casing",
+                      "type"
+                    ]
+                  },
+                  "appconnectIssuer": {
+                    "type": "string",
+                    "description": "The [App Store Connect Issuer ID](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests). Required for AppStoreConnect sources, invalid for all others.",
+                    "maxLength": 36,
+                    "minLength": 36
+                  },
+                  "appconnectPrivateKey": {
+                    "type": "string",
+                    "description": "The [App Store Connect API Private Key](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api). Required for AppStoreConnect sources, invalid for all others."
+                  },
+                  "appId": {
+                    "type": "string",
+                    "description": "The App Store Connect App ID. Required for AppStoreConnect sources, invalid for all others.",
+                    "minLength": 1
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "The source's URL. Optional for HTTP sources, invalid for all others."
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "The user name for accessing the source. Optional for HTTP sources, invalid for all others."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password for accessing the source. Optional for HTTP sources, invalid for all others."
+                  },
+                  "bucket": {
+                    "type": "string",
+                    "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+                  },
+                  "region": {
+                    "enum": [
+                      "us-east-2",
+                      "us-east-1",
+                      "us-west-1",
+                      "us-west-2",
+                      "ap-east-1",
+                      "ap-south-1",
+                      "ap-northeast-2",
+                      "ap-southeast-1",
+                      "ap-southeast-2",
+                      "ap-northeast-1",
+                      "ca-central-1",
+                      "cn-north-1",
+                      "cn-northwest-1",
+                      "eu-central-1",
+                      "eu-west-1",
+                      "eu-west-2",
+                      "eu-west-3",
+                      "eu-north-1",
+                      "sa-east-1",
+                      "us-gov-east-1",
+                      "us-gov-west-1"
+                    ],
+                    "type": "string",
+                    "description": "The source's [S3 region](https://docs.aws.amazon.com/general/latest/gr/s3.html). Required for S3 sources, invalid for all others.\n\n* `us-east-2` - US East (Ohio)\n* `us-east-1` - US East (N. Virginia)\n* `us-west-1` - US West (N. California)\n* `us-west-2` - US West (Oregon)\n* `ap-east-1` - Asia Pacific (Hong Kong)\n* `ap-south-1` - Asia Pacific (Mumbai)\n* `ap-northeast-2` - Asia Pacific (Seoul)\n* `ap-southeast-1` - Asia Pacific (Singapore)\n* `ap-southeast-2` - Asia Pacific (Sydney)\n* `ap-northeast-1` - Asia Pacific (Tokyo)\n* `ca-central-1` - Canada (Central)\n* `cn-north-1` - China (Beijing)\n* `cn-northwest-1` - China (Ningxia)\n* `eu-central-1` - EU (Frankfurt)\n* `eu-west-1` - EU (Ireland)\n* `eu-west-2` - EU (London)\n* `eu-west-3` - EU (Paris)\n* `eu-north-1` - EU (Stockholm)\n* `sa-east-1` - South America (São Paulo)\n* `us-gov-east-1` - AWS GovCloud (US-East)\n* `us-gov-west-1` - AWS GovCloud (US)"
+                  },
+                  "access_key": {
+                    "type": "string",
+                    "description": "The [AWS Access Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/security-creds.html#access-keys-and-secret-access-keys).Required for S3 sources, invalid for all others."
+                  },
+                  "secret_key": {
+                    "type": "string",
+                    "description": "The [AWS Secret Access Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/security-creds.html#access-keys-and-secret-access-keys).Required for S3 sources, invalid for all others."
+                  },
+                  "prefix": {
+                    "type": "string",
+                    "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+                  },
+                  "client_email": {
+                    "type": "string",
+                    "description": "The GCS email address for authentication. Required for GCS sources, invalid for all others."
+                  },
+                  "private_key": {
+                    "type": "string",
+                    "description": "The GCS private key. Required for GCS sources, invalid for all others."
+                  }
+                },
+                "required": [
+                  "name",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "http"
+                          ]
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "object",
+                          "properties": {
+                            "hidden-secret": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            }
+                          }
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "layout": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "native",
+                                "symstore",
+                                "symstore_index2",
+                                "ssqp",
+                                "unified",
+                                "debuginfod"
+                              ]
+                            },
+                            "casing": {
+                              "type": "string",
+                              "enum": [
+                                "lowercase",
+                                "uppercase",
+                                "default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "filetypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "pe",
+                              "pdb",
+                              "mach_debug",
+                              "mach_code",
+                              "elf_debug",
+                              "elf_code",
+                              "breakpad"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "url",
+                        "layout"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "s3"
+                          ]
+                        },
+                        "bucket": {
+                          "type": "string"
+                        },
+                        "region": {
+                          "type": "string"
+                        },
+                        "access_key": {
+                          "type": "string"
+                        },
+                        "secret_key": {
+                          "type": "object",
+                          "properties": {
+                            "hidden-secret": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            }
+                          }
+                        },
+                        "prefix": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "layout": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "native",
+                                "symstore",
+                                "symstore_index2",
+                                "ssqp",
+                                "unified",
+                                "debuginfod"
+                              ]
+                            },
+                            "casing": {
+                              "type": "string",
+                              "enum": [
+                                "lowercase",
+                                "uppercase",
+                                "default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "filetypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "pe",
+                              "pdb",
+                              "mach_debug",
+                              "mach_code",
+                              "elf_debug",
+                              "elf_code",
+                              "breakpad"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "bucket",
+                        "region",
+                        "access_key",
+                        "secret_key",
+                        "layout"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "gcs"
+                          ]
+                        },
+                        "bucket": {
+                          "type": "string"
+                        },
+                        "client_email": {
+                          "type": "string"
+                        },
+                        "private_key": {
+                          "type": "object",
+                          "properties": {
+                            "hidden-secret": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            }
+                          }
+                        },
+                        "prefix": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "layout": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "native",
+                                "symstore",
+                                "symstore_index2",
+                                "ssqp",
+                                "unified",
+                                "debuginfod"
+                              ]
+                            },
+                            "casing": {
+                              "type": "string",
+                              "enum": [
+                                "lowercase",
+                                "uppercase",
+                                "default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "filetypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "pe",
+                              "pdb",
+                              "mach_debug",
+                              "mach_code",
+                              "elf_debug",
+                              "elf_code",
+                              "breakpad"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "bucket",
+                        "client_email",
+                        "private_key",
+                        "layout"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "appStoreConnect"
+                          ]
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "appconnectIssuer": {
+                          "type": "string",
+                          "minLength": 36,
+                          "maxLength": 36
+                        },
+                        "appconnectKey": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 20
+                        },
+                        "appconnectPrivateKey": {
+                          "type": "string"
+                        },
+                        "appName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 512
+                        },
+                        "appId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "bundleId": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "name",
+                        "appconnectIssuer",
+                        "appconnectKey",
+                        "appconnectPrivateKey",
+                        "appName",
+                        "appId",
+                        "bundleId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "examples": {
+                  "UpdateACustomSymbolSourceInAProject.": {
+                    "value": {
+                      "id": "honk",
+                      "name": "honk source",
+                      "layout": {
+                        "type": "native"
+                      },
+                      "type": "http",
+                      "url": "http://honk.beep",
+                      "username": "honkhonk",
+                      "password": {
+                        "hidden-secret": true
+                      }
+                    },
+                    "summary": "Update a custom symbol source in a project."
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a Symbol Source from a Project",
+        "description": "Delete a custom symbol source from a project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the source to delete.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_slug}/": {
       "post": {
         "operationId": "Add a Team to a Project",
@@ -33489,6 +35061,37 @@
           }
         }
       },
+      "Layout": {
+        "type": "object",
+        "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
+        "properties": {
+          "type": {
+            "enum": [
+              "native",
+              "symstore",
+              "symstore_index2",
+              "ssqp",
+              "unified",
+              "debuginfod"
+            ],
+            "type": "string",
+            "description": "The source's layout type.\n\n* `native` - native\n* `symstore` - symstore\n* `symstore_index2` - symstore_index2\n* `ssqp` - ssqp\n* `unified` - unified\n* `debuginfod` - debuginfod"
+          },
+          "casing": {
+            "enum": [
+              "lowercase",
+              "uppercase",
+              "default"
+            ],
+            "type": "string",
+            "description": "The source's casing rules.\n\n* `lowercase` - lowercase\n* `uppercase` - uppercase\n* `default` - default"
+          }
+        },
+        "required": [
+          "casing",
+          "type"
+        ]
+      },
       "ListClientKeysResponse": {
         "type": "array",
         "items": {
@@ -37297,6 +38900,142 @@
         },
         "required": [
           "displayName"
+        ]
+      },
+      "Source": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": [
+              "appStoreConnect",
+              "http",
+              "gcs",
+              "s3"
+            ],
+            "type": "string",
+            "description": "The type of the source.\n\n* `appStoreConnect` - App Store Connect\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+          },
+          "name": {
+            "type": "string",
+            "description": "The human-readable name of the source."
+          },
+          "id": {
+            "type": "string",
+            "description": "The internal ID of the source. Must be distinct from all other source IDs and cannot start with '`sentry:`'. If this is not provided, a new UUID will be generated."
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
+            "properties": {
+              "type": {
+                "enum": [
+                  "native",
+                  "symstore",
+                  "symstore_index2",
+                  "ssqp",
+                  "unified",
+                  "debuginfod"
+                ],
+                "type": "string",
+                "description": "The source's layout type.\n\n* `native` - native\n* `symstore` - symstore\n* `symstore_index2` - symstore_index2\n* `ssqp` - ssqp\n* `unified` - unified\n* `debuginfod` - debuginfod"
+              },
+              "casing": {
+                "enum": [
+                  "lowercase",
+                  "uppercase",
+                  "default"
+                ],
+                "type": "string",
+                "description": "The source's casing rules.\n\n* `lowercase` - lowercase\n* `uppercase` - uppercase\n* `default` - default"
+              }
+            },
+            "required": [
+              "casing",
+              "type"
+            ]
+          },
+          "appconnectIssuer": {
+            "type": "string",
+            "description": "The [App Store Connect Issuer ID](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests). Required for AppStoreConnect sources, invalid for all others.",
+            "maxLength": 36,
+            "minLength": 36
+          },
+          "appconnectPrivateKey": {
+            "type": "string",
+            "description": "The [App Store Connect API Private Key](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api). Required for AppStoreConnect sources, invalid for all others."
+          },
+          "appId": {
+            "type": "string",
+            "description": "The App Store Connect App ID. Required for AppStoreConnect sources, invalid for all others.",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "description": "The source's URL. Optional for HTTP sources, invalid for all others."
+          },
+          "username": {
+            "type": "string",
+            "description": "The user name for accessing the source. Optional for HTTP sources, invalid for all others."
+          },
+          "password": {
+            "type": "string",
+            "description": "The password for accessing the source. Optional for HTTP sources, invalid for all others."
+          },
+          "bucket": {
+            "type": "string",
+            "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+          },
+          "region": {
+            "enum": [
+              "us-east-2",
+              "us-east-1",
+              "us-west-1",
+              "us-west-2",
+              "ap-east-1",
+              "ap-south-1",
+              "ap-northeast-2",
+              "ap-southeast-1",
+              "ap-southeast-2",
+              "ap-northeast-1",
+              "ca-central-1",
+              "cn-north-1",
+              "cn-northwest-1",
+              "eu-central-1",
+              "eu-west-1",
+              "eu-west-2",
+              "eu-west-3",
+              "eu-north-1",
+              "sa-east-1",
+              "us-gov-east-1",
+              "us-gov-west-1"
+            ],
+            "type": "string",
+            "description": "The source's [S3 region](https://docs.aws.amazon.com/general/latest/gr/s3.html). Required for S3 sources, invalid for all others.\n\n* `us-east-2` - US East (Ohio)\n* `us-east-1` - US East (N. Virginia)\n* `us-west-1` - US West (N. California)\n* `us-west-2` - US West (Oregon)\n* `ap-east-1` - Asia Pacific (Hong Kong)\n* `ap-south-1` - Asia Pacific (Mumbai)\n* `ap-northeast-2` - Asia Pacific (Seoul)\n* `ap-southeast-1` - Asia Pacific (Singapore)\n* `ap-southeast-2` - Asia Pacific (Sydney)\n* `ap-northeast-1` - Asia Pacific (Tokyo)\n* `ca-central-1` - Canada (Central)\n* `cn-north-1` - China (Beijing)\n* `cn-northwest-1` - China (Ningxia)\n* `eu-central-1` - EU (Frankfurt)\n* `eu-west-1` - EU (Ireland)\n* `eu-west-2` - EU (London)\n* `eu-west-3` - EU (Paris)\n* `eu-north-1` - EU (Stockholm)\n* `sa-east-1` - South America (São Paulo)\n* `us-gov-east-1` - AWS GovCloud (US-East)\n* `us-gov-west-1` - AWS GovCloud (US)"
+          },
+          "access_key": {
+            "type": "string",
+            "description": "The [AWS Access Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/security-creds.html#access-keys-and-secret-access-keys).Required for S3 sources, invalid for all others."
+          },
+          "secret_key": {
+            "type": "string",
+            "description": "The [AWS Secret Access Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/security-creds.html#access-keys-and-secret-access-keys).Required for S3 sources, invalid for all others."
+          },
+          "prefix": {
+            "type": "string",
+            "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+          },
+          "client_email": {
+            "type": "string",
+            "description": "The GCS email address for authentication. Required for GCS sources, invalid for all others."
+          },
+          "private_key": {
+            "type": "string",
+            "description": "The GCS private key. Required for GCS sources, invalid for all others."
+          }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "SourceMapDebug": {
