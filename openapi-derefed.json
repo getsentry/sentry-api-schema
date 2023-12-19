@@ -5768,6 +5768,91 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/relay_usage/": {
+      "get": {
+        "operationId": "List an Organization's trusted Relays",
+        "description": "Return a list of trusted relays bound to an organization.\n\nIf the organization doesn't have Relay usage enabled it returns a 404.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "relayId": {
+                        "type": "string"
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "publicKey": {
+                        "type": "string"
+                      },
+                      "firstSeen": {
+                        "type": "string"
+                      },
+                      "lastSeen": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "firstSeen",
+                      "lastSeen",
+                      "publicKey",
+                      "relayId",
+                      "version"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAnOrganization'sTrustedRelays": {
+                    "value": [
+                      {
+                        "relayId": "0123abcd-4567-efgh-ij89-012aaa456bbb",
+                        "version": "23.11.2",
+                        "firstSeen": "2023-12-10T00:00:00.000000Z",
+                        "lastSeen": "2023-12-20T22:22:22.222222Z",
+                        "publicKey": "asdfa54g9987ga9dfha0f8adfhkj324-dafd78321-I"
+                      }
+                    ],
+                    "summary": "List an organization's trusted relays"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/replays/": {
       "get": {
         "operationId": "List an Organization's Replays",
@@ -37803,6 +37888,36 @@
             "slug",
             "team",
             "teams"
+          ]
+        }
+      },
+      "OrganizationRelayResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "relayId": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "publicKey": {
+              "type": "string"
+            },
+            "firstSeen": {
+              "type": "string"
+            },
+            "lastSeen": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "firstSeen",
+            "lastSeen",
+            "publicKey",
+            "relayId",
+            "version"
           ]
         }
       },
