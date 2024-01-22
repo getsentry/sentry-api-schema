@@ -236,7 +236,12 @@
             "OrganizationInviteRequestIndexEndpoint::GET",
             "OrganizationInviteRequestIndexEndpoint::POST",
             "OrganizationJoinRequestEndpoint::POST",
+            "OrganizationMemberUnreleasedCommitsEndpoint::GET",
+            "OrganizationPinnedSearchEndpoint::DELETE",
+            "OrganizationPinnedSearchEndpoint::PUT",
             "OrganizationProjectsCountEndpoint::GET",
+            "OrganizationRecentSearchesEndpoint::GET",
+            "OrganizationRecentSearchesEndpoint::POST",
             "OrganizationReleaseAssembleEndpoint::POST",
             "OrganizationReleaseCommitsEndpoint::GET",
             "OrganizationReleaseDetailsEndpoint::DELETE",
@@ -252,6 +257,8 @@
             "OrganizationReleasesEndpoint::POST",
             "OrganizationReleasesStatsEndpoint::GET",
             "OrganizationRequestProjectCreation::POST",
+            "OrganizationSearchDetailsEndpoint::DELETE",
+            "OrganizationSearchDetailsEndpoint::PUT",
             "OrganizationUserDetailsEndpoint::GET",
             "OrganizationUsersEndpoint::GET",
             "ProguardArtifactReleasesEndpoint::GET",
@@ -323,11 +330,12 @@
             "UserUserRoleDetailsEndpoint::DELETE",
             "UserUserRoleDetailsEndpoint::GET",
             "UserUserRoleDetailsEndpoint::POST",
-            "UserUserRolesEndpoint::GET"
+            "UserUserRolesEndpoint::GET",
+            "VstsSearchEndpoint::GET"
         ]
     },
     "discover-n-dashboards": {
-        "block_start": 329,
+        "block_start": 337,
         "public": [],
         "private": [
             "DiscoverSavedQueryVisitEndpoint::POST",
@@ -353,7 +361,7 @@
         ]
     },
     "owners-native": {
-        "block_start": 355,
+        "block_start": 363,
         "public": [
             "ProjectSymbolSourcesEndpoint::DELETE",
             "ProjectSymbolSourcesEndpoint::GET",
@@ -382,7 +390,7 @@
         ]
     },
     "performance": {
-        "block_start": 384,
+        "block_start": 392,
         "public": [
             "OrganizationEventsEndpoint::GET"
         ],
@@ -440,7 +448,7 @@
         ]
     },
     "telemetry-experience": {
-        "block_start": 442,
+        "block_start": 450,
         "public": [],
         "private": [
             "ArtifactBundlesEndpoint::DELETE",
@@ -471,7 +479,7 @@
         ]
     },
     "enterprise": {
-        "block_start": 473,
+        "block_start": 481,
         "public": [
             "OrganizationIntegrationsEndpoint::GET",
             "OrganizationMemberDetailsEndpoint::DELETE",
@@ -520,6 +528,7 @@
             "OrganizationAuthProviderSendRemindersEndpoint::POST",
             "OrganizationAuthProvidersEndpoint::GET",
             "OrganizationIntegrationMigrateOpsgenieEndpoint::PUT",
+            "OrganizationStatsEndpoint::GET",
             "UserAuthenticatorDetailsEndpoint::DELETE",
             "UserAuthenticatorDetailsEndpoint::GET",
             "UserAuthenticatorDetailsEndpoint::PUT",
@@ -559,7 +568,6 @@
             "OrganizationMemberTeamDetailsEndpoint::GET",
             "OrganizationMemberTeamDetailsEndpoint::PUT",
             "OrganizationSCIMSchemaIndex::GET",
-            "OrganizationStatsEndpoint::GET",
             "OrganizationUserTeamsEndpoint::GET",
             "ProjectMemberIndexEndpoint::GET",
             "ProjectTeamsEndpoint::GET",
@@ -568,7 +576,7 @@
         ]
     },
     "ecosystem": {
-        "block_start": 570,
+        "block_start": 578,
         "public": [
             "NotificationActionsDetailsEndpoint::DELETE",
             "NotificationActionsDetailsEndpoint::GET",
@@ -577,6 +585,12 @@
             "NotificationActionsIndexEndpoint::POST"
         ],
         "private": [
+            "GithubSharedSearchEndpoint::GET",
+            "OrganizationApiKeyDetailsEndpoint::DELETE",
+            "OrganizationApiKeyDetailsEndpoint::GET",
+            "OrganizationApiKeyDetailsEndpoint::PUT",
+            "OrganizationApiKeyIndexEndpoint::GET",
+            "OrganizationApiKeyIndexEndpoint::POST",
             "SlackActionEndpoint::POST",
             "SlackCommandsEndpoint::POST",
             "SlackEventEndpoint::POST",
@@ -588,18 +602,11 @@
         ],
         "unknown": [
             "GitHubEnterpriseWebhookEndpoint::POST",
-            "GitHubIntegrationsWebhookEndpoint::POST",
-            "GithubSharedSearchEndpoint::GET",
-            "OrganizationApiKeyDetailsEndpoint::DELETE",
-            "OrganizationApiKeyDetailsEndpoint::GET",
-            "OrganizationApiKeyDetailsEndpoint::PUT",
-            "OrganizationApiKeyIndexEndpoint::GET",
-            "OrganizationApiKeyIndexEndpoint::POST",
-            "OrganizationMemberUnreleasedCommitsEndpoint::GET"
+            "GitHubIntegrationsWebhookEndpoint::POST"
         ]
     },
     "team-web-sdk-frontend": {
-        "block_start": 601,
+        "block_start": 608,
         "public": [],
         "private": [
             "SourceMapDebugBlueThunderEditionEndpoint::GET"
@@ -618,7 +625,7 @@
         ]
     },
     "product-owners-settings-integrations": {
-        "block_start": 620,
+        "block_start": 627,
         "public": [],
         "private": [
             "OrganizationSentryFunctionDetailsEndpoint::DELETE",
@@ -713,7 +720,7 @@
         ]
     },
     "crons": {
-        "block_start": 715,
+        "block_start": 722,
         "public": [
             "MonitorIngestCheckInDetailsEndpoint::PUT",
             "MonitorIngestCheckInIndexEndpoint::POST",
@@ -734,45 +741,31 @@
         ],
         "unknown": []
     },
-    "owners-snuba": {
-        "block_start": 737,
-        "public": [],
-        "private": [],
-        "experimental": [],
-        "unknown": [
-            "OrganizationPinnedSearchEndpoint::DELETE",
-            "OrganizationPinnedSearchEndpoint::PUT",
-            "OrganizationRecentSearchesEndpoint::GET",
-            "OrganizationRecentSearchesEndpoint::POST",
-            "OrganizationSearchDetailsEndpoint::DELETE",
-            "OrganizationSearchDetailsEndpoint::PUT",
-            "VstsSearchEndpoint::GET"
-        ]
-    },
     "feedback-backend": {
-        "block_start": 752,
+        "block_start": 744,
         "public": [],
-        "private": [],
-        "experimental": [],
-        "unknown": [
+        "private": [
             "OrganizationUserReportsEndpoint::GET",
             "ProjectUserReportsEndpoint::GET",
             "ProjectUserReportsEndpoint::POST"
-        ]
+        ],
+        "experimental": [],
+        "unknown": []
     },
     "replay-backend": {
-        "block_start": 763,
+        "block_start": 755,
         "public": [
             "OrganizationReplayDetailsEndpoint::GET",
             "OrganizationReplayIndexEndpoint::GET"
         ],
-        "private": [],
+        "private": [
+            "OrganizationReplayEventsMetaEndpoint::GET"
+        ],
         "experimental": [
             "ProjectReplayAccessibilityIssuesEndpoint::GET"
         ],
         "unknown": [
             "OrganizationReplayCountEndpoint::GET",
-            "OrganizationReplayEventsMetaEndpoint::GET",
             "OrganizationReplaySelectorIndexEndpoint::GET",
             "ProjectReplayClicksIndexEndpoint::GET",
             "ProjectReplayDetailsEndpoint::DELETE",
@@ -782,7 +775,7 @@
         ]
     },
     "profiling": {
-        "block_start": 784,
+        "block_start": 777,
         "public": [],
         "private": [
             "OrganizationProfilingFiltersEndpoint::GET",
@@ -800,7 +793,7 @@
         "unknown": []
     },
     "hybrid-cloud": {
-        "block_start": 802,
+        "block_start": 795,
         "public": [],
         "private": [
             "OrganizationUnsubscribeIssue::GET",
@@ -814,7 +807,7 @@
         "unknown": []
     },
     "machine-learning-ai": {
-        "block_start": 816,
+        "block_start": 809,
         "public": [],
         "private": [
             "EventAiSuggestedFixEndpoint::GET"
@@ -823,7 +816,7 @@
         "unknown": []
     },
     "owners-processing": {
-        "block_start": 825,
+        "block_start": 818,
         "public": [],
         "private": [],
         "experimental": [],
@@ -836,7 +829,7 @@
         ]
     },
     "security": {
-        "block_start": 838,
+        "block_start": 831,
         "public": [],
         "private": [
             "ApiTokensEndpoint::DELETE",
@@ -847,19 +840,8 @@
         "experimental": [],
         "unknown": []
     },
-    "data": {
-        "block_start": 850,
-        "public": [],
-        "private": [],
-        "experimental": [],
-        "unknown": [
-            "SystemHealthEndpoint::GET",
-            "SystemOptionsEndpoint::GET",
-            "SystemOptionsEndpoint::PUT"
-        ]
-    },
     "open-source": {
-        "block_start": 861,
+        "block_start": 843,
         "public": [],
         "private": [
             "InternalBeaconEndpoint::POST",
@@ -873,7 +855,10 @@
             "InternalQueueTasksEndpoint::GET",
             "InternalQuotasEndpoint::GET",
             "InternalStatsEndpoint::GET",
-            "InternalWarningsEndpoint::GET"
+            "InternalWarningsEndpoint::GET",
+            "SystemHealthEndpoint::GET",
+            "SystemOptionsEndpoint::GET",
+            "SystemOptionsEndpoint::PUT"
         ],
         "experimental": [
             "RelocationAbortEndpoint::PUT",
@@ -889,7 +874,7 @@
         "unknown": []
     },
     "revenue": {
-        "block_start": 891,
+        "block_start": 876,
         "public": [],
         "private": [
             "CheckAM2CompatibilityEndpoint::GET"
