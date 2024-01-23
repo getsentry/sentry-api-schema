@@ -3491,9 +3491,73 @@
                         "type": "boolean"
                       },
                       "type": {
+                        "enum": [
+                          "cron_job",
+                          "unknown"
+                        ],
                         "type": "string"
                       },
-                      "config": {},
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "schedule_type": {
+                            "enum": [
+                              "crontab",
+                              "interval"
+                            ],
+                            "type": "string"
+                          },
+                          "schedule": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "integer"
+                                },
+                                "minLength": 2,
+                                "maxLength": 2
+                              }
+                            ]
+                          },
+                          "checkin_margin": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "max_runtime": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "timezone": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "failure_issue_threshold": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "recovery_threshold": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "alert_rule_id": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "alert_rule_id",
+                          "checkin_margin",
+                          "failure_issue_threshold",
+                          "max_runtime",
+                          "recovery_threshold",
+                          "schedule",
+                          "schedule_type",
+                          "timezone"
+                        ]
+                      },
                       "dateCreated": {
                         "type": "string",
                         "format": "date-time"
@@ -3819,9 +3883,73 @@
                       "type": "boolean"
                     },
                     "type": {
+                      "enum": [
+                        "cron_job",
+                        "unknown"
+                      ],
                       "type": "string"
                     },
-                    "config": {},
+                    "config": {
+                      "type": "object",
+                      "properties": {
+                        "schedule_type": {
+                          "enum": [
+                            "crontab",
+                            "interval"
+                          ],
+                          "type": "string"
+                        },
+                        "schedule": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "integer"
+                              },
+                              "minLength": 2,
+                              "maxLength": 2
+                            }
+                          ]
+                        },
+                        "checkin_margin": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "max_runtime": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "timezone": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "failure_issue_threshold": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "recovery_threshold": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "alert_rule_id": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "alert_rule_id",
+                        "checkin_margin",
+                        "failure_issue_threshold",
+                        "max_runtime",
+                        "recovery_threshold",
+                        "schedule",
+                        "schedule_type",
+                        "timezone"
+                      ]
+                    },
                     "dateCreated": {
                       "type": "string",
                       "format": "date-time"
@@ -4123,9 +4251,73 @@
                       "type": "boolean"
                     },
                     "type": {
+                      "enum": [
+                        "cron_job",
+                        "unknown"
+                      ],
                       "type": "string"
                     },
-                    "config": {},
+                    "config": {
+                      "type": "object",
+                      "properties": {
+                        "schedule_type": {
+                          "enum": [
+                            "crontab",
+                            "interval"
+                          ],
+                          "type": "string"
+                        },
+                        "schedule": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "integer"
+                              },
+                              "minLength": 2,
+                              "maxLength": 2
+                            }
+                          ]
+                        },
+                        "checkin_margin": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "max_runtime": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "timezone": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "failure_issue_threshold": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "recovery_threshold": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "alert_rule_id": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "alert_rule_id",
+                        "checkin_margin",
+                        "failure_issue_threshold",
+                        "max_runtime",
+                        "recovery_threshold",
+                        "schedule",
+                        "schedule_type",
+                        "timezone"
+                      ]
+                    },
                     "dateCreated": {
                       "type": "string",
                       "format": "date-time"
@@ -4459,9 +4651,73 @@
                       "type": "boolean"
                     },
                     "type": {
+                      "enum": [
+                        "cron_job",
+                        "unknown"
+                      ],
                       "type": "string"
                     },
-                    "config": {},
+                    "config": {
+                      "type": "object",
+                      "properties": {
+                        "schedule_type": {
+                          "enum": [
+                            "crontab",
+                            "interval"
+                          ],
+                          "type": "string"
+                        },
+                        "schedule": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "integer"
+                              },
+                              "minLength": 2,
+                              "maxLength": 2
+                            }
+                          ]
+                        },
+                        "checkin_margin": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "max_runtime": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "timezone": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "failure_issue_threshold": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "recovery_threshold": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "alert_rule_id": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "alert_rule_id",
+                        "checkin_margin",
+                        "failure_issue_threshold",
+                        "max_runtime",
+                        "recovery_threshold",
+                        "schedule",
+                        "schedule_type",
+                        "timezone"
+                      ]
+                    },
                     "dateCreated": {
                       "type": "string",
                       "format": "date-time"
@@ -36704,9 +36960,73 @@
             "type": "boolean"
           },
           "type": {
+            "enum": [
+              "cron_job",
+              "unknown"
+            ],
             "type": "string"
           },
-          "config": {},
+          "config": {
+            "type": "object",
+            "properties": {
+              "schedule_type": {
+                "enum": [
+                  "crontab",
+                  "interval"
+                ],
+                "type": "string"
+              },
+              "schedule": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "minLength": 2,
+                    "maxLength": 2
+                  }
+                ]
+              },
+              "checkin_margin": {
+                "type": "integer",
+                "nullable": true
+              },
+              "max_runtime": {
+                "type": "integer",
+                "nullable": true
+              },
+              "timezone": {
+                "type": "string",
+                "nullable": true
+              },
+              "failure_issue_threshold": {
+                "type": "integer",
+                "nullable": true
+              },
+              "recovery_threshold": {
+                "type": "integer",
+                "nullable": true
+              },
+              "alert_rule_id": {
+                "type": "integer",
+                "nullable": true
+              }
+            },
+            "required": [
+              "alert_rule_id",
+              "checkin_margin",
+              "failure_issue_threshold",
+              "max_runtime",
+              "recovery_threshold",
+              "schedule",
+              "schedule_type",
+              "timezone"
+            ]
+          },
           "dateCreated": {
             "type": "string",
             "format": "date-time"
@@ -37014,9 +37334,73 @@
               "type": "boolean"
             },
             "type": {
+              "enum": [
+                "cron_job",
+                "unknown"
+              ],
               "type": "string"
             },
-            "config": {},
+            "config": {
+              "type": "object",
+              "properties": {
+                "schedule_type": {
+                  "enum": [
+                    "crontab",
+                    "interval"
+                  ],
+                  "type": "string"
+                },
+                "schedule": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "minLength": 2,
+                      "maxLength": 2
+                    }
+                  ]
+                },
+                "checkin_margin": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "max_runtime": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "timezone": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "failure_issue_threshold": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "recovery_threshold": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "alert_rule_id": {
+                  "type": "integer",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "alert_rule_id",
+                "checkin_margin",
+                "failure_issue_threshold",
+                "max_runtime",
+                "recovery_threshold",
+                "schedule",
+                "schedule_type",
+                "timezone"
+              ]
+            },
             "dateCreated": {
               "type": "string",
               "format": "date-time"
