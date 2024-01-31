@@ -8434,6 +8434,285 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/sessions/": {
+      "get": {
+        "operationId": "Retrieve Release Health Session Statistics",
+        "description": "        Returns a time series of release health session statistics for projects bound to an \"\n        \"organization.\n\nThe interval and date range are subject to certain restrictions and rounding \"\n        \"rules.\n\nThe date range is rounded to align with the interval, and is rounded to at least one \"\n        \"hour. The interval can at most be one day and at least one hour currently. It has to cleanly \"\n        \"divide one day, for rounding reasons.\n\nBecause of technical limitations, this endpoint returns \"\n        \"at most 10000 data points. For example, if you select a 90 day window grouped by releases, \"\n        \"you will see at most `floor(10k / (90 + 1)) = 109` releases. To get more results, reduce the \"\n        \"`statsPeriod`.\"",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The list of fields to query.\n\nThe available fields are\n  - `sum(session)`\n  - `count_unique(\"\n                    \"user)`\n  - `avg`, `p50`, `p75`, `p90`, `p95`, `p99`, `max` applied to `session.duration`. For \"\n                    \"example, `p99(session.duration)`. Session duration is [no longer being recorded](\"\n                    \"https://github.com/getsentry/sentry/discussions/42716) as of on Jan 12, 2023. Returned data may \"\n                    \"be incomplete.\n  - `crash_rate`, `crash_free_rate` applied to `user` or `session`. For example, \"\n                    \"`crash_free_rate(user)`",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of groups to return per request."
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Resolution of the time series, given in the same format as `statsPeriod`.\n\nThe default and\n        the minimum interval is `1h`."
+          },
+          {
+            "in": "query",
+            "name": "groupBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The list of properties to group by.\n\nThe available groupBy conditions are `project`,\n        `release`, `environment` and `session.status`."
+          },
+          {
+            "in": "query",
+            "name": "orderBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An optional field to order by, which must be one of the fields provided in `field`. Use `-`\n        for descending order, for example `-sum(session)`"
+          },
+          {
+            "in": "query",
+            "name": "includeTotals",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Specify `0` to exclude totals from the response. The default is `1`"
+          },
+          {
+            "in": "query",
+            "name": "includeSeries",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Specify `0` to exclude series from the response. The default is `1`"
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          }
+        ],
+        "tags": [
+          "Releases"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "type": "string"
+                    },
+                    "end": {
+                      "type": "string"
+                    },
+                    "intervals": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "groups": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "by": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "oneOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            }
+                          },
+                          "series": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "totals": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "number",
+                              "format": "double",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "required": [
+                          "by",
+                          "series",
+                          "totals"
+                        ]
+                      }
+                    },
+                    "query": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "end",
+                    "groups",
+                    "intervals",
+                    "query",
+                    "start"
+                  ]
+                },
+                "examples": {
+                  "QuerySessions": {
+                    "value": {
+                      "groups": [
+                        {
+                          "by": {
+                            "session.status": "errored"
+                          },
+                          "totals": {
+                            "sum(session)": 1000
+                          },
+                          "series": {
+                            "sum(session)": [
+                              368,
+                              392,
+                              240
+                            ]
+                          }
+                        },
+                        {
+                          "by": {
+                            "session.status": "healthy"
+                          },
+                          "totals": {
+                            "sum(session)": 17905998
+                          },
+                          "series": {
+                            "sum(session)": [
+                              6230841,
+                              6923689,
+                              4751465
+                            ]
+                          }
+                        }
+                      ],
+                      "start": "2024-01-29T07:30:00Z",
+                      "end": "2024-01-29T09:00:00Z",
+                      "intervals": [
+                        "2024-01-29T07:30:00Z",
+                        "2024-01-29T08:00:00Z",
+                        "2024-01-29T08:30:00Z"
+                      ],
+                      "query": ""
+                    },
+                    "summary": "Query Sessions"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/stats-summary/": {
       "get": {
         "operationId": "Retrieve an Organization's Events Count by Project",
@@ -20651,340 +20930,6 @@
           },
           "404": {
             "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "org: read"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/0/organizations/{organization_slug}/sessions/": {
-      "get": {
-        "tags": [
-          "Releases"
-        ],
-        "description": "Returns a time series of release health session statistics for projects bound to an organization.\n\nThe interval and date range are subject to certain restrictions and rounding rules.\n\nThe date range is rounded to align with the interval, and is rounded to at least one hour. The interval can at most be one day and at least one hour currently. It has to cleanly divide one day, for rounding reasons.\n\nBecause of technical limitations, this endpoint returns at most 10000 data points. For example, if you select a 90 day window grouped by releases, you will see at most `floor(10k / (90 + 1)) = 109` releases. To get more results, reduce the `statsPeriod`.",
-        "operationId": "Retrieve Release Health Session Statistics",
-        "parameters": [
-          {
-            "name": "organization_slug",
-            "in": "path",
-            "description": "The slug of the organization.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "project",
-            "in": "query",
-            "description": "The ID of the projects to filter by.\n\nUse `-1` to include all accessible projects.",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer"
-              }
-            },
-            "style": "form",
-            "explode": true
-          },
-          {
-            "name": "field",
-            "in": "query",
-            "description": "The list of fields to query.\n\nThe available fields are\n  - `sum(session)`\n  - `count_unique(user)`\n  - `avg`, `p50`, `p75`, `p90`, `p95`, `p99`, `max` applied to `session.duration`. For example, `p99(session.duration)`. Session duration is [no longer being recorded](https://github.com/getsentry/sentry/discussions/42716) as of on Jan 12, 2023. Returned data may be incomplete.\n  - `crash_rate`, `crash_free_rate` applied to `user` or `session`. For example, `crash_free_rate(user)`",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "style": "form",
-            "explode": true
-          },
-          {
-            "name": "environment",
-            "in": "query",
-            "description": "The name of environments to filter by.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "style": "form",
-            "explode": true
-          },
-          {
-            "name": "groupBy",
-            "in": "query",
-            "description": "The list of properties to group by.\n\nThe available groupBy conditions are `project`, `release`, `environment` and `session.status`.\n\nGrouping by `session.status` does not work when `crash_rate` or `crash_free_rate` are queried.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "style": "form",
-            "explode": true
-          },
-          {
-            "name": "orderBy",
-            "in": "query",
-            "description": "An optional field to order by, which must be one of the fields provided in `field`. Use `-` for descending order, for example `-sum(session)`. \n\nThis alters the order of the `groups` returned, so it only makes sense in combination with `groupBy`. \n\nOrdering by more than one field is currently not supported.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "query",
-            "in": "query",
-            "description": "A free-form query that is applied as a filter.\n\nAn example query could be `release:\"1.1.0\" or release:\"1.2.0\"`.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "statsPeriod",
-            "in": "query",
-            "description": "This defines the range of the time series, relative to now.\n\nThe range is given in a `\"<number><unit>\"` format.\n\nFor example `1d` for a one day range. Possible units are `m` for minutes, `h` for hours, `d` for days and `w` for weeks.\n\nIt defaults to `90d`.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "interval",
-            "in": "query",
-            "description": "This is the resolution of the time series, given in the same format as `statsPeriod`.\n\nThe default resolution is `1h` and the minimum resolution is currently restricted to `1h` as well.\n\nIntervals larger than `1d` are not supported, and the interval has to cleanly divide one day.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "statsPeriodStart",
-            "in": "query",
-            "description": "This defines the start of the time series range, in the same format as the `interval`, relative to now.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "statsPeriodEnd",
-            "in": "query",
-            "description": "This defines the end of the time series range, in the same format as the `interval`, relative to now.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "description": "This defines the start of the time series range as an explicit datetime.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "end",
-            "in": "query",
-            "description": "This defines the inclusive end of the time series range as an explicit datetime.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Time-series Session Statistics.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "start",
-                    "end",
-                    "intervals",
-                    "groups"
-                  ],
-                  "properties": {
-                    "start": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The start time of the data being returned."
-                    },
-                    "end": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The exclusive end time of the data being returned."
-                    },
-                    "intervals": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "description": "The time slices of the timeseries data given in the `groups[].series` field."
-                    },
-                    "groups": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "description": "A grouped result, as requested by the `groupBy` request parameter.",
-                        "required": [
-                          "by",
-                          "totals",
-                          "series"
-                        ],
-                        "properties": {
-                          "by": {
-                            "type": "object",
-                            "description": "These are key/value pairs, the key being the requested `groupBy` property with its corresponding value.",
-                            "properties": {
-                              "session.status": {
-                                "type": "string",
-                                "description": "Example `groupBy` property"
-                              }
-                            }
-                          },
-                          "totals": {
-                            "type": "object",
-                            "description": "These are key/value pairs, the key being the requested `field`, and the value the corresponding total over the requested time frame.",
-                            "properties": {
-                              "sum(session)": {
-                                "type": "integer",
-                                "description": "Example `field` value"
-                              }
-                            }
-                          },
-                          "series": {
-                            "type": "object",
-                            "description": "These are key/value pairs, the key being the requested `field`, and the value is an array of aggregated values. The array corresponds to the times given in the `intervals` array.",
-                            "additionalProperties": {
-                              "type": "array",
-                              "items": {
-                                "type": "integer"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "start": "2021-02-01T00:00:00Z",
-                  "end": "2021-02-04T00:00:00Z",
-                  "intervals": [
-                    "2021-02-01T00:00:00Z",
-                    "2021-02-02T00:00:00Z",
-                    "2021-02-03T00:00:00Z"
-                  ],
-                  "groups": [
-                    {
-                      "by": {
-                        "session.status": "healthy"
-                      },
-                      "totals": {
-                        "sum(session)": 1715553
-                      },
-                      "series": {
-                        "sum(session)": [
-                          683772,
-                          677788,
-                          353993
-                        ]
-                      }
-                    },
-                    {
-                      "by": {
-                        "session.status": "abnormal"
-                      },
-                      "totals": {
-                        "sum(session)": 0
-                      },
-                      "series": {
-                        "sum(session)": [
-                          0,
-                          0,
-                          0
-                        ]
-                      }
-                    },
-                    {
-                      "by": {
-                        "session.status": "crashed"
-                      },
-                      "totals": {
-                        "sum(session)": 383
-                      },
-                      "series": {
-                        "sum(session)": [
-                          33,
-                          26,
-                          324
-                        ]
-                      }
-                    },
-                    {
-                      "by": {
-                        "session.status": "errored"
-                      },
-                      "totals": {
-                        "sum(session)": 1565
-                      },
-                      "series": {
-                        "sum(session)": [
-                          163,
-                          201,
-                          1201
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Wrong Parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "detail"
-                  ],
-                  "properties": {
-                    "detail": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -40038,6 +39983,78 @@
         },
         "required": [
           "displayName"
+        ]
+      },
+      "SessionsQueryResult": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "intervals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "by": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
+                  }
+                },
+                "series": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    }
+                  }
+                },
+                "totals": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "number",
+                    "format": "double",
+                    "nullable": true
+                  }
+                }
+              },
+              "required": [
+                "by",
+                "series",
+                "totals"
+              ]
+            }
+          },
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "end",
+          "groups",
+          "intervals",
+          "query",
+          "start"
         ]
       },
       "Source": {
