@@ -6231,6 +6231,124 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/replay-count/": {
+      "get": {
+        "operationId": "Return a Count of Replays",
+        "description": "Return a count of replays for the given issue or transaction id.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer"
+                  }
+                },
+                "examples": {
+                  "QueryReplayCountByIssueOrTransactionId": {
+                    "value": {
+                      "1": 9,
+                      "2": 0,
+                      "5": 0,
+                      "9": 1,
+                      "10": 29
+                    },
+                    "summary": "Query replay count by issue or transaction id"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/replays/": {
       "get": {
         "operationId": "List an Organization's Replays",
@@ -39552,6 +39670,12 @@
             "minimum": 0,
             "nullable": true
           }
+        }
+      },
+      "ReplayCounts": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "integer"
         }
       },
       "Rule": {
