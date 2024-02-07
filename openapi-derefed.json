@@ -6349,6 +6349,229 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/replay-selectors/": {
+      "get": {
+        "operationId": "List an Organization's Selectors",
+        "description": "Return a list of selectors for a given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "This defines the range of the time series, relative to now. The range is given in a `<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for minutes, `h` for hours, `d` for days and `w` for weeks.You must either provide a `statsPeriod`, or a `start` and `end`."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the start of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `end` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the inclusive end of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `start` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {}
+            },
+            "description": "The ID of the projects to filter by."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The field to sort the output by."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "count_dead_clicks": {
+                            "type": "integer"
+                          },
+                          "count_rage_clicks": {
+                            "type": "integer"
+                          },
+                          "dom_element": {
+                            "type": "string"
+                          },
+                          "element": {
+                            "type": "object",
+                            "properties": {
+                              "alt": {
+                                "type": "string"
+                              },
+                              "aria_label": {
+                                "type": "string"
+                              },
+                              "class": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "tag": {
+                                "type": "string"
+                              },
+                              "testid": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "alt",
+                              "aria_label",
+                              "class",
+                              "id",
+                              "role",
+                              "tag",
+                              "testid",
+                              "title"
+                            ]
+                          },
+                          "project_id": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "RetrieveACollectionOfSelectorsForAnOrganization.": {
+                    "value": {
+                      "data": [
+                        {
+                          "count_dead_clicks": 2,
+                          "count_rage_clicks": 1,
+                          "dom_element": "div#myid.class1.class2",
+                          "element": {
+                            "alt": "",
+                            "aria_label": "",
+                            "class": [
+                              "class1",
+                              "class2"
+                            ],
+                            "id": "myid",
+                            "role": "",
+                            "tag": "div",
+                            "testid": "",
+                            "title": ""
+                          },
+                          "project_id": "1"
+                        }
+                      ]
+                    },
+                    "summary": "Retrieve a collection of selectors for an organization."
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/replays/": {
       "get": {
         "operationId": "List an Organization's Replays",
@@ -36789,6 +37012,76 @@
             "status"
           ]
         }
+      },
+      "ListSelectors": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "count_dead_clicks": {
+                  "type": "integer"
+                },
+                "count_rage_clicks": {
+                  "type": "integer"
+                },
+                "dom_element": {
+                  "type": "string"
+                },
+                "element": {
+                  "type": "object",
+                  "properties": {
+                    "alt": {
+                      "type": "string"
+                    },
+                    "aria_label": {
+                      "type": "string"
+                    },
+                    "class": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "tag": {
+                      "type": "string"
+                    },
+                    "testid": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "alt",
+                    "aria_label",
+                    "class",
+                    "id",
+                    "role",
+                    "tag",
+                    "testid",
+                    "title"
+                  ]
+                },
+                "project_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
       },
       "ListTeamProjectResponse": {
         "type": "array",
