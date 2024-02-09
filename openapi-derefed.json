@@ -7469,6 +7469,9 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -14419,6 +14422,62 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/replays/{replay_id}/": {
+      "delete": {
+        "operationId": "Delete a Replay Instance",
+        "description": "Delete a replay",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
