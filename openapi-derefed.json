@@ -14565,6 +14565,256 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/replays/{replay_id}/recording-segments/": {
+      "get": {
+        "operationId": "List Recording Segments",
+        "description": "Return a collection of replay recording segments.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  }
+                },
+                "examples": {
+                  "RetrieveACollectionOfReplaySegments": {
+                    "value": [
+                      [
+                        {
+                          "type": 5,
+                          "timestamp": 1658770772.902,
+                          "data": {
+                            "tag": "performanceSpan",
+                            "payload": {
+                              "op": "memory",
+                              "description": "",
+                              "startTimestamp": 1658770772.902,
+                              "endTimestamp": 1658770772.902,
+                              "data": {
+                                "memory": {
+                                  "jsHeapSizeLimit": 4294705152,
+                                  "totalJSHeapSize": 10204109,
+                                  "usedJSHeapSize": 9131621
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      [
+                        {
+                          "type": 5,
+                          "timestamp": 1665063926.125,
+                          "data": {
+                            "tag": "performanceSpan",
+                            "payload": {
+                              "op": "navigation.navigate",
+                              "description": "https://sentry.io",
+                              "startTimestamp": 1665063926.125,
+                              "endTimestamp": 1665063926.833,
+                              "data": {
+                                "size": 9538,
+                                "duration": 710
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    ],
+                    "summary": "Retrieve a collection of replay segments"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_slug}/{project_slug}/replays/{replay_id}/recording-segments/{segment_id}/": {
+      "get": {
+        "operationId": "Fetch Recording Segment",
+        "description": "Return a replay recording segment.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "segment_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the segment you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "examples": {
+                  "RetrieveAReplaySegment": {
+                    "value": [
+                      {
+                        "type": 5,
+                        "timestamp": 1658770772.902,
+                        "data": {
+                          "tag": "performanceSpan",
+                          "payload": {
+                            "op": "memory",
+                            "description": "",
+                            "startTimestamp": 1658770772.902,
+                            "endTimestamp": 1658770772.902,
+                            "data": {
+                              "memory": {
+                                "jsHeapSizeLimit": 4294705152,
+                                "totalJSHeapSize": 10204109,
+                                "usedJSHeapSize": 9131621
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "summary": "Retrieve a replay segment"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_slug}/{project_slug}/rules/": {
       "get": {
         "operationId": "List a Project's Issue Alert Rules",
@@ -36135,6 +36385,13 @@
           }
         }
       },
+      "GetReplayRecordingSegment": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      },
       "Layout": {
         "type": "object",
         "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
@@ -36856,6 +37113,16 @@
         "required": [
           "data"
         ]
+      },
+      "ListReplayRecordingSegments": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
       },
       "ListReplays": {
         "type": "array",
