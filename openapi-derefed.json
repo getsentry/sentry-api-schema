@@ -14423,6 +14423,148 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/replays/{replay_id}/clicks/": {
+      "get": {
+        "operationId": "List Clicked Nodes",
+        "description": "Retrieve a collection of RRWeb DOM node-ids and the timestamp they were clicked.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "node_id": {
+                            "type": "integer"
+                          },
+                          "timestamp": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "node_id",
+                          "timestamp"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "RetrieveACollectionOfRRWebDOMNode-idsAndTheTimestampTheyWereClicked.": {
+                    "value": {
+                      "data": [
+                        {
+                          "node_id": 1,
+                          "timestamp": "2024-02-08T15:52:25+00:00"
+                        }
+                      ]
+                    },
+                    "summary": "Retrieve a collection of RRWeb DOM node-ids and the timestamp they were clicked."
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_slug}/{project_slug}/rules/": {
       "get": {
         "operationId": "List a Project's Issue Alert Rules",
@@ -36687,6 +36829,33 @@
             "status"
           ]
         }
+      },
+      "ListReplayClicks": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "node_id": {
+                  "type": "integer"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "node_id",
+                "timestamp"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
       },
       "ListReplays": {
         "type": "array",
