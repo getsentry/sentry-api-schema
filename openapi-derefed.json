@@ -6231,6 +6231,271 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/release-threshold-statuses/": {
+      "get": {
+        "operationId": "Retrieve Statuses of Release Thresholds (Alpha)",
+        "description": "**`[WARNING]`**: This API is an experimental Alpha feature and is subject to change!\n\nList all derived statuses of releases that fall within the provided start/end datetimes.\n\nConstructs a response key'd off \\{`release_version`\\}-\\{`project_slug`\\} that lists thresholds with their status for *specified* projects.\nEach returned enriched threshold will contain the full serialized `release_threshold` instance as well as it's derived health statuses.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds. Use along with `end`.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The inclusive end of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds. Use along with `start`.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "A list of environment names to filter your results by."
+          },
+          {
+            "in": "query",
+            "name": "projectSlug",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "A list of project slugs to filter your results by."
+          },
+          {
+            "in": "query",
+            "name": "release",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "A list of release versions to filter your results by."
+          }
+        ],
+        "tags": [
+          "Releases"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:read",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "date": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "environment": {
+                          "type": "object",
+                          "additionalProperties": {},
+                          "nullable": true
+                        },
+                        "project": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "release": {
+                          "type": "string"
+                        },
+                        "threshold_type": {
+                          "type": "integer"
+                        },
+                        "trigger_type": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "integer"
+                        },
+                        "window_in_seconds": {
+                          "type": "integer"
+                        },
+                        "end": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "is_healthy": {
+                          "type": "boolean"
+                        },
+                        "key": {
+                          "type": "string"
+                        },
+                        "project_slug": {
+                          "type": "string"
+                        },
+                        "project_id": {
+                          "type": "integer"
+                        },
+                        "start": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "metric_value": {
+                          "anyOf": [
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            {
+                              "type": "object",
+                              "nullable": true
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "end",
+                        "is_healthy",
+                        "key",
+                        "metric_value",
+                        "project_id",
+                        "project_slug",
+                        "start"
+                      ]
+                    }
+                  }
+                },
+                "examples": {
+                  "ClientKeyWithRateLimiting": {
+                    "value": {
+                      "the-spoiled-yoghurt-v1.0.0": [
+                        {
+                          "project_id": 0,
+                          "project_slug": "the-spoiled-yoghurt",
+                          "environment": {
+                            "name": "production"
+                          },
+                          "project": {
+                            "id": "4505321021243392",
+                            "slug": "the-spoiled-yoghurt",
+                            "name": "The Spoiled Yoghurt",
+                            "platform": "python",
+                            "dateCreated": "2023-06-08T00:13:06.004534Z",
+                            "isBookmarked": false,
+                            "isMember": true,
+                            "features": [
+                              "alert-filters",
+                              "custom-inbound-filters",
+                              "data-forwarding",
+                              "discard-groups",
+                              "minidump",
+                              "race-free-group-creation",
+                              "rate-limits",
+                              "servicehooks",
+                              "similarity-indexing",
+                              "similarity-indexing-v2",
+                              "similarity-view",
+                              "similarity-view-v2"
+                            ],
+                            "firstEvent": null,
+                            "firstTransactionEvent": false,
+                            "access": [
+                              "member:read",
+                              "event:read",
+                              "project:admin",
+                              "team:write",
+                              "project:write",
+                              "team:admin",
+                              "project:read",
+                              "org:integrations",
+                              "org:read",
+                              "project:releases",
+                              "team:read",
+                              "alerts:write",
+                              "event:admin",
+                              "event:write",
+                              "alerts:read"
+                            ],
+                            "hasAccess": true,
+                            "hasMinifiedStackTrace": false,
+                            "hasCustomMetrics": false,
+                            "hasMonitors": false,
+                            "hasProfiles": false,
+                            "hasReplays": false,
+                            "hasSessions": false,
+                            "isInternal": false,
+                            "isPublic": false,
+                            "avatar": {
+                              "avatarType": "letter_avatar",
+                              "avatarUuid": null
+                            },
+                            "color": "#3f70bf",
+                            "status": "active"
+                          },
+                          "threshold_type": 0,
+                          "trigger_type": "over",
+                          "value": 100,
+                          "window_in_seconds": 600,
+                          "key": "foobar-v1.0.0",
+                          "release": "the-spoiled-yoghurt-v1.0.0",
+                          "is_healthy": true,
+                          "start": "2022-02-14T19:00:00Z",
+                          "end": "2022-02-28T18:03:00Z",
+                          "metric_value": 0.1
+                        }
+                      ]
+                    },
+                    "summary": "Client key with rate limiting"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/replay-count/": {
       "get": {
         "operationId": "Return a Count of Replays",
@@ -40401,6 +40666,92 @@
             "maximum": 86400,
             "minimum": 0,
             "nullable": true
+          }
+        }
+      },
+      "ReleaseThresholdStatusResponse": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "environment": {
+                "type": "object",
+                "additionalProperties": {},
+                "nullable": true
+              },
+              "project": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "release": {
+                "type": "string"
+              },
+              "threshold_type": {
+                "type": "integer"
+              },
+              "trigger_type": {
+                "type": "string"
+              },
+              "value": {
+                "type": "integer"
+              },
+              "window_in_seconds": {
+                "type": "integer"
+              },
+              "end": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "is_healthy": {
+                "type": "boolean"
+              },
+              "key": {
+                "type": "string"
+              },
+              "project_slug": {
+                "type": "string"
+              },
+              "project_id": {
+                "type": "integer"
+              },
+              "start": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "metric_value": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  {
+                    "type": "object",
+                    "nullable": true
+                  }
+                ]
+              }
+            },
+            "required": [
+              "end",
+              "is_healthy",
+              "key",
+              "metric_value",
+              "project_id",
+              "project_slug",
+              "start"
+            ]
           }
         }
       },
