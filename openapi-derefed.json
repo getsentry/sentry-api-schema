@@ -15117,6 +15117,119 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/monitors/{monitor_slug}/checkins/": {
+      "get": {
+        "operationId": "Retrieve Check-Ins for a Monitor by Project",
+        "description": "Retrieve a list of check-ins for a monitor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "monitor_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the monitor.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Crons"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "groups": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "environment": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "duration": {
+                        "type": "integer"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "attachmentId": {
+                        "type": "string"
+                      },
+                      "expectedTime": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "monitorConfig": {}
+                    },
+                    "required": [
+                      "attachmentId",
+                      "dateCreated",
+                      "duration",
+                      "environment",
+                      "expectedTime",
+                      "id",
+                      "monitorConfig",
+                      "status"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_slug}/{project_slug}/ownership/": {
       "get": {
         "operationId": "Retrieve Ownership Configuration for a Project",
