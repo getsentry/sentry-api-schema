@@ -1542,6 +1542,859 @@
         }
       }
     },
+    "/api/0/organizations/{organization_slug}/members/": {
+      "get": {
+        "operationId": "List an Organization's Members",
+        "description": "List all organization members.\n\nResponse includes pending invites that are approved by organization admins but waiting to be accepted by the invitee.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:read",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "externalUsers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "externalId": {
+                              "type": "string"
+                            },
+                            "userId": {
+                              "type": "string"
+                            },
+                            "teamId": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string"
+                            },
+                            "externalName": {
+                              "type": "string"
+                            },
+                            "integrationId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "externalName",
+                            "id",
+                            "integrationId",
+                            "provider"
+                          ]
+                        }
+                      },
+                      "role": {
+                        "type": "string"
+                      },
+                      "roleName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "identities": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "organization": {
+                                  "type": "object",
+                                  "properties": {
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "slug"
+                                  ]
+                                },
+                                "provider": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name"
+                                  ]
+                                },
+                                "dateVerified": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "dateSynced": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "dateSynced",
+                                "dateVerified",
+                                "id",
+                                "name",
+                                "organization",
+                                "provider"
+                              ]
+                            }
+                          },
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "avatarUrl": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "authenticators": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "canReset2fa": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "dateJoined": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "lastLogin": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "experiments": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "is_verified": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "id",
+                                "is_verified"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "dateJoined",
+                          "email",
+                          "emails",
+                          "experiments",
+                          "has2fa",
+                          "hasPasswordAuth",
+                          "id",
+                          "isActive",
+                          "isManaged",
+                          "isStaff",
+                          "isSuperuser",
+                          "lastActive",
+                          "lastLogin",
+                          "name",
+                          "username"
+                        ]
+                      },
+                      "orgRole": {
+                        "type": "string"
+                      },
+                      "pending": {
+                        "type": "boolean"
+                      },
+                      "expired": {
+                        "type": "boolean"
+                      },
+                      "flags": {
+                        "type": "object",
+                        "properties": {
+                          "idp:provisioned": {
+                            "type": "boolean"
+                          },
+                          "idp:role-restricted": {
+                            "type": "boolean"
+                          },
+                          "sso:linked": {
+                            "type": "boolean"
+                          },
+                          "sso:invalid": {
+                            "type": "boolean"
+                          },
+                          "member-limit:restricted": {
+                            "type": "boolean"
+                          },
+                          "partnership:restricted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "idp:provisioned",
+                          "idp:role-restricted",
+                          "member-limit:restricted",
+                          "partnership:restricted",
+                          "sso:invalid",
+                          "sso:linked"
+                        ]
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "inviteStatus": {
+                        "type": "string"
+                      },
+                      "inviterName": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "dateCreated",
+                      "email",
+                      "expired",
+                      "flags",
+                      "id",
+                      "inviteStatus",
+                      "inviterName",
+                      "name",
+                      "orgRole",
+                      "pending",
+                      "user"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListOrganizationMembers": {
+                    "value": [
+                      {
+                        "id": "57377908164",
+                        "email": "sirpenguin@antarcticarocks.com",
+                        "name": "Sir Penguin",
+                        "user": {
+                          "id": "280094367316",
+                          "name": "Sir Penguin",
+                          "username": "sirpenguin@antarcticarocks.com",
+                          "email": "sirpenguin@antarcticarocks.com",
+                          "avatarUrl": "https://secure.gravatar.com/avatar/16aeb26c5fdba335c7078e9e9ddb5149?s=32&d=mm",
+                          "isActive": true,
+                          "hasPasswordAuth": true,
+                          "isManaged": false,
+                          "dateJoined": "2021-07-06T21:13:58.375239Z",
+                          "lastLogin": "2021-08-02T18:25:00.051182Z",
+                          "has2fa": false,
+                          "lastActive": "2021-08-02T21:32:18.836829Z",
+                          "isSuperuser": false,
+                          "isStaff": false,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "2153450836",
+                              "email": "sirpenguin@antarcticarocks.com",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null
+                          },
+                          "authenticators": [],
+                          "canReset2fa": true
+                        },
+                        "role": "member",
+                        "orgRole": "member",
+                        "roleName": "Member",
+                        "pending": false,
+                        "expired": false,
+                        "flags": {
+                          "idp:provisioned": false,
+                          "idp:role-restricted": false,
+                          "sso:linked": false,
+                          "sso:invalid": false,
+                          "member-limit:restricted": false,
+                          "partnership:restricted": false
+                        },
+                        "dateCreated": "2021-07-06T21:13:01.120263Z",
+                        "inviteStatus": "approved",
+                        "inviterName": "maininviter@antarcticarocks.com"
+                      }
+                    ],
+                    "summary": "List organization members"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Add a Member to an Organization",
+        "description": "Add or invite a member to an organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The email address to send the invitation to.",
+                    "maxLength": 75
+                  },
+                  "orgRole": {
+                    "enum": [
+                      "billing",
+                      "member",
+                      "manager",
+                      "owner",
+                      "admin"
+                    ],
+                    "type": "string",
+                    "default": "member",
+                    "description": "The organization-level role of the new member. Roles include:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
+                  },
+                  "teamRoles": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "nullable": true,
+                    "default": [],
+                    "description": "The team and team-roles assigned to the member. Team roles can be either:\n        - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.\n        - `admin` - Has full management access to their team's membership and projects."
+                  },
+                  "sendInvite": {
+                    "type": "boolean",
+                    "writeOnly": true,
+                    "default": true,
+                    "description": "Whether or not to send an invite notification through email. Defaults to True."
+                  },
+                  "reinvite": {
+                    "type": "boolean",
+                    "description": "Whether or not to re-invite a user who has already been invited to the organization. Defaults to True."
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "externalUsers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "externalId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "teamId": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "externalName": {
+                            "type": "string"
+                          },
+                          "integrationId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "externalName",
+                          "id",
+                          "integrationId",
+                          "provider"
+                        ]
+                      }
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "roleName": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    },
+                    "orgRole": {
+                      "type": "string"
+                    },
+                    "pending": {
+                      "type": "boolean"
+                    },
+                    "expired": {
+                      "type": "boolean"
+                    },
+                    "flags": {
+                      "type": "object",
+                      "properties": {
+                        "idp:provisioned": {
+                          "type": "boolean"
+                        },
+                        "idp:role-restricted": {
+                          "type": "boolean"
+                        },
+                        "sso:linked": {
+                          "type": "boolean"
+                        },
+                        "sso:invalid": {
+                          "type": "boolean"
+                        },
+                        "member-limit:restricted": {
+                          "type": "boolean"
+                        },
+                        "partnership:restricted": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "idp:provisioned",
+                        "idp:role-restricted",
+                        "member-limit:restricted",
+                        "partnership:restricted",
+                        "sso:invalid",
+                        "sso:linked"
+                      ]
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "inviteStatus": {
+                      "type": "string"
+                    },
+                    "inviterName": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "email",
+                    "expired",
+                    "flags",
+                    "id",
+                    "inviteStatus",
+                    "inviterName",
+                    "name",
+                    "orgRole",
+                    "pending",
+                    "user"
+                  ]
+                },
+                "examples": {
+                  "AddAMemberToAnOrganization": {
+                    "value": {
+                      "id": "57377908164",
+                      "email": "sirpenguin@antarcticarocks.com",
+                      "name": "Sir Penguin",
+                      "user": {
+                        "id": "280094367316",
+                        "name": "Sir Penguin",
+                        "username": "sirpenguin@antarcticarocks.com",
+                        "email": "sirpenguin@antarcticarocks.com",
+                        "avatarUrl": "https://secure.gravatar.com/avatar/16aeb26c5fdba335c7078e9e9ddb5149?s=32&d=mm",
+                        "isActive": true,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-07-06T21:13:58.375239Z",
+                        "lastLogin": "2021-08-02T18:25:00.051182Z",
+                        "has2fa": false,
+                        "lastActive": "2021-08-02T21:32:18.836829Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "2153450836",
+                            "email": "sirpenguin@antarcticarocks.com",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null
+                        },
+                        "authenticators": [],
+                        "canReset2fa": true
+                      },
+                      "role": "member",
+                      "orgRole": "member",
+                      "roleName": "Member",
+                      "pending": false,
+                      "expired": false,
+                      "flags": {
+                        "idp:provisioned": false,
+                        "idp:role-restricted": false,
+                        "sso:linked": false,
+                        "sso:invalid": false,
+                        "member-limit:restricted": false,
+                        "partnership:restricted": false
+                      },
+                      "dateCreated": "2021-07-06T21:13:01.120263Z",
+                      "inviteStatus": "approved",
+                      "inviterName": "maininviter@antarcticarocks.com"
+                    },
+                    "summary": "Add a member to an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/members/{member_id}/": {
       "get": {
         "operationId": "Retrieve an Organization Member",
@@ -2119,10 +2972,11 @@
                       "billing",
                       "member",
                       "manager",
-                      "owner"
+                      "owner",
+                      "admin"
                     ],
                     "type": "string",
-                    "description": "The organization role of the member. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes."
+                    "description": "The organization role of the member. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
                   },
                   "teamRoles": {
                     "type": "array",
@@ -8242,7 +9096,7 @@
     },
     "/api/0/organizations/{organization_slug}/scim/v2/Users": {
       "get": {
-        "operationId": "List an Organization's Members",
+        "operationId": "List an Organization's SCIM Members",
         "description": "Returns a paginated list of members bound to a organization with a SCIM Users GET Request.",
         "parameters": [
           {
@@ -8508,10 +9362,11 @@
                     "enum": [
                       "billing",
                       "member",
-                      "manager"
+                      "manager",
+                      "admin"
                     ],
                     "type": "string",
-                    "description": "The organization role of the member. If unspecified, this will be\n                    set to the organization's default role. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership."
+                    "description": "The organization role of the member. If unspecified, this will be\n                    set to the organization's default role. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
                   }
                 },
                 "required": [
@@ -22846,269 +23701,6 @@
                     "dateCreated": "2018-11-06T21:19:58.536Z",
                     "id": "acbafc639127fd89d10f474520104517ff1d709e",
                     "message": "Initial commit from Create Next App"
-                  }
-                ]
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "org: read"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/0/organizations/{organization_slug}/users/": {
-      "get": {
-        "tags": [
-          "Organizations"
-        ],
-        "description": "Return a list of users that belong to a given organization.",
-        "operationId": "List an Organization's Users",
-        "parameters": [
-          {
-            "name": "organization_slug",
-            "in": "path",
-            "description": "The slug of the organization the event ID should be looked up in.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "project",
-            "in": "query",
-            "description": "Restrict results to users who have access to a given project ID",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "dateCreated",
-                      "user",
-                      "roleName",
-                      "expired",
-                      "id",
-                      "projects",
-                      "name",
-                      "role",
-                      "flags",
-                      "email",
-                      "pending"
-                    ],
-                    "properties": {
-                      "dateCreated": {
-                        "type": "string"
-                      },
-                      "user": {
-                        "type": "object",
-                        "required": [
-                          "username",
-                          "lastLogin",
-                          "isSuperuser",
-                          "isManaged",
-                          "lastActive",
-                          "isStaff",
-                          "id",
-                          "isActive",
-                          "has2fa",
-                          "name",
-                          "avatarUrl",
-                          "dateJoined",
-                          "emails",
-                          "avatar",
-                          "hasPasswordAuth",
-                          "email"
-                        ],
-                        "properties": {
-                          "username": {
-                            "type": "string"
-                          },
-                          "lastLogin": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "isSuperuser": {
-                            "type": "boolean"
-                          },
-                          "isManaged": {
-                            "type": "boolean"
-                          },
-                          "lastActive": {
-                            "type": "string"
-                          },
-                          "isStaff": {
-                            "type": "boolean"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "isActive": {
-                            "type": "boolean"
-                          },
-                          "has2fa": {
-                            "type": "boolean"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "avatarUrl": {
-                            "type": "string"
-                          },
-                          "dateJoined": {
-                            "type": "string"
-                          },
-                          "emails": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "is_verified": {
-                                  "type": "boolean"
-                                },
-                                "id": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          },
-                          "avatar": {
-                            "type": "object",
-                            "properties": {
-                              "avatarType": {
-                                "type": "string"
-                              },
-                              "avatarUuid": {
-                                "type": "string",
-                                "nullable": true
-                              }
-                            }
-                          },
-                          "hasPasswordAuth": {
-                            "type": "boolean"
-                          },
-                          "email": {
-                            "type": "string"
-                          }
-                        }
-                      },
-                      "roleName": {
-                        "type": "string"
-                      },
-                      "expired": {
-                        "type": "boolean"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "projects": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "role": {
-                        "type": "string",
-                        "enum": [
-                          "owner",
-                          "manager",
-                          "admin",
-                          "member",
-                          "billing"
-                        ]
-                      },
-                      "flags": {
-                        "type": "object",
-                        "properties": {
-                          "sso: linked": {
-                            "type": "boolean"
-                          },
-                          "sso: invalid": {
-                            "type": "boolean"
-                          }
-                        }
-                      },
-                      "email": {
-                        "type": "string"
-                      },
-                      "pending": {
-                        "type": "boolean"
-                      }
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "dateCreated": "2019-05-09T18:06:01.728Z",
-                    "user": {
-                      "username": "testEmail@test.com",
-                      "lastLogin": "2019-09-16T02:56:06.806Z",
-                      "isSuperuser": false,
-                      "isManaged": false,
-                      "lastActive": "2019-10-08T15:05:38.715Z",
-                      "isStaff": false,
-                      "id": "433307",
-                      "isActive": true,
-                      "has2fa": false,
-                      "name": "OtherTest McTestuser",
-                      "avatarUrl": "https://secure.gravatar.com/avatar/1eb103c0e899f372a85eb0a44f0a0f42?s=32&d=mm",
-                      "dateJoined": "2019-05-09T18:06:01.443Z",
-                      "emails": [
-                        {
-                          "is_verified": true,
-                          "id": "468229",
-                          "email": "testEmail@test.com"
-                        }
-                      ],
-                      "avatar": {
-                        "avatarType": "letter_avatar",
-                        "avatarUuid": null
-                      },
-                      "hasPasswordAuth": false,
-                      "email": "testEmail@test.com"
-                    },
-                    "roleName": "Organization Owner",
-                    "expired": false,
-                    "id": "9376061",
-                    "projects": [
-                      "buggy-sentry-project"
-                    ],
-                    "name": "OtherTest McTestuser",
-                    "role": "owner",
-                    "flags": {
-                      "sso: linked": false,
-                      "sso: invalid": false
-                    },
-                    "email": "testEmail@test.com",
-                    "pending": false
                   }
                 ]
               }
@@ -38234,6 +38826,305 @@
           ]
         }
       },
+      "ListOrganizationMemberResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "externalUsers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "externalId": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "string"
+                  },
+                  "teamId": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "externalName": {
+                    "type": "string"
+                  },
+                  "integrationId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "externalName",
+                  "id",
+                  "integrationId",
+                  "provider"
+                ]
+              }
+            },
+            "role": {
+              "type": "string"
+            },
+            "roleName": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "user": {
+              "type": "object",
+              "properties": {
+                "identities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "organization": {
+                        "type": "object",
+                        "properties": {
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "slug"
+                        ]
+                      },
+                      "provider": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      },
+                      "dateVerified": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateSynced": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "dateSynced",
+                      "dateVerified",
+                      "id",
+                      "name",
+                      "organization",
+                      "provider"
+                    ]
+                  }
+                },
+                "avatar": {
+                  "type": "object",
+                  "properties": {
+                    "avatarType": {
+                      "type": "string"
+                    },
+                    "avatarUuid": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "avatarUrl": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "authenticators": {
+                  "type": "array",
+                  "items": {}
+                },
+                "canReset2fa": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
+                },
+                "hasPasswordAuth": {
+                  "type": "boolean"
+                },
+                "isManaged": {
+                  "type": "boolean"
+                },
+                "dateJoined": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "lastLogin": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "has2fa": {
+                  "type": "boolean"
+                },
+                "lastActive": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "isSuperuser": {
+                  "type": "boolean"
+                },
+                "isStaff": {
+                  "type": "boolean"
+                },
+                "experiments": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "emails": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "is_verified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "id",
+                      "is_verified"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "avatarUrl",
+                "dateJoined",
+                "email",
+                "emails",
+                "experiments",
+                "has2fa",
+                "hasPasswordAuth",
+                "id",
+                "isActive",
+                "isManaged",
+                "isStaff",
+                "isSuperuser",
+                "lastActive",
+                "lastLogin",
+                "name",
+                "username"
+              ]
+            },
+            "orgRole": {
+              "type": "string"
+            },
+            "pending": {
+              "type": "boolean"
+            },
+            "expired": {
+              "type": "boolean"
+            },
+            "flags": {
+              "type": "object",
+              "properties": {
+                "idp:provisioned": {
+                  "type": "boolean"
+                },
+                "idp:role-restricted": {
+                  "type": "boolean"
+                },
+                "sso:linked": {
+                  "type": "boolean"
+                },
+                "sso:invalid": {
+                  "type": "boolean"
+                },
+                "member-limit:restricted": {
+                  "type": "boolean"
+                },
+                "partnership:restricted": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "idp:provisioned",
+                "idp:role-restricted",
+                "member-limit:restricted",
+                "partnership:restricted",
+                "sso:invalid",
+                "sso:linked"
+              ]
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "inviteStatus": {
+              "type": "string"
+            },
+            "inviterName": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "required": [
+            "dateCreated",
+            "email",
+            "expired",
+            "flags",
+            "id",
+            "inviteStatus",
+            "inviterName",
+            "name",
+            "orgRole",
+            "pending",
+            "user"
+          ]
+        }
+      },
       "ListReplayClicks": {
         "type": "object",
         "properties": {
@@ -39848,6 +40739,348 @@
         "required": [
           "data",
           "meta"
+        ]
+      },
+      "OrganizationMember": {
+        "type": "object",
+        "properties": {
+          "externalUsers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "externalId": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "teamId": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "provider": {
+                  "type": "string"
+                },
+                "externalName": {
+                  "type": "string"
+                },
+                "integrationId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "externalName",
+                "id",
+                "integrationId",
+                "provider"
+              ]
+            }
+          },
+          "role": {
+            "type": "string"
+          },
+          "roleName": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "identities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organization": {
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "provider": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    },
+                    "dateVerified": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateSynced": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "dateSynced",
+                    "dateVerified",
+                    "id",
+                    "name",
+                    "organization",
+                    "provider"
+                  ]
+                }
+              },
+              "avatar": {
+                "type": "object",
+                "properties": {
+                  "avatarType": {
+                    "type": "string"
+                  },
+                  "avatarUuid": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              },
+              "authenticators": {
+                "type": "array",
+                "items": {}
+              },
+              "canReset2fa": {
+                "type": "boolean"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "avatarUrl": {
+                "type": "string"
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "hasPasswordAuth": {
+                "type": "boolean"
+              },
+              "isManaged": {
+                "type": "boolean"
+              },
+              "dateJoined": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastLogin": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "has2fa": {
+                "type": "boolean"
+              },
+              "lastActive": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "isSuperuser": {
+                "type": "boolean"
+              },
+              "isStaff": {
+                "type": "boolean"
+              },
+              "experiments": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "emails": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "is_verified": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "email",
+                    "id",
+                    "is_verified"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "avatarUrl",
+              "dateJoined",
+              "email",
+              "emails",
+              "experiments",
+              "has2fa",
+              "hasPasswordAuth",
+              "id",
+              "isActive",
+              "isManaged",
+              "isStaff",
+              "isSuperuser",
+              "lastActive",
+              "lastLogin",
+              "name",
+              "username"
+            ]
+          },
+          "orgRole": {
+            "type": "string"
+          },
+          "pending": {
+            "type": "boolean"
+          },
+          "expired": {
+            "type": "boolean"
+          },
+          "flags": {
+            "type": "object",
+            "properties": {
+              "idp:provisioned": {
+                "type": "boolean"
+              },
+              "idp:role-restricted": {
+                "type": "boolean"
+              },
+              "sso:linked": {
+                "type": "boolean"
+              },
+              "sso:invalid": {
+                "type": "boolean"
+              },
+              "member-limit:restricted": {
+                "type": "boolean"
+              },
+              "partnership:restricted": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "idp:provisioned",
+              "idp:role-restricted",
+              "member-limit:restricted",
+              "partnership:restricted",
+              "sso:invalid",
+              "sso:linked"
+            ]
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "inviteStatus": {
+            "type": "string"
+          },
+          "inviterName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "dateCreated",
+          "email",
+          "expired",
+          "flags",
+          "id",
+          "inviteStatus",
+          "inviterName",
+          "name",
+          "orgRole",
+          "pending",
+          "user"
+        ]
+      },
+      "OrganizationMemberRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email address to send the invitation to.",
+            "maxLength": 75
+          },
+          "orgRole": {
+            "enum": [
+              "billing",
+              "member",
+              "manager",
+              "owner",
+              "admin"
+            ],
+            "type": "string",
+            "default": "member",
+            "description": "The organization-level role of the new member. Roles include:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
+          },
+          "teamRoles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "nullable": true,
+            "default": [],
+            "description": "The team and team-roles assigned to the member. Team roles can be either:\n        - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.\n        - `admin` - Has full management access to their team's membership and projects."
+          },
+          "sendInvite": {
+            "type": "boolean",
+            "writeOnly": true,
+            "default": true,
+            "description": "Whether or not to send an invite notification through email. Defaults to True."
+          },
+          "reinvite": {
+            "type": "boolean",
+            "description": "Whether or not to re-invite a user who has already been invited to the organization. Defaults to True."
+          }
+        },
+        "required": [
+          "email"
         ]
       },
       "OrganizationMemberSCIM": {
@@ -41906,10 +43139,11 @@
             "enum": [
               "billing",
               "member",
-              "manager"
+              "manager",
+              "admin"
             ],
             "type": "string",
-            "description": "The organization role of the member. If unspecified, this will be\n                    set to the organization's default role. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership."
+            "description": "The organization role of the member. If unspecified, this will be\n                    set to the organization's default role. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
           }
         },
         "required": [
@@ -42726,10 +43960,11 @@
               "billing",
               "member",
               "manager",
-              "owner"
+              "owner",
+              "admin"
             ],
             "type": "string",
-            "description": "The organization role of the member. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes."
+            "description": "The organization role of the member. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
           },
           "teamRoles": {
             "type": "array",
