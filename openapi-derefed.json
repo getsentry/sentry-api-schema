@@ -16803,6 +16803,136 @@
         }
       }
     },
+    "/api/0/projects/{organization_slug}/{project_slug}/replays/{replay_id}/viewed-by/": {
+      "get": {
+        "operationId": "Get list of user who have viewed a replay",
+        "description": "Return a list of users who have viewed a replay.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "viewed_by": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        }
+                      },
+                      "required": [
+                        "viewed_by"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "GetListOfUsersWhoHaveViewedAReplay": {
+                    "value": {
+                      "data": {
+                        "viewed_by": [
+                          {
+                            "id": "884411",
+                            "name": "some.body@sentry.io",
+                            "username": "d93522a35cb64c13991104bd73d44519",
+                            "email": "some.body@sentry.io",
+                            "avatarUrl": "https://gravatar.com/avatar/d93522a35cb64c13991104bd73d44519d93522a35cb64c13991104bd73d44519?s=32&d=mm",
+                            "isActive": true,
+                            "hasPasswordAuth": false,
+                            "isManaged": false,
+                            "dateJoined": "2022-07-25T23:36:29.593212Z",
+                            "lastLogin": "2024-03-14T18:11:28.740309Z",
+                            "has2fa": true,
+                            "lastActive": "2024-03-15T22:22:06.925934Z",
+                            "isSuperuser": true,
+                            "isStaff": false,
+                            "experiments": {},
+                            "emails": [
+                              {
+                                "id": "2231333",
+                                "email": "some.body@sentry.io",
+                                "is_verified": true
+                              }
+                            ],
+                            "avatar": {
+                              "avatarType": "upload",
+                              "avatarUuid": "499dcd0764da42a589654a2224086e67",
+                              "avatarUrl": "https://sentry.io/avatar/499dcd0764da42a589654a2224086e67/"
+                            },
+                            "type": "user"
+                          }
+                        ]
+                      }
+                    },
+                    "summary": "Get list of users who have viewed a replay"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_slug}/{project_slug}/rules/": {
       "get": {
         "operationId": "List a Project's Issue Alert Rules",
@@ -38067,6 +38197,29 @@
           "type": "object",
           "additionalProperties": {}
         }
+      },
+      "GetReplayViewedBy": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "viewed_by": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              }
+            },
+            "required": [
+              "viewed_by"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
       },
       "Layout": {
         "type": "object",
