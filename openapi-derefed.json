@@ -144,9 +144,17 @@
                       },
                       "monitorType": {
                         "type": "integer"
+                      },
+                      "activations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
                       }
                     },
                     "required": [
+                      "activations",
                       "aggregate",
                       "createdBy",
                       "dateCreated",
@@ -213,7 +221,8 @@
                           "name": "John Doe",
                           "email": "john.doe@sentry.io"
                         },
-                        "monitorType": 0
+                        "monitorType": 0,
+                        "activations": []
                       }
                     ],
                     "summary": "List metric alert rules for an organization"
@@ -479,9 +488,17 @@
                     },
                     "monitorType": {
                       "type": "integer"
+                    },
+                    "activations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
                     }
                   },
                   "required": [
+                    "activations",
                     "aggregate",
                     "createdBy",
                     "dateCreated",
@@ -556,7 +573,8 @@
                         "name": "Jane Doe",
                         "email": "jane.doe@sentry.io"
                       },
-                      "monitorType": 0
+                      "monitorType": 0,
+                      "activations": []
                     },
                     "summary": "Create a metric alert rule for an organization"
                   }
@@ -714,9 +732,17 @@
                     },
                     "monitorType": {
                       "type": "integer"
+                    },
+                    "activations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
                     }
                   },
                   "required": [
+                    "activations",
                     "aggregate",
                     "createdBy",
                     "dateCreated",
@@ -771,7 +797,8 @@
                         "default",
                         "error"
                       ],
-                      "monitorType": 0
+                      "monitorType": 0,
+                      "activations": []
                     },
                     "summary": "Get detailed view about a metric alert rule"
                   }
@@ -1045,9 +1072,17 @@
                     },
                     "monitorType": {
                       "type": "integer"
+                    },
+                    "activations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
                     }
                   },
                   "required": [
+                    "activations",
                     "aggregate",
                     "createdBy",
                     "dateCreated",
@@ -1100,7 +1135,8 @@
                         "name": "Spongebob Squarepants",
                         "email": "spongebob.s@example.com"
                       },
-                      "monitorType": 0
+                      "monitorType": 0,
+                      "activations": []
                     },
                     "summary": "Update a metric alert rule"
                   }
@@ -1159,6 +1195,120 @@
         "responses": {
           "202": {
             "description": "Accepted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_slug}/alert-rules/{alert_rule_id}/activations/": {
+      "get": {
+        "operationId": "Retrieve activations for an AlertRule",
+        "description": "Return a list of activations for a metric alert rule.\n\nAn activation represents a single instance of an activated alert rule being triggered.\nIt contains a date_added field which represents the time the alert was triggered.\nActivations can be filtered by start and end parameters to return activations with date_added that falls within the specified time window.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "alert_rule_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the rule you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Alerts"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alert_rule:read",
+              "alerts:read",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "alertRuleId": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "finishedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "metricValue": {
+                        "type": "integer"
+                      },
+                      "querySubscriptionId": {
+                        "type": "string"
+                      },
+                      "isComplete": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "alertRuleId",
+                      "dateCreated",
+                      "finishedAt",
+                      "id",
+                      "isComplete",
+                      "metricValue",
+                      "querySubscriptionId"
+                    ]
+                  }
+                },
+                "examples": {
+                  "FetchAListOfActivationsForAMetricAlertRule": {
+                    "value": [
+                      {
+                        "id": "1",
+                        "alertRuleId": "1",
+                        "dateCreated": "2023-09-25T23:35:31.787875Z",
+                        "finishedAt": "2023-09-25T23:35:31.787866Z",
+                        "metricValue": 100,
+                        "querySubscriptionId": "1",
+                        "isComplete": true
+                      }
+                    ],
+                    "summary": "Fetch a list of activations for a metric alert rule"
+                  }
+                }
+              }
+            },
+            "description": ""
           },
           "401": {
             "description": "Unauthorized"
@@ -37455,9 +37605,17 @@
           },
           "monitorType": {
             "type": "integer"
+          },
+          "activations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
           }
         },
         "required": [
+          "activations",
           "aggregate",
           "createdBy",
           "dateCreated",
@@ -38452,6 +38610,46 @@
           "type"
         ]
       },
+      "ListAlertRuleActivations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "alertRuleId": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "finishedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "metricValue": {
+              "type": "integer"
+            },
+            "querySubscriptionId": {
+              "type": "string"
+            },
+            "isComplete": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "alertRuleId",
+            "dateCreated",
+            "finishedAt",
+            "id",
+            "isComplete",
+            "metricValue",
+            "querySubscriptionId"
+          ]
+        }
+      },
       "ListClientKeysResponse": {
         "type": "array",
         "items": {
@@ -38702,9 +38900,17 @@
             },
             "monitorType": {
               "type": "integer"
+            },
+            "activations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": {}
+              }
             }
           },
           "required": [
+            "activations",
             "aggregate",
             "createdBy",
             "dateCreated",
