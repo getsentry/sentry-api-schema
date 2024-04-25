@@ -3978,7 +3978,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_slug}/members/{member_id}/teams/{team_slug}/": {
+    "/api/0/organizations/{organization_slug}/members/{member_id}/teams/{team_id_or_slug}/": {
       "post": {
         "operationId": "Add an Organization Member to a Team",
         "description": "This request can return various success codes depending on the context of the team:\n- **`201`**: The member has been successfully added.\n- **`202`**: The member needs permission to join the team and an access request\nhas been generated.\n- **`204`**: The member is already on the team.\n\nIf the team is provisioned through an identity provider, the member cannot join the\nteam through Sentry.\n\nNote the permission scopes vary depending on the organization setting `\"Open Membership\"`\nand the type of authorization token. The following table outlines the accepted scopes.\n<table style=\"width: 100%;\">\n<thead>\n    <tr>\n    <th style=\"width: 33%;\"></th>\n    <th colspan=\"2\" style=\"text-align: center; font-weight: bold; width: 33%;\">Open Membership</th>\n    </tr>\n</thead>\n<tbody>\n    <tr>\n    <td style=\"width: 34%;\"></td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">On</td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">Off</td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/api/auth/#auth-tokens\">Org Auth Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; team:write</strong></li>\n        </ul>\n    </td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/api/auth/#user-authentication-tokens\">User Auth Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read +</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&nbsp; &nbsp;team:write**</strong></li>\n        </ul>\n    </td>\n    </tr>\n</tbody>\n</table>\n\n\n*Organization members are restricted to this scope. When sending a request, it will always\nreturn a 202 and request an invite to the team.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:write`** scopes in their user\nauthorization token to add members to their teams.",
@@ -4003,11 +4003,11 @@
           },
           {
             "in": "path",
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "schema": {
               "type": "string"
             },
-            "description": "The slug of the team the resource belongs to.",
+            "description": "The id or slug of the team the resource belongs to.",
             "required": true
           }
         ],
@@ -4179,11 +4179,11 @@
           },
           {
             "in": "path",
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "schema": {
               "type": "string"
             },
-            "description": "The slug of the team the resource belongs to.",
+            "description": "The id or slug of the team the resource belongs to.",
             "required": true
           }
         ],
@@ -19978,7 +19978,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_slug}/": {
+    "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_id_or_slug}/": {
       "post": {
         "operationId": "Add a Team to a Project",
         "description": "Give a team access to a project.",
@@ -20003,11 +20003,11 @@
           },
           {
             "in": "path",
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "schema": {
               "type": "string"
             },
-            "description": "The slug of the team the resource belongs to.",
+            "description": "The id or slug of the team the resource belongs to.",
             "required": true
           }
         ],
@@ -20309,11 +20309,11 @@
           },
           {
             "in": "path",
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "schema": {
               "type": "string"
             },
-            "description": "The slug of the team the resource belongs to.",
+            "description": "The id or slug of the team the resource belongs to.",
             "required": true
           }
         ],
@@ -20587,7 +20587,7 @@
         }
       }
     },
-    "/api/0/teams/{organization_slug}/{team_slug}/projects/": {
+    "/api/0/teams/{organization_slug}/{team_id_or_slug}/projects/": {
       "get": {
         "operationId": "List a Team's Projects",
         "description": "Return a list of projects bound to a team.",
@@ -20603,11 +20603,11 @@
           },
           {
             "in": "path",
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "schema": {
               "type": "string"
             },
-            "description": "The slug of the team the resource belongs to.",
+            "description": "The id or slug of the team the resource belongs to.",
             "required": true
           },
           {
@@ -20997,11 +20997,11 @@
           },
           {
             "in": "path",
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "schema": {
               "type": "string"
             },
-            "description": "The slug of the team the resource belongs to.",
+            "description": "The id or slug of the team the resource belongs to.",
             "required": true
           }
         ],
@@ -21262,7 +21262,7 @@
         }
       }
     },
-    "/api/0/teams/{organization_slug}/{team_slug}/": {
+    "/api/0/teams/{organization_slug}/{team_id_or_slug}/": {
       "get": {
         "tags": [
           "Teams"
@@ -21280,9 +21280,9 @@
             }
           },
           {
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "in": "path",
-            "description": "The slug of the team to get.",
+            "description": "The id or slug of the team to get.",
             "required": true,
             "schema": {
               "type": "string"
@@ -21475,9 +21475,9 @@
             }
           },
           {
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "in": "path",
-            "description": "The slug of the team to get.",
+            "description": "The id or slug of the team to get.",
             "required": true,
             "schema": {
               "type": "string"
@@ -21619,9 +21619,9 @@
             }
           },
           {
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "in": "path",
-            "description": "The slug of the team to get.",
+            "description": "The id or slug of the team to get.",
             "required": true,
             "schema": {
               "type": "string"
@@ -21648,7 +21648,7 @@
         ]
       }
     },
-    "/api/0/teams/{organization_slug}/{team_slug}/stats/": {
+    "/api/0/teams/{organization_slug}/{team_id_or_slug}/stats/": {
       "get": {
         "tags": [
           "Teams"
@@ -21667,9 +21667,9 @@
             }
           },
           {
-            "name": "team_slug",
+            "name": "team_id_or_slug",
             "in": "path",
-            "description": "The slug of the team to get.",
+            "description": "The id or slug of the team to get.",
             "required": true,
             "schema": {
               "type": "string"
