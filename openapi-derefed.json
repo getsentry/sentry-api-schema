@@ -14,6 +14,1766 @@
     }
   },
   "paths": {
+    "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/": {
+      "get": {
+        "operationId": "Retrieve an Organization Member",
+        "description": "Retrieve an organization member's details.\n\nWill return a pending invite as long as it's already approved.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the organization member.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:read",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "externalUsers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "externalId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "teamId": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "externalName": {
+                            "type": "string"
+                          },
+                          "integrationId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "externalName",
+                          "id",
+                          "integrationId",
+                          "provider"
+                        ]
+                      }
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "roleName": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    },
+                    "orgRole": {
+                      "type": "string"
+                    },
+                    "pending": {
+                      "type": "boolean"
+                    },
+                    "expired": {
+                      "type": "boolean"
+                    },
+                    "flags": {
+                      "type": "object",
+                      "properties": {
+                        "idp:provisioned": {
+                          "type": "boolean"
+                        },
+                        "idp:role-restricted": {
+                          "type": "boolean"
+                        },
+                        "sso:linked": {
+                          "type": "boolean"
+                        },
+                        "sso:invalid": {
+                          "type": "boolean"
+                        },
+                        "member-limit:restricted": {
+                          "type": "boolean"
+                        },
+                        "partnership:restricted": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "idp:provisioned",
+                        "idp:role-restricted",
+                        "member-limit:restricted",
+                        "partnership:restricted",
+                        "sso:invalid",
+                        "sso:linked"
+                      ]
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "inviteStatus": {
+                      "type": "string"
+                    },
+                    "inviterName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "teamRoles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "teamSlug": {
+                            "type": "string"
+                          },
+                          "role": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "role",
+                          "teamSlug"
+                        ]
+                      }
+                    },
+                    "roles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          },
+                          "isAllowed": {
+                            "type": "boolean"
+                          },
+                          "isRetired": {
+                            "type": "boolean"
+                          },
+                          "is_global": {
+                            "type": "boolean"
+                          },
+                          "isGlobal": {
+                            "type": "boolean"
+                          },
+                          "minimumTeamRole": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "isAllowed",
+                          "isGlobal",
+                          "isRetired",
+                          "is_global",
+                          "minimumTeamRole",
+                          "name",
+                          "scopes"
+                        ]
+                      }
+                    },
+                    "invite_link": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "isOnlyOwner": {
+                      "type": "boolean"
+                    },
+                    "orgRoleList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          },
+                          "isAllowed": {
+                            "type": "boolean"
+                          },
+                          "isRetired": {
+                            "type": "boolean"
+                          },
+                          "is_global": {
+                            "type": "boolean"
+                          },
+                          "isGlobal": {
+                            "type": "boolean"
+                          },
+                          "minimumTeamRole": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "isAllowed",
+                          "isGlobal",
+                          "isRetired",
+                          "is_global",
+                          "minimumTeamRole",
+                          "name",
+                          "scopes"
+                        ]
+                      }
+                    },
+                    "teamRoleList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          },
+                          "isAllowed": {
+                            "type": "boolean"
+                          },
+                          "isRetired": {
+                            "type": "boolean"
+                          },
+                          "isMinimumRoleFor": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "isAllowed",
+                          "isMinimumRoleFor",
+                          "isRetired",
+                          "name",
+                          "scopes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "email",
+                    "expired",
+                    "flags",
+                    "id",
+                    "inviteStatus",
+                    "invite_link",
+                    "inviterName",
+                    "isOnlyOwner",
+                    "name",
+                    "orgRole",
+                    "orgRoleList",
+                    "pending",
+                    "teamRoleList",
+                    "teamRoles",
+                    "teams",
+                    "user"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update an Organization Member's Roles",
+        "description": "Update a member's organization and team-level roles.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the member to update.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "orgRole": {
+                    "enum": [
+                      "billing",
+                      "member",
+                      "manager",
+                      "owner",
+                      "admin"
+                    ],
+                    "type": "string",
+                    "description": "The organization role of the member. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
+                  },
+                  "teamRoles": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "nullable": true,
+                    "default": [],
+                    "description": "\nConfigures the team role of the member. The two roles are:\n- `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.\n- `admin` - Has full management access to their team's membership and projects.\n```json\n{\n    \"teamRoles\": [\n        {\n            \"teamSlug\": \"ancient-gabelers\",\n            \"role\": \"admin\"\n        },\n        {\n            \"teamSlug\": \"powerful-abolitionist\",\n            \"role\": \"contributor\"\n        }\n    ]\n}\n```\n"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "externalUsers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "externalId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "teamId": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "externalName": {
+                            "type": "string"
+                          },
+                          "integrationId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "externalName",
+                          "id",
+                          "integrationId",
+                          "provider"
+                        ]
+                      }
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "roleName": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    },
+                    "orgRole": {
+                      "type": "string"
+                    },
+                    "pending": {
+                      "type": "boolean"
+                    },
+                    "expired": {
+                      "type": "boolean"
+                    },
+                    "flags": {
+                      "type": "object",
+                      "properties": {
+                        "idp:provisioned": {
+                          "type": "boolean"
+                        },
+                        "idp:role-restricted": {
+                          "type": "boolean"
+                        },
+                        "sso:linked": {
+                          "type": "boolean"
+                        },
+                        "sso:invalid": {
+                          "type": "boolean"
+                        },
+                        "member-limit:restricted": {
+                          "type": "boolean"
+                        },
+                        "partnership:restricted": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "idp:provisioned",
+                        "idp:role-restricted",
+                        "member-limit:restricted",
+                        "partnership:restricted",
+                        "sso:invalid",
+                        "sso:linked"
+                      ]
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "inviteStatus": {
+                      "type": "string"
+                    },
+                    "inviterName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "teamRoles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "teamSlug": {
+                            "type": "string"
+                          },
+                          "role": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "role",
+                          "teamSlug"
+                        ]
+                      }
+                    },
+                    "roles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          },
+                          "isAllowed": {
+                            "type": "boolean"
+                          },
+                          "isRetired": {
+                            "type": "boolean"
+                          },
+                          "is_global": {
+                            "type": "boolean"
+                          },
+                          "isGlobal": {
+                            "type": "boolean"
+                          },
+                          "minimumTeamRole": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "isAllowed",
+                          "isGlobal",
+                          "isRetired",
+                          "is_global",
+                          "minimumTeamRole",
+                          "name",
+                          "scopes"
+                        ]
+                      }
+                    },
+                    "invite_link": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "isOnlyOwner": {
+                      "type": "boolean"
+                    },
+                    "orgRoleList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          },
+                          "isAllowed": {
+                            "type": "boolean"
+                          },
+                          "isRetired": {
+                            "type": "boolean"
+                          },
+                          "is_global": {
+                            "type": "boolean"
+                          },
+                          "isGlobal": {
+                            "type": "boolean"
+                          },
+                          "minimumTeamRole": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "isAllowed",
+                          "isGlobal",
+                          "isRetired",
+                          "is_global",
+                          "minimumTeamRole",
+                          "name",
+                          "scopes"
+                        ]
+                      }
+                    },
+                    "teamRoleList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "desc": {
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowed": {
+                            "type": "boolean"
+                          },
+                          "isAllowed": {
+                            "type": "boolean"
+                          },
+                          "isRetired": {
+                            "type": "boolean"
+                          },
+                          "isMinimumRoleFor": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "allowed",
+                          "desc",
+                          "id",
+                          "isAllowed",
+                          "isMinimumRoleFor",
+                          "isRetired",
+                          "name",
+                          "scopes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "email",
+                    "expired",
+                    "flags",
+                    "id",
+                    "inviteStatus",
+                    "invite_link",
+                    "inviterName",
+                    "isOnlyOwner",
+                    "name",
+                    "orgRole",
+                    "orgRoleList",
+                    "pending",
+                    "teamRoleList",
+                    "teamRoles",
+                    "teams",
+                    "user"
+                  ]
+                },
+                "examples": {
+                  "UpdateOrganizationMember": {
+                    "value": {
+                      "id": "57377908164",
+                      "email": "sirpenguin@antarcticarocks.com",
+                      "name": "Sir Penguin",
+                      "user": {
+                        "id": "280094367316",
+                        "name": "Sir Penguin",
+                        "username": "sirpenguin@antarcticarocks.com",
+                        "email": "sirpenguin@antarcticarocks.com",
+                        "avatarUrl": "https://secure.gravatar.com/avatar/16aeb26c5fdba335c7078e9e9ddb5149?s=32&d=mm",
+                        "isActive": true,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-07-06T21:13:58.375239Z",
+                        "lastLogin": "2021-08-02T18:25:00.051182Z",
+                        "has2fa": false,
+                        "lastActive": "2021-08-02T21:32:18.836829Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "2153450836",
+                            "email": "sirpenguin@antarcticarocks.com",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null
+                        },
+                        "authenticators": [],
+                        "canReset2fa": true
+                      },
+                      "role": "member",
+                      "orgRole": "member",
+                      "roleName": "Member",
+                      "pending": false,
+                      "expired": false,
+                      "flags": {
+                        "idp:provisioned": false,
+                        "idp:role-restricted": false,
+                        "sso:linked": false,
+                        "sso:invalid": false,
+                        "member-limit:restricted": false,
+                        "partnership:restricted": false
+                      },
+                      "dateCreated": "2021-07-06T21:13:01.120263Z",
+                      "inviteStatus": "approved",
+                      "inviterName": "maininviter@antarcticarocks.com",
+                      "teams": [
+                        "cool-team",
+                        "ancient-gabelers"
+                      ],
+                      "teamRoles": [
+                        {
+                          "teamSlug": "ancient-gabelers",
+                          "role": "admin"
+                        },
+                        {
+                          "teamSlug": "powerful-abolitionist",
+                          "role": "contributor"
+                        }
+                      ],
+                      "invite_link": null,
+                      "isOnlyOwner": false,
+                      "orgRoleList": [
+                        {
+                          "id": "billing",
+                          "name": "Billing",
+                          "desc": "Can manage subscription and billing details.",
+                          "scopes": [
+                            "org:billing"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": false,
+                          "is_global": false,
+                          "isGlobal": false,
+                          "minimumTeamRole": "contributor"
+                        },
+                        {
+                          "id": "member",
+                          "name": "Member",
+                          "desc": "Members can view and act on events, as well as view most other data within the organization.",
+                          "scopes": [
+                            "team:read",
+                            "project:releases",
+                            "org:read",
+                            "event:read",
+                            "alerts:write",
+                            "member:read",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": false,
+                          "is_global": false,
+                          "isGlobal": false,
+                          "minimumTeamRole": "contributor"
+                        },
+                        {
+                          "id": "admin",
+                          "name": "Admin",
+                          "desc": "Admin privileges on any teams of which they're a member. They can create new teams and projects, as well as remove teams and projects on which they already hold membership (or all teams, if open membership is enabled). Additionally, they can manage memberships of teams that they are members of. They cannot invite members to the organization.",
+                          "scopes": [
+                            "team:admin",
+                            "org:integrations",
+                            "project:admin",
+                            "team:read",
+                            "project:releases",
+                            "org:read",
+                            "team:write",
+                            "event:read",
+                            "alerts:write",
+                            "member:read",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "project:write"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": true,
+                          "is_global": false,
+                          "isGlobal": false,
+                          "minimumTeamRole": "admin"
+                        },
+                        {
+                          "id": "manager",
+                          "name": "Manager",
+                          "desc": "Gains admin access on all teams as well as the ability to add and remove members.",
+                          "scopes": [
+                            "team:admin",
+                            "org:integrations",
+                            "project:releases",
+                            "team:write",
+                            "member:read",
+                            "org:write",
+                            "project:write",
+                            "project:admin",
+                            "team:read",
+                            "org:read",
+                            "event:read",
+                            "member:write",
+                            "alerts:write",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "member:admin"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": false,
+                          "is_global": true,
+                          "isGlobal": true,
+                          "minimumTeamRole": "admin"
+                        },
+                        {
+                          "id": "owner",
+                          "name": "Owner",
+                          "desc": "Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members, as well as make billing and plan changes.",
+                          "scopes": [
+                            "team:admin",
+                            "org:integrations",
+                            "project:releases",
+                            "org:admin",
+                            "team:write",
+                            "member:read",
+                            "org:write",
+                            "project:write",
+                            "project:admin",
+                            "team:read",
+                            "org:read",
+                            "event:read",
+                            "member:write",
+                            "alerts:write",
+                            "org:billing",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "member:admin"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": false,
+                          "is_global": true,
+                          "isGlobal": true,
+                          "minimumTeamRole": "admin"
+                        }
+                      ],
+                      "teamRoleList": [
+                        {
+                          "id": "contributor",
+                          "name": "Contributor",
+                          "desc": "Contributors can view and act on events, as well as view most other data within the team's projects.",
+                          "scopes": [
+                            "team:read",
+                            "project:releases",
+                            "org:read",
+                            "event:read",
+                            "member:read",
+                            "alerts:read",
+                            "project:read",
+                            "event:write"
+                          ],
+                          "allowed": false,
+                          "isAllowed": false,
+                          "isRetired": false,
+                          "isMinimumRoleFor": null
+                        },
+                        {
+                          "id": "admin",
+                          "name": "Team Admin",
+                          "desc": "Admin privileges on the team. They can create and remove projects, and can manage the team's memberships. They cannot invite members to the organization.",
+                          "scopes": [
+                            "team:admin",
+                            "org:integrations",
+                            "project:admin",
+                            "team:read",
+                            "project:releases",
+                            "org:read",
+                            "team:write",
+                            "event:read",
+                            "alerts:write",
+                            "member:read",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "project:write"
+                          ],
+                          "allowed": false,
+                          "isAllowed": false,
+                          "isRetired": false,
+                          "isMinimumRoleFor": "admin"
+                        }
+                      ]
+                    },
+                    "summary": "Update organization member"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an Organization Member",
+        "description": "Remove an organization member.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the member to delete.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:read",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/": {
+      "post": {
+        "operationId": "Add an Organization Member to a Team",
+        "description": "This request can return various success codes depending on the context of the team:\n- **`201`**: The member has been successfully added.\n- **`202`**: The member needs permission to join the team and an access request\nhas been generated.\n- **`204`**: The member is already on the team.\n\nIf the team is provisioned through an identity provider, the member cannot join the\nteam through Sentry.\n\nNote the permission scopes vary depending on the organization setting `\"Open Membership\"`\nand the type of authorization token. The following table outlines the accepted scopes.\n<table style=\"width: 100%;\">\n<thead>\n    <tr>\n    <th style=\"width: 33%;\"></th>\n    <th colspan=\"2\" style=\"text-align: center; font-weight: bold; width: 33%;\">Open Membership</th>\n    </tr>\n</thead>\n<tbody>\n    <tr>\n    <td style=\"width: 34%;\"></td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">On</td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">Off</td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/api/auth/#auth-tokens\">Org Auth Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; team:write</strong></li>\n        </ul>\n    </td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/api/auth/#user-authentication-tokens\">User Auth Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read +</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&nbsp; &nbsp;team:write**</strong></li>\n        </ul>\n    </td>\n    </tr>\n</tbody>\n</table>\n\n\n*Organization members are restricted to this scope. When sending a request, it will always\nreturn a 202 and request an invite to the team.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:write`** scopes in their user\nauthorization token to add members to their teams.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the organization member to add to the team",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the team the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Teams"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:read",
+              "org:write",
+              "team:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isMember": {
+                      "type": "boolean"
+                    },
+                    "teamRole": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "flags": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasAccess": {
+                      "type": "boolean"
+                    },
+                    "isPending": {
+                      "type": "boolean"
+                    },
+                    "memberCount": {
+                      "type": "integer"
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "avatarUrl": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "avatar",
+                    "dateCreated",
+                    "flags",
+                    "hasAccess",
+                    "id",
+                    "isMember",
+                    "isPending",
+                    "memberCount",
+                    "name",
+                    "slug",
+                    "teamRole"
+                  ]
+                },
+                "examples": {
+                  "Join,RequestAccessToOrAddAMemberToATeam": {
+                    "value": {
+                      "id": "4502349234123",
+                      "slug": "ancient-gabelers",
+                      "name": "Ancient Gabelers",
+                      "dateCreated": "2023-05-31T19:47:53.621181Z",
+                      "isMember": true,
+                      "teamRole": "contributor",
+                      "flags": {
+                        "idp:provisioned": false
+                      },
+                      "access": [
+                        "alerts:read",
+                        "event:write",
+                        "project:read",
+                        "team:read",
+                        "member:read",
+                        "project:releases",
+                        "event:read",
+                        "org:read"
+                      ],
+                      "hasAccess": true,
+                      "isPending": false,
+                      "memberCount": 3,
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      }
+                    },
+                    "summary": "Join, request access to or add a member to a team"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "202": {
+            "description": "Accepted"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "This team is managed through your organization's identity provider"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an Organization Member from a Team",
+        "description": "Delete an organization member from a team.\n\nNote the permission scopes vary depending on the type of authorization token. The following\ntable outlines the accepted scopes.\n<table style=\"width: 100%;\">\n    <tr style=\"width: 50%;\">\n        <td style=\"width: 50%; text-align: center; font-weight: bold; vertical-align: middle;\"><a href=\"https://docs.sentry.io/api/auth/#auth-tokens\">Org Auth Token</a></td>\n        <td style=\"width: 50%; text-align: left;\">\n            <ul style=\"list-style-type: none; padding-left: 0;\">\n                <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; team:admin</strong></li>\n            </ul>\n        </td>\n    </tr>\n    <tr style=\"width: 50%;\">\n        <td style=\"width: 50%; text-align: center; font-weight: bold; vertical-align: middle;\"><a href=\"https://docs.sentry.io/api/auth/#user-authentication-tokens\">User Auth Token</a></td>\n        <td style=\"width: 50%; text-align: left;\">\n            <ul style=\"list-style-type: none; padding-left: 0;\">\n                <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; team:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:read + team:admin**</strong></li>\n            </ul>\n        </td>\n    </tr>\n</table>\n\n\n\\***`org:read`** can only be used to remove yourself from the teams you are a member of.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:admin`** scopes in their user\nauthorization token to delete members from their teams.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the organization member to delete from the team",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the team the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Teams"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write",
+              "team:admin"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isMember": {
+                      "type": "boolean"
+                    },
+                    "teamRole": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "flags": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasAccess": {
+                      "type": "boolean"
+                    },
+                    "isPending": {
+                      "type": "boolean"
+                    },
+                    "memberCount": {
+                      "type": "integer"
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "avatarUrl": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "avatar",
+                    "dateCreated",
+                    "flags",
+                    "hasAccess",
+                    "id",
+                    "isMember",
+                    "isPending",
+                    "memberCount",
+                    "name",
+                    "slug",
+                    "teamRole"
+                  ]
+                },
+                "examples": {
+                  "RemoveAMemberFromATeam": {
+                    "value": {
+                      "id": "4502349234123",
+                      "slug": "ancient-gabelers",
+                      "name": "Ancient Gabelers",
+                      "dateCreated": "2023-05-31T19:47:53.621181Z",
+                      "isMember": false,
+                      "teamRole": null,
+                      "flags": {
+                        "idp:provisioned": false
+                      },
+                      "access": [
+                        "alerts:read",
+                        "event:write",
+                        "project:read",
+                        "team:read",
+                        "member:read",
+                        "project:releases",
+                        "event:read",
+                        "org:read"
+                      ],
+                      "hasAccess": true,
+                      "isPending": false,
+                      "memberCount": 3,
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      }
+                    },
+                    "summary": "Remove a member from a team"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "This team is managed through your organization's identity provider"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_slug}/alert-rules/": {
       "get": {
         "operationId": "List an Organization's Metric Alert Rules",
@@ -2570,1766 +4330,6 @@
           },
           "403": {
             "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/organizations/{organization_slug}/members/{member_id}/": {
-      "get": {
-        "operationId": "Retrieve an Organization Member",
-        "description": "Retrieve an organization member's details.\n\nWill return a pending invite as long as it's already approved.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "member_id",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID of the organization member.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Organizations"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "member:admin",
-              "member:read",
-              "member:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "externalUsers": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "externalId": {
-                            "type": "string"
-                          },
-                          "userId": {
-                            "type": "string"
-                          },
-                          "teamId": {
-                            "type": "string"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "provider": {
-                            "type": "string"
-                          },
-                          "externalName": {
-                            "type": "string"
-                          },
-                          "integrationId": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "externalName",
-                          "id",
-                          "integrationId",
-                          "provider"
-                        ]
-                      }
-                    },
-                    "role": {
-                      "type": "string"
-                    },
-                    "roleName": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "user": {
-                      "type": "object",
-                      "properties": {
-                        "identities": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "organization": {
-                                "type": "object",
-                                "properties": {
-                                  "slug": {
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "name",
-                                  "slug"
-                                ]
-                              },
-                              "provider": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "id",
-                                  "name"
-                                ]
-                              },
-                              "dateVerified": {
-                                "type": "string",
-                                "format": "date-time"
-                              },
-                              "dateSynced": {
-                                "type": "string",
-                                "format": "date-time"
-                              }
-                            },
-                            "required": [
-                              "dateSynced",
-                              "dateVerified",
-                              "id",
-                              "name",
-                              "organization",
-                              "provider"
-                            ]
-                          }
-                        },
-                        "avatar": {
-                          "type": "object",
-                          "properties": {
-                            "avatarType": {
-                              "type": "string"
-                            },
-                            "avatarUuid": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "avatarUrl": {
-                              "type": "string",
-                              "nullable": true
-                            }
-                          }
-                        },
-                        "authenticators": {
-                          "type": "array",
-                          "items": {}
-                        },
-                        "canReset2fa": {
-                          "type": "boolean"
-                        },
-                        "id": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "username": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "avatarUrl": {
-                          "type": "string"
-                        },
-                        "isActive": {
-                          "type": "boolean"
-                        },
-                        "hasPasswordAuth": {
-                          "type": "boolean"
-                        },
-                        "isManaged": {
-                          "type": "boolean"
-                        },
-                        "dateJoined": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "lastLogin": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "has2fa": {
-                          "type": "boolean"
-                        },
-                        "lastActive": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "isSuperuser": {
-                          "type": "boolean"
-                        },
-                        "isStaff": {
-                          "type": "boolean"
-                        },
-                        "experiments": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        "emails": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "email": {
-                                "type": "string"
-                              },
-                              "is_verified": {
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "email",
-                              "id",
-                              "is_verified"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "avatarUrl",
-                        "dateJoined",
-                        "email",
-                        "emails",
-                        "experiments",
-                        "has2fa",
-                        "hasPasswordAuth",
-                        "id",
-                        "isActive",
-                        "isManaged",
-                        "isStaff",
-                        "isSuperuser",
-                        "lastActive",
-                        "lastLogin",
-                        "name",
-                        "username"
-                      ]
-                    },
-                    "orgRole": {
-                      "type": "string"
-                    },
-                    "pending": {
-                      "type": "boolean"
-                    },
-                    "expired": {
-                      "type": "boolean"
-                    },
-                    "flags": {
-                      "type": "object",
-                      "properties": {
-                        "idp:provisioned": {
-                          "type": "boolean"
-                        },
-                        "idp:role-restricted": {
-                          "type": "boolean"
-                        },
-                        "sso:linked": {
-                          "type": "boolean"
-                        },
-                        "sso:invalid": {
-                          "type": "boolean"
-                        },
-                        "member-limit:restricted": {
-                          "type": "boolean"
-                        },
-                        "partnership:restricted": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "idp:provisioned",
-                        "idp:role-restricted",
-                        "member-limit:restricted",
-                        "partnership:restricted",
-                        "sso:invalid",
-                        "sso:linked"
-                      ]
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "inviteStatus": {
-                      "type": "string"
-                    },
-                    "inviterName": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "teams": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "teamRoles": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "teamSlug": {
-                            "type": "string"
-                          },
-                          "role": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "role",
-                          "teamSlug"
-                        ]
-                      }
-                    },
-                    "roles": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "desc": {
-                            "type": "string"
-                          },
-                          "scopes": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "allowed": {
-                            "type": "boolean"
-                          },
-                          "isAllowed": {
-                            "type": "boolean"
-                          },
-                          "isRetired": {
-                            "type": "boolean"
-                          },
-                          "is_global": {
-                            "type": "boolean"
-                          },
-                          "isGlobal": {
-                            "type": "boolean"
-                          },
-                          "minimumTeamRole": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "allowed",
-                          "desc",
-                          "id",
-                          "isAllowed",
-                          "isGlobal",
-                          "isRetired",
-                          "is_global",
-                          "minimumTeamRole",
-                          "name",
-                          "scopes"
-                        ]
-                      }
-                    },
-                    "invite_link": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "isOnlyOwner": {
-                      "type": "boolean"
-                    },
-                    "orgRoleList": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "desc": {
-                            "type": "string"
-                          },
-                          "scopes": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "allowed": {
-                            "type": "boolean"
-                          },
-                          "isAllowed": {
-                            "type": "boolean"
-                          },
-                          "isRetired": {
-                            "type": "boolean"
-                          },
-                          "is_global": {
-                            "type": "boolean"
-                          },
-                          "isGlobal": {
-                            "type": "boolean"
-                          },
-                          "minimumTeamRole": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "allowed",
-                          "desc",
-                          "id",
-                          "isAllowed",
-                          "isGlobal",
-                          "isRetired",
-                          "is_global",
-                          "minimumTeamRole",
-                          "name",
-                          "scopes"
-                        ]
-                      }
-                    },
-                    "teamRoleList": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "desc": {
-                            "type": "string"
-                          },
-                          "scopes": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "allowed": {
-                            "type": "boolean"
-                          },
-                          "isAllowed": {
-                            "type": "boolean"
-                          },
-                          "isRetired": {
-                            "type": "boolean"
-                          },
-                          "isMinimumRoleFor": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        },
-                        "required": [
-                          "allowed",
-                          "desc",
-                          "id",
-                          "isAllowed",
-                          "isMinimumRoleFor",
-                          "isRetired",
-                          "name",
-                          "scopes"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "dateCreated",
-                    "email",
-                    "expired",
-                    "flags",
-                    "id",
-                    "inviteStatus",
-                    "invite_link",
-                    "inviterName",
-                    "isOnlyOwner",
-                    "name",
-                    "orgRole",
-                    "orgRoleList",
-                    "pending",
-                    "teamRoleList",
-                    "teamRoles",
-                    "teams",
-                    "user"
-                  ]
-                }
-              }
-            },
-            "description": ""
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "operationId": "Update an Organization Member's Roles",
-        "description": "Update a member's organization and team-level roles.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "member_id",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID of the member to update.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Organizations"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "orgRole": {
-                    "enum": [
-                      "billing",
-                      "member",
-                      "manager",
-                      "owner",
-                      "admin"
-                    ],
-                    "type": "string",
-                    "description": "The organization role of the member. The options are:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
-                  },
-                  "teamRoles": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    },
-                    "nullable": true,
-                    "default": [],
-                    "description": "\nConfigures the team role of the member. The two roles are:\n- `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.\n- `admin` - Has full management access to their team's membership and projects.\n```json\n{\n    \"teamRoles\": [\n        {\n            \"teamSlug\": \"ancient-gabelers\",\n            \"role\": \"admin\"\n        },\n        {\n            \"teamSlug\": \"powerful-abolitionist\",\n            \"role\": \"contributor\"\n        }\n    ]\n}\n```\n"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "member:admin",
-              "member:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "externalUsers": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "externalId": {
-                            "type": "string"
-                          },
-                          "userId": {
-                            "type": "string"
-                          },
-                          "teamId": {
-                            "type": "string"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "provider": {
-                            "type": "string"
-                          },
-                          "externalName": {
-                            "type": "string"
-                          },
-                          "integrationId": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "externalName",
-                          "id",
-                          "integrationId",
-                          "provider"
-                        ]
-                      }
-                    },
-                    "role": {
-                      "type": "string"
-                    },
-                    "roleName": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "user": {
-                      "type": "object",
-                      "properties": {
-                        "identities": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "organization": {
-                                "type": "object",
-                                "properties": {
-                                  "slug": {
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "name",
-                                  "slug"
-                                ]
-                              },
-                              "provider": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "id",
-                                  "name"
-                                ]
-                              },
-                              "dateVerified": {
-                                "type": "string",
-                                "format": "date-time"
-                              },
-                              "dateSynced": {
-                                "type": "string",
-                                "format": "date-time"
-                              }
-                            },
-                            "required": [
-                              "dateSynced",
-                              "dateVerified",
-                              "id",
-                              "name",
-                              "organization",
-                              "provider"
-                            ]
-                          }
-                        },
-                        "avatar": {
-                          "type": "object",
-                          "properties": {
-                            "avatarType": {
-                              "type": "string"
-                            },
-                            "avatarUuid": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "avatarUrl": {
-                              "type": "string",
-                              "nullable": true
-                            }
-                          }
-                        },
-                        "authenticators": {
-                          "type": "array",
-                          "items": {}
-                        },
-                        "canReset2fa": {
-                          "type": "boolean"
-                        },
-                        "id": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "username": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "avatarUrl": {
-                          "type": "string"
-                        },
-                        "isActive": {
-                          "type": "boolean"
-                        },
-                        "hasPasswordAuth": {
-                          "type": "boolean"
-                        },
-                        "isManaged": {
-                          "type": "boolean"
-                        },
-                        "dateJoined": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "lastLogin": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "has2fa": {
-                          "type": "boolean"
-                        },
-                        "lastActive": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "isSuperuser": {
-                          "type": "boolean"
-                        },
-                        "isStaff": {
-                          "type": "boolean"
-                        },
-                        "experiments": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        "emails": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "email": {
-                                "type": "string"
-                              },
-                              "is_verified": {
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "email",
-                              "id",
-                              "is_verified"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "avatarUrl",
-                        "dateJoined",
-                        "email",
-                        "emails",
-                        "experiments",
-                        "has2fa",
-                        "hasPasswordAuth",
-                        "id",
-                        "isActive",
-                        "isManaged",
-                        "isStaff",
-                        "isSuperuser",
-                        "lastActive",
-                        "lastLogin",
-                        "name",
-                        "username"
-                      ]
-                    },
-                    "orgRole": {
-                      "type": "string"
-                    },
-                    "pending": {
-                      "type": "boolean"
-                    },
-                    "expired": {
-                      "type": "boolean"
-                    },
-                    "flags": {
-                      "type": "object",
-                      "properties": {
-                        "idp:provisioned": {
-                          "type": "boolean"
-                        },
-                        "idp:role-restricted": {
-                          "type": "boolean"
-                        },
-                        "sso:linked": {
-                          "type": "boolean"
-                        },
-                        "sso:invalid": {
-                          "type": "boolean"
-                        },
-                        "member-limit:restricted": {
-                          "type": "boolean"
-                        },
-                        "partnership:restricted": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "idp:provisioned",
-                        "idp:role-restricted",
-                        "member-limit:restricted",
-                        "partnership:restricted",
-                        "sso:invalid",
-                        "sso:linked"
-                      ]
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "inviteStatus": {
-                      "type": "string"
-                    },
-                    "inviterName": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "teams": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "teamRoles": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "teamSlug": {
-                            "type": "string"
-                          },
-                          "role": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "role",
-                          "teamSlug"
-                        ]
-                      }
-                    },
-                    "roles": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "desc": {
-                            "type": "string"
-                          },
-                          "scopes": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "allowed": {
-                            "type": "boolean"
-                          },
-                          "isAllowed": {
-                            "type": "boolean"
-                          },
-                          "isRetired": {
-                            "type": "boolean"
-                          },
-                          "is_global": {
-                            "type": "boolean"
-                          },
-                          "isGlobal": {
-                            "type": "boolean"
-                          },
-                          "minimumTeamRole": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "allowed",
-                          "desc",
-                          "id",
-                          "isAllowed",
-                          "isGlobal",
-                          "isRetired",
-                          "is_global",
-                          "minimumTeamRole",
-                          "name",
-                          "scopes"
-                        ]
-                      }
-                    },
-                    "invite_link": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "isOnlyOwner": {
-                      "type": "boolean"
-                    },
-                    "orgRoleList": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "desc": {
-                            "type": "string"
-                          },
-                          "scopes": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "allowed": {
-                            "type": "boolean"
-                          },
-                          "isAllowed": {
-                            "type": "boolean"
-                          },
-                          "isRetired": {
-                            "type": "boolean"
-                          },
-                          "is_global": {
-                            "type": "boolean"
-                          },
-                          "isGlobal": {
-                            "type": "boolean"
-                          },
-                          "minimumTeamRole": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "allowed",
-                          "desc",
-                          "id",
-                          "isAllowed",
-                          "isGlobal",
-                          "isRetired",
-                          "is_global",
-                          "minimumTeamRole",
-                          "name",
-                          "scopes"
-                        ]
-                      }
-                    },
-                    "teamRoleList": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "desc": {
-                            "type": "string"
-                          },
-                          "scopes": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "allowed": {
-                            "type": "boolean"
-                          },
-                          "isAllowed": {
-                            "type": "boolean"
-                          },
-                          "isRetired": {
-                            "type": "boolean"
-                          },
-                          "isMinimumRoleFor": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        },
-                        "required": [
-                          "allowed",
-                          "desc",
-                          "id",
-                          "isAllowed",
-                          "isMinimumRoleFor",
-                          "isRetired",
-                          "name",
-                          "scopes"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "dateCreated",
-                    "email",
-                    "expired",
-                    "flags",
-                    "id",
-                    "inviteStatus",
-                    "invite_link",
-                    "inviterName",
-                    "isOnlyOwner",
-                    "name",
-                    "orgRole",
-                    "orgRoleList",
-                    "pending",
-                    "teamRoleList",
-                    "teamRoles",
-                    "teams",
-                    "user"
-                  ]
-                },
-                "examples": {
-                  "UpdateOrganizationMember": {
-                    "value": {
-                      "id": "57377908164",
-                      "email": "sirpenguin@antarcticarocks.com",
-                      "name": "Sir Penguin",
-                      "user": {
-                        "id": "280094367316",
-                        "name": "Sir Penguin",
-                        "username": "sirpenguin@antarcticarocks.com",
-                        "email": "sirpenguin@antarcticarocks.com",
-                        "avatarUrl": "https://secure.gravatar.com/avatar/16aeb26c5fdba335c7078e9e9ddb5149?s=32&d=mm",
-                        "isActive": true,
-                        "hasPasswordAuth": true,
-                        "isManaged": false,
-                        "dateJoined": "2021-07-06T21:13:58.375239Z",
-                        "lastLogin": "2021-08-02T18:25:00.051182Z",
-                        "has2fa": false,
-                        "lastActive": "2021-08-02T21:32:18.836829Z",
-                        "isSuperuser": false,
-                        "isStaff": false,
-                        "experiments": {},
-                        "emails": [
-                          {
-                            "id": "2153450836",
-                            "email": "sirpenguin@antarcticarocks.com",
-                            "is_verified": true
-                          }
-                        ],
-                        "avatar": {
-                          "avatarType": "letter_avatar",
-                          "avatarUuid": null
-                        },
-                        "authenticators": [],
-                        "canReset2fa": true
-                      },
-                      "role": "member",
-                      "orgRole": "member",
-                      "roleName": "Member",
-                      "pending": false,
-                      "expired": false,
-                      "flags": {
-                        "idp:provisioned": false,
-                        "idp:role-restricted": false,
-                        "sso:linked": false,
-                        "sso:invalid": false,
-                        "member-limit:restricted": false,
-                        "partnership:restricted": false
-                      },
-                      "dateCreated": "2021-07-06T21:13:01.120263Z",
-                      "inviteStatus": "approved",
-                      "inviterName": "maininviter@antarcticarocks.com",
-                      "teams": [
-                        "cool-team",
-                        "ancient-gabelers"
-                      ],
-                      "teamRoles": [
-                        {
-                          "teamSlug": "ancient-gabelers",
-                          "role": "admin"
-                        },
-                        {
-                          "teamSlug": "powerful-abolitionist",
-                          "role": "contributor"
-                        }
-                      ],
-                      "invite_link": null,
-                      "isOnlyOwner": false,
-                      "orgRoleList": [
-                        {
-                          "id": "billing",
-                          "name": "Billing",
-                          "desc": "Can manage subscription and billing details.",
-                          "scopes": [
-                            "org:billing"
-                          ],
-                          "allowed": true,
-                          "isAllowed": true,
-                          "isRetired": false,
-                          "is_global": false,
-                          "isGlobal": false,
-                          "minimumTeamRole": "contributor"
-                        },
-                        {
-                          "id": "member",
-                          "name": "Member",
-                          "desc": "Members can view and act on events, as well as view most other data within the organization.",
-                          "scopes": [
-                            "team:read",
-                            "project:releases",
-                            "org:read",
-                            "event:read",
-                            "alerts:write",
-                            "member:read",
-                            "alerts:read",
-                            "event:admin",
-                            "project:read",
-                            "event:write"
-                          ],
-                          "allowed": true,
-                          "isAllowed": true,
-                          "isRetired": false,
-                          "is_global": false,
-                          "isGlobal": false,
-                          "minimumTeamRole": "contributor"
-                        },
-                        {
-                          "id": "admin",
-                          "name": "Admin",
-                          "desc": "Admin privileges on any teams of which they're a member. They can create new teams and projects, as well as remove teams and projects on which they already hold membership (or all teams, if open membership is enabled). Additionally, they can manage memberships of teams that they are members of. They cannot invite members to the organization.",
-                          "scopes": [
-                            "team:admin",
-                            "org:integrations",
-                            "project:admin",
-                            "team:read",
-                            "project:releases",
-                            "org:read",
-                            "team:write",
-                            "event:read",
-                            "alerts:write",
-                            "member:read",
-                            "alerts:read",
-                            "event:admin",
-                            "project:read",
-                            "event:write",
-                            "project:write"
-                          ],
-                          "allowed": true,
-                          "isAllowed": true,
-                          "isRetired": true,
-                          "is_global": false,
-                          "isGlobal": false,
-                          "minimumTeamRole": "admin"
-                        },
-                        {
-                          "id": "manager",
-                          "name": "Manager",
-                          "desc": "Gains admin access on all teams as well as the ability to add and remove members.",
-                          "scopes": [
-                            "team:admin",
-                            "org:integrations",
-                            "project:releases",
-                            "team:write",
-                            "member:read",
-                            "org:write",
-                            "project:write",
-                            "project:admin",
-                            "team:read",
-                            "org:read",
-                            "event:read",
-                            "member:write",
-                            "alerts:write",
-                            "alerts:read",
-                            "event:admin",
-                            "project:read",
-                            "event:write",
-                            "member:admin"
-                          ],
-                          "allowed": true,
-                          "isAllowed": true,
-                          "isRetired": false,
-                          "is_global": true,
-                          "isGlobal": true,
-                          "minimumTeamRole": "admin"
-                        },
-                        {
-                          "id": "owner",
-                          "name": "Owner",
-                          "desc": "Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members, as well as make billing and plan changes.",
-                          "scopes": [
-                            "team:admin",
-                            "org:integrations",
-                            "project:releases",
-                            "org:admin",
-                            "team:write",
-                            "member:read",
-                            "org:write",
-                            "project:write",
-                            "project:admin",
-                            "team:read",
-                            "org:read",
-                            "event:read",
-                            "member:write",
-                            "alerts:write",
-                            "org:billing",
-                            "alerts:read",
-                            "event:admin",
-                            "project:read",
-                            "event:write",
-                            "member:admin"
-                          ],
-                          "allowed": true,
-                          "isAllowed": true,
-                          "isRetired": false,
-                          "is_global": true,
-                          "isGlobal": true,
-                          "minimumTeamRole": "admin"
-                        }
-                      ],
-                      "teamRoleList": [
-                        {
-                          "id": "contributor",
-                          "name": "Contributor",
-                          "desc": "Contributors can view and act on events, as well as view most other data within the team's projects.",
-                          "scopes": [
-                            "team:read",
-                            "project:releases",
-                            "org:read",
-                            "event:read",
-                            "member:read",
-                            "alerts:read",
-                            "project:read",
-                            "event:write"
-                          ],
-                          "allowed": false,
-                          "isAllowed": false,
-                          "isRetired": false,
-                          "isMinimumRoleFor": null
-                        },
-                        {
-                          "id": "admin",
-                          "name": "Team Admin",
-                          "desc": "Admin privileges on the team. They can create and remove projects, and can manage the team's memberships. They cannot invite members to the organization.",
-                          "scopes": [
-                            "team:admin",
-                            "org:integrations",
-                            "project:admin",
-                            "team:read",
-                            "project:releases",
-                            "org:read",
-                            "team:write",
-                            "event:read",
-                            "alerts:write",
-                            "member:read",
-                            "alerts:read",
-                            "event:admin",
-                            "project:read",
-                            "event:write",
-                            "project:write"
-                          ],
-                          "allowed": false,
-                          "isAllowed": false,
-                          "isRetired": false,
-                          "isMinimumRoleFor": "admin"
-                        }
-                      ]
-                    },
-                    "summary": "Update organization member"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "delete": {
-        "operationId": "Delete an Organization Member",
-        "description": "Remove an organization member.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "member_id",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID of the member to delete.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Organizations"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "member:admin",
-              "member:read",
-              "member:write"
-            ]
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/organizations/{organization_slug}/members/{member_id}/teams/{team_id_or_slug}/": {
-      "post": {
-        "operationId": "Add an Organization Member to a Team",
-        "description": "This request can return various success codes depending on the context of the team:\n- **`201`**: The member has been successfully added.\n- **`202`**: The member needs permission to join the team and an access request\nhas been generated.\n- **`204`**: The member is already on the team.\n\nIf the team is provisioned through an identity provider, the member cannot join the\nteam through Sentry.\n\nNote the permission scopes vary depending on the organization setting `\"Open Membership\"`\nand the type of authorization token. The following table outlines the accepted scopes.\n<table style=\"width: 100%;\">\n<thead>\n    <tr>\n    <th style=\"width: 33%;\"></th>\n    <th colspan=\"2\" style=\"text-align: center; font-weight: bold; width: 33%;\">Open Membership</th>\n    </tr>\n</thead>\n<tbody>\n    <tr>\n    <td style=\"width: 34%;\"></td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">On</td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">Off</td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/api/auth/#auth-tokens\">Org Auth Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; team:write</strong></li>\n        </ul>\n    </td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/api/auth/#user-authentication-tokens\">User Auth Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read +</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&nbsp; &nbsp;team:write**</strong></li>\n        </ul>\n    </td>\n    </tr>\n</tbody>\n</table>\n\n\n*Organization members are restricted to this scope. When sending a request, it will always\nreturn a 202 and request an invite to the team.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:write`** scopes in their user\nauthorization token to add members to their teams.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "member_id",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID of the organization member to add to the team",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "team_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the team the resource belongs to.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Teams"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "org:read",
-              "org:write",
-              "team:write"
-            ]
-          }
-        ],
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "slug": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "isMember": {
-                      "type": "boolean"
-                    },
-                    "teamRole": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "flags": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    },
-                    "access": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "hasAccess": {
-                      "type": "boolean"
-                    },
-                    "isPending": {
-                      "type": "boolean"
-                    },
-                    "memberCount": {
-                      "type": "integer"
-                    },
-                    "avatar": {
-                      "type": "object",
-                      "properties": {
-                        "avatarType": {
-                          "type": "string"
-                        },
-                        "avatarUuid": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "avatarUrl": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "access",
-                    "avatar",
-                    "dateCreated",
-                    "flags",
-                    "hasAccess",
-                    "id",
-                    "isMember",
-                    "isPending",
-                    "memberCount",
-                    "name",
-                    "slug",
-                    "teamRole"
-                  ]
-                },
-                "examples": {
-                  "Join,RequestAccessToOrAddAMemberToATeam": {
-                    "value": {
-                      "id": "4502349234123",
-                      "slug": "ancient-gabelers",
-                      "name": "Ancient Gabelers",
-                      "dateCreated": "2023-05-31T19:47:53.621181Z",
-                      "isMember": true,
-                      "teamRole": "contributor",
-                      "flags": {
-                        "idp:provisioned": false
-                      },
-                      "access": [
-                        "alerts:read",
-                        "event:write",
-                        "project:read",
-                        "team:read",
-                        "member:read",
-                        "project:releases",
-                        "event:read",
-                        "org:read"
-                      ],
-                      "hasAccess": true,
-                      "isPending": false,
-                      "memberCount": 3,
-                      "avatar": {
-                        "avatarType": "letter_avatar",
-                        "avatarUuid": null
-                      }
-                    },
-                    "summary": "Join, request access to or add a member to a team"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "202": {
-            "description": "Accepted"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "This team is managed through your organization's identity provider"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "delete": {
-        "operationId": "Delete an Organization Member from a Team",
-        "description": "Delete an organization member from a team.\n\nNote the permission scopes vary depending on the type of authorization token. The following\ntable outlines the accepted scopes.\n<table style=\"width: 100%;\">\n    <tr style=\"width: 50%;\">\n        <td style=\"width: 50%; text-align: center; font-weight: bold; vertical-align: middle;\"><a href=\"https://docs.sentry.io/api/auth/#auth-tokens\">Org Auth Token</a></td>\n        <td style=\"width: 50%; text-align: left;\">\n            <ul style=\"list-style-type: none; padding-left: 0;\">\n                <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; team:admin</strong></li>\n            </ul>\n        </td>\n    </tr>\n    <tr style=\"width: 50%;\">\n        <td style=\"width: 50%; text-align: center; font-weight: bold; vertical-align: middle;\"><a href=\"https://docs.sentry.io/api/auth/#user-authentication-tokens\">User Auth Token</a></td>\n        <td style=\"width: 50%; text-align: left;\">\n            <ul style=\"list-style-type: none; padding-left: 0;\">\n                <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; team:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:read + team:admin**</strong></li>\n            </ul>\n        </td>\n    </tr>\n</table>\n\n\n\\***`org:read`** can only be used to remove yourself from the teams you are a member of.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:admin`** scopes in their user\nauthorization token to delete members from their teams.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "member_id",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID of the organization member to delete from the team",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "team_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the team the resource belongs to.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Teams"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "org:admin",
-              "org:read",
-              "org:write",
-              "team:admin"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "slug": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "isMember": {
-                      "type": "boolean"
-                    },
-                    "teamRole": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "flags": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    },
-                    "access": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "hasAccess": {
-                      "type": "boolean"
-                    },
-                    "isPending": {
-                      "type": "boolean"
-                    },
-                    "memberCount": {
-                      "type": "integer"
-                    },
-                    "avatar": {
-                      "type": "object",
-                      "properties": {
-                        "avatarType": {
-                          "type": "string"
-                        },
-                        "avatarUuid": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "avatarUrl": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "access",
-                    "avatar",
-                    "dateCreated",
-                    "flags",
-                    "hasAccess",
-                    "id",
-                    "isMember",
-                    "isPending",
-                    "memberCount",
-                    "name",
-                    "slug",
-                    "teamRole"
-                  ]
-                },
-                "examples": {
-                  "RemoveAMemberFromATeam": {
-                    "value": {
-                      "id": "4502349234123",
-                      "slug": "ancient-gabelers",
-                      "name": "Ancient Gabelers",
-                      "dateCreated": "2023-05-31T19:47:53.621181Z",
-                      "isMember": false,
-                      "teamRole": null,
-                      "flags": {
-                        "idp:provisioned": false
-                      },
-                      "access": [
-                        "alerts:read",
-                        "event:write",
-                        "project:read",
-                        "team:read",
-                        "member:read",
-                        "project:releases",
-                        "event:read",
-                        "org:read"
-                      ],
-                      "hasAccess": true,
-                      "isPending": false,
-                      "memberCount": 3,
-                      "avatar": {
-                        "avatarType": "letter_avatar",
-                        "avatarUuid": null
-                      }
-                    },
-                    "summary": "Remove a member from a team"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "This team is managed through your organization's identity provider"
           },
           "404": {
             "description": "Not Found"
@@ -11722,6 +11722,615 @@
           },
           "404": {
             "description": "A team with this slug already exists."
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/": {
+      "post": {
+        "operationId": "Add a Team to a Project",
+        "description": "Give a team access to a project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the team the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stats": {},
+                    "transactionStats": {},
+                    "sessionStats": {},
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isMember": {
+                      "type": "boolean"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "firstEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "firstTransactionEvent": {
+                      "type": "boolean"
+                    },
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasAccess": {
+                      "type": "boolean"
+                    },
+                    "hasCustomMetrics": {
+                      "type": "boolean"
+                    },
+                    "hasMinifiedStackTrace": {
+                      "type": "boolean"
+                    },
+                    "hasMonitors": {
+                      "type": "boolean"
+                    },
+                    "hasProfiles": {
+                      "type": "boolean"
+                    },
+                    "hasReplays": {
+                      "type": "boolean"
+                    },
+                    "hasSessions": {
+                      "type": "boolean"
+                    },
+                    "isInternal": {
+                      "type": "boolean"
+                    },
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "avatarUrl": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "team": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "avatar",
+                    "color",
+                    "dateCreated",
+                    "features",
+                    "firstEvent",
+                    "firstTransactionEvent",
+                    "hasAccess",
+                    "hasCustomMetrics",
+                    "hasMinifiedStackTrace",
+                    "hasMonitors",
+                    "hasProfiles",
+                    "hasReplays",
+                    "hasSessions",
+                    "id",
+                    "isBookmarked",
+                    "isInternal",
+                    "isMember",
+                    "isPublic",
+                    "name",
+                    "platform",
+                    "slug",
+                    "status",
+                    "team",
+                    "teams"
+                  ]
+                },
+                "examples": {
+                  "GiveATeamAccessToAProject": {
+                    "value": {
+                      "id": "6758470122493650",
+                      "slug": "The Spoiled Yoghurt",
+                      "name": "the-spoiled-yoghurt",
+                      "platform": "javascript",
+                      "dateCreated": "2023-03-29T15:25:21.344565Z",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "features": [
+                        "alert-filters",
+                        "custom-inbound-filters",
+                        "data-forwarding",
+                        "discard-groups",
+                        "minidump",
+                        "race-free-group-creation",
+                        "rate-limits",
+                        "servicehooks",
+                        "similarity-indexing",
+                        "similarity-indexing-v2",
+                        "similarity-view",
+                        "similarity-view-v2"
+                      ],
+                      "firstEvent": null,
+                      "firstTransactionEvent": false,
+                      "access": [
+                        "member:read",
+                        "event:read",
+                        "project:admin",
+                        "team:write",
+                        "project:write",
+                        "team:admin",
+                        "project:read",
+                        "org:integrations",
+                        "org:read",
+                        "project:releases",
+                        "team:read",
+                        "alerts:write",
+                        "event:admin",
+                        "event:write",
+                        "alerts:read"
+                      ],
+                      "hasAccess": true,
+                      "hasMinifiedStackTrace": false,
+                      "hasCustomMetrics": false,
+                      "hasMonitors": false,
+                      "hasProfiles": false,
+                      "hasReplays": false,
+                      "hasSessions": false,
+                      "isInternal": false,
+                      "isPublic": false,
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      },
+                      "color": "#5cbf3f",
+                      "status": "active",
+                      "team": {
+                        "id": "2349234102",
+                        "name": "Prime Mover",
+                        "slug": "prime-mover"
+                      },
+                      "teams": [
+                        {
+                          "id": "2349234102",
+                          "name": "Prime Mover",
+                          "slug": "prime-mover"
+                        },
+                        {
+                          "id": "47584447",
+                          "name": "Powerful Abolitionist",
+                          "slug": "powerful-abolitionist"
+                        }
+                      ]
+                    },
+                    "summary": "Give a Team Access to a Project"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a Team from a Project",
+        "description": "Revoke a team's access to a project.\n\nNote that Team Admins can only revoke access to teams they are admins of.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the team the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stats": {},
+                    "transactionStats": {},
+                    "sessionStats": {},
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isMember": {
+                      "type": "boolean"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "firstEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "firstTransactionEvent": {
+                      "type": "boolean"
+                    },
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasAccess": {
+                      "type": "boolean"
+                    },
+                    "hasCustomMetrics": {
+                      "type": "boolean"
+                    },
+                    "hasMinifiedStackTrace": {
+                      "type": "boolean"
+                    },
+                    "hasMonitors": {
+                      "type": "boolean"
+                    },
+                    "hasProfiles": {
+                      "type": "boolean"
+                    },
+                    "hasReplays": {
+                      "type": "boolean"
+                    },
+                    "hasSessions": {
+                      "type": "boolean"
+                    },
+                    "isInternal": {
+                      "type": "boolean"
+                    },
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "avatarUrl": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "team": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "avatar",
+                    "color",
+                    "dateCreated",
+                    "features",
+                    "firstEvent",
+                    "firstTransactionEvent",
+                    "hasAccess",
+                    "hasCustomMetrics",
+                    "hasMinifiedStackTrace",
+                    "hasMonitors",
+                    "hasProfiles",
+                    "hasReplays",
+                    "hasSessions",
+                    "id",
+                    "isBookmarked",
+                    "isInternal",
+                    "isMember",
+                    "isPublic",
+                    "name",
+                    "platform",
+                    "slug",
+                    "status",
+                    "team",
+                    "teams"
+                  ]
+                },
+                "examples": {
+                  "RevokeATeam'sAccessToAProject": {
+                    "value": {
+                      "id": "6758470122493650",
+                      "slug": "The Spoiled Yoghurt",
+                      "name": "the-spoiled-yoghurt",
+                      "platform": "javascript",
+                      "dateCreated": "2023-03-29T15:25:21.344565Z",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "features": [
+                        "alert-filters",
+                        "custom-inbound-filters",
+                        "data-forwarding",
+                        "discard-groups",
+                        "minidump",
+                        "race-free-group-creation",
+                        "rate-limits",
+                        "servicehooks",
+                        "similarity-indexing",
+                        "similarity-indexing-v2",
+                        "similarity-view",
+                        "similarity-view-v2"
+                      ],
+                      "firstEvent": null,
+                      "firstTransactionEvent": false,
+                      "access": [
+                        "member:read",
+                        "event:read",
+                        "project:admin",
+                        "team:write",
+                        "project:write",
+                        "team:admin",
+                        "project:read",
+                        "org:integrations",
+                        "org:read",
+                        "project:releases",
+                        "team:read",
+                        "alerts:write",
+                        "event:admin",
+                        "event:write",
+                        "alerts:read"
+                      ],
+                      "hasAccess": true,
+                      "hasMinifiedStackTrace": false,
+                      "hasCustomMetrics": false,
+                      "hasMonitors": false,
+                      "hasProfiles": false,
+                      "hasReplays": false,
+                      "hasSessions": false,
+                      "isInternal": false,
+                      "isPublic": false,
+                      "avatar": {
+                        "avatarType": "letter_avatar",
+                        "avatarUuid": null
+                      },
+                      "color": "#5cbf3f",
+                      "status": "active",
+                      "team": {
+                        "id": "2349234102",
+                        "name": "Prime Mover",
+                        "slug": "prime-mover"
+                      },
+                      "teams": [
+                        {
+                          "id": "2349234102",
+                          "name": "Prime Mover",
+                          "slug": "prime-mover"
+                        }
+                      ]
+                    },
+                    "summary": "Revoke a Team's Access to a Project"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -19976,615 +20585,6 @@
         "responses": {
           "204": {
             "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/projects/{organization_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/": {
-      "post": {
-        "operationId": "Add a Team to a Project",
-        "description": "Give a team access to a project.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "project_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the project the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "team_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the team the resource belongs to.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Projects"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "project:admin",
-              "project:write"
-            ]
-          }
-        ],
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stats": {},
-                    "transactionStats": {},
-                    "sessionStats": {},
-                    "id": {
-                      "type": "string"
-                    },
-                    "slug": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "platform": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "isBookmarked": {
-                      "type": "boolean"
-                    },
-                    "isMember": {
-                      "type": "boolean"
-                    },
-                    "features": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "firstEvent": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "firstTransactionEvent": {
-                      "type": "boolean"
-                    },
-                    "access": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "hasAccess": {
-                      "type": "boolean"
-                    },
-                    "hasCustomMetrics": {
-                      "type": "boolean"
-                    },
-                    "hasMinifiedStackTrace": {
-                      "type": "boolean"
-                    },
-                    "hasMonitors": {
-                      "type": "boolean"
-                    },
-                    "hasProfiles": {
-                      "type": "boolean"
-                    },
-                    "hasReplays": {
-                      "type": "boolean"
-                    },
-                    "hasSessions": {
-                      "type": "boolean"
-                    },
-                    "isInternal": {
-                      "type": "boolean"
-                    },
-                    "isPublic": {
-                      "type": "boolean"
-                    },
-                    "avatar": {
-                      "type": "object",
-                      "properties": {
-                        "avatarType": {
-                          "type": "string"
-                        },
-                        "avatarUuid": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "avatarUrl": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    },
-                    "color": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "team": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "slug": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "name",
-                        "slug"
-                      ]
-                    },
-                    "teams": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "slug"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "access",
-                    "avatar",
-                    "color",
-                    "dateCreated",
-                    "features",
-                    "firstEvent",
-                    "firstTransactionEvent",
-                    "hasAccess",
-                    "hasCustomMetrics",
-                    "hasMinifiedStackTrace",
-                    "hasMonitors",
-                    "hasProfiles",
-                    "hasReplays",
-                    "hasSessions",
-                    "id",
-                    "isBookmarked",
-                    "isInternal",
-                    "isMember",
-                    "isPublic",
-                    "name",
-                    "platform",
-                    "slug",
-                    "status",
-                    "team",
-                    "teams"
-                  ]
-                },
-                "examples": {
-                  "GiveATeamAccessToAProject": {
-                    "value": {
-                      "id": "6758470122493650",
-                      "slug": "The Spoiled Yoghurt",
-                      "name": "the-spoiled-yoghurt",
-                      "platform": "javascript",
-                      "dateCreated": "2023-03-29T15:25:21.344565Z",
-                      "isBookmarked": false,
-                      "isMember": true,
-                      "features": [
-                        "alert-filters",
-                        "custom-inbound-filters",
-                        "data-forwarding",
-                        "discard-groups",
-                        "minidump",
-                        "race-free-group-creation",
-                        "rate-limits",
-                        "servicehooks",
-                        "similarity-indexing",
-                        "similarity-indexing-v2",
-                        "similarity-view",
-                        "similarity-view-v2"
-                      ],
-                      "firstEvent": null,
-                      "firstTransactionEvent": false,
-                      "access": [
-                        "member:read",
-                        "event:read",
-                        "project:admin",
-                        "team:write",
-                        "project:write",
-                        "team:admin",
-                        "project:read",
-                        "org:integrations",
-                        "org:read",
-                        "project:releases",
-                        "team:read",
-                        "alerts:write",
-                        "event:admin",
-                        "event:write",
-                        "alerts:read"
-                      ],
-                      "hasAccess": true,
-                      "hasMinifiedStackTrace": false,
-                      "hasCustomMetrics": false,
-                      "hasMonitors": false,
-                      "hasProfiles": false,
-                      "hasReplays": false,
-                      "hasSessions": false,
-                      "isInternal": false,
-                      "isPublic": false,
-                      "avatar": {
-                        "avatarType": "letter_avatar",
-                        "avatarUuid": null
-                      },
-                      "color": "#5cbf3f",
-                      "status": "active",
-                      "team": {
-                        "id": "2349234102",
-                        "name": "Prime Mover",
-                        "slug": "prime-mover"
-                      },
-                      "teams": [
-                        {
-                          "id": "2349234102",
-                          "name": "Prime Mover",
-                          "slug": "prime-mover"
-                        },
-                        {
-                          "id": "47584447",
-                          "name": "Powerful Abolitionist",
-                          "slug": "powerful-abolitionist"
-                        }
-                      ]
-                    },
-                    "summary": "Give a Team Access to a Project"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "delete": {
-        "operationId": "Delete a Team from a Project",
-        "description": "Revoke a team's access to a project.\n\nNote that Team Admins can only revoke access to teams they are admins of.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "project_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the project the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "team_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the team the resource belongs to.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Projects"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "project:admin",
-              "project:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stats": {},
-                    "transactionStats": {},
-                    "sessionStats": {},
-                    "id": {
-                      "type": "string"
-                    },
-                    "slug": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "platform": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "isBookmarked": {
-                      "type": "boolean"
-                    },
-                    "isMember": {
-                      "type": "boolean"
-                    },
-                    "features": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "firstEvent": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "firstTransactionEvent": {
-                      "type": "boolean"
-                    },
-                    "access": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "hasAccess": {
-                      "type": "boolean"
-                    },
-                    "hasCustomMetrics": {
-                      "type": "boolean"
-                    },
-                    "hasMinifiedStackTrace": {
-                      "type": "boolean"
-                    },
-                    "hasMonitors": {
-                      "type": "boolean"
-                    },
-                    "hasProfiles": {
-                      "type": "boolean"
-                    },
-                    "hasReplays": {
-                      "type": "boolean"
-                    },
-                    "hasSessions": {
-                      "type": "boolean"
-                    },
-                    "isInternal": {
-                      "type": "boolean"
-                    },
-                    "isPublic": {
-                      "type": "boolean"
-                    },
-                    "avatar": {
-                      "type": "object",
-                      "properties": {
-                        "avatarType": {
-                          "type": "string"
-                        },
-                        "avatarUuid": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "avatarUrl": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    },
-                    "color": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "team": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "slug": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "name",
-                        "slug"
-                      ]
-                    },
-                    "teams": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "slug"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "access",
-                    "avatar",
-                    "color",
-                    "dateCreated",
-                    "features",
-                    "firstEvent",
-                    "firstTransactionEvent",
-                    "hasAccess",
-                    "hasCustomMetrics",
-                    "hasMinifiedStackTrace",
-                    "hasMonitors",
-                    "hasProfiles",
-                    "hasReplays",
-                    "hasSessions",
-                    "id",
-                    "isBookmarked",
-                    "isInternal",
-                    "isMember",
-                    "isPublic",
-                    "name",
-                    "platform",
-                    "slug",
-                    "status",
-                    "team",
-                    "teams"
-                  ]
-                },
-                "examples": {
-                  "RevokeATeam'sAccessToAProject": {
-                    "value": {
-                      "id": "6758470122493650",
-                      "slug": "The Spoiled Yoghurt",
-                      "name": "the-spoiled-yoghurt",
-                      "platform": "javascript",
-                      "dateCreated": "2023-03-29T15:25:21.344565Z",
-                      "isBookmarked": false,
-                      "isMember": true,
-                      "features": [
-                        "alert-filters",
-                        "custom-inbound-filters",
-                        "data-forwarding",
-                        "discard-groups",
-                        "minidump",
-                        "race-free-group-creation",
-                        "rate-limits",
-                        "servicehooks",
-                        "similarity-indexing",
-                        "similarity-indexing-v2",
-                        "similarity-view",
-                        "similarity-view-v2"
-                      ],
-                      "firstEvent": null,
-                      "firstTransactionEvent": false,
-                      "access": [
-                        "member:read",
-                        "event:read",
-                        "project:admin",
-                        "team:write",
-                        "project:write",
-                        "team:admin",
-                        "project:read",
-                        "org:integrations",
-                        "org:read",
-                        "project:releases",
-                        "team:read",
-                        "alerts:write",
-                        "event:admin",
-                        "event:write",
-                        "alerts:read"
-                      ],
-                      "hasAccess": true,
-                      "hasMinifiedStackTrace": false,
-                      "hasCustomMetrics": false,
-                      "hasMonitors": false,
-                      "hasProfiles": false,
-                      "hasReplays": false,
-                      "hasSessions": false,
-                      "isInternal": false,
-                      "isPublic": false,
-                      "avatar": {
-                        "avatarType": "letter_avatar",
-                        "avatarUuid": null
-                      },
-                      "color": "#5cbf3f",
-                      "status": "active",
-                      "team": {
-                        "id": "2349234102",
-                        "name": "Prime Mover",
-                        "slug": "prime-mover"
-                      },
-                      "teams": [
-                        {
-                          "id": "2349234102",
-                          "name": "Prime Mover",
-                          "slug": "prime-mover"
-                        }
-                      ]
-                    },
-                    "summary": "Revoke a Team's Access to a Project"
-                  }
-                }
-              }
-            },
-            "description": ""
           },
           "403": {
             "description": "Forbidden"
