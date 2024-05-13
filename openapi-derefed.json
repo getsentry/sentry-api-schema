@@ -595,6 +595,619 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/alert-rules/{alert_rule_id}/": {
+      "get": {
+        "operationId": "Retrieve a Metric Alert Rule for an Organization",
+        "description": "Return details on an individual metric alert rule.\n\nA metric alert rule is a configuration that defines the conditions for triggering an alert.\nIt specifies the metric type, function, time interval, and threshold\nvalues that determine when an alert should be triggered. Metric alert rules are used to monitor\nand notify you when certain metrics, like error count, latency, or failure rate, cross a\npredefined threshold. These rules help you proactively identify and address issues in your\nproject.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "alert_rule_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the rule you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Alerts"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alert_rule:read",
+              "alerts:read",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "This represents a Sentry Metric Alert Rule.",
+                  "properties": {
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "queryType": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "resolveThreshold": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "dataset": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "thresholdType": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "eventTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "owner": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "originalAlertRuleId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "comparisonDelta": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "snooze": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "aggregate": {
+                      "type": "string"
+                    },
+                    "timeWindow": {
+                      "type": "integer"
+                    },
+                    "triggers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "dateModified": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "monitorType": {
+                      "type": "integer"
+                    },
+                    "activations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    }
+                  },
+                  "required": [
+                    "activations",
+                    "aggregate",
+                    "createdBy",
+                    "dateCreated",
+                    "dateModified",
+                    "id",
+                    "monitorType",
+                    "name",
+                    "organizationId",
+                    "query",
+                    "timeWindow",
+                    "triggers"
+                  ]
+                },
+                "examples": {
+                  "GetDetailedViewAboutAMetricAlertRule": {
+                    "value": {
+                      "id": "177412243058",
+                      "name": "My Metric Alert Rule",
+                      "organizationId": "4505676595200000",
+                      "queryType": 0,
+                      "dataset": "events",
+                      "query": "",
+                      "aggregate": "count_unique(user)",
+                      "thresholdType": 0,
+                      "resolveThreshold": null,
+                      "timeWindow": 60,
+                      "environment": null,
+                      "triggers": [
+                        {
+                          "id": "294385908",
+                          "alertRuleId": "177412243058",
+                          "label": "critical",
+                          "thresholdType": 0,
+                          "alertThreshold": 31,
+                          "resolveThreshold": null,
+                          "dateCreated": "2023-09-26T22:14:17.557579Z",
+                          "actions": []
+                        }
+                      ],
+                      "projects": [
+                        "my-coolest-project"
+                      ],
+                      "owner": "team:29508397892374892",
+                      "dateModified": "2023-09-26T22:14:17.522166Z",
+                      "dateCreated": "2023-09-26T22:14:17.522196Z",
+                      "createdBy": {
+                        "id": 2834985497897,
+                        "name": "Somebody That I Used to Know",
+                        "email": "anon@sentry.io"
+                      },
+                      "eventTypes": [
+                        "default",
+                        "error"
+                      ],
+                      "monitorType": 0,
+                      "activations": []
+                    },
+                    "summary": "Get detailed view about a metric alert rule"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update a Metric Alert Rule",
+        "description": "Updates a metric alert rule. See **Metric Alert Rule Types** under\n[Create a Metric Alert Rule for an Organization](/api/alerts/create-a-metric-alert-rule-for-an-organization/#metric-alert-rule-types)\nto see valid request body configurations for different types of metric alert rule types.\n> Warning: Calling this endpoint fully overwrites the specified metric alert.\n\nA metric alert rule is a configuration that defines the conditions for triggering an alert.\nIt specifies the metric type, function, time interval, and threshold\nvalues that determine when an alert should be triggered. Metric alert rules are used to monitor\nand notify you when certain metrics, like error count, latency, or failure rate, cross a\npredefined threshold. These rules help you proactively identify and address issues in your\nproject.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "alert_rule_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the rule you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Alerts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name for the rule.",
+                    "maxLength": 256
+                  },
+                  "aggregate": {
+                    "type": "string",
+                    "description": "A string representing the aggregate function used in this alert rule. Valid aggregate functions are `count`, `count_unique`, `percentage`, `avg`, `apdex`, `failure_rate`, `p50`, `p75`, `p95`, `p99`, `p100`, and `percentile`. See **Metric Alert Rule Types** under [Create a Metric Alert Rule](/api/alerts/create-a-metric-alert-rule-for-an-organization/#metric-alert-rule-types) for valid configurations."
+                  },
+                  "timeWindow": {
+                    "enum": [
+                      1,
+                      5,
+                      10,
+                      15,
+                      30,
+                      60,
+                      120,
+                      240,
+                      1440
+                    ],
+                    "type": "integer",
+                    "description": "The time period to aggregate over.\n\n* `1` - 1 minute\n* `5` - 5 minutes\n* `10` - 10 minutes\n* `15` - 15 minutes\n* `30` - 30 minutes\n* `60` - 1 hour\n* `120` - 2 hours\n* `240` - 4 hours\n* `1440` - 24 hours"
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The names of the projects to filter by."
+                  },
+                  "query": {
+                    "type": "string",
+                    "description": "An event search query to subscribe to and monitor for alerts. For example, to filter transactions so that only those with status code 400 are included, you could use `\"query\": \"http.status_code:400\"`. Use an empty string for no filter."
+                  },
+                  "thresholdType": {
+                    "enum": [
+                      0,
+                      1
+                    ],
+                    "type": "integer",
+                    "description": "The comparison operator for the critical and warning thresholds. The comparison operator for the resolved threshold is automatically set to the opposite operator. When a percentage change threshold is used, `0` is equivalent to \"Higher than\" and `1` is equivalent to \"Lower than\".\n\n* `0` - Above\n* `1` - Below"
+                  },
+                  "triggers": {
+                    "type": "array",
+                    "items": {},
+                    "description": "\nA list of triggers, where each trigger is an object with the following fields:\n- `label`: One of `critical` or `warning`. A `critical` trigger is always required.\n- `alertThreshold`: The value that the subscription needs to reach to trigger the\nalert rule.\n- `actions`: A list of actions that take place when the threshold is met. Set as an empty list if no actions are to take place.\n```json\ntriggers: [\n    {\n        \"label\": \"critical\",\n        \"alertThreshold\": 100,\n        \"actions\": [\n            {\n                \"type\": \"email\",\n                \"targetType\": \"user\",\n                \"targetIdentifier\": \"23489853\",\n                \"inputChannelId\": None\n                \"integrationId\": None,\n                \"sentryAppId\": None\n            }\n        ]\n    },\n    {\n        \"label\": \"warning\",\n        \"alertThreshold\": 75,\n        \"actions\": []\n    }\n]\n```\nMetric alert rule trigger actions follow the following structure:\n- `type`: The type of trigger action. Valid values are `email`, `slack`, `msteams`, `pagerduty`, `sentry_app`, `sentry_notification`, and `opsgenie`.\n- `targetType`: The type of target the notification will be sent to. Valid values are `specific`, `user`, `team`, and `sentry_app`.\n- `targetIdentifier`: The ID of the target. This must be an integer for PagerDuty and Sentry apps, and a string for all others. Examples of appropriate values include a Slack channel name (`#my-channel`), a user ID, a team ID, a Sentry app ID, etc.\n- `inputChannelId`: The ID of the Slack channel. This is only used for the Slack action, and can be used as an alternative to providing the `targetIdentifier`.\n- `integrationId`: The integration ID. This is required for every action type except `email` and `sentry_app.`\n- `sentryAppId`: The ID of the Sentry app. This is required when `type` is `sentry_app`.\n- `priority`: The severity of the Pagerduty alert or the priority of the Opsgenie alert (optional). Defaults for Pagerduty are `critical` for critical and `warning` for warning. Defaults for Opsgenie are `P1` for critical and `P2` for warning.\n"
+                  },
+                  "environment": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The name of the environment to filter by. Defaults to all environments."
+                  },
+                  "dataset": {
+                    "type": "string",
+                    "description": "The name of the dataset that this query will be executed on. Valid values are `events`, `transactions`, `metrics`, `sessions`, and `generic-metrics`. Defaults to `events`. See **Metric Alert Rule Types** under [Create a Metric Alert Rule](/api/alerts/create-a-metric-alert-rule-for-an-organization/#metric-alert-rule-types) for valid configurations."
+                  },
+                  "queryType": {
+                    "enum": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "type": "integer",
+                    "description": "The type of query. If no value is provided, `queryType` is set to the default for the specified `dataset.` See **Metric Alert Rule Types** under [Create a Metric Alert Rule](/api/alerts/create-a-metric-alert-rule-for-an-organization/#metric-alert-rule-types) for valid configurations.\n\n* `0` - event.type:error\n* `1` - event.type:transaction\n* `2` - None"
+                  },
+                  "eventTypes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "List of event types that this alert will be related to. Valid values are `default` (events captured using [Capture Message](/product/sentry-basics/integrate-backend/capturing-errors/#capture-message)), `error` and `transaction`."
+                  },
+                  "comparisonDelta": {
+                    "type": "integer",
+                    "description": "An optional int representing the time delta to use as the comparison period, in minutes. Required when using a percentage change threshold (\"x%\" higher or lower compared to `comparisonDelta` minutes ago). A percentage change threshold cannot be used for [Crash Free Session Rate](/api/alerts/create-a-metric-alert-rule-for-an-organization/#crash-free-session-rate) or [Crash Free User Rate](/api/alerts/create-a-metric-alert-rule-for-an-organization/#crash-free-user-rate)."
+                  },
+                  "resolveThreshold": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "Optional value that the metric needs to reach to resolve the alert. If no value is provided, this is set automatically based on the lowest severity trigger's `alertThreshold`. For example, if the alert is set to trigger at the warning level when the number of errors is above 50, then the alert would be set to resolve when there are less than 50 errors. If `thresholdType` is `0`, `resolveThreshold` must be greater than the critical threshold. Otherwise, it must be less than the critical threshold."
+                  },
+                  "owner": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The ID of the team or user that owns the rule."
+                  },
+                  "monitorType": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Monitor type represents whether the alert rule is actively being monitored or is monitored given a specific activation condition."
+                  },
+                  "activationCondition": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "nullable": true,
+                    "description": "Optional int that represents a trigger condition for when to start monitoring"
+                  }
+                },
+                "required": [
+                  "aggregate",
+                  "name",
+                  "projects",
+                  "query",
+                  "thresholdType",
+                  "timeWindow",
+                  "triggers"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "alert_rule:write",
+              "alerts:write",
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "This represents a Sentry Metric Alert Rule.",
+                  "properties": {
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "queryType": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "resolveThreshold": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "dataset": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "thresholdType": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "eventTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "owner": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "originalAlertRuleId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "comparisonDelta": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "snooze": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "aggregate": {
+                      "type": "string"
+                    },
+                    "timeWindow": {
+                      "type": "integer"
+                    },
+                    "triggers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "dateModified": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "monitorType": {
+                      "type": "integer"
+                    },
+                    "activations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    }
+                  },
+                  "required": [
+                    "activations",
+                    "aggregate",
+                    "createdBy",
+                    "dateCreated",
+                    "dateModified",
+                    "id",
+                    "monitorType",
+                    "name",
+                    "organizationId",
+                    "query",
+                    "timeWindow",
+                    "triggers"
+                  ]
+                },
+                "examples": {
+                  "UpdateAMetricAlertRule": {
+                    "value": {
+                      "id": "345989573",
+                      "name": "P30 Transaction Duration",
+                      "organizationId": "02403489017",
+                      "queryType": 1,
+                      "dataset": "transactions",
+                      "query": "",
+                      "aggregate": "percentile(transaction.duration,0.3)",
+                      "thresholdType": 1,
+                      "resolveThreshold": null,
+                      "timeWindow": 60,
+                      "environment": null,
+                      "triggers": [
+                        {
+                          "id": "0543809890",
+                          "alertRuleId": "345989573",
+                          "label": "critical",
+                          "thresholdType": 1,
+                          "alertThreshold": 70,
+                          "resolveThreshold": null,
+                          "dateCreated": "2023-09-25T23:35:31.832084Z",
+                          "actions": []
+                        }
+                      ],
+                      "projects": [
+                        "backend"
+                      ],
+                      "owner": "team:9390258908",
+                      "originalAlertRuleId": null,
+                      "comparisonDelta": 10080,
+                      "dateModified": "2023-09-25T23:35:31.787866Z",
+                      "dateCreated": "2023-09-25T23:35:31.787875Z",
+                      "createdBy": {
+                        "id": 902843590658,
+                        "name": "Spongebob Squarepants",
+                        "email": "spongebob.s@example.com"
+                      },
+                      "monitorType": 0,
+                      "activations": []
+                    },
+                    "summary": "Update a metric alert rule"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a Metric Alert Rule",
+        "description": "Delete a specific metric alert rule.\n\nA metric alert rule is a configuration that defines the conditions for triggering an alert.\nIt specifies the metric type, function, time interval, and threshold\nvalues that determine when an alert should be triggered. Metric alert rules are used to monitor\nand notify you when certain metrics, like error count, latency, or failure rate, cross a\npredefined threshold. These rules help you proactively identify and address issues in your\nproject.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "alert_rule_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the rule you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Alerts"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alert_rule:write",
+              "alerts:write",
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/alert-rules/{alert_rule_id}/activations/": {
       "get": {
         "operationId": "Retrieve activations for an AlertRule",
@@ -4796,6 +5409,1266 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/replay-count/": {
+      "get": {
+        "operationId": "Return a Count of Replays",
+        "description": "Return a count of replays for the given issue or transaction id.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer"
+                  }
+                },
+                "examples": {
+                  "QueryReplayCountByIssueOrTransactionId": {
+                    "value": {
+                      "1": 9,
+                      "2": 0,
+                      "5": 0,
+                      "9": 1,
+                      "10": 29
+                    },
+                    "summary": "Query replay count by issue or transaction id"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/replay-selectors/": {
+      "get": {
+        "operationId": "List an Organization's Selectors",
+        "description": "Return a list of selectors for a given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "This defines the range of the time series, relative to now. The range is given in a `<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for minutes, `h` for hours, `d` for days and `w` for weeks.You must either provide a `statsPeriod`, or a `start` and `end`."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the start of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `end` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "This defines the inclusive end of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `start` instead of `statsPeriod`."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {}
+            },
+            "description": "The ID of the projects to filter by."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The field to sort the output by."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "count_dead_clicks": {
+                            "type": "integer"
+                          },
+                          "count_rage_clicks": {
+                            "type": "integer"
+                          },
+                          "dom_element": {
+                            "type": "string"
+                          },
+                          "element": {
+                            "type": "object",
+                            "properties": {
+                              "alt": {
+                                "type": "string"
+                              },
+                              "aria_label": {
+                                "type": "string"
+                              },
+                              "class": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "component_name": {
+                                "type": "string"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "tag": {
+                                "type": "string"
+                              },
+                              "testid": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "alt",
+                              "aria_label",
+                              "class",
+                              "component_name",
+                              "id",
+                              "role",
+                              "tag",
+                              "testid",
+                              "title"
+                            ]
+                          },
+                          "project_id": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "RetrieveACollectionOfSelectorsForAnOrganization.": {
+                    "value": {
+                      "data": [
+                        {
+                          "count_dead_clicks": 2,
+                          "count_rage_clicks": 1,
+                          "dom_element": "div#myid.class1.class2",
+                          "element": {
+                            "alt": "",
+                            "aria_label": "",
+                            "class": [
+                              "class1",
+                              "class2"
+                            ],
+                            "component_name": "",
+                            "id": "myid",
+                            "role": "",
+                            "tag": "div",
+                            "testid": "",
+                            "title": ""
+                          },
+                          "project_id": "1"
+                        }
+                      ]
+                    },
+                    "summary": "Retrieve a collection of selectors for an organization."
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/replays/": {
+      "get": {
+        "operationId": "List an Organization's Replays",
+        "description": "Return a list of replays belonging to an organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "\nThis defines the range of the time series, relative to now. The range is given in a\n`<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for\nminutes, `h` for hours, `d` for days and `w` for weeks. You must either provide a\n`statsPeriod`, or a `start` and `end`.\n"
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "\nThis defines the start of the time series range as an explicit datetime, either in UTC\nISO8601 or epoch seconds. Use along with `end` instead of `statsPeriod`.\n"
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "\nThis defines the inclusive end of the time series range as an explicit datetime, either in\nUTC ISO8601 or epoch seconds. Use along with `start` instead of `statsPeriod`.\n"
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "activity",
+                  "browser",
+                  "count_dead_clicks",
+                  "count_errors",
+                  "count_rage_clicks",
+                  "count_segments",
+                  "count_urls",
+                  "device",
+                  "dist",
+                  "duration",
+                  "environment",
+                  "error_ids",
+                  "finished_at",
+                  "id",
+                  "is_archived",
+                  "os",
+                  "platform",
+                  "project_id",
+                  "releases",
+                  "sdk",
+                  "started_at",
+                  "tags",
+                  "trace_ids",
+                  "urls",
+                  "user",
+                  "clicks",
+                  "info_ids",
+                  "warning_ids",
+                  "count_warnings",
+                  "count_infos",
+                  "has_viewed"
+                ],
+                "type": "string",
+                "description": "* `activity` - activity\n* `browser` - browser\n* `count_dead_clicks` - count_dead_clicks\n* `count_errors` - count_errors\n* `count_rage_clicks` - count_rage_clicks\n* `count_segments` - count_segments\n* `count_urls` - count_urls\n* `device` - device\n* `dist` - dist\n* `duration` - duration\n* `environment` - environment\n* `error_ids` - error_ids\n* `finished_at` - finished_at\n* `id` - id\n* `is_archived` - is_archived\n* `os` - os\n* `platform` - platform\n* `project_id` - project_id\n* `releases` - releases\n* `sdk` - sdk\n* `started_at` - started_at\n* `tags` - tags\n* `trace_ids` - trace_ids\n* `urls` - urls\n* `user` - user\n* `clicks` - clicks\n* `info_ids` - info_ids\n* `warning_ids` - warning_ids\n* `count_warnings` - count_warnings\n* `count_infos` - count_infos\n* `has_viewed` - has_viewed"
+              }
+            },
+            "description": "Specifies a field that should be marshaled in the output. Invalid fields will be rejected."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The ID of the projects to filter by."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The environment to filter by."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The field to sort the output by."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A structured query string to filter the output by."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The cursor parameter is used to paginate results. See [here](https://docs.sentry.io/api/pagination/) for how to use this query parameter"
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "string"
+                      },
+                      "trace_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "error_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "environment": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "tags": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "array",
+                            "items": {}
+                          }
+                        ]
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "username": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "email": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "ip": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "sdk": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "os": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "browser": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "device": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "brand": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "model": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "family": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "is_archived": {
+                        "type": "boolean",
+                        "nullable": true
+                      },
+                      "urls": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "clicks": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "count_dead_clicks": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_rage_clicks": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_errors": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "duration": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "finished_at": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "started_at": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "activity": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_urls": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "replay_type": {
+                        "type": "string"
+                      },
+                      "count_segments": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "platform": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "releases": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "dist": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "count_warnings": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "count_infos": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "has_viewed": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "GetListOfReplays": {
+                    "value": [
+                      {
+                        "activity": 5,
+                        "browser": {
+                          "name": "Chome",
+                          "version": "103.0.38"
+                        },
+                        "count_dead_clicks": 6,
+                        "count_rage_clicks": 1,
+                        "count_errors": 1,
+                        "count_segments": 0,
+                        "count_urls": 1,
+                        "device": {
+                          "brand": "Apple",
+                          "family": "iPhone",
+                          "model": "11",
+                          "name": "iPhone 11"
+                        },
+                        "dist": null,
+                        "duration": 576,
+                        "environment": "production",
+                        "error_ids": [
+                          "7e07485f-12f9-416b-8b14-26260799b51f"
+                        ],
+                        "finished_at": "2022-07-07T14:15:33.201019",
+                        "has_viewed": true,
+                        "id": "7e07485f-12f9-416b-8b14-26260799b51f",
+                        "is_archived": null,
+                        "os": {
+                          "name": "iOS",
+                          "version": "16.2"
+                        },
+                        "platform": "Sentry",
+                        "project_id": "639195",
+                        "releases": [
+                          "version@1.4"
+                        ],
+                        "sdk": {
+                          "name": "Thundercat",
+                          "version": "27.1"
+                        },
+                        "started_at": "2022-07-07T14:05:57.909921",
+                        "tags": {
+                          "hello": [
+                            "world",
+                            "Lionel Richie"
+                          ]
+                        },
+                        "trace_ids": [
+                          "7e07485f-12f9-416b-8b14-26260799b51f"
+                        ],
+                        "urls": [
+                          "/organizations/abc123/issues"
+                        ],
+                        "user": {
+                          "display_name": "John Doe",
+                          "email": "john.doe@example.com",
+                          "id": "30246326",
+                          "ip": "213.164.1.114",
+                          "username": "John Doe"
+                        }
+                      }
+                    ],
+                    "summary": "Get list of replays"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/replays/{replay_id}/": {
+      "get": {
+        "operationId": "Retrieve a Replay Instance",
+        "description": "Return details on an individual replay.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "\nThis defines the range of the time series, relative to now. The range is given in a\n`<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for\nminutes, `h` for hours, `d` for days and `w` for weeks. You must either provide a\n`statsPeriod`, or a `start` and `end`.\n"
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "\nThis defines the start of the time series range as an explicit datetime, either in UTC\nISO8601 or epoch seconds. Use along with `end` instead of `statsPeriod`.\n"
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "\nThis defines the inclusive end of the time series range as an explicit datetime, either in\nUTC ISO8601 or epoch seconds. Use along with `start` instead of `statsPeriod`.\n"
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "activity",
+                  "browser",
+                  "count_dead_clicks",
+                  "count_errors",
+                  "count_rage_clicks",
+                  "count_segments",
+                  "count_urls",
+                  "device",
+                  "dist",
+                  "duration",
+                  "environment",
+                  "error_ids",
+                  "finished_at",
+                  "id",
+                  "is_archived",
+                  "os",
+                  "platform",
+                  "project_id",
+                  "releases",
+                  "sdk",
+                  "started_at",
+                  "tags",
+                  "trace_ids",
+                  "urls",
+                  "user",
+                  "clicks",
+                  "info_ids",
+                  "warning_ids",
+                  "count_warnings",
+                  "count_infos",
+                  "has_viewed"
+                ],
+                "type": "string",
+                "description": "* `activity` - activity\n* `browser` - browser\n* `count_dead_clicks` - count_dead_clicks\n* `count_errors` - count_errors\n* `count_rage_clicks` - count_rage_clicks\n* `count_segments` - count_segments\n* `count_urls` - count_urls\n* `device` - device\n* `dist` - dist\n* `duration` - duration\n* `environment` - environment\n* `error_ids` - error_ids\n* `finished_at` - finished_at\n* `id` - id\n* `is_archived` - is_archived\n* `os` - os\n* `platform` - platform\n* `project_id` - project_id\n* `releases` - releases\n* `sdk` - sdk\n* `started_at` - started_at\n* `tags` - tags\n* `trace_ids` - trace_ids\n* `urls` - urls\n* `user` - user\n* `clicks` - clicks\n* `info_ids` - info_ids\n* `warning_ids` - warning_ids\n* `count_warnings` - count_warnings\n* `count_infos` - count_infos\n* `has_viewed` - has_viewed"
+              }
+            },
+            "description": "Specifies a field that should be marshaled in the output. Invalid fields will be rejected."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The ID of the projects to filter by."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The environment to filter by."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The field to sort the output by."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A structured query string to filter the output by."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The cursor parameter is used to paginate results. See [here](https://docs.sentry.io/api/pagination/) for how to use this query parameter"
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "trace_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "error_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "tags": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        {
+                          "type": "array",
+                          "items": {}
+                        }
+                      ]
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "username": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "email": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "ip": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "display_name": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "sdk": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "os": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "browser": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "device": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "brand": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "model": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "family": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "is_archived": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "urls": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "clicks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "count_dead_clicks": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "count_rage_clicks": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "count_errors": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "duration": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "finished_at": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "started_at": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "activity": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "count_urls": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "replay_type": {
+                      "type": "string"
+                    },
+                    "count_segments": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "releases": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "dist": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "count_warnings": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "count_infos": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "has_viewed": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "examples": {
+                  "GetSingleReplayDetails": {
+                    "value": {
+                      "activity": 5,
+                      "browser": {
+                        "name": "Chome",
+                        "version": "103.0.38"
+                      },
+                      "count_dead_clicks": 6,
+                      "count_rage_clicks": 1,
+                      "count_errors": 1,
+                      "count_segments": 0,
+                      "count_urls": 1,
+                      "device": {
+                        "brand": "Apple",
+                        "family": "iPhone",
+                        "model": "11",
+                        "name": "iPhone 11"
+                      },
+                      "dist": null,
+                      "duration": 576,
+                      "environment": "production",
+                      "error_ids": [
+                        "7e07485f-12f9-416b-8b14-26260799b51f"
+                      ],
+                      "finished_at": "2022-07-07T14:15:33.201019",
+                      "has_viewed": true,
+                      "id": "7e07485f-12f9-416b-8b14-26260799b51f",
+                      "is_archived": null,
+                      "os": {
+                        "name": "iOS",
+                        "version": "16.2"
+                      },
+                      "platform": "Sentry",
+                      "project_id": "639195",
+                      "releases": [
+                        "version@1.4"
+                      ],
+                      "sdk": {
+                        "name": "Thundercat",
+                        "version": "27.1"
+                      },
+                      "started_at": "2022-07-07T14:05:57.909921",
+                      "tags": {
+                        "hello": [
+                          "world",
+                          "Lionel Richie"
+                        ]
+                      },
+                      "trace_ids": [
+                        "7e07485f-12f9-416b-8b14-26260799b51f"
+                      ],
+                      "urls": [
+                        "/organizations/abc123/issues"
+                      ],
+                      "user": {
+                        "display_name": "John Doe",
+                        "email": "john.doe@example.com",
+                        "id": "30246326",
+                        "ip": "213.164.1.114",
+                        "username": "John Doe"
+                      }
+                    },
+                    "summary": "Get single replay details"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups": {
       "get": {
         "operationId": "List an Organization's Paginated Teams",
@@ -7870,619 +9743,6 @@
         }
       }
     },
-    "/api/0/organizations/{organization_slug}/alert-rules/{alert_rule_id}/": {
-      "get": {
-        "operationId": "Retrieve a Metric Alert Rule for an Organization",
-        "description": "Return details on an individual metric alert rule.\n\nA metric alert rule is a configuration that defines the conditions for triggering an alert.\nIt specifies the metric type, function, time interval, and threshold\nvalues that determine when an alert should be triggered. Metric alert rules are used to monitor\nand notify you when certain metrics, like error count, latency, or failure rate, cross a\npredefined threshold. These rules help you proactively identify and address issues in your\nproject.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "alert_rule_id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The ID of the rule you'd like to query.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Alerts"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "alert_rule:read",
-              "alerts:read",
-              "org:admin",
-              "org:read",
-              "org:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "This represents a Sentry Metric Alert Rule.",
-                  "properties": {
-                    "environment": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "projects": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "nullable": true
-                    },
-                    "queryType": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "resolveThreshold": {
-                      "type": "number",
-                      "format": "double",
-                      "nullable": true
-                    },
-                    "dataset": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "thresholdType": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "eventTypes": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "nullable": true
-                    },
-                    "owner": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "originalAlertRuleId": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "comparisonDelta": {
-                      "type": "number",
-                      "format": "double",
-                      "nullable": true
-                    },
-                    "snooze": {
-                      "type": "boolean",
-                      "nullable": true
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "organizationId": {
-                      "type": "string"
-                    },
-                    "query": {
-                      "type": "string"
-                    },
-                    "aggregate": {
-                      "type": "string"
-                    },
-                    "timeWindow": {
-                      "type": "integer"
-                    },
-                    "triggers": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    },
-                    "dateModified": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "createdBy": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    },
-                    "monitorType": {
-                      "type": "integer"
-                    },
-                    "activations": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    }
-                  },
-                  "required": [
-                    "activations",
-                    "aggregate",
-                    "createdBy",
-                    "dateCreated",
-                    "dateModified",
-                    "id",
-                    "monitorType",
-                    "name",
-                    "organizationId",
-                    "query",
-                    "timeWindow",
-                    "triggers"
-                  ]
-                },
-                "examples": {
-                  "GetDetailedViewAboutAMetricAlertRule": {
-                    "value": {
-                      "id": "177412243058",
-                      "name": "My Metric Alert Rule",
-                      "organizationId": "4505676595200000",
-                      "queryType": 0,
-                      "dataset": "events",
-                      "query": "",
-                      "aggregate": "count_unique(user)",
-                      "thresholdType": 0,
-                      "resolveThreshold": null,
-                      "timeWindow": 60,
-                      "environment": null,
-                      "triggers": [
-                        {
-                          "id": "294385908",
-                          "alertRuleId": "177412243058",
-                          "label": "critical",
-                          "thresholdType": 0,
-                          "alertThreshold": 31,
-                          "resolveThreshold": null,
-                          "dateCreated": "2023-09-26T22:14:17.557579Z",
-                          "actions": []
-                        }
-                      ],
-                      "projects": [
-                        "my-coolest-project"
-                      ],
-                      "owner": "team:29508397892374892",
-                      "dateModified": "2023-09-26T22:14:17.522166Z",
-                      "dateCreated": "2023-09-26T22:14:17.522196Z",
-                      "createdBy": {
-                        "id": 2834985497897,
-                        "name": "Somebody That I Used to Know",
-                        "email": "anon@sentry.io"
-                      },
-                      "eventTypes": [
-                        "default",
-                        "error"
-                      ],
-                      "monitorType": 0,
-                      "activations": []
-                    },
-                    "summary": "Get detailed view about a metric alert rule"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "operationId": "Update a Metric Alert Rule",
-        "description": "Updates a metric alert rule. See **Metric Alert Rule Types** under\n[Create a Metric Alert Rule for an Organization](/api/alerts/create-a-metric-alert-rule-for-an-organization/#metric-alert-rule-types)\nto see valid request body configurations for different types of metric alert rule types.\n> Warning: Calling this endpoint fully overwrites the specified metric alert.\n\nA metric alert rule is a configuration that defines the conditions for triggering an alert.\nIt specifies the metric type, function, time interval, and threshold\nvalues that determine when an alert should be triggered. Metric alert rules are used to monitor\nand notify you when certain metrics, like error count, latency, or failure rate, cross a\npredefined threshold. These rules help you proactively identify and address issues in your\nproject.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "alert_rule_id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The ID of the rule you'd like to query.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Alerts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "The name for the rule.",
-                    "maxLength": 256
-                  },
-                  "aggregate": {
-                    "type": "string",
-                    "description": "A string representing the aggregate function used in this alert rule. Valid aggregate functions are `count`, `count_unique`, `percentage`, `avg`, `apdex`, `failure_rate`, `p50`, `p75`, `p95`, `p99`, `p100`, and `percentile`. See **Metric Alert Rule Types** under [Create a Metric Alert Rule](/api/alerts/create-a-metric-alert-rule-for-an-organization/#metric-alert-rule-types) for valid configurations."
-                  },
-                  "timeWindow": {
-                    "enum": [
-                      1,
-                      5,
-                      10,
-                      15,
-                      30,
-                      60,
-                      120,
-                      240,
-                      1440
-                    ],
-                    "type": "integer",
-                    "description": "The time period to aggregate over.\n\n* `1` - 1 minute\n* `5` - 5 minutes\n* `10` - 10 minutes\n* `15` - 15 minutes\n* `30` - 30 minutes\n* `60` - 1 hour\n* `120` - 2 hours\n* `240` - 4 hours\n* `1440` - 24 hours"
-                  },
-                  "projects": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "The names of the projects to filter by."
-                  },
-                  "query": {
-                    "type": "string",
-                    "description": "An event search query to subscribe to and monitor for alerts. For example, to filter transactions so that only those with status code 400 are included, you could use `\"query\": \"http.status_code:400\"`. Use an empty string for no filter."
-                  },
-                  "thresholdType": {
-                    "enum": [
-                      0,
-                      1
-                    ],
-                    "type": "integer",
-                    "description": "The comparison operator for the critical and warning thresholds. The comparison operator for the resolved threshold is automatically set to the opposite operator. When a percentage change threshold is used, `0` is equivalent to \"Higher than\" and `1` is equivalent to \"Lower than\".\n\n* `0` - Above\n* `1` - Below"
-                  },
-                  "triggers": {
-                    "type": "array",
-                    "items": {},
-                    "description": "\nA list of triggers, where each trigger is an object with the following fields:\n- `label`: One of `critical` or `warning`. A `critical` trigger is always required.\n- `alertThreshold`: The value that the subscription needs to reach to trigger the\nalert rule.\n- `actions`: A list of actions that take place when the threshold is met. Set as an empty list if no actions are to take place.\n```json\ntriggers: [\n    {\n        \"label\": \"critical\",\n        \"alertThreshold\": 100,\n        \"actions\": [\n            {\n                \"type\": \"email\",\n                \"targetType\": \"user\",\n                \"targetIdentifier\": \"23489853\",\n                \"inputChannelId\": None\n                \"integrationId\": None,\n                \"sentryAppId\": None\n            }\n        ]\n    },\n    {\n        \"label\": \"warning\",\n        \"alertThreshold\": 75,\n        \"actions\": []\n    }\n]\n```\nMetric alert rule trigger actions follow the following structure:\n- `type`: The type of trigger action. Valid values are `email`, `slack`, `msteams`, `pagerduty`, `sentry_app`, `sentry_notification`, and `opsgenie`.\n- `targetType`: The type of target the notification will be sent to. Valid values are `specific`, `user`, `team`, and `sentry_app`.\n- `targetIdentifier`: The ID of the target. This must be an integer for PagerDuty and Sentry apps, and a string for all others. Examples of appropriate values include a Slack channel name (`#my-channel`), a user ID, a team ID, a Sentry app ID, etc.\n- `inputChannelId`: The ID of the Slack channel. This is only used for the Slack action, and can be used as an alternative to providing the `targetIdentifier`.\n- `integrationId`: The integration ID. This is required for every action type except `email` and `sentry_app.`\n- `sentryAppId`: The ID of the Sentry app. This is required when `type` is `sentry_app`.\n- `priority`: The severity of the Pagerduty alert or the priority of the Opsgenie alert (optional). Defaults for Pagerduty are `critical` for critical and `warning` for warning. Defaults for Opsgenie are `P1` for critical and `P2` for warning.\n"
-                  },
-                  "environment": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "The name of the environment to filter by. Defaults to all environments."
-                  },
-                  "dataset": {
-                    "type": "string",
-                    "description": "The name of the dataset that this query will be executed on. Valid values are `events`, `transactions`, `metrics`, `sessions`, and `generic-metrics`. Defaults to `events`. See **Metric Alert Rule Types** under [Create a Metric Alert Rule](/api/alerts/create-a-metric-alert-rule-for-an-organization/#metric-alert-rule-types) for valid configurations."
-                  },
-                  "queryType": {
-                    "enum": [
-                      0,
-                      1,
-                      2
-                    ],
-                    "type": "integer",
-                    "description": "The type of query. If no value is provided, `queryType` is set to the default for the specified `dataset.` See **Metric Alert Rule Types** under [Create a Metric Alert Rule](/api/alerts/create-a-metric-alert-rule-for-an-organization/#metric-alert-rule-types) for valid configurations.\n\n* `0` - event.type:error\n* `1` - event.type:transaction\n* `2` - None"
-                  },
-                  "eventTypes": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "List of event types that this alert will be related to. Valid values are `default` (events captured using [Capture Message](/product/sentry-basics/integrate-backend/capturing-errors/#capture-message)), `error` and `transaction`."
-                  },
-                  "comparisonDelta": {
-                    "type": "integer",
-                    "description": "An optional int representing the time delta to use as the comparison period, in minutes. Required when using a percentage change threshold (\"x%\" higher or lower compared to `comparisonDelta` minutes ago). A percentage change threshold cannot be used for [Crash Free Session Rate](/api/alerts/create-a-metric-alert-rule-for-an-organization/#crash-free-session-rate) or [Crash Free User Rate](/api/alerts/create-a-metric-alert-rule-for-an-organization/#crash-free-user-rate)."
-                  },
-                  "resolveThreshold": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Optional value that the metric needs to reach to resolve the alert. If no value is provided, this is set automatically based on the lowest severity trigger's `alertThreshold`. For example, if the alert is set to trigger at the warning level when the number of errors is above 50, then the alert would be set to resolve when there are less than 50 errors. If `thresholdType` is `0`, `resolveThreshold` must be greater than the critical threshold. Otherwise, it must be less than the critical threshold."
-                  },
-                  "owner": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "The ID of the team or user that owns the rule."
-                  },
-                  "monitorType": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "description": "Monitor type represents whether the alert rule is actively being monitored or is monitored given a specific activation condition."
-                  },
-                  "activationCondition": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "nullable": true,
-                    "description": "Optional int that represents a trigger condition for when to start monitoring"
-                  }
-                },
-                "required": [
-                  "aggregate",
-                  "name",
-                  "projects",
-                  "query",
-                  "thresholdType",
-                  "timeWindow",
-                  "triggers"
-                ]
-              }
-            }
-          },
-          "required": true
-        },
-        "security": [
-          {
-            "auth_token": [
-              "alert_rule:write",
-              "alerts:write",
-              "org:admin",
-              "org:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "This represents a Sentry Metric Alert Rule.",
-                  "properties": {
-                    "environment": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "projects": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "nullable": true
-                    },
-                    "queryType": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "resolveThreshold": {
-                      "type": "number",
-                      "format": "double",
-                      "nullable": true
-                    },
-                    "dataset": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "thresholdType": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "eventTypes": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "nullable": true
-                    },
-                    "owner": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "originalAlertRuleId": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "comparisonDelta": {
-                      "type": "number",
-                      "format": "double",
-                      "nullable": true
-                    },
-                    "snooze": {
-                      "type": "boolean",
-                      "nullable": true
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "organizationId": {
-                      "type": "string"
-                    },
-                    "query": {
-                      "type": "string"
-                    },
-                    "aggregate": {
-                      "type": "string"
-                    },
-                    "timeWindow": {
-                      "type": "integer"
-                    },
-                    "triggers": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    },
-                    "dateModified": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "createdBy": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    },
-                    "monitorType": {
-                      "type": "integer"
-                    },
-                    "activations": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    }
-                  },
-                  "required": [
-                    "activations",
-                    "aggregate",
-                    "createdBy",
-                    "dateCreated",
-                    "dateModified",
-                    "id",
-                    "monitorType",
-                    "name",
-                    "organizationId",
-                    "query",
-                    "timeWindow",
-                    "triggers"
-                  ]
-                },
-                "examples": {
-                  "UpdateAMetricAlertRule": {
-                    "value": {
-                      "id": "345989573",
-                      "name": "P30 Transaction Duration",
-                      "organizationId": "02403489017",
-                      "queryType": 1,
-                      "dataset": "transactions",
-                      "query": "",
-                      "aggregate": "percentile(transaction.duration,0.3)",
-                      "thresholdType": 1,
-                      "resolveThreshold": null,
-                      "timeWindow": 60,
-                      "environment": null,
-                      "triggers": [
-                        {
-                          "id": "0543809890",
-                          "alertRuleId": "345989573",
-                          "label": "critical",
-                          "thresholdType": 1,
-                          "alertThreshold": 70,
-                          "resolveThreshold": null,
-                          "dateCreated": "2023-09-25T23:35:31.832084Z",
-                          "actions": []
-                        }
-                      ],
-                      "projects": [
-                        "backend"
-                      ],
-                      "owner": "team:9390258908",
-                      "originalAlertRuleId": null,
-                      "comparisonDelta": 10080,
-                      "dateModified": "2023-09-25T23:35:31.787866Z",
-                      "dateCreated": "2023-09-25T23:35:31.787875Z",
-                      "createdBy": {
-                        "id": 902843590658,
-                        "name": "Spongebob Squarepants",
-                        "email": "spongebob.s@example.com"
-                      },
-                      "monitorType": 0,
-                      "activations": []
-                    },
-                    "summary": "Update a metric alert rule"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "delete": {
-        "operationId": "Delete a Metric Alert Rule",
-        "description": "Delete a specific metric alert rule.\n\nA metric alert rule is a configuration that defines the conditions for triggering an alert.\nIt specifies the metric type, function, time interval, and threshold\nvalues that determine when an alert should be triggered. Metric alert rules are used to monitor\nand notify you when certain metrics, like error count, latency, or failure rate, cross a\npredefined threshold. These rules help you proactively identify and address issues in your\nproject.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "alert_rule_id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The ID of the rule you'd like to query.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Alerts"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "alert_rule:write",
-              "alerts:write",
-              "org:admin",
-              "org:write"
-            ]
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Accepted"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/0/organizations/{organization_slug}/monitors/": {
       "get": {
         "operationId": "Retrieve Monitors for an Organization",
@@ -10456,1266 +11716,6 @@
           },
           "401": {
             "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/organizations/{organization_slug}/replay-count/": {
-      "get": {
-        "operationId": "Return a Count of Replays",
-        "description": "Return a count of replays for the given issue or transaction id.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "end",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`."
-          },
-          {
-            "in": "query",
-            "name": "environment",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "The name of environments to filter by."
-          },
-          {
-            "in": "query",
-            "name": "start",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example `2001-12-14T12:34:56.7890`."
-          },
-          {
-            "in": "query",
-            "name": "statsPeriod",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example `24h`, to mean query data starting from 24 hours ago to now."
-          },
-          {
-            "in": "query",
-            "name": "project",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer"
-              }
-            },
-            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "org:admin",
-              "org:read",
-              "org:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "integer"
-                  }
-                },
-                "examples": {
-                  "QueryReplayCountByIssueOrTransactionId": {
-                    "value": {
-                      "1": 9,
-                      "2": 0,
-                      "5": 0,
-                      "9": 1,
-                      "10": 29
-                    },
-                    "summary": "Query replay count by issue or transaction id"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/api/0/organizations/{organization_slug}/replay-selectors/": {
-      "get": {
-        "operationId": "List an Organization's Selectors",
-        "description": "Return a list of selectors for a given organization.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "environment",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "The name of environments to filter by."
-          },
-          {
-            "in": "query",
-            "name": "statsPeriod",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "This defines the range of the time series, relative to now. The range is given in a `<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for minutes, `h` for hours, `d` for days and `w` for weeks.You must either provide a `statsPeriod`, or a `start` and `end`."
-          },
-          {
-            "in": "query",
-            "name": "start",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "This defines the start of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `end` instead of `statsPeriod`."
-          },
-          {
-            "in": "query",
-            "name": "end",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "This defines the inclusive end of the time series range as an explicit datetime, either in UTC ISO8601 or epoch seconds.Use along with `start` instead of `statsPeriod`."
-          },
-          {
-            "in": "query",
-            "name": "project",
-            "schema": {
-              "type": "array",
-              "items": {}
-            },
-            "description": "The ID of the projects to filter by."
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "The field to sort the output by."
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
-          },
-          {
-            "in": "query",
-            "name": "per_page",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "org:admin",
-              "org:read",
-              "org:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "count_dead_clicks": {
-                            "type": "integer"
-                          },
-                          "count_rage_clicks": {
-                            "type": "integer"
-                          },
-                          "dom_element": {
-                            "type": "string"
-                          },
-                          "element": {
-                            "type": "object",
-                            "properties": {
-                              "alt": {
-                                "type": "string"
-                              },
-                              "aria_label": {
-                                "type": "string"
-                              },
-                              "class": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                              },
-                              "component_name": {
-                                "type": "string"
-                              },
-                              "id": {
-                                "type": "string"
-                              },
-                              "role": {
-                                "type": "string"
-                              },
-                              "tag": {
-                                "type": "string"
-                              },
-                              "testid": {
-                                "type": "string"
-                              },
-                              "title": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "alt",
-                              "aria_label",
-                              "class",
-                              "component_name",
-                              "id",
-                              "role",
-                              "tag",
-                              "testid",
-                              "title"
-                            ]
-                          },
-                          "project_id": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                },
-                "examples": {
-                  "RetrieveACollectionOfSelectorsForAnOrganization.": {
-                    "value": {
-                      "data": [
-                        {
-                          "count_dead_clicks": 2,
-                          "count_rage_clicks": 1,
-                          "dom_element": "div#myid.class1.class2",
-                          "element": {
-                            "alt": "",
-                            "aria_label": "",
-                            "class": [
-                              "class1",
-                              "class2"
-                            ],
-                            "component_name": "",
-                            "id": "myid",
-                            "role": "",
-                            "tag": "div",
-                            "testid": "",
-                            "title": ""
-                          },
-                          "project_id": "1"
-                        }
-                      ]
-                    },
-                    "summary": "Retrieve a collection of selectors for an organization."
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/api/0/organizations/{organization_slug}/replays/": {
-      "get": {
-        "operationId": "List an Organization's Replays",
-        "description": "Return a list of replays belonging to an organization.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "statsPeriod",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "\nThis defines the range of the time series, relative to now. The range is given in a\n`<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for\nminutes, `h` for hours, `d` for days and `w` for weeks. You must either provide a\n`statsPeriod`, or a `start` and `end`.\n"
-          },
-          {
-            "in": "query",
-            "name": "start",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "\nThis defines the start of the time series range as an explicit datetime, either in UTC\nISO8601 or epoch seconds. Use along with `end` instead of `statsPeriod`.\n"
-          },
-          {
-            "in": "query",
-            "name": "end",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "\nThis defines the inclusive end of the time series range as an explicit datetime, either in\nUTC ISO8601 or epoch seconds. Use along with `start` instead of `statsPeriod`.\n"
-          },
-          {
-            "in": "query",
-            "name": "field",
-            "schema": {
-              "type": "array",
-              "items": {
-                "enum": [
-                  "activity",
-                  "browser",
-                  "count_dead_clicks",
-                  "count_errors",
-                  "count_rage_clicks",
-                  "count_segments",
-                  "count_urls",
-                  "device",
-                  "dist",
-                  "duration",
-                  "environment",
-                  "error_ids",
-                  "finished_at",
-                  "id",
-                  "is_archived",
-                  "os",
-                  "platform",
-                  "project_id",
-                  "releases",
-                  "sdk",
-                  "started_at",
-                  "tags",
-                  "trace_ids",
-                  "urls",
-                  "user",
-                  "clicks",
-                  "info_ids",
-                  "warning_ids",
-                  "count_warnings",
-                  "count_infos",
-                  "has_viewed"
-                ],
-                "type": "string",
-                "description": "* `activity` - activity\n* `browser` - browser\n* `count_dead_clicks` - count_dead_clicks\n* `count_errors` - count_errors\n* `count_rage_clicks` - count_rage_clicks\n* `count_segments` - count_segments\n* `count_urls` - count_urls\n* `device` - device\n* `dist` - dist\n* `duration` - duration\n* `environment` - environment\n* `error_ids` - error_ids\n* `finished_at` - finished_at\n* `id` - id\n* `is_archived` - is_archived\n* `os` - os\n* `platform` - platform\n* `project_id` - project_id\n* `releases` - releases\n* `sdk` - sdk\n* `started_at` - started_at\n* `tags` - tags\n* `trace_ids` - trace_ids\n* `urls` - urls\n* `user` - user\n* `clicks` - clicks\n* `info_ids` - info_ids\n* `warning_ids` - warning_ids\n* `count_warnings` - count_warnings\n* `count_infos` - count_infos\n* `has_viewed` - has_viewed"
-              }
-            },
-            "description": "Specifies a field that should be marshaled in the output. Invalid fields will be rejected."
-          },
-          {
-            "in": "query",
-            "name": "project",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer"
-              }
-            },
-            "description": "The ID of the projects to filter by."
-          },
-          {
-            "in": "query",
-            "name": "environment",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "The environment to filter by."
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "The field to sort the output by."
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "A structured query string to filter the output by."
-          },
-          {
-            "in": "query",
-            "name": "per_page",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "Limit the number of rows to return in the result."
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "The cursor parameter is used to paginate results. See [here](https://docs.sentry.io/api/pagination/) for how to use this query parameter"
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "org:admin",
-              "org:read",
-              "org:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "project_id": {
-                        "type": "string"
-                      },
-                      "trace_ids": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "error_ids": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "environment": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "tags": {
-                        "anyOf": [
-                          {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          {
-                            "type": "array",
-                            "items": {}
-                          }
-                        ]
-                      },
-                      "user": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "username": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "email": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "ip": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "display_name": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "sdk": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "version": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "os": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "version": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "browser": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "version": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "device": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "brand": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "model": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "family": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "is_archived": {
-                        "type": "boolean",
-                        "nullable": true
-                      },
-                      "urls": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "nullable": true
-                      },
-                      "clicks": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        }
-                      },
-                      "count_dead_clicks": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "count_rage_clicks": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "count_errors": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "duration": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "finished_at": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "started_at": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "activity": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "count_urls": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "replay_type": {
-                        "type": "string"
-                      },
-                      "count_segments": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "platform": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "releases": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "dist": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "count_warnings": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "count_infos": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "has_viewed": {
-                        "type": "boolean"
-                      }
-                    }
-                  }
-                },
-                "examples": {
-                  "GetListOfReplays": {
-                    "value": [
-                      {
-                        "activity": 5,
-                        "browser": {
-                          "name": "Chome",
-                          "version": "103.0.38"
-                        },
-                        "count_dead_clicks": 6,
-                        "count_rage_clicks": 1,
-                        "count_errors": 1,
-                        "count_segments": 0,
-                        "count_urls": 1,
-                        "device": {
-                          "brand": "Apple",
-                          "family": "iPhone",
-                          "model": "11",
-                          "name": "iPhone 11"
-                        },
-                        "dist": null,
-                        "duration": 576,
-                        "environment": "production",
-                        "error_ids": [
-                          "7e07485f-12f9-416b-8b14-26260799b51f"
-                        ],
-                        "finished_at": "2022-07-07T14:15:33.201019",
-                        "has_viewed": true,
-                        "id": "7e07485f-12f9-416b-8b14-26260799b51f",
-                        "is_archived": null,
-                        "os": {
-                          "name": "iOS",
-                          "version": "16.2"
-                        },
-                        "platform": "Sentry",
-                        "project_id": "639195",
-                        "releases": [
-                          "version@1.4"
-                        ],
-                        "sdk": {
-                          "name": "Thundercat",
-                          "version": "27.1"
-                        },
-                        "started_at": "2022-07-07T14:05:57.909921",
-                        "tags": {
-                          "hello": [
-                            "world",
-                            "Lionel Richie"
-                          ]
-                        },
-                        "trace_ids": [
-                          "7e07485f-12f9-416b-8b14-26260799b51f"
-                        ],
-                        "urls": [
-                          "/organizations/abc123/issues"
-                        ],
-                        "user": {
-                          "display_name": "John Doe",
-                          "email": "john.doe@example.com",
-                          "id": "30246326",
-                          "ip": "213.164.1.114",
-                          "username": "John Doe"
-                        }
-                      }
-                    ],
-                    "summary": "Get list of replays"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/api/0/organizations/{organization_slug}/replays/{replay_id}/": {
-      "get": {
-        "operationId": "Retrieve a Replay Instance",
-        "description": "Return details on an individual replay.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "replay_id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "The ID of the replay you'd like to retrieve.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "statsPeriod",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "\nThis defines the range of the time series, relative to now. The range is given in a\n`<number><unit>` format. For example `1d` for a one day range. Possible units are `m` for\nminutes, `h` for hours, `d` for days and `w` for weeks. You must either provide a\n`statsPeriod`, or a `start` and `end`.\n"
-          },
-          {
-            "in": "query",
-            "name": "start",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "\nThis defines the start of the time series range as an explicit datetime, either in UTC\nISO8601 or epoch seconds. Use along with `end` instead of `statsPeriod`.\n"
-          },
-          {
-            "in": "query",
-            "name": "end",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "\nThis defines the inclusive end of the time series range as an explicit datetime, either in\nUTC ISO8601 or epoch seconds. Use along with `start` instead of `statsPeriod`.\n"
-          },
-          {
-            "in": "query",
-            "name": "field",
-            "schema": {
-              "type": "array",
-              "items": {
-                "enum": [
-                  "activity",
-                  "browser",
-                  "count_dead_clicks",
-                  "count_errors",
-                  "count_rage_clicks",
-                  "count_segments",
-                  "count_urls",
-                  "device",
-                  "dist",
-                  "duration",
-                  "environment",
-                  "error_ids",
-                  "finished_at",
-                  "id",
-                  "is_archived",
-                  "os",
-                  "platform",
-                  "project_id",
-                  "releases",
-                  "sdk",
-                  "started_at",
-                  "tags",
-                  "trace_ids",
-                  "urls",
-                  "user",
-                  "clicks",
-                  "info_ids",
-                  "warning_ids",
-                  "count_warnings",
-                  "count_infos",
-                  "has_viewed"
-                ],
-                "type": "string",
-                "description": "* `activity` - activity\n* `browser` - browser\n* `count_dead_clicks` - count_dead_clicks\n* `count_errors` - count_errors\n* `count_rage_clicks` - count_rage_clicks\n* `count_segments` - count_segments\n* `count_urls` - count_urls\n* `device` - device\n* `dist` - dist\n* `duration` - duration\n* `environment` - environment\n* `error_ids` - error_ids\n* `finished_at` - finished_at\n* `id` - id\n* `is_archived` - is_archived\n* `os` - os\n* `platform` - platform\n* `project_id` - project_id\n* `releases` - releases\n* `sdk` - sdk\n* `started_at` - started_at\n* `tags` - tags\n* `trace_ids` - trace_ids\n* `urls` - urls\n* `user` - user\n* `clicks` - clicks\n* `info_ids` - info_ids\n* `warning_ids` - warning_ids\n* `count_warnings` - count_warnings\n* `count_infos` - count_infos\n* `has_viewed` - has_viewed"
-              }
-            },
-            "description": "Specifies a field that should be marshaled in the output. Invalid fields will be rejected."
-          },
-          {
-            "in": "query",
-            "name": "project",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer"
-              }
-            },
-            "description": "The ID of the projects to filter by."
-          },
-          {
-            "in": "query",
-            "name": "environment",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "The environment to filter by."
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "The field to sort the output by."
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "A structured query string to filter the output by."
-          },
-          {
-            "in": "query",
-            "name": "per_page",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "Limit the number of rows to return in the result."
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "The cursor parameter is used to paginate results. See [here](https://docs.sentry.io/api/pagination/) for how to use this query parameter"
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "org:admin",
-              "org:read",
-              "org:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "project_id": {
-                      "type": "string"
-                    },
-                    "trace_ids": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "error_ids": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "environment": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "tags": {
-                      "anyOf": [
-                        {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        {
-                          "type": "array",
-                          "items": {}
-                        }
-                      ]
-                    },
-                    "user": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "username": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "email": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "ip": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "display_name": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    },
-                    "sdk": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "version": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    },
-                    "os": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "version": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    },
-                    "browser": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "version": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    },
-                    "device": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "brand": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "model": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "family": {
-                          "type": "string",
-                          "nullable": true
-                        }
-                      }
-                    },
-                    "is_archived": {
-                      "type": "boolean",
-                      "nullable": true
-                    },
-                    "urls": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "nullable": true
-                    },
-                    "clicks": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    },
-                    "count_dead_clicks": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "count_rage_clicks": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "count_errors": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "duration": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "finished_at": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "started_at": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "activity": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "count_urls": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "replay_type": {
-                      "type": "string"
-                    },
-                    "count_segments": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "platform": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "releases": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "dist": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "count_warnings": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "count_infos": {
-                      "type": "integer",
-                      "nullable": true
-                    },
-                    "has_viewed": {
-                      "type": "boolean"
-                    }
-                  }
-                },
-                "examples": {
-                  "GetSingleReplayDetails": {
-                    "value": {
-                      "activity": 5,
-                      "browser": {
-                        "name": "Chome",
-                        "version": "103.0.38"
-                      },
-                      "count_dead_clicks": 6,
-                      "count_rage_clicks": 1,
-                      "count_errors": 1,
-                      "count_segments": 0,
-                      "count_urls": 1,
-                      "device": {
-                        "brand": "Apple",
-                        "family": "iPhone",
-                        "model": "11",
-                        "name": "iPhone 11"
-                      },
-                      "dist": null,
-                      "duration": 576,
-                      "environment": "production",
-                      "error_ids": [
-                        "7e07485f-12f9-416b-8b14-26260799b51f"
-                      ],
-                      "finished_at": "2022-07-07T14:15:33.201019",
-                      "has_viewed": true,
-                      "id": "7e07485f-12f9-416b-8b14-26260799b51f",
-                      "is_archived": null,
-                      "os": {
-                        "name": "iOS",
-                        "version": "16.2"
-                      },
-                      "platform": "Sentry",
-                      "project_id": "639195",
-                      "releases": [
-                        "version@1.4"
-                      ],
-                      "sdk": {
-                        "name": "Thundercat",
-                        "version": "27.1"
-                      },
-                      "started_at": "2022-07-07T14:05:57.909921",
-                      "tags": {
-                        "hello": [
-                          "world",
-                          "Lionel Richie"
-                        ]
-                      },
-                      "trace_ids": [
-                        "7e07485f-12f9-416b-8b14-26260799b51f"
-                      ],
-                      "urls": [
-                        "/organizations/abc123/issues"
-                      ],
-                      "user": {
-                        "display_name": "John Doe",
-                        "email": "john.doe@example.com",
-                        "id": "30246326",
-                        "ip": "213.164.1.114",
-                        "username": "John Doe"
-                      }
-                    },
-                    "summary": "Get single replay details"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "403": {
             "description": "Forbidden"
@@ -15620,6 +15620,584 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/": {
+      "delete": {
+        "operationId": "Delete a Replay Instance",
+        "description": "Delete a replay",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/clicks/": {
+      "get": {
+        "operationId": "List Clicked Nodes",
+        "description": "Retrieve a collection of RRWeb DOM node-ids and the timestamp they were clicked.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "node_id": {
+                            "type": "integer"
+                          },
+                          "timestamp": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "node_id",
+                          "timestamp"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "RetrieveACollectionOfRRWebDOMNode-idsAndTheTimestampTheyWereClicked.": {
+                    "value": {
+                      "data": [
+                        {
+                          "node_id": 1,
+                          "timestamp": "2024-02-08T15:52:25+00:00"
+                        }
+                      ]
+                    },
+                    "summary": "Retrieve a collection of RRWeb DOM node-ids and the timestamp they were clicked."
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/": {
+      "get": {
+        "operationId": "List Recording Segments",
+        "description": "Return a collection of replay recording segments.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  }
+                },
+                "examples": {
+                  "RetrieveACollectionOfReplaySegments": {
+                    "value": [
+                      [
+                        {
+                          "type": 5,
+                          "timestamp": 1658770772.902,
+                          "data": {
+                            "tag": "performanceSpan",
+                            "payload": {
+                              "op": "memory",
+                              "description": "",
+                              "startTimestamp": 1658770772.902,
+                              "endTimestamp": 1658770772.902,
+                              "data": {
+                                "memory": {
+                                  "jsHeapSizeLimit": 4294705152,
+                                  "totalJSHeapSize": 10204109,
+                                  "usedJSHeapSize": 9131621
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      [
+                        {
+                          "type": 5,
+                          "timestamp": 1665063926.125,
+                          "data": {
+                            "tag": "performanceSpan",
+                            "payload": {
+                              "op": "navigation.navigate",
+                              "description": "https://sentry.io",
+                              "startTimestamp": 1665063926.125,
+                              "endTimestamp": 1665063926.833,
+                              "data": {
+                                "size": 9538,
+                                "duration": 710
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    ],
+                    "summary": "Retrieve a collection of replay segments"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/{segment_id}/": {
+      "get": {
+        "operationId": "Fetch Recording Segment",
+        "description": "Return a replay recording segment.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "segment_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the segment you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "examples": {
+                  "RetrieveAReplaySegment": {
+                    "value": [
+                      {
+                        "type": 5,
+                        "timestamp": 1658770772.902,
+                        "data": {
+                          "tag": "performanceSpan",
+                          "payload": {
+                            "op": "memory",
+                            "description": "",
+                            "startTimestamp": 1658770772.902,
+                            "endTimestamp": 1658770772.902,
+                            "data": {
+                              "memory": {
+                                "jsHeapSizeLimit": 4294705152,
+                                "totalJSHeapSize": 10204109,
+                                "usedJSHeapSize": 9131621
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "summary": "Retrieve a replay segment"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/viewed-by/": {
+      "get": {
+        "operationId": "Get list of user who have viewed a replay",
+        "description": "Return a list of users who have viewed a replay.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "replay_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the replay you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "viewed_by": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        }
+                      },
+                      "required": [
+                        "viewed_by"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "GetListOfUsersWhoHaveViewedAReplay": {
+                    "value": {
+                      "data": {
+                        "viewed_by": [
+                          {
+                            "id": "884411",
+                            "name": "some.body@sentry.io",
+                            "username": "d93522a35cb64c13991104bd73d44519",
+                            "email": "some.body@sentry.io",
+                            "avatarUrl": "https://gravatar.com/avatar/d93522a35cb64c13991104bd73d44519d93522a35cb64c13991104bd73d44519?s=32&d=mm",
+                            "isActive": true,
+                            "hasPasswordAuth": false,
+                            "isManaged": false,
+                            "dateJoined": "2022-07-25T23:36:29.593212Z",
+                            "lastLogin": "2024-03-14T18:11:28.740309Z",
+                            "has2fa": true,
+                            "lastActive": "2024-03-15T22:22:06.925934Z",
+                            "isSuperuser": true,
+                            "isStaff": false,
+                            "experiments": {},
+                            "emails": [
+                              {
+                                "id": "2231333",
+                                "email": "some.body@sentry.io",
+                                "is_verified": true
+                              }
+                            ],
+                            "avatar": {
+                              "avatarType": "upload",
+                              "avatarUuid": "499dcd0764da42a589654a2224086e67",
+                              "avatarUrl": "https://sentry.io/avatar/499dcd0764da42a589654a2224086e67/"
+                            },
+                            "type": "user"
+                          }
+                        ]
+                      }
+                    },
+                    "summary": "Get list of users who have viewed a replay"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -20007,584 +20585,6 @@
           },
           "401": {
             "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/projects/{organization_slug}/{project_id_or_slug}/replays/{replay_id}/": {
-      "delete": {
-        "operationId": "Delete a Replay Instance",
-        "description": "Delete a replay",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "project_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the project the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "replay_id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "The ID of the replay you'd like to retrieve.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "project:admin",
-              "project:read",
-              "project:write"
-            ]
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/projects/{organization_slug}/{project_id_or_slug}/replays/{replay_id}/clicks/": {
-      "get": {
-        "operationId": "List Clicked Nodes",
-        "description": "Retrieve a collection of RRWeb DOM node-ids and the timestamp they were clicked.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "project_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the project the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "replay_id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "The ID of the replay you'd like to retrieve.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
-          },
-          {
-            "in": "query",
-            "name": "environment",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "The name of environments to filter by."
-          },
-          {
-            "in": "query",
-            "name": "per_page",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "project:admin",
-              "project:read",
-              "project:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "node_id": {
-                            "type": "integer"
-                          },
-                          "timestamp": {
-                            "type": "string",
-                            "format": "date-time"
-                          }
-                        },
-                        "required": [
-                          "node_id",
-                          "timestamp"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                },
-                "examples": {
-                  "RetrieveACollectionOfRRWebDOMNode-idsAndTheTimestampTheyWereClicked.": {
-                    "value": {
-                      "data": [
-                        {
-                          "node_id": 1,
-                          "timestamp": "2024-02-08T15:52:25+00:00"
-                        }
-                      ]
-                    },
-                    "summary": "Retrieve a collection of RRWeb DOM node-ids and the timestamp they were clicked."
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/projects/{organization_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/": {
-      "get": {
-        "operationId": "List Recording Segments",
-        "description": "Return a collection of replay recording segments.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "project_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the project the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "replay_id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "The ID of the replay you'd like to retrieve.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
-          },
-          {
-            "in": "query",
-            "name": "per_page",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "project:admin",
-              "project:read",
-              "project:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    }
-                  }
-                },
-                "examples": {
-                  "RetrieveACollectionOfReplaySegments": {
-                    "value": [
-                      [
-                        {
-                          "type": 5,
-                          "timestamp": 1658770772.902,
-                          "data": {
-                            "tag": "performanceSpan",
-                            "payload": {
-                              "op": "memory",
-                              "description": "",
-                              "startTimestamp": 1658770772.902,
-                              "endTimestamp": 1658770772.902,
-                              "data": {
-                                "memory": {
-                                  "jsHeapSizeLimit": 4294705152,
-                                  "totalJSHeapSize": 10204109,
-                                  "usedJSHeapSize": 9131621
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ],
-                      [
-                        {
-                          "type": 5,
-                          "timestamp": 1665063926.125,
-                          "data": {
-                            "tag": "performanceSpan",
-                            "payload": {
-                              "op": "navigation.navigate",
-                              "description": "https://sentry.io",
-                              "startTimestamp": 1665063926.125,
-                              "endTimestamp": 1665063926.833,
-                              "data": {
-                                "size": 9538,
-                                "duration": 710
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    ],
-                    "summary": "Retrieve a collection of replay segments"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/projects/{organization_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/{segment_id}/": {
-      "get": {
-        "operationId": "Fetch Recording Segment",
-        "description": "Return a replay recording segment.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "project_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the project the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "replay_id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "The ID of the replay you'd like to retrieve.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "segment_id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The ID of the segment you'd like to retrieve.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "project:admin",
-              "project:read",
-              "project:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": {}
-                  }
-                },
-                "examples": {
-                  "RetrieveAReplaySegment": {
-                    "value": [
-                      {
-                        "type": 5,
-                        "timestamp": 1658770772.902,
-                        "data": {
-                          "tag": "performanceSpan",
-                          "payload": {
-                            "op": "memory",
-                            "description": "",
-                            "startTimestamp": 1658770772.902,
-                            "endTimestamp": 1658770772.902,
-                            "data": {
-                              "memory": {
-                                "jsHeapSizeLimit": 4294705152,
-                                "totalJSHeapSize": 10204109,
-                                "usedJSHeapSize": 9131621
-                              }
-                            }
-                          }
-                        }
-                      }
-                    ],
-                    "summary": "Retrieve a replay segment"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/projects/{organization_slug}/{project_id_or_slug}/replays/{replay_id}/viewed-by/": {
-      "get": {
-        "operationId": "Get list of user who have viewed a replay",
-        "description": "Return a list of users who have viewed a replay.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "project_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The id or slug of the project the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "replay_id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "The ID of the replay you'd like to retrieve.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Replays"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "event:admin",
-              "event:read",
-              "event:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "viewed_by": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "additionalProperties": {}
-                          }
-                        }
-                      },
-                      "required": [
-                        "viewed_by"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                },
-                "examples": {
-                  "GetListOfUsersWhoHaveViewedAReplay": {
-                    "value": {
-                      "data": {
-                        "viewed_by": [
-                          {
-                            "id": "884411",
-                            "name": "some.body@sentry.io",
-                            "username": "d93522a35cb64c13991104bd73d44519",
-                            "email": "some.body@sentry.io",
-                            "avatarUrl": "https://gravatar.com/avatar/d93522a35cb64c13991104bd73d44519d93522a35cb64c13991104bd73d44519?s=32&d=mm",
-                            "isActive": true,
-                            "hasPasswordAuth": false,
-                            "isManaged": false,
-                            "dateJoined": "2022-07-25T23:36:29.593212Z",
-                            "lastLogin": "2024-03-14T18:11:28.740309Z",
-                            "has2fa": true,
-                            "lastActive": "2024-03-15T22:22:06.925934Z",
-                            "isSuperuser": true,
-                            "isStaff": false,
-                            "experiments": {},
-                            "emails": [
-                              {
-                                "id": "2231333",
-                                "email": "some.body@sentry.io",
-                                "is_verified": true
-                              }
-                            ],
-                            "avatar": {
-                              "avatarType": "upload",
-                              "avatarUuid": "499dcd0764da42a589654a2224086e67",
-                              "avatarUrl": "https://sentry.io/avatar/499dcd0764da42a589654a2224086e67/"
-                            },
-                            "type": "user"
-                          }
-                        ]
-                      }
-                    },
-                    "summary": "Get list of users who have viewed a replay"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "403": {
             "description": "Forbidden"
