@@ -14,6 +14,212 @@
     }
   },
   "paths": {
+    "/api/0/organizations/": {
+      "get": {
+        "operationId": "List Your Organizations",
+        "description": "Return a list of organizations available to the authenticated session. This is particularly useful for requests with a user bound context. For API key-based requests this will only return the organization that belongs to the key.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "owner",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Specify `true` to restrict results to organizations in which you are an owner."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nValid query fields include:\n- `id`: The organization ID\n- `slug`: The organization slug\n- `status`: The organization's current status (one of `active`, `pending_deletion`, or `deletion_in_progress`)\n- `email` or `member_id`: Filter your organizations by the emails or [organization member IDs](/api/organizations/list-an-organizations-members/) of specific members included\n- `platform`: Filter your organizations to those with at least one project using this platform\n- `query`: Filter your organizations by name, slug, and members that contain this substring\n\nExample: `query=(slug:foo AND status:active) OR (email:[thing-one@example.com,thing-two@example.com] AND query:bar)`\n"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The field to sort results by, in descending order. If not specified the results are sorted by the date they were created.\n\nValid fields include:\n- `members`: By number of members\n- `projects`: By number of projects\n- `events`: By number of events in the past 24 hours\n"
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "isEarlyAdopter": {
+                        "type": "boolean"
+                      },
+                      "require2FA": {
+                        "type": "boolean"
+                      },
+                      "requireEmailVerification": {
+                        "type": "boolean"
+                      },
+                      "avatar": {
+                        "type": "object",
+                        "properties": {
+                          "avatarType": {
+                            "type": "string"
+                          },
+                          "avatarUuid": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "avatarUrl": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "features": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "links": {
+                        "type": "object",
+                        "properties": {
+                          "organizationUrl": {
+                            "type": "string"
+                          },
+                          "regionUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "organizationUrl",
+                          "regionUrl"
+                        ]
+                      },
+                      "hasAuthProvider": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "avatar",
+                      "dateCreated",
+                      "features",
+                      "hasAuthProvider",
+                      "id",
+                      "isEarlyAdopter",
+                      "links",
+                      "name",
+                      "require2FA",
+                      "requireEmailVerification",
+                      "slug",
+                      "status"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListYourOrganizations": {
+                    "value": [
+                      {
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null
+                        },
+                        "dateCreated": "2018-11-06T21:19:55.101Z",
+                        "features": [
+                          "session-replay-video",
+                          "onboarding",
+                          "advanced-search",
+                          "monitor-seat-billing",
+                          "issue-platform"
+                        ],
+                        "hasAuthProvider": false,
+                        "id": "2",
+                        "isEarlyAdopter": false,
+                        "links": {
+                          "organizationUrl": "https://the-interstellar-jurisdiction.sentry.io",
+                          "regionUrl": "https://us.sentry.io"
+                        },
+                        "name": "The Interstellar Jurisdiction",
+                        "require2FA": false,
+                        "requireEmailVerification": false,
+                        "slug": "the-interstellar-jurisdiction",
+                        "status": {
+                          "id": "active",
+                          "name": "active"
+                        }
+                      }
+                    ],
+                    "summary": "List your organizations"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/alert-rules/": {
       "get": {
         "operationId": "List an Organization's Metric Alert Rules",
@@ -1355,7 +1561,7 @@
                 "type": "string"
               }
             },
-            "description": "The fields, functions, or equations to request for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](https://docs.sentry.io/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n",
+            "description": "The fields, functions, or equations to request for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n",
             "required": true
           },
           {
@@ -1420,7 +1626,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
           },
           {
             "in": "query",
@@ -7460,7 +7666,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
           }
         ],
         "tags": [
@@ -7603,7 +7809,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
           }
         ],
         "tags": [
@@ -10083,7 +10289,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
           }
         ],
         "tags": [
@@ -16844,7 +17050,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The search filter for your query, read more about query syntax [here](https://docs.sentry.io/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
           }
         ],
         "tags": [
@@ -21853,139 +22059,6 @@
           {
             "auth_token": [
               "team:read"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/0/organizations/": {
-      "get": {
-        "tags": [
-          "Organizations"
-        ],
-        "description": "Return a list of organizations available to the authenticated session.  This is particularly useful for requests with an user bound context.  For API key based requests this will only return the organization that belongs to the key.",
-        "operationId": "List Your Organizations",
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "query",
-            "description": "Restrict results to organizations in which you are an organization owner.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
-            "x-learn-more": "https://docs.sentry.io/api/pagination/",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "avatar",
-                      "dateCreated",
-                      "id",
-                      "isEarlyAdopter",
-                      "name",
-                      "require2FA",
-                      "slug",
-                      "status"
-                    ],
-                    "properties": {
-                      "avatar": {
-                        "type": "object",
-                        "properties": {
-                          "avatarType": {
-                            "type": "string"
-                          },
-                          "avatarUuid": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "dateCreated": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "isEarlyAdopter": {
-                        "type": "boolean"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "require2FA": {
-                        "type": "boolean"
-                      },
-                      "slug": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "type": "object",
-                        "required": [
-                          "id",
-                          "name"
-                        ],
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "avatar": {
-                      "avatarType": "letter_avatar",
-                      "avatarUuid": null
-                    },
-                    "dateCreated": "2018-11-06T21:19:55.101Z",
-                    "id": "2",
-                    "isEarlyAdopter": false,
-                    "name": "The Interstellar Jurisdiction",
-                    "require2FA": false,
-                    "slug": "the-interstellar-jurisdiction",
-                    "status": {
-                      "id": "active",
-                      "name": "active"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "org: read"
             ]
           }
         ]
@@ -39649,6 +39722,105 @@
             "orgRole",
             "pending",
             "user"
+          ]
+        }
+      },
+      "ListOrganizations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "slug": {
+              "type": "string"
+            },
+            "status": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "isEarlyAdopter": {
+              "type": "boolean"
+            },
+            "require2FA": {
+              "type": "boolean"
+            },
+            "requireEmailVerification": {
+              "type": "boolean"
+            },
+            "avatar": {
+              "type": "object",
+              "properties": {
+                "avatarType": {
+                  "type": "string"
+                },
+                "avatarUuid": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "avatarUrl": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            },
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "links": {
+              "type": "object",
+              "properties": {
+                "organizationUrl": {
+                  "type": "string"
+                },
+                "regionUrl": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "organizationUrl",
+                "regionUrl"
+              ]
+            },
+            "hasAuthProvider": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "avatar",
+            "dateCreated",
+            "features",
+            "hasAuthProvider",
+            "id",
+            "isEarlyAdopter",
+            "links",
+            "name",
+            "require2FA",
+            "requireEmailVerification",
+            "slug",
+            "status"
           ]
         }
       },
