@@ -1538,6 +1538,91 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/environments/": {
+      "get": {
+        "operationId": "List an Organization's Environments",
+        "description": "Lists an organization's environments.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "visibility",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The visibility of the environments to filter by. The options are: `all`, `hidden`, `visible`. Defaults to `visible`."
+          }
+        ],
+        "tags": [
+          "Environments"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAnOrganization'sEnvironments": {
+                    "value": [
+                      {
+                        "id": 1,
+                        "name": "Production"
+                      },
+                      {
+                        "id": 2,
+                        "name": "Staging"
+                      }
+                    ],
+                    "summary": "List an Organization's Environments"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/events/": {
       "get": {
         "operationId": "Query Discover Events in Table Format",
@@ -42055,6 +42140,24 @@
           "triggers"
         ]
       },
+      "OrganizationEnvironmentResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        }
+      },
       "OrganizationEventsResponseDict": {
         "type": "object",
         "properties": {
@@ -45514,6 +45617,16 @@
       "name": "Integrations",
       "x-sidebar-name": "Integrations",
       "description": "Endpoints for Integrations",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Environments",
+      "x-sidebar-name": "Environments",
+      "description": "Endpoints for Environments",
       "x-display-description": false,
       "externalDocs": {
         "description": "Found an error? Let us know.",
