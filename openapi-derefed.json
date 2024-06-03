@@ -7683,6 +7683,1796 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/": {
+      "get": {
+        "operationId": "Retrieve an Organization's Release",
+        "description": "Return details on an individual release.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "version",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The version identifier of the release",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The project id to filter by."
+          },
+          {
+            "in": "query",
+            "name": "health",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Whether or not to include health data with the release. By default, this is false."
+          },
+          {
+            "in": "query",
+            "name": "adoptionStages",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Whether or not to include adoption stages with the release. By default, this is false."
+          },
+          {
+            "in": "query",
+            "name": "summaryStatsPeriod",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "14d",
+                "1d",
+                "1h",
+                "24h",
+                "2d",
+                "30d",
+                "48h",
+                "7d",
+                "90d"
+              ]
+            },
+            "description": "The period of time used to query summary stats for the release. By default, this is 14d."
+          },
+          {
+            "in": "query",
+            "name": "healthStatsPeriod",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "14d",
+                "1d",
+                "1h",
+                "24h",
+                "2d",
+                "30d",
+                "48h",
+                "7d",
+                "90d"
+              ]
+            },
+            "description": "The period of time used to query health stats for the release. By default, this is 24h if health is enabled."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "crash_free_sessions",
+                "crash_free_users",
+                "date",
+                "sessions",
+                "users"
+              ]
+            },
+            "description": "The field used to sort results by. By default, this is `date`."
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "archived",
+                "open"
+              ]
+            },
+            "description": "Release statuses that you can filter by."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nexample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          }
+        ],
+        "tags": [
+          "Releases"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:read",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ref": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "url": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateReleased": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "dateStarted": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "owner": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "lastCommit": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "lastDeploy": {
+                      "type": "object",
+                      "properties": {
+                        "dateStarted": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "url": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "id": {
+                          "type": "integer"
+                        },
+                        "environment": {
+                          "type": "string"
+                        },
+                        "dateFinished": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "dateFinished",
+                        "environment",
+                        "id",
+                        "name"
+                      ],
+                      "nullable": true
+                    },
+                    "firstEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "lastEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "currentProjectMeta": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "userAgent": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "adoptionStages": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "newGroups": {
+                      "type": "integer"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "shortVersion": {
+                      "type": "string"
+                    },
+                    "versionInfo": {
+                      "type": "object",
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        },
+                        "package": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "buildHash": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "buildHash",
+                        "package",
+                        "version"
+                      ]
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "commitCount": {
+                      "type": "integer"
+                    },
+                    "deployCount": {
+                      "type": "integer"
+                    },
+                    "authors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "lastLogin": {
+                            "type": "string"
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "type": "string"
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "experiments": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "object",
+                                  "nullable": true
+                                }
+                              ]
+                            }
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "anyOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "avatar": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "dateJoined": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "dateJoined",
+                          "email",
+                          "hasPasswordAuth",
+                          "id",
+                          "isActive",
+                          "isManaged",
+                          "name",
+                          "username"
+                        ]
+                      }
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "healthData": {
+                            "type": "object",
+                            "properties": {
+                              "durationP50": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "durationP90": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "crashFreeUsers": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "crashFreeSessions": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "totalUsers": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalUsers24h": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalProjectUsers24h": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalSessions": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalSessions24h": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalProjectSessions24h": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "adoption": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "sessionsAdoption": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "sessionsCrashed": {
+                                "type": "integer"
+                              },
+                              "sessionsErrored": {
+                                "type": "integer"
+                              },
+                              "hasHealthData": {
+                                "type": "boolean"
+                              },
+                              "stats": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              }
+                            },
+                            "required": [
+                              "hasHealthData",
+                              "sessionsCrashed",
+                              "sessionsErrored",
+                              "stats"
+                            ],
+                            "nullable": true
+                          },
+                          "dateReleased": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "dateStarted": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "id": {
+                            "type": "integer"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "newGroups": {
+                            "type": "integer"
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "platforms": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
+                          },
+                          "hasHealthData": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "hasHealthData",
+                          "id",
+                          "name",
+                          "newGroups",
+                          "platform",
+                          "platforms",
+                          "slug"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "authors",
+                    "commitCount",
+                    "data",
+                    "deployCount",
+                    "id",
+                    "newGroups",
+                    "projects",
+                    "shortVersion",
+                    "status",
+                    "version",
+                    "versionInfo"
+                  ]
+                },
+                "examples": {
+                  "RetrieveReleaseDetails": {
+                    "value": {
+                      "id": 1122684517,
+                      "version": "control@abc123",
+                      "status": "open",
+                      "shortVersion": "control@abc123",
+                      "versionInfo": {
+                        "package": "control",
+                        "version": {
+                          "raw": "abc123"
+                        },
+                        "description": "abc123",
+                        "buildHash": "abc123"
+                      },
+                      "ref": null,
+                      "url": null,
+                      "dateReleased": null,
+                      "dateCreated": "2024-05-21T11:26:16.190281Z",
+                      "data": {},
+                      "newGroups": 0,
+                      "owner": null,
+                      "commitCount": 2,
+                      "lastCommit": {
+                        "id": "xyz123",
+                        "message": "feat(raspberries): Made raspberries even more delicious",
+                        "dateCreated": "2024-05-21T11:04:55Z",
+                        "pullRequest": {
+                          "id": "70214",
+                          "title": "feat(raspberries): Made raspberries even more delicious",
+                          "message": "Made raspberries even more delicious",
+                          "dateCreated": "2024-05-03T07:32:28.205043Z",
+                          "repository": {
+                            "id": "1",
+                            "name": "raj/raspberries",
+                            "url": "https://raspberries.raspberries/raj/raspberries",
+                            "provider": {
+                              "id": "integrations:github",
+                              "name": "GitHub"
+                            },
+                            "status": "active",
+                            "dateCreated": "2016-10-10T21:36:42.414678Z",
+                            "integrationId": "2933",
+                            "externalSlug": "raj/raspberries",
+                            "externalId": "873328"
+                          },
+                          "author": {
+                            "id": "2837091",
+                            "name": "Raj's Raspberries",
+                            "username": "rajraspberry",
+                            "avatarUrl": "https://gravatar.com/avatar/bf99685de539465db9208ab3a888843ba0e5e85b1f156084484c7c6c31312be5?s=32&d=mm",
+                            "isActive": true,
+                            "hasPasswordAuth": false,
+                            "isManaged": false,
+                            "dateJoined": "2023-08-07T12:32:09.091427Z",
+                            "lastLogin": "2024-05-21T05:46:23.824074Z",
+                            "has2fa": true,
+                            "lastActive": "2024-05-21T13:59:10.614891Z",
+                            "isSuperuser": true,
+                            "isStaff": true,
+                            "experiments": {},
+                            "emails": [
+                              {
+                                "id": "2972219",
+                                "email": "raj@raspberries",
+                                "is_verified": true
+                              }
+                            ],
+                            "avatar": {
+                              "avatarType": "upload",
+                              "avatarUuid": "xyz123",
+                              "avatarUrl": "https://sentry.io/avatar/xyz123/"
+                            }
+                          },
+                          "externalUrl": "https://github.com/raj/raspberries/pull/70214"
+                        },
+                        "suspectCommitType": "",
+                        "repository": {
+                          "id": "1",
+                          "name": "raj/raspberries",
+                          "url": "https://github.com/raj/raspberries",
+                          "provider": {
+                            "id": "integrations:github",
+                            "name": "GitHub"
+                          },
+                          "status": "active",
+                          "dateCreated": "2016-10-10T21:36:42.414678Z",
+                          "integrationId": "2933",
+                          "externalSlug": "raj/raspberries",
+                          "externalId": "873328"
+                        },
+                        "author": {
+                          "id": "2837091",
+                          "name": "Raj's Raspberries",
+                          "username": "rajraspberry",
+                          "avatarUrl": "https://gravatar.com/avatar/bf99685de539465db9208ab3a888843ba0e5e85b1f156084484c7c6c31312be5?s=32&d=mm",
+                          "isActive": true,
+                          "hasPasswordAuth": false,
+                          "isManaged": false,
+                          "dateJoined": "2023-08-07T12:32:09.091427Z",
+                          "lastLogin": "2024-05-21T05:46:23.824074Z",
+                          "has2fa": true,
+                          "lastActive": "2024-05-21T13:59:10.614891Z",
+                          "isSuperuser": true,
+                          "isStaff": true,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "2972219",
+                              "email": "raj@raspberries",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "upload",
+                            "avatarUuid": "xyz123",
+                            "avatarUrl": "https://sentry.io/avatar/xyz123/"
+                          }
+                        },
+                        "releases": [
+                          {
+                            "version": "control@abc123",
+                            "shortVersion": "control@abc123",
+                            "ref": null,
+                            "url": null,
+                            "dateReleased": null,
+                            "dateCreated": "2024-05-21T11:26:16.190281Z"
+                          },
+                          {
+                            "version": "backend@abc123",
+                            "shortVersion": "backend@abc123",
+                            "ref": null,
+                            "url": null,
+                            "dateReleased": null,
+                            "dateCreated": "2024-05-21T11:56:36.790866Z"
+                          },
+                          {
+                            "version": "control@def789",
+                            "shortVersion": "control@def789",
+                            "ref": null,
+                            "url": null,
+                            "dateReleased": null,
+                            "dateCreated": "2024-05-21T12:44:25.923663Z"
+                          },
+                          {
+                            "version": "frontend@ghi012",
+                            "shortVersion": "frontend@ghi012",
+                            "ref": null,
+                            "url": null,
+                            "dateReleased": null,
+                            "dateCreated": "2024-05-21T12:46:42.338358Z"
+                          }
+                        ]
+                      },
+                      "deployCount": 1,
+                      "lastDeploy": {
+                        "id": 53070941,
+                        "environment": "canary-test-control",
+                        "dateStarted": null,
+                        "dateFinished": "2024-05-21T11:26:17.597793Z",
+                        "name": "control@abc123 to canary-test-",
+                        "url": null
+                      },
+                      "authors": [
+                        {
+                          "id": 2837091,
+                          "name": "Raj's Raspberries",
+                          "username": "rajraspberry",
+                          "email": "raj@raspberries",
+                          "avatarUrl": "https://gravatar.com/avatar/bf99685de539465db9208ab3a888843ba0e5e85b1f156084484c7c6c31312be5?s=32&d=mm",
+                          "isActive": true,
+                          "hasPasswordAuth": false,
+                          "isManaged": false,
+                          "dateJoined": "2023-08-07T12:32:09.091427Z",
+                          "lastLogin": "2024-05-21T05:46:23.824074Z",
+                          "has2fa": true,
+                          "lastActive": "2024-05-21T13:59:10.614891Z",
+                          "isSuperuser": true,
+                          "isStaff": true,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "2972219",
+                              "email": "raj@raspberries",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "upload",
+                            "avatarUuid": "xyz123",
+                            "avatarUrl": "https://sentry.io/avatar/xyz123/"
+                          }
+                        }
+                      ],
+                      "projects": [
+                        {
+                          "id": 1,
+                          "slug": "sentry",
+                          "name": "Backend",
+                          "newGroups": 0,
+                          "platform": "python",
+                          "platforms": [
+                            "native",
+                            "other",
+                            "python"
+                          ],
+                          "hasHealthData": false,
+                          "healthData": {
+                            "durationP50": null,
+                            "durationP90": null,
+                            "crashFreeUsers": null,
+                            "crashFreeSessions": null,
+                            "sessionsCrashed": 0,
+                            "sessionsErrored": 0,
+                            "totalUsers": null,
+                            "totalUsers24h": null,
+                            "totalProjectUsers24h": null,
+                            "totalSessions": null,
+                            "totalSessions24h": null,
+                            "totalProjectSessions24h": null,
+                            "adoption": null,
+                            "sessionsAdoption": null,
+                            "stats": {
+                              "24h": [
+                                [
+                                  1715126400,
+                                  0
+                                ],
+                                [
+                                  1715212800,
+                                  0
+                                ],
+                                [
+                                  1715299200,
+                                  0
+                                ],
+                                [
+                                  1715385600,
+                                  0
+                                ],
+                                [
+                                  1715472000,
+                                  0
+                                ],
+                                [
+                                  1715558400,
+                                  0
+                                ],
+                                [
+                                  1715644800,
+                                  0
+                                ],
+                                [
+                                  1715731200,
+                                  0
+                                ],
+                                [
+                                  1715817600,
+                                  0
+                                ],
+                                [
+                                  1715904000,
+                                  0
+                                ],
+                                [
+                                  1715990400,
+                                  0
+                                ],
+                                [
+                                  1716076800,
+                                  0
+                                ],
+                                [
+                                  1716163200,
+                                  0
+                                ],
+                                [
+                                  1716249600,
+                                  0
+                                ]
+                              ]
+                            },
+                            "hasHealthData": false
+                          }
+                        }
+                      ],
+                      "firstEvent": null,
+                      "lastEvent": null,
+                      "currentProjectMeta": {},
+                      "userAgent": "Python-urllib/3.11",
+                      "adoptionStages": {
+                        "sentry": {
+                          "stage": "low_adoption",
+                          "adopted": null,
+                          "unadopted": null
+                        }
+                      }
+                    },
+                    "summary": "Retrieve release details"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update an Organization's Release",
+        "description": "Update a release. This can change some metadata associated with\nthe release (the ref, url, and dates).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "version",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The version identifier of the release",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Releases"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ref": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "An optional commit reference. This is useful if a tagged version has been provided.",
+                    "maxLength": 200
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": true,
+                    "description": "A URL that points to the release. For instance, this can be the path to an online interface to the source code, such as a GitHub URL."
+                  },
+                  "dateReleased": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "An optional date that indicates when the release went live.  If not provided the current time is used."
+                  },
+                  "commits": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "maxLength": 64
+                        },
+                        "repository": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 64
+                        },
+                        "message": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "author_name": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 128
+                        },
+                        "author_email": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 75
+                        },
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "patch_set": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "path": {
+                                "type": "string",
+                                "maxLength": 510
+                              },
+                              "type": {
+                                "type": "string",
+                                "maxLength": 1
+                              }
+                            },
+                            "required": [
+                              "path",
+                              "type"
+                            ]
+                          },
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ]
+                    },
+                    "description": "An optional list of commit data to be associated."
+                  },
+                  "refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "commit": {
+                          "type": "string"
+                        },
+                        "repository": {
+                          "type": "string",
+                          "maxLength": 200
+                        },
+                        "previousCommit": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 64
+                        }
+                      },
+                      "required": [
+                        "commit",
+                        "repository"
+                      ]
+                    },
+                    "description": "An optional way to indicate the start and end commits for each repository included in a release. Head commits must include parameters ``repository`` and ``commit`` (the HEAD SHA). They can optionally include ``previousCommit`` (the SHA of the HEAD of the previous release), which should be specified if this is the first time you've sent commit data."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ref": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "url": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateReleased": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "dateStarted": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "owner": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "lastCommit": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "lastDeploy": {
+                      "type": "object",
+                      "properties": {
+                        "dateStarted": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "url": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "id": {
+                          "type": "integer"
+                        },
+                        "environment": {
+                          "type": "string"
+                        },
+                        "dateFinished": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "dateFinished",
+                        "environment",
+                        "id",
+                        "name"
+                      ],
+                      "nullable": true
+                    },
+                    "firstEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "lastEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "currentProjectMeta": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "userAgent": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "adoptionStages": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "newGroups": {
+                      "type": "integer"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "shortVersion": {
+                      "type": "string"
+                    },
+                    "versionInfo": {
+                      "type": "object",
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        },
+                        "package": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "buildHash": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "buildHash",
+                        "package",
+                        "version"
+                      ]
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "commitCount": {
+                      "type": "integer"
+                    },
+                    "deployCount": {
+                      "type": "integer"
+                    },
+                    "authors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "lastLogin": {
+                            "type": "string"
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "type": "string"
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "experiments": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "object",
+                                  "nullable": true
+                                }
+                              ]
+                            }
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "anyOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "avatar": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "dateJoined": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "dateJoined",
+                          "email",
+                          "hasPasswordAuth",
+                          "id",
+                          "isActive",
+                          "isManaged",
+                          "name",
+                          "username"
+                        ]
+                      }
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "healthData": {
+                            "type": "object",
+                            "properties": {
+                              "durationP50": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "durationP90": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "crashFreeUsers": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "crashFreeSessions": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "totalUsers": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalUsers24h": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalProjectUsers24h": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalSessions": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalSessions24h": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "totalProjectSessions24h": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "adoption": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "sessionsAdoption": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true
+                              },
+                              "sessionsCrashed": {
+                                "type": "integer"
+                              },
+                              "sessionsErrored": {
+                                "type": "integer"
+                              },
+                              "hasHealthData": {
+                                "type": "boolean"
+                              },
+                              "stats": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              }
+                            },
+                            "required": [
+                              "hasHealthData",
+                              "sessionsCrashed",
+                              "sessionsErrored",
+                              "stats"
+                            ],
+                            "nullable": true
+                          },
+                          "dateReleased": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "dateStarted": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "id": {
+                            "type": "integer"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "newGroups": {
+                            "type": "integer"
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "platforms": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
+                          },
+                          "hasHealthData": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "hasHealthData",
+                          "id",
+                          "name",
+                          "newGroups",
+                          "platform",
+                          "platforms",
+                          "slug"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "authors",
+                    "commitCount",
+                    "data",
+                    "deployCount",
+                    "id",
+                    "newGroups",
+                    "projects",
+                    "shortVersion",
+                    "status",
+                    "version",
+                    "versionInfo"
+                  ]
+                },
+                "examples": {
+                  "RetrieveReleaseDetails": {
+                    "value": {
+                      "id": 1122684517,
+                      "version": "control@abc123",
+                      "status": "open",
+                      "shortVersion": "control@abc123",
+                      "versionInfo": {
+                        "package": "control",
+                        "version": {
+                          "raw": "abc123"
+                        },
+                        "description": "abc123",
+                        "buildHash": "abc123"
+                      },
+                      "ref": null,
+                      "url": null,
+                      "dateReleased": null,
+                      "dateCreated": "2024-05-21T11:26:16.190281Z",
+                      "data": {},
+                      "newGroups": 0,
+                      "owner": null,
+                      "commitCount": 2,
+                      "lastCommit": {
+                        "id": "xyz123",
+                        "message": "feat(raspberries): Made raspberries even more delicious",
+                        "dateCreated": "2024-05-21T11:04:55Z",
+                        "pullRequest": {
+                          "id": "70214",
+                          "title": "feat(raspberries): Made raspberries even more delicious",
+                          "message": "Made raspberries even more delicious",
+                          "dateCreated": "2024-05-03T07:32:28.205043Z",
+                          "repository": {
+                            "id": "1",
+                            "name": "raj/raspberries",
+                            "url": "https://raspberries.raspberries/raj/raspberries",
+                            "provider": {
+                              "id": "integrations:github",
+                              "name": "GitHub"
+                            },
+                            "status": "active",
+                            "dateCreated": "2016-10-10T21:36:42.414678Z",
+                            "integrationId": "2933",
+                            "externalSlug": "raj/raspberries",
+                            "externalId": "873328"
+                          },
+                          "author": {
+                            "id": "2837091",
+                            "name": "Raj's Raspberries",
+                            "username": "rajraspberry",
+                            "avatarUrl": "https://gravatar.com/avatar/bf99685de539465db9208ab3a888843ba0e5e85b1f156084484c7c6c31312be5?s=32&d=mm",
+                            "isActive": true,
+                            "hasPasswordAuth": false,
+                            "isManaged": false,
+                            "dateJoined": "2023-08-07T12:32:09.091427Z",
+                            "lastLogin": "2024-05-21T05:46:23.824074Z",
+                            "has2fa": true,
+                            "lastActive": "2024-05-21T13:59:10.614891Z",
+                            "isSuperuser": true,
+                            "isStaff": true,
+                            "experiments": {},
+                            "emails": [
+                              {
+                                "id": "2972219",
+                                "email": "raj@raspberries",
+                                "is_verified": true
+                              }
+                            ],
+                            "avatar": {
+                              "avatarType": "upload",
+                              "avatarUuid": "xyz123",
+                              "avatarUrl": "https://sentry.io/avatar/xyz123/"
+                            }
+                          },
+                          "externalUrl": "https://github.com/raj/raspberries/pull/70214"
+                        },
+                        "suspectCommitType": "",
+                        "repository": {
+                          "id": "1",
+                          "name": "raj/raspberries",
+                          "url": "https://github.com/raj/raspberries",
+                          "provider": {
+                            "id": "integrations:github",
+                            "name": "GitHub"
+                          },
+                          "status": "active",
+                          "dateCreated": "2016-10-10T21:36:42.414678Z",
+                          "integrationId": "2933",
+                          "externalSlug": "raj/raspberries",
+                          "externalId": "873328"
+                        },
+                        "author": {
+                          "id": "2837091",
+                          "name": "Raj's Raspberries",
+                          "username": "rajraspberry",
+                          "avatarUrl": "https://gravatar.com/avatar/bf99685de539465db9208ab3a888843ba0e5e85b1f156084484c7c6c31312be5?s=32&d=mm",
+                          "isActive": true,
+                          "hasPasswordAuth": false,
+                          "isManaged": false,
+                          "dateJoined": "2023-08-07T12:32:09.091427Z",
+                          "lastLogin": "2024-05-21T05:46:23.824074Z",
+                          "has2fa": true,
+                          "lastActive": "2024-05-21T13:59:10.614891Z",
+                          "isSuperuser": true,
+                          "isStaff": true,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "2972219",
+                              "email": "raj@raspberries",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "upload",
+                            "avatarUuid": "xyz123",
+                            "avatarUrl": "https://sentry.io/avatar/xyz123/"
+                          }
+                        },
+                        "releases": [
+                          {
+                            "version": "control@abc123",
+                            "shortVersion": "control@abc123",
+                            "ref": null,
+                            "url": null,
+                            "dateReleased": null,
+                            "dateCreated": "2024-05-21T11:26:16.190281Z"
+                          },
+                          {
+                            "version": "backend@abc123",
+                            "shortVersion": "backend@abc123",
+                            "ref": null,
+                            "url": null,
+                            "dateReleased": null,
+                            "dateCreated": "2024-05-21T11:56:36.790866Z"
+                          },
+                          {
+                            "version": "control@def789",
+                            "shortVersion": "control@def789",
+                            "ref": null,
+                            "url": null,
+                            "dateReleased": null,
+                            "dateCreated": "2024-05-21T12:44:25.923663Z"
+                          },
+                          {
+                            "version": "frontend@ghi012",
+                            "shortVersion": "frontend@ghi012",
+                            "ref": null,
+                            "url": null,
+                            "dateReleased": null,
+                            "dateCreated": "2024-05-21T12:46:42.338358Z"
+                          }
+                        ]
+                      },
+                      "deployCount": 1,
+                      "lastDeploy": {
+                        "id": 53070941,
+                        "environment": "canary-test-control",
+                        "dateStarted": null,
+                        "dateFinished": "2024-05-21T11:26:17.597793Z",
+                        "name": "control@abc123 to canary-test-",
+                        "url": null
+                      },
+                      "authors": [
+                        {
+                          "id": 2837091,
+                          "name": "Raj's Raspberries",
+                          "username": "rajraspberry",
+                          "email": "raj@raspberries",
+                          "avatarUrl": "https://gravatar.com/avatar/bf99685de539465db9208ab3a888843ba0e5e85b1f156084484c7c6c31312be5?s=32&d=mm",
+                          "isActive": true,
+                          "hasPasswordAuth": false,
+                          "isManaged": false,
+                          "dateJoined": "2023-08-07T12:32:09.091427Z",
+                          "lastLogin": "2024-05-21T05:46:23.824074Z",
+                          "has2fa": true,
+                          "lastActive": "2024-05-21T13:59:10.614891Z",
+                          "isSuperuser": true,
+                          "isStaff": true,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "2972219",
+                              "email": "raj@raspberries",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "upload",
+                            "avatarUuid": "xyz123",
+                            "avatarUrl": "https://sentry.io/avatar/xyz123/"
+                          }
+                        }
+                      ],
+                      "projects": [
+                        {
+                          "id": 1,
+                          "slug": "sentry",
+                          "name": "Backend",
+                          "newGroups": 0,
+                          "platform": "python",
+                          "platforms": [
+                            "native",
+                            "other",
+                            "python"
+                          ],
+                          "hasHealthData": false,
+                          "healthData": {
+                            "durationP50": null,
+                            "durationP90": null,
+                            "crashFreeUsers": null,
+                            "crashFreeSessions": null,
+                            "sessionsCrashed": 0,
+                            "sessionsErrored": 0,
+                            "totalUsers": null,
+                            "totalUsers24h": null,
+                            "totalProjectUsers24h": null,
+                            "totalSessions": null,
+                            "totalSessions24h": null,
+                            "totalProjectSessions24h": null,
+                            "adoption": null,
+                            "sessionsAdoption": null,
+                            "stats": {
+                              "24h": [
+                                [
+                                  1715126400,
+                                  0
+                                ],
+                                [
+                                  1715212800,
+                                  0
+                                ],
+                                [
+                                  1715299200,
+                                  0
+                                ],
+                                [
+                                  1715385600,
+                                  0
+                                ],
+                                [
+                                  1715472000,
+                                  0
+                                ],
+                                [
+                                  1715558400,
+                                  0
+                                ],
+                                [
+                                  1715644800,
+                                  0
+                                ],
+                                [
+                                  1715731200,
+                                  0
+                                ],
+                                [
+                                  1715817600,
+                                  0
+                                ],
+                                [
+                                  1715904000,
+                                  0
+                                ],
+                                [
+                                  1715990400,
+                                  0
+                                ],
+                                [
+                                  1716076800,
+                                  0
+                                ],
+                                [
+                                  1716163200,
+                                  0
+                                ],
+                                [
+                                  1716249600,
+                                  0
+                                ]
+                              ]
+                            },
+                            "hasHealthData": false
+                          }
+                        }
+                      ],
+                      "firstEvent": null,
+                      "lastEvent": null,
+                      "currentProjectMeta": {},
+                      "userAgent": "Python-urllib/3.11",
+                      "adoptionStages": {
+                        "sentry": {
+                          "stage": "low_adoption",
+                          "adopted": null,
+                          "unadopted": null
+                        }
+                      }
+                    },
+                    "summary": "Retrieve release details"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an Organization's Release",
+        "description": "Permanently remove a release and all of its files.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "version",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The version identifier of the release",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Releases"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:releases"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/replay-count/": {
       "get": {
         "operationId": "Return a Count of Replays",
@@ -35725,575 +37515,6 @@
         ]
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/": {
-      "get": {
-        "tags": [
-          "Releases"
-        ],
-        "description": "Return a release for a given organization.",
-        "operationId": "Retrieve an Organization's Releases",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The id or slug of the organization the release belongs to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "version",
-            "in": "path",
-            "description": "The version identifier of the release.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "authors",
-                    "commitCount",
-                    "data",
-                    "dateCreated",
-                    "dateReleased",
-                    "deployCount",
-                    "firstEvent",
-                    "lastCommit",
-                    "lastDeploy",
-                    "lastEvent",
-                    "newGroups",
-                    "owner",
-                    "projects",
-                    "ref",
-                    "shortVersion",
-                    "version",
-                    "url"
-                  ],
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "authors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object"
-                      }
-                    },
-                    "commitCount": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "data": {
-                      "type": "object"
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "dateReleased": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "deployCount": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "firstEvent": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "lastCommit": {
-                      "type": "object",
-                      "nullable": true
-                    },
-                    "lastDeploy": {
-                      "type": "object",
-                      "nullable": true,
-                      "oneOf": [
-                        {
-                          "type": "object",
-                          "required": [
-                            "environment",
-                            "name",
-                            "dateStarted",
-                            "dateFinished",
-                            "url",
-                            "id"
-                          ],
-                          "properties": {
-                            "environment": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "dateStarted": {
-                              "type": "string",
-                              "format": "date-time",
-                              "nullable": true
-                            },
-                            "dateFinished": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "url": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "id": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        {
-                          "type": "string",
-                          "nullable": true,
-                          "not": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              },
-                              {
-                                "type": "boolean"
-                              },
-                              {
-                                "type": "object"
-                              },
-                              {
-                                "type": "array",
-                                "items": {}
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    "lastEvent": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "newGroups": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "owner": {
-                      "type": "object",
-                      "nullable": true
-                    },
-                    "projects": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "ref": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "shortVersion": {
-                      "type": "string"
-                    },
-                    "version": {
-                      "type": "string"
-                    },
-                    "url": {
-                      "type": "string",
-                      "nullable": true
-                    }
-                  }
-                },
-                "example": {
-                  "id": 2,
-                  "authors": [],
-                  "commitCount": 0,
-                  "data": {},
-                  "dateCreated": "2018-11-06T21:20:08.033Z",
-                  "dateReleased": null,
-                  "deployCount": 0,
-                  "firstEvent": null,
-                  "lastCommit": null,
-                  "lastDeploy": null,
-                  "lastEvent": null,
-                  "newGroups": 0,
-                  "owner": null,
-                  "projects": [
-                    {
-                      "name": "Pump Station",
-                      "slug": "pump-station"
-                    }
-                  ],
-                  "ref": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb",
-                  "shortVersion": "2.0rc2",
-                  "url": null,
-                  "version": "2.0rc2"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "project:releases"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "Releases"
-        ],
-        "description": "Update a release for a given organization.",
-        "operationId": "Update an Organization's Release",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The id or slug of the organization the release belongs to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "version",
-            "in": "path",
-            "description": "The version identifier of the release.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "ref": {
-                    "type": "string",
-                    "description": "An optional commit reference. This is useful if a tagged version has been provided."
-                  },
-                  "url": {
-                    "type": "string",
-                    "description": "A URL that points to the release. This can be the path to an online interface to the source code for instance."
-                  },
-                  "dateReleased": {
-                    "type": "string",
-                    "format": "date-time",
-                    "description": "An optional date that indicates when the release went live. If not provided the current time is assumed."
-                  },
-                  "commits": {
-                    "type": "array",
-                    "items": {
-                      "type": "object"
-                    },
-                    "description": "An optional list of commit data to be associated with the release. Commits must include parameters `id` (the sha of the commit), and can optionally include `repository`, `message`, `author_name`, `author_email`, and `timestamp`."
-                  },
-                  "refs": {
-                    "type": "array",
-                    "items": {
-                      "type": "object"
-                    },
-                    "description": "An optional way to indicate the start and end commits for each repository included in a release. Head commits must include parameters `repository` and `commit` (the HEAD sha). They can optionally include `previousCommit` (the sha of the HEAD of the previous release), which should be specified if this is the first time you've sent commit data."
-                  }
-                }
-              },
-              "example": {
-                "ref": "freshtofu",
-                "url": "https://vcshub.invalid/user/project/refs/freshtofu"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "authors",
-                    "commitCount",
-                    "data",
-                    "dateCreated",
-                    "dateReleased",
-                    "deployCount",
-                    "firstEvent",
-                    "lastCommit",
-                    "lastDeploy",
-                    "lastEvent",
-                    "newGroups",
-                    "owner",
-                    "projects",
-                    "ref",
-                    "shortVersion",
-                    "version",
-                    "url"
-                  ],
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "authors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object"
-                      }
-                    },
-                    "commitCount": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "data": {
-                      "type": "object"
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "dateReleased": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "deployCount": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "firstEvent": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "lastCommit": {
-                      "type": "object",
-                      "nullable": true
-                    },
-                    "lastDeploy": {
-                      "type": "object",
-                      "nullable": true,
-                      "oneOf": [
-                        {
-                          "type": "object",
-                          "required": [
-                            "environment",
-                            "name",
-                            "dateStarted",
-                            "dateFinished",
-                            "url",
-                            "id"
-                          ],
-                          "properties": {
-                            "environment": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "dateStarted": {
-                              "type": "string",
-                              "format": "date-time",
-                              "nullable": true
-                            },
-                            "dateFinished": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "url": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "id": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        {
-                          "type": "string",
-                          "nullable": true,
-                          "not": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              },
-                              {
-                                "type": "boolean"
-                              },
-                              {
-                                "type": "object"
-                              },
-                              {
-                                "type": "array",
-                                "items": {}
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    "lastEvent": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "newGroups": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "owner": {
-                      "type": "object",
-                      "nullable": true
-                    },
-                    "projects": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "ref": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "shortVersion": {
-                      "type": "string"
-                    },
-                    "version": {
-                      "type": "string"
-                    },
-                    "url": {
-                      "type": "string",
-                      "nullable": true
-                    }
-                  }
-                },
-                "example": {
-                  "id": 2,
-                  "authors": [],
-                  "commitCount": 0,
-                  "data": {},
-                  "dateCreated": "2019-01-03T00:12:55.109Z",
-                  "dateReleased": null,
-                  "deployCount": 0,
-                  "firstEvent": null,
-                  "lastCommit": null,
-                  "lastDeploy": null,
-                  "lastEvent": null,
-                  "newGroups": 0,
-                  "owner": null,
-                  "projects": [
-                    {
-                      "name": "Pump Station",
-                      "slug": "pump-station"
-                    }
-                  ],
-                  "ref": "6ba09a7c53235ee8a8fa5ee4c1ca8ca886e7fdbb",
-                  "shortVersion": "2.0rc2",
-                  "url": null,
-                  "version": "2.0rc2"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "project:releases"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Releases"
-        ],
-        "description": "Delete a release for a given organization.",
-        "operationId": "Delete an Organization's Release",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The id or slug of the organization the release belongs to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "version",
-            "in": "path",
-            "description": "The version identifier of the release.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "project:releases"
-            ]
-          }
-        ]
-      }
-    },
     "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/": {
       "get": {
         "tags": [
@@ -38484,6 +39705,80 @@
             "status"
           ]
         }
+      },
+      "Commit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "repository": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 64
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "author_name": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 128
+          },
+          "author_email": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 75
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "patch_set": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "maxLength": 510
+                },
+                "type": {
+                  "type": "string",
+                  "maxLength": 1
+                }
+              },
+              "required": [
+                "path",
+                "type"
+              ]
+            },
+            "nullable": true
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "CommitPatchSet": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 510
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 1
+          }
+        },
+        "required": [
+          "path",
+          "type"
+        ]
       },
       "DetailedProject": {
         "type": "object",
@@ -41916,6 +43211,413 @@
           "trigger_type"
         ]
       },
+      "OrgReleaseResponse": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateReleased": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateStarted": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "owner": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "lastCommit": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "lastDeploy": {
+            "type": "object",
+            "properties": {
+              "dateStarted": {
+                "type": "string",
+                "nullable": true
+              },
+              "url": {
+                "type": "string",
+                "nullable": true
+              },
+              "id": {
+                "type": "integer"
+              },
+              "environment": {
+                "type": "string"
+              },
+              "dateFinished": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "dateFinished",
+              "environment",
+              "id",
+              "name"
+            ],
+            "nullable": true
+          },
+          "firstEvent": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastEvent": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "currentProjectMeta": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "userAgent": {
+            "type": "string",
+            "nullable": true
+          },
+          "adoptionStages": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "id": {
+            "type": "integer"
+          },
+          "version": {
+            "type": "string"
+          },
+          "newGroups": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "shortVersion": {
+            "type": "string"
+          },
+          "versionInfo": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "package": {
+                "type": "string",
+                "nullable": true
+              },
+              "version": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "buildHash": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "buildHash",
+              "package",
+              "version"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "commitCount": {
+            "type": "integer"
+          },
+          "deployCount": {
+            "type": "integer"
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lastLogin": {
+                  "type": "string"
+                },
+                "has2fa": {
+                  "type": "boolean"
+                },
+                "lastActive": {
+                  "type": "string"
+                },
+                "isSuperuser": {
+                  "type": "boolean"
+                },
+                "isStaff": {
+                  "type": "boolean"
+                },
+                "experiments": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "object",
+                        "nullable": true
+                      }
+                    ]
+                  }
+                },
+                "emails": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "boolean"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "avatar": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
+                },
+                "hasPasswordAuth": {
+                  "type": "boolean"
+                },
+                "isManaged": {
+                  "type": "boolean"
+                },
+                "dateJoined": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "avatarUrl",
+                "dateJoined",
+                "email",
+                "hasPasswordAuth",
+                "id",
+                "isActive",
+                "isManaged",
+                "name",
+                "username"
+              ]
+            }
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "healthData": {
+                  "type": "object",
+                  "properties": {
+                    "durationP50": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "durationP90": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "crashFreeUsers": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "crashFreeSessions": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "totalUsers": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "totalUsers24h": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "totalProjectUsers24h": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "totalSessions": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "totalSessions24h": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "totalProjectSessions24h": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "adoption": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "sessionsAdoption": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "sessionsCrashed": {
+                      "type": "integer"
+                    },
+                    "sessionsErrored": {
+                      "type": "integer"
+                    },
+                    "hasHealthData": {
+                      "type": "boolean"
+                    },
+                    "stats": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "hasHealthData",
+                    "sessionsCrashed",
+                    "sessionsErrored",
+                    "stats"
+                  ],
+                  "nullable": true
+                },
+                "dateReleased": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "dateCreated": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "dateStarted": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "newGroups": {
+                  "type": "integer"
+                },
+                "platform": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "platforms": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "hasHealthData": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "hasHealthData",
+                "id",
+                "name",
+                "newGroups",
+                "platform",
+                "platforms",
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "authors",
+          "commitCount",
+          "data",
+          "deployCount",
+          "id",
+          "newGroups",
+          "projects",
+          "shortVersion",
+          "status",
+          "version",
+          "versionInfo"
+        ]
+      },
       "OrganizationAlertRuleDetailsPut": {
         "type": "object",
         "properties": {
@@ -43327,6 +45029,115 @@
           ]
         }
       },
+      "OrganizationRelease": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string",
+            "nullable": true,
+            "description": "An optional commit reference. This is useful if a tagged version has been provided.",
+            "maxLength": 200
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "A URL that points to the release. For instance, this can be the path to an online interface to the source code, such as a GitHub URL."
+          },
+          "dateReleased": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "An optional date that indicates when the release went live.  If not provided the current time is used."
+          },
+          "commits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "repository": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 64
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "author_name": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 128
+                },
+                "author_email": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 75
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "patch_set": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string",
+                        "maxLength": 510
+                      },
+                      "type": {
+                        "type": "string",
+                        "maxLength": 1
+                      }
+                    },
+                    "required": [
+                      "path",
+                      "type"
+                    ]
+                  },
+                  "nullable": true
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "description": "An optional list of commit data to be associated."
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "commit": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "previousCommit": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 64
+                }
+              },
+              "required": [
+                "commit",
+                "repository"
+              ]
+            },
+            "description": "An optional way to indicate the start and end commits for each repository included in a release. Head commits must include parameters ``repository`` and ``commit`` (the HEAD SHA). They can optionally include ``previousCommit`` (the SHA of the HEAD of the previous release), which should be specified if this is the first time you've sent commit data."
+          }
+        }
+      },
       "OrganizationStatsSummaryResponse": {
         "type": "object",
         "properties": {
@@ -44190,6 +46001,27 @@
             "nullable": true
           }
         }
+      },
+      "ReleaseHeadCommit": {
+        "type": "object",
+        "properties": {
+          "commit": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "previousCommit": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "commit",
+          "repository"
+        ]
       },
       "ReleaseThresholdStatusResponse": {
         "type": "object",
