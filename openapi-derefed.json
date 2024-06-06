@@ -20957,13 +20957,12 @@
                 "properties": {
                   "type": {
                     "enum": [
-                      "appStoreConnect",
                       "http",
                       "gcs",
                       "s3"
                     ],
                     "type": "string",
-                    "description": "The type of the source.\n\n* `appStoreConnect` - App Store Connect\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+                    "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
                   },
                   "name": {
                     "type": "string",
@@ -20975,7 +20974,7 @@
                   },
                   "layout": {
                     "type": "object",
-                    "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
+                    "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
                     "properties": {
                       "type": {
                         "enum": [
@@ -21005,21 +21004,6 @@
                       "type"
                     ]
                   },
-                  "appconnectIssuer": {
-                    "type": "string",
-                    "description": "The [App Store Connect Issuer ID](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests). Required for AppStoreConnect sources, invalid for all others.",
-                    "maxLength": 36,
-                    "minLength": 36
-                  },
-                  "appconnectPrivateKey": {
-                    "type": "string",
-                    "description": "The [App Store Connect API Private Key](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api). Required for AppStoreConnect sources, invalid for all others."
-                  },
-                  "appId": {
-                    "type": "string",
-                    "description": "The App Store Connect App ID. Required for AppStoreConnect sources, invalid for all others.",
-                    "minLength": 1
-                  },
                   "url": {
                     "type": "string",
                     "description": "The source's URL. Optional for HTTP sources, invalid for all others."
@@ -21034,7 +21018,7 @@
                   },
                   "bucket": {
                     "type": "string",
-                    "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+                    "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 source, invalid for HTTP sources."
                   },
                   "region": {
                     "enum": [
@@ -21073,7 +21057,7 @@
                   },
                   "prefix": {
                     "type": "string",
-                    "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+                    "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP."
                   },
                   "client_email": {
                     "type": "string",
@@ -21510,13 +21494,12 @@
                 "properties": {
                   "type": {
                     "enum": [
-                      "appStoreConnect",
                       "http",
                       "gcs",
                       "s3"
                     ],
                     "type": "string",
-                    "description": "The type of the source.\n\n* `appStoreConnect` - App Store Connect\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+                    "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
                   },
                   "name": {
                     "type": "string",
@@ -21528,7 +21511,7 @@
                   },
                   "layout": {
                     "type": "object",
-                    "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
+                    "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
                     "properties": {
                       "type": {
                         "enum": [
@@ -21558,21 +21541,6 @@
                       "type"
                     ]
                   },
-                  "appconnectIssuer": {
-                    "type": "string",
-                    "description": "The [App Store Connect Issuer ID](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests). Required for AppStoreConnect sources, invalid for all others.",
-                    "maxLength": 36,
-                    "minLength": 36
-                  },
-                  "appconnectPrivateKey": {
-                    "type": "string",
-                    "description": "The [App Store Connect API Private Key](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api). Required for AppStoreConnect sources, invalid for all others."
-                  },
-                  "appId": {
-                    "type": "string",
-                    "description": "The App Store Connect App ID. Required for AppStoreConnect sources, invalid for all others.",
-                    "minLength": 1
-                  },
                   "url": {
                     "type": "string",
                     "description": "The source's URL. Optional for HTTP sources, invalid for all others."
@@ -21587,7 +21555,7 @@
                   },
                   "bucket": {
                     "type": "string",
-                    "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+                    "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 source, invalid for HTTP sources."
                   },
                   "region": {
                     "enum": [
@@ -21626,7 +21594,7 @@
                   },
                   "prefix": {
                     "type": "string",
-                    "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+                    "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP."
                   },
                   "client_email": {
                     "type": "string",
@@ -40621,7 +40589,7 @@
       },
       "Layout": {
         "type": "object",
-        "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
+        "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
         "properties": {
           "type": {
             "enum": [
@@ -46636,13 +46604,12 @@
         "properties": {
           "type": {
             "enum": [
-              "appStoreConnect",
               "http",
               "gcs",
               "s3"
             ],
             "type": "string",
-            "description": "The type of the source.\n\n* `appStoreConnect` - App Store Connect\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+            "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
           },
           "name": {
             "type": "string",
@@ -46654,7 +46621,7 @@
           },
           "layout": {
             "type": "object",
-            "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources and invalid for AppStoreConnect sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
+            "description": "Layout settings for the source. This is required for HTTP, GCS, and S3 sources.\n\n**`type`** ***(string)*** - The layout of the folder structure. The options are:\n- `native` - Platform-Specific (SymStore / GDB / LLVM)\n- `symstore` - Microsoft SymStore\n- `symstore_index2` - Microsoft SymStore (with index2.txt)\n- `ssqp` - Microsoft SSQP\n- `unified` - Unified Symbol Server Layout\n- `debuginfod` - debuginfod\n\n**`casing`** ***(string)*** - The layout of the folder structure. The options are:\n- `default` - Default (mixed case)\n- `uppercase` - Uppercase\n- `lowercase` - Lowercase\n\n```json\n{\n    \"layout\": {\n        \"type\": \"native\"\n        \"casing\": \"default\"\n    }\n}\n```",
             "properties": {
               "type": {
                 "enum": [
@@ -46684,21 +46651,6 @@
               "type"
             ]
           },
-          "appconnectIssuer": {
-            "type": "string",
-            "description": "The [App Store Connect Issuer ID](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests). Required for AppStoreConnect sources, invalid for all others.",
-            "maxLength": 36,
-            "minLength": 36
-          },
-          "appconnectPrivateKey": {
-            "type": "string",
-            "description": "The [App Store Connect API Private Key](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api). Required for AppStoreConnect sources, invalid for all others."
-          },
-          "appId": {
-            "type": "string",
-            "description": "The App Store Connect App ID. Required for AppStoreConnect sources, invalid for all others.",
-            "minLength": 1
-          },
           "url": {
             "type": "string",
             "description": "The source's URL. Optional for HTTP sources, invalid for all others."
@@ -46713,7 +46665,7 @@
           },
           "bucket": {
             "type": "string",
-            "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+            "description": "The GCS or S3 bucket where the source resides. Required for GCS and S3 source, invalid for HTTP sources."
           },
           "region": {
             "enum": [
@@ -46752,7 +46704,7 @@
           },
           "prefix": {
             "type": "string",
-            "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP and AppStoreConnect sources."
+            "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP."
           },
           "client_email": {
             "type": "string",
