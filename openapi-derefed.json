@@ -4456,6 +4456,117 @@
           }
         }
       },
+      "put": {
+        "operationId": "Update an Organization Member's Team Role",
+        "description": "The relevant organization member must already be a part of the team.\n\nNote that for organization admins, managers, and owners, they are\nautomatically granted a minimum team role of `admin` on all teams they\nare part of. Read more about [team roles](https://docs.sentry.io/product/teams/roles/).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "member_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the organization member to change",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The id or slug of the team the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Teams"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "teamRole": {
+                    "enum": [
+                      "contributor",
+                      "admin"
+                    ],
+                    "type": "string",
+                    "default": "contributor",
+                    "description": "The team-level role to switch to. Valid roles include:\n\n* `contributor` - Contributors can view and act on events, as well as view most other data within the team's projects.\n* `admin` - Admin privileges on the team. They can create and remove projects, and can manage the team's memberships."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "member:admin",
+              "member:read",
+              "member:write",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isActive": {
+                      "type": "boolean"
+                    },
+                    "teamRole": {
+                      "enum": [
+                        "contributor",
+                        "admin"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "isActive",
+                    "teamRole"
+                  ]
+                },
+                "examples": {
+                  "UpdateATeamRole": {
+                    "value": {
+                      "isActive": true,
+                      "teamRole": "admin"
+                    },
+                    "summary": "Update a Team Role"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "delete": {
         "operationId": "Delete an Organization Member from a Team",
         "description": "Delete an organization member from a team.\n\nNote the permission scopes vary depending on the type of authorization token. The following\ntable outlines the accepted scopes.\n<table style=\"width: 100%;\">\n    <tr style=\"width: 50%;\">\n        <td style=\"width: 50%; text-align: center; font-weight: bold; vertical-align: middle;\"><a href=\"https://docs.sentry.io/api/auth/#auth-tokens\">Org Auth Token</a></td>\n        <td style=\"width: 50%; text-align: left;\">\n            <ul style=\"list-style-type: none; padding-left: 0;\">\n                <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; team:admin</strong></li>\n            </ul>\n        </td>\n    </tr>\n    <tr style=\"width: 50%;\">\n        <td style=\"width: 50%; text-align: center; font-weight: bold; vertical-align: middle;\"><a href=\"https://docs.sentry.io/api/auth/#user-authentication-tokens\">User Auth Token</a></td>\n        <td style=\"width: 50%; text-align: left;\">\n            <ul style=\"list-style-type: none; padding-left: 0;\">\n                <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; team:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:read + team:admin**</strong></li>\n            </ul>\n        </td>\n    </tr>\n</table>\n\n\n\\***`org:read`** can only be used to remove yourself from the teams you are a member of.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:admin`** scopes in their user\nauthorization token to delete members from their teams.",
@@ -44300,6 +44411,39 @@
           "schemas",
           "sentryOrgRole",
           "userName"
+        ]
+      },
+      "OrganizationMemberTeam": {
+        "type": "object",
+        "properties": {
+          "teamRole": {
+            "enum": [
+              "contributor",
+              "admin"
+            ],
+            "type": "string",
+            "default": "contributor",
+            "description": "The team-level role to switch to. Valid roles include:\n\n* `contributor` - Contributors can view and act on events, as well as view most other data within the team's projects.\n* `admin` - Admin privileges on the team. They can create and remove projects, and can manage the team's memberships."
+          }
+        }
+      },
+      "OrganizationMemberTeamDetails": {
+        "type": "object",
+        "properties": {
+          "isActive": {
+            "type": "boolean"
+          },
+          "teamRole": {
+            "enum": [
+              "contributor",
+              "admin"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "isActive",
+          "teamRole"
         ]
       },
       "OrganizationMemberWithRoles": {
