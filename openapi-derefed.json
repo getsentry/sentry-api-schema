@@ -15935,7 +15935,7 @@
     "/api/0/organizations/{organization_id_or_slug}/sessions/": {
       "get": {
         "operationId": "Retrieve Release Health Session Statistics",
-        "description": "        Returns a time series of release health session statistics for projects bound to an \"\n        \"organization.\n\nThe interval and date range are subject to certain restrictions and rounding \"\n        \"rules.\n\nThe date range is rounded to align with the interval, and is rounded to at least one \"\n        \"hour. The interval can at most be one day and at least one hour currently. It has to cleanly \"\n        \"divide one day, for rounding reasons.\n\nBecause of technical limitations, this endpoint returns \"\n        \"at most 10000 data points. For example, if you select a 90 day window grouped by releases, \"\n        \"you will see at most `floor(10k / (90 + 1)) = 109` releases. To get more results, reduce the \"\n        \"`statsPeriod`.\"",
+        "description": "Returns a time series of release health session statistics for projects bound to an organization.\n\nThe interval and date range are subject to certain restrictions and rounding rules.\n\nThe date range is rounded to align with the interval, and is rounded to at least one\nhour. The interval can at most be one day and at least one hour currently. It has to cleanly\ndivide one day, for rounding reasons.\n\nBecause of technical limitations, this endpoint returns\nat most 10000 data points. For example, if you select a 90 day window grouped by releases,\nyou will see at most `floor(10k / (90 + 1)) = 109` releases. To get more results, reduce the\n`statsPeriod`.\"",
         "parameters": [
           {
             "in": "path",
@@ -15955,7 +15955,7 @@
                 "type": "string"
               }
             },
-            "description": "The list of fields to query.\n\nThe available fields are\n  - `sum(session)`\n  - `count_unique(\"\n                    \"user)`\n  - `avg`, `p50`, `p75`, `p90`, `p95`, `p99`, `max` applied to `session.duration`. For \"\n                    \"example, `p99(session.duration)`. Session duration is [no longer being recorded](\"\n                    \"https://github.com/getsentry/sentry/discussions/42716) as of on Jan 12, 2023. Returned data may \"\n                    \"be incomplete.\n  - `crash_rate`, `crash_free_rate` applied to `user` or `session`. For example, \"\n                    \"`crash_free_rate(user)`",
+            "description": "The list of fields to query.\n\nThe available fields are\n- `sum(session)`\n- `count_unique(user)`\n- `avg`, `p50`, `p75`, `p90`, `p95`, `p99`, `max` applied to `session.duration`. For example, `p99(session.duration)`. Session duration is [no longer being recorded](https://github.com/getsentry/sentry/discussions/42716) as of on Jan 12, 2023. Returned data may be incomplete.\n- `crash_rate`, `crash_free_rate` applied to `user` or `session`. For example,`crash_free_rate(user)`\n",
             "required": true
           },
           {
