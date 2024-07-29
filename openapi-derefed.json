@@ -3827,6 +3827,1109 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/dashboards/": {
+      "get": {
+        "operationId": "Retrieve an Organization's Custom Dashboards",
+        "description": "Retrieve a list of custom dashboards that are associated with the given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          }
+        ],
+        "tags": [
+          "Dashboards"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string"
+                      },
+                      "createdBy": {
+                        "type": "object",
+                        "properties": {
+                          "identities": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "organization": {
+                                  "type": "object",
+                                  "properties": {
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "slug"
+                                  ]
+                                },
+                                "provider": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name"
+                                  ]
+                                },
+                                "dateVerified": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "dateSynced": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "dateSynced",
+                                "dateVerified",
+                                "id",
+                                "name",
+                                "organization",
+                                "provider"
+                              ]
+                            }
+                          },
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "avatarUrl": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "authenticators": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "canReset2fa": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "dateJoined": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "lastLogin": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "experiments": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "is_verified": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "id",
+                                "is_verified"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "dateJoined",
+                          "email",
+                          "emails",
+                          "experiments",
+                          "has2fa",
+                          "hasPasswordAuth",
+                          "id",
+                          "isActive",
+                          "isManaged",
+                          "isStaff",
+                          "isSuperuser",
+                          "lastActive",
+                          "lastLogin",
+                          "name",
+                          "username"
+                        ]
+                      },
+                      "widgetDisplay": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "widgetPreview": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "createdBy",
+                      "dateCreated",
+                      "id",
+                      "title",
+                      "widgetDisplay",
+                      "widgetPreview"
+                    ]
+                  }
+                },
+                "examples": {
+                  "QueryDashboards": {
+                    "value": [
+                      {
+                        "id": "1",
+                        "title": "Dashboard",
+                        "dateCreated": "2024-06-20T14:38:03.498574Z",
+                        "createdBy": {
+                          "id": "1",
+                          "name": "Admin",
+                          "username": "admin",
+                          "email": "admin@sentry.io",
+                          "avatarUrl": "www.example.com",
+                          "isActive": true,
+                          "hasPasswordAuth": true,
+                          "isManaged": false,
+                          "dateJoined": "2021-10-25T17:07:33.190596Z",
+                          "lastLogin": "2024-07-16T15:28:39.261659Z",
+                          "has2fa": true,
+                          "lastActive": "2024-07-16T20:45:49.364197Z",
+                          "isSuperuser": false,
+                          "isStaff": false,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "1",
+                              "email": "admin@sentry.io",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null,
+                            "avatarUrl": "www.example.com"
+                          }
+                        },
+                        "widgetDisplay": [],
+                        "widgetPreview": []
+                      },
+                      {
+                        "id": "2",
+                        "title": "Dashboard",
+                        "dateCreated": "2024-06-20T14:38:03.498574Z",
+                        "createdBy": {
+                          "id": "1",
+                          "name": "Admin",
+                          "username": "admin",
+                          "email": "admin@sentry.io",
+                          "avatarUrl": "www.example.com",
+                          "isActive": true,
+                          "hasPasswordAuth": true,
+                          "isManaged": false,
+                          "dateJoined": "2021-10-25T17:07:33.190596Z",
+                          "lastLogin": "2024-07-16T15:28:39.261659Z",
+                          "has2fa": true,
+                          "lastActive": "2024-07-16T20:45:49.364197Z",
+                          "isSuperuser": false,
+                          "isStaff": false,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "1",
+                              "email": "admin@sentry.io",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null,
+                            "avatarUrl": "www.example.com"
+                          }
+                        },
+                        "widgetDisplay": [],
+                        "widgetPreview": []
+                      }
+                    ],
+                    "summary": "Query Dashboards"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a New Dashboard for an Organization",
+        "description": "Create a new dashboard for the given Organization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Dashboards"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "The user defined title for this dashboard.",
+                    "maxLength": 255
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "A dashboard's unique id."
+                  },
+                  "widgets": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string",
+                          "maxLength": 255
+                        },
+                        "description": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 255
+                        },
+                        "thresholds": {
+                          "type": "object",
+                          "additionalProperties": {},
+                          "nullable": true
+                        },
+                        "display_type": {
+                          "enum": [
+                            "line",
+                            "area",
+                            "stacked_area",
+                            "bar",
+                            "table",
+                            "big_number",
+                            "top_n"
+                          ],
+                          "type": "string",
+                          "description": "* `line` - line\n* `area` - area\n* `stacked_area` - stacked_area\n* `bar` - bar\n* `table` - table\n* `big_number` - big_number\n* `top_n` - top_n"
+                        },
+                        "interval": {
+                          "type": "string",
+                          "maxLength": 10
+                        },
+                        "queries": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "fields": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "aggregates": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "columns": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "field_aliases": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "conditions": {
+                                "type": "string"
+                              },
+                              "orderby": {
+                                "type": "string"
+                              },
+                              "is_hidden": {
+                                "type": "boolean"
+                              },
+                              "on_demand_extraction": {
+                                "type": "object",
+                                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                                "properties": {
+                                  "extraction_state": {
+                                    "type": "string"
+                                  },
+                                  "enabled": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "on_demand_extraction_disabled": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        },
+                        "widget_type": {
+                          "enum": [
+                            "discover",
+                            "issue",
+                            "metrics",
+                            "custom-metrics",
+                            "error-events",
+                            "transaction-like"
+                          ],
+                          "type": "string",
+                          "description": "* `discover` - discover\n* `issue` - issue\n* `metrics` - metrics\n* `custom-metrics` - custom-metrics\n* `error-events` - error-events\n* `transaction-like` - transaction-like"
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "maximum": 10,
+                          "minimum": 1,
+                          "nullable": true
+                        },
+                        "layout": {
+                          "type": "object",
+                          "additionalProperties": {},
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "description": "A json list of widgets saved in this dashboard."
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "default": [],
+                    "description": "The saved projects filter for this dashboard."
+                  },
+                  "environment": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "The saved environment filter for this dashboard."
+                  },
+                  "period": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The saved time range period for this dashboard."
+                  },
+                  "start": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "The saved start time for this dashboard."
+                  },
+                  "end": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "The saved end time for this dashboard."
+                  },
+                  "filters": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "The saved filters for this dashboard."
+                  },
+                  "utc": {
+                    "type": "boolean",
+                    "description": "Setting that lets you display saved time range for this dashboard in UTC."
+                  }
+                },
+                "required": [
+                  "title"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "environment": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "period": {
+                      "type": "string"
+                    },
+                    "utc": {
+                      "type": "string"
+                    },
+                    "expired": {
+                      "type": "boolean"
+                    },
+                    "start": {
+                      "type": "string"
+                    },
+                    "end": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "dateCreated": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    },
+                    "widgets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "displayType": {
+                            "type": "string"
+                          },
+                          "thresholds": {
+                            "type": "object",
+                            "properties": {
+                              "max_values": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "integer"
+                                }
+                              },
+                              "unit": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "max_values",
+                              "unit"
+                            ],
+                            "nullable": true
+                          },
+                          "interval": {
+                            "type": "string"
+                          },
+                          "dateCreated": {
+                            "type": "string"
+                          },
+                          "dashboardId": {
+                            "type": "string"
+                          },
+                          "queries": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "fields": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "aggregates": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "fieldAliases": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "conditions": {
+                                  "type": "string"
+                                },
+                                "orderby": {
+                                  "type": "string"
+                                },
+                                "widgetId": {
+                                  "type": "string"
+                                },
+                                "onDemand": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "enabled": {
+                                        "type": "boolean"
+                                      },
+                                      "extractionState": {
+                                        "type": "string"
+                                      },
+                                      "dashboardWidgetQueryId": {
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "required": [
+                                      "dashboardWidgetQueryId",
+                                      "enabled",
+                                      "extractionState"
+                                    ]
+                                  }
+                                },
+                                "isHidden": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "aggregates",
+                                "columns",
+                                "conditions",
+                                "fieldAliases",
+                                "fields",
+                                "id",
+                                "isHidden",
+                                "name",
+                                "onDemand",
+                                "orderby",
+                                "widgetId"
+                              ]
+                            }
+                          },
+                          "limit": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "widgetType": {
+                            "type": "string"
+                          },
+                          "layout": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer"
+                            }
+                          }
+                        },
+                        "required": [
+                          "dashboardId",
+                          "dateCreated",
+                          "description",
+                          "displayType",
+                          "id",
+                          "interval",
+                          "layout",
+                          "limit",
+                          "queries",
+                          "thresholds",
+                          "title",
+                          "widgetType"
+                        ]
+                      }
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "filters": {
+                      "type": "object",
+                      "properties": {
+                        "release": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "createdBy",
+                    "dateCreated",
+                    "filters",
+                    "id",
+                    "projects",
+                    "title",
+                    "widgets"
+                  ]
+                },
+                "examples": {
+                  "CreateDashboard": {
+                    "value": {
+                      "id": "1",
+                      "title": "Dashboard",
+                      "dateCreated": "2024-06-20T14:38:03.498574Z",
+                      "createdBy": {
+                        "id": "1",
+                        "name": "Admin",
+                        "username": "admin",
+                        "email": "admin@sentry.io",
+                        "avatarUrl": "www.example.com",
+                        "isActive": true,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-10-25T17:07:33.190596Z",
+                        "lastLogin": "2024-07-16T15:28:39.261659Z",
+                        "has2fa": true,
+                        "lastActive": "2024-07-16T20:45:49.364197Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "1",
+                            "email": "admin@sentry.io",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null,
+                          "avatarUrl": "www.example.com"
+                        }
+                      },
+                      "widgets": [
+                        {
+                          "id": "658714",
+                          "title": "Custom Widget",
+                          "description": null,
+                          "displayType": "table",
+                          "thresholds": null,
+                          "interval": "5m",
+                          "dateCreated": "2024-07-16T15:36:46.048343Z",
+                          "dashboardId": "1",
+                          "queries": [
+                            {
+                              "id": "1",
+                              "name": "",
+                              "fields": [
+                                "avg(transaction.duration)",
+                                "transaction"
+                              ],
+                              "aggregates": [
+                                "avg(transaction.duration)"
+                              ],
+                              "columns": [
+                                "transaction"
+                              ],
+                              "fieldAliases": [
+                                "",
+                                ""
+                              ],
+                              "conditions": "",
+                              "orderby": "-avg(transaction.duration)",
+                              "widgetId": "1",
+                              "onDemand": [
+                                {
+                                  "enabled": false,
+                                  "extractionState": "disabled:not-applicable",
+                                  "dashboardWidgetQueryId": 1
+                                }
+                              ],
+                              "isHidden": false
+                            }
+                          ],
+                          "limit": null,
+                          "widgetType": "discover",
+                          "layout": {
+                            "w": 2,
+                            "y": 0,
+                            "h": 2,
+                            "minH": 2,
+                            "x": 0
+                          }
+                        }
+                      ],
+                      "projects": [
+                        1
+                      ],
+                      "filters": {},
+                      "period": "7d"
+                    },
+                    "summary": "Create Dashboard"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/": {
       "get": {
         "operationId": "Retrieve an Organization's Custom Dashboard",
@@ -43279,6 +44382,199 @@
           "type"
         ]
       },
+      "Dashboard": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The user defined title for this dashboard.",
+            "maxLength": 255
+          },
+          "id": {
+            "type": "string",
+            "description": "A dashboard's unique id."
+          },
+          "widgets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string",
+                  "maxLength": 255
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 255
+                },
+                "thresholds": {
+                  "type": "object",
+                  "additionalProperties": {},
+                  "nullable": true
+                },
+                "display_type": {
+                  "enum": [
+                    "line",
+                    "area",
+                    "stacked_area",
+                    "bar",
+                    "table",
+                    "big_number",
+                    "top_n"
+                  ],
+                  "type": "string",
+                  "description": "* `line` - line\n* `area` - area\n* `stacked_area` - stacked_area\n* `bar` - bar\n* `table` - table\n* `big_number` - big_number\n* `top_n` - top_n"
+                },
+                "interval": {
+                  "type": "string",
+                  "maxLength": 10
+                },
+                "queries": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "fields": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "aggregates": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "columns": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "field_aliases": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "conditions": {
+                        "type": "string"
+                      },
+                      "orderby": {
+                        "type": "string"
+                      },
+                      "is_hidden": {
+                        "type": "boolean"
+                      },
+                      "on_demand_extraction": {
+                        "type": "object",
+                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                        "properties": {
+                          "extraction_state": {
+                            "type": "string"
+                          },
+                          "enabled": {
+                            "type": "boolean"
+                          }
+                        }
+                      },
+                      "on_demand_extraction_disabled": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "widget_type": {
+                  "enum": [
+                    "discover",
+                    "issue",
+                    "metrics",
+                    "custom-metrics",
+                    "error-events",
+                    "transaction-like"
+                  ],
+                  "type": "string",
+                  "description": "* `discover` - discover\n* `issue` - issue\n* `metrics` - metrics\n* `custom-metrics` - custom-metrics\n* `error-events` - error-events\n* `transaction-like` - transaction-like"
+                },
+                "limit": {
+                  "type": "integer",
+                  "maximum": 10,
+                  "minimum": 1,
+                  "nullable": true
+                },
+                "layout": {
+                  "type": "object",
+                  "additionalProperties": {},
+                  "nullable": true
+                }
+              }
+            },
+            "description": "A json list of widgets saved in this dashboard."
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "default": [],
+            "description": "The saved projects filter for this dashboard."
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "The saved environment filter for this dashboard."
+          },
+          "period": {
+            "type": "string",
+            "nullable": true,
+            "description": "The saved time range period for this dashboard."
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The saved start time for this dashboard."
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The saved end time for this dashboard."
+          },
+          "filters": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "The saved filters for this dashboard."
+          },
+          "utc": {
+            "type": "boolean",
+            "description": "Setting that lets you display saved time range for this dashboard in UTC."
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
       "DashboardDetails": {
         "type": "object",
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
@@ -43867,6 +45163,223 @@
           "title",
           "widgets"
         ]
+      },
+      "DashboardListResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string"
+            },
+            "createdBy": {
+              "type": "object",
+              "properties": {
+                "identities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "organization": {
+                        "type": "object",
+                        "properties": {
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "slug"
+                        ]
+                      },
+                      "provider": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      },
+                      "dateVerified": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateSynced": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "dateSynced",
+                      "dateVerified",
+                      "id",
+                      "name",
+                      "organization",
+                      "provider"
+                    ]
+                  }
+                },
+                "avatar": {
+                  "type": "object",
+                  "properties": {
+                    "avatarType": {
+                      "type": "string"
+                    },
+                    "avatarUuid": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "avatarUrl": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "authenticators": {
+                  "type": "array",
+                  "items": {}
+                },
+                "canReset2fa": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
+                },
+                "hasPasswordAuth": {
+                  "type": "boolean"
+                },
+                "isManaged": {
+                  "type": "boolean"
+                },
+                "dateJoined": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "lastLogin": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "has2fa": {
+                  "type": "boolean"
+                },
+                "lastActive": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "isSuperuser": {
+                  "type": "boolean"
+                },
+                "isStaff": {
+                  "type": "boolean"
+                },
+                "experiments": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "emails": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "is_verified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "id",
+                      "is_verified"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "avatarUrl",
+                "dateJoined",
+                "email",
+                "emails",
+                "experiments",
+                "has2fa",
+                "hasPasswordAuth",
+                "id",
+                "isActive",
+                "isManaged",
+                "isStaff",
+                "isSuperuser",
+                "lastActive",
+                "lastLogin",
+                "name",
+                "username"
+              ]
+            },
+            "widgetDisplay": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "widgetPreview": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": [
+            "createdBy",
+            "dateCreated",
+            "id",
+            "title",
+            "widgetDisplay",
+            "widgetPreview"
+          ]
+        }
       },
       "DashboardWidget": {
         "type": "object",
