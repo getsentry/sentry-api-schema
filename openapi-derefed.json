@@ -6274,6 +6274,1947 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/discover/saved/": {
+      "get": {
+        "operationId": "List an Organization's Discover Saved Queries",
+        "description": "Retrieve a list of saved queries that are associated with the given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the Discover query you'd like to filter by."
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The property to sort results by. If not specified, the results are sorted by query name.\n\nAvailable fields are:\n- name\n- dateCreated\n- dateUpdated\n- mostPopular\n- recentlyViewed\n- myqueries\n        "
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "environment": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "query": {
+                        "type": "string"
+                      },
+                      "fields": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "widths": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "aggregations": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "range": {
+                        "type": "string"
+                      },
+                      "start": {
+                        "type": "string"
+                      },
+                      "end": {
+                        "type": "string"
+                      },
+                      "orderby": {
+                        "type": "string"
+                      },
+                      "limit": {
+                        "type": "string"
+                      },
+                      "yAxis": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "display": {
+                        "type": "string"
+                      },
+                      "topEvents": {
+                        "type": "integer"
+                      },
+                      "interval": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "projects": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer"
+                        }
+                      },
+                      "version": {
+                        "type": "integer"
+                      },
+                      "queryDataset": {
+                        "type": "string"
+                      },
+                      "datasetSource": {
+                        "type": "string"
+                      },
+                      "expired": {
+                        "type": "boolean"
+                      },
+                      "dateCreated": {
+                        "type": "string"
+                      },
+                      "dateUpdated": {
+                        "type": "string"
+                      },
+                      "createdBy": {
+                        "type": "object",
+                        "properties": {
+                          "identities": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "organization": {
+                                  "type": "object",
+                                  "properties": {
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "slug"
+                                  ]
+                                },
+                                "provider": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name"
+                                  ]
+                                },
+                                "dateVerified": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "dateSynced": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "dateSynced",
+                                "dateVerified",
+                                "id",
+                                "name",
+                                "organization",
+                                "provider"
+                              ]
+                            }
+                          },
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "avatarUrl": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "authenticators": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "canReset2fa": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "dateJoined": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "lastLogin": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "experiments": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "is_verified": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "id",
+                                "is_verified"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "dateJoined",
+                          "email",
+                          "emails",
+                          "experiments",
+                          "has2fa",
+                          "hasPasswordAuth",
+                          "id",
+                          "isActive",
+                          "isManaged",
+                          "isStaff",
+                          "isSuperuser",
+                          "lastActive",
+                          "lastLogin",
+                          "name",
+                          "username"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "createdBy",
+                      "datasetSource",
+                      "dateCreated",
+                      "dateUpdated",
+                      "expired",
+                      "id",
+                      "name",
+                      "projects",
+                      "queryDataset",
+                      "version"
+                    ]
+                  }
+                },
+                "examples": {
+                  "GetDiscoverSavedQueries": {
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "Transactions by Volume",
+                        "projects": [],
+                        "version": 2,
+                        "queryDataset": "transaction-like",
+                        "datasetSource": "unknown",
+                        "expired": false,
+                        "dateCreated": "2024-07-25T19:35:38.422859Z",
+                        "dateUpdated": "2024-07-25T19:35:38.422874Z",
+                        "environment": [],
+                        "query": "",
+                        "fields": [
+                          "id",
+                          "transaction",
+                          "timestamp"
+                        ],
+                        "widths": [],
+                        "range": "24h",
+                        "orderby": "-timestamp",
+                        "yAxis": [
+                          "count()"
+                        ],
+                        "createdBy": {
+                          "id": "1",
+                          "name": "Admin",
+                          "username": "admin",
+                          "email": "admin@sentry.io",
+                          "avatarUrl": "www.example.com",
+                          "isActive": true,
+                          "hasPasswordAuth": true,
+                          "isManaged": false,
+                          "dateJoined": "2021-10-25T17:07:33.190596Z",
+                          "lastLogin": "2024-07-16T15:28:39.261659Z",
+                          "has2fa": true,
+                          "lastActive": "2024-07-16T20:45:49.364197Z",
+                          "isSuperuser": false,
+                          "isStaff": false,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "1",
+                              "email": "admin@sentry.io",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null,
+                            "avatarUrl": "www.example.com"
+                          }
+                        }
+                      },
+                      {
+                        "id": "2",
+                        "name": "All Events",
+                        "projects": [],
+                        "version": 2,
+                        "queryDataset": "discover",
+                        "datasetSource": "unknown",
+                        "expired": false,
+                        "dateCreated": "2024-07-25T19:35:38.422859Z",
+                        "dateUpdated": "2024-07-25T19:35:38.422874Z",
+                        "environment": [],
+                        "query": "transaction:/api/foo",
+                        "fields": [
+                          "transaction",
+                          "project",
+                          "count()",
+                          "avg(transaction.duration)",
+                          "p75()",
+                          "p95()"
+                        ],
+                        "widths": [],
+                        "range": "24h",
+                        "orderby": "-count",
+                        "yAxis": [
+                          "count()"
+                        ],
+                        "createdBy": {
+                          "id": "1",
+                          "name": "Admin",
+                          "username": "admin",
+                          "email": "admin@sentry.io",
+                          "avatarUrl": "www.example.com",
+                          "isActive": true,
+                          "hasPasswordAuth": true,
+                          "isManaged": false,
+                          "dateJoined": "2021-10-25T17:07:33.190596Z",
+                          "lastLogin": "2024-07-16T15:28:39.261659Z",
+                          "has2fa": true,
+                          "lastActive": "2024-07-16T20:45:49.364197Z",
+                          "isSuperuser": false,
+                          "isStaff": false,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "1",
+                              "email": "admin@sentry.io",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null,
+                            "avatarUrl": "www.example.com"
+                          }
+                        }
+                      }
+                    ],
+                    "summary": "Get Discover Saved Queries"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a New Saved Query",
+        "description": "Create a new saved query for the given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The user-defined saved query name.",
+                    "maxLength": 255
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "default": [],
+                    "description": "The saved projects filter for this query."
+                  },
+                  "queryDataset": {
+                    "enum": [
+                      "discover",
+                      "error-events",
+                      "transaction-like"
+                    ],
+                    "type": "string",
+                    "default": "discover",
+                    "description": "The dataset you would like to query.\n\n* `discover` - discover\n* `error-events` - error-events\n* `transaction-like` - transaction-like"
+                  },
+                  "start": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "The saved start time for this saved query."
+                  },
+                  "end": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "The saved end time for this saved query."
+                  },
+                  "range": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The saved time range period for this saved query."
+                  },
+                  "fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "The fields, functions, or equations that can be requested for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n"
+                  },
+                  "orderby": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "How to order the query results. Must be something in the `field` list, excluding equations."
+                  },
+                  "environment": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "The name of environments to filter by."
+                  },
+                  "query": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Filters results by using [query syntax](/product/sentry-basics/search/)."
+                  },
+                  "yAxis": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "Aggregate functions to be plotted on the chart."
+                  },
+                  "display": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Visualization type for saved query chart. Allowed values are:\n- default\n- previous\n- top5\n- daily\n- dailytop5\n- bar\n"
+                  },
+                  "topEvents": {
+                    "type": "integer",
+                    "maximum": 10,
+                    "minimum": 1,
+                    "nullable": true,
+                    "description": "Number of top events' timeseries to be visualized."
+                  },
+                  "interval": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Resolution of the time series."
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "environment": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "widths": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "aggregations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "range": {
+                      "type": "string"
+                    },
+                    "start": {
+                      "type": "string"
+                    },
+                    "end": {
+                      "type": "string"
+                    },
+                    "orderby": {
+                      "type": "string"
+                    },
+                    "limit": {
+                      "type": "string"
+                    },
+                    "yAxis": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "display": {
+                      "type": "string"
+                    },
+                    "topEvents": {
+                      "type": "integer"
+                    },
+                    "interval": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "version": {
+                      "type": "integer"
+                    },
+                    "queryDataset": {
+                      "type": "string"
+                    },
+                    "datasetSource": {
+                      "type": "string"
+                    },
+                    "expired": {
+                      "type": "boolean"
+                    },
+                    "dateCreated": {
+                      "type": "string"
+                    },
+                    "dateUpdated": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "createdBy",
+                    "datasetSource",
+                    "dateCreated",
+                    "dateUpdated",
+                    "expired",
+                    "id",
+                    "name",
+                    "projects",
+                    "queryDataset",
+                    "version"
+                  ]
+                },
+                "examples": {
+                  "CreateDiscoverSavedQuery": {
+                    "value": {
+                      "id": "1",
+                      "name": "Transactions by Volume",
+                      "projects": [],
+                      "version": 2,
+                      "queryDataset": "discover",
+                      "datasetSource": "unknown",
+                      "expired": false,
+                      "dateCreated": "2024-07-25T19:35:38.422859Z",
+                      "dateUpdated": "2024-07-25T19:35:38.422874Z",
+                      "environment": [],
+                      "query": "transaction:/api/foo",
+                      "fields": [
+                        "transaction",
+                        "project",
+                        "count()",
+                        "avg(transaction.duration)",
+                        "p75()",
+                        "p95()"
+                      ],
+                      "widths": [],
+                      "range": "24h",
+                      "orderby": "-count",
+                      "yAxis": [
+                        "count()"
+                      ],
+                      "createdBy": {
+                        "id": "1",
+                        "name": "Admin",
+                        "username": "admin",
+                        "email": "admin@sentry.io",
+                        "avatarUrl": "www.example.com",
+                        "isActive": true,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-10-25T17:07:33.190596Z",
+                        "lastLogin": "2024-07-16T15:28:39.261659Z",
+                        "has2fa": true,
+                        "lastActive": "2024-07-16T20:45:49.364197Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "1",
+                            "email": "admin@sentry.io",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null,
+                          "avatarUrl": "www.example.com"
+                        }
+                      }
+                    },
+                    "summary": "Create Discover Saved Query"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/": {
+      "get": {
+        "operationId": "Retrieve an Organization's Discover Saved Query",
+        "description": "Retrieve a saved query.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "query_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the Discover query you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "environment": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "widths": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "aggregations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "range": {
+                      "type": "string"
+                    },
+                    "start": {
+                      "type": "string"
+                    },
+                    "end": {
+                      "type": "string"
+                    },
+                    "orderby": {
+                      "type": "string"
+                    },
+                    "limit": {
+                      "type": "string"
+                    },
+                    "yAxis": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "display": {
+                      "type": "string"
+                    },
+                    "topEvents": {
+                      "type": "integer"
+                    },
+                    "interval": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "version": {
+                      "type": "integer"
+                    },
+                    "queryDataset": {
+                      "type": "string"
+                    },
+                    "datasetSource": {
+                      "type": "string"
+                    },
+                    "expired": {
+                      "type": "boolean"
+                    },
+                    "dateCreated": {
+                      "type": "string"
+                    },
+                    "dateUpdated": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "createdBy",
+                    "datasetSource",
+                    "dateCreated",
+                    "dateUpdated",
+                    "expired",
+                    "id",
+                    "name",
+                    "projects",
+                    "queryDataset",
+                    "version"
+                  ]
+                },
+                "examples": {
+                  "DiscoverSavedQueryGETResponse": {
+                    "value": {
+                      "id": "1",
+                      "name": "Transactions by Volume",
+                      "projects": [],
+                      "version": 2,
+                      "queryDataset": "discover",
+                      "datasetSource": "unknown",
+                      "expired": false,
+                      "dateCreated": "2024-07-25T19:35:38.422859Z",
+                      "dateUpdated": "2024-07-25T19:35:38.422874Z",
+                      "environment": [],
+                      "query": "transaction:/api/foo",
+                      "fields": [
+                        "transaction",
+                        "project",
+                        "count()",
+                        "avg(transaction.duration)",
+                        "p75()",
+                        "p95()"
+                      ],
+                      "widths": [],
+                      "range": "24h",
+                      "orderby": "-count",
+                      "yAxis": [
+                        "count()"
+                      ],
+                      "createdBy": {
+                        "id": "1",
+                        "name": "Admin",
+                        "username": "admin",
+                        "email": "admin@sentry.io",
+                        "avatarUrl": "www.example.com",
+                        "isActive": true,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-10-25T17:07:33.190596Z",
+                        "lastLogin": "2024-07-16T15:28:39.261659Z",
+                        "has2fa": true,
+                        "lastActive": "2024-07-16T20:45:49.364197Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "1",
+                            "email": "admin@sentry.io",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null,
+                          "avatarUrl": "www.example.com"
+                        }
+                      }
+                    },
+                    "summary": "Discover Saved Query GET response"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Edit an Organization's Discover Saved Query",
+        "description": "Modify a saved query.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "query_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the Discover query you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The user-defined saved query name.",
+                    "maxLength": 255
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "default": [],
+                    "description": "The saved projects filter for this query."
+                  },
+                  "queryDataset": {
+                    "enum": [
+                      "discover",
+                      "error-events",
+                      "transaction-like"
+                    ],
+                    "type": "string",
+                    "default": "discover",
+                    "description": "The dataset you would like to query.\n\n* `discover` - discover\n* `error-events` - error-events\n* `transaction-like` - transaction-like"
+                  },
+                  "start": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "The saved start time for this saved query."
+                  },
+                  "end": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "The saved end time for this saved query."
+                  },
+                  "range": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The saved time range period for this saved query."
+                  },
+                  "fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "The fields, functions, or equations that can be requested for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n"
+                  },
+                  "orderby": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "How to order the query results. Must be something in the `field` list, excluding equations."
+                  },
+                  "environment": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "The name of environments to filter by."
+                  },
+                  "query": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Filters results by using [query syntax](/product/sentry-basics/search/)."
+                  },
+                  "yAxis": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "Aggregate functions to be plotted on the chart."
+                  },
+                  "display": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Visualization type for saved query chart. Allowed values are:\n- default\n- previous\n- top5\n- daily\n- dailytop5\n- bar\n"
+                  },
+                  "topEvents": {
+                    "type": "integer",
+                    "maximum": 10,
+                    "minimum": 1,
+                    "nullable": true,
+                    "description": "Number of top events' timeseries to be visualized."
+                  },
+                  "interval": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Resolution of the time series."
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "environment": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "widths": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "aggregations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "range": {
+                      "type": "string"
+                    },
+                    "start": {
+                      "type": "string"
+                    },
+                    "end": {
+                      "type": "string"
+                    },
+                    "orderby": {
+                      "type": "string"
+                    },
+                    "limit": {
+                      "type": "string"
+                    },
+                    "yAxis": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "display": {
+                      "type": "string"
+                    },
+                    "topEvents": {
+                      "type": "integer"
+                    },
+                    "interval": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "version": {
+                      "type": "integer"
+                    },
+                    "queryDataset": {
+                      "type": "string"
+                    },
+                    "datasetSource": {
+                      "type": "string"
+                    },
+                    "expired": {
+                      "type": "boolean"
+                    },
+                    "dateCreated": {
+                      "type": "string"
+                    },
+                    "dateUpdated": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "createdBy",
+                    "datasetSource",
+                    "dateCreated",
+                    "dateUpdated",
+                    "expired",
+                    "id",
+                    "name",
+                    "projects",
+                    "queryDataset",
+                    "version"
+                  ]
+                },
+                "examples": {
+                  "DiscoverSavedQueryGETResponse": {
+                    "value": {
+                      "id": "1",
+                      "name": "Transactions by Volume",
+                      "projects": [],
+                      "version": 2,
+                      "queryDataset": "discover",
+                      "datasetSource": "unknown",
+                      "expired": false,
+                      "dateCreated": "2024-07-25T19:35:38.422859Z",
+                      "dateUpdated": "2024-07-25T19:35:38.422874Z",
+                      "environment": [],
+                      "query": "transaction:/api/foo",
+                      "fields": [
+                        "transaction",
+                        "project",
+                        "count()",
+                        "avg(transaction.duration)",
+                        "p75()",
+                        "p95()"
+                      ],
+                      "widths": [],
+                      "range": "24h",
+                      "orderby": "-count",
+                      "yAxis": [
+                        "count()"
+                      ],
+                      "createdBy": {
+                        "id": "1",
+                        "name": "Admin",
+                        "username": "admin",
+                        "email": "admin@sentry.io",
+                        "avatarUrl": "www.example.com",
+                        "isActive": true,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-10-25T17:07:33.190596Z",
+                        "lastLogin": "2024-07-16T15:28:39.261659Z",
+                        "has2fa": true,
+                        "lastActive": "2024-07-16T20:45:49.364197Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "1",
+                            "email": "admin@sentry.io",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null,
+                          "avatarUrl": "www.example.com"
+                        }
+                      }
+                    },
+                    "summary": "Discover Saved Query GET response"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an Organization's Discover Saved Query",
+        "description": "Delete a saved query.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "query_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the Discover query you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/environments/": {
       "get": {
         "operationId": "List an Organization's Environments",
@@ -47624,6 +49565,682 @@
           "teams",
           "uptimeAutodetection",
           "verifySSL"
+        ]
+      },
+      "DiscoverSavedQuery": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The user-defined saved query name.",
+            "maxLength": 255
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "default": [],
+            "description": "The saved projects filter for this query."
+          },
+          "queryDataset": {
+            "enum": [
+              "discover",
+              "error-events",
+              "transaction-like"
+            ],
+            "type": "string",
+            "default": "discover",
+            "description": "The dataset you would like to query.\n\n* `discover` - discover\n* `error-events` - error-events\n* `transaction-like` - transaction-like"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The saved start time for this saved query."
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The saved end time for this saved query."
+          },
+          "range": {
+            "type": "string",
+            "nullable": true,
+            "description": "The saved time range period for this saved query."
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "The fields, functions, or equations that can be requested for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n"
+          },
+          "orderby": {
+            "type": "string",
+            "nullable": true,
+            "description": "How to order the query results. Must be something in the `field` list, excluding equations."
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "The name of environments to filter by."
+          },
+          "query": {
+            "type": "string",
+            "nullable": true,
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/)."
+          },
+          "yAxis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "Aggregate functions to be plotted on the chart."
+          },
+          "display": {
+            "type": "string",
+            "nullable": true,
+            "description": "Visualization type for saved query chart. Allowed values are:\n- default\n- previous\n- top5\n- daily\n- dailytop5\n- bar\n"
+          },
+          "topEvents": {
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "description": "Number of top events' timeseries to be visualized."
+          },
+          "interval": {
+            "type": "string",
+            "nullable": true,
+            "description": "Resolution of the time series."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "DiscoverSavedQueryListResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "query": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "widths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "aggregations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "range": {
+              "type": "string"
+            },
+            "start": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            },
+            "orderby": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "string"
+            },
+            "yAxis": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "display": {
+              "type": "string"
+            },
+            "topEvents": {
+              "type": "integer"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "projects": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "version": {
+              "type": "integer"
+            },
+            "queryDataset": {
+              "type": "string"
+            },
+            "datasetSource": {
+              "type": "string"
+            },
+            "expired": {
+              "type": "boolean"
+            },
+            "dateCreated": {
+              "type": "string"
+            },
+            "dateUpdated": {
+              "type": "string"
+            },
+            "createdBy": {
+              "type": "object",
+              "properties": {
+                "identities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "organization": {
+                        "type": "object",
+                        "properties": {
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "slug"
+                        ]
+                      },
+                      "provider": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      },
+                      "dateVerified": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateSynced": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "dateSynced",
+                      "dateVerified",
+                      "id",
+                      "name",
+                      "organization",
+                      "provider"
+                    ]
+                  }
+                },
+                "avatar": {
+                  "type": "object",
+                  "properties": {
+                    "avatarType": {
+                      "type": "string"
+                    },
+                    "avatarUuid": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "avatarUrl": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "authenticators": {
+                  "type": "array",
+                  "items": {}
+                },
+                "canReset2fa": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
+                },
+                "hasPasswordAuth": {
+                  "type": "boolean"
+                },
+                "isManaged": {
+                  "type": "boolean"
+                },
+                "dateJoined": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "lastLogin": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "has2fa": {
+                  "type": "boolean"
+                },
+                "lastActive": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "isSuperuser": {
+                  "type": "boolean"
+                },
+                "isStaff": {
+                  "type": "boolean"
+                },
+                "experiments": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "emails": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "is_verified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "id",
+                      "is_verified"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "avatarUrl",
+                "dateJoined",
+                "email",
+                "emails",
+                "experiments",
+                "has2fa",
+                "hasPasswordAuth",
+                "id",
+                "isActive",
+                "isManaged",
+                "isStaff",
+                "isSuperuser",
+                "lastActive",
+                "lastLogin",
+                "name",
+                "username"
+              ]
+            }
+          },
+          "required": [
+            "createdBy",
+            "datasetSource",
+            "dateCreated",
+            "dateUpdated",
+            "expired",
+            "id",
+            "name",
+            "projects",
+            "queryDataset",
+            "version"
+          ]
+        }
+      },
+      "DiscoverSavedQueryModel": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "query": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "widths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "aggregations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "range": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "orderby": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "string"
+          },
+          "yAxis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "display": {
+            "type": "string"
+          },
+          "topEvents": {
+            "type": "integer"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "version": {
+            "type": "integer"
+          },
+          "queryDataset": {
+            "type": "string"
+          },
+          "datasetSource": {
+            "type": "string"
+          },
+          "expired": {
+            "type": "boolean"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "dateUpdated": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "object",
+            "properties": {
+              "identities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organization": {
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "provider": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    },
+                    "dateVerified": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateSynced": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "dateSynced",
+                    "dateVerified",
+                    "id",
+                    "name",
+                    "organization",
+                    "provider"
+                  ]
+                }
+              },
+              "avatar": {
+                "type": "object",
+                "properties": {
+                  "avatarType": {
+                    "type": "string"
+                  },
+                  "avatarUuid": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              },
+              "authenticators": {
+                "type": "array",
+                "items": {}
+              },
+              "canReset2fa": {
+                "type": "boolean"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "avatarUrl": {
+                "type": "string"
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "hasPasswordAuth": {
+                "type": "boolean"
+              },
+              "isManaged": {
+                "type": "boolean"
+              },
+              "dateJoined": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastLogin": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "has2fa": {
+                "type": "boolean"
+              },
+              "lastActive": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "isSuperuser": {
+                "type": "boolean"
+              },
+              "isStaff": {
+                "type": "boolean"
+              },
+              "experiments": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "emails": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "is_verified": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "email",
+                    "id",
+                    "is_verified"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "avatarUrl",
+              "dateJoined",
+              "email",
+              "emails",
+              "experiments",
+              "has2fa",
+              "hasPasswordAuth",
+              "id",
+              "isActive",
+              "isManaged",
+              "isStaff",
+              "isSuperuser",
+              "lastActive",
+              "lastLogin",
+              "name",
+              "username"
+            ]
+          }
+        },
+        "required": [
+          "createdBy",
+          "datasetSource",
+          "dateCreated",
+          "dateUpdated",
+          "expired",
+          "id",
+          "name",
+          "projects",
+          "queryDataset",
+          "version"
         ]
       },
       "DynamicSdkLoaderOption": {
