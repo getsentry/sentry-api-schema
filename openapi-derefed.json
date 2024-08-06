@@ -29273,6 +29273,199 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/": {
+      "get": {
+        "operationId": "List a Project's Teams",
+        "description": "Return a list of teams that have access to this project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Teams"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "isMember": {
+                        "type": "boolean"
+                      },
+                      "teamRole": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "flags": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "access": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "hasAccess": {
+                        "type": "boolean"
+                      },
+                      "isPending": {
+                        "type": "boolean"
+                      },
+                      "memberCount": {
+                        "type": "integer"
+                      },
+                      "avatar": {
+                        "type": "object",
+                        "properties": {
+                          "avatarType": {
+                            "type": "string"
+                          },
+                          "avatarUuid": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "avatarUrl": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "access",
+                      "avatar",
+                      "dateCreated",
+                      "flags",
+                      "hasAccess",
+                      "id",
+                      "isMember",
+                      "isPending",
+                      "memberCount",
+                      "name",
+                      "slug",
+                      "teamRole"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAProject'sTeams": {
+                    "value": [
+                      {
+                        "id": "4502349234123",
+                        "slug": "ancient-gabelers",
+                        "name": "Ancient Gabelers",
+                        "dateCreated": "2023-05-31T19:47:53.621181Z",
+                        "isMember": true,
+                        "teamRole": "contributor",
+                        "flags": {
+                          "idp:provisioned": false
+                        },
+                        "access": [
+                          "alerts:read",
+                          "event:write",
+                          "project:read",
+                          "team:read",
+                          "member:read",
+                          "project:releases",
+                          "event:read",
+                          "org:read"
+                        ],
+                        "hasAccess": true,
+                        "isPending": false,
+                        "memberCount": 3,
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null
+                        }
+                      },
+                      {
+                        "id": "4502349234125",
+                        "slug": "squeaky-minnows",
+                        "name": "Squeaky Minnows",
+                        "dateCreated": "2023-07-27T11:23:34.621181Z",
+                        "isMember": true,
+                        "teamRole": "contributor",
+                        "flags": {
+                          "idp:provisioned": false
+                        },
+                        "access": [
+                          "alerts:read",
+                          "event:write",
+                          "project:read",
+                          "team:read",
+                          "member:read",
+                          "project:releases",
+                          "event:read",
+                          "org:read"
+                        ],
+                        "hasAccess": true,
+                        "isPending": false,
+                        "memberCount": 5,
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null
+                        }
+                      }
+                    ],
+                    "summary": "List a project's teams"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/": {
       "post": {
         "operationId": "Add a Team to a Project",
@@ -56820,6 +57013,83 @@
           "frequency",
           "name"
         ]
+      },
+      "ProjectTeamsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "slug": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "isMember": {
+              "type": "boolean"
+            },
+            "teamRole": {
+              "type": "string",
+              "nullable": true
+            },
+            "flags": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "access": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "hasAccess": {
+              "type": "boolean"
+            },
+            "isPending": {
+              "type": "boolean"
+            },
+            "memberCount": {
+              "type": "integer"
+            },
+            "avatar": {
+              "type": "object",
+              "properties": {
+                "avatarType": {
+                  "type": "string"
+                },
+                "avatarUuid": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "avatarUrl": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "required": [
+            "access",
+            "avatar",
+            "dateCreated",
+            "flags",
+            "hasAccess",
+            "id",
+            "isMember",
+            "isPending",
+            "memberCount",
+            "name",
+            "slug",
+            "teamRole"
+          ]
+        }
       },
       "ProjectWithTeam": {
         "type": "object",
