@@ -8496,6 +8496,375 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/external-users/": {
+      "post": {
+        "operationId": "Create an External User",
+        "description": "Links a user from an external provider to a Sentry user.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "user_id": {
+                    "type": "integer",
+                    "description": "The user ID in Sentry."
+                  },
+                  "external_name": {
+                    "type": "string",
+                    "description": "The associated username for the provider."
+                  },
+                  "provider": {
+                    "enum": [
+                      "github",
+                      "github_enterprise",
+                      "slack",
+                      "gitlab",
+                      "msteams",
+                      "custom_scm"
+                    ],
+                    "type": "string",
+                    "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
+                  },
+                  "integration_id": {
+                    "type": "integer",
+                    "description": "The Integration ID."
+                  },
+                  "id": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "description": "The external actor ID."
+                  },
+                  "external_id": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The associated user ID for provider."
+                  }
+                },
+                "required": [
+                  "external_name",
+                  "id",
+                  "integration_id",
+                  "provider",
+                  "user_id"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                  "properties": {
+                    "user_id": {
+                      "type": "integer",
+                      "description": "The user ID in Sentry."
+                    },
+                    "external_name": {
+                      "type": "string",
+                      "description": "The associated username for the provider."
+                    },
+                    "provider": {
+                      "enum": [
+                        "github",
+                        "github_enterprise",
+                        "slack",
+                        "gitlab",
+                        "msteams",
+                        "custom_scm"
+                      ],
+                      "type": "string",
+                      "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
+                    },
+                    "integration_id": {
+                      "type": "integer",
+                      "description": "The Integration ID."
+                    },
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true,
+                      "description": "The external actor ID."
+                    },
+                    "external_id": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "The associated user ID for provider."
+                    }
+                  },
+                  "required": [
+                    "external_name",
+                    "id",
+                    "integration_id",
+                    "provider",
+                    "user_id"
+                  ]
+                },
+                "examples": {
+                  "CreateAnExternalUser": {
+                    "value": {
+                      "id": 123,
+                      "provider": "github",
+                      "external_name": "@billy",
+                      "integration_id": 123,
+                      "user_id": 123
+                    },
+                    "summary": "Create an external user"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/": {
+      "put": {
+        "operationId": "Update an External User",
+        "description": "Update a user in an external provider that is currently linked to a Sentry user.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "external_user_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the external user object. This is returned when creating an external user.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "user_id": {
+                    "type": "integer",
+                    "description": "The user ID in Sentry."
+                  },
+                  "external_name": {
+                    "type": "string",
+                    "description": "The associated username for the provider."
+                  },
+                  "provider": {
+                    "enum": [
+                      "github",
+                      "github_enterprise",
+                      "slack",
+                      "gitlab",
+                      "msteams",
+                      "custom_scm"
+                    ],
+                    "type": "string",
+                    "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
+                  },
+                  "integration_id": {
+                    "type": "integer",
+                    "description": "The Integration ID."
+                  },
+                  "id": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "description": "The external actor ID."
+                  },
+                  "external_id": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The associated user ID for provider."
+                  }
+                },
+                "required": [
+                  "external_name",
+                  "id",
+                  "integration_id",
+                  "provider",
+                  "user_id"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                  "properties": {
+                    "user_id": {
+                      "type": "integer",
+                      "description": "The user ID in Sentry."
+                    },
+                    "external_name": {
+                      "type": "string",
+                      "description": "The associated username for the provider."
+                    },
+                    "provider": {
+                      "enum": [
+                        "github",
+                        "github_enterprise",
+                        "slack",
+                        "gitlab",
+                        "msteams",
+                        "custom_scm"
+                      ],
+                      "type": "string",
+                      "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
+                    },
+                    "integration_id": {
+                      "type": "integer",
+                      "description": "The Integration ID."
+                    },
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true,
+                      "description": "The external actor ID."
+                    },
+                    "external_id": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "The associated user ID for provider."
+                    }
+                  },
+                  "required": [
+                    "external_name",
+                    "id",
+                    "integration_id",
+                    "provider",
+                    "user_id"
+                  ]
+                },
+                "examples": {
+                  "CreateAnExternalUser": {
+                    "value": {
+                      "id": 123,
+                      "provider": "github",
+                      "external_name": "@billy",
+                      "integration_id": 123,
+                      "user_id": 123
+                    },
+                    "summary": "Create an external user"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an External User",
+        "description": "Delete the link between a user from an external provider and a Sentry user.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "external_user_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the external user object. This is returned when creating an external user.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/integrations/": {
       "get": {
         "operationId": "List an Organization's Available Integrations",
@@ -50742,6 +51111,53 @@
             "type": "boolean"
           }
         }
+      },
+      "ExternalUser": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "description": "The user ID in Sentry."
+          },
+          "external_name": {
+            "type": "string",
+            "description": "The associated username for the provider."
+          },
+          "provider": {
+            "enum": [
+              "github",
+              "github_enterprise",
+              "slack",
+              "gitlab",
+              "msteams",
+              "custom_scm"
+            ],
+            "type": "string",
+            "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
+          },
+          "integration_id": {
+            "type": "integer",
+            "description": "The Integration ID."
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "The external actor ID."
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "The associated user ID for provider."
+          }
+        },
+        "required": [
+          "external_name",
+          "id",
+          "integration_id",
+          "provider",
+          "user_id"
+        ]
       },
       "GetReplay": {
         "type": "object",
