@@ -16811,8 +16811,8 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/replay-count/": {
       "get": {
-        "operationId": "Return a Count of Replays",
-        "description": "Return a count of replays for the given issue or transaction id.",
+        "operationId": "Retrieve a Count of Replays",
+        "description": "Return a count of replays for the given issue or transaction ID.",
         "parameters": [
           {
             "in": "path",
@@ -16822,15 +16822,6 @@
             },
             "description": "The ID or slug of the organization the resource belongs to.",
             "required": true
-          },
-          {
-            "in": "query",
-            "name": "end",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
           },
           {
             "in": "query",
@@ -16851,6 +16842,15 @@
               "format": "date-time"
             },
             "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
           },
           {
             "in": "query",
@@ -16984,7 +16984,9 @@
             "name": "project",
             "schema": {
               "type": "array",
-              "items": {}
+              "items": {
+                "type": "integer"
+              }
             },
             "description": "The ID of the projects to filter by."
           },
@@ -27446,7 +27448,7 @@
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/": {
       "delete": {
         "operationId": "Delete a Replay Instance",
-        "description": "Delete a replay",
+        "description": "Delete a replay.",
         "parameters": [
           {
             "in": "path",
@@ -27784,7 +27786,7 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/{segment_id}/": {
       "get": {
-        "operationId": "Fetch Recording Segment",
+        "operationId": "Retrieve a Recording Segment",
         "description": "Return a replay recording segment.",
         "parameters": [
           {
@@ -27893,7 +27895,7 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/viewed-by/": {
       "get": {
-        "operationId": "Get list of user who have viewed a replay",
+        "operationId": "List Users Who Have Viewed a Replay",
         "description": "Return a list of users who have viewed a replay.",
         "parameters": [
           {
