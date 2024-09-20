@@ -2118,12 +2118,12 @@
                           "scopes": [
                             "org:billing"
                           ],
-                          "allowed": false,
-                          "isAllowed": false,
+                          "allowed": true,
+                          "isAllowed": true,
                           "isRetired": false,
-                          "isTeamRolesAllowed": false,
                           "is_global": false,
                           "isGlobal": false,
+                          "isTeamRolesAllowed": false,
                           "minimumTeamRole": "contributor"
                         },
                         {
@@ -2131,23 +2131,23 @@
                           "name": "Member",
                           "desc": "Members can view and act on events, as well as view most other data within the organization.",
                           "scopes": [
-                            "project:read",
-                            "project:releases",
-                            "member:read",
-                            "event:admin",
                             "team:read",
-                            "alerts:write",
+                            "project:releases",
+                            "org:read",
                             "event:read",
+                            "alerts:write",
+                            "member:read",
                             "alerts:read",
-                            "event:write",
-                            "org:read"
+                            "event:admin",
+                            "project:read",
+                            "event:write"
                           ],
-                          "allowed": false,
-                          "isAllowed": false,
+                          "allowed": true,
+                          "isAllowed": true,
                           "isRetired": false,
-                          "isTeamRolesAllowed": true,
                           "is_global": false,
                           "isGlobal": false,
+                          "isTeamRolesAllowed": true,
                           "minimumTeamRole": "contributor"
                         },
                         {
@@ -2155,28 +2155,28 @@
                           "name": "Admin",
                           "desc": "Admin privileges on any teams of which they're a member. They can create new teams and projects, as well as remove teams and projects on which they already hold membership (or all teams, if open membership is enabled). Additionally, they can manage memberships of teams that they are members of. They cannot invite members to the organization.",
                           "scopes": [
-                            "project:read",
-                            "project:releases",
-                            "member:read",
-                            "event:admin",
-                            "team:write",
+                            "team:admin",
+                            "org:integrations",
                             "project:admin",
                             "team:read",
-                            "org:integrations",
-                            "alerts:write",
-                            "team:admin",
-                            "project:write",
+                            "project:releases",
+                            "org:read",
+                            "team:write",
                             "event:read",
+                            "alerts:write",
+                            "member:read",
                             "alerts:read",
+                            "event:admin",
+                            "project:read",
                             "event:write",
-                            "org:read"
+                            "project:write"
                           ],
-                          "allowed": false,
-                          "isAllowed": false,
-                          "isRetired": false,
-                          "isTeamRolesAllowed": true,
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": true,
                           "is_global": false,
                           "isGlobal": false,
+                          "isTeamRolesAllowed": true,
                           "minimumTeamRole": "admin"
                         },
                         {
@@ -2184,31 +2184,31 @@
                           "name": "Manager",
                           "desc": "Gains admin access on all teams as well as the ability to add and remove members.",
                           "scopes": [
-                            "member:write",
-                            "project:read",
-                            "member:read",
-                            "event:admin",
+                            "team:admin",
                             "org:integrations",
-                            "member:admin",
-                            "alerts:write",
-                            "event:write",
-                            "org:write",
                             "project:releases",
                             "team:write",
+                            "member:read",
+                            "org:write",
+                            "project:write",
                             "project:admin",
                             "team:read",
-                            "team:admin",
-                            "project:write",
+                            "org:read",
                             "event:read",
+                            "member:write",
+                            "alerts:write",
                             "alerts:read",
-                            "org:read"
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "member:admin"
                           ],
-                          "allowed": false,
-                          "isAllowed": false,
+                          "allowed": true,
+                          "isAllowed": true,
                           "isRetired": false,
-                          "isTeamRolesAllowed": true,
                           "is_global": true,
                           "isGlobal": true,
+                          "isTeamRolesAllowed": true,
                           "minimumTeamRole": "admin"
                         },
                         {
@@ -2216,33 +2216,33 @@
                           "name": "Owner",
                           "desc": "Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members, as well as make billing and plan changes.",
                           "scopes": [
-                            "member:write",
-                            "project:read",
-                            "member:read",
-                            "event:admin",
+                            "team:admin",
                             "org:integrations",
-                            "member:admin",
-                            "alerts:write",
-                            "event:write",
-                            "org:write",
-                            "org:admin",
                             "project:releases",
+                            "org:admin",
                             "team:write",
+                            "member:read",
+                            "org:write",
+                            "project:write",
                             "project:admin",
                             "team:read",
-                            "org:billing",
-                            "team:admin",
-                            "project:write",
+                            "org:read",
                             "event:read",
+                            "member:write",
+                            "alerts:write",
+                            "org:billing",
                             "alerts:read",
-                            "org:read"
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "member:admin"
                           ],
-                          "allowed": false,
-                          "isAllowed": false,
+                          "allowed": true,
+                          "isAllowed": true,
                           "isRetired": false,
-                          "isTeamRolesAllowed": true,
                           "is_global": true,
                           "isGlobal": true,
+                          "isTeamRolesAllowed": true,
                           "minimumTeamRole": "admin"
                         }
                       ],
@@ -9078,7 +9078,7 @@
     "/api/0/organizations/{organization_id_or_slug}/members/": {
       "get": {
         "operationId": "List an Organization's Members",
-        "description": "List all organization members.\n\nResponse includes pending invites that are approved by organization admins but waiting to be accepted by the invitee.",
+        "description": "List all organization members.\n\nResponse includes pending invites that are approved by organization owners or managers but waiting to be accepted by the invitee.",
         "parameters": [
           {
             "in": "path",
@@ -9935,7 +9935,7 @@
     "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/": {
       "get": {
         "operationId": "Retrieve an Organization Member",
-        "description": "Retrieve an organization member's details.\n\nWill return a pending invite as long as it's already approved.",
+        "description": "Retrieve an organization member's details.\n\nResponse will be a pending invite if it has been approved by organization owners or managers but is waiting to be accepted by the invitee.",
         "parameters": [
           {
             "in": "path",
@@ -10270,7 +10270,8 @@
                             "type": "string"
                           },
                           "role": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           }
                         },
                         "required": [
@@ -10412,6 +10413,263 @@
                     "teamRoles",
                     "teams"
                   ]
+                },
+                "examples": {
+                  "UpdateOrganizationMember": {
+                    "value": {
+                      "id": "57377908164",
+                      "email": "sirpenguin@antarcticarocks.com",
+                      "name": "Sir Penguin",
+                      "user": {
+                        "id": "280094367316",
+                        "name": "Sir Penguin",
+                        "username": "sirpenguin@antarcticarocks.com",
+                        "email": "sirpenguin@antarcticarocks.com",
+                        "avatarUrl": "https://secure.gravatar.com/avatar/16aeb26c5fdba335c7078e9e9ddb5149?s=32&d=mm",
+                        "isActive": true,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-07-06T21:13:58.375239Z",
+                        "lastLogin": "2021-08-02T18:25:00.051182Z",
+                        "has2fa": false,
+                        "lastActive": "2021-08-02T21:32:18.836829Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "2153450836",
+                            "email": "sirpenguin@antarcticarocks.com",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null
+                        },
+                        "authenticators": [],
+                        "canReset2fa": true
+                      },
+                      "role": "member",
+                      "orgRole": "member",
+                      "roleName": "Member",
+                      "pending": false,
+                      "expired": false,
+                      "flags": {
+                        "idp:provisioned": false,
+                        "idp:role-restricted": false,
+                        "sso:linked": false,
+                        "sso:invalid": false,
+                        "member-limit:restricted": false,
+                        "partnership:restricted": false
+                      },
+                      "dateCreated": "2021-07-06T21:13:01.120263Z",
+                      "inviteStatus": "approved",
+                      "inviterName": "maininviter@antarcticarocks.com",
+                      "teams": [
+                        "cool-team",
+                        "ancient-gabelers"
+                      ],
+                      "teamRoles": [
+                        {
+                          "teamSlug": "ancient-gabelers",
+                          "role": "admin"
+                        },
+                        {
+                          "teamSlug": "powerful-abolitionist",
+                          "role": "contributor"
+                        }
+                      ],
+                      "invite_link": null,
+                      "isOnlyOwner": false,
+                      "orgRoleList": [
+                        {
+                          "id": "billing",
+                          "name": "Billing",
+                          "desc": "Can manage subscription and billing details.",
+                          "scopes": [
+                            "org:billing"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": false,
+                          "is_global": false,
+                          "isGlobal": false,
+                          "isTeamRolesAllowed": false,
+                          "minimumTeamRole": "contributor"
+                        },
+                        {
+                          "id": "member",
+                          "name": "Member",
+                          "desc": "Members can view and act on events, as well as view most other data within the organization.",
+                          "scopes": [
+                            "team:read",
+                            "project:releases",
+                            "org:read",
+                            "event:read",
+                            "alerts:write",
+                            "member:read",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": false,
+                          "is_global": false,
+                          "isGlobal": false,
+                          "isTeamRolesAllowed": true,
+                          "minimumTeamRole": "contributor"
+                        },
+                        {
+                          "id": "admin",
+                          "name": "Admin",
+                          "desc": "Admin privileges on any teams of which they're a member. They can create new teams and projects, as well as remove teams and projects on which they already hold membership (or all teams, if open membership is enabled). Additionally, they can manage memberships of teams that they are members of. They cannot invite members to the organization.",
+                          "scopes": [
+                            "team:admin",
+                            "org:integrations",
+                            "project:admin",
+                            "team:read",
+                            "project:releases",
+                            "org:read",
+                            "team:write",
+                            "event:read",
+                            "alerts:write",
+                            "member:read",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "project:write"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": true,
+                          "is_global": false,
+                          "isGlobal": false,
+                          "isTeamRolesAllowed": true,
+                          "minimumTeamRole": "admin"
+                        },
+                        {
+                          "id": "manager",
+                          "name": "Manager",
+                          "desc": "Gains admin access on all teams as well as the ability to add and remove members.",
+                          "scopes": [
+                            "team:admin",
+                            "org:integrations",
+                            "project:releases",
+                            "team:write",
+                            "member:read",
+                            "org:write",
+                            "project:write",
+                            "project:admin",
+                            "team:read",
+                            "org:read",
+                            "event:read",
+                            "member:write",
+                            "alerts:write",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "member:admin"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": false,
+                          "is_global": true,
+                          "isGlobal": true,
+                          "isTeamRolesAllowed": true,
+                          "minimumTeamRole": "admin"
+                        },
+                        {
+                          "id": "owner",
+                          "name": "Owner",
+                          "desc": "Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members, as well as make billing and plan changes.",
+                          "scopes": [
+                            "team:admin",
+                            "org:integrations",
+                            "project:releases",
+                            "org:admin",
+                            "team:write",
+                            "member:read",
+                            "org:write",
+                            "project:write",
+                            "project:admin",
+                            "team:read",
+                            "org:read",
+                            "event:read",
+                            "member:write",
+                            "alerts:write",
+                            "org:billing",
+                            "alerts:read",
+                            "event:admin",
+                            "project:read",
+                            "event:write",
+                            "member:admin"
+                          ],
+                          "allowed": true,
+                          "isAllowed": true,
+                          "isRetired": false,
+                          "is_global": true,
+                          "isGlobal": true,
+                          "isTeamRolesAllowed": true,
+                          "minimumTeamRole": "admin"
+                        }
+                      ],
+                      "teamRoleList": [
+                        {
+                          "id": "contributor",
+                          "name": "Contributor",
+                          "desc": "Contributors can view and act on events, as well as view most other data within the team's projects.",
+                          "scopes": [
+                            "project:read",
+                            "project:releases",
+                            "member:read",
+                            "team:read",
+                            "event:read",
+                            "alerts:read",
+                            "event:write",
+                            "org:read"
+                          ],
+                          "allowed": false,
+                          "isAllowed": false,
+                          "isRetired": false,
+                          "isTeamRolesAllowed": true,
+                          "isMinimumRoleFor": null
+                        },
+                        {
+                          "id": "admin",
+                          "name": "Team Admin",
+                          "desc": "Admin privileges on the team. They can create and remove projects, and can manage the team's memberships.",
+                          "scopes": [
+                            "project:read",
+                            "project:releases",
+                            "member:read",
+                            "event:admin",
+                            "team:write",
+                            "project:admin",
+                            "team:read",
+                            "org:integrations",
+                            "alerts:write",
+                            "team:admin",
+                            "project:write",
+                            "event:read",
+                            "alerts:read",
+                            "event:write",
+                            "org:read"
+                          ],
+                          "allowed": false,
+                          "isAllowed": false,
+                          "isRetired": false,
+                          "isTeamRolesAllowed": true,
+                          "isMinimumRoleFor": "admin"
+                        }
+                      ]
+                    },
+                    "summary": "Update organization member"
+                  }
                 }
               }
             },
@@ -10797,7 +11055,8 @@
                             "type": "string"
                           },
                           "role": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           }
                         },
                         "required": [
@@ -11150,47 +11409,47 @@
                           "name": "Contributor",
                           "desc": "Contributors can view and act on events, as well as view most other data within the team's projects.",
                           "scopes": [
-                            "team:read",
-                            "project:releases",
-                            "org:read",
-                            "event:read",
-                            "member:read",
-                            "alerts:read",
                             "project:read",
-                            "event:write"
+                            "project:releases",
+                            "member:read",
+                            "team:read",
+                            "event:read",
+                            "alerts:read",
+                            "event:write",
+                            "org:read"
                           ],
                           "allowed": false,
                           "isAllowed": false,
                           "isRetired": false,
-                          "isMinimumRoleFor": null,
-                          "isTeamRolesAllowed": true
+                          "isTeamRolesAllowed": true,
+                          "isMinimumRoleFor": null
                         },
                         {
                           "id": "admin",
                           "name": "Team Admin",
-                          "desc": "Admin privileges on the team. They can create and remove projects, and can manage the team's memberships. They cannot invite members to the organization.",
+                          "desc": "Admin privileges on the team. They can create and remove projects, and can manage the team's memberships.",
                           "scopes": [
-                            "team:admin",
-                            "org:integrations",
+                            "project:read",
+                            "project:releases",
+                            "member:read",
+                            "event:admin",
+                            "team:write",
                             "project:admin",
                             "team:read",
-                            "project:releases",
-                            "org:read",
-                            "team:write",
-                            "event:read",
+                            "org:integrations",
                             "alerts:write",
-                            "member:read",
+                            "team:admin",
+                            "project:write",
+                            "event:read",
                             "alerts:read",
-                            "event:admin",
-                            "project:read",
                             "event:write",
-                            "project:write"
+                            "org:read"
                           ],
                           "allowed": false,
                           "isAllowed": false,
                           "isRetired": false,
-                          "isMinimumRoleFor": "admin",
-                          "isTeamRolesAllowed": true
+                          "isTeamRolesAllowed": true,
+                          "isMinimumRoleFor": "admin"
                         }
                       ]
                     },
@@ -57575,7 +57834,8 @@
                   "type": "string"
                 },
                 "role": {
-                  "type": "string"
+                  "type": "string",
+                  "nullable": true
                 }
               },
               "required": [
