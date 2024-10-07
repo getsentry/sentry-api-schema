@@ -8273,9 +8273,14 @@
             "in": "query",
             "name": "visibility",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "all",
+                "hidden",
+                "visible"
+              ]
             },
-            "description": "The visibility of the environments to filter by. The options are: `all`, `hidden`, `visible`. Defaults to `visible`."
+            "description": "The visibility of the environments to filter by. Defaults to `visible`."
           }
         ],
         "tags": [
@@ -8300,7 +8305,7 @@
                     "type": "object",
                     "properties": {
                       "id": {
-                        "type": "integer"
+                        "type": "string"
                       },
                       "name": {
                         "type": "string"
@@ -8316,11 +8321,11 @@
                   "ListAnOrganization'sEnvironments": {
                     "value": [
                       {
-                        "id": 1,
+                        "id": "1",
                         "name": "Production"
                       },
                       {
-                        "id": 2,
+                        "id": "2",
                         "name": "Staging"
                       }
                     ],
@@ -24360,6 +24365,117 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/": {
+      "get": {
+        "operationId": "List a Project's Environments",
+        "description": "Lists a project's environments.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "visibility",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "hidden",
+                "visible"
+              ]
+            },
+            "description": "The visibility of the environments to filter by. Defaults to `visible`."
+          }
+        ],
+        "tags": [
+          "Environments"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "isHidden": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "isHidden",
+                      "name"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAProject'sEnvironments": {
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "Production",
+                        "isHidden": false
+                      },
+                      {
+                        "id": "2",
+                        "name": "Staging",
+                        "isHidden": true
+                      }
+                    ],
+                    "summary": "List a Project's Environments"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Invalid value for 'visibility'."
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
@@ -54590,6 +54706,28 @@
           ]
         }
       },
+      "ListProjectEnvironments": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "isHidden": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "isHidden",
+            "name"
+          ]
+        }
+      },
       "ListReplayClicks": {
         "type": "object",
         "properties": {
@@ -57078,7 +57216,7 @@
           "type": "object",
           "properties": {
             "id": {
-              "type": "integer"
+              "type": "string"
             },
             "name": {
               "type": "string"
