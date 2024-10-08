@@ -24581,7 +24581,8 @@
                         "type": "string"
                       },
                       "location": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                       },
                       "culprit": {
                         "type": "string"
@@ -24590,19 +24591,24 @@
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           },
                           "email": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           },
                           "username": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           },
                           "ip_address": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           },
                           "name": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           },
                           "data": {
                             "type": "object",
@@ -24610,9 +24616,6 @@
                             "nullable": true
                           }
                         },
-                        "required": [
-                          "data"
-                        ],
                         "nullable": true
                       },
                       "tags": {
@@ -44501,200 +44504,6 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/events/": {
-      "get": {
-        "tags": [
-          "Events"
-        ],
-        "description": "This endpoint lists an issue's events.",
-        "operationId": "List an Issue's Events",
-        "parameters": [
-          {
-            "name": "issue_id",
-            "in": "path",
-            "description": "The ID of the issue to retrieve.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "full",
-            "in": "query",
-            "description": "If this is set to true then the event payload will include the full event body, including the stacktrace. \nSet to true to enable.",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "eventID",
-                      "tags",
-                      "dateCreated",
-                      "user",
-                      "message",
-                      "id",
-                      "platform",
-                      "event.type",
-                      "groupID",
-                      "title"
-                    ],
-                    "properties": {
-                      "eventID": {
-                        "type": "string"
-                      },
-                      "tags": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "value": {
-                              "type": "string"
-                            },
-                            "key": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      },
-                      "dateCreated": {
-                        "type": "string"
-                      },
-                      "user": {
-                        "type": "object",
-                        "nullable": true,
-                        "required": [
-                          "username",
-                          "name",
-                          "ip_address",
-                          "email",
-                          "data",
-                          "id"
-                        ],
-                        "properties": {
-                          "username": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "ip_address": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "email": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "data": {
-                            "type": "object",
-                            "nullable": true,
-                            "properties": {
-                              "isStaff": {
-                                "type": "boolean"
-                              }
-                            }
-                          },
-                          "id": {
-                            "type": "string"
-                          }
-                        }
-                      },
-                      "message": {
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "platform": {
-                        "type": "string"
-                      },
-                      "event.type": {
-                        "type": "string"
-                      },
-                      "groupID": {
-                        "type": "string"
-                      },
-                      "title": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "eventID": "9fac2ceed9344f2bbfdd1fdacb0ed9b1",
-                    "tags": [
-                      {
-                        "key": "browser",
-                        "value": "Chrome 60.0"
-                      },
-                      {
-                        "key": "device",
-                        "value": "Other"
-                      },
-                      {
-                        "key": "environment",
-                        "value": "production"
-                      },
-                      {
-                        "value": "fatal",
-                        "key": "level"
-                      },
-                      {
-                        "key": "os",
-                        "value": "Mac OS X 10.12.6"
-                      },
-                      {
-                        "value": "CPython 2.7.16",
-                        "key": "runtime"
-                      },
-                      {
-                        "key": "release",
-                        "value": "17642328ead24b51867165985996d04b29310337"
-                      },
-                      {
-                        "key": "server_name",
-                        "value": "web1.example.com"
-                      }
-                    ],
-                    "dateCreated": "2020-09-11T17:46:36Z",
-                    "user": null,
-                    "message": "",
-                    "title": "This is an example Python exception",
-                    "id": "dfb1a2d057194e76a4186cc8a5271553",
-                    "platform": "python",
-                    "event.type": "error",
-                    "groupID": "1889724436"
-                  }
-                ]
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "event:read"
-            ]
-          }
-        ]
-      }
-    },
     "/api/0/issues/{issue_id}/": {
       "get": {
         "tags": [
@@ -48326,6 +48135,289 @@
             ]
           }
         ]
+      }
+    },
+    "/api/0/issues/{issue_id}/events/": {
+      "get": {
+        "operationId": "List an Issue's Events",
+        "description": "Return a list of error events bound to an issue",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "full",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Specify true to include the full event body, including the stacktrace, in the event payload."
+          },
+          {
+            "in": "query",
+            "name": "sample",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Return events in pseudo-random order. This is deterministic so an identical query will always return the same events in the same order."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An optional search query for filtering events."
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "event.type": {
+                        "type": "string"
+                      },
+                      "groupID": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "eventID": {
+                        "type": "string"
+                      },
+                      "projectID": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "location": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "culprit": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "email": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "username": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "ip_address": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "data": {
+                            "type": "object",
+                            "additionalProperties": {},
+                            "nullable": true
+                          }
+                        },
+                        "nullable": true
+                      },
+                      "tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "query": {
+                              "type": "string"
+                            },
+                            "key": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "key",
+                            "value"
+                          ]
+                        }
+                      },
+                      "platform": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "crashFile": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "crashFile",
+                      "culprit",
+                      "dateCreated",
+                      "event.type",
+                      "eventID",
+                      "groupID",
+                      "id",
+                      "location",
+                      "message",
+                      "platform",
+                      "projectID",
+                      "tags",
+                      "title",
+                      "user"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ReturnAListOfErrorEventsBoundToAnIssue": {
+                    "value": [
+                      {
+                        "eventID": "9fac2ceed9344f2bbfdd1fdacb0ed9b1",
+                        "tags": [
+                          {
+                            "key": "browser",
+                            "value": "Chrome 60.0"
+                          },
+                          {
+                            "key": "device",
+                            "value": "Other"
+                          },
+                          {
+                            "key": "environment",
+                            "value": "production"
+                          },
+                          {
+                            "value": "fatal",
+                            "key": "level"
+                          },
+                          {
+                            "key": "os",
+                            "value": "Mac OS X 10.12.6"
+                          },
+                          {
+                            "value": "CPython 2.7.16",
+                            "key": "runtime"
+                          },
+                          {
+                            "key": "release",
+                            "value": "17642328ead24b51867165985996d04b29310337"
+                          },
+                          {
+                            "key": "server_name",
+                            "value": "web1.example.com"
+                          }
+                        ],
+                        "dateCreated": "2020-09-11T17:46:36Z",
+                        "user": null,
+                        "message": "",
+                        "title": "This is an example Python exception",
+                        "id": "dfb1a2d057194e76a4186cc8a5271553",
+                        "platform": "python",
+                        "event.type": "error",
+                        "groupID": "1889724436",
+                        "crashFile": null,
+                        "location": "example.py:123",
+                        "culprit": "/books/new/",
+                        "projectID": "49271"
+                      }
+                    ],
+                    "summary": "Return a list of error events bound to an issue"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     }
   },
@@ -52902,6 +52994,122 @@
         "required": [
           "data"
         ]
+      },
+      "GroupEventsResponseDict": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "event.type": {
+              "type": "string"
+            },
+            "groupID": {
+              "type": "string",
+              "nullable": true
+            },
+            "eventID": {
+              "type": "string"
+            },
+            "projectID": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string",
+              "nullable": true
+            },
+            "culprit": {
+              "type": "string"
+            },
+            "user": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "email": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "username": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "ip_address": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": {},
+                  "nullable": true
+                }
+              },
+              "nullable": true
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "key",
+                  "value"
+                ]
+              }
+            },
+            "platform": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "crashFile": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "required": [
+            "crashFile",
+            "culprit",
+            "dateCreated",
+            "event.type",
+            "eventID",
+            "groupID",
+            "id",
+            "location",
+            "message",
+            "platform",
+            "projectID",
+            "tags",
+            "title",
+            "user"
+          ]
+        }
       },
       "Layout": {
         "type": "object",
@@ -58878,7 +59086,8 @@
               "type": "string"
             },
             "location": {
-              "type": "string"
+              "type": "string",
+              "nullable": true
             },
             "culprit": {
               "type": "string"
@@ -58887,19 +59096,24 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "nullable": true
                 },
                 "email": {
-                  "type": "string"
+                  "type": "string",
+                  "nullable": true
                 },
                 "username": {
-                  "type": "string"
+                  "type": "string",
+                  "nullable": true
                 },
                 "ip_address": {
-                  "type": "string"
+                  "type": "string",
+                  "nullable": true
                 },
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "nullable": true
                 },
                 "data": {
                   "type": "object",
@@ -58907,9 +59121,6 @@
                   "nullable": true
                 }
               },
-              "required": [
-                "data"
-              ],
               "nullable": true
             },
             "tags": {
