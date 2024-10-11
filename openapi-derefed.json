@@ -8550,7 +8550,7 @@
     "/api/0/organizations/{organization_id_or_slug}/external-users/": {
       "post": {
         "operationId": "Create an External User",
-        "description": "Links a user from an external provider to a Sentry user.",
+        "description": "Link a user from an external provider to a Sentry user.",
         "parameters": [
           {
             "in": "path",
@@ -8563,7 +8563,7 @@
           }
         ],
         "tags": [
-          "Organizations"
+          "Integrations"
         ],
         "requestBody": {
           "content": {
@@ -8578,7 +8578,7 @@
                   },
                   "external_name": {
                     "type": "string",
-                    "description": "The associated username for the provider."
+                    "description": "The associated name for the provider."
                   },
                   "provider": {
                     "enum": [
@@ -8629,66 +8629,99 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "externalId": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "teamId": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "provider": {
+                      "type": "string"
+                    },
+                    "externalName": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "externalName",
+                    "id",
+                    "integrationId",
+                    "provider"
+                  ]
+                },
+                "examples": {
+                  "CreateAnExternalUser": {
+                    "value": {
+                      "externalName": "@Billybob",
+                      "provider": "github",
+                      "userId": "1",
+                      "integrationId": "1",
+                      "id": "1"
+                    },
+                    "summary": "Create an external user"
+                  }
+                }
+              }
+            },
+            "description": ""
           },
           "201": {
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                   "properties": {
-                    "user_id": {
-                      "type": "integer",
-                      "description": "The user ID in Sentry."
+                    "externalId": {
+                      "type": "string"
                     },
-                    "external_name": {
-                      "type": "string",
-                      "description": "The associated username for the provider."
+                    "userId": {
+                      "type": "string"
                     },
-                    "provider": {
-                      "enum": [
-                        "github",
-                        "github_enterprise",
-                        "slack",
-                        "gitlab",
-                        "msteams",
-                        "custom_scm"
-                      ],
-                      "type": "string",
-                      "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
-                    },
-                    "integration_id": {
-                      "type": "integer",
-                      "description": "The Integration ID."
+                    "teamId": {
+                      "type": "string"
                     },
                     "id": {
-                      "type": "integer",
-                      "readOnly": true,
-                      "description": "The external actor ID."
+                      "type": "string"
                     },
-                    "external_id": {
-                      "type": "string",
-                      "nullable": true,
-                      "description": "The associated user ID for provider."
+                    "provider": {
+                      "type": "string"
+                    },
+                    "externalName": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "string"
                     }
                   },
                   "required": [
-                    "external_name",
+                    "externalName",
                     "id",
-                    "integration_id",
-                    "provider",
-                    "user_id"
+                    "integrationId",
+                    "provider"
                   ]
                 },
                 "examples": {
                   "CreateAnExternalUser": {
                     "value": {
-                      "id": 123,
+                      "externalName": "@Billybob",
                       "provider": "github",
-                      "external_name": "@billy",
-                      "integration_id": 123,
-                      "user_id": 123
+                      "userId": "1",
+                      "integrationId": "1",
+                      "id": "1"
                     },
                     "summary": "Create an external user"
                   }
@@ -8731,7 +8764,7 @@
           }
         ],
         "tags": [
-          "Organizations"
+          "Integrations"
         ],
         "requestBody": {
           "content": {
@@ -8746,7 +8779,7 @@
                   },
                   "external_name": {
                     "type": "string",
-                    "description": "The associated username for the provider."
+                    "description": "The associated name for the provider."
                   },
                   "provider": {
                     "enum": [
@@ -8801,59 +8834,44 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                   "properties": {
-                    "user_id": {
-                      "type": "integer",
-                      "description": "The user ID in Sentry."
+                    "externalId": {
+                      "type": "string"
                     },
-                    "external_name": {
-                      "type": "string",
-                      "description": "The associated username for the provider."
+                    "userId": {
+                      "type": "string"
                     },
-                    "provider": {
-                      "enum": [
-                        "github",
-                        "github_enterprise",
-                        "slack",
-                        "gitlab",
-                        "msteams",
-                        "custom_scm"
-                      ],
-                      "type": "string",
-                      "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
-                    },
-                    "integration_id": {
-                      "type": "integer",
-                      "description": "The Integration ID."
+                    "teamId": {
+                      "type": "string"
                     },
                     "id": {
-                      "type": "integer",
-                      "readOnly": true,
-                      "description": "The external actor ID."
+                      "type": "string"
                     },
-                    "external_id": {
-                      "type": "string",
-                      "nullable": true,
-                      "description": "The associated user ID for provider."
+                    "provider": {
+                      "type": "string"
+                    },
+                    "externalName": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "string"
                     }
                   },
                   "required": [
-                    "external_name",
+                    "externalName",
                     "id",
-                    "integration_id",
-                    "provider",
-                    "user_id"
+                    "integrationId",
+                    "provider"
                   ]
                 },
                 "examples": {
                   "CreateAnExternalUser": {
                     "value": {
-                      "id": 123,
+                      "externalName": "@Billybob",
                       "provider": "github",
-                      "external_name": "@billy",
-                      "integration_id": 123,
-                      "user_id": 123
+                      "userId": "1",
+                      "integrationId": "1",
+                      "id": "1"
                     },
                     "summary": "Create an external user"
                   }
@@ -8894,7 +8912,7 @@
           }
         ],
         "tags": [
-          "Organizations"
+          "Integrations"
         ],
         "security": [
           {
@@ -33295,6 +33313,401 @@
         }
       }
     },
+    "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/": {
+      "post": {
+        "operationId": "Create an External Team",
+        "description": "Link a team from an external provider to a Sentry team.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the team the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "external_name": {
+                    "type": "string",
+                    "description": "The associated name for the provider."
+                  },
+                  "provider": {
+                    "enum": [
+                      "github",
+                      "github_enterprise",
+                      "slack",
+                      "gitlab",
+                      "msteams",
+                      "custom_scm"
+                    ],
+                    "type": "string",
+                    "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
+                  },
+                  "integration_id": {
+                    "type": "integer",
+                    "description": "The Integration ID."
+                  },
+                  "external_id": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The associated user ID for provider."
+                  }
+                },
+                "required": [
+                  "external_name",
+                  "integration_id",
+                  "provider"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team:admin",
+              "team:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "externalId": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "teamId": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "provider": {
+                      "type": "string"
+                    },
+                    "externalName": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "externalName",
+                    "id",
+                    "integrationId",
+                    "provider"
+                  ]
+                },
+                "examples": {
+                  "CreateAnExternalTeam": {
+                    "value": {
+                      "externalId": "asdf",
+                      "externalName": "@team-foo",
+                      "provider": "slack",
+                      "integrationId": "1",
+                      "id": "1",
+                      "teamId": "2"
+                    },
+                    "summary": "Create an external team"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "externalId": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "teamId": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "provider": {
+                      "type": "string"
+                    },
+                    "externalName": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "externalName",
+                    "id",
+                    "integrationId",
+                    "provider"
+                  ]
+                },
+                "examples": {
+                  "CreateAnExternalTeam": {
+                    "value": {
+                      "externalId": "asdf",
+                      "externalName": "@team-foo",
+                      "provider": "slack",
+                      "integrationId": "1",
+                      "id": "1",
+                      "teamId": "2"
+                    },
+                    "summary": "Create an external team"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/": {
+      "put": {
+        "operationId": "Update an External Team",
+        "description": "Update a team in an external provider that is currently linked to a Sentry team.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the team the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "external_team_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the external team object. This is returned when creating an external team.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "external_name": {
+                    "type": "string",
+                    "description": "The associated name for the provider."
+                  },
+                  "provider": {
+                    "enum": [
+                      "github",
+                      "github_enterprise",
+                      "slack",
+                      "gitlab",
+                      "msteams",
+                      "custom_scm"
+                    ],
+                    "type": "string",
+                    "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
+                  },
+                  "integration_id": {
+                    "type": "integer",
+                    "description": "The Integration ID."
+                  },
+                  "external_id": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The associated user ID for provider."
+                  }
+                },
+                "required": [
+                  "external_name",
+                  "integration_id",
+                  "provider"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "team:admin",
+              "team:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "externalId": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "teamId": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "provider": {
+                      "type": "string"
+                    },
+                    "externalName": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "externalName",
+                    "id",
+                    "integrationId",
+                    "provider"
+                  ]
+                },
+                "examples": {
+                  "CreateAnExternalTeam": {
+                    "value": {
+                      "externalId": "asdf",
+                      "externalName": "@team-foo",
+                      "provider": "slack",
+                      "integrationId": "1",
+                      "id": "1",
+                      "teamId": "2"
+                    },
+                    "summary": "Create an external team"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an External Team",
+        "description": "Delete the link between a team from an external provider and a Sentry team.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "team_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the team the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "external_team_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the external team object. This is returned when creating an external team.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "team:admin"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/": {
       "get": {
         "operationId": "List a Team's Members",
@@ -52707,6 +53120,74 @@
           }
         }
       },
+      "ExternalActor": {
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "teamId": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "externalName": {
+            "type": "string"
+          },
+          "integrationId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "externalName",
+          "id",
+          "integrationId",
+          "provider"
+        ]
+      },
+      "ExternalTeam": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "external_name": {
+            "type": "string",
+            "description": "The associated name for the provider."
+          },
+          "provider": {
+            "enum": [
+              "github",
+              "github_enterprise",
+              "slack",
+              "gitlab",
+              "msteams",
+              "custom_scm"
+            ],
+            "type": "string",
+            "description": "The provider of the external actor.\n\n* `github`\n* `github_enterprise`\n* `slack`\n* `gitlab`\n* `msteams`\n* `custom_scm`"
+          },
+          "integration_id": {
+            "type": "integer",
+            "description": "The Integration ID."
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "The associated user ID for provider."
+          }
+        },
+        "required": [
+          "external_name",
+          "integration_id",
+          "provider"
+        ]
+      },
       "ExternalUser": {
         "type": "object",
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
@@ -52717,7 +53198,7 @@
           },
           "external_name": {
             "type": "string",
-            "description": "The associated username for the provider."
+            "description": "The associated name for the provider."
           },
           "provider": {
             "enum": [
