@@ -4401,6 +4401,25 @@
                   "utc": {
                     "type": "boolean",
                     "description": "Setting that lets you display saved time range for this dashboard in UTC."
+                  },
+                  "permissions": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                        "properties": {
+                          "is_creator_only_editable": {
+                            "type": "boolean",
+                            "description": "Whether the dashboard is editable only by the creator."
+                          }
+                        },
+                        "required": [
+                          "is_creator_only_editable"
+                        ]
+                      }
+                    ],
+                    "nullable": true,
+                    "description": "Permissions that restrict users from editing dashboards"
                   }
                 },
                 "required": [
@@ -4818,6 +4837,18 @@
                           }
                         }
                       }
+                    },
+                    "permissions": {
+                      "type": "object",
+                      "properties": {
+                        "is_creator_only_editable": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "is_creator_only_editable"
+                      ],
+                      "nullable": true
                     }
                   },
                   "required": [
@@ -4825,6 +4856,7 @@
                     "dateCreated",
                     "filters",
                     "id",
+                    "permissions",
                     "projects",
                     "title",
                     "widgets"
@@ -4922,7 +4954,10 @@
                         1
                       ],
                       "filters": {},
-                      "period": "7d"
+                      "period": "7d",
+                      "permissions": {
+                        "is_creator_only_editable": false
+                      }
                     },
                     "summary": "Create Dashboard"
                   }
@@ -5380,6 +5415,18 @@
                           }
                         }
                       }
+                    },
+                    "permissions": {
+                      "type": "object",
+                      "properties": {
+                        "is_creator_only_editable": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "is_creator_only_editable"
+                      ],
+                      "nullable": true
                     }
                   },
                   "required": [
@@ -5387,6 +5434,7 @@
                     "dateCreated",
                     "filters",
                     "id",
+                    "permissions",
                     "projects",
                     "title",
                     "widgets"
@@ -5484,7 +5532,10 @@
                         1
                       ],
                       "filters": {},
-                      "period": "7d"
+                      "period": "7d",
+                      "permissions": {
+                        "is_creator_only_editable": false
+                      }
                     },
                     "summary": "Dashboard GET response"
                   }
@@ -5721,6 +5772,25 @@
                   "utc": {
                     "type": "boolean",
                     "description": "Setting that lets you display saved time range for this dashboard in UTC."
+                  },
+                  "permissions": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                        "properties": {
+                          "is_creator_only_editable": {
+                            "type": "boolean",
+                            "description": "Whether the dashboard is editable only by the creator."
+                          }
+                        },
+                        "required": [
+                          "is_creator_only_editable"
+                        ]
+                      }
+                    ],
+                    "nullable": true,
+                    "description": "Permissions that restrict users from editing dashboards"
                   }
                 }
               }
@@ -6134,6 +6204,18 @@
                           }
                         }
                       }
+                    },
+                    "permissions": {
+                      "type": "object",
+                      "properties": {
+                        "is_creator_only_editable": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "is_creator_only_editable"
+                      ],
+                      "nullable": true
                     }
                   },
                   "required": [
@@ -6141,6 +6223,7 @@
                     "dateCreated",
                     "filters",
                     "id",
+                    "permissions",
                     "projects",
                     "title",
                     "widgets"
@@ -6238,7 +6321,10 @@
                         1
                       ],
                       "filters": {},
-                      "period": "7d"
+                      "period": "7d",
+                      "permissions": {
+                        "is_creator_only_editable": false
+                      }
                     },
                     "summary": "Dashboard PUT response"
                   }
@@ -47259,6 +47345,25 @@
           "utc": {
             "type": "boolean",
             "description": "Setting that lets you display saved time range for this dashboard in UTC."
+          },
+          "permissions": {
+            "allOf": [
+              {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "is_creator_only_editable": {
+                    "type": "boolean",
+                    "description": "Whether the dashboard is editable only by the creator."
+                  }
+                },
+                "required": [
+                  "is_creator_only_editable"
+                ]
+              }
+            ],
+            "nullable": true,
+            "description": "Permissions that restrict users from editing dashboards"
           }
         },
         "required": [
@@ -47456,6 +47561,25 @@
           "utc": {
             "type": "boolean",
             "description": "Setting that lets you display saved time range for this dashboard in UTC."
+          },
+          "permissions": {
+            "allOf": [
+              {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "is_creator_only_editable": {
+                    "type": "boolean",
+                    "description": "Whether the dashboard is editable only by the creator."
+                  }
+                },
+                "required": [
+                  "is_creator_only_editable"
+                ]
+              }
+            ],
+            "nullable": true,
+            "description": "Permissions that restrict users from editing dashboards"
           }
         }
       },
@@ -47853,6 +47977,18 @@
                 }
               }
             }
+          },
+          "permissions": {
+            "type": "object",
+            "properties": {
+              "is_creator_only_editable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "is_creator_only_editable"
+            ],
+            "nullable": true
           }
         },
         "required": [
@@ -47860,6 +47996,7 @@
           "dateCreated",
           "filters",
           "id",
+          "permissions",
           "projects",
           "title",
           "widgets"
@@ -48083,6 +48220,19 @@
             "widgetPreview"
           ]
         }
+      },
+      "DashboardPermissions": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "is_creator_only_editable": {
+            "type": "boolean",
+            "description": "Whether the dashboard is editable only by the creator."
+          }
+        },
+        "required": [
+          "is_creator_only_editable"
+        ]
       },
       "DashboardWidget": {
         "type": "object",
