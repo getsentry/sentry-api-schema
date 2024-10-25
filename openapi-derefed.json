@@ -40533,73 +40533,6 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/tags/{key}/": {
-      "get": {
-        "tags": [
-          "Events"
-        ],
-        "description": "Returns details for given tag key related to an issue.",
-        "operationId": "Retrieve Tag Details",
-        "parameters": [
-          {
-            "name": "issue_id",
-            "in": "path",
-            "description": "The ID of the issue to retrieve.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "key",
-            "in": "path",
-            "description": "The tag key to look the values up for.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "key",
-                    "totalValues"
-                  ],
-                  "properties": {
-                    "key": {
-                      "type": "string"
-                    },
-                    "totalValues": {
-                      "type": "integer"
-                    }
-                  }
-                },
-                "example": {
-                  "key": "ice_cream",
-                  "totalValues": 6
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "event:read"
-            ]
-          }
-        ]
-      }
-    },
     "/api/0/issues/{issue_id}/hashes/": {
       "get": {
         "tags": [
@@ -46820,6 +46753,167 @@
                       "sdkUpdates": []
                     },
                     "summary": "Return an issue event"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/issues/{issue_id}/tags/{key}/": {
+      "get": {
+        "operationId": "Retrieve Tag Details",
+        "description": "Return a list of values associated with this key for an issue. When paginated can return at most 1000 values.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The tag key to look the values up for.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uniqueValues": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "totalValues": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "topValues": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "query": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "key": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "count": {
+                            "type": "integer"
+                          },
+                          "lastSeen": {
+                            "type": "string"
+                          },
+                          "firstSeen": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "firstSeen",
+                          "key",
+                          "lastSeen",
+                          "name",
+                          "value"
+                        ]
+                      },
+                      "nullable": true
+                    },
+                    "key": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "name"
+                  ]
+                },
+                "examples": {
+                  "ReturnASpecificTag'sDetails": {
+                    "value": {
+                      "key": "flavors",
+                      "name": "Flavors",
+                      "uniqueValues": 2,
+                      "totalValues": 3,
+                      "topValues": [
+                        {
+                          "key": "chunkymonkey",
+                          "name": "Chunky Monkey",
+                          "value": "chunkymonkey",
+                          "count": 2,
+                          "lastSeen": "2024-01-01T00:00:00Z",
+                          "firstSeen": "2024-01-01T00:00:00Z"
+                        },
+                        {
+                          "key": "halfbaked",
+                          "name": "Half Baked",
+                          "value": "halfbaked",
+                          "count": 1,
+                          "lastSeen": "2024-01-01T00:00:00Z",
+                          "firstSeen": "2024-01-01T00:00:00Z"
+                        }
+                      ]
+                    },
+                    "summary": "Return a specific tag's details"
                   }
                 }
               }
@@ -59642,6 +59736,68 @@
         },
         "required": [
           "errors"
+        ]
+      },
+      "TagKeyDetailsDict": {
+        "type": "object",
+        "properties": {
+          "uniqueValues": {
+            "type": "integer",
+            "nullable": true
+          },
+          "totalValues": {
+            "type": "integer",
+            "nullable": true
+          },
+          "topValues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "key": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                },
+                "lastSeen": {
+                  "type": "string"
+                },
+                "firstSeen": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "count",
+                "firstSeen",
+                "key",
+                "lastSeen",
+                "name",
+                "value"
+              ]
+            },
+            "nullable": true
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
         ]
       },
       "Team": {
