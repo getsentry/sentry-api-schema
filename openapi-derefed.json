@@ -54,7 +54,7 @@
           }
         ],
         "tags": [
-          "Organizations"
+          "Users"
         ],
         "security": [
           {
@@ -35032,6 +35032,326 @@
         }
       }
     },
+    "/api/0/users/{user_id}/emails/": {
+      "get": {
+        "operationId": "List user emails",
+        "description": "Returns a list of emails. Primary email will have `isPrimary: true`",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the user the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "isPrimary": {
+                        "type": "boolean"
+                      },
+                      "isVerified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "isPrimary",
+                      "isVerified"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListUserEmails": {
+                    "value": [
+                      {
+                        "email": "billy@sentry.io",
+                        "isPrimary": true,
+                        "isVerified": true
+                      },
+                      {
+                        "email": "billybob@sentry.io",
+                        "isPrimary": false,
+                        "isVerified": true
+                      }
+                    ],
+                    "summary": "List user emails"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Add a secondary email address",
+        "description": "Add a secondary email address to account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the user the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The email address to add/remove."
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "isPrimary": {
+                        "type": "boolean"
+                      },
+                      "isVerified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "isPrimary",
+                      "isVerified"
+                    ]
+                  }
+                },
+                "examples": {
+                  "AddsASecondaryEmail": {
+                    "value": [
+                      {
+                        "email": "billybob@sentry.io",
+                        "isPrimary": true,
+                        "isVerified": true
+                      }
+                    ],
+                    "summary": "Adds a secondary email"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "isPrimary": {
+                        "type": "boolean"
+                      },
+                      "isVerified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "isPrimary",
+                      "isVerified"
+                    ]
+                  }
+                },
+                "examples": {
+                  "AddsASecondaryEmail": {
+                    "value": [
+                      {
+                        "email": "billybob@sentry.io",
+                        "isPrimary": true,
+                        "isVerified": true
+                      }
+                    ],
+                    "summary": "Adds a secondary email"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update a primary email address",
+        "description": "Update a primary email address",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the user the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The email address to add/remove."
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "isPrimary": {
+                        "type": "boolean"
+                      },
+                      "isVerified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "isPrimary",
+                      "isVerified"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Remove an email address",
+        "description": "Removes an email associated with the user account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the user the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/stats/": {
       "get": {
         "tags": [
@@ -51291,6 +51611,19 @@
           }
         }
       },
+      "EmailValidator": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email address to add/remove."
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
       "ExternalActor": {
         "type": "object",
         "properties": {
@@ -60330,6 +60663,28 @@
           }
         }
       },
+      "UserEmailSerializerResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "isPrimary": {
+              "type": "boolean"
+            },
+            "isVerified": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "email",
+            "isPrimary",
+            "isVerified"
+          ]
+        }
+      },
       "_LegacyBrowserFilter": {
         "type": "object",
         "properties": {
@@ -60517,6 +60872,16 @@
       "name": "Environments",
       "x-sidebar-name": "Environments",
       "description": "Endpoints for Environments",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Users",
+      "x-sidebar-name": "Users",
+      "description": "Endpoints for Users",
       "x-display-description": false,
       "externalDocs": {
         "description": "Found an error? Let us know.",
