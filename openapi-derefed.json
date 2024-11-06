@@ -4406,13 +4406,21 @@
                         "type": "object",
                         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                         "properties": {
-                          "is_creator_only_editable": {
+                          "is_editable_by_everyone": {
                             "type": "boolean",
-                            "description": "Whether the dashboard is editable only by the creator."
+                            "description": "Whether the dashboard is editable by everyone."
+                          },
+                          "teams_with_edit_access": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            },
+                            "default": [],
+                            "description": "List of team IDs that have edit access to a dashboard."
                           }
                         },
                         "required": [
-                          "is_creator_only_editable"
+                          "is_editable_by_everyone"
                         ]
                       }
                     ],
@@ -4844,12 +4852,19 @@
                     "permissions": {
                       "type": "object",
                       "properties": {
-                        "is_creator_only_editable": {
+                        "isEditableByEveryone": {
                           "type": "boolean"
+                        },
+                        "teamsWithEditAccess": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          }
                         }
                       },
                       "required": [
-                        "is_creator_only_editable"
+                        "isEditableByEveryone",
+                        "teamsWithEditAccess"
                       ],
                       "nullable": true
                     }
@@ -4960,7 +4975,8 @@
                       "filters": {},
                       "period": "7d",
                       "permissions": {
-                        "is_creator_only_editable": false
+                        "isEditableByEveryone": true,
+                        "teamsWithEditAccess": []
                       }
                     },
                     "summary": "Create Dashboard"
@@ -5428,12 +5444,19 @@
                     "permissions": {
                       "type": "object",
                       "properties": {
-                        "is_creator_only_editable": {
+                        "isEditableByEveryone": {
                           "type": "boolean"
+                        },
+                        "teamsWithEditAccess": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          }
                         }
                       },
                       "required": [
-                        "is_creator_only_editable"
+                        "isEditableByEveryone",
+                        "teamsWithEditAccess"
                       ],
                       "nullable": true
                     }
@@ -5544,7 +5567,8 @@
                       "filters": {},
                       "period": "7d",
                       "permissions": {
-                        "is_creator_only_editable": false
+                        "isEditableByEveryone": true,
+                        "teamsWithEditAccess": []
                       }
                     },
                     "summary": "Dashboard GET response"
@@ -5790,13 +5814,21 @@
                         "type": "object",
                         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                         "properties": {
-                          "is_creator_only_editable": {
+                          "is_editable_by_everyone": {
                             "type": "boolean",
-                            "description": "Whether the dashboard is editable only by the creator."
+                            "description": "Whether the dashboard is editable by everyone."
+                          },
+                          "teams_with_edit_access": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            },
+                            "default": [],
+                            "description": "List of team IDs that have edit access to a dashboard."
                           }
                         },
                         "required": [
-                          "is_creator_only_editable"
+                          "is_editable_by_everyone"
                         ]
                       }
                     ],
@@ -6224,12 +6256,19 @@
                     "permissions": {
                       "type": "object",
                       "properties": {
-                        "is_creator_only_editable": {
+                        "isEditableByEveryone": {
                           "type": "boolean"
+                        },
+                        "teamsWithEditAccess": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          }
                         }
                       },
                       "required": [
-                        "is_creator_only_editable"
+                        "isEditableByEveryone",
+                        "teamsWithEditAccess"
                       ],
                       "nullable": true
                     }
@@ -6340,7 +6379,8 @@
                       "filters": {},
                       "period": "7d",
                       "permissions": {
-                        "is_creator_only_editable": false
+                        "isEditableByEveryone": true,
+                        "teamsWithEditAccess": []
                       }
                     },
                     "summary": "Dashboard PUT response"
@@ -47782,13 +47822,21 @@
                 "type": "object",
                 "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                 "properties": {
-                  "is_creator_only_editable": {
+                  "is_editable_by_everyone": {
                     "type": "boolean",
-                    "description": "Whether the dashboard is editable only by the creator."
+                    "description": "Whether the dashboard is editable by everyone."
+                  },
+                  "teams_with_edit_access": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "default": [],
+                    "description": "List of team IDs that have edit access to a dashboard."
                   }
                 },
                 "required": [
-                  "is_creator_only_editable"
+                  "is_editable_by_everyone"
                 ]
               }
             ],
@@ -47999,13 +48047,21 @@
                 "type": "object",
                 "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                 "properties": {
-                  "is_creator_only_editable": {
+                  "is_editable_by_everyone": {
                     "type": "boolean",
-                    "description": "Whether the dashboard is editable only by the creator."
+                    "description": "Whether the dashboard is editable by everyone."
+                  },
+                  "teams_with_edit_access": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "default": [],
+                    "description": "List of team IDs that have edit access to a dashboard."
                   }
                 },
                 "required": [
-                  "is_creator_only_editable"
+                  "is_editable_by_everyone"
                 ]
               }
             ],
@@ -48417,12 +48473,19 @@
           "permissions": {
             "type": "object",
             "properties": {
-              "is_creator_only_editable": {
+              "isEditableByEveryone": {
                 "type": "boolean"
+              },
+              "teamsWithEditAccess": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
               }
             },
             "required": [
-              "is_creator_only_editable"
+              "isEditableByEveryone",
+              "teamsWithEditAccess"
             ],
             "nullable": true
           }
@@ -48661,13 +48724,21 @@
         "type": "object",
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
         "properties": {
-          "is_creator_only_editable": {
+          "is_editable_by_everyone": {
             "type": "boolean",
-            "description": "Whether the dashboard is editable only by the creator."
+            "description": "Whether the dashboard is editable by everyone."
+          },
+          "teams_with_edit_access": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "default": [],
+            "description": "List of team IDs that have edit access to a dashboard."
           }
         },
         "required": [
-          "is_creator_only_editable"
+          "is_editable_by_everyone"
         ]
       },
       "DashboardWidget": {
