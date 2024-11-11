@@ -10030,6 +10030,216 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/": {
+      "get": {
+        "operationId": "Retrieve an Integration for an Organization",
+        "description": "OrganizationIntegrationBaseEndpoints expect both Integration and\nOrganizationIntegration DB entries to exist for a given organization and\nintegration_id.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "domainName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "accountType": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "scopes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "provider": {},
+                    "configOrganization": {},
+                    "configData": {},
+                    "externalId": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "integer"
+                    },
+                    "organizationIntegrationStatus": {
+                      "type": "string"
+                    },
+                    "gracePeriodEnd": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "accountType",
+                    "configData",
+                    "configOrganization",
+                    "domainName",
+                    "externalId",
+                    "gracePeriodEnd",
+                    "icon",
+                    "id",
+                    "name",
+                    "organizationId",
+                    "organizationIntegrationStatus",
+                    "provider",
+                    "scopes",
+                    "status"
+                  ]
+                },
+                "examples": {
+                  "ListAllAvailableIntegrationsForAlphabetSoupFactory": {
+                    "value": {
+                      "id": "24817",
+                      "name": "Alphabet Soup Factory",
+                      "icon": "https://avatars.slack-edge.com/alphabet-soup",
+                      "domainName": "alphabet-soup.slack.com",
+                      "accountType": null,
+                      "scopes": [
+                        "channels:read",
+                        "chat:write",
+                        "chat:write.customize",
+                        "chat:write.public",
+                        "commands",
+                        "groups:read",
+                        "im:history",
+                        "im:read",
+                        "links:read",
+                        "links:write",
+                        "team:read",
+                        "users:read"
+                      ],
+                      "status": "active",
+                      "provider": {
+                        "key": "slack",
+                        "slug": "slack",
+                        "name": "Slack",
+                        "canAdd": true,
+                        "canDisable": false,
+                        "features": [
+                          "alert-rule",
+                          "chat-unfurl"
+                        ],
+                        "aspects": {
+                          "alerts": [
+                            {
+                              "type": "info",
+                              "text": "The Slack integration adds a new Alert Rule action to all projects. To enable automatic notifications sent to Slack you must create a rule using the slack workspace action in your project settings."
+                            }
+                          ]
+                        }
+                      },
+                      "configOrganization": [],
+                      "configData": {
+                        "installationType": "born_as_bot"
+                      },
+                      "externalId": "7252394",
+                      "organizationId": 6234528,
+                      "organizationIntegrationStatus": "active",
+                      "gracePeriodEnd": null
+                    },
+                    "summary": "List All Available Integrations for Alphabet Soup Factory"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an Integration for an Organization",
+        "description": "OrganizationIntegrationBaseEndpoints expect both Integration and\nOrganizationIntegration DB entries to exist for a given organization and\nintegration_id.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/members/": {
       "get": {
         "operationId": "List an Organization's Members",
@@ -57991,6 +58201,71 @@
         "required": [
           "data",
           "meta"
+        ]
+      },
+      "OrganizationIntegrationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "domainName": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "provider": {},
+          "configOrganization": {},
+          "configData": {},
+          "externalId": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "organizationIntegrationStatus": {
+            "type": "string"
+          },
+          "gracePeriodEnd": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "accountType",
+          "configData",
+          "configOrganization",
+          "domainName",
+          "externalId",
+          "gracePeriodEnd",
+          "icon",
+          "id",
+          "name",
+          "organizationId",
+          "organizationIntegrationStatus",
+          "provider",
+          "scopes",
+          "status"
         ]
       },
       "OrganizationMember": {
