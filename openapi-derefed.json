@@ -26216,6 +26216,120 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/": {
+      "get": {
+        "operationId": "List a Project's Data Filters",
+        "description": "Retrieve a list of filters for a given project.\n`active` will be either a boolean or a list for the legacy browser filters.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "active": {
+                        "anyOf": [
+                          {
+                            "type": "boolean"
+                          },
+                          {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "active",
+                      "id"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAProject'sFilters": {
+                    "value": [
+                      {
+                        "id": "browser-extensions",
+                        "active": false
+                      },
+                      {
+                        "id": "filtered-transaction",
+                        "active": true
+                      },
+                      {
+                        "id": "legacy-browsers",
+                        "active": [
+                          "opera",
+                          "edge",
+                          "safari",
+                          "chrome",
+                          "ie",
+                          "opera_mini",
+                          "firefox",
+                          "android"
+                        ]
+                      },
+                      {
+                        "id": "localhost",
+                        "active": false
+                      },
+                      {
+                        "id": "web-crawlers",
+                        "active": true
+                      }
+                    ],
+                    "summary": "List a project's filters"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/{filter_id}/": {
       "put": {
         "operationId": "Update an Inbound Data Filter",
@@ -60074,6 +60188,34 @@
             "tags",
             "title",
             "user"
+          ]
+        }
+      },
+      "ProjectFilterResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "active": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "active",
+            "id"
           ]
         }
       },
