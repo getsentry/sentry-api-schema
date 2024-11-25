@@ -4844,12 +4844,32 @@
                             "type": "string"
                           }
                         }
+                      },
+                      "permissions": {
+                        "type": "object",
+                        "properties": {
+                          "isEditableByEveryone": {
+                            "type": "boolean"
+                          },
+                          "teamsWithEditAccess": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        },
+                        "required": [
+                          "isEditableByEveryone",
+                          "teamsWithEditAccess"
+                        ],
+                        "nullable": true
                       }
                     },
                     "required": [
                       "createdBy",
                       "dateCreated",
                       "id",
+                      "permissions",
                       "title",
                       "widgetDisplay",
                       "widgetPreview"
@@ -4893,7 +4913,11 @@
                           }
                         },
                         "widgetDisplay": [],
-                        "widgetPreview": []
+                        "widgetPreview": [],
+                        "permissions": {
+                          "isEditableByEveryone": true,
+                          "teamsWithEditAccess": []
+                        }
                       },
                       {
                         "id": "2",
@@ -4929,7 +4953,8 @@
                           }
                         },
                         "widgetDisplay": [],
-                        "widgetPreview": []
+                        "widgetPreview": [],
+                        "permissions": null
                       }
                     ],
                     "summary": "Query Dashboards"
@@ -50062,12 +50087,32 @@
                   "type": "string"
                 }
               }
+            },
+            "permissions": {
+              "type": "object",
+              "properties": {
+                "isEditableByEveryone": {
+                  "type": "boolean"
+                },
+                "teamsWithEditAccess": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "required": [
+                "isEditableByEveryone",
+                "teamsWithEditAccess"
+              ],
+              "nullable": true
             }
           },
           "required": [
             "createdBy",
             "dateCreated",
             "id",
+            "permissions",
             "title",
             "widgetDisplay",
             "widgetPreview"
