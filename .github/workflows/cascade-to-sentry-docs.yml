@@ -8,7 +8,13 @@ jobs:
   cascade-to-sentry-docs:
     runs-on: ubuntu-latest
     steps:
+      - name: Get auth token
+        id: token
+        uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
+        with:
+          app-id: ${{ vars.SENTRY_INTERNAL_APP_ID }}
+          private-key: ${{ secrets.SENTRY_INTERNAL_APP_PRIVATE_KEY }}
       - name: Cascade to sentry-docs
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_RELEASE_PAT }}
+          GITHUB_TOKEN: ${{ steps.token.outputs.token }}
         run: gh workflow run "Bump API Schema SHA" -R getsentry/sentry-docs
