@@ -38726,6 +38726,11 @@
               "project:write"
             ]
           }
+        ],
+        "servers": [
+          {
+            "url": "https://{region}.sentry.io"
+          }
         ]
       },
       "delete": {
@@ -45441,6 +45446,11 @@
               "project:releases"
             ]
           }
+        ],
+        "servers": [
+          {
+            "url": "https://{region}.sentry.io"
+          }
         ]
       }
     },
@@ -45704,6 +45714,11 @@
             "auth_token": [
               "project:releases"
             ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://{region}.sentry.io"
           }
         ]
       }
@@ -62455,10 +62470,17 @@
   },
   "servers": [
     {
-      "url": "https://us.sentry.io"
-    },
-    {
-      "url": "https://de.sentry.io"
+      "url": "https://{region}.sentry.io",
+      "variables": {
+        "region": {
+          "default": "us",
+          "description": "The data-storage-location for an organization",
+          "enum": [
+            "us",
+            "de"
+          ]
+        }
+      }
     }
   ],
   "tags": [
