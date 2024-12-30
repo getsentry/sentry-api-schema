@@ -48678,17 +48678,17 @@
                       "totalValues": 3,
                       "topValues": [
                         {
-                          "key": "chunkymonkey",
-                          "name": "Chunky Monkey",
-                          "value": "chunkymonkey",
+                          "key": "strawberry",
+                          "name": "Strawberry",
+                          "value": "strawberry",
                           "count": 2,
                           "lastSeen": "2024-01-01T00:00:00Z",
                           "firstSeen": "2024-01-01T00:00:00Z"
                         },
                         {
-                          "key": "halfbaked",
-                          "name": "Half Baked",
-                          "value": "halfbaked",
+                          "key": "vanilla",
+                          "name": "Vanilla",
+                          "value": "vanilla",
                           "count": 1,
                           "lastSeen": "2024-01-01T00:00:00Z",
                           "firstSeen": "2024-01-01T00:00:00Z"
@@ -48696,6 +48696,167 @@
                       ]
                     },
                     "summary": "Return a specific tag's details"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/issues/{issue_id}/tags/{key}/values/": {
+      "get": {
+        "operationId": "List a Tag's Values for an Issue",
+        "description": "Returns a list of values associated with this key for an issue.\nReturns at most 1000 values when paginated.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The tag key to look the values up for.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "age",
+                "count",
+                "date",
+                "id"
+              ]
+            },
+            "description": "Sort order of the resulting tag values. Prefix with '-' for descending order. Default is '-id'."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "query": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "key": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "integer"
+                      },
+                      "lastSeen": {
+                        "type": "string"
+                      },
+                      "firstSeen": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "count",
+                      "firstSeen",
+                      "key",
+                      "lastSeen",
+                      "name",
+                      "value"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ReturnAllTagValuesForASpecificTag": {
+                    "value": [
+                      {
+                        "key": "strawberry",
+                        "name": "Strawberry",
+                        "value": "strawberry",
+                        "count": 2,
+                        "lastSeen": "2024-01-01T00:00:00Z",
+                        "firstSeen": "2024-01-01T00:00:00Z"
+                      },
+                      {
+                        "key": "vanilla",
+                        "name": "Vanilla",
+                        "value": "vanilla",
+                        "count": 1,
+                        "lastSeen": "2024-01-01T00:00:00Z",
+                        "firstSeen": "2024-01-01T00:00:00Z"
+                      },
+                      {
+                        "key": "chocolate",
+                        "name": "Chocolate",
+                        "value": "chocolate",
+                        "count": 1,
+                        "lastSeen": "2024-01-01T00:00:00Z",
+                        "firstSeen": "2024-01-01T00:00:00Z"
+                      },
+                      {
+                        "key": "Neopolitan",
+                        "name": "Neopolitan",
+                        "value": "neopolitan",
+                        "count": 1,
+                        "lastSeen": "2024-01-01T00:00:00Z",
+                        "firstSeen": "2024-01-01T00:00:00Z"
+                      }
+                    ],
+                    "summary": "Return all tag values for a specific tag"
                   }
                 }
               }
@@ -61859,6 +62020,44 @@
           "key",
           "name"
         ]
+      },
+      "TagKeyValuesDict": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "nullable": true
+            },
+            "key": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "count": {
+              "type": "integer"
+            },
+            "lastSeen": {
+              "type": "string"
+            },
+            "firstSeen": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "count",
+            "firstSeen",
+            "key",
+            "lastSeen",
+            "name",
+            "value"
+          ]
+        }
       },
       "Team": {
         "type": "object",
