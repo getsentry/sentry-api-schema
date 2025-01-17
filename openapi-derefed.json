@@ -3173,6 +3173,10 @@
                             },
                             "nullable": true
                           },
+                          "options": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
                           "stats": {},
                           "transactionStats": {},
                           "sessionStats": {},
@@ -17077,6 +17081,10 @@
                         },
                         "nullable": true
                       },
+                      "options": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
                       "stats": {},
                       "transactionStats": {},
                       "sessionStats": {},
@@ -26272,6 +26280,40 @@
                     "scrapeJavaScript": {
                       "type": "boolean"
                     },
+                    "highlightTags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "highlightContext": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "highlightPreset": {
+                      "type": "object",
+                      "properties": {
+                        "tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "context": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "context",
+                        "tags"
+                      ]
+                    },
                     "groupingConfig": {
                       "type": "string"
                     },
@@ -26989,6 +27031,10 @@
                       "type": "string",
                       "nullable": true
                     },
+                    "relayCustomMetricCardinalityLimit": {
+                      "type": "integer",
+                      "nullable": true
+                    },
                     "builtinSymbolSources": {
                       "type": "array",
                       "items": {
@@ -27021,6 +27067,12 @@
                       "type": "string"
                     },
                     "uptimeAutodetection": {
+                      "type": "boolean"
+                    },
+                    "isDynamicallySampled": {
+                      "type": "boolean"
+                    },
+                    "tempestFetchScreenshots": {
                       "type": "boolean"
                     }
                   },
@@ -27064,8 +27116,12 @@
                     "hasProfiles",
                     "hasReplays",
                     "hasSessions",
+                    "highlightContext",
+                    "highlightPreset",
+                    "highlightTags",
                     "id",
                     "isBookmarked",
+                    "isDynamicallySampled",
                     "isInternal",
                     "isMember",
                     "isPublic",
@@ -27077,6 +27133,7 @@
                     "platforms",
                     "plugins",
                     "processingIssues",
+                    "relayCustomMetricCardinalityLimit",
                     "relayPiiConfig",
                     "resolveAge",
                     "safeFields",
@@ -27093,8 +27150,8 @@
                     "subjectPrefix",
                     "subjectTemplate",
                     "symbolSources",
-                    "team",
                     "teams",
+                    "tempestFetchScreenshots",
                     "uptimeAutodetection",
                     "verifySSL"
                   ]
@@ -27497,7 +27554,16 @@
                       "eventProcessing": {
                         "symbolicationDegraded": false
                       },
-                      "symbolSources": "[]"
+                      "symbolSources": "[]",
+                      "tempestFetchScreenshots": false,
+                      "relayCustomMetricCardinalityLimit": 5,
+                      "isDynamicallySampled": true,
+                      "highlightTags": [],
+                      "highlightContext": {},
+                      "highlightPreset": {
+                        "tags": [],
+                        "context": {}
+                      }
                     },
                     "summary": "Get detailed view about a Project"
                   }
@@ -27861,6 +27927,40 @@
                     "scrapeJavaScript": {
                       "type": "boolean"
                     },
+                    "highlightTags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "highlightContext": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "highlightPreset": {
+                      "type": "object",
+                      "properties": {
+                        "tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "context": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "context",
+                        "tags"
+                      ]
+                    },
                     "groupingConfig": {
                       "type": "string"
                     },
@@ -28578,6 +28678,10 @@
                       "type": "string",
                       "nullable": true
                     },
+                    "relayCustomMetricCardinalityLimit": {
+                      "type": "integer",
+                      "nullable": true
+                    },
                     "builtinSymbolSources": {
                       "type": "array",
                       "items": {
@@ -28610,6 +28714,12 @@
                       "type": "string"
                     },
                     "uptimeAutodetection": {
+                      "type": "boolean"
+                    },
+                    "isDynamicallySampled": {
+                      "type": "boolean"
+                    },
+                    "tempestFetchScreenshots": {
                       "type": "boolean"
                     }
                   },
@@ -28653,8 +28763,12 @@
                     "hasProfiles",
                     "hasReplays",
                     "hasSessions",
+                    "highlightContext",
+                    "highlightPreset",
+                    "highlightTags",
                     "id",
                     "isBookmarked",
+                    "isDynamicallySampled",
                     "isInternal",
                     "isMember",
                     "isPublic",
@@ -28666,6 +28780,7 @@
                     "platforms",
                     "plugins",
                     "processingIssues",
+                    "relayCustomMetricCardinalityLimit",
                     "relayPiiConfig",
                     "resolveAge",
                     "safeFields",
@@ -28682,8 +28797,8 @@
                     "subjectPrefix",
                     "subjectTemplate",
                     "symbolSources",
-                    "team",
                     "teams",
+                    "tempestFetchScreenshots",
                     "uptimeAutodetection",
                     "verifySSL"
                   ]
@@ -29086,7 +29201,16 @@
                       "eventProcessing": {
                         "symbolicationDegraded": false
                       },
-                      "symbolSources": "[]"
+                      "symbolSources": "[]",
+                      "tempestFetchScreenshots": false,
+                      "relayCustomMetricCardinalityLimit": 5,
+                      "isDynamicallySampled": true,
+                      "highlightTags": [],
+                      "highlightContext": {},
+                      "highlightPreset": {
+                        "tags": [],
+                        "context": {}
+                      }
                     },
                     "summary": "Get detailed view about a Project"
                   }
@@ -37009,7 +37133,6 @@
                     "platform",
                     "slug",
                     "status",
-                    "team",
                     "teams"
                   ]
                 },
@@ -37375,7 +37498,6 @@
                     "platform",
                     "slug",
                     "status",
-                    "team",
                     "teams"
                   ]
                 },
@@ -40327,6 +40449,10 @@
                           }
                         },
                         "nullable": true
+                      },
+                      "options": {
+                        "type": "object",
+                        "additionalProperties": {}
                       },
                       "stats": {},
                       "transactionStats": {},
@@ -56842,6 +56968,10 @@
                   },
                   "nullable": true
                 },
+                "options": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
                 "stats": {},
                 "transactionStats": {},
                 "sessionStats": {},
@@ -57368,6 +57498,40 @@
           },
           "scrapeJavaScript": {
             "type": "boolean"
+          },
+          "highlightTags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "highlightContext": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "highlightPreset": {
+            "type": "object",
+            "properties": {
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "context": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "required": [
+              "context",
+              "tags"
+            ]
           },
           "groupingConfig": {
             "type": "string"
@@ -58086,6 +58250,10 @@
             "type": "string",
             "nullable": true
           },
+          "relayCustomMetricCardinalityLimit": {
+            "type": "integer",
+            "nullable": true
+          },
           "builtinSymbolSources": {
             "type": "array",
             "items": {
@@ -58118,6 +58286,12 @@
             "type": "string"
           },
           "uptimeAutodetection": {
+            "type": "boolean"
+          },
+          "isDynamicallySampled": {
+            "type": "boolean"
+          },
+          "tempestFetchScreenshots": {
             "type": "boolean"
           }
         },
@@ -58161,8 +58335,12 @@
           "hasProfiles",
           "hasReplays",
           "hasSessions",
+          "highlightContext",
+          "highlightPreset",
+          "highlightTags",
           "id",
           "isBookmarked",
+          "isDynamicallySampled",
           "isInternal",
           "isMember",
           "isPublic",
@@ -58174,6 +58352,7 @@
           "platforms",
           "plugins",
           "processingIssues",
+          "relayCustomMetricCardinalityLimit",
           "relayPiiConfig",
           "resolveAge",
           "safeFields",
@@ -58190,8 +58369,8 @@
           "subjectPrefix",
           "subjectTemplate",
           "symbolSources",
-          "team",
           "teams",
+          "tempestFetchScreenshots",
           "uptimeAutodetection",
           "verifySSL"
         ]
@@ -63004,6 +63183,10 @@
               },
               "nullable": true
             },
+            "options": {
+              "type": "object",
+              "additionalProperties": {}
+            },
             "stats": {},
             "transactionStats": {},
             "sessionStats": {},
@@ -66561,6 +66744,10 @@
               },
               "nullable": true
             },
+            "options": {
+              "type": "object",
+              "additionalProperties": {}
+            },
             "stats": {},
             "transactionStats": {},
             "sessionStats": {},
@@ -68111,7 +68298,6 @@
           "platform",
           "slug",
           "status",
-          "team",
           "teams"
         ]
       },
