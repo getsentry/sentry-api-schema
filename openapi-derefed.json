@@ -37541,6 +37541,566 @@
         }
       }
     },
+    "/api/0/sentry-apps/{sentry_app_id_or_slug}/": {
+      "get": {
+        "operationId": "Retrieve a custom integration by ID or slug.",
+        "description": "Retrieve a custom integration.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sentry_app_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the custom integration.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write",
+              "member:read",
+              "org:read",
+              "project:read",
+              "project:releases",
+              "team:read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "allowedOrigins": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatars": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "color": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "avatarType",
+                        "avatarUrl",
+                        "avatarUuid",
+                        "color"
+                      ]
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "featureData": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "isAlertable": {
+                      "type": "boolean"
+                    },
+                    "metadata": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "schema": {
+                      "type": "string"
+                    },
+                    "scopes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "uuid": {
+                      "type": "string"
+                    },
+                    "verifyInstall": {
+                      "type": "boolean"
+                    },
+                    "author": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "overview": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "popularity": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "redirectUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "webhookUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "clientSecret": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "datePublished": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "clientId": {
+                      "type": "string"
+                    },
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "slug"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "allowedOrigins",
+                    "avatars",
+                    "events",
+                    "featureData",
+                    "isAlertable",
+                    "metadata",
+                    "name",
+                    "schema",
+                    "scopes",
+                    "slug",
+                    "status",
+                    "uuid",
+                    "verifyInstall"
+                  ]
+                },
+                "examples": {
+                  "RetrieveACustomIntegration": {
+                    "value": {
+                      "allowedOrigins": [],
+                      "author": "ACME Corp",
+                      "avatars": {
+                        "avatarType": "avatar",
+                        "avatarUuid": "6c25b771-a576-4c18-a1c3-ab059c1d42ba",
+                        "avatarUrl": "https://example.com/avatar.png",
+                        "color": false
+                      },
+                      "events": [
+                        "issue"
+                      ],
+                      "isAlertable": false,
+                      "metadata": "",
+                      "name": "ACME Corp Integration",
+                      "overview": null,
+                      "popularity": 27,
+                      "redirectUrl": null,
+                      "featureData": [],
+                      "schema": "",
+                      "scopes": [
+                        "event:read",
+                        "org:read"
+                      ],
+                      "slug": "acme-corp-integration",
+                      "status": "unpublished",
+                      "uuid": "77cebea3-019e-484d-8673-6c3969698827",
+                      "verifyInstall": true,
+                      "webhookUrl": "https://example.com/webhook",
+                      "clientId": "ed06141686bb60102d878c607eff449fa9907fa7a8cb70f0d337a8fb0b6566c3",
+                      "clientSecret": "**********",
+                      "owner": {
+                        "id": 42,
+                        "slug": "acme-corp"
+                      }
+                    },
+                    "summary": "Retrieve a custom integration"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update an existing custom integration.",
+        "description": "Update an existing custom integration.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sentry_app_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the custom integration.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the custom integration."
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "The custom integration's permission scopes for API access."
+                  },
+                  "author": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The custom integration's author."
+                  },
+                  "events": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "Webhook events the custom integration is subscribed to."
+                  },
+                  "schema": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "nullable": true,
+                    "description": "The UI components schema, used to render the custom integration's configuration UI elements. See our [schema docs](https://docs.sentry.io/organization/integrations/integration-platform/ui-components/) for more information."
+                  },
+                  "webhookUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": true,
+                    "description": "The webhook destination URL."
+                  },
+                  "redirectUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": true,
+                    "description": "The post-installation redirect URL."
+                  },
+                  "isInternal": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether or not the integration is internal only. False means the integration is public."
+                  },
+                  "isAlertable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Marks whether or not the custom integration can be used in an alert rule."
+                  },
+                  "overview": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The custom integration's description."
+                  },
+                  "verifyInstall": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether or not an installation of the custom integration should be verified."
+                  },
+                  "allowedOrigins": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxLength": 255
+                    },
+                    "description": "The list of allowed origins for CORS."
+                  }
+                },
+                "required": [
+                  "name",
+                  "scopes"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "allowedOrigins": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatars": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "color": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "avatarType",
+                        "avatarUrl",
+                        "avatarUuid",
+                        "color"
+                      ]
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "featureData": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "isAlertable": {
+                      "type": "boolean"
+                    },
+                    "metadata": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "schema": {
+                      "type": "string"
+                    },
+                    "scopes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "uuid": {
+                      "type": "string"
+                    },
+                    "verifyInstall": {
+                      "type": "boolean"
+                    },
+                    "author": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "overview": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "popularity": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "redirectUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "webhookUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "clientSecret": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "datePublished": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "clientId": {
+                      "type": "string"
+                    },
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "slug"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "allowedOrigins",
+                    "avatars",
+                    "events",
+                    "featureData",
+                    "isAlertable",
+                    "metadata",
+                    "name",
+                    "schema",
+                    "scopes",
+                    "slug",
+                    "status",
+                    "uuid",
+                    "verifyInstall"
+                  ]
+                },
+                "examples": {
+                  "UpdateACustomIntegration": {
+                    "value": {
+                      "allowedOrigins": [],
+                      "author": "ACME Corp",
+                      "avatars": {
+                        "avatarType": "avatar",
+                        "avatarUuid": "6c25b771-a576-4c18-a1c3-ab059c1d42ba",
+                        "avatarUrl": "https://example.com/avatar.png",
+                        "color": false
+                      },
+                      "events": [
+                        "issue"
+                      ],
+                      "isAlertable": false,
+                      "metadata": "",
+                      "name": "ACME Corp Integration",
+                      "overview": null,
+                      "popularity": 27,
+                      "redirectUrl": null,
+                      "featureData": [],
+                      "schema": "",
+                      "scopes": [
+                        "event:read",
+                        "org:read"
+                      ],
+                      "slug": "acme-corp-integration",
+                      "status": "unpublished",
+                      "uuid": "77cebea3-019e-484d-8673-6c3969698827",
+                      "verifyInstall": true,
+                      "webhookUrl": "https://example.com/webhook",
+                      "clientId": "ed06141686bb60102d878c607eff449fa9907fa7a8cb70f0d337a8fb0b6566c3",
+                      "clientSecret": "**********",
+                      "owner": {
+                        "id": 42,
+                        "slug": "acme-corp"
+                      }
+                    },
+                    "summary": "Update a custom integration"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a custom integration.",
+        "description": "Delete a custom integration.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sentry_app_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the custom integration.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/": {
       "get": {
         "operationId": "Retrieve a Team",
@@ -68468,6 +69028,223 @@
         },
         "required": [
           "displayName"
+        ]
+      },
+      "SentryAppDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "allowedOrigins": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "avatars": {
+            "type": "object",
+            "properties": {
+              "avatarType": {
+                "type": "string"
+              },
+              "avatarUuid": {
+                "type": "string"
+              },
+              "avatarUrl": {
+                "type": "string"
+              },
+              "color": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "avatarType",
+              "avatarUrl",
+              "avatarUuid",
+              "color"
+            ]
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "featureData": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isAlertable": {
+            "type": "boolean"
+          },
+          "metadata": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "schema": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "slug": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "verifyInstall": {
+            "type": "boolean"
+          },
+          "author": {
+            "type": "string",
+            "nullable": true
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "popularity": {
+            "type": "integer",
+            "nullable": true
+          },
+          "redirectUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "webhookUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientSecret": {
+            "type": "string",
+            "nullable": true
+          },
+          "datePublished": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "slug": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "slug"
+            ]
+          }
+        },
+        "required": [
+          "allowedOrigins",
+          "avatars",
+          "events",
+          "featureData",
+          "isAlertable",
+          "metadata",
+          "name",
+          "schema",
+          "scopes",
+          "slug",
+          "status",
+          "uuid",
+          "verifyInstall"
+        ]
+      },
+      "SentryAppParser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the custom integration."
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "The custom integration's permission scopes for API access."
+          },
+          "author": {
+            "type": "string",
+            "nullable": true,
+            "description": "The custom integration's author."
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "Webhook events the custom integration is subscribed to."
+          },
+          "schema": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true,
+            "description": "The UI components schema, used to render the custom integration's configuration UI elements. See our [schema docs](https://docs.sentry.io/organization/integrations/integration-platform/ui-components/) for more information."
+          },
+          "webhookUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "The webhook destination URL."
+          },
+          "redirectUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "The post-installation redirect URL."
+          },
+          "isInternal": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether or not the integration is internal only. False means the integration is public."
+          },
+          "isAlertable": {
+            "type": "boolean",
+            "default": false,
+            "description": "Marks whether or not the custom integration can be used in an alert rule."
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true,
+            "description": "The custom integration's description."
+          },
+          "verifyInstall": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether or not an installation of the custom integration should be verified."
+          },
+          "allowedOrigins": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "The list of allowed origins for CORS."
+          }
+        },
+        "required": [
+          "name",
+          "scopes"
         ]
       },
       "SessionsQueryResult": {
