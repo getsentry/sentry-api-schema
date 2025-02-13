@@ -22219,10 +22219,12 @@
                   "type": "object",
                   "properties": {
                     "start": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "date-time"
                     },
                     "end": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "date-time"
                     },
                     "intervals": {
                       "type": "array",
@@ -22237,15 +22239,19 @@
                         "properties": {
                           "by": {
                             "type": "object",
-                            "additionalProperties": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "integer"
-                                }
-                              ]
+                            "properties": {
+                              "project": {
+                                "type": "integer"
+                              },
+                              "release": {
+                                "type": "string"
+                              },
+                              "environment": {
+                                "type": "string"
+                              },
+                              "session.status": {
+                                "type": "string"
+                              }
                             }
                           },
                           "series": {
@@ -29651,7 +29657,8 @@
                         "nullable": true
                       },
                       "culprit": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                       },
                       "user": {
                         "type": "object",
@@ -29713,7 +29720,8 @@
                         }
                       },
                       "platform": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                       },
                       "dateCreated": {
                         "type": "string",
@@ -52263,7 +52271,8 @@
                         "nullable": true
                       },
                       "culprit": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                       },
                       "user": {
                         "type": "object",
@@ -52325,7 +52334,8 @@
                         }
                       },
                       "platform": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                       },
                       "dateCreated": {
                         "type": "string",
@@ -59648,7 +59658,8 @@
               "nullable": true
             },
             "culprit": {
-              "type": "string"
+              "type": "string",
+              "nullable": true
             },
             "user": {
               "type": "object",
@@ -59710,7 +59721,8 @@
               }
             },
             "platform": {
-              "type": "string"
+              "type": "string",
+              "nullable": true
             },
             "dateCreated": {
               "type": "string",
@@ -67590,7 +67602,8 @@
               "nullable": true
             },
             "culprit": {
-              "type": "string"
+              "type": "string",
+              "nullable": true
             },
             "user": {
               "type": "object",
@@ -67652,7 +67665,8 @@
               }
             },
             "platform": {
-              "type": "string"
+              "type": "string",
+              "nullable": true
             },
             "dateCreated": {
               "type": "string",
@@ -69228,10 +69242,12 @@
         "type": "object",
         "properties": {
           "start": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time"
           },
           "end": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time"
           },
           "intervals": {
             "type": "array",
@@ -69246,15 +69262,19 @@
               "properties": {
                 "by": {
                   "type": "object",
-                  "additionalProperties": {
-                    "anyOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "integer"
-                      }
-                    ]
+                  "properties": {
+                    "project": {
+                      "type": "integer"
+                    },
+                    "release": {
+                      "type": "string"
+                    },
+                    "environment": {
+                      "type": "string"
+                    },
+                    "session.status": {
+                      "type": "string"
+                    }
                   }
                 },
                 "series": {
