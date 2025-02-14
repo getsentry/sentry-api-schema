@@ -53618,6 +53618,88 @@
         }
       }
     },
+    "/api/0/issues/{issue_id}/external-issues/": {
+      "get": {
+        "operationId": "Retrieve custom integration issue links for the given Sentry issue",
+        "description": "Retrieve custom integration issue links for the given Sentry issue",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "issueId": {
+                        "type": "string"
+                      },
+                      "serviceType": {
+                        "type": "string"
+                      },
+                      "displayName": {
+                        "type": "string"
+                      },
+                      "webUrl": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "displayName",
+                      "id",
+                      "issueId",
+                      "serviceType",
+                      "webUrl"
+                    ]
+                  }
+                },
+                "examples": {
+                  "RetrieveTheCustomIntegrationsAssociatedWithAnIssueId": {
+                    "value": [
+                      {
+                        "id": "123456",
+                        "issueId": "1234567890",
+                        "serviceType": "example-app",
+                        "displayName": "example-issue#2",
+                        "webUrl": "https://example.com/my-test-project/issue/example-issue-2/this-is-an-example-python-exception"
+                      }
+                    ],
+                    "summary": "Retrieve the custom integrations associated with an issue id"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/0/issues/{issue_id}/tags/{key}/": {
       "get": {
         "operationId": "Retrieve Tag Details",
@@ -59944,6 +60026,36 @@
             "tags",
             "title",
             "user"
+          ]
+        }
+      },
+      "GroupExternalIssueResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "issueId": {
+              "type": "string"
+            },
+            "serviceType": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "webUrl": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "displayName",
+            "id",
+            "issueId",
+            "serviceType",
+            "webUrl"
           ]
         }
       },
