@@ -22125,6 +22125,269 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/sentry-apps/": {
+      "get": {
+        "operationId": "Retrieve the custom integrations created by an organization",
+        "description": "Retrieve the custom integrations for an organization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "allowedOrigins": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "avatars": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string"
+                            },
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "color": {
+                              "type": "boolean"
+                            },
+                            "photoType": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "avatarType",
+                            "avatarUrl",
+                            "avatarUuid",
+                            "color",
+                            "photoType"
+                          ]
+                        }
+                      },
+                      "events": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "featureData": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "isAlertable": {
+                        "type": "boolean"
+                      },
+                      "metadata": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "schema": {
+                        "type": "string"
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "uuid": {
+                        "type": "string"
+                      },
+                      "verifyInstall": {
+                        "type": "boolean"
+                      },
+                      "author": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "overview": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "popularity": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "redirectUrl": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "webhookUrl": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "clientSecret": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "datePublished": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "clientId": {
+                        "type": "string"
+                      },
+                      "owner": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "slug"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "allowedOrigins",
+                      "avatars",
+                      "events",
+                      "featureData",
+                      "isAlertable",
+                      "metadata",
+                      "name",
+                      "schema",
+                      "scopes",
+                      "slug",
+                      "status",
+                      "uuid",
+                      "verifyInstall"
+                    ]
+                  }
+                },
+                "examples": {
+                  "RetrieveTheCustomIntegrationsCreatedByTheGivenOrganization": {
+                    "value": [
+                      {
+                        "allowedOrigins": [],
+                        "author": "ACME Corp",
+                        "avatars": [
+                          {
+                            "avatarType": "avatar",
+                            "avatarUuid": "6c25b771-a576-4c18-a1c3-ab059c1d42ba",
+                            "avatarUrl": "https://example.com/avatar.png",
+                            "color": false,
+                            "photoType": "icon"
+                          }
+                        ],
+                        "events": [
+                          "issue"
+                        ],
+                        "isAlertable": false,
+                        "metadata": "",
+                        "name": "ACME Corp Integration",
+                        "overview": null,
+                        "popularity": 27,
+                        "redirectUrl": null,
+                        "featureData": [],
+                        "schema": "",
+                        "scopes": [
+                          "event:read",
+                          "org:read"
+                        ],
+                        "slug": "acme-corp-integration",
+                        "status": "unpublished",
+                        "uuid": "77cebea3-019e-484d-8673-6c3969698827",
+                        "verifyInstall": true,
+                        "webhookUrl": "https://example.com/webhook",
+                        "clientId": "ed06141686bb60102d878c607eff449fa9907fa7a8cb70f0d337a8fb0b6566c3",
+                        "clientSecret": "**********",
+                        "owner": {
+                          "id": 42,
+                          "slug": "acme-corp"
+                        }
+                      },
+                      {
+                        "allowedOrigins": [],
+                        "author": "ACME Corp",
+                        "avatars": [],
+                        "events": [
+                          "issue",
+                          "event"
+                        ],
+                        "isAlertable": false,
+                        "metadata": "",
+                        "name": "ACME Corp Integration v2",
+                        "overview": null,
+                        "popularity": 0,
+                        "redirectUrl": "example.com",
+                        "featureData": [],
+                        "schema": "",
+                        "scopes": [
+                          "event:admin",
+                          "org:admin"
+                        ],
+                        "slug": "acme-corp-integration-v2",
+                        "status": "unpublished",
+                        "uuid": "77cebea3-019e-484d-8673-123124234",
+                        "verifyInstall": true,
+                        "webhookUrl": "https://example.com/webhook",
+                        "clientId": "2730a92919437a7b052e6827cd2c9f119be37101asdasdad123131231231231",
+                        "clientSecret": "**********",
+                        "owner": {
+                          "id": 42,
+                          "slug": "acme-corp"
+                        }
+                      }
+                    ],
+                    "summary": "Retrieve the custom integrations created by the given organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/sessions/": {
       "get": {
         "operationId": "Retrieve Release Health Session Statistics",
@@ -37699,31 +37962,34 @@
                       }
                     },
                     "avatars": {
-                      "type": "object",
-                      "properties": {
-                        "avatarType": {
-                          "type": "string"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "avatarType": {
+                            "type": "string"
+                          },
+                          "avatarUuid": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "color": {
+                            "type": "boolean"
+                          },
+                          "photoType": {
+                            "type": "string"
+                          }
                         },
-                        "avatarUuid": {
-                          "type": "string"
-                        },
-                        "avatarUrl": {
-                          "type": "string"
-                        },
-                        "color": {
-                          "type": "boolean"
-                        },
-                        "photoType": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "avatarType",
-                        "avatarUrl",
-                        "avatarUuid",
-                        "color",
-                        "photoType"
-                      ]
+                        "required": [
+                          "avatarType",
+                          "avatarUrl",
+                          "avatarUuid",
+                          "color",
+                          "photoType"
+                        ]
+                      }
                     },
                     "events": {
                       "type": "array",
@@ -37835,13 +38101,15 @@
                     "value": {
                       "allowedOrigins": [],
                       "author": "ACME Corp",
-                      "avatars": {
-                        "avatarType": "avatar",
-                        "avatarUuid": "6c25b771-a576-4c18-a1c3-ab059c1d42ba",
-                        "avatarUrl": "https://example.com/avatar.png",
-                        "color": false,
-                        "photoType": "icon"
-                      },
+                      "avatars": [
+                        {
+                          "avatarType": "avatar",
+                          "avatarUuid": "6c25b771-a576-4c18-a1c3-ab059c1d42ba",
+                          "avatarUrl": "https://example.com/avatar.png",
+                          "color": false,
+                          "photoType": "icon"
+                        }
+                      ],
                       "events": [
                         "issue"
                       ],
@@ -38004,31 +38272,34 @@
                       }
                     },
                     "avatars": {
-                      "type": "object",
-                      "properties": {
-                        "avatarType": {
-                          "type": "string"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "avatarType": {
+                            "type": "string"
+                          },
+                          "avatarUuid": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "color": {
+                            "type": "boolean"
+                          },
+                          "photoType": {
+                            "type": "string"
+                          }
                         },
-                        "avatarUuid": {
-                          "type": "string"
-                        },
-                        "avatarUrl": {
-                          "type": "string"
-                        },
-                        "color": {
-                          "type": "boolean"
-                        },
-                        "photoType": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "avatarType",
-                        "avatarUrl",
-                        "avatarUuid",
-                        "color",
-                        "photoType"
-                      ]
+                        "required": [
+                          "avatarType",
+                          "avatarUrl",
+                          "avatarUuid",
+                          "color",
+                          "photoType"
+                        ]
+                      }
                     },
                     "events": {
                       "type": "array",
@@ -38140,13 +38411,15 @@
                     "value": {
                       "allowedOrigins": [],
                       "author": "ACME Corp",
-                      "avatars": {
-                        "avatarType": "avatar",
-                        "avatarUuid": "6c25b771-a576-4c18-a1c3-ab059c1d42ba",
-                        "avatarUrl": "https://example.com/avatar.png",
-                        "color": false,
-                        "photoType": "icon"
-                      },
+                      "avatars": [
+                        {
+                          "avatarType": "avatar",
+                          "avatarUuid": "6c25b771-a576-4c18-a1c3-ab059c1d42ba",
+                          "avatarUrl": "https://example.com/avatar.png",
+                          "color": false,
+                          "photoType": "icon"
+                        }
+                      ],
                       "events": [
                         "issue"
                       ],
@@ -67557,6 +67830,153 @@
           }
         }
       },
+      "OrganizationSentryAppDetailsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "allowedOrigins": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "avatars": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "avatarType": {
+                    "type": "string"
+                  },
+                  "avatarUuid": {
+                    "type": "string"
+                  },
+                  "avatarUrl": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "boolean"
+                  },
+                  "photoType": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "avatarType",
+                  "avatarUrl",
+                  "avatarUuid",
+                  "color",
+                  "photoType"
+                ]
+              }
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "featureData": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "isAlertable": {
+              "type": "boolean"
+            },
+            "metadata": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "schema": {
+              "type": "string"
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "slug": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "uuid": {
+              "type": "string"
+            },
+            "verifyInstall": {
+              "type": "boolean"
+            },
+            "author": {
+              "type": "string",
+              "nullable": true
+            },
+            "overview": {
+              "type": "string",
+              "nullable": true
+            },
+            "popularity": {
+              "type": "integer",
+              "nullable": true
+            },
+            "redirectUrl": {
+              "type": "string",
+              "nullable": true
+            },
+            "webhookUrl": {
+              "type": "string",
+              "nullable": true
+            },
+            "clientSecret": {
+              "type": "string",
+              "nullable": true
+            },
+            "datePublished": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "clientId": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "slug"
+              ]
+            }
+          },
+          "required": [
+            "allowedOrigins",
+            "avatars",
+            "events",
+            "featureData",
+            "isAlertable",
+            "metadata",
+            "name",
+            "schema",
+            "scopes",
+            "slug",
+            "status",
+            "uuid",
+            "verifyInstall"
+          ]
+        }
+      },
       "OrganizationStatsSummaryResponse": {
         "type": "object",
         "properties": {
@@ -69333,31 +69753,34 @@
             }
           },
           "avatars": {
-            "type": "object",
-            "properties": {
-              "avatarType": {
-                "type": "string"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "avatarType": {
+                  "type": "string"
+                },
+                "avatarUuid": {
+                  "type": "string"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "boolean"
+                },
+                "photoType": {
+                  "type": "string"
+                }
               },
-              "avatarUuid": {
-                "type": "string"
-              },
-              "avatarUrl": {
-                "type": "string"
-              },
-              "color": {
-                "type": "boolean"
-              },
-              "photoType": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "avatarType",
-              "avatarUrl",
-              "avatarUuid",
-              "color",
-              "photoType"
-            ]
+              "required": [
+                "avatarType",
+                "avatarUrl",
+                "avatarUuid",
+                "color",
+                "photoType"
+              ]
+            }
           },
           "events": {
             "type": "array",
