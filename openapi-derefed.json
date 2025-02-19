@@ -47518,83 +47518,172 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/values/": {
       "get": {
+        "operationId": "List a Tag's Values for an Issue",
+        "description": "Returns a list of values associated with this key for an issue.\nReturns at most 1000 values when paginated.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The tag key to look the values up for.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "age",
+                "count",
+                "date",
+                "id"
+              ]
+            },
+            "description": "Sort order of the resulting tag values. Prefix with '-' for descending order. Default is '-id'."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          }
+        ],
         "tags": [
           "Events"
         ],
-        "description": "Returns details for given tag key related to an issue. \n\nWhen [paginated](/api/pagination) can return at most 1000 values.",
-        "operationId": "List a Tag's Values Related to an Issue",
-        "parameters": [
+        "security": [
           {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the organization the event belongs to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "issue_id",
-            "in": "path",
-            "description": "The ID of the issue to retrieve.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "key",
-            "in": "path",
-            "description": "The tag key to look the values up for.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
           }
         ],
         "responses": {
           "200": {
-            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "key",
-                      "value"
-                    ],
                     "properties": {
+                      "query": {
+                        "type": "string",
+                        "nullable": true
+                      },
                       "key": {
+                        "type": "string"
+                      },
+                      "name": {
                         "type": "string"
                       },
                       "value": {
                         "type": "string"
+                      },
+                      "count": {
+                        "type": "integer"
+                      },
+                      "lastSeen": {
+                        "type": "string"
+                      },
+                      "firstSeen": {
+                        "type": "string"
                       }
-                    }
+                    },
+                    "required": [
+                      "count",
+                      "firstSeen",
+                      "key",
+                      "lastSeen",
+                      "name",
+                      "value"
+                    ]
                   }
                 },
-                "example": [
-                  {
-                    "key": "ice_cream",
-                    "value": "mint_choco"
+                "examples": {
+                  "ReturnAllTagValuesForASpecificTag": {
+                    "value": [
+                      {
+                        "key": "strawberry",
+                        "name": "Strawberry",
+                        "value": "strawberry",
+                        "count": 2,
+                        "lastSeen": "2024-01-01T00:00:00Z",
+                        "firstSeen": "2024-01-01T00:00:00Z"
+                      },
+                      {
+                        "key": "vanilla",
+                        "name": "Vanilla",
+                        "value": "vanilla",
+                        "count": 1,
+                        "lastSeen": "2024-01-01T00:00:00Z",
+                        "firstSeen": "2024-01-01T00:00:00Z"
+                      },
+                      {
+                        "key": "chocolate",
+                        "name": "Chocolate",
+                        "value": "chocolate",
+                        "count": 1,
+                        "lastSeen": "2024-01-01T00:00:00Z",
+                        "firstSeen": "2024-01-01T00:00:00Z"
+                      },
+                      {
+                        "key": "Neopolitan",
+                        "name": "Neopolitan",
+                        "value": "neopolitan",
+                        "count": 1,
+                        "lastSeen": "2024-01-01T00:00:00Z",
+                        "firstSeen": "2024-01-01T00:00:00Z"
+                      }
+                    ],
+                    "summary": "Return all tag values for a specific tag"
                   }
-                ]
+                }
               }
-            }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "event:read"
-            ]
-          }
-        ]
+        }
       }
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/": {
@@ -52548,11 +52637,20 @@
         ]
       }
     },
-    "/api/0/issues/{issue_id}/events/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/": {
       "get": {
         "operationId": "List an Issue's Events",
         "description": "Return a list of error events bound to an issue",
         "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
           {
             "in": "path",
             "name": "issue_id",
@@ -52849,11 +52947,20 @@
         }
       }
     },
-    "/api/0/issues/{issue_id}/events/{event_id}/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/{event_id}/": {
       "get": {
         "operationId": "Retrieve an Issue Event",
         "description": "Retrieves the details of an issue event.",
         "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
           {
             "in": "path",
             "name": "issue_id",
@@ -53891,11 +53998,20 @@
         }
       }
     },
-    "/api/0/issues/{issue_id}/external-issues/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/external-issues/": {
       "get": {
         "operationId": "Retrieve custom integration issue links for the given Sentry issue",
         "description": "Retrieve custom integration issue links for the given Sentry issue",
         "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
           {
             "in": "path",
             "name": "issue_id",
@@ -53973,7 +54089,7 @@
         }
       }
     },
-    "/api/0/issues/{issue_id}/tags/{key}/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/": {
       "get": {
         "operationId": "Retrieve Tag Details",
         "description": "Return a list of values associated with this key for an issue. When paginated can return at most 1000 values.",
@@ -53985,6 +54101,15 @@
               "type": "integer"
             },
             "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
             "required": true
           },
           {
@@ -54113,167 +54238,6 @@
                       ]
                     },
                     "summary": "Return a specific tag's details"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/issues/{issue_id}/tags/{key}/values/": {
-      "get": {
-        "operationId": "List a Tag's Values for an Issue",
-        "description": "Returns a list of values associated with this key for an issue.\nReturns at most 1000 values when paginated.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "issue_id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The ID of the issue you'd like to query.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "key",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The tag key to look the values up for.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "age",
-                "count",
-                "date",
-                "id"
-              ]
-            },
-            "description": "Sort order of the resulting tag values. Prefix with '-' for descending order. Default is '-id'."
-          },
-          {
-            "in": "query",
-            "name": "environment",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "The name of environments to filter by."
-          }
-        ],
-        "tags": [
-          "Events"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "event:admin",
-              "event:read",
-              "event:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "query": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "key": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "value": {
-                        "type": "string"
-                      },
-                      "count": {
-                        "type": "integer"
-                      },
-                      "lastSeen": {
-                        "type": "string"
-                      },
-                      "firstSeen": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "count",
-                      "firstSeen",
-                      "key",
-                      "lastSeen",
-                      "name",
-                      "value"
-                    ]
-                  }
-                },
-                "examples": {
-                  "ReturnAllTagValuesForASpecificTag": {
-                    "value": [
-                      {
-                        "key": "strawberry",
-                        "name": "Strawberry",
-                        "value": "strawberry",
-                        "count": 2,
-                        "lastSeen": "2024-01-01T00:00:00Z",
-                        "firstSeen": "2024-01-01T00:00:00Z"
-                      },
-                      {
-                        "key": "vanilla",
-                        "name": "Vanilla",
-                        "value": "vanilla",
-                        "count": 1,
-                        "lastSeen": "2024-01-01T00:00:00Z",
-                        "firstSeen": "2024-01-01T00:00:00Z"
-                      },
-                      {
-                        "key": "chocolate",
-                        "name": "Chocolate",
-                        "value": "chocolate",
-                        "count": 1,
-                        "lastSeen": "2024-01-01T00:00:00Z",
-                        "firstSeen": "2024-01-01T00:00:00Z"
-                      },
-                      {
-                        "key": "Neopolitan",
-                        "name": "Neopolitan",
-                        "value": "neopolitan",
-                        "count": 1,
-                        "lastSeen": "2024-01-01T00:00:00Z",
-                        "firstSeen": "2024-01-01T00:00:00Z"
-                      }
-                    ],
-                    "summary": "Return all tag values for a specific tag"
                   }
                 }
               }
