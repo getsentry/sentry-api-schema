@@ -10796,6 +10796,924 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/explore/saved/": {
+      "get": {
+        "operationId": "List an Organization's Explore Saved Queries",
+        "description": "Retrieve a list of saved queries that are associated with the given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the Explore query you'd like to filter by."
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The property to sort results by. If not specified, the results are sorted by query name.\n\nAvailable fields are:\n- `name`\n- `dateCreated`\n- `dateUpdated`\n- `mostPopular`\n- `recentlyViewed`\n- `myqueries`\n        "
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "environment": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "query": {
+                        "type": "string"
+                      },
+                      "fields": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "range": {
+                        "type": "string"
+                      },
+                      "start": {
+                        "type": "string"
+                      },
+                      "end": {
+                        "type": "string"
+                      },
+                      "orderby": {
+                        "type": "string"
+                      },
+                      "visualize": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "interval": {
+                        "type": "string"
+                      },
+                      "mode": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "projects": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer"
+                        }
+                      },
+                      "dataset": {
+                        "type": "string"
+                      },
+                      "expired": {
+                        "type": "boolean"
+                      },
+                      "dateAdded": {
+                        "type": "string"
+                      },
+                      "dateUpdated": {
+                        "type": "string"
+                      },
+                      "createdBy": {
+                        "type": "object",
+                        "properties": {
+                          "identities": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "organization": {
+                                  "type": "object",
+                                  "properties": {
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "slug"
+                                  ]
+                                },
+                                "provider": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name"
+                                  ]
+                                },
+                                "dateVerified": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "dateSynced": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "dateSynced",
+                                "dateVerified",
+                                "id",
+                                "name",
+                                "organization",
+                                "provider"
+                              ]
+                            }
+                          },
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "avatarUrl": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "authenticators": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "canReset2fa": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "dateJoined": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "lastLogin": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "experiments": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "is_verified": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "id",
+                                "is_verified"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "dateJoined",
+                          "email",
+                          "emails",
+                          "experiments",
+                          "has2fa",
+                          "hasPasswordAuth",
+                          "id",
+                          "isActive",
+                          "isManaged",
+                          "isStaff",
+                          "isSuperuser",
+                          "lastActive",
+                          "lastLogin",
+                          "name",
+                          "username"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "createdBy",
+                      "dataset",
+                      "dateAdded",
+                      "dateUpdated",
+                      "expired",
+                      "id",
+                      "name",
+                      "projects"
+                    ]
+                  }
+                },
+                "examples": {
+                  "GetExploreSavedQueries": {
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "Pageloads",
+                        "projects": [],
+                        "dateAdded": "2024-07-25T19:35:38.422859Z",
+                        "dateUpdated": "2024-07-25T19:35:38.422874Z",
+                        "environment": [],
+                        "query": "span.op:pageload",
+                        "fields": [
+                          "span.op",
+                          "timestamp"
+                        ],
+                        "range": "24h",
+                        "orderby": "-timestamp",
+                        "mode": "samples",
+                        "dataset": "spans",
+                        "expired": false,
+                        "createdBy": {
+                          "id": "1",
+                          "name": "Admin",
+                          "username": "admin",
+                          "email": "admin@sentry.io",
+                          "avatarUrl": "www.example.com",
+                          "isActive": true,
+                          "hasPasswordAuth": true,
+                          "isManaged": false,
+                          "dateJoined": "2021-10-25T17:07:33.190596Z",
+                          "lastLogin": "2024-07-16T15:28:39.261659Z",
+                          "has2fa": true,
+                          "lastActive": "2024-07-16T20:45:49.364197Z",
+                          "isSuperuser": false,
+                          "isStaff": false,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "1",
+                              "email": "admin@sentry.io",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null,
+                            "avatarUrl": "www.example.com"
+                          }
+                        }
+                      },
+                      {
+                        "id": "2",
+                        "name": "Cache Gets",
+                        "projects": [],
+                        "dateAdded": "2024-07-25T19:35:38.422859Z",
+                        "dateUpdated": "2024-07-25T19:35:38.422874Z",
+                        "environment": [],
+                        "query": "span.op:cache.get",
+                        "fields": [
+                          "span.op",
+                          "span.durationtimestamp"
+                        ],
+                        "range": "24h",
+                        "orderby": "-timestamp",
+                        "mode": "samples",
+                        "dataset": "spans",
+                        "expired": false,
+                        "createdBy": {
+                          "id": "1",
+                          "name": "Admin",
+                          "username": "admin",
+                          "email": "admin@sentry.io",
+                          "avatarUrl": "www.example.com",
+                          "isActive": true,
+                          "hasPasswordAuth": true,
+                          "isManaged": false,
+                          "dateJoined": "2021-10-25T17:07:33.190596Z",
+                          "lastLogin": "2024-07-16T15:28:39.261659Z",
+                          "has2fa": true,
+                          "lastActive": "2024-07-16T20:45:49.364197Z",
+                          "isSuperuser": false,
+                          "isStaff": false,
+                          "experiments": {},
+                          "emails": [
+                            {
+                              "id": "1",
+                              "email": "admin@sentry.io",
+                              "is_verified": true
+                            }
+                          ],
+                          "avatar": {
+                            "avatarType": "letter_avatar",
+                            "avatarUuid": null,
+                            "avatarUrl": "www.example.com"
+                          }
+                        }
+                      }
+                    ],
+                    "summary": "Get Explore Saved Queries"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a New Trace Explorer Saved Query",
+        "description": "Create a new trace explorersaved query for the given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The user-defined saved query name.",
+                    "maxLength": 255
+                  },
+                  "mode": {
+                    "enum": [
+                      "samples",
+                      "aggregate"
+                    ],
+                    "type": "string",
+                    "description": "The mode of the query.\n\n* `samples`\n* `aggregate`"
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "default": [],
+                    "description": "The saved projects filter for this query."
+                  },
+                  "dataset": {
+                    "enum": [
+                      "spans",
+                      "ourlogs"
+                    ],
+                    "type": "string",
+                    "default": "spans",
+                    "description": "The dataset you would like to query. `spans` is the only supported value for now.\n\n* `spans`\n* `ourlogs`"
+                  },
+                  "start": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "The saved start time for this saved query."
+                  },
+                  "end": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "The saved end time for this saved query."
+                  },
+                  "range": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The saved time range period for this saved query."
+                  },
+                  "fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "The fields, functions, or equations that can be requested for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n"
+                  },
+                  "orderby": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "How to order the query results. Must be something in the `field` list, excluding equations."
+                  },
+                  "environment": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "The name of environments to filter by."
+                  },
+                  "query": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Filters results by using [query syntax](/product/sentry-basics/search/)."
+                  },
+                  "visualize": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "chartType": {
+                          "type": "integer"
+                        },
+                        "yAxes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "chartType",
+                        "yAxes"
+                      ]
+                    },
+                    "nullable": true,
+                    "description": "The visualizations to be plotted on the chart."
+                  },
+                  "interval": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Resolution of the time series."
+                  }
+                },
+                "required": [
+                  "mode",
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "environment": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "range": {
+                      "type": "string"
+                    },
+                    "start": {
+                      "type": "string"
+                    },
+                    "end": {
+                      "type": "string"
+                    },
+                    "orderby": {
+                      "type": "string"
+                    },
+                    "visualize": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "interval": {
+                      "type": "string"
+                    },
+                    "mode": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "dataset": {
+                      "type": "string"
+                    },
+                    "expired": {
+                      "type": "boolean"
+                    },
+                    "dateAdded": {
+                      "type": "string"
+                    },
+                    "dateUpdated": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "createdBy",
+                    "dataset",
+                    "dateAdded",
+                    "dateUpdated",
+                    "expired",
+                    "id",
+                    "name",
+                    "projects"
+                  ]
+                },
+                "examples": {
+                  "CreateExploreSavedQuery": {
+                    "value": {
+                      "id": "1",
+                      "name": "Pageloads",
+                      "projects": [],
+                      "dateAdded": "2024-07-25T19:35:38.422859Z",
+                      "dateUpdated": "2024-07-25T19:35:38.422874Z",
+                      "environment": [],
+                      "query": "span.op:pageload",
+                      "fields": [
+                        "span.op",
+                        "project",
+                        "count(span.duration)",
+                        "avg(span.duration)",
+                        "p75(span.duration)",
+                        "p95(span.duration)"
+                      ],
+                      "range": "24h",
+                      "orderby": "-count(span.duration)",
+                      "mode": "samples",
+                      "dataset": "spans",
+                      "expired": false,
+                      "createdBy": {
+                        "id": "1",
+                        "name": "Admin",
+                        "username": "admin",
+                        "email": "admin@sentry.io",
+                        "avatarUrl": "www.example.com",
+                        "isActive": true,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-10-25T17:07:33.190596Z",
+                        "lastLogin": "2024-07-16T15:28:39.261659Z",
+                        "has2fa": true,
+                        "lastActive": "2024-07-16T20:45:49.364197Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "1",
+                            "email": "admin@sentry.io",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null,
+                          "avatarUrl": "www.example.com"
+                        }
+                      }
+                    },
+                    "summary": "Create Explore Saved Query"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/external-users/": {
       "post": {
         "operationId": "Create an External User",
@@ -62588,6 +63506,635 @@
           "name"
         ]
       },
+      "ExploreSavedQuery": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The user-defined saved query name.",
+            "maxLength": 255
+          },
+          "mode": {
+            "enum": [
+              "samples",
+              "aggregate"
+            ],
+            "type": "string",
+            "description": "The mode of the query.\n\n* `samples`\n* `aggregate`"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "default": [],
+            "description": "The saved projects filter for this query."
+          },
+          "dataset": {
+            "enum": [
+              "spans",
+              "ourlogs"
+            ],
+            "type": "string",
+            "default": "spans",
+            "description": "The dataset you would like to query. `spans` is the only supported value for now.\n\n* `spans`\n* `ourlogs`"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The saved start time for this saved query."
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The saved end time for this saved query."
+          },
+          "range": {
+            "type": "string",
+            "nullable": true,
+            "description": "The saved time range period for this saved query."
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "The fields, functions, or equations that can be requested for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n"
+          },
+          "orderby": {
+            "type": "string",
+            "nullable": true,
+            "description": "How to order the query results. Must be something in the `field` list, excluding equations."
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "The name of environments to filter by."
+          },
+          "query": {
+            "type": "string",
+            "nullable": true,
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/)."
+          },
+          "visualize": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "chartType": {
+                  "type": "integer"
+                },
+                "yAxes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "chartType",
+                "yAxes"
+              ]
+            },
+            "nullable": true,
+            "description": "The visualizations to be plotted on the chart."
+          },
+          "interval": {
+            "type": "string",
+            "nullable": true,
+            "description": "Resolution of the time series."
+          }
+        },
+        "required": [
+          "mode",
+          "name"
+        ]
+      },
+      "ExploreSavedQueryListResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "query": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "range": {
+              "type": "string"
+            },
+            "start": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            },
+            "orderby": {
+              "type": "string"
+            },
+            "visualize": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "interval": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "projects": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "dataset": {
+              "type": "string"
+            },
+            "expired": {
+              "type": "boolean"
+            },
+            "dateAdded": {
+              "type": "string"
+            },
+            "dateUpdated": {
+              "type": "string"
+            },
+            "createdBy": {
+              "type": "object",
+              "properties": {
+                "identities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "organization": {
+                        "type": "object",
+                        "properties": {
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "slug"
+                        ]
+                      },
+                      "provider": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      },
+                      "dateVerified": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateSynced": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "dateSynced",
+                      "dateVerified",
+                      "id",
+                      "name",
+                      "organization",
+                      "provider"
+                    ]
+                  }
+                },
+                "avatar": {
+                  "type": "object",
+                  "properties": {
+                    "avatarType": {
+                      "type": "string"
+                    },
+                    "avatarUuid": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "avatarUrl": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "authenticators": {
+                  "type": "array",
+                  "items": {}
+                },
+                "canReset2fa": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
+                },
+                "hasPasswordAuth": {
+                  "type": "boolean"
+                },
+                "isManaged": {
+                  "type": "boolean"
+                },
+                "dateJoined": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "lastLogin": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "has2fa": {
+                  "type": "boolean"
+                },
+                "lastActive": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "isSuperuser": {
+                  "type": "boolean"
+                },
+                "isStaff": {
+                  "type": "boolean"
+                },
+                "experiments": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "emails": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "is_verified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "id",
+                      "is_verified"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "avatarUrl",
+                "dateJoined",
+                "email",
+                "emails",
+                "experiments",
+                "has2fa",
+                "hasPasswordAuth",
+                "id",
+                "isActive",
+                "isManaged",
+                "isStaff",
+                "isSuperuser",
+                "lastActive",
+                "lastLogin",
+                "name",
+                "username"
+              ]
+            }
+          },
+          "required": [
+            "createdBy",
+            "dataset",
+            "dateAdded",
+            "dateUpdated",
+            "expired",
+            "id",
+            "name",
+            "projects"
+          ]
+        }
+      },
+      "ExploreSavedQueryModel": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "query": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "range": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "orderby": {
+            "type": "string"
+          },
+          "visualize": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "interval": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "dataset": {
+            "type": "string"
+          },
+          "expired": {
+            "type": "boolean"
+          },
+          "dateAdded": {
+            "type": "string"
+          },
+          "dateUpdated": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "object",
+            "properties": {
+              "identities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organization": {
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "provider": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    },
+                    "dateVerified": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateSynced": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "dateSynced",
+                    "dateVerified",
+                    "id",
+                    "name",
+                    "organization",
+                    "provider"
+                  ]
+                }
+              },
+              "avatar": {
+                "type": "object",
+                "properties": {
+                  "avatarType": {
+                    "type": "string"
+                  },
+                  "avatarUuid": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              },
+              "authenticators": {
+                "type": "array",
+                "items": {}
+              },
+              "canReset2fa": {
+                "type": "boolean"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "avatarUrl": {
+                "type": "string"
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "hasPasswordAuth": {
+                "type": "boolean"
+              },
+              "isManaged": {
+                "type": "boolean"
+              },
+              "dateJoined": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastLogin": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "has2fa": {
+                "type": "boolean"
+              },
+              "lastActive": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "isSuperuser": {
+                "type": "boolean"
+              },
+              "isStaff": {
+                "type": "boolean"
+              },
+              "experiments": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "emails": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "is_verified": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "email",
+                    "id",
+                    "is_verified"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "avatarUrl",
+              "dateJoined",
+              "email",
+              "emails",
+              "experiments",
+              "has2fa",
+              "hasPasswordAuth",
+              "id",
+              "isActive",
+              "isManaged",
+              "isStaff",
+              "isSuperuser",
+              "lastActive",
+              "lastLogin",
+              "name",
+              "username"
+            ]
+          }
+        },
+        "required": [
+          "createdBy",
+          "dataset",
+          "dateAdded",
+          "dateUpdated",
+          "expired",
+          "id",
+          "name",
+          "projects"
+        ]
+      },
       "ExternalActor": {
         "type": "object",
         "properties": {
@@ -74794,6 +76341,24 @@
             "description": "\nConfigures the team role of the member. The two roles are:\n- `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.\n- `admin` - Has full management access to their team's membership and projects.\n```json\n{\n    \"teamRoles\": [\n        {\n            \"teamSlug\": \"ancient-gabelers\",\n            \"role\": \"admin\"\n        },\n        {\n            \"teamSlug\": \"powerful-abolitionist\",\n            \"role\": \"contributor\"\n        }\n    ]\n}\n```\n"
           }
         }
+      },
+      "Visualize": {
+        "type": "object",
+        "properties": {
+          "chartType": {
+            "type": "integer"
+          },
+          "yAxes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "chartType",
+          "yAxes"
+        ]
       },
       "_LegacyBrowserFilter": {
         "type": "object",
