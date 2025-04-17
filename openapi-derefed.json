@@ -12705,6 +12705,486 @@
           }
         }
       },
+      "put": {
+        "operationId": "Bulk Mutate an Organization's Issues",
+        "description": "Bulk mutate various attributes on a maxmimum of 1000 issues. \n- For non-status updates, the `id` query parameter is required. \n- For status updates, the `id` query parameter may be omitted to update issues that match the filtering. \nIf any IDs are out of scope, the data won't be mutated but the endpoint will still produce a successful response. For example, if no issues were found matching the criteria, a HTTP 204 is returned.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The list of issue IDs to mutate. It is optional for status updates, in which an implicit `update all` is assumed."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string",
+              "default": "is:unresolved issue.priority:[high,medium]"
+            },
+            "description": "An optional search query for filtering issues. A default query will apply if no view/query is set. For all results use this parameter with an empty string."
+          },
+          {
+            "in": "query",
+            "name": "viewId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the view to use. If no query is present, the view's query and filters will be applied."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "date",
+                "freq",
+                "inbox",
+                "new",
+                "trends",
+                "user"
+              ],
+              "default": "date"
+            },
+            "description": "The sort order of the view. Options include 'Last Seen' (`date`), 'First Seen' (`new`), 'Trends' (`trends`), 'Events' (`freq`), 'Users' (`user`), and 'Date Added' (`inbox`)."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 100
+            },
+            "description": "The maximum number of issues to affect. The maximum is 100."
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inbox": {
+                    "type": "boolean",
+                    "description": "If true, marks the issue as reviewed by the requestor."
+                  },
+                  "status": {
+                    "enum": [
+                      "resolved",
+                      "unresolved",
+                      "ignored",
+                      "resolvedInNextRelease",
+                      "muted"
+                    ],
+                    "type": "string",
+                    "description": "Limit mutations to only issues with the given status.\n\n* `resolved`\n* `unresolved`\n* `ignored`\n* `resolvedInNextRelease`\n* `muted`"
+                  },
+                  "statusDetails": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "inNextRelease": {
+                            "type": "boolean",
+                            "description": "If true, marks the issue as resolved in the next release."
+                          },
+                          "inUpcomingRelease": {
+                            "type": "boolean",
+                            "description": "If true, marks the issue as resolved in the upcoming release."
+                          },
+                          "inRelease": {
+                            "type": "string",
+                            "description": "The version of the release that the issue should be resolved in.If set to `latest`, the latest release will be used."
+                          },
+                          "inCommit": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "commit": {
+                                    "type": "string",
+                                    "description": "The SHA of the resolving commit."
+                                  },
+                                  "repository": {
+                                    "type": "string",
+                                    "description": "The name of the repository (as it appears in Sentry)."
+                                  }
+                                },
+                                "required": [
+                                  "commit",
+                                  "repository"
+                                ]
+                              }
+                            ],
+                            "description": "The commit data that the issue should use for resolution."
+                          },
+                          "ignoreDuration": {
+                            "type": "integer",
+                            "description": "Ignore the issue until for this many minutes."
+                          },
+                          "ignoreCount": {
+                            "type": "integer",
+                            "description": "Ignore the issue until it has occurred this many times in `ignoreWindow` minutes."
+                          },
+                          "ignoreWindow": {
+                            "type": "integer",
+                            "maximum": 10080,
+                            "description": "Ignore the issue until it has occurred `ignoreCount` times in this many minutes. (Max: 1 week)"
+                          },
+                          "ignoreUserCount": {
+                            "type": "integer",
+                            "description": "Ignore the issue until it has affected this many users in `ignoreUserWindow` minutes."
+                          },
+                          "ignoreUserWindow": {
+                            "type": "integer",
+                            "maximum": 10080,
+                            "description": "Ignore the issue until it has affected `ignoreUserCount` users in this many minutes. (Max: 1 week)"
+                          }
+                        },
+                        "required": [
+                          "ignoreCount",
+                          "ignoreDuration",
+                          "ignoreUserCount",
+                          "ignoreUserWindow",
+                          "ignoreWindow",
+                          "inNextRelease",
+                          "inRelease",
+                          "inUpcomingRelease"
+                        ]
+                      }
+                    ],
+                    "description": "Additional details about the resolution. Status detail updates that include release data are only allowed for issues within a single project."
+                  },
+                  "substatus": {
+                    "enum": [
+                      "archived_until_escalating",
+                      "archived_until_condition_met",
+                      "archived_forever",
+                      "escalating",
+                      "ongoing",
+                      "regressed",
+                      "new",
+                      null
+                    ],
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The new substatus of the issue.\n\n* `archived_until_escalating`\n* `archived_until_condition_met`\n* `archived_forever`\n* `escalating`\n* `ongoing`\n* `regressed`\n* `new`"
+                  },
+                  "hasSeen": {
+                    "type": "boolean",
+                    "description": "If true, marks the issue as seen by the requestor."
+                  },
+                  "isBookmarked": {
+                    "type": "boolean",
+                    "description": "If true, bookmarks the issue for the requestor."
+                  },
+                  "isPublic": {
+                    "type": "boolean",
+                    "description": "If true, publishes the issue."
+                  },
+                  "isSubscribed": {
+                    "type": "boolean",
+                    "description": "If true, subscribes the requestor to the issue."
+                  },
+                  "merge": {
+                    "type": "boolean",
+                    "description": "If true, merges the issues together."
+                  },
+                  "discard": {
+                    "type": "boolean",
+                    "description": "If true, discards the issues instead of updating them."
+                  },
+                  "assignedTo": {
+                    "type": "string",
+                    "description": "The user or team that should be assigned to the issues. Values take the form of `<user_id>`, `user:<user_id>`, `<username>`, `<user_primary_email>`, or `team:<team_id>`."
+                  },
+                  "priority": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string",
+                    "description": "The priority that should be set for the issues\n\n* `low`\n* `medium`\n* `high`"
+                  }
+                },
+                "required": [
+                  "assignedTo",
+                  "discard",
+                  "hasSeen",
+                  "inbox",
+                  "isBookmarked",
+                  "isPublic",
+                  "isSubscribed",
+                  "merge",
+                  "priority",
+                  "status",
+                  "statusDetails",
+                  "substatus"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assignedTo": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "enum": [
+                            "user",
+                            "team"
+                          ],
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "email",
+                        "id",
+                        "name",
+                        "type"
+                      ]
+                    },
+                    "discard": {
+                      "type": "boolean"
+                    },
+                    "hasSeen": {
+                      "type": "boolean"
+                    },
+                    "inbox": {
+                      "type": "boolean"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isPublic": {
+                      "type": "boolean"
+                    },
+                    "isSubscribed": {
+                      "type": "boolean"
+                    },
+                    "merge": {
+                      "type": "object",
+                      "properties": {
+                        "parent": {
+                          "type": "string"
+                        },
+                        "children": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "children",
+                        "parent"
+                      ]
+                    },
+                    "priority": {
+                      "type": "string"
+                    },
+                    "shareId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "statusDetails": {
+                      "type": "object",
+                      "properties": {
+                        "inNextRelease": {
+                          "type": "boolean"
+                        },
+                        "inUpcomingRelease": {
+                          "type": "boolean"
+                        },
+                        "inRelease": {
+                          "type": "string"
+                        },
+                        "inCommit": {
+                          "type": "object",
+                          "properties": {
+                            "commit": {
+                              "type": "string"
+                            },
+                            "repository": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "commit",
+                            "repository"
+                          ]
+                        },
+                        "ignoreDuration": {
+                          "type": "integer"
+                        },
+                        "ignoreCount": {
+                          "type": "integer"
+                        },
+                        "ignoreWindow": {
+                          "type": "integer"
+                        },
+                        "ignoreUserCount": {
+                          "type": "integer"
+                        },
+                        "ignoreUserWindow": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "subscriptionDetails": {
+                      "type": "object",
+                      "properties": {
+                        "disabled": {
+                          "type": "boolean"
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "substatus": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "ReturnTheUpdateResultsForIssuesInAnOrganization": {
+                    "value": {
+                      "assignedTo": {
+                        "type": "user",
+                        "id": "1",
+                        "name": "John Doe",
+                        "email": "john.doe@example.com"
+                      },
+                      "discard": false,
+                      "hasSeen": true,
+                      "inbox": true,
+                      "isBookmarked": false,
+                      "isPublic": true,
+                      "isSubscribed": true,
+                      "merge": {
+                        "children": [
+                          "11",
+                          "12",
+                          "13"
+                        ],
+                        "parent": "10"
+                      },
+                      "priority": "medium",
+                      "shareId": "123def456abc",
+                      "status": "ignored",
+                      "statusDetails": {
+                        "ignoreDuration": 100,
+                        "ignoreCount": 10,
+                        "ignoreWindow": 60,
+                        "ignoreUserCount": 10,
+                        "ignoreUserWindow": 60,
+                        "inNextRelease": false,
+                        "inUpcomingRelease": false,
+                        "inRelease": "1.0.0",
+                        "inCommit": {
+                          "commit": "123def456abc",
+                          "repository": "getsentry/sentry"
+                        }
+                      },
+                      "subscriptionDetails": {
+                        "disabled": false,
+                        "reason": "mentioned"
+                      },
+                      "substatus": "archived_until_condition_met"
+                    },
+                    "summary": "Return the update results for issues in an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "delete": {
         "operationId": "Bulk Remove an Organization's Issues",
         "description": "Permanently remove the given issues. If IDs are provided, queries and filtering will be ignored. If any IDs are out of scope, the data won't be mutated but the endpoint will still produce a successful response. For example, if no issues were found matching the criteria, a HTTP 204 is returned.",
@@ -64641,6 +65121,185 @@
           ]
         }
       },
+      "GroupValidator": {
+        "type": "object",
+        "properties": {
+          "inbox": {
+            "type": "boolean",
+            "description": "If true, marks the issue as reviewed by the requestor."
+          },
+          "status": {
+            "enum": [
+              "resolved",
+              "unresolved",
+              "ignored",
+              "resolvedInNextRelease",
+              "muted"
+            ],
+            "type": "string",
+            "description": "Limit mutations to only issues with the given status.\n\n* `resolved`\n* `unresolved`\n* `ignored`\n* `resolvedInNextRelease`\n* `muted`"
+          },
+          "statusDetails": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "inNextRelease": {
+                    "type": "boolean",
+                    "description": "If true, marks the issue as resolved in the next release."
+                  },
+                  "inUpcomingRelease": {
+                    "type": "boolean",
+                    "description": "If true, marks the issue as resolved in the upcoming release."
+                  },
+                  "inRelease": {
+                    "type": "string",
+                    "description": "The version of the release that the issue should be resolved in.If set to `latest`, the latest release will be used."
+                  },
+                  "inCommit": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "commit": {
+                            "type": "string",
+                            "description": "The SHA of the resolving commit."
+                          },
+                          "repository": {
+                            "type": "string",
+                            "description": "The name of the repository (as it appears in Sentry)."
+                          }
+                        },
+                        "required": [
+                          "commit",
+                          "repository"
+                        ]
+                      }
+                    ],
+                    "description": "The commit data that the issue should use for resolution."
+                  },
+                  "ignoreDuration": {
+                    "type": "integer",
+                    "description": "Ignore the issue until for this many minutes."
+                  },
+                  "ignoreCount": {
+                    "type": "integer",
+                    "description": "Ignore the issue until it has occurred this many times in `ignoreWindow` minutes."
+                  },
+                  "ignoreWindow": {
+                    "type": "integer",
+                    "maximum": 10080,
+                    "description": "Ignore the issue until it has occurred `ignoreCount` times in this many minutes. (Max: 1 week)"
+                  },
+                  "ignoreUserCount": {
+                    "type": "integer",
+                    "description": "Ignore the issue until it has affected this many users in `ignoreUserWindow` minutes."
+                  },
+                  "ignoreUserWindow": {
+                    "type": "integer",
+                    "maximum": 10080,
+                    "description": "Ignore the issue until it has affected `ignoreUserCount` users in this many minutes. (Max: 1 week)"
+                  }
+                },
+                "required": [
+                  "ignoreCount",
+                  "ignoreDuration",
+                  "ignoreUserCount",
+                  "ignoreUserWindow",
+                  "ignoreWindow",
+                  "inNextRelease",
+                  "inRelease",
+                  "inUpcomingRelease"
+                ]
+              }
+            ],
+            "description": "Additional details about the resolution. Status detail updates that include release data are only allowed for issues within a single project."
+          },
+          "substatus": {
+            "enum": [
+              "archived_until_escalating",
+              "archived_until_condition_met",
+              "archived_forever",
+              "escalating",
+              "ongoing",
+              "regressed",
+              "new",
+              null
+            ],
+            "type": "string",
+            "nullable": true,
+            "description": "The new substatus of the issue.\n\n* `archived_until_escalating`\n* `archived_until_condition_met`\n* `archived_forever`\n* `escalating`\n* `ongoing`\n* `regressed`\n* `new`"
+          },
+          "hasSeen": {
+            "type": "boolean",
+            "description": "If true, marks the issue as seen by the requestor."
+          },
+          "isBookmarked": {
+            "type": "boolean",
+            "description": "If true, bookmarks the issue for the requestor."
+          },
+          "isPublic": {
+            "type": "boolean",
+            "description": "If true, publishes the issue."
+          },
+          "isSubscribed": {
+            "type": "boolean",
+            "description": "If true, subscribes the requestor to the issue."
+          },
+          "merge": {
+            "type": "boolean",
+            "description": "If true, merges the issues together."
+          },
+          "discard": {
+            "type": "boolean",
+            "description": "If true, discards the issues instead of updating them."
+          },
+          "assignedTo": {
+            "type": "string",
+            "description": "The user or team that should be assigned to the issues. Values take the form of `<user_id>`, `user:<user_id>`, `<username>`, `<user_primary_email>`, or `team:<team_id>`."
+          },
+          "priority": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "type": "string",
+            "description": "The priority that should be set for the issues\n\n* `low`\n* `medium`\n* `high`"
+          }
+        },
+        "required": [
+          "assignedTo",
+          "discard",
+          "hasSeen",
+          "inbox",
+          "isBookmarked",
+          "isPublic",
+          "isSubscribed",
+          "merge",
+          "priority",
+          "status",
+          "statusDetails",
+          "substatus"
+        ]
+      },
+      "InCommitValidator": {
+        "type": "object",
+        "properties": {
+          "commit": {
+            "type": "string",
+            "description": "The SHA of the resolving commit."
+          },
+          "repository": {
+            "type": "string",
+            "description": "The name of the repository (as it appears in Sentry)."
+          }
+        },
+        "required": [
+          "commit",
+          "repository"
+        ]
+      },
       "IssueEventDetailsResponse": {
         "type": "object",
         "properties": {
@@ -72210,6 +72869,142 @@
           ]
         }
       },
+      "OrganizationGroupIndexPutResponse": {
+        "type": "object",
+        "properties": {
+          "assignedTo": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "user",
+                  "team"
+                ],
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "email",
+              "id",
+              "name",
+              "type"
+            ]
+          },
+          "discard": {
+            "type": "boolean"
+          },
+          "hasSeen": {
+            "type": "boolean"
+          },
+          "inbox": {
+            "type": "boolean"
+          },
+          "isBookmarked": {
+            "type": "boolean"
+          },
+          "isPublic": {
+            "type": "boolean"
+          },
+          "isSubscribed": {
+            "type": "boolean"
+          },
+          "merge": {
+            "type": "object",
+            "properties": {
+              "parent": {
+                "type": "string"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "children",
+              "parent"
+            ]
+          },
+          "priority": {
+            "type": "string"
+          },
+          "shareId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusDetails": {
+            "type": "object",
+            "properties": {
+              "inNextRelease": {
+                "type": "boolean"
+              },
+              "inUpcomingRelease": {
+                "type": "boolean"
+              },
+              "inRelease": {
+                "type": "string"
+              },
+              "inCommit": {
+                "type": "object",
+                "properties": {
+                  "commit": {
+                    "type": "string"
+                  },
+                  "repository": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "commit",
+                  "repository"
+                ]
+              },
+              "ignoreDuration": {
+                "type": "integer"
+              },
+              "ignoreCount": {
+                "type": "integer"
+              },
+              "ignoreWindow": {
+                "type": "integer"
+              },
+              "ignoreUserCount": {
+                "type": "integer"
+              },
+              "ignoreUserWindow": {
+                "type": "integer"
+              }
+            }
+          },
+          "subscriptionDetails": {
+            "type": "object",
+            "properties": {
+              "disabled": {
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          },
+          "substatus": {
+            "type": "string"
+          }
+        }
+      },
       "OrganizationIntegrationResponse": {
         "type": "object",
         "properties": {
@@ -75925,6 +76720,77 @@
         },
         "required": [
           "errors"
+        ]
+      },
+      "StatusDetailsValidator": {
+        "type": "object",
+        "properties": {
+          "inNextRelease": {
+            "type": "boolean",
+            "description": "If true, marks the issue as resolved in the next release."
+          },
+          "inUpcomingRelease": {
+            "type": "boolean",
+            "description": "If true, marks the issue as resolved in the upcoming release."
+          },
+          "inRelease": {
+            "type": "string",
+            "description": "The version of the release that the issue should be resolved in.If set to `latest`, the latest release will be used."
+          },
+          "inCommit": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "commit": {
+                    "type": "string",
+                    "description": "The SHA of the resolving commit."
+                  },
+                  "repository": {
+                    "type": "string",
+                    "description": "The name of the repository (as it appears in Sentry)."
+                  }
+                },
+                "required": [
+                  "commit",
+                  "repository"
+                ]
+              }
+            ],
+            "description": "The commit data that the issue should use for resolution."
+          },
+          "ignoreDuration": {
+            "type": "integer",
+            "description": "Ignore the issue until for this many minutes."
+          },
+          "ignoreCount": {
+            "type": "integer",
+            "description": "Ignore the issue until it has occurred this many times in `ignoreWindow` minutes."
+          },
+          "ignoreWindow": {
+            "type": "integer",
+            "maximum": 10080,
+            "description": "Ignore the issue until it has occurred `ignoreCount` times in this many minutes. (Max: 1 week)"
+          },
+          "ignoreUserCount": {
+            "type": "integer",
+            "description": "Ignore the issue until it has affected this many users in `ignoreUserWindow` minutes."
+          },
+          "ignoreUserWindow": {
+            "type": "integer",
+            "maximum": 10080,
+            "description": "Ignore the issue until it has affected `ignoreUserCount` users in this many minutes. (Max: 1 week)"
+          }
+        },
+        "required": [
+          "ignoreCount",
+          "ignoreDuration",
+          "ignoreUserCount",
+          "ignoreUserWindow",
+          "ignoreWindow",
+          "inNextRelease",
+          "inRelease",
+          "inUpcomingRelease"
         ]
       },
       "TagKeyDetailsDict": {
