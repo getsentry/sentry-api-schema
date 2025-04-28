@@ -41629,8 +41629,8 @@
                   "GiveATeamAccessToAProject": {
                     "value": {
                       "id": "6758470122493650",
-                      "slug": "The Spoiled Yoghurt",
-                      "name": "the-spoiled-yoghurt",
+                      "slug": "the-spoiled-yoghurt",
+                      "name": "The Spoiled Yoghurt",
                       "platform": "javascript",
                       "dateCreated": "2023-03-29T15:25:21.344565Z",
                       "isBookmarked": false,
@@ -41988,8 +41988,8 @@
                   "RevokeATeam'sAccessToAProject": {
                     "value": {
                       "id": "6758470122493650",
-                      "slug": "The Spoiled Yoghurt",
-                      "name": "the-spoiled-yoghurt",
+                      "slug": "the-spoiled-yoghurt",
+                      "name": "The Spoiled Yoghurt",
                       "platform": "javascript",
                       "dateCreated": "2023-03-29T15:25:21.344565Z",
                       "isBookmarked": false,
@@ -45792,8 +45792,8 @@
                           }
                         ],
                         "id": "6758470122493650",
-                        "name": "the-spoiled-yoghurt",
-                        "slug": "The Spoiled Yoghurt",
+                        "slug": "the-spoiled-yoghurt",
+                        "name": "The Spoiled Yoghurt",
                         "isBookmarked": false,
                         "isMember": true,
                         "access": [
@@ -45848,82 +45848,6 @@
                         "hasInsightsLlmMonitoring": false,
                         "platform": "node-express",
                         "platforms": [],
-                        "latestRelease": null,
-                        "hasUserReports": false,
-                        "latestDeploys": null
-                      },
-                      {
-                        "team": {
-                          "id": "2349234102",
-                          "name": "Prime Mover",
-                          "slug": "prime-mover"
-                        },
-                        "teams": [
-                          {
-                            "id": "2349234102",
-                            "name": "Prime Mover",
-                            "slug": "prime-mover"
-                          }
-                        ],
-                        "id": "1829334501859481",
-                        "name": "Pump Station",
-                        "slug": "pump-station",
-                        "isBookmarked": false,
-                        "isMember": true,
-                        "access": [
-                          "project:read",
-                          "event:read",
-                          "team:read",
-                          "alerts:read",
-                          "org:read",
-                          "event:write",
-                          "project:releases",
-                          "member:read"
-                        ],
-                        "hasAccess": true,
-                        "dateCreated": "2023-03-29T15:21:49.943746Z",
-                        "environments": [
-                          "production"
-                        ],
-                        "eventProcessing": {
-                          "symbolicationDegraded": false
-                        },
-                        "features": [
-                          "alert-filters",
-                          "custom-inbound-filters",
-                          "data-forwarding",
-                          "discard-groups",
-                          "minidump",
-                          "rate-limits",
-                          "servicehooks",
-                          "similarity-indexing",
-                          "similarity-indexing-v2",
-                          "similarity-view",
-                          "similarity-view-v2"
-                        ],
-                        "firstEvent": "2023-04-05T21:02:08.054000Z",
-                        "firstTransactionEvent": false,
-                        "hasSessions": false,
-                        "hasProfiles": false,
-                        "hasReplays": false,
-                        "hasFlags": false,
-                        "hasMonitors": false,
-                        "hasFeedbacks": false,
-                        "hasNewFeedbacks": false,
-                        "hasMinifiedStackTrace": true,
-                        "hasInsightsHttp": false,
-                        "hasInsightsDb": false,
-                        "hasInsightsAssets": false,
-                        "hasInsightsAppStart": false,
-                        "hasInsightsScreenLoad": false,
-                        "hasInsightsVitals": false,
-                        "hasInsightsCaches": false,
-                        "hasInsightsQueues": false,
-                        "hasInsightsLlmMonitoring": true,
-                        "platform": "javascript",
-                        "platforms": [
-                          "javascript"
-                        ],
                         "latestRelease": null,
                         "hasUserReports": false,
                         "latestDeploys": null
@@ -46021,6 +45945,20 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "latestDeploys": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "options": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
                     "stats": {},
                     "transactionStats": {},
                     "sessionStats": {},
@@ -46121,40 +46059,92 @@
                     "hasInsightsLlmMonitoring": {
                       "type": "boolean"
                     },
-                    "isInternal": {
-                      "type": "boolean"
-                    },
-                    "isPublic": {
-                      "type": "boolean"
-                    },
-                    "avatar": {
+                    "team": {
                       "type": "object",
                       "properties": {
-                        "avatarType": {
+                        "id": {
                           "type": "string"
                         },
-                        "avatarUuid": {
-                          "type": "string",
-                          "nullable": true
+                        "name": {
+                          "type": "string"
                         },
-                        "avatarUrl": {
-                          "type": "string",
-                          "nullable": true
+                        "slug": {
+                          "type": "string"
                         }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug"
+                      ],
+                      "nullable": true
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ]
                       }
                     },
-                    "color": {
-                      "type": "string"
+                    "eventProcessing": {
+                      "type": "object",
+                      "properties": {
+                        "symbolicationDegraded": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "symbolicationDegraded"
+                      ]
                     },
-                    "status": {
-                      "type": "string"
+                    "platforms": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasUserReports": {
+                      "type": "boolean"
+                    },
+                    "environments": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "latestRelease": {
+                      "type": "object",
+                      "properties": {
+                        "version": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "version"
+                      ],
+                      "nullable": true
                     }
                   },
                   "required": [
                     "access",
-                    "avatar",
-                    "color",
                     "dateCreated",
+                    "environments",
+                    "eventProcessing",
                     "features",
                     "firstEvent",
                     "firstTransactionEvent",
@@ -46176,27 +46166,62 @@
                     "hasProfiles",
                     "hasReplays",
                     "hasSessions",
+                    "hasUserReports",
                     "id",
                     "isBookmarked",
-                    "isInternal",
                     "isMember",
-                    "isPublic",
+                    "latestRelease",
                     "name",
                     "platform",
+                    "platforms",
                     "slug",
-                    "status"
+                    "team",
+                    "teams"
                   ]
                 },
                 "examples": {
                   "ProjectSuccessfullyCreated": {
                     "value": {
-                      "id": "4505321021243392",
+                      "team": {
+                        "id": "2349234102",
+                        "name": "Prime Mover",
+                        "slug": "prime-mover"
+                      },
+                      "teams": [
+                        {
+                          "id": "2349234102",
+                          "name": "Prime Mover",
+                          "slug": "prime-mover"
+                        },
+                        {
+                          "id": "47584447",
+                          "name": "Powerful Abolitionist",
+                          "slug": "powerful-abolitionist"
+                        }
+                      ],
+                      "id": "6758470122493650",
                       "slug": "the-spoiled-yoghurt",
                       "name": "The Spoiled Yoghurt",
-                      "platform": "python",
-                      "dateCreated": "2023-06-08T00:13:06.004534Z",
                       "isBookmarked": false,
                       "isMember": true,
+                      "access": [
+                        "project:read",
+                        "event:read",
+                        "team:read",
+                        "alerts:read",
+                        "org:read",
+                        "event:write",
+                        "project:releases",
+                        "member:read"
+                      ],
+                      "hasAccess": true,
+                      "dateCreated": "2023-03-29T15:25:21.344565Z",
+                      "environments": [
+                        "production"
+                      ],
+                      "eventProcessing": {
+                        "symbolicationDegraded": false
+                      },
                       "features": [
                         "alert-filters",
                         "custom-inbound-filters",
@@ -46211,50 +46236,29 @@
                         "similarity-view-v2"
                       ],
                       "firstEvent": null,
-                      "firstTransactionEvent": false,
-                      "access": [
-                        "member:read",
-                        "event:read",
-                        "project:admin",
-                        "team:write",
-                        "project:write",
-                        "team:admin",
-                        "project:read",
-                        "org:integrations",
-                        "org:read",
-                        "project:releases",
-                        "team:read",
-                        "alerts:write",
-                        "event:admin",
-                        "event:write",
-                        "alerts:read"
-                      ],
-                      "hasAccess": true,
-                      "hasMinifiedStackTrace": false,
-                      "hasFeedbacks": false,
-                      "hasMonitors": false,
-                      "hasNewFeedbacks": false,
+                      "firstTransactionEvent": true,
+                      "hasSessions": false,
                       "hasProfiles": false,
                       "hasReplays": false,
                       "hasFlags": false,
-                      "hasSessions": false,
+                      "hasMonitors": false,
+                      "hasFeedbacks": false,
+                      "hasNewFeedbacks": false,
+                      "hasMinifiedStackTrace": false,
                       "hasInsightsHttp": true,
                       "hasInsightsDb": false,
-                      "hasInsightsAssets": true,
+                      "hasInsightsAssets": false,
                       "hasInsightsAppStart": false,
                       "hasInsightsScreenLoad": false,
                       "hasInsightsVitals": false,
-                      "hasInsightsCaches": false,
-                      "hasInsightsQueues": false,
+                      "hasInsightsCaches": true,
+                      "hasInsightsQueues": true,
                       "hasInsightsLlmMonitoring": false,
-                      "isInternal": false,
-                      "isPublic": false,
-                      "avatar": {
-                        "avatarType": "letter_avatar",
-                        "avatarUuid": null
-                      },
-                      "color": "#3f70bf",
-                      "status": "active"
+                      "platform": "node-express",
+                      "platforms": [],
+                      "latestRelease": null,
+                      "hasUserReports": false,
+                      "latestDeploys": null
                     },
                     "summary": "Project successfully created"
                   }
@@ -74641,175 +74645,6 @@
         "type": "object",
         "additionalProperties": {}
       },
-      "Project": {
-        "type": "object",
-        "properties": {
-          "stats": {},
-          "transactionStats": {},
-          "sessionStats": {},
-          "id": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "platform": {
-            "type": "string",
-            "nullable": true
-          },
-          "dateCreated": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "isBookmarked": {
-            "type": "boolean"
-          },
-          "isMember": {
-            "type": "boolean"
-          },
-          "features": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "firstEvent": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "firstTransactionEvent": {
-            "type": "boolean"
-          },
-          "access": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "hasAccess": {
-            "type": "boolean"
-          },
-          "hasFeedbacks": {
-            "type": "boolean"
-          },
-          "hasFlags": {
-            "type": "boolean"
-          },
-          "hasMinifiedStackTrace": {
-            "type": "boolean"
-          },
-          "hasMonitors": {
-            "type": "boolean"
-          },
-          "hasNewFeedbacks": {
-            "type": "boolean"
-          },
-          "hasProfiles": {
-            "type": "boolean"
-          },
-          "hasReplays": {
-            "type": "boolean"
-          },
-          "hasSessions": {
-            "type": "boolean"
-          },
-          "hasInsightsHttp": {
-            "type": "boolean"
-          },
-          "hasInsightsDb": {
-            "type": "boolean"
-          },
-          "hasInsightsAssets": {
-            "type": "boolean"
-          },
-          "hasInsightsAppStart": {
-            "type": "boolean"
-          },
-          "hasInsightsScreenLoad": {
-            "type": "boolean"
-          },
-          "hasInsightsVitals": {
-            "type": "boolean"
-          },
-          "hasInsightsCaches": {
-            "type": "boolean"
-          },
-          "hasInsightsQueues": {
-            "type": "boolean"
-          },
-          "hasInsightsLlmMonitoring": {
-            "type": "boolean"
-          },
-          "isInternal": {
-            "type": "boolean"
-          },
-          "isPublic": {
-            "type": "boolean"
-          },
-          "avatar": {
-            "type": "object",
-            "properties": {
-              "avatarType": {
-                "type": "string"
-              },
-              "avatarUuid": {
-                "type": "string",
-                "nullable": true
-              },
-              "avatarUrl": {
-                "type": "string",
-                "nullable": true
-              }
-            }
-          },
-          "color": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "access",
-          "avatar",
-          "color",
-          "dateCreated",
-          "features",
-          "firstEvent",
-          "firstTransactionEvent",
-          "hasAccess",
-          "hasFeedbacks",
-          "hasFlags",
-          "hasInsightsAppStart",
-          "hasInsightsAssets",
-          "hasInsightsCaches",
-          "hasInsightsDb",
-          "hasInsightsHttp",
-          "hasInsightsLlmMonitoring",
-          "hasInsightsQueues",
-          "hasInsightsScreenLoad",
-          "hasInsightsVitals",
-          "hasMinifiedStackTrace",
-          "hasMonitors",
-          "hasNewFeedbacks",
-          "hasProfiles",
-          "hasReplays",
-          "hasSessions",
-          "id",
-          "isBookmarked",
-          "isInternal",
-          "isMember",
-          "isPublic",
-          "name",
-          "platform",
-          "slug",
-          "status"
-        ]
-      },
       "ProjectAdmin": {
         "type": "object",
         "properties": {
@@ -75451,6 +75286,243 @@
           "conditions",
           "frequency",
           "name"
+        ]
+      },
+      "ProjectSummary": {
+        "type": "object",
+        "properties": {
+          "latestDeploys": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "options": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "stats": {},
+          "transactionStats": {},
+          "sessionStats": {},
+          "id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isBookmarked": {
+            "type": "boolean"
+          },
+          "isMember": {
+            "type": "boolean"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "firstEvent": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "firstTransactionEvent": {
+            "type": "boolean"
+          },
+          "access": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hasAccess": {
+            "type": "boolean"
+          },
+          "hasFeedbacks": {
+            "type": "boolean"
+          },
+          "hasFlags": {
+            "type": "boolean"
+          },
+          "hasMinifiedStackTrace": {
+            "type": "boolean"
+          },
+          "hasMonitors": {
+            "type": "boolean"
+          },
+          "hasNewFeedbacks": {
+            "type": "boolean"
+          },
+          "hasProfiles": {
+            "type": "boolean"
+          },
+          "hasReplays": {
+            "type": "boolean"
+          },
+          "hasSessions": {
+            "type": "boolean"
+          },
+          "hasInsightsHttp": {
+            "type": "boolean"
+          },
+          "hasInsightsDb": {
+            "type": "boolean"
+          },
+          "hasInsightsAssets": {
+            "type": "boolean"
+          },
+          "hasInsightsAppStart": {
+            "type": "boolean"
+          },
+          "hasInsightsScreenLoad": {
+            "type": "boolean"
+          },
+          "hasInsightsVitals": {
+            "type": "boolean"
+          },
+          "hasInsightsCaches": {
+            "type": "boolean"
+          },
+          "hasInsightsQueues": {
+            "type": "boolean"
+          },
+          "hasInsightsLlmMonitoring": {
+            "type": "boolean"
+          },
+          "team": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "slug"
+            ],
+            "nullable": true
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "slug"
+              ]
+            }
+          },
+          "eventProcessing": {
+            "type": "object",
+            "properties": {
+              "symbolicationDegraded": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "symbolicationDegraded"
+            ]
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hasUserReports": {
+            "type": "boolean"
+          },
+          "environments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "latestRelease": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "version"
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "access",
+          "dateCreated",
+          "environments",
+          "eventProcessing",
+          "features",
+          "firstEvent",
+          "firstTransactionEvent",
+          "hasAccess",
+          "hasFeedbacks",
+          "hasFlags",
+          "hasInsightsAppStart",
+          "hasInsightsAssets",
+          "hasInsightsCaches",
+          "hasInsightsDb",
+          "hasInsightsHttp",
+          "hasInsightsLlmMonitoring",
+          "hasInsightsQueues",
+          "hasInsightsScreenLoad",
+          "hasInsightsVitals",
+          "hasMinifiedStackTrace",
+          "hasMonitors",
+          "hasNewFeedbacks",
+          "hasProfiles",
+          "hasReplays",
+          "hasSessions",
+          "hasUserReports",
+          "id",
+          "isBookmarked",
+          "isMember",
+          "latestRelease",
+          "name",
+          "platform",
+          "platforms",
+          "slug",
+          "team",
+          "teams"
         ]
       },
       "ProjectTeamsResponse": {
