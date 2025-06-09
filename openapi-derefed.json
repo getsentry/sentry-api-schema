@@ -29673,6 +29673,148 @@
         }
       }
     },
+    "/api/0/prevent/owner/{owner}/repository/{repository}/test-results/": {
+      "get": {
+        "operationId": "Retrieve a paginated list of test results for a given repository and owner",
+        "description": "Retrieves the list of test results for a given repository and owner. Also accepts a number of query parameters to filter the results.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repository",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the repository.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for test results response including pagination metadata",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Serializer for individual test result nodes from GraphQL response",
+                        "properties": {
+                          "updatedAt": {
+                            "type": "string"
+                          },
+                          "avgDuration": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "failureRate": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "flakeRate": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "commitsFailed": {
+                            "type": "integer"
+                          },
+                          "totalFailCount": {
+                            "type": "integer"
+                          },
+                          "totalFlakyFailCount": {
+                            "type": "integer"
+                          },
+                          "totalSkipCount": {
+                            "type": "integer"
+                          },
+                          "totalPassCount": {
+                            "type": "integer"
+                          },
+                          "lastDuration": {
+                            "type": "number",
+                            "format": "double"
+                          }
+                        },
+                        "required": [
+                          "avgDuration",
+                          "commitsFailed",
+                          "failureRate",
+                          "flakeRate",
+                          "lastDuration",
+                          "name",
+                          "totalFailCount",
+                          "totalFlakyFailCount",
+                          "totalPassCount",
+                          "totalSkipCount",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "pageInfo": {
+                      "type": "object",
+                      "description": "Serializer for pagination information",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "hasNextPage": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "endCursor",
+                        "hasNextPage"
+                      ]
+                    },
+                    "totalCount": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "pageInfo",
+                    "results",
+                    "totalCount"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/": {
       "get": {
         "operationId": "Retrieve a Project",
@@ -74834,6 +74976,23 @@
         "type": "object",
         "additionalProperties": {}
       },
+      "PageInfo": {
+        "type": "object",
+        "description": "Serializer for pagination information",
+        "properties": {
+          "endCursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "endCursor",
+          "hasNextPage"
+        ]
+      },
       "ProjectAdmin": {
         "type": "object",
         "properties": {
@@ -78155,6 +78314,152 @@
           "schemas"
         ]
       },
+      "TestResult": {
+        "type": "object",
+        "description": "Serializer for test results response including pagination metadata",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Serializer for individual test result nodes from GraphQL response",
+              "properties": {
+                "updatedAt": {
+                  "type": "string"
+                },
+                "avgDuration": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "failureRate": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "flakeRate": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "commitsFailed": {
+                  "type": "integer"
+                },
+                "totalFailCount": {
+                  "type": "integer"
+                },
+                "totalFlakyFailCount": {
+                  "type": "integer"
+                },
+                "totalSkipCount": {
+                  "type": "integer"
+                },
+                "totalPassCount": {
+                  "type": "integer"
+                },
+                "lastDuration": {
+                  "type": "number",
+                  "format": "double"
+                }
+              },
+              "required": [
+                "avgDuration",
+                "commitsFailed",
+                "failureRate",
+                "flakeRate",
+                "lastDuration",
+                "name",
+                "totalFailCount",
+                "totalFlakyFailCount",
+                "totalPassCount",
+                "totalSkipCount",
+                "updatedAt"
+              ]
+            }
+          },
+          "pageInfo": {
+            "type": "object",
+            "description": "Serializer for pagination information",
+            "properties": {
+              "endCursor": {
+                "type": "string",
+                "nullable": true
+              },
+              "hasNextPage": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "endCursor",
+              "hasNextPage"
+            ]
+          },
+          "totalCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pageInfo",
+          "results",
+          "totalCount"
+        ]
+      },
+      "TestResultNode": {
+        "type": "object",
+        "description": "Serializer for individual test result nodes from GraphQL response",
+        "properties": {
+          "updatedAt": {
+            "type": "string"
+          },
+          "avgDuration": {
+            "type": "number",
+            "format": "double"
+          },
+          "name": {
+            "type": "string"
+          },
+          "failureRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "flakeRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "commitsFailed": {
+            "type": "integer"
+          },
+          "totalFailCount": {
+            "type": "integer"
+          },
+          "totalFlakyFailCount": {
+            "type": "integer"
+          },
+          "totalSkipCount": {
+            "type": "integer"
+          },
+          "totalPassCount": {
+            "type": "integer"
+          },
+          "lastDuration": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "avgDuration",
+          "commitsFailed",
+          "failureRate",
+          "flakeRate",
+          "lastDuration",
+          "name",
+          "totalFailCount",
+          "totalFlakyFailCount",
+          "totalPassCount",
+          "totalSkipCount",
+          "updatedAt"
+        ]
+      },
       "UpdateClientKey": {
         "type": "object",
         "properties": {
@@ -78442,6 +78747,16 @@
       "externalDocs": {
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Prevent",
+      "x-sidebar-name": "Prevent",
+      "description": "Endpoints for Prevent",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/prevent/&template=api_error_template.md"
       }
     }
   ]
