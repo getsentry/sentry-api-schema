@@ -29815,6 +29815,106 @@
         }
       }
     },
+    "/api/0/prevent/owner/{owner}/repository/{repository}/test-results-aggregates/": {
+      "get": {
+        "operationId": "Retrieves aggregated test result metrics for a given repository and owner",
+        "description": "Retrieves aggregated test result metrics for a given repository and owner.\nAlso accepts a query parameter to specify the time period for the metrics.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repository",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the repository.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for test results aggregates response",
+                  "properties": {
+                    "totalDuration": {
+                      "type": "integer"
+                    },
+                    "totalDurationPercentChange": {
+                      "type": "integer"
+                    },
+                    "slowestTestsDuration": {
+                      "type": "integer"
+                    },
+                    "slowestTestsDurationPercentChange": {
+                      "type": "integer"
+                    },
+                    "totalSlowTests": {
+                      "type": "integer"
+                    },
+                    "totalSlowTestsPercentChange": {
+                      "type": "integer"
+                    },
+                    "totalFails": {
+                      "type": "integer"
+                    },
+                    "totalFailsPercentChange": {
+                      "type": "integer"
+                    },
+                    "totalSkips": {
+                      "type": "integer"
+                    },
+                    "totalSkipsPercentChange": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "slowestTestsDuration",
+                    "slowestTestsDurationPercentChange",
+                    "totalDuration",
+                    "totalDurationPercentChange",
+                    "totalFails",
+                    "totalFailsPercentChange",
+                    "totalSkips",
+                    "totalSkipsPercentChange",
+                    "totalSlowTests",
+                    "totalSlowTestsPercentChange"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/": {
       "get": {
         "operationId": "Retrieve a Project",
@@ -78402,6 +78502,54 @@
           "pageInfo",
           "results",
           "totalCount"
+        ]
+      },
+      "TestResultAggregates": {
+        "type": "object",
+        "description": "Serializer for test results aggregates response",
+        "properties": {
+          "totalDuration": {
+            "type": "integer"
+          },
+          "totalDurationPercentChange": {
+            "type": "integer"
+          },
+          "slowestTestsDuration": {
+            "type": "integer"
+          },
+          "slowestTestsDurationPercentChange": {
+            "type": "integer"
+          },
+          "totalSlowTests": {
+            "type": "integer"
+          },
+          "totalSlowTestsPercentChange": {
+            "type": "integer"
+          },
+          "totalFails": {
+            "type": "integer"
+          },
+          "totalFailsPercentChange": {
+            "type": "integer"
+          },
+          "totalSkips": {
+            "type": "integer"
+          },
+          "totalSkipsPercentChange": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "slowestTestsDuration",
+          "slowestTestsDurationPercentChange",
+          "totalDuration",
+          "totalDurationPercentChange",
+          "totalFails",
+          "totalFailsPercentChange",
+          "totalSkips",
+          "totalSkipsPercentChange",
+          "totalSlowTests",
+          "totalSlowTestsPercentChange"
         ]
       },
       "TestResultNode": {
