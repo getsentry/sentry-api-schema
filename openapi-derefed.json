@@ -29886,6 +29886,14 @@
             },
             "description": "The name of the repository.",
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The time interval to search for results by.\n\nAvailable fields are:\n- `INTERVAL_30_DAY`\n- `INTERVAL_7_DAY`\n- `INTERVAL_1_DAY`\n"
           }
         ],
         "tags": [
@@ -29940,9 +29948,28 @@
                     "totalSkipsPercentChange": {
                       "type": "number",
                       "format": "double"
+                    },
+                    "flakeCount": {
+                      "type": "integer"
+                    },
+                    "flakeCountPercentChange": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "flakeRate": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "flakeRatePercentChange": {
+                      "type": "number",
+                      "format": "double"
                     }
                   },
                   "required": [
+                    "flakeCount",
+                    "flakeCountPercentChange",
+                    "flakeRate",
+                    "flakeRatePercentChange",
                     "slowestTestsDuration",
                     "slowestTestsDurationPercentChange",
                     "totalDuration",
@@ -78768,9 +78795,28 @@
           "totalSkipsPercentChange": {
             "type": "number",
             "format": "double"
+          },
+          "flakeCount": {
+            "type": "integer"
+          },
+          "flakeCountPercentChange": {
+            "type": "number",
+            "format": "double"
+          },
+          "flakeRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "flakeRatePercentChange": {
+            "type": "number",
+            "format": "double"
           }
         },
         "required": [
+          "flakeCount",
+          "flakeCountPercentChange",
+          "flakeRate",
+          "flakeRatePercentChange",
           "slowestTestsDuration",
           "slowestTestsDurationPercentChange",
           "totalDuration",
