@@ -29695,6 +29695,55 @@
             },
             "description": "The name of the repository.",
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The property to sort results by. If not specified, all results are returned. Use `-`\n        for descending order.\n\nAvailable fields are:\n- `AVG_DURATION`\n- `FLAKE_RATE`\n- `FAILURE_RATE`\n- `COMMITS_WHERE_FAIL`\n- `UPDATED_AT`\n        "
+          },
+          {
+            "in": "query",
+            "name": "filterBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An optional field to filter by, which will constrain the results to only include tests that match the filter.\n\nAvailable fields are:\n- `FLAKY_TESTS`\n- `FAILED_TESTS`\n- `SLOWEST_TESTS`\n- `SKIPPED_TESTS`\n        "
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The time interval to search for results by.\n\nAvailable fields are:\n- `INTERVAL_30_DAY`\n- `INTERVAL_7_DAY`\n- `INTERVAL_1_DAY`\n"
+          },
+          {
+            "in": "query",
+            "name": "branch",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The branch to search for results by. If not specified, the default branch is returned.\n        "
+          },
+          {
+            "in": "query",
+            "name": "first",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "The number of results to return from the start of the list."
+          },
+          {
+            "in": "query",
+            "name": "last",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of results to return from the end of the list."
           }
         ],
         "tags": [
