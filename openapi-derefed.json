@@ -29675,7 +29675,7 @@
     },
     "/api/0/prevent/owner/{owner}/repository/{repository}/test-results/": {
       "get": {
-        "operationId": "Retrieve a paginated list of test results for a given repository and owner",
+        "operationId": "Retrieve paginated list of test results for repository and owner",
         "description": "Retrieves the list of test results for a given repository and owner. Also accepts a number of query parameters to filter the results.",
         "parameters": [
           {
@@ -29744,6 +29744,14 @@
               "type": "integer"
             },
             "description": "The number of results to return from the end of the list."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The cursor to start the query from. Will return results after the cursor if used with `first` or before the cursor if used with `last`.\n        "
           }
         ],
         "tags": [
@@ -29866,7 +29874,7 @@
     },
     "/api/0/prevent/owner/{owner}/repository/{repository}/test-results-aggregates/": {
       "get": {
-        "operationId": "Retrieves aggregated test result metrics for a given repository and owner",
+        "operationId": "Retrieve aggregated test result metrics for repository and owner",
         "description": "Retrieves aggregated test result metrics for a given repository and owner.\nAlso accepts a query parameter to specify the time period for the metrics.",
         "parameters": [
           {
