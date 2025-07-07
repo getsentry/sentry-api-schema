@@ -24825,6 +24825,641 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/repos/{repo_id}/commits/": {
+      "get": {
+        "operationId": "List a Repository's Commits",
+        "description": "List a Repository's Commits",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repo_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The repository ID.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "pullRequest": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "message": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "repository": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "provider": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "dateCreated": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "integrationId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "externalSlug": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "externalId": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "dateCreated",
+                              "externalId",
+                              "externalSlug",
+                              "id",
+                              "integrationId",
+                              "name",
+                              "provider",
+                              "status",
+                              "url"
+                            ]
+                          },
+                          "author": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "identities": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "organization": {
+                                          "type": "object",
+                                          "properties": {
+                                            "slug": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "name",
+                                            "slug"
+                                          ]
+                                        },
+                                        "provider": {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "name"
+                                          ]
+                                        },
+                                        "dateVerified": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        },
+                                        "dateSynced": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        }
+                                      },
+                                      "required": [
+                                        "dateSynced",
+                                        "dateVerified",
+                                        "id",
+                                        "name",
+                                        "organization",
+                                        "provider"
+                                      ]
+                                    }
+                                  },
+                                  "avatar": {
+                                    "type": "object",
+                                    "properties": {
+                                      "avatarType": {
+                                        "type": "string"
+                                      },
+                                      "avatarUuid": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "avatarUrl": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  },
+                                  "authenticators": {
+                                    "type": "array",
+                                    "items": {}
+                                  },
+                                  "canReset2fa": {
+                                    "type": "boolean"
+                                  },
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "avatarUrl": {
+                                    "type": "string"
+                                  },
+                                  "isActive": {
+                                    "type": "boolean"
+                                  },
+                                  "hasPasswordAuth": {
+                                    "type": "boolean"
+                                  },
+                                  "isManaged": {
+                                    "type": "boolean"
+                                  },
+                                  "dateJoined": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "lastLogin": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": true
+                                  },
+                                  "has2fa": {
+                                    "type": "boolean"
+                                  },
+                                  "lastActive": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": true
+                                  },
+                                  "isSuperuser": {
+                                    "type": "boolean"
+                                  },
+                                  "isStaff": {
+                                    "type": "boolean"
+                                  },
+                                  "experiments": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                  },
+                                  "emails": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "email": {
+                                          "type": "string"
+                                        },
+                                        "is_verified": {
+                                          "type": "boolean"
+                                        }
+                                      },
+                                      "required": [
+                                        "email",
+                                        "id",
+                                        "is_verified"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "avatarUrl",
+                                  "dateJoined",
+                                  "email",
+                                  "emails",
+                                  "experiments",
+                                  "has2fa",
+                                  "hasPasswordAuth",
+                                  "id",
+                                  "isActive",
+                                  "isManaged",
+                                  "isStaff",
+                                  "isSuperuser",
+                                  "lastActive",
+                                  "lastLogin",
+                                  "name",
+                                  "username"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "email",
+                                  "name"
+                                ]
+                              }
+                            ]
+                          },
+                          "externalUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "author",
+                          "dateCreated",
+                          "externalUrl",
+                          "id",
+                          "message",
+                          "repository",
+                          "title"
+                        ],
+                        "nullable": true
+                      },
+                      "suspectCommitType": {
+                        "type": "string"
+                      },
+                      "repository": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "provider": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "integrationId": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "externalSlug": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "externalId": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "dateCreated",
+                          "externalId",
+                          "externalSlug",
+                          "id",
+                          "integrationId",
+                          "name",
+                          "provider",
+                          "status",
+                          "url"
+                        ]
+                      },
+                      "author": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "identities": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "organization": {
+                                      "type": "object",
+                                      "properties": {
+                                        "slug": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "name",
+                                        "slug"
+                                      ]
+                                    },
+                                    "provider": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "name"
+                                      ]
+                                    },
+                                    "dateVerified": {
+                                      "type": "string",
+                                      "format": "date-time"
+                                    },
+                                    "dateSynced": {
+                                      "type": "string",
+                                      "format": "date-time"
+                                    }
+                                  },
+                                  "required": [
+                                    "dateSynced",
+                                    "dateVerified",
+                                    "id",
+                                    "name",
+                                    "organization",
+                                    "provider"
+                                  ]
+                                }
+                              },
+                              "avatar": {
+                                "type": "object",
+                                "properties": {
+                                  "avatarType": {
+                                    "type": "string"
+                                  },
+                                  "avatarUuid": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "avatarUrl": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                }
+                              },
+                              "authenticators": {
+                                "type": "array",
+                                "items": {}
+                              },
+                              "canReset2fa": {
+                                "type": "boolean"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "avatarUrl": {
+                                "type": "string"
+                              },
+                              "isActive": {
+                                "type": "boolean"
+                              },
+                              "hasPasswordAuth": {
+                                "type": "boolean"
+                              },
+                              "isManaged": {
+                                "type": "boolean"
+                              },
+                              "dateJoined": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "lastLogin": {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              },
+                              "has2fa": {
+                                "type": "boolean"
+                              },
+                              "lastActive": {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              },
+                              "isSuperuser": {
+                                "type": "boolean"
+                              },
+                              "isStaff": {
+                                "type": "boolean"
+                              },
+                              "experiments": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              },
+                              "emails": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "email": {
+                                      "type": "string"
+                                    },
+                                    "is_verified": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "email",
+                                    "id",
+                                    "is_verified"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "avatarUrl",
+                              "dateJoined",
+                              "email",
+                              "emails",
+                              "experiments",
+                              "has2fa",
+                              "hasPasswordAuth",
+                              "id",
+                              "isActive",
+                              "isManaged",
+                              "isStaff",
+                              "isSuperuser",
+                              "lastActive",
+                              "lastLogin",
+                              "name",
+                              "username"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "email": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "name"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "message",
+                      "pullRequest",
+                      "suspectCommitType"
+                    ]
+                  }
+                },
+                "examples": {
+                  "RepositoryCommits": {
+                    "value": [
+                      {
+                        "dateCreated": "2018-11-06T21:19:58.536Z",
+                        "id": "acbafc639127fd89d10f474520104517ff1d709e",
+                        "message": "Initial commit from Create Next App",
+                        "suspectCommitType": "",
+                        "pullRequest": null
+                      }
+                    ],
+                    "summary": "Repository Commits"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups": {
       "get": {
         "operationId": "List an Organization's Paginated Teams",
@@ -48276,91 +48911,6 @@
         ]
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/repos/{repo_id}/commits/": {
-      "get": {
-        "tags": [
-          "Organizations"
-        ],
-        "description": "Return a list of commits for a given repository.",
-        "operationId": "List a Repository's Commits",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The organization short name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "repo_id",
-            "in": "path",
-            "description": "The repository ID.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "dateCreated",
-                      "id",
-                      "message"
-                    ],
-                    "properties": {
-                      "dateCreated": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "nullable": true
-                      }
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "dateCreated": "2018-11-06T21:19:58.536Z",
-                    "id": "acbafc639127fd89d10f474520104517ff1d709e",
-                    "message": "Initial commit from Create Next App"
-                  }
-                ]
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "org: read"
-            ]
-          }
-        ]
-      }
-    },
     "/api/0/projects/": {
       "get": {
         "tags": [
@@ -59157,6 +59707,568 @@
           "path",
           "type"
         ]
+      },
+      "CommitSerializerResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string",
+              "nullable": true
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "pullRequest": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "dateCreated": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "repository": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "provider": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "integrationId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "externalSlug": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "externalId": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "externalId",
+                    "externalSlug",
+                    "id",
+                    "integrationId",
+                    "name",
+                    "provider",
+                    "status",
+                    "url"
+                  ]
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "email",
+                        "name"
+                      ]
+                    }
+                  ]
+                },
+                "externalUrl": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "author",
+                "dateCreated",
+                "externalUrl",
+                "id",
+                "message",
+                "repository",
+                "title"
+              ],
+              "nullable": true
+            },
+            "suspectCommitType": {
+              "type": "string"
+            },
+            "repository": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "provider": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string"
+                },
+                "dateCreated": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "integrationId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "externalSlug": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "externalId": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "dateCreated",
+                "externalId",
+                "externalSlug",
+                "id",
+                "integrationId",
+                "name",
+                "provider",
+                "status",
+                "url"
+              ]
+            },
+            "author": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "identities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "organization": {
+                            "type": "object",
+                            "properties": {
+                              "slug": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "slug"
+                            ]
+                          },
+                          "provider": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name"
+                            ]
+                          },
+                          "dateVerified": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "dateSynced": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "dateSynced",
+                          "dateVerified",
+                          "id",
+                          "name",
+                          "organization",
+                          "provider"
+                        ]
+                      }
+                    },
+                    "avatar": {
+                      "type": "object",
+                      "properties": {
+                        "avatarType": {
+                          "type": "string"
+                        },
+                        "avatarUuid": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "avatarUrl": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "authenticators": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "canReset2fa": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "avatarUrl": {
+                      "type": "string"
+                    },
+                    "isActive": {
+                      "type": "boolean"
+                    },
+                    "hasPasswordAuth": {
+                      "type": "boolean"
+                    },
+                    "isManaged": {
+                      "type": "boolean"
+                    },
+                    "dateJoined": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "lastLogin": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "has2fa": {
+                      "type": "boolean"
+                    },
+                    "lastActive": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "isSuperuser": {
+                      "type": "boolean"
+                    },
+                    "isStaff": {
+                      "type": "boolean"
+                    },
+                    "experiments": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "emails": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "is_verified": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "email",
+                          "id",
+                          "is_verified"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "avatarUrl",
+                    "dateJoined",
+                    "email",
+                    "emails",
+                    "experiments",
+                    "has2fa",
+                    "hasPasswordAuth",
+                    "id",
+                    "isActive",
+                    "isManaged",
+                    "isStaff",
+                    "isSuperuser",
+                    "lastActive",
+                    "lastLogin",
+                    "name",
+                    "username"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email",
+                    "name"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "dateCreated",
+            "id",
+            "message",
+            "pullRequest",
+            "suspectCommitType"
+          ]
+        }
       },
       "ConfigValidator": {
         "type": "object",
