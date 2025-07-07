@@ -26675,756 +26675,6 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/shortids/{issue_id}/": {
-      "get": {
-        "operationId": "Resolve a Short ID",
-        "description": "Resolve a short ID to the project slug and group details.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID or slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "issue_id",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The short ID of the issue to resolve.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Organizations"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "event:admin",
-              "event:read",
-              "event:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "organizationSlug": {
-                      "type": "string"
-                    },
-                    "projectSlug": {
-                      "type": "string"
-                    },
-                    "groupId": {
-                      "type": "string"
-                    },
-                    "group": {
-                      "type": "object",
-                      "properties": {
-                        "isUnhandled": {
-                          "type": "boolean"
-                        },
-                        "count": {
-                          "type": "integer"
-                        },
-                        "userCount": {
-                          "type": "integer"
-                        },
-                        "firstSeen": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "lastSeen": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "id": {
-                          "type": "string"
-                        },
-                        "shareId": {
-                          "type": "string"
-                        },
-                        "shortId": {
-                          "type": "string"
-                        },
-                        "title": {
-                          "type": "string"
-                        },
-                        "culprit": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "permalink": {
-                          "type": "string"
-                        },
-                        "logger": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "level": {
-                          "type": "string"
-                        },
-                        "status": {
-                          "type": "string"
-                        },
-                        "statusDetails": {
-                          "type": "object",
-                          "properties": {
-                            "autoResolved": {
-                              "type": "boolean"
-                            },
-                            "ignoreCount": {
-                              "type": "integer"
-                            },
-                            "ignoreUntil": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "ignoreUserCount": {
-                              "type": "integer"
-                            },
-                            "ignoreUserWindow": {
-                              "type": "integer"
-                            },
-                            "ignoreWindow": {
-                              "type": "integer"
-                            },
-                            "actor": {
-                              "type": "object",
-                              "properties": {
-                                "identities": {
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "id": {
-                                        "type": "string"
-                                      },
-                                      "name": {
-                                        "type": "string"
-                                      },
-                                      "organization": {
-                                        "type": "object",
-                                        "properties": {
-                                          "slug": {
-                                            "type": "string"
-                                          },
-                                          "name": {
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "name",
-                                          "slug"
-                                        ]
-                                      },
-                                      "provider": {
-                                        "type": "object",
-                                        "properties": {
-                                          "id": {
-                                            "type": "string"
-                                          },
-                                          "name": {
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "id",
-                                          "name"
-                                        ]
-                                      },
-                                      "dateVerified": {
-                                        "type": "string",
-                                        "format": "date-time"
-                                      },
-                                      "dateSynced": {
-                                        "type": "string",
-                                        "format": "date-time"
-                                      }
-                                    },
-                                    "required": [
-                                      "dateSynced",
-                                      "dateVerified",
-                                      "id",
-                                      "name",
-                                      "organization",
-                                      "provider"
-                                    ]
-                                  }
-                                },
-                                "avatar": {
-                                  "type": "object",
-                                  "properties": {
-                                    "avatarType": {
-                                      "type": "string"
-                                    },
-                                    "avatarUuid": {
-                                      "type": "string",
-                                      "nullable": true
-                                    },
-                                    "avatarUrl": {
-                                      "type": "string",
-                                      "nullable": true
-                                    }
-                                  }
-                                },
-                                "authenticators": {
-                                  "type": "array",
-                                  "items": {}
-                                },
-                                "canReset2fa": {
-                                  "type": "boolean"
-                                },
-                                "id": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "username": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "avatarUrl": {
-                                  "type": "string"
-                                },
-                                "isActive": {
-                                  "type": "boolean"
-                                },
-                                "hasPasswordAuth": {
-                                  "type": "boolean"
-                                },
-                                "isManaged": {
-                                  "type": "boolean"
-                                },
-                                "dateJoined": {
-                                  "type": "string",
-                                  "format": "date-time"
-                                },
-                                "lastLogin": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "nullable": true
-                                },
-                                "has2fa": {
-                                  "type": "boolean"
-                                },
-                                "lastActive": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "nullable": true
-                                },
-                                "isSuperuser": {
-                                  "type": "boolean"
-                                },
-                                "isStaff": {
-                                  "type": "boolean"
-                                },
-                                "experiments": {
-                                  "type": "object",
-                                  "additionalProperties": {}
-                                },
-                                "emails": {
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "id": {
-                                        "type": "string"
-                                      },
-                                      "email": {
-                                        "type": "string"
-                                      },
-                                      "is_verified": {
-                                        "type": "boolean"
-                                      }
-                                    },
-                                    "required": [
-                                      "email",
-                                      "id",
-                                      "is_verified"
-                                    ]
-                                  }
-                                }
-                              },
-                              "required": [
-                                "avatarUrl",
-                                "dateJoined",
-                                "email",
-                                "emails",
-                                "experiments",
-                                "has2fa",
-                                "hasPasswordAuth",
-                                "id",
-                                "isActive",
-                                "isManaged",
-                                "isStaff",
-                                "isSuperuser",
-                                "lastActive",
-                                "lastLogin",
-                                "name",
-                                "username"
-                              ]
-                            },
-                            "inNextRelease": {
-                              "type": "boolean"
-                            },
-                            "inRelease": {
-                              "type": "string"
-                            },
-                            "inCommit": {
-                              "type": "string"
-                            },
-                            "pendingEvents": {
-                              "type": "integer"
-                            },
-                            "info": {}
-                          }
-                        },
-                        "substatus": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "isPublic": {
-                          "type": "boolean"
-                        },
-                        "platform": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "priority": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "priorityLockedAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "nullable": true
-                        },
-                        "seerFixabilityScore": {
-                          "type": "number",
-                          "format": "double",
-                          "nullable": true
-                        },
-                        "seerAutofixLastTriggered": {
-                          "type": "string",
-                          "format": "date-time",
-                          "nullable": true
-                        },
-                        "project": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "slug": {
-                              "type": "string"
-                            },
-                            "platform": {
-                              "type": "string",
-                              "nullable": true
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "name",
-                            "platform",
-                            "slug"
-                          ]
-                        },
-                        "type": {
-                          "type": "string"
-                        },
-                        "issueType": {
-                          "type": "string"
-                        },
-                        "issueCategory": {
-                          "type": "string"
-                        },
-                        "metadata": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        "numComments": {
-                          "type": "integer"
-                        },
-                        "assignedTo": {
-                          "type": "object",
-                          "properties": {
-                            "identities": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "type": "string"
-                                  },
-                                  "organization": {
-                                    "type": "object",
-                                    "properties": {
-                                      "slug": {
-                                        "type": "string"
-                                      },
-                                      "name": {
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "name",
-                                      "slug"
-                                    ]
-                                  },
-                                  "provider": {
-                                    "type": "object",
-                                    "properties": {
-                                      "id": {
-                                        "type": "string"
-                                      },
-                                      "name": {
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "id",
-                                      "name"
-                                    ]
-                                  },
-                                  "dateVerified": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                  },
-                                  "dateSynced": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                  }
-                                },
-                                "required": [
-                                  "dateSynced",
-                                  "dateVerified",
-                                  "id",
-                                  "name",
-                                  "organization",
-                                  "provider"
-                                ]
-                              }
-                            },
-                            "avatar": {
-                              "type": "object",
-                              "properties": {
-                                "avatarType": {
-                                  "type": "string"
-                                },
-                                "avatarUuid": {
-                                  "type": "string",
-                                  "nullable": true
-                                },
-                                "avatarUrl": {
-                                  "type": "string",
-                                  "nullable": true
-                                }
-                              }
-                            },
-                            "authenticators": {
-                              "type": "array",
-                              "items": {}
-                            },
-                            "canReset2fa": {
-                              "type": "boolean"
-                            },
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "username": {
-                              "type": "string"
-                            },
-                            "email": {
-                              "type": "string"
-                            },
-                            "avatarUrl": {
-                              "type": "string"
-                            },
-                            "isActive": {
-                              "type": "boolean"
-                            },
-                            "hasPasswordAuth": {
-                              "type": "boolean"
-                            },
-                            "isManaged": {
-                              "type": "boolean"
-                            },
-                            "dateJoined": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "lastLogin": {
-                              "type": "string",
-                              "format": "date-time",
-                              "nullable": true
-                            },
-                            "has2fa": {
-                              "type": "boolean"
-                            },
-                            "lastActive": {
-                              "type": "string",
-                              "format": "date-time",
-                              "nullable": true
-                            },
-                            "isSuperuser": {
-                              "type": "boolean"
-                            },
-                            "isStaff": {
-                              "type": "boolean"
-                            },
-                            "experiments": {
-                              "type": "object",
-                              "additionalProperties": {}
-                            },
-                            "emails": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "email": {
-                                    "type": "string"
-                                  },
-                                  "is_verified": {
-                                    "type": "boolean"
-                                  }
-                                },
-                                "required": [
-                                  "email",
-                                  "id",
-                                  "is_verified"
-                                ]
-                              }
-                            }
-                          },
-                          "required": [
-                            "avatarUrl",
-                            "dateJoined",
-                            "email",
-                            "emails",
-                            "experiments",
-                            "has2fa",
-                            "hasPasswordAuth",
-                            "id",
-                            "isActive",
-                            "isManaged",
-                            "isStaff",
-                            "isSuperuser",
-                            "lastActive",
-                            "lastLogin",
-                            "name",
-                            "username"
-                          ]
-                        },
-                        "isBookmarked": {
-                          "type": "boolean"
-                        },
-                        "isSubscribed": {
-                          "type": "boolean"
-                        },
-                        "subscriptionDetails": {
-                          "type": "object",
-                          "properties": {
-                            "disabled": {
-                              "type": "boolean"
-                            },
-                            "reason": {
-                              "type": "string"
-                            }
-                          },
-                          "nullable": true
-                        },
-                        "hasSeen": {
-                          "type": "boolean"
-                        },
-                        "annotations": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "displayName": {
-                                "type": "string"
-                              },
-                              "url": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "displayName",
-                              "url"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "annotations",
-                        "assignedTo",
-                        "culprit",
-                        "hasSeen",
-                        "id",
-                        "isBookmarked",
-                        "isPublic",
-                        "isSubscribed",
-                        "issueCategory",
-                        "issueType",
-                        "level",
-                        "logger",
-                        "metadata",
-                        "numComments",
-                        "permalink",
-                        "platform",
-                        "priority",
-                        "priorityLockedAt",
-                        "project",
-                        "seerAutofixLastTriggered",
-                        "seerFixabilityScore",
-                        "shareId",
-                        "shortId",
-                        "status",
-                        "statusDetails",
-                        "subscriptionDetails",
-                        "substatus",
-                        "title",
-                        "type"
-                      ]
-                    },
-                    "shortId": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "group",
-                    "groupId",
-                    "organizationSlug",
-                    "projectSlug",
-                    "shortId"
-                  ]
-                },
-                "examples": {
-                  "ShortIDLookup": {
-                    "value": {
-                      "group": {
-                        "annotations": [],
-                        "assignedTo": {
-                          "id": "1",
-                          "name": "John Doe",
-                          "username": "johndoe",
-                          "email": "john@example.com",
-                          "avatarUrl": "https://secure.gravatar.com/avatar/1234567890abcdef",
-                          "isActive": true,
-                          "hasPasswordAuth": true,
-                          "isManaged": false,
-                          "dateJoined": "2018-01-01T00:00:00Z",
-                          "lastLogin": "2023-12-01T10:00:00Z",
-                          "has2fa": false,
-                          "lastActive": "2023-12-01T10:00:00Z",
-                          "isSuperuser": false,
-                          "isStaff": false,
-                          "experiments": {},
-                          "emails": [
-                            {
-                              "id": "1",
-                              "email": "john@example.com",
-                              "is_verified": true
-                            }
-                          ],
-                          "avatar": {
-                            "avatarType": "letter_avatar",
-                            "avatarUuid": null,
-                            "avatarUrl": null
-                          }
-                        },
-                        "count": 1,
-                        "culprit": "raven.scripts.runner in main",
-                        "firstSeen": "2018-11-06T21:19:55Z",
-                        "hasSeen": false,
-                        "id": "1",
-                        "isBookmarked": false,
-                        "isPublic": false,
-                        "isSubscribed": true,
-                        "lastSeen": "2018-11-06T21:19:55Z",
-                        "level": "error",
-                        "logger": null,
-                        "metadata": {
-                          "title": "This is an example Python exception"
-                        },
-                        "numComments": 0,
-                        "permalink": "https://sentry.io/the-interstellar-jurisdiction/pump-station/issues/1/",
-                        "project": {
-                          "id": "2",
-                          "name": "Pump Station",
-                          "slug": "pump-station",
-                          "platform": "python"
-                        },
-                        "shareId": "abc123",
-                        "shortId": "PUMP-STATION-1",
-                        "status": "unresolved",
-                        "statusDetails": {},
-                        "subscriptionDetails": null,
-                        "title": "This is an example Python exception",
-                        "type": "default",
-                        "userCount": 0,
-                        "issueCategory": "error",
-                        "issueType": "error",
-                        "platform": "python",
-                        "priority": "medium",
-                        "priorityLockedAt": null,
-                        "seerFixabilityScore": 0.5,
-                        "seerAutofixLastTriggered": null,
-                        "substatus": "ongoing"
-                      },
-                      "groupId": "1",
-                      "organizationSlug": "the-interstellar-jurisdiction",
-                      "projectSlug": "pump-station",
-                      "shortId": "PUMP-STATION-1"
-                    },
-                    "summary": "Short ID Lookup"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/0/organizations/{organization_id_or_slug}/stats-summary/": {
       "get": {
         "operationId": "Retrieve an Organization's Events Count by Project",
@@ -48335,6 +47585,287 @@
                     "message": "Initial commit from Create Next App"
                   }
                 ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org: read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/shortids/{issue_id}/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "description": "This resolves a short ID or internal issue ID to the project slug and group details.",
+        "operationId": "Resolve a Short ID",
+        "parameters": [
+          {
+            "name": "organization_id_or_slug",
+            "in": "path",
+            "description": "The ID or slug of the organization the short ID should be looked up in.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "issue_id",
+            "in": "path",
+            "description": "The short ID or issue ID to look up.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "organizationSlug",
+                    "projectSlug",
+                    "shortId",
+                    "group",
+                    "groupId"
+                  ],
+                  "properties": {
+                    "organizationSlug": {
+                      "type": "string"
+                    },
+                    "projectSlug": {
+                      "type": "string"
+                    },
+                    "shortId": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "required": [
+                        "lastSeen",
+                        "numComments",
+                        "userCount",
+                        "culprit",
+                        "title",
+                        "id",
+                        "assignedTo",
+                        "logger",
+                        "type",
+                        "annotations",
+                        "metadata",
+                        "status",
+                        "subscriptionDetails",
+                        "isPublic",
+                        "hasSeen",
+                        "shortId",
+                        "shareId",
+                        "firstSeen",
+                        "count",
+                        "permalink",
+                        "level",
+                        "isSubscribed",
+                        "isBookmarked",
+                        "project",
+                        "statusDetails"
+                      ],
+                      "properties": {
+                        "lastSeen": {
+                          "type": "string"
+                        },
+                        "numComments": {
+                          "type": "integer"
+                        },
+                        "userCount": {
+                          "type": "integer"
+                        },
+                        "culprit": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "assignedTo": {
+                          "type": "object",
+                          "nullable": true,
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "logger": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "annotations": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "properties": {
+                            "function": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            },
+                            "filename": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "resolved",
+                            "unresolved",
+                            "ignored"
+                          ]
+                        },
+                        "subscriptionDetails": {
+                          "type": "object",
+                          "nullable": true,
+                          "properties": {
+                            "reason": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "isPublic": {
+                          "type": "boolean"
+                        },
+                        "hasSeen": {
+                          "type": "boolean"
+                        },
+                        "shortId": {
+                          "type": "string"
+                        },
+                        "shareId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "firstSeen": {
+                          "type": "string"
+                        },
+                        "count": {
+                          "type": "string"
+                        },
+                        "permalink": {
+                          "type": "string"
+                        },
+                        "level": {
+                          "type": "string"
+                        },
+                        "isSubscribed": {
+                          "type": "boolean"
+                        },
+                        "isBookmarked": {
+                          "type": "boolean"
+                        },
+                        "project": {
+                          "type": "object",
+                          "properties": {
+                            "slug": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "statusDetails": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "groupId": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "group": {
+                    "annotations": [],
+                    "assignedTo": null,
+                    "count": "1",
+                    "culprit": "raven.scripts.runner in main",
+                    "firstSeen": "2018-11-06T21:19:55Z",
+                    "hasSeen": false,
+                    "id": "1",
+                    "isBookmarked": false,
+                    "isPublic": false,
+                    "isSubscribed": true,
+                    "lastSeen": "2018-11-06T21:19:55Z",
+                    "level": "error",
+                    "logger": null,
+                    "metadata": {
+                      "title": "This is an example Python exception"
+                    },
+                    "numComments": 0,
+                    "permalink": "https://sentry.io/the-interstellar-jurisdiction/pump-station/issues/1/",
+                    "project": {
+                      "id": "2",
+                      "name": "Pump Station",
+                      "slug": "pump-station"
+                    },
+                    "shareId": null,
+                    "shortId": "PUMP-STATION-1",
+                    "status": "unresolved",
+                    "statusDetails": {},
+                    "subscriptionDetails": null,
+                    "title": "This is an example Python exception",
+                    "type": "default",
+                    "userCount": 0
+                  },
+                  "groupId": "1",
+                  "organizationSlug": "the-interstellar-jurisdiction",
+                  "projectSlug": "pump-station",
+                  "shortId": "PUMP-STATION-1"
+                }
               }
             }
           },
@@ -77566,616 +77097,6 @@
           "intervals",
           "query",
           "start"
-        ]
-      },
-      "ShortIdLookupResponse": {
-        "type": "object",
-        "properties": {
-          "organizationSlug": {
-            "type": "string"
-          },
-          "projectSlug": {
-            "type": "string"
-          },
-          "groupId": {
-            "type": "string"
-          },
-          "group": {
-            "type": "object",
-            "properties": {
-              "isUnhandled": {
-                "type": "boolean"
-              },
-              "count": {
-                "type": "integer"
-              },
-              "userCount": {
-                "type": "integer"
-              },
-              "firstSeen": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "lastSeen": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "id": {
-                "type": "string"
-              },
-              "shareId": {
-                "type": "string"
-              },
-              "shortId": {
-                "type": "string"
-              },
-              "title": {
-                "type": "string"
-              },
-              "culprit": {
-                "type": "string",
-                "nullable": true
-              },
-              "permalink": {
-                "type": "string"
-              },
-              "logger": {
-                "type": "string",
-                "nullable": true
-              },
-              "level": {
-                "type": "string"
-              },
-              "status": {
-                "type": "string"
-              },
-              "statusDetails": {
-                "type": "object",
-                "properties": {
-                  "autoResolved": {
-                    "type": "boolean"
-                  },
-                  "ignoreCount": {
-                    "type": "integer"
-                  },
-                  "ignoreUntil": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "ignoreUserCount": {
-                    "type": "integer"
-                  },
-                  "ignoreUserWindow": {
-                    "type": "integer"
-                  },
-                  "ignoreWindow": {
-                    "type": "integer"
-                  },
-                  "actor": {
-                    "type": "object",
-                    "properties": {
-                      "identities": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "organization": {
-                              "type": "object",
-                              "properties": {
-                                "slug": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "name",
-                                "slug"
-                              ]
-                            },
-                            "provider": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "id",
-                                "name"
-                              ]
-                            },
-                            "dateVerified": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "dateSynced": {
-                              "type": "string",
-                              "format": "date-time"
-                            }
-                          },
-                          "required": [
-                            "dateSynced",
-                            "dateVerified",
-                            "id",
-                            "name",
-                            "organization",
-                            "provider"
-                          ]
-                        }
-                      },
-                      "avatar": {
-                        "type": "object",
-                        "properties": {
-                          "avatarType": {
-                            "type": "string"
-                          },
-                          "avatarUuid": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "avatarUrl": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "authenticators": {
-                        "type": "array",
-                        "items": {}
-                      },
-                      "canReset2fa": {
-                        "type": "boolean"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "username": {
-                        "type": "string"
-                      },
-                      "email": {
-                        "type": "string"
-                      },
-                      "avatarUrl": {
-                        "type": "string"
-                      },
-                      "isActive": {
-                        "type": "boolean"
-                      },
-                      "hasPasswordAuth": {
-                        "type": "boolean"
-                      },
-                      "isManaged": {
-                        "type": "boolean"
-                      },
-                      "dateJoined": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "lastLogin": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true
-                      },
-                      "has2fa": {
-                        "type": "boolean"
-                      },
-                      "lastActive": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true
-                      },
-                      "isSuperuser": {
-                        "type": "boolean"
-                      },
-                      "isStaff": {
-                        "type": "boolean"
-                      },
-                      "experiments": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      },
-                      "emails": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "email": {
-                              "type": "string"
-                            },
-                            "is_verified": {
-                              "type": "boolean"
-                            }
-                          },
-                          "required": [
-                            "email",
-                            "id",
-                            "is_verified"
-                          ]
-                        }
-                      }
-                    },
-                    "required": [
-                      "avatarUrl",
-                      "dateJoined",
-                      "email",
-                      "emails",
-                      "experiments",
-                      "has2fa",
-                      "hasPasswordAuth",
-                      "id",
-                      "isActive",
-                      "isManaged",
-                      "isStaff",
-                      "isSuperuser",
-                      "lastActive",
-                      "lastLogin",
-                      "name",
-                      "username"
-                    ]
-                  },
-                  "inNextRelease": {
-                    "type": "boolean"
-                  },
-                  "inRelease": {
-                    "type": "string"
-                  },
-                  "inCommit": {
-                    "type": "string"
-                  },
-                  "pendingEvents": {
-                    "type": "integer"
-                  },
-                  "info": {}
-                }
-              },
-              "substatus": {
-                "type": "string",
-                "nullable": true
-              },
-              "isPublic": {
-                "type": "boolean"
-              },
-              "platform": {
-                "type": "string",
-                "nullable": true
-              },
-              "priority": {
-                "type": "string",
-                "nullable": true
-              },
-              "priorityLockedAt": {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              "seerFixabilityScore": {
-                "type": "number",
-                "format": "double",
-                "nullable": true
-              },
-              "seerAutofixLastTriggered": {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              "project": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "slug": {
-                    "type": "string"
-                  },
-                  "platform": {
-                    "type": "string",
-                    "nullable": true
-                  }
-                },
-                "required": [
-                  "id",
-                  "name",
-                  "platform",
-                  "slug"
-                ]
-              },
-              "type": {
-                "type": "string"
-              },
-              "issueType": {
-                "type": "string"
-              },
-              "issueCategory": {
-                "type": "string"
-              },
-              "metadata": {
-                "type": "object",
-                "additionalProperties": {}
-              },
-              "numComments": {
-                "type": "integer"
-              },
-              "assignedTo": {
-                "type": "object",
-                "properties": {
-                  "identities": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "organization": {
-                          "type": "object",
-                          "properties": {
-                            "slug": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "name",
-                            "slug"
-                          ]
-                        },
-                        "provider": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "name"
-                          ]
-                        },
-                        "dateVerified": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "dateSynced": {
-                          "type": "string",
-                          "format": "date-time"
-                        }
-                      },
-                      "required": [
-                        "dateSynced",
-                        "dateVerified",
-                        "id",
-                        "name",
-                        "organization",
-                        "provider"
-                      ]
-                    }
-                  },
-                  "avatar": {
-                    "type": "object",
-                    "properties": {
-                      "avatarType": {
-                        "type": "string"
-                      },
-                      "avatarUuid": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "avatarUrl": {
-                        "type": "string",
-                        "nullable": true
-                      }
-                    }
-                  },
-                  "authenticators": {
-                    "type": "array",
-                    "items": {}
-                  },
-                  "canReset2fa": {
-                    "type": "boolean"
-                  },
-                  "id": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "username": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "avatarUrl": {
-                    "type": "string"
-                  },
-                  "isActive": {
-                    "type": "boolean"
-                  },
-                  "hasPasswordAuth": {
-                    "type": "boolean"
-                  },
-                  "isManaged": {
-                    "type": "boolean"
-                  },
-                  "dateJoined": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "lastLogin": {
-                    "type": "string",
-                    "format": "date-time",
-                    "nullable": true
-                  },
-                  "has2fa": {
-                    "type": "boolean"
-                  },
-                  "lastActive": {
-                    "type": "string",
-                    "format": "date-time",
-                    "nullable": true
-                  },
-                  "isSuperuser": {
-                    "type": "boolean"
-                  },
-                  "isStaff": {
-                    "type": "boolean"
-                  },
-                  "experiments": {
-                    "type": "object",
-                    "additionalProperties": {}
-                  },
-                  "emails": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "is_verified": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "email",
-                        "id",
-                        "is_verified"
-                      ]
-                    }
-                  }
-                },
-                "required": [
-                  "avatarUrl",
-                  "dateJoined",
-                  "email",
-                  "emails",
-                  "experiments",
-                  "has2fa",
-                  "hasPasswordAuth",
-                  "id",
-                  "isActive",
-                  "isManaged",
-                  "isStaff",
-                  "isSuperuser",
-                  "lastActive",
-                  "lastLogin",
-                  "name",
-                  "username"
-                ]
-              },
-              "isBookmarked": {
-                "type": "boolean"
-              },
-              "isSubscribed": {
-                "type": "boolean"
-              },
-              "subscriptionDetails": {
-                "type": "object",
-                "properties": {
-                  "disabled": {
-                    "type": "boolean"
-                  },
-                  "reason": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              },
-              "hasSeen": {
-                "type": "boolean"
-              },
-              "annotations": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "displayName": {
-                      "type": "string"
-                    },
-                    "url": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "displayName",
-                    "url"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "annotations",
-              "assignedTo",
-              "culprit",
-              "hasSeen",
-              "id",
-              "isBookmarked",
-              "isPublic",
-              "isSubscribed",
-              "issueCategory",
-              "issueType",
-              "level",
-              "logger",
-              "metadata",
-              "numComments",
-              "permalink",
-              "platform",
-              "priority",
-              "priorityLockedAt",
-              "project",
-              "seerAutofixLastTriggered",
-              "seerFixabilityScore",
-              "shareId",
-              "shortId",
-              "status",
-              "statusDetails",
-              "subscriptionDetails",
-              "substatus",
-              "title",
-              "type"
-            ]
-          },
-          "shortId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "group",
-          "groupId",
-          "organizationSlug",
-          "projectSlug",
-          "shortId"
         ]
       },
       "Source": {
