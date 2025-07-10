@@ -18928,6 +18928,362 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repository/{repository}/test-results/": {
+      "get": {
+        "operationId": "Retrieve paginated list of test results for repository, owner, and organization",
+        "description": "Retrieves the list of test results for a given repository and owner. Also accepts a number of query parameters to filter the results.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repository",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the repository.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The property to sort results by. If not specified, the default is `COMMITS_WHERE_FAIL` in descending order. Use `-`\n        for descending order.\n\nAvailable fields are:\n- `AVG_DURATION`\n- `FLAKE_RATE`\n- `FAILURE_RATE`\n- `COMMITS_WHERE_FAIL`\n- `UPDATED_AT`\n        "
+          },
+          {
+            "in": "query",
+            "name": "filterBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An optional field to filter by, which will constrain the results to only include tests that match the filter.\n\nAvailable fields are:\n- `FLAKY_TESTS`\n- `FAILED_TESTS`\n- `SLOWEST_TESTS`\n- `SKIPPED_TESTS`\n        "
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The time interval to search for results by.\n\nAvailable fields are:\n- `INTERVAL_30_DAY`\n- `INTERVAL_7_DAY`\n- `INTERVAL_1_DAY`\n"
+          },
+          {
+            "in": "query",
+            "name": "branch",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The branch to search for results by. If not specified, the default is `main`.\n        "
+          },
+          {
+            "in": "query",
+            "name": "first",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "The number of results to return from the start of the list."
+          },
+          {
+            "in": "query",
+            "name": "last",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of results to return from the end of the list."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The cursor to start the query from. Will return results after the cursor if used with `first` or before the cursor if used with `last`.\n        "
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for test results response including pagination metadata",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Serializer for individual test result nodes from GraphQL response",
+                        "properties": {
+                          "updatedAt": {
+                            "type": "string"
+                          },
+                          "avgDuration": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "totalDuration": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "failureRate": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "flakeRate": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "commitsFailed": {
+                            "type": "integer"
+                          },
+                          "totalFailCount": {
+                            "type": "integer"
+                          },
+                          "totalFlakyFailCount": {
+                            "type": "integer"
+                          },
+                          "totalSkipCount": {
+                            "type": "integer"
+                          },
+                          "totalPassCount": {
+                            "type": "integer"
+                          },
+                          "lastDuration": {
+                            "type": "number",
+                            "format": "double"
+                          }
+                        },
+                        "required": [
+                          "avgDuration",
+                          "commitsFailed",
+                          "failureRate",
+                          "flakeRate",
+                          "lastDuration",
+                          "name",
+                          "totalDuration",
+                          "totalFailCount",
+                          "totalFlakyFailCount",
+                          "totalPassCount",
+                          "totalSkipCount",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "pageInfo": {
+                      "type": "object",
+                      "description": "Serializer for pagination information",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "hasNextPage": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "endCursor",
+                        "hasNextPage"
+                      ]
+                    },
+                    "totalCount": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "pageInfo",
+                    "results",
+                    "totalCount"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repository/{repository}/test-results-aggregates/": {
+      "get": {
+        "operationId": "Retrieve aggregated test result metrics for repository, owner, and organization",
+        "description": "Retrieves aggregated test result metrics for a given repository and owner.\nAlso accepts a query parameter to specify the time period for the metrics.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repository",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the repository.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The time interval to search for results by.\n\nAvailable fields are:\n- `INTERVAL_30_DAY`\n- `INTERVAL_7_DAY`\n- `INTERVAL_1_DAY`\n"
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for test results aggregates response",
+                  "properties": {
+                    "totalDuration": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "totalDurationPercentChange": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "slowestTestsDuration": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "slowestTestsDurationPercentChange": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "totalSlowTests": {
+                      "type": "integer"
+                    },
+                    "totalSlowTestsPercentChange": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "totalFails": {
+                      "type": "integer"
+                    },
+                    "totalFailsPercentChange": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "totalSkips": {
+                      "type": "integer"
+                    },
+                    "totalSkipsPercentChange": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "flakeCount": {
+                      "type": "integer"
+                    },
+                    "flakeCountPercentChange": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "flakeRate": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "flakeRatePercentChange": {
+                      "type": "number",
+                      "format": "double"
+                    }
+                  },
+                  "required": [
+                    "flakeCount",
+                    "flakeCountPercentChange",
+                    "flakeRate",
+                    "flakeRatePercentChange",
+                    "slowestTestsDuration",
+                    "slowestTestsDurationPercentChange",
+                    "totalDuration",
+                    "totalDurationPercentChange",
+                    "totalFails",
+                    "totalFailsPercentChange",
+                    "totalSkips",
+                    "totalSkipsPercentChange",
+                    "totalSlowTests",
+                    "totalSlowTestsPercentChange"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/projects/": {
       "get": {
         "operationId": "List an Organization's Projects",
@@ -28728,344 +29084,6 @@
           },
           "403": {
             "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/api/0/prevent/owner/{owner}/repository/{repository}/test-results/": {
-      "get": {
-        "operationId": "Retrieve paginated list of test results for repository and owner",
-        "description": "Retrieves the list of test results for a given repository and owner. Also accepts a number of query parameters to filter the results.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "owner",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The owner of the repository.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "repository",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The name of the repository.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "sortBy",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The property to sort results by. If not specified, the default is `COMMITS_WHERE_FAIL` in descending order. Use `-`\n        for descending order.\n\nAvailable fields are:\n- `AVG_DURATION`\n- `FLAKE_RATE`\n- `FAILURE_RATE`\n- `COMMITS_WHERE_FAIL`\n- `UPDATED_AT`\n        "
-          },
-          {
-            "in": "query",
-            "name": "filterBy",
-            "schema": {
-              "type": "string"
-            },
-            "description": "An optional field to filter by, which will constrain the results to only include tests that match the filter.\n\nAvailable fields are:\n- `FLAKY_TESTS`\n- `FAILED_TESTS`\n- `SLOWEST_TESTS`\n- `SKIPPED_TESTS`\n        "
-          },
-          {
-            "in": "query",
-            "name": "interval",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The time interval to search for results by.\n\nAvailable fields are:\n- `INTERVAL_30_DAY`\n- `INTERVAL_7_DAY`\n- `INTERVAL_1_DAY`\n"
-          },
-          {
-            "in": "query",
-            "name": "branch",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The branch to search for results by. If not specified, the default is `main`.\n        "
-          },
-          {
-            "in": "query",
-            "name": "first",
-            "schema": {
-              "type": "integer",
-              "default": 20
-            },
-            "description": "The number of results to return from the start of the list."
-          },
-          {
-            "in": "query",
-            "name": "last",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The number of results to return from the end of the list."
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The cursor to start the query from. Will return results after the cursor if used with `first` or before the cursor if used with `last`.\n        "
-          }
-        ],
-        "tags": [
-          "Prevent"
-        ],
-        "security": [
-          {
-            "auth_token": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "Serializer for test results response including pagination metadata",
-                  "properties": {
-                    "results": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "description": "Serializer for individual test result nodes from GraphQL response",
-                        "properties": {
-                          "updatedAt": {
-                            "type": "string"
-                          },
-                          "avgDuration": {
-                            "type": "number",
-                            "format": "double"
-                          },
-                          "totalDuration": {
-                            "type": "number",
-                            "format": "double"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "failureRate": {
-                            "type": "number",
-                            "format": "double"
-                          },
-                          "flakeRate": {
-                            "type": "number",
-                            "format": "double"
-                          },
-                          "commitsFailed": {
-                            "type": "integer"
-                          },
-                          "totalFailCount": {
-                            "type": "integer"
-                          },
-                          "totalFlakyFailCount": {
-                            "type": "integer"
-                          },
-                          "totalSkipCount": {
-                            "type": "integer"
-                          },
-                          "totalPassCount": {
-                            "type": "integer"
-                          },
-                          "lastDuration": {
-                            "type": "number",
-                            "format": "double"
-                          }
-                        },
-                        "required": [
-                          "avgDuration",
-                          "commitsFailed",
-                          "failureRate",
-                          "flakeRate",
-                          "lastDuration",
-                          "name",
-                          "totalDuration",
-                          "totalFailCount",
-                          "totalFlakyFailCount",
-                          "totalPassCount",
-                          "totalSkipCount",
-                          "updatedAt"
-                        ]
-                      }
-                    },
-                    "pageInfo": {
-                      "type": "object",
-                      "description": "Serializer for pagination information",
-                      "properties": {
-                        "endCursor": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "hasNextPage": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "endCursor",
-                        "hasNextPage"
-                      ]
-                    },
-                    "totalCount": {
-                      "type": "integer"
-                    }
-                  },
-                  "required": [
-                    "pageInfo",
-                    "results",
-                    "totalCount"
-                  ]
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/0/prevent/owner/{owner}/repository/{repository}/test-results-aggregates/": {
-      "get": {
-        "operationId": "Retrieve aggregated test result metrics for repository and owner",
-        "description": "Retrieves aggregated test result metrics for a given repository and owner.\nAlso accepts a query parameter to specify the time period for the metrics.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "owner",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The owner of the repository.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "repository",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The name of the repository.",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "interval",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The time interval to search for results by.\n\nAvailable fields are:\n- `INTERVAL_30_DAY`\n- `INTERVAL_7_DAY`\n- `INTERVAL_1_DAY`\n"
-          }
-        ],
-        "tags": [
-          "Prevent"
-        ],
-        "security": [
-          {
-            "auth_token": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "Serializer for test results aggregates response",
-                  "properties": {
-                    "totalDuration": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "totalDurationPercentChange": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "slowestTestsDuration": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "slowestTestsDurationPercentChange": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "totalSlowTests": {
-                      "type": "integer"
-                    },
-                    "totalSlowTestsPercentChange": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "totalFails": {
-                      "type": "integer"
-                    },
-                    "totalFailsPercentChange": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "totalSkips": {
-                      "type": "integer"
-                    },
-                    "totalSkipsPercentChange": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "flakeCount": {
-                      "type": "integer"
-                    },
-                    "flakeCountPercentChange": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "flakeRate": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "flakeRatePercentChange": {
-                      "type": "number",
-                      "format": "double"
-                    }
-                  },
-                  "required": [
-                    "flakeCount",
-                    "flakeCountPercentChange",
-                    "flakeRate",
-                    "flakeRatePercentChange",
-                    "slowestTestsDuration",
-                    "slowestTestsDurationPercentChange",
-                    "totalDuration",
-                    "totalDurationPercentChange",
-                    "totalFails",
-                    "totalFailsPercentChange",
-                    "totalSkips",
-                    "totalSkipsPercentChange",
-                    "totalSlowTests",
-                    "totalSlowTestsPercentChange"
-                  ]
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
