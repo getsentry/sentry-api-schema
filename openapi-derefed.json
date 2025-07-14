@@ -19005,6 +19005,160 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repositories/": {
+      "get": {
+        "operationId": "Retrieves repository list for a given owner",
+        "description": "Retrieves repository data for a given owner.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "first",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "The number of results to return from the start of the list."
+          },
+          {
+            "in": "query",
+            "name": "last",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of results to return from the end of the list."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The cursor to start the query from. Will return results after the cursor if used with `first` or before the cursor if used with `last`."
+          },
+          {
+            "in": "query",
+            "name": "term",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The term substring to filter test name strings by using the `contains` operator."
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for repositories response",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Serializer for individual repository nodes from GraphQL response",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "latestCommitAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "defaultBranch": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "defaultBranch",
+                          "latestCommitAt",
+                          "name",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "pageInfo": {
+                      "type": "object",
+                      "description": "Serializer for pagination information",
+                      "properties": {
+                        "startCursor": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "endCursor": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "hasNextPage": {
+                          "type": "boolean"
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "endCursor",
+                        "hasNextPage",
+                        "hasPreviousPage",
+                        "startCursor"
+                      ]
+                    },
+                    "totalCount": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "pageInfo",
+                    "results",
+                    "totalCount"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repository/{repository}/test-results/": {
       "get": {
         "operationId": "Retrieve paginated list of test results for repository, owner, and organization",
@@ -19092,7 +19246,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The cursor to start the query from. Will return results after the cursor if used with `first` or before the cursor if used with `last`.\n        "
+            "description": "The cursor to start the query from. Will return results after the cursor if used with `first` or before the cursor if used with `last`."
           },
           {
             "in": "query",
@@ -69611,6 +69765,32 @@
           "hasNextPage"
         ]
       },
+      "PageInfoTemp": {
+        "type": "object",
+        "description": "Serializer for pagination information",
+        "properties": {
+          "startCursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "endCursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "endCursor",
+          "hasNextPage",
+          "hasPreviousPage",
+          "startCursor"
+        ]
+      },
       "ProjectAdmin": {
         "type": "object",
         "properties": {
@@ -70929,6 +71109,101 @@
         "additionalProperties": {
           "type": "integer"
         }
+      },
+      "Repositories": {
+        "type": "object",
+        "description": "Serializer for repositories response",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Serializer for individual repository nodes from GraphQL response",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "latestCommitAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "defaultBranch": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "defaultBranch",
+                "latestCommitAt",
+                "name",
+                "updatedAt"
+              ]
+            }
+          },
+          "pageInfo": {
+            "type": "object",
+            "description": "Serializer for pagination information",
+            "properties": {
+              "startCursor": {
+                "type": "string",
+                "nullable": true
+              },
+              "endCursor": {
+                "type": "string",
+                "nullable": true
+              },
+              "hasNextPage": {
+                "type": "boolean"
+              },
+              "hasPreviousPage": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "endCursor",
+              "hasNextPage",
+              "hasPreviousPage",
+              "startCursor"
+            ]
+          },
+          "totalCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pageInfo",
+          "results",
+          "totalCount"
+        ]
+      },
+      "RepositoryNode": {
+        "type": "object",
+        "description": "Serializer for individual repository nodes from GraphQL response",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "latestCommitAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "defaultBranch": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "defaultBranch",
+          "latestCommitAt",
+          "name",
+          "updatedAt"
+        ]
       },
       "Rule": {
         "type": "object",
