@@ -19012,7 +19012,7 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repositories/": {
       "get": {
-        "operationId": "Retrieves repository list for a given owner",
+        "operationId": "Retrieves list of repositories for a given owner",
         "description": "Retrieves repository data for a given owner.",
         "parameters": [
           {
@@ -19035,20 +19035,19 @@
           },
           {
             "in": "query",
-            "name": "first",
-            "schema": {
-              "type": "integer",
-              "default": 20
-            },
-            "description": "The number of results to return from the start of the list."
-          },
-          {
-            "in": "query",
-            "name": "last",
+            "name": "limit",
             "schema": {
               "type": "integer"
             },
-            "description": "The number of results to return from the end of the list."
+            "description": "The number of results to return. If not specified, defaults to 20."
+          },
+          {
+            "in": "query",
+            "name": "navigation",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Whether to get the previous or next page from paginated results. Use `next` for forward pagination after the cursor or `prev` for backward pagination before the cursor. If not specified, defaults to `next`. If no cursor is provided, the cursor is the beginning of the result set."
           },
           {
             "in": "query",
@@ -19064,7 +19063,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The term substring to filter test name strings by using the `contains` operator."
+            "description": "The term substring to filter name strings by using the `contains` operator."
           }
         ],
         "tags": [
@@ -19109,6 +19108,154 @@
                           "latestCommitAt",
                           "name",
                           "updatedAt"
+                        ]
+                      }
+                    },
+                    "pageInfo": {
+                      "type": "object",
+                      "description": "Serializer for pagination information",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "startCursor": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean"
+                        },
+                        "hasNextPage": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "endCursor",
+                        "hasNextPage",
+                        "hasPreviousPage",
+                        "startCursor"
+                      ]
+                    },
+                    "totalCount": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "pageInfo",
+                    "results",
+                    "totalCount"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repository/{repository}/branches/": {
+      "get": {
+        "operationId": "Retrieves list of branches for a given owner and repository",
+        "description": "Retrieves branch data for a given owner and repository.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repository",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the repository.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of results to return. If not specified, defaults to 20."
+          },
+          {
+            "in": "query",
+            "name": "navigation",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Whether to get the previous or next page from paginated results. Use `next` for forward pagination after the cursor or `prev` for backward pagination before the cursor. If not specified, defaults to `next`. If no cursor is provided, the cursor is the beginning of the result set."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The cursor pointing to a specific position in the result set to start the query from. Results after the cursor will be returned if used with `next` or before the cursor if used with `prev` for `navigation`."
+          },
+          {
+            "in": "query",
+            "name": "term",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The term substring to filter name strings by using the `contains` operator."
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for repository branches response",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Serializer for individual branch nodes from GraphQL response",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
                         ]
                       }
                     },
@@ -19258,7 +19405,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The term substring to filter test name strings by using the `contains` operator."
+            "description": "The term substring to filter name strings by using the `contains` operator."
           }
         ],
         "tags": [
@@ -55150,6 +55297,73 @@
           "name",
           "slug",
           "teamRole"
+        ]
+      },
+      "BranchNode": {
+        "type": "object",
+        "description": "Serializer for individual branch nodes from GraphQL response",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "Branches": {
+        "type": "object",
+        "description": "Serializer for repository branches response",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Serializer for individual branch nodes from GraphQL response",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          },
+          "pageInfo": {
+            "type": "object",
+            "description": "Serializer for pagination information",
+            "properties": {
+              "endCursor": {
+                "type": "string",
+                "nullable": true
+              },
+              "startCursor": {
+                "type": "string",
+                "nullable": true
+              },
+              "hasPreviousPage": {
+                "type": "boolean"
+              },
+              "hasNextPage": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "endCursor",
+              "hasNextPage",
+              "hasPreviousPage",
+              "startCursor"
+            ]
+          },
+          "totalCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pageInfo",
+          "results",
+          "totalCount"
         ]
       },
       "CheckInList": {
