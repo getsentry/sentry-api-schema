@@ -19272,6 +19272,9 @@
                   "type": "object",
                   "description": "Serializer for repository branches response",
                   "properties": {
+                    "defaultBranch": {
+                      "type": "string"
+                    },
                     "results": {
                       "type": "array",
                       "items": {
@@ -19318,6 +19321,7 @@
                     }
                   },
                   "required": [
+                    "defaultBranch",
                     "pageInfo",
                     "results",
                     "totalCount"
@@ -19701,6 +19705,94 @@
                     "totalSkipsPercentChange",
                     "totalSlowTests",
                     "totalSlowTestsPercentChange"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repository/{repository}/test-suites/": {
+      "get": {
+        "operationId": "Retrieve test suites belonging to a repository's test results",
+        "description": "Retrieves test suites belonging to a repository's test results.\nIt accepts a list of test suites as a query parameter to specify individual test suites.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repository",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the repository.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "term",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The term substring to filter name strings by using the `contains` operator."
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for test suites belonging to a repository's test results",
+                  "properties": {
+                    "testSuites": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "testSuites"
                   ]
                 }
               }
@@ -55295,6 +55387,9 @@
         "type": "object",
         "description": "Serializer for repository branches response",
         "properties": {
+          "defaultBranch": {
+            "type": "string"
+          },
           "results": {
             "type": "array",
             "items": {
@@ -55341,6 +55436,7 @@
           }
         },
         "required": [
+          "defaultBranch",
           "pageInfo",
           "results",
           "totalCount"
@@ -73875,6 +73971,21 @@
           "totalPassCount",
           "totalSkipCount",
           "updatedAt"
+        ]
+      },
+      "TestSuite": {
+        "type": "object",
+        "description": "Serializer for test suites belonging to a repository's test results",
+        "properties": {
+          "testSuites": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "testSuites"
         ]
       },
       "UpdateClientKey": {
