@@ -19848,6 +19848,82 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repository/{repository}/token/regenerate/": {
+      "post": {
+        "operationId": "Regenerates a repository upload token and returns the new token",
+        "description": "Regenerates a repository upload token and returns the new token.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repository",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the repository.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for repositories response",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "token"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/projects/": {
       "get": {
         "operationId": "List an Organization's Projects",
@@ -71625,6 +71701,18 @@
           "latestCommitAt",
           "name",
           "updatedAt"
+        ]
+      },
+      "RepositoryTokenRegenerate": {
+        "type": "object",
+        "description": "Serializer for repositories response",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
         ]
       },
       "Rule": {
