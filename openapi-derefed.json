@@ -19229,6 +19229,139 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repositories/sync/": {
+      "get": {
+        "operationId": "Gets syncing status for repositories for an integrated org",
+        "description": "Gets syncing status for repositories for an integrated organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for a sync repository response",
+                  "properties": {
+                    "is_syncing": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "is_syncing"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Syncs repositories from an integrated org with GitHub",
+        "description": "Syncs repositories for an integrated organization with GitHub.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for a sync repository response",
+                  "properties": {
+                    "is_syncing": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "is_syncing"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repositories/tokens/": {
       "get": {
         "operationId": "Retrieves a paginated list of repository tokens for a given owner",
@@ -73649,6 +73782,18 @@
           "inNextRelease",
           "inRelease",
           "inUpcomingRelease"
+        ]
+      },
+      "SyncRepos": {
+        "type": "object",
+        "description": "Serializer for a sync repository response",
+        "properties": {
+          "is_syncing": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "is_syncing"
         ]
       },
       "TagKeyDetailsDict": {
