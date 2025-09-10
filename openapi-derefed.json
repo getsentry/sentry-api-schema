@@ -19703,7 +19703,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The property to sort results by. If not specified, the default is `COMMITS_WHERE_FAIL` in descending order. Use `-`\n        for descending order.\n\nAvailable fields are:\n- `AVG_DURATION`\n- `FLAKE_RATE`\n- `FAILURE_RATE`\n- `COMMITS_WHERE_FAIL`\n- `UPDATED_AT`\n        "
+            "description": "The property to sort results by. If not specified, the default is `TOTAL_FAIL_COUNT` in descending order. Use `-`\n        for descending order.\n\nAvailable fields are:\n- `AVG_DURATION`\n- `FLAKE_RATE`\n- `FAILURE_RATE`\n- `TOTAL_FAIL_COUNT`\n- `UPDATED_AT`\n        "
           },
           {
             "in": "query",
@@ -19813,9 +19813,6 @@
                             "type": "number",
                             "format": "double"
                           },
-                          "commitsFailed": {
-                            "type": "integer"
-                          },
                           "totalFailCount": {
                             "type": "integer"
                           },
@@ -19835,7 +19832,6 @@
                         },
                         "required": [
                           "avgDuration",
-                          "commitsFailed",
                           "failureRate",
                           "flakeRate",
                           "lastDuration",
@@ -74459,9 +74455,6 @@
                   "type": "number",
                   "format": "double"
                 },
-                "commitsFailed": {
-                  "type": "integer"
-                },
                 "totalFailCount": {
                   "type": "integer"
                 },
@@ -74481,7 +74474,6 @@
               },
               "required": [
                 "avgDuration",
-                "commitsFailed",
                 "failureRate",
                 "flakeRate",
                 "lastDuration",
@@ -74632,9 +74624,6 @@
             "type": "number",
             "format": "double"
           },
-          "commitsFailed": {
-            "type": "integer"
-          },
           "totalFailCount": {
             "type": "integer"
           },
@@ -74654,7 +74643,6 @@
         },
         "required": [
           "avgDuration",
-          "commitsFailed",
           "failureRate",
           "flakeRate",
           "lastDuration",
