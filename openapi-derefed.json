@@ -19509,6 +19509,92 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repository/{repository}/": {
+      "get": {
+        "operationId": "Retrieves a single repository for a given owner",
+        "description": "Retrieves repository data for a single repository.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner of the repository.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "repository",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the repository.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Prevent"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Serializer for single repository response",
+                  "properties": {
+                    "uploadToken": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "activated": {
+                      "type": "boolean"
+                    },
+                    "active": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "activated",
+                    "active",
+                    "uploadToken"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repository/{repository}/branches/": {
       "get": {
         "operationId": "Retrieves list of branches for a given owner and repository",
@@ -72059,6 +72145,27 @@
           "pageInfo",
           "results",
           "totalCount"
+        ]
+      },
+      "Repository": {
+        "type": "object",
+        "description": "Serializer for single repository response",
+        "properties": {
+          "uploadToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "activated": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "activated",
+          "active",
+          "uploadToken"
         ]
       },
       "RepositoryNode": {
