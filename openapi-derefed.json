@@ -54196,6 +54196,359 @@
         ]
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/autofix/": {
+      "get": {
+        "operationId": "Retrieve Seer Issue Fix State",
+        "description": "Retrieve the current detailed state of an issue fix process for a specific issue including:\n\n- Current status\n- Steps performed and their outcomes\n- Repository information and permissions\n- Root Cause Analysis\n- Proposed Solution\n- Generated code changes\n\nThis endpoint although documented is still experimental and the payload may change in the future.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Seer"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Response type for the GET endpoint",
+                  "properties": {
+                    "autofix": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "autofix"
+                  ]
+                },
+                "examples": {
+                  "AutofixInProgress": {
+                    "value": {
+                      "autofix": {
+                        "run_id": 12345,
+                        "request": {
+                          "organization_id": 1,
+                          "project_id": 2,
+                          "repos": [
+                            {
+                              "integration_id": "12345",
+                              "provider": "github",
+                              "owner": "getsentry",
+                              "name": "seer",
+                              "external_id": "439438299",
+                              "branch_name": "main",
+                              "base_commit_sha": "4ebb4f342e308fda87d6ccb3cced25f2701bd60c"
+                            }
+                          ],
+                          "tags_overview": {
+                            "tags_overview": [
+                              {
+                                "key": "environment",
+                                "name": "Environment",
+                                "top_values": [
+                                  {
+                                    "count": 1,
+                                    "percentage": "100%",
+                                    "value": "production"
+                                  }
+                                ]
+                              },
+                              {
+                                "key": "run_id",
+                                "name": "Run Id",
+                                "top_values": [
+                                  {
+                                    "count": 1,
+                                    "percentage": "100%",
+                                    "value": "1372444"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "options": {
+                            "auto_run_source": "issue_summary_on_alert_fixability"
+                          }
+                        },
+                        "updated_at": "2025-09-23T21:02:18.160885",
+                        "status": "COMPLETED",
+                        "codebases": {
+                          "439438299": {
+                            "repo_external_id": "439438299",
+                            "file_changes": [],
+                            "is_readable": true,
+                            "is_writeable": true
+                          }
+                        },
+                        "steps": [
+                          {
+                            "active_comment_thread": null,
+                            "agent_comment_thread": null,
+                            "completedMessage": null,
+                            "id": "0872381c-7d71-46cd-a62b-fbc196846965",
+                            "index": 0,
+                            "initial_memory_length": 1,
+                            "insights": [],
+                            "key": "root_cause_analysis_processing",
+                            "output_confidence_score": null,
+                            "output_stream": null,
+                            "proceed_confidence_score": null,
+                            "progress": [
+                              {
+                                "data": null,
+                                "message": "Figuring out the root cause...",
+                                "timestamp": "2025-09-12T23:20:31.304114",
+                                "type": "INFO"
+                              },
+                              {
+                                "data": null,
+                                "message": "Looking at `src/seer/automation/autofix/tools/tools.py` in `getsentry/seer`...",
+                                "timestamp": "2025-09-12T23:20:49.671212",
+                                "type": "INFO"
+                              },
+                              {
+                                "data": null,
+                                "message": "Simulating profound thought...",
+                                "timestamp": "2025-09-12T23:20:58.229135",
+                                "type": "INFO"
+                              },
+                              {
+                                "data": null,
+                                "message": "Arranging data in a way that looks intentional...",
+                                "timestamp": "2025-09-12T23:21:22.696531",
+                                "type": "INFO"
+                              }
+                            ],
+                            "queued_user_messages": [],
+                            "status": "COMPLETED",
+                            "title": "Analyzing the Issue",
+                            "type": "default"
+                          },
+                          {
+                            "active_comment_thread": null,
+                            "agent_comment_thread": null,
+                            "causes": [
+                              {
+                                "description": "`BaseTools.run_ripgrep` called without required `query` argument, causing `TypeError`.",
+                                "id": 0,
+                                "relevant_repos": [
+                                  "getsentry/seer"
+                                ],
+                                "reproduction_urls": [],
+                                "root_cause_reproduction": [
+                                  {
+                                    "code_snippet_and_analysis": "The process begins with an HTTP request to the `autofix_start_endpoint`. This is the entry point for the autofix workflow.",
+                                    "is_most_important_event": false,
+                                    "relevant_code_file": {
+                                      "file_path": "seer/app.py",
+                                      "repo_name": "getsentry/seer"
+                                    },
+                                    "timeline_item_type": "internal_code",
+                                    "title": "Autofix process initiated via API endpoint."
+                                  }
+                                ]
+                              }
+                            ],
+                            "completedMessage": null,
+                            "id": "e6ae64b6-e4d4-44f5-bac7-6ecf6780a6dc",
+                            "index": 1,
+                            "key": "root_cause_analysis",
+                            "output_stream": null,
+                            "progress": [
+                              {
+                                "data": null,
+                                "message": "Here is Autofix's proposed root cause.",
+                                "timestamp": "2025-09-12T23:21:30.662818",
+                                "type": "INFO"
+                              }
+                            ],
+                            "queued_user_messages": [],
+                            "selection": {
+                              "cause_id": 0,
+                              "instruction": null
+                            },
+                            "status": "COMPLETED",
+                            "termination_reason": null,
+                            "title": "Root Cause Analysis",
+                            "type": "root_cause_analysis"
+                          }
+                        ],
+                        "coding_agents": {},
+                        "last_triggered_at": "2025-09-23T21:00:46.696678",
+                        "completed_at": null,
+                        "repositories": [
+                          {
+                            "integration_id": 2933,
+                            "url": "https://github.com/getsentry/seer",
+                            "external_id": "439438299",
+                            "name": "getsentry/seer",
+                            "provider": "integrations:github",
+                            "default_branch": "main",
+                            "is_readable": true,
+                            "is_writeable": true
+                          }
+                        ]
+                      }
+                    },
+                    "summary": "Autofix in Progress"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Start Seer Issue Fix",
+        "description": "Trigger a Seer Issue Fix run for a specific issue.\n\nThe issue fix process can:\n- Identify the root cause of the issue\n- Propose a solution\n- Generate code changes\n- Create a pull request with the fix\n\nThe process runs asynchronously, and you can get the state using the GET endpoint.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Seer"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "event_id": {
+                    "type": "string",
+                    "description": "Run issue fix on a specific event. If not provided, the recommended event for the issue will be used."
+                  },
+                  "instruction": {
+                    "type": "string",
+                    "description": "Optional custom instruction to guide the issue fix process."
+                  },
+                  "pr_to_comment_on_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL of a pull request where the issue fix should add comments."
+                  },
+                  "stopping_point": {
+                    "enum": [
+                      "root_cause",
+                      "solution",
+                      "code_changes",
+                      "open_pr"
+                    ],
+                    "type": "string",
+                    "description": "Where the issue fix process should stop. If not provided, will run to root cause.\n\n* `root_cause`\n* `solution`\n* `code_changes`\n* `open_pr`"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Response type for the POST endpoint",
+                  "properties": {
+                    "run_id": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "run_id"
+                  ]
+                },
+                "examples": {
+                  "SuccessfulAutofixCreation": {
+                    "value": {
+                      "run_id": 12345
+                    },
+                    "summary": "Successful Autofix Creation"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/": {
       "get": {
         "operationId": "List an Issue's Events",
@@ -55934,6 +56287,61 @@
           "query",
           "timeWindow",
           "triggers"
+        ]
+      },
+      "AutofixPostResponse": {
+        "type": "object",
+        "description": "Response type for the POST endpoint",
+        "properties": {
+          "run_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "run_id"
+        ]
+      },
+      "AutofixRequest": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "description": "Run issue fix on a specific event. If not provided, the recommended event for the issue will be used."
+          },
+          "instruction": {
+            "type": "string",
+            "description": "Optional custom instruction to guide the issue fix process."
+          },
+          "pr_to_comment_on_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of a pull request where the issue fix should add comments."
+          },
+          "stopping_point": {
+            "enum": [
+              "root_cause",
+              "solution",
+              "code_changes",
+              "open_pr"
+            ],
+            "type": "string",
+            "description": "Where the issue fix process should stop. If not provided, will run to root cause.\n\n* `root_cause`\n* `solution`\n* `code_changes`\n* `open_pr`"
+          }
+        }
+      },
+      "AutofixStateResponse": {
+        "type": "object",
+        "description": "Response type for the GET endpoint",
+        "properties": {
+          "autofix": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          }
+        },
+        "required": [
+          "autofix"
         ]
       },
       "BaseTeam": {
@@ -75099,6 +75507,15 @@
       "externalDocs": {
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/prevent/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Seer",
+      "description": "Endpoints for Seer features",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/seer/&template=api_error_template.md"
       }
     }
   ]
