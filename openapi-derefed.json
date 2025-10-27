@@ -11258,88 +11258,12 @@
                       "assignedTo": {
                         "type": "object",
                         "properties": {
-                          "identities": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "organization": {
-                                  "type": "object",
-                                  "properties": {
-                                    "slug": {
-                                      "type": "string"
-                                    },
-                                    "name": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "name",
-                                    "slug"
-                                  ]
-                                },
-                                "provider": {
-                                  "type": "object",
-                                  "properties": {
-                                    "id": {
-                                      "type": "string"
-                                    },
-                                    "name": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "id",
-                                    "name"
-                                  ]
-                                },
-                                "dateVerified": {
-                                  "type": "string",
-                                  "format": "date-time"
-                                },
-                                "dateSynced": {
-                                  "type": "string",
-                                  "format": "date-time"
-                                }
-                              },
-                              "required": [
-                                "dateSynced",
-                                "dateVerified",
-                                "id",
-                                "name",
-                                "organization",
-                                "provider"
-                              ]
-                            }
-                          },
-                          "avatar": {
-                            "type": "object",
-                            "properties": {
-                              "avatarType": {
-                                "type": "string"
-                              },
-                              "avatarUuid": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "avatarUrl": {
-                                "type": "string",
-                                "nullable": true
-                              }
-                            }
-                          },
-                          "authenticators": {
-                            "type": "array",
-                            "items": {}
-                          },
-                          "canReset2fa": {
-                            "type": "boolean"
+                          "type": {
+                            "enum": [
+                              "user",
+                              "team"
+                            ],
+                            "type": "string"
                           },
                           "id": {
                             "type": "string"
@@ -11347,91 +11271,14 @@
                           "name": {
                             "type": "string"
                           },
-                          "username": {
-                            "type": "string"
-                          },
                           "email": {
                             "type": "string"
-                          },
-                          "avatarUrl": {
-                            "type": "string"
-                          },
-                          "isActive": {
-                            "type": "boolean"
-                          },
-                          "hasPasswordAuth": {
-                            "type": "boolean"
-                          },
-                          "isManaged": {
-                            "type": "boolean"
-                          },
-                          "dateJoined": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "lastLogin": {
-                            "type": "string",
-                            "format": "date-time",
-                            "nullable": true
-                          },
-                          "has2fa": {
-                            "type": "boolean"
-                          },
-                          "lastActive": {
-                            "type": "string",
-                            "format": "date-time",
-                            "nullable": true
-                          },
-                          "isSuperuser": {
-                            "type": "boolean"
-                          },
-                          "isStaff": {
-                            "type": "boolean"
-                          },
-                          "experiments": {
-                            "type": "object",
-                            "additionalProperties": {}
-                          },
-                          "emails": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "is_verified": {
-                                  "type": "boolean"
-                                }
-                              },
-                              "required": [
-                                "email",
-                                "id",
-                                "is_verified"
-                              ]
-                            }
                           }
                         },
                         "required": [
-                          "avatarUrl",
-                          "dateJoined",
-                          "email",
-                          "emails",
-                          "experiments",
-                          "has2fa",
-                          "hasPasswordAuth",
                           "id",
-                          "isActive",
-                          "isManaged",
-                          "isStaff",
-                          "isSuperuser",
-                          "lastActive",
-                          "lastLogin",
                           "name",
-                          "username"
+                          "type"
                         ]
                       },
                       "isBookmarked": {
@@ -11697,22 +11544,10 @@
                       {
                         "annotations": [],
                         "assignedTo": {
+                          "type": "user",
                           "id": "1",
                           "name": "John Doe",
-                          "email": "john.doe@example.com",
-                          "username": "john.doe",
-                          "avatarUrl": "https://example.com/avatar.png",
-                          "isActive": true,
-                          "hasPasswordAuth": true,
-                          "isManaged": false,
-                          "dateJoined": "2018-11-06T21:19:55Z",
-                          "lastLogin": "2018-11-06T21:19:55Z",
-                          "has2fa": false,
-                          "lastActive": "2018-11-06T21:19:55Z",
-                          "isSuperuser": false,
-                          "isStaff": false,
-                          "experiments": {},
-                          "emails": []
+                          "email": "john.doe@example.com"
                         },
                         "count": "150",
                         "culprit": "raven.scripts.runner in main",
@@ -12188,12 +12023,10 @@
                           "type": "string"
                         },
                         "email": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "email",
                         "id",
                         "name",
                         "type"
@@ -15857,12 +15690,10 @@
                             "type": "string"
                           },
                           "email": {
-                            "type": "string",
-                            "nullable": true
+                            "type": "string"
                           }
                         },
                         "required": [
-                          "email",
                           "id",
                           "name",
                           "type"
@@ -17033,12 +16864,10 @@
                           "type": "string"
                         },
                         "email": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "email",
                         "id",
                         "name",
                         "type"
@@ -17526,12 +17355,10 @@
                           "type": "string"
                         },
                         "email": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "email",
                         "id",
                         "name",
                         "type"
@@ -18709,12 +18536,10 @@
                           "type": "string"
                         },
                         "email": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "email",
                         "id",
                         "name",
                         "type"
@@ -27710,88 +27535,12 @@
                         "assignedTo": {
                           "type": "object",
                           "properties": {
-                            "identities": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "type": "string"
-                                  },
-                                  "organization": {
-                                    "type": "object",
-                                    "properties": {
-                                      "slug": {
-                                        "type": "string"
-                                      },
-                                      "name": {
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "name",
-                                      "slug"
-                                    ]
-                                  },
-                                  "provider": {
-                                    "type": "object",
-                                    "properties": {
-                                      "id": {
-                                        "type": "string"
-                                      },
-                                      "name": {
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "id",
-                                      "name"
-                                    ]
-                                  },
-                                  "dateVerified": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                  },
-                                  "dateSynced": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                  }
-                                },
-                                "required": [
-                                  "dateSynced",
-                                  "dateVerified",
-                                  "id",
-                                  "name",
-                                  "organization",
-                                  "provider"
-                                ]
-                              }
-                            },
-                            "avatar": {
-                              "type": "object",
-                              "properties": {
-                                "avatarType": {
-                                  "type": "string"
-                                },
-                                "avatarUuid": {
-                                  "type": "string",
-                                  "nullable": true
-                                },
-                                "avatarUrl": {
-                                  "type": "string",
-                                  "nullable": true
-                                }
-                              }
-                            },
-                            "authenticators": {
-                              "type": "array",
-                              "items": {}
-                            },
-                            "canReset2fa": {
-                              "type": "boolean"
+                            "type": {
+                              "enum": [
+                                "user",
+                                "team"
+                              ],
+                              "type": "string"
                             },
                             "id": {
                               "type": "string"
@@ -27799,91 +27548,14 @@
                             "name": {
                               "type": "string"
                             },
-                            "username": {
-                              "type": "string"
-                            },
                             "email": {
                               "type": "string"
-                            },
-                            "avatarUrl": {
-                              "type": "string"
-                            },
-                            "isActive": {
-                              "type": "boolean"
-                            },
-                            "hasPasswordAuth": {
-                              "type": "boolean"
-                            },
-                            "isManaged": {
-                              "type": "boolean"
-                            },
-                            "dateJoined": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "lastLogin": {
-                              "type": "string",
-                              "format": "date-time",
-                              "nullable": true
-                            },
-                            "has2fa": {
-                              "type": "boolean"
-                            },
-                            "lastActive": {
-                              "type": "string",
-                              "format": "date-time",
-                              "nullable": true
-                            },
-                            "isSuperuser": {
-                              "type": "boolean"
-                            },
-                            "isStaff": {
-                              "type": "boolean"
-                            },
-                            "experiments": {
-                              "type": "object",
-                              "additionalProperties": {}
-                            },
-                            "emails": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "email": {
-                                    "type": "string"
-                                  },
-                                  "is_verified": {
-                                    "type": "boolean"
-                                  }
-                                },
-                                "required": [
-                                  "email",
-                                  "id",
-                                  "is_verified"
-                                ]
-                              }
                             }
                           },
                           "required": [
-                            "avatarUrl",
-                            "dateJoined",
-                            "email",
-                            "emails",
-                            "experiments",
-                            "has2fa",
-                            "hasPasswordAuth",
                             "id",
-                            "isActive",
-                            "isManaged",
-                            "isStaff",
-                            "isSuperuser",
-                            "lastActive",
-                            "lastLogin",
                             "name",
-                            "username"
+                            "type"
                           ]
                         },
                         "isBookmarked": {
@@ -27978,31 +27650,8 @@
                         "assignedTo": {
                           "id": "1",
                           "name": "John Doe",
-                          "username": "johndoe",
                           "email": "john@example.com",
-                          "avatarUrl": "https://secure.gravatar.com/avatar/1234567890abcdef",
-                          "isActive": true,
-                          "hasPasswordAuth": true,
-                          "isManaged": false,
-                          "dateJoined": "2018-01-01T00:00:00Z",
-                          "lastLogin": "2023-12-01T10:00:00Z",
-                          "has2fa": false,
-                          "lastActive": "2023-12-01T10:00:00Z",
-                          "isSuperuser": false,
-                          "isStaff": false,
-                          "experiments": {},
-                          "emails": [
-                            {
-                              "id": "1",
-                              "email": "john@example.com",
-                              "is_verified": true
-                            }
-                          ],
-                          "avatar": {
-                            "avatarType": "letter_avatar",
-                            "avatarUuid": null,
-                            "avatarUrl": null
-                          }
+                          "type": "user"
                         },
                         "count": "1",
                         "culprit": "raven.scripts.runner in main",
@@ -35918,12 +35567,10 @@
                           "type": "string"
                         },
                         "email": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "email",
                         "id",
                         "name",
                         "type"
@@ -37110,12 +36757,10 @@
                           "type": "string"
                         },
                         "email": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "email",
                         "id",
                         "name",
                         "type"
@@ -67088,12 +66733,10 @@
                 "type": "string"
               },
               "email": {
-                "type": "string",
-                "nullable": true
+                "type": "string"
               }
             },
             "required": [
-              "email",
               "id",
               "name",
               "type"
@@ -67511,12 +67154,10 @@
                   "type": "string"
                 },
                 "email": {
-                  "type": "string",
-                  "nullable": true
+                  "type": "string"
                 }
               },
               "required": [
-                "email",
                 "id",
                 "name",
                 "type"
@@ -69649,88 +69290,12 @@
             "assignedTo": {
               "type": "object",
               "properties": {
-                "identities": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "organization": {
-                        "type": "object",
-                        "properties": {
-                          "slug": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "name",
-                          "slug"
-                        ]
-                      },
-                      "provider": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name"
-                        ]
-                      },
-                      "dateVerified": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "dateSynced": {
-                        "type": "string",
-                        "format": "date-time"
-                      }
-                    },
-                    "required": [
-                      "dateSynced",
-                      "dateVerified",
-                      "id",
-                      "name",
-                      "organization",
-                      "provider"
-                    ]
-                  }
-                },
-                "avatar": {
-                  "type": "object",
-                  "properties": {
-                    "avatarType": {
-                      "type": "string"
-                    },
-                    "avatarUuid": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "avatarUrl": {
-                      "type": "string",
-                      "nullable": true
-                    }
-                  }
-                },
-                "authenticators": {
-                  "type": "array",
-                  "items": {}
-                },
-                "canReset2fa": {
-                  "type": "boolean"
+                "type": {
+                  "enum": [
+                    "user",
+                    "team"
+                  ],
+                  "type": "string"
                 },
                 "id": {
                   "type": "string"
@@ -69738,91 +69303,14 @@
                 "name": {
                   "type": "string"
                 },
-                "username": {
-                  "type": "string"
-                },
                 "email": {
                   "type": "string"
-                },
-                "avatarUrl": {
-                  "type": "string"
-                },
-                "isActive": {
-                  "type": "boolean"
-                },
-                "hasPasswordAuth": {
-                  "type": "boolean"
-                },
-                "isManaged": {
-                  "type": "boolean"
-                },
-                "dateJoined": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "lastLogin": {
-                  "type": "string",
-                  "format": "date-time",
-                  "nullable": true
-                },
-                "has2fa": {
-                  "type": "boolean"
-                },
-                "lastActive": {
-                  "type": "string",
-                  "format": "date-time",
-                  "nullable": true
-                },
-                "isSuperuser": {
-                  "type": "boolean"
-                },
-                "isStaff": {
-                  "type": "boolean"
-                },
-                "experiments": {
-                  "type": "object",
-                  "additionalProperties": {}
-                },
-                "emails": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "email": {
-                        "type": "string"
-                      },
-                      "is_verified": {
-                        "type": "boolean"
-                      }
-                    },
-                    "required": [
-                      "email",
-                      "id",
-                      "is_verified"
-                    ]
-                  }
                 }
               },
               "required": [
-                "avatarUrl",
-                "dateJoined",
-                "email",
-                "emails",
-                "experiments",
-                "has2fa",
-                "hasPasswordAuth",
                 "id",
-                "isActive",
-                "isManaged",
-                "isStaff",
-                "isSuperuser",
-                "lastActive",
-                "lastLogin",
                 "name",
-                "username"
+                "type"
               ]
             },
             "isBookmarked": {
@@ -70102,12 +69590,10 @@
                 "type": "string"
               },
               "email": {
-                "type": "string",
-                "nullable": true
+                "type": "string"
               }
             },
             "required": [
-              "email",
               "id",
               "name",
               "type"
@@ -74464,88 +73950,12 @@
               "assignedTo": {
                 "type": "object",
                 "properties": {
-                  "identities": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "organization": {
-                          "type": "object",
-                          "properties": {
-                            "slug": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "name",
-                            "slug"
-                          ]
-                        },
-                        "provider": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "name"
-                          ]
-                        },
-                        "dateVerified": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "dateSynced": {
-                          "type": "string",
-                          "format": "date-time"
-                        }
-                      },
-                      "required": [
-                        "dateSynced",
-                        "dateVerified",
-                        "id",
-                        "name",
-                        "organization",
-                        "provider"
-                      ]
-                    }
-                  },
-                  "avatar": {
-                    "type": "object",
-                    "properties": {
-                      "avatarType": {
-                        "type": "string"
-                      },
-                      "avatarUuid": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "avatarUrl": {
-                        "type": "string",
-                        "nullable": true
-                      }
-                    }
-                  },
-                  "authenticators": {
-                    "type": "array",
-                    "items": {}
-                  },
-                  "canReset2fa": {
-                    "type": "boolean"
+                  "type": {
+                    "enum": [
+                      "user",
+                      "team"
+                    ],
+                    "type": "string"
                   },
                   "id": {
                     "type": "string"
@@ -74553,91 +73963,14 @@
                   "name": {
                     "type": "string"
                   },
-                  "username": {
-                    "type": "string"
-                  },
                   "email": {
                     "type": "string"
-                  },
-                  "avatarUrl": {
-                    "type": "string"
-                  },
-                  "isActive": {
-                    "type": "boolean"
-                  },
-                  "hasPasswordAuth": {
-                    "type": "boolean"
-                  },
-                  "isManaged": {
-                    "type": "boolean"
-                  },
-                  "dateJoined": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "lastLogin": {
-                    "type": "string",
-                    "format": "date-time",
-                    "nullable": true
-                  },
-                  "has2fa": {
-                    "type": "boolean"
-                  },
-                  "lastActive": {
-                    "type": "string",
-                    "format": "date-time",
-                    "nullable": true
-                  },
-                  "isSuperuser": {
-                    "type": "boolean"
-                  },
-                  "isStaff": {
-                    "type": "boolean"
-                  },
-                  "experiments": {
-                    "type": "object",
-                    "additionalProperties": {}
-                  },
-                  "emails": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "is_verified": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "email",
-                        "id",
-                        "is_verified"
-                      ]
-                    }
                   }
                 },
                 "required": [
-                  "avatarUrl",
-                  "dateJoined",
-                  "email",
-                  "emails",
-                  "experiments",
-                  "has2fa",
-                  "hasPasswordAuth",
                   "id",
-                  "isActive",
-                  "isManaged",
-                  "isStaff",
-                  "isSuperuser",
-                  "lastActive",
-                  "lastLogin",
                   "name",
-                  "username"
+                  "type"
                 ]
               },
               "isBookmarked": {
