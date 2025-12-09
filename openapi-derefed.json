@@ -42018,7 +42018,7 @@
     "/api/0/seer/models/": {
       "get": {
         "operationId": "List Seer AI Models",
-        "description": "Get list of actively used LLM model names from Seer.\n\nReturns the list of AI models that are currently used in production in Seer.\nThis endpoint does not require authentication and can be used to discover which models Seer uses.",
+        "description": "Get list of actively used LLM model names from Seer.\n\nReturns the list of AI models that are currently used in production in Seer.\nThis endpoint does not require authentication and can be used to discover which models Seer uses.\n\nRequests to this endpoint should use the region-specific domain\neg. `us.sentry.io` or `de.sentry.io`",
         "tags": [
           "Seer"
         ],
@@ -42050,7 +42050,12 @@
             },
             "description": ""
           }
-        }
+        },
+        "servers": [
+          {
+            "url": "https://{region}.sentry.io"
+          }
+        ]
       }
     },
     "/api/0/sentry-apps/{sentry_app_id_or_slug}/": {
