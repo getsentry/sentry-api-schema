@@ -10355,6 +10355,845 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/forwarding/": {
+      "get": {
+        "operationId": "Retrieve Data Forwarders for an Organization",
+        "description": "Returns a list of data forwarders for an organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "organizationId": {
+                        "type": "string"
+                      },
+                      "isEnabled": {
+                        "type": "boolean"
+                      },
+                      "enrollNewProjects": {
+                        "type": "boolean"
+                      },
+                      "enrolledProjects": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "slug": {
+                              "type": "string"
+                            },
+                            "platform": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "platform",
+                            "slug"
+                          ]
+                        }
+                      },
+                      "provider": {
+                        "type": "string"
+                      },
+                      "config": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "projectConfigs": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "isEnabled": {
+                              "type": "boolean"
+                            },
+                            "dataForwarderId": {
+                              "type": "string"
+                            },
+                            "project": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                },
+                                "platform": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "platform",
+                                "slug"
+                              ]
+                            },
+                            "overrides": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            "effectiveConfig": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            "dateAdded": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "dateUpdated": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "dataForwarderId",
+                            "dateAdded",
+                            "dateUpdated",
+                            "effectiveConfig",
+                            "id",
+                            "isEnabled",
+                            "overrides",
+                            "project"
+                          ]
+                        }
+                      },
+                      "dateAdded": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateUpdated": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "config",
+                      "dateAdded",
+                      "dateUpdated",
+                      "enrollNewProjects",
+                      "enrolledProjects",
+                      "id",
+                      "isEnabled",
+                      "organizationId",
+                      "projectConfigs",
+                      "provider"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAllDataForwardersForAnOrganization": {
+                    "value": [
+                      {
+                        "id": "1",
+                        "organizationId": "1",
+                        "isEnabled": true,
+                        "enrollNewProjects": true,
+                        "enrolledProjects": [],
+                        "provider": "sqs",
+                        "config": {
+                          "region": "us-east-1",
+                          "queue_url": "https://sqs.us-east-1.amazonaws.com/01234567890/sentry-errors.fifo",
+                          "s3_bucket": "sentry-errors-bucket",
+                          "access_key": "AKIAIOSFODNN7EXAMPLE",
+                          "secret_key": "wJalrXUtnFEMI1K7MDENGSbPxRfiCYEXAMPLEKEY",
+                          "message_group_id": "sentry-errors"
+                        },
+                        "projectConfigs": [],
+                        "dateAdded": "2025-11-01T00:00:00.000000Z",
+                        "dateUpdated": "2025-11-01T00:00:00.000000Z"
+                      },
+                      {
+                        "id": "2",
+                        "organizationId": "1",
+                        "isEnabled": true,
+                        "enrollNewProjects": false,
+                        "enrolledProjects": [
+                          {
+                            "id": "1",
+                            "slug": "proj-1",
+                            "platform": "javascript-react"
+                          },
+                          {
+                            "id": "2",
+                            "slug": "proj-2",
+                            "platform": "python-flask"
+                          }
+                        ],
+                        "provider": "segment",
+                        "config": {
+                          "write_key": "itA5bLOPNxccvZ9ON1NYg9EXAMPLEKEY"
+                        },
+                        "projectConfigs": [
+                          {
+                            "id": "1",
+                            "isEnabled": true,
+                            "dataForwarderId": "2",
+                            "project": {
+                              "id": "1",
+                              "slug": "proj-1",
+                              "platform": "javascript-react"
+                            },
+                            "overrides": {},
+                            "effectiveConfig": {
+                              "write_key": "itA5bLOPNxccvZ9ON1NYg9EXAMPLEKEY"
+                            },
+                            "dateAdded": "2025-11-01T00:00:00.000000Z",
+                            "dateUpdated": "2025-11-01T00:00:00.000000Z"
+                          },
+                          {
+                            "id": "2",
+                            "isEnabled": true,
+                            "dataForwarderId": "2",
+                            "project": {
+                              "id": "2",
+                              "slug": "proj-2",
+                              "platform": "python-flask"
+                            },
+                            "overrides": {},
+                            "effectiveConfig": {
+                              "write_key": "itA5bLOPNxccvZ9ON1NYg9EXAMPLEKEY"
+                            },
+                            "dateAdded": "2025-11-01T00:00:00.000000Z",
+                            "dateUpdated": "2025-11-01T00:00:00.000000Z"
+                          }
+                        ],
+                        "dateAdded": "2025-11-01T00:00:00.000000Z",
+                        "dateUpdated": "2025-11-01T00:00:00.000000Z"
+                      },
+                      {
+                        "id": "3",
+                        "organizationId": "1",
+                        "isEnabled": true,
+                        "enrollNewProjects": true,
+                        "enrolledProjects": [
+                          {
+                            "id": "1",
+                            "slug": "proj-1",
+                            "platform": "javascript-react"
+                          }
+                        ],
+                        "provider": "splunk",
+                        "config": {
+                          "index": "main",
+                          "token": "ab13cdef-45aa-1bcd-a123-bcEXAMPLEKEY",
+                          "source": "sentry",
+                          "instance_url": "https://prd-a-abcde.splunkcloud.com:8088"
+                        },
+                        "projectConfigs": [
+                          {
+                            "id": "3",
+                            "isEnabled": true,
+                            "dataForwarderId": "3",
+                            "project": {
+                              "id": "1",
+                              "slug": "proj-1",
+                              "platform": "javascript-react"
+                            },
+                            "overrides": {
+                              "source": "sentry-custom"
+                            },
+                            "effectiveConfig": {
+                              "index": "main",
+                              "token": "ab13cdef-45aa-1bcd-a123-bcEXAMPLEKEY",
+                              "source": "sentry-custom",
+                              "instance_url": "https://prd-a-abcde.splunkcloud.com:8088"
+                            },
+                            "dateAdded": "2025-11-01T00:00:00.000000Z",
+                            "dateUpdated": "2025-11-01T00:00:00.000000Z"
+                          }
+                        ],
+                        "dateAdded": "2025-11-01T00:00:00.000000Z",
+                        "dateUpdated": "2025-11-01T00:00:00.000000Z"
+                      }
+                    ],
+                    "summary": "List all data forwarders for an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a Data Forwarder for an Organization",
+        "description": "Creates a new data forwarder for an organization.\nOnly one data forwarder can be created per provider for a given organization.\n\nProject-specific overrides can only be created after creating the data forwarder.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "organization_id": {
+                    "type": "integer",
+                    "description": "The ID of the organization related to the data forwarder."
+                  },
+                  "provider": {
+                    "enum": [
+                      "segment",
+                      "sqs",
+                      "splunk"
+                    ],
+                    "type": "string",
+                    "description": "The provider of the data forwarder. One of \"segment\", \"sqs\", or \"splunk\".\n\n* `segment` - Segment\n* `sqs` - Amazon SQS\n* `splunk` - Splunk"
+                  },
+                  "is_enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether the data forwarder is enabled."
+                  },
+                  "enroll_new_projects": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to enroll new projects automatically, after they're created."
+                  },
+                  "config": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "description": "The configuration for the data forwarder, specific to the provider type. \nFor a 'sqs' provider, the required keys are queue_url, region, access_key, secret_key. If using a FIFO queue, you must also provide a message_group_id, though s3_bucket is optional. \nFor a 'segment' provider, the required keys are write_key. \nFor a 'splunk' provider, the required keys are instance_url, index, source, token."
+                  },
+                  "project_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "The IDs of the projects connected to the data forwarder. Missing project IDs will be unenrolled if previously enrolled."
+                  }
+                },
+                "required": [
+                  "organization_id",
+                  "provider"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    },
+                    "isEnabled": {
+                      "type": "boolean"
+                    },
+                    "enrollNewProjects": {
+                      "type": "boolean"
+                    },
+                    "enrolledProjects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "platform",
+                          "slug"
+                        ]
+                      }
+                    },
+                    "provider": {
+                      "type": "string"
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "projectConfigs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "isEnabled": {
+                            "type": "boolean"
+                          },
+                          "dataForwarderId": {
+                            "type": "string"
+                          },
+                          "project": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              },
+                              "platform": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "platform",
+                              "slug"
+                            ]
+                          },
+                          "overrides": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "effectiveConfig": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "dateAdded": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "dateUpdated": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "dataForwarderId",
+                          "dateAdded",
+                          "dateUpdated",
+                          "effectiveConfig",
+                          "id",
+                          "isEnabled",
+                          "overrides",
+                          "project"
+                        ]
+                      }
+                    },
+                    "dateAdded": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "config",
+                    "dateAdded",
+                    "dateUpdated",
+                    "enrollNewProjects",
+                    "enrolledProjects",
+                    "id",
+                    "isEnabled",
+                    "organizationId",
+                    "projectConfigs",
+                    "provider"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/": {
+      "put": {
+        "operationId": "Update a Data Forwarder for an Organization",
+        "description": "Updates a data forwarder for an organization or update a project-specific override.\nUpdates to the data forwarder's configuration require `org:write` permissions, and the entire\nconfiguration to be provided, including the `project_ids` field.\n\nTo configure project-specific overrides, specify only the following fields:\n\n  - 'project_id': The ID of the project to create/modify the override for.\n  - 'overrides': Follows the same format as `config` but all provider fields are optional, since only specified fields are overridden.\n  - 'is_enabled': To enable/disable the forwarder for events on the specific project.\n\nOverrides can be performed with `project:write` permissions on the project being modified.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "data_forwarder_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the data forwarder you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "organization_id": {
+                    "type": "integer",
+                    "description": "The ID of the organization related to the data forwarder."
+                  },
+                  "provider": {
+                    "enum": [
+                      "segment",
+                      "sqs",
+                      "splunk"
+                    ],
+                    "type": "string",
+                    "description": "The provider of the data forwarder. One of \"segment\", \"sqs\", or \"splunk\".\n\n* `segment` - Segment\n* `sqs` - Amazon SQS\n* `splunk` - Splunk"
+                  },
+                  "is_enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether the data forwarder is enabled."
+                  },
+                  "enroll_new_projects": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to enroll new projects automatically, after they're created."
+                  },
+                  "config": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "description": "The configuration for the data forwarder, specific to the provider type. \nFor a 'sqs' provider, the required keys are queue_url, region, access_key, secret_key. If using a FIFO queue, you must also provide a message_group_id, though s3_bucket is optional. \nFor a 'segment' provider, the required keys are write_key. \nFor a 'splunk' provider, the required keys are instance_url, index, source, token."
+                  },
+                  "project_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "The IDs of the projects connected to the data forwarder. Missing project IDs will be unenrolled if previously enrolled."
+                  }
+                },
+                "required": [
+                  "organization_id",
+                  "provider"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    },
+                    "isEnabled": {
+                      "type": "boolean"
+                    },
+                    "enrollNewProjects": {
+                      "type": "boolean"
+                    },
+                    "enrolledProjects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "platform",
+                          "slug"
+                        ]
+                      }
+                    },
+                    "provider": {
+                      "type": "string"
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "projectConfigs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "isEnabled": {
+                            "type": "boolean"
+                          },
+                          "dataForwarderId": {
+                            "type": "string"
+                          },
+                          "project": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              },
+                              "platform": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "platform",
+                              "slug"
+                            ]
+                          },
+                          "overrides": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "effectiveConfig": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "dateAdded": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "dateUpdated": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "dataForwarderId",
+                          "dateAdded",
+                          "dateUpdated",
+                          "effectiveConfig",
+                          "id",
+                          "isEnabled",
+                          "overrides",
+                          "project"
+                        ]
+                      }
+                    },
+                    "dateAdded": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "config",
+                    "dateAdded",
+                    "dateUpdated",
+                    "enrollNewProjects",
+                    "enrolledProjects",
+                    "id",
+                    "isEnabled",
+                    "organizationId",
+                    "projectConfigs",
+                    "provider"
+                  ]
+                },
+                "examples": {
+                  "ADataForwarderForAnOrganization": {
+                    "value": {
+                      "id": "1",
+                      "organizationId": "1",
+                      "isEnabled": true,
+                      "enrollNewProjects": true,
+                      "enrolledProjects": [],
+                      "provider": "sqs",
+                      "config": {
+                        "region": "us-east-1",
+                        "queue_url": "https://sqs.us-east-1.amazonaws.com/01234567890/sentry-errors.fifo",
+                        "s3_bucket": "sentry-errors-bucket",
+                        "access_key": "AKIAIOSFODNN7EXAMPLE",
+                        "secret_key": "wJalrXUtnFEMI1K7MDENGSbPxRfiCYEXAMPLEKEY",
+                        "message_group_id": "sentry-errors"
+                      },
+                      "projectConfigs": [],
+                      "dateAdded": "2025-11-01T00:00:00.000000Z",
+                      "dateUpdated": "2025-11-01T00:00:00.000000Z"
+                    },
+                    "summary": "A data forwarder for an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a Data Forwarder for an Organization",
+        "description": "Deletes a data forwarder for an organization. All project-specific overrides will be deleted as well.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "data_forwarder_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the data forwarder you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/integrations/": {
       "get": {
         "operationId": "List an Organization's Available Integrations",
@@ -59598,6 +60437,188 @@
           }
         }
       },
+      "DataForwarder": {
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": "integer",
+            "description": "The ID of the organization related to the data forwarder."
+          },
+          "provider": {
+            "enum": [
+              "segment",
+              "sqs",
+              "splunk"
+            ],
+            "type": "string",
+            "description": "The provider of the data forwarder. One of \"segment\", \"sqs\", or \"splunk\".\n\n* `segment` - Segment\n* `sqs` - Amazon SQS\n* `splunk` - Splunk"
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether the data forwarder is enabled."
+          },
+          "enroll_new_projects": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to enroll new projects automatically, after they're created."
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "The configuration for the data forwarder, specific to the provider type. \nFor a 'sqs' provider, the required keys are queue_url, region, access_key, secret_key. If using a FIFO queue, you must also provide a message_group_id, though s3_bucket is optional. \nFor a 'segment' provider, the required keys are write_key. \nFor a 'splunk' provider, the required keys are instance_url, index, source, token."
+          },
+          "project_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "The IDs of the projects connected to the data forwarder. Missing project IDs will be unenrolled if previously enrolled."
+          }
+        },
+        "required": [
+          "organization_id",
+          "provider"
+        ]
+      },
+      "DataForwarderResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "isEnabled": {
+            "type": "boolean"
+          },
+          "enrollNewProjects": {
+            "type": "boolean"
+          },
+          "enrolledProjects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "platform": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "id",
+                "platform",
+                "slug"
+              ]
+            }
+          },
+          "provider": {
+            "type": "string"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "projectConfigs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "isEnabled": {
+                  "type": "boolean"
+                },
+                "dataForwarderId": {
+                  "type": "string"
+                },
+                "project": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "platform",
+                    "slug"
+                  ]
+                },
+                "overrides": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "effectiveConfig": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "dateAdded": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "dateUpdated": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "dataForwarderId",
+                "dateAdded",
+                "dateUpdated",
+                "effectiveConfig",
+                "id",
+                "isEnabled",
+                "overrides",
+                "project"
+              ]
+            }
+          },
+          "dateAdded": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateUpdated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "config",
+          "dateAdded",
+          "dateUpdated",
+          "enrollNewProjects",
+          "enrolledProjects",
+          "id",
+          "isEnabled",
+          "organizationId",
+          "projectConfigs",
+          "provider"
+        ]
+      },
       "Deploy": {
         "type": "object",
         "properties": {
@@ -63911,6 +64932,145 @@
             "public",
             "rateLimit",
             "secret"
+          ]
+        }
+      },
+      "ListDataForwarderResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "organizationId": {
+              "type": "string"
+            },
+            "isEnabled": {
+              "type": "boolean"
+            },
+            "enrollNewProjects": {
+              "type": "boolean"
+            },
+            "enrolledProjects": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "id",
+                  "platform",
+                  "slug"
+                ]
+              }
+            },
+            "provider": {
+              "type": "string"
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "projectConfigs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "isEnabled": {
+                    "type": "boolean"
+                  },
+                  "dataForwarderId": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "platform": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "platform",
+                      "slug"
+                    ]
+                  },
+                  "overrides": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "effectiveConfig": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "dateAdded": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "dateUpdated": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "dataForwarderId",
+                  "dateAdded",
+                  "dateUpdated",
+                  "effectiveConfig",
+                  "id",
+                  "isEnabled",
+                  "overrides",
+                  "project"
+                ]
+              }
+            },
+            "dateAdded": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "dateUpdated": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "config",
+            "dateAdded",
+            "dateUpdated",
+            "enrollNewProjects",
+            "enrolledProjects",
+            "id",
+            "isEnabled",
+            "organizationId",
+            "projectConfigs",
+            "provider"
           ]
         }
       },
