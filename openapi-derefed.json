@@ -1109,8 +1109,20 @@
                     "enableSeerCoding": {
                       "type": "boolean"
                     },
+                    "allowBackgroundAgentDelegation": {
+                      "type": "boolean"
+                    },
+                    "autoEnableCodeReview": {
+                      "type": "boolean"
+                    },
                     "autoOpenPrs": {
                       "type": "boolean"
+                    },
+                    "defaultCodeReviewTriggers": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     },
                     "teams": {
                       "type": "array",
@@ -1801,12 +1813,14 @@
                   "required": [
                     "aggregatedDataConsent",
                     "alertsMemberWrite",
+                    "allowBackgroundAgentDelegation",
                     "allowJoinRequests",
                     "allowMemberInvite",
                     "allowMemberProjectCreation",
                     "allowSharedIssues",
                     "allowSuperuserAccess",
                     "attachmentsRole",
+                    "autoEnableCodeReview",
                     "autoOpenPrs",
                     "avatar",
                     "codecovAccess",
@@ -1815,6 +1829,7 @@
                     "dateCreated",
                     "debugFilesRole",
                     "defaultAutofixAutomationTuning",
+                    "defaultCodeReviewTriggers",
                     "defaultRole",
                     "defaultSeerScannerAutomation",
                     "enablePrReviewTestGeneration",
@@ -2124,10 +2139,17 @@
                       "gitlabPRBot": false,
                       "aggregatedDataConsent": false,
                       "defaultAutofixAutomationTuning": "off",
+                      "autoEnableCodeReview": true,
+                      "defaultCodeReviewTriggers": [
+                        "on_command_phrase",
+                        "on_ready_for_review",
+                        "on_new_commit"
+                      ],
                       "defaultSeerScannerAutomation": true,
                       "enableSeerCoding": true,
                       "enableSeerEnhancedAlerts": true,
                       "autoOpenPrs": false,
+                      "allowBackgroundAgentDelegation": true,
                       "enablePrReviewTestGeneration": true,
                       "issueAlertsThreadFlag": true,
                       "metricAlertsThreadFlag": true,
@@ -61099,8 +61121,20 @@
           "enableSeerCoding": {
             "type": "boolean"
           },
+          "allowBackgroundAgentDelegation": {
+            "type": "boolean"
+          },
+          "autoEnableCodeReview": {
+            "type": "boolean"
+          },
           "autoOpenPrs": {
             "type": "boolean"
+          },
+          "defaultCodeReviewTriggers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "teams": {
             "type": "array",
@@ -61791,12 +61825,14 @@
         "required": [
           "aggregatedDataConsent",
           "alertsMemberWrite",
+          "allowBackgroundAgentDelegation",
           "allowJoinRequests",
           "allowMemberInvite",
           "allowMemberProjectCreation",
           "allowSharedIssues",
           "allowSuperuserAccess",
           "attachmentsRole",
+          "autoEnableCodeReview",
           "autoOpenPrs",
           "avatar",
           "codecovAccess",
@@ -61805,6 +61841,7 @@
           "dateCreated",
           "debugFilesRole",
           "defaultAutofixAutomationTuning",
+          "defaultCodeReviewTriggers",
           "defaultRole",
           "defaultSeerScannerAutomation",
           "enablePrReviewTestGeneration",
