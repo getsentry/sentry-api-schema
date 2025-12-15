@@ -592,6 +592,18 @@
                     "type": "string",
                     "description": "The role required to download debug information files, ProGuard mappings and source maps.\n\n* `member` - Member\n* `admin` - Admin\n* `manager` - Manager\n* `owner` - Owner"
                   },
+                  "hasGranularReplayPermissions": {
+                    "type": "boolean",
+                    "description": "Specify `true` to enable granular replay permissions, allowing per-member access control for replay data."
+                  },
+                  "replayAccessMembers": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "nullable": true,
+                    "description": "A list of user IDs who have permission to access replay data. Requires the hasGranularReplayPermissions flag to be true to be enforced."
+                  },
                   "avatarType": {
                     "enum": [
                       "letter_avatar",
@@ -70033,6 +70045,18 @@
             ],
             "type": "string",
             "description": "The role required to download debug information files, ProGuard mappings and source maps.\n\n* `member` - Member\n* `admin` - Admin\n* `manager` - Manager\n* `owner` - Owner"
+          },
+          "hasGranularReplayPermissions": {
+            "type": "boolean",
+            "description": "Specify `true` to enable granular replay permissions, allowing per-member access control for replay data."
+          },
+          "replayAccessMembers": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "nullable": true,
+            "description": "A list of user IDs who have permission to access replay data. Requires the hasGranularReplayPermissions flag to be true to be enforced."
           },
           "avatarType": {
             "enum": [
