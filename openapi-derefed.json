@@ -21350,6 +21350,266 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/project-keys/": {
+      "get": {
+        "operationId": "List an Organization's Client Keys",
+        "description": "Return a list of client keys (DSNs) for all projects in an organization.\n\nThis paginated endpoint lists client keys across all projects in an organization. Each key includes the project ID\nto identify which project it belongs to.\n\nQuery Parameters:\n- team: Filter by team slug or ID to get keys only for that team's projects\n- status: Filter by 'active' or 'inactive' to get keys with specific status",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          },
+          {
+            "in": "query",
+            "name": "team",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Filter keys by team slug or ID. If provided, only keys for projects belonging to this team will be returned."
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "enum": [
+                "active",
+                "inactive"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Filter keys by status. Options are 'active' or 'inactive'.\n\n* `active`\n* `inactive`"
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "This represents a Sentry Project Client Key.",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "public": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "secret": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "projectId": {
+                        "type": "integer"
+                      },
+                      "isActive": {
+                        "type": "boolean"
+                      },
+                      "rateLimit": {
+                        "type": "object",
+                        "properties": {
+                          "window": {
+                            "type": "integer"
+                          },
+                          "count": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "window"
+                        ],
+                        "nullable": true
+                      },
+                      "dsn": {
+                        "type": "object",
+                        "properties": {
+                          "secret": {
+                            "type": "string"
+                          },
+                          "public": {
+                            "type": "string"
+                          },
+                          "csp": {
+                            "type": "string"
+                          },
+                          "security": {
+                            "type": "string"
+                          },
+                          "minidump": {
+                            "type": "string"
+                          },
+                          "nel": {
+                            "type": "string"
+                          },
+                          "unreal": {
+                            "type": "string"
+                          },
+                          "crons": {
+                            "type": "string"
+                          },
+                          "cdn": {
+                            "type": "string"
+                          },
+                          "playstation": {
+                            "type": "string"
+                          },
+                          "integration": {
+                            "type": "string"
+                          },
+                          "otlp_traces": {
+                            "type": "string"
+                          },
+                          "otlp_logs": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "cdn",
+                          "crons",
+                          "csp",
+                          "integration",
+                          "minidump",
+                          "nel",
+                          "otlp_logs",
+                          "otlp_traces",
+                          "playstation",
+                          "public",
+                          "secret",
+                          "security",
+                          "unreal"
+                        ]
+                      },
+                      "browserSdkVersion": {
+                        "type": "string"
+                      },
+                      "browserSdk": {
+                        "type": "object",
+                        "properties": {
+                          "choices": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "choices"
+                        ]
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "dynamicSdkLoaderOptions": {
+                        "type": "object",
+                        "properties": {
+                          "hasReplay": {
+                            "type": "boolean"
+                          },
+                          "hasPerformance": {
+                            "type": "boolean"
+                          },
+                          "hasDebug": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "hasDebug",
+                          "hasPerformance",
+                          "hasReplay"
+                        ]
+                      },
+                      "useCase": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "browserSdk",
+                      "browserSdkVersion",
+                      "dateCreated",
+                      "dsn",
+                      "dynamicSdkLoaderOptions",
+                      "id",
+                      "isActive",
+                      "label",
+                      "name",
+                      "projectId",
+                      "public",
+                      "rateLimit",
+                      "secret"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "default": "Team not found"
+                    }
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/projects/": {
       "get": {
         "operationId": "List an Organization's Projects",
@@ -66326,6 +66586,175 @@
           ]
         }
       },
+      "ListOrganizationClientKeysResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "This represents a Sentry Project Client Key.",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "public": {
+              "type": "string",
+              "nullable": true
+            },
+            "secret": {
+              "type": "string",
+              "nullable": true
+            },
+            "projectId": {
+              "type": "integer"
+            },
+            "isActive": {
+              "type": "boolean"
+            },
+            "rateLimit": {
+              "type": "object",
+              "properties": {
+                "window": {
+                  "type": "integer"
+                },
+                "count": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "count",
+                "window"
+              ],
+              "nullable": true
+            },
+            "dsn": {
+              "type": "object",
+              "properties": {
+                "secret": {
+                  "type": "string"
+                },
+                "public": {
+                  "type": "string"
+                },
+                "csp": {
+                  "type": "string"
+                },
+                "security": {
+                  "type": "string"
+                },
+                "minidump": {
+                  "type": "string"
+                },
+                "nel": {
+                  "type": "string"
+                },
+                "unreal": {
+                  "type": "string"
+                },
+                "crons": {
+                  "type": "string"
+                },
+                "cdn": {
+                  "type": "string"
+                },
+                "playstation": {
+                  "type": "string"
+                },
+                "integration": {
+                  "type": "string"
+                },
+                "otlp_traces": {
+                  "type": "string"
+                },
+                "otlp_logs": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cdn",
+                "crons",
+                "csp",
+                "integration",
+                "minidump",
+                "nel",
+                "otlp_logs",
+                "otlp_traces",
+                "playstation",
+                "public",
+                "secret",
+                "security",
+                "unreal"
+              ]
+            },
+            "browserSdkVersion": {
+              "type": "string"
+            },
+            "browserSdk": {
+              "type": "object",
+              "properties": {
+                "choices": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "choices"
+              ]
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "dynamicSdkLoaderOptions": {
+              "type": "object",
+              "properties": {
+                "hasReplay": {
+                  "type": "boolean"
+                },
+                "hasPerformance": {
+                  "type": "boolean"
+                },
+                "hasDebug": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "hasDebug",
+                "hasPerformance",
+                "hasReplay"
+              ]
+            },
+            "useCase": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "browserSdk",
+            "browserSdkVersion",
+            "dateCreated",
+            "dsn",
+            "dynamicSdkLoaderOptions",
+            "id",
+            "isActive",
+            "label",
+            "name",
+            "projectId",
+            "public",
+            "rateLimit",
+            "secret"
+          ]
+        }
+      },
       "ListOrganizationIntegrationResponse": {
         "type": "array",
         "items": {
@@ -76152,6 +76581,15 @@
         "required": [
           "slug"
         ]
+      },
+      "TeamNotFound": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "default": "Team not found"
+          }
+        }
       },
       "TeamPost": {
         "type": "object",
