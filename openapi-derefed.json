@@ -9807,8 +9807,8 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/events/": {
       "get": {
-        "operationId": "Query Discover Events in Table Format",
-        "description": "Retrieves discover (also known as events) data for a given organization.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested",
+        "operationId": "Query Explore Events in Table Format",
+        "description": "Retrieves explore data for a given organization.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested",
         "parameters": [
           {
             "in": "path",
@@ -9828,7 +9828,22 @@
                 "type": "string"
               }
             },
-            "description": "The fields, functions, or equations to request for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/product/sentry-basics/search/searchable-properties/#properties-table), under any field that is an event property.\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[]` formatting to avoid ambiguity with any fields\n    - example: `field=tag[isEnterprise]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n",
+            "description": "The fields, functions, or equations to request for the query. At most 20 fields can be selected per request. Each field can be one of the following types:\n- A built-in key field. See possible fields in the [properties table](/concepts/search/searchable-properties/), under any field that matches the dataset passed to the dataset parameter\n    - example: `field=transaction`\n- A tag. Tags should use the `tag[{name}, {type}]` formatting to avoid ambiguity with any fields,\n    - example: `field=tag[isEnterprise, string]`\n    - example: `field=tag[numberOfBytes, number]`\n- A function which will be in the format of `function_name(parameters,...)`. See possible functions in the [query builder documentation](/product/discover-queries/query-builder/#stacking-functions).\n    - when a function is included, Discover will group by any tags or fields\n    - example: `field=count_if(transaction.duration,greater,300)`\n- An equation when prefixed with `equation|`. Read more about [equations here](/product/discover-queries/query-builder/query-equations/).\n    - example: `field=equation|count_if(transaction.duration,greater,300) / count() * 100`\n",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "dataset",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "logs",
+                "profile_functions",
+                "spans",
+                "uptime_results"
+              ]
+            },
+            "description": "Which dataset to query, changing datasets changes the available fields that can be queried",
             "required": true
           },
           {
@@ -9905,7 +9920,7 @@
           }
         ],
         "tags": [
-          "Discover"
+          "Explore"
         ],
         "security": [
           {
@@ -9992,6 +10007,436 @@
                       }
                     },
                     "summary": "Query Events"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Invalid Query"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/events-timeseries/": {
+      "get": {
+        "operationId": "Query Explore Events in Timeseries Format",
+        "description": "Retrieves explore data for a given organization as a timeseries.\n\nThis endpoint can return timeseries for either 1 or many axis, and results grouped to the top events depending\non the parameters passed",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "dataset",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "logs",
+                "profile_functions",
+                "spans",
+                "uptime_results"
+              ]
+            },
+            "description": "Which dataset to query, changing datasets changes the available fields that can be queried",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "topEvents",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of top event results to return, must be between 1 and 10.\nWhen TopEvents is passed, both sort and groupBy are required parameters"
+          },
+          {
+            "in": "query",
+            "name": "comparisonDelta",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The delta in seconds to return additional offset timeseries by"
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The size of the bucket for the timeseries to have, must be a value smaller than the window being\nqueried. If the interval is invalid a default interval will be selected instead"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            },
+            "description": "What to order the results of the query by. Must be something in the `field` list, excluding equations."
+          },
+          {
+            "in": "query",
+            "name": "groupBy",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "List of fields to group by, *Required* for topEvents queries as this and sort determine what the\ntop events are"
+          },
+          {
+            "in": "query",
+            "name": "yAxis",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The aggregate field to create the timeseries for, defaults to `count()` when not included"
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nExample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          },
+          {
+            "in": "query",
+            "name": "disableAggregateExtrapolation",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ]
+            },
+            "description": "Whether to disable the use of extrapolation and return the sampled values, due to sampling the\nnumber returned may be less than the actual values sent to Sentry"
+          },
+          {
+            "in": "query",
+            "name": "preventMetricAggregates",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ]
+            },
+            "description": "Whether to throw an error when aggregates are passed in the query or groupBy"
+          },
+          {
+            "in": "query",
+            "name": "excludeOther",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ]
+            },
+            "description": "Only applicable with TopEvents, whether to include the 'other' timeseries which represents all the\nevents that aren't in the top groups."
+          }
+        ],
+        "tags": [
+          "Explore"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "dataset": {
+                          "type": "string"
+                        },
+                        "start": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "end": {
+                          "type": "number",
+                          "format": "double"
+                        }
+                      },
+                      "required": [
+                        "dataset",
+                        "end",
+                        "start"
+                      ]
+                    },
+                    "timeSeries": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "values": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "value": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "incomplete": {
+                                  "type": "boolean"
+                                },
+                                "comparisonValue": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "sampleCount": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "sampleRate": {
+                                  "type": "number",
+                                  "format": "double",
+                                  "nullable": true
+                                },
+                                "confidence": {
+                                  "enum": [
+                                    "low",
+                                    "high"
+                                  ],
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "incompleteReason": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "incomplete",
+                                "timestamp",
+                                "value"
+                              ]
+                            }
+                          },
+                          "yAxis": {
+                            "type": "string"
+                          },
+                          "groupBy": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "value"
+                              ]
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "properties": {
+                              "order": {
+                                "type": "integer"
+                              },
+                              "isOther": {
+                                "type": "boolean"
+                              },
+                              "valueUnit": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "dataScanned": {
+                                "enum": [
+                                  "partial",
+                                  "full"
+                                ],
+                                "type": "string"
+                              },
+                              "valueType": {
+                                "type": "string"
+                              },
+                              "interval": {
+                                "type": "number",
+                                "format": "double"
+                              }
+                            },
+                            "required": [
+                              "interval",
+                              "valueType",
+                              "valueUnit"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "meta",
+                          "values",
+                          "yAxis"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "timeSeries"
+                  ]
+                },
+                "examples": {
+                  "QueryTopEventsAsATimeseries": {
+                    "value": {
+                      "timeSeries": [
+                        {
+                          "values": [
+                            {
+                              "timestamp": 1741368281123,
+                              "value": 5,
+                              "incomplete": false
+                            },
+                            {
+                              "timestamp": 1741368281123,
+                              "value": 5,
+                              "incomplete": false
+                            }
+                          ],
+                          "yAxis": "count()",
+                          "groupBy": [
+                            {
+                              "key": "transaction",
+                              "value": "foo"
+                            },
+                            {
+                              "key": "project",
+                              "value": "bar"
+                            },
+                            {
+                              "key": "tag[foo]",
+                              "value": "baz"
+                            }
+                          ],
+                          "meta": {
+                            "valueUnit": null,
+                            "valueType": "integer",
+                            "interval": 3600
+                          }
+                        },
+                        {
+                          "values": [
+                            {
+                              "timestamp": 1741368281123,
+                              "value": 5,
+                              "incomplete": false
+                            },
+                            {
+                              "timestamp": 1741368281123,
+                              "value": 5,
+                              "incomplete": false
+                            }
+                          ],
+                          "yAxis": "count()",
+                          "groupBy": [
+                            {
+                              "key": "transaction",
+                              "value": "foo"
+                            },
+                            {
+                              "key": "project",
+                              "value": "ball"
+                            },
+                            {
+                              "key": "tag[foo]",
+                              "value": "baz"
+                            }
+                          ],
+                          "meta": {
+                            "valueUnit": null,
+                            "valueType": "integer",
+                            "interval": 3600
+                          }
+                        }
+                      ],
+                      "meta": {
+                        "dataset": "spans",
+                        "start": 1741368281123,
+                        "end": 1741368281123
+                      }
+                    },
+                    "summary": "Query Top Events as a Timeseries"
                   }
                 }
               }
@@ -70755,6 +71200,152 @@
           "meta"
         ]
       },
+      "OrganizationEventsTimeseriesResponse": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "dataset": {
+                "type": "string"
+              },
+              "start": {
+                "type": "number",
+                "format": "double"
+              },
+              "end": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "required": [
+              "dataset",
+              "end",
+              "start"
+            ]
+          },
+          "timeSeries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "value": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "incomplete": {
+                        "type": "boolean"
+                      },
+                      "comparisonValue": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "sampleCount": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "sampleRate": {
+                        "type": "number",
+                        "format": "double",
+                        "nullable": true
+                      },
+                      "confidence": {
+                        "enum": [
+                          "low",
+                          "high"
+                        ],
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "incompleteReason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "incomplete",
+                      "timestamp",
+                      "value"
+                    ]
+                  }
+                },
+                "yAxis": {
+                  "type": "string"
+                },
+                "groupBy": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "value"
+                    ]
+                  }
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "order": {
+                      "type": "integer"
+                    },
+                    "isOther": {
+                      "type": "boolean"
+                    },
+                    "valueUnit": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dataScanned": {
+                      "enum": [
+                        "partial",
+                        "full"
+                      ],
+                      "type": "string"
+                    },
+                    "valueType": {
+                      "type": "string"
+                    },
+                    "interval": {
+                      "type": "number",
+                      "format": "double"
+                    }
+                  },
+                  "required": [
+                    "interval",
+                    "valueType",
+                    "valueUnit"
+                  ]
+                }
+              },
+              "required": [
+                "meta",
+                "values",
+                "yAxis"
+              ]
+            }
+          }
+        },
+        "required": [
+          "timeSeries"
+        ]
+      },
       "OrganizationGroupIndexGetResponse": {
         "type": "array",
         "items": {
@@ -77216,6 +77807,16 @@
       "name": "Discover",
       "x-sidebar-name": "Discover & Performance",
       "description": "Discover and Performance allow you to slice and dice your Error and Transaction events",
+      "x-display-description": true,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Explore",
+      "x-sidebar-name": "Explore",
+      "description": "Explore allow you to slice and dice your events",
       "x-display-description": true,
       "externalDocs": {
         "description": "Found an error? Let us know.",
