@@ -7350,6 +7350,1155 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/detectors/": {
+      "get": {
+        "operationId": "Fetch an Organization's Monitors",
+        "description": "List an Organization's Monitors",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An optional search query for filtering monitors."
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The property to sort results by. If not specified, the results are sorted by id.\n\nAvailable fields are:\n- `name`\n- `id`\n- `type`\n- `connectedWorkflows`\n- `latestGroup`\n- `openIssues`\n\nPrefix with `-` to sort in descending order.\n        "
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The ID of the monitor you'd like to query."
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:read",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "owner": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "enum": [
+                              "user",
+                              "team"
+                            ],
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type"
+                        ],
+                        "nullable": true
+                      },
+                      "createdBy": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "latestGroup": {
+                        "type": "object",
+                        "additionalProperties": {},
+                        "nullable": true
+                      },
+                      "description": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "projectId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "workflowIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateUpdated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dataSources": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "nullable": true
+                      },
+                      "conditionGroup": {
+                        "type": "object",
+                        "additionalProperties": {},
+                        "nullable": true
+                      },
+                      "config": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "enabled": {
+                        "type": "boolean"
+                      },
+                      "openIssues": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "conditionGroup",
+                      "config",
+                      "dataSources",
+                      "dateCreated",
+                      "dateUpdated",
+                      "enabled",
+                      "id",
+                      "name",
+                      "openIssues",
+                      "projectId",
+                      "type",
+                      "workflowIds"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAllMonitorsInAnOrganization": {
+                    "value": [
+                      {
+                        "id": "123",
+                        "projectId": "1",
+                        "name": "Error Monitor",
+                        "description": null,
+                        "type": "error",
+                        "workflowIds": [
+                          "12345"
+                        ],
+                        "owner": null,
+                        "createdBy": null,
+                        "dateCreated": "2025-03-12T11:15:50.764865Z",
+                        "dateUpdated": "2025-06-17T14:04:02.485354Z",
+                        "dataSources": null,
+                        "conditionGroup": null,
+                        "config": {},
+                        "enabled": true,
+                        "latestGroup": {
+                          "id": "123456789",
+                          "title": "This is an example Python exception",
+                          "culprit": "/api/0/test/example/",
+                          "shortId": "SENTRY-ABC12",
+                          "level": "info",
+                          "status": "unresolved",
+                          "substatus": "escalating",
+                          "platform": "python",
+                          "project": {
+                            "id": "1",
+                            "name": "Example",
+                            "slug": "sentry",
+                            "platform": "python"
+                          },
+                          "type": "default",
+                          "issueType": "error",
+                          "issueCategory": "error",
+                          "metadata": {
+                            "title": "This is an example Python exception",
+                            "sdk": {
+                              "name": "sentry.python.django",
+                              "name_normalized": "sentry.python"
+                            },
+                            "severity": 0,
+                            "severity_reason": "log_level_info",
+                            "initial_priority": 25
+                          },
+                          "numComments": 0,
+                          "firstSeen": "2026-01-08T21:00:59.737468Z",
+                          "lastSeen": "2026-01-08T21:23:45.723716Z"
+                        },
+                        "openIssues": 100
+                      },
+                      {
+                        "id": "234567891",
+                        "projectId": "1",
+                        "name": "[us] Example",
+                        "description": null,
+                        "type": "uptime_domain_failure",
+                        "workflowIds": [],
+                        "owner": {
+                          "type": "team",
+                          "id": "1234",
+                          "name": "abc"
+                        },
+                        "createdBy": null,
+                        "dateCreated": "2025-04-21T21:56:32.445528Z",
+                        "dateUpdated": "2025-10-23T00:07:24.809466Z",
+                        "dataSources": [
+                          {
+                            "id": "271218",
+                            "organizationId": "1",
+                            "type": "uptime_subscription",
+                            "sourceId": "267409",
+                            "queryObj": {
+                              "url": "https://example.com",
+                              "method": "POST",
+                              "body": "{\n  \"level\": \"info\",\n  \"message\": \"Test-Event\",\n  \"platform\": \"javascript\"\n}",
+                              "headers": [
+                                [
+                                  "content-type",
+                                  "application/json"
+                                ],
+                                [
+                                  "user-agent",
+                                  "Sentry Test"
+                                ]
+                              ],
+                              "intervalSeconds": 60,
+                              "timeoutMs": 5000,
+                              "traceSampling": false
+                            }
+                          }
+                        ],
+                        "conditionGroup": {
+                          "id": "56789",
+                          "organizationId": "1",
+                          "logicType": "any",
+                          "conditions": [
+                            {
+                              "id": "123456",
+                              "type": "eq",
+                              "comparison": "failure",
+                              "conditionResult": 75
+                            },
+                            {
+                              "id": "234567",
+                              "type": "eq",
+                              "comparison": "success",
+                              "conditionResult": 0
+                            }
+                          ],
+                          "actions": []
+                        },
+                        "config": {
+                          "mode": 1,
+                          "environment": "us",
+                          "downtimeThreshold": 3,
+                          "recoveryThreshold": 1
+                        },
+                        "enabled": true,
+                        "latestGroup": null,
+                        "openIssues": 0
+                      },
+                      {
+                        "id": "1234567",
+                        "projectId": "123",
+                        "name": "Test Alert",
+                        "description": null,
+                        "type": "metric_issue",
+                        "workflowIds": [
+                          "1234567"
+                        ],
+                        "owner": {
+                          "type": "user",
+                          "id": "12345",
+                          "name": "jane@example.com",
+                          "email": "jane@example.com"
+                        },
+                        "createdBy": "12345",
+                        "dateCreated": "2025-04-28T22:46:12.469771Z",
+                        "dateUpdated": "2025-07-29T20:57:06.680844Z",
+                        "dataSources": [
+                          {
+                            "id": "56789",
+                            "organizationId": "1",
+                            "type": "snuba_query_subscription",
+                            "sourceId": "45678",
+                            "queryObj": {
+                              "id": "34567",
+                              "status": 0,
+                              "subscription": "12/3456789",
+                              "snubaQuery": {
+                                "id": "56789",
+                                "dataset": "events_analytics_platform",
+                                "query": "",
+                                "aggregate": "avg(span.duration)",
+                                "timeWindow": 14400,
+                                "environment": null,
+                                "eventTypes": [
+                                  "trace_item_span"
+                                ],
+                                "extrapolationMode": "unknown"
+                              }
+                            }
+                          }
+                        ],
+                        "conditionGroup": {
+                          "id": "12345",
+                          "organizationId": "1",
+                          "logicType": "any",
+                          "conditions": [
+                            {
+                              "id": "456789",
+                              "type": "gt",
+                              "comparison": 1600,
+                              "conditionResult": 75
+                            },
+                            {
+                              "id": "345678",
+                              "type": "lte",
+                              "comparison": 1600,
+                              "conditionResult": 0
+                            }
+                          ],
+                          "actions": []
+                        },
+                        "config": {
+                          "detectionType": "static",
+                          "comparisonDelta": null
+                        },
+                        "enabled": true,
+                        "latestGroup": null,
+                        "openIssues": 0
+                      }
+                    ],
+                    "summary": "List all monitors in an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a Monitor for a Project",
+        "description": "Create a Monitor for a project",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the monitor.",
+                    "maxLength": 200
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The type of monitor - `metric_issue`."
+                  },
+                  "data_sources": {
+                    "type": "array",
+                    "items": {},
+                    "description": "\n            The data sources for the monitor to use based on what you want to measure.\n\n            **Number of Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n"
+                  },
+                  "config": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "\n            The issue detection type configuration.\n\n\n            - `detectionType`\n                - `static`: Threshold based monitor\n                - `percent`: Change based monitor\n                - `dynamic`: Dynamic monitor\n            - `comparisonDelta`: If selecting a **change** detection type, the comparison delta is the time period at which to compare against in minutes.\n            For example, a value of 3600 compares the metric tracked against data 1 hour ago.\n                - `300`: 5 minutes\n                - `900`: 15 minutes\n                - `3600`: 1 hour\n                - `86400`: 1 day\n                - `604800`: 1 week\n                - `2592000`: 1 month\n\n            **Threshold**\n            ```json\n            {\n                \"detectionType\": \"static\",\n            }\n            ```\n            **Change**\n            ```json\n            {\n                \"detectionType\": \"percent\",\n                \"comparisonDelta\": 3600,\n            }\n            ```\n            **Dynamic**\n            ```json\n            {\n                \"detectionType\": \"dynamic\",\n            }\n            ```\n        "
+                  },
+                  "condition_group": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "logic_type": {
+                            "enum": [
+                              "any",
+                              "any-short",
+                              "all",
+                              "none"
+                            ],
+                            "type": "string",
+                            "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
+                          },
+                          "conditions": {
+                            "type": "array",
+                            "items": {}
+                          }
+                        },
+                        "required": [
+                          "logic_type"
+                        ]
+                      }
+                    ],
+                    "description": "\n            Issue detection configuration for when to create an issue and at what priority level.\n\n\n            - `logicType`: `any`\n            - `type`: Any of `gt` (greater than), `lte` (less than or equal), or `anomaly_detection` (dynamic)\n            - `comparison`: Any positive integer. This is threshold that must be crossed for the monitor to create an issue, e.g. \"Create a metric issue when there are more than 5 unresolved error events\".\n                - If creating a **dynamic** monitor, see the options below.\n                    - `seasonality`: `auto`\n                    - `sensitivity`: Level of responsiveness. Options are one of `low`, `medium`, or `high`\n                    - `thresholdType`: If you want to be alerted to anomalies that are moving above, below, or in both directions in relation to your threshold.\n                        - `0`: Above\n                        - `1`: Below\n                        - `2`: Above and below\n\n            - `conditionResult`: The issue state change when the threshold is crossed.\n                - `75`: High priority\n                - `50`: Low priority\n                - `0`: Resolved\n\n\n            **Threshold and Change Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"gt\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 75\n                    },\n                    {\n                        \"type\": \"lte\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Threshold Monitor with Medium Priority**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        type: \"gt\",\n                        comparison: 5,\n                        conditionResult: 75\n                    },\n                    {\n                        type: \"gt\",\n                        comparison: 2,\n                        conditionResult: 50\n                    },\n                    {\n                        type: \"lte\",\n                        comparison: 2,\n                        conditionResult: 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Dynamic Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"anomaly_detection\",\n                        \"comparison\": {\n                            \"seasonality\": \"auto\",\n                            \"sensitivity\": \"medium\",\n                            \"thresholdType\": 2\n                        },\n                        \"conditionResult\": 75\n                    }\n                ],\n                \"actions\": []\n            ```\n        "
+                  },
+                  "owner": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "\n            The user or team who owns the monitor.\n\n            **User**\n            ```json\n                \"type\": \"user\",\n                \"id\": \"12345\",\n                \"name\": \"Jane Doe\",\n                \"email\": \"jane.doe@sentry.io\"\n            ```\n\n            **Team**\n            ```json\n                \"type\": \"team\",\n                \"id\": \"123456789\",\n                \"name\": \"example-team\"\n            ```\n        "
+                  },
+                  "description": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "A description of the monitor. Will be used in the resulting issue."
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Set to False if you want to disable the monitor."
+                  }
+                },
+                "required": [
+                  "name",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "MonitorSuccessfullyCreated": {
+                    "value": {
+                      "id": "12345",
+                      "projectId": "1",
+                      "name": "Example metric monitor",
+                      "description": "Example description",
+                      "type": "metric_issue",
+                      "workflowIds": [],
+                      "owner": {
+                        "type": "user",
+                        "id": "12345",
+                        "name": "Jane Doe",
+                        "email": "jane@sentry.io"
+                      },
+                      "createdBy": "12345",
+                      "dateCreated": "2026-01-08T23:45:13.235259Z",
+                      "dateUpdated": "2026-01-08T23:45:13.235243Z",
+                      "dataSources": [
+                        {
+                          "id": "123456",
+                          "organizationId": "1",
+                          "type": "snuba_query_subscription",
+                          "sourceId": "12345",
+                          "queryObj": {
+                            "id": "23456",
+                            "status": 1,
+                            "subscription": null,
+                            "snubaQuery": {
+                              "id": "45678",
+                              "dataset": "events",
+                              "query": "is:unresolved",
+                              "aggregate": "count()",
+                              "timeWindow": 3600,
+                              "environment": null,
+                              "eventTypes": [
+                                "error",
+                                "default"
+                              ],
+                              "extrapolationMode": "unknown"
+                            }
+                          }
+                        }
+                      ],
+                      "conditionGroup": {
+                        "id": "1234567",
+                        "organizationId": "1",
+                        "logicType": "any",
+                        "conditions": [
+                          {
+                            "id": "2345677",
+                            "type": "gt",
+                            "comparison": 10,
+                            "conditionResult": 75
+                          },
+                          {
+                            "id": "567891",
+                            "type": "lte",
+                            "comparison": 10,
+                            "conditionResult": 0
+                          }
+                        ],
+                        "actions": []
+                      },
+                      "config": {
+                        "detectionType": "static"
+                      },
+                      "enabled": true,
+                      "latestGroup": null,
+                      "openIssues": 0
+                    },
+                    "summary": "Monitor successfully created"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Bulk Delete Monitors",
+        "description": "Bulk delete Monitors for a given organization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An optional search query for filtering monitors."
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The property to sort results by. If not specified, the results are sorted by id.\n\nAvailable fields are:\n- `name`\n- `id`\n- `type`\n- `connectedWorkflows`\n- `latestGroup`\n- `openIssues`\n\nPrefix with `-` to sort in descending order.\n        "
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The ID of the monitor you'd like to query."
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/": {
+      "get": {
+        "operationId": "Fetch a Monitor",
+        "description": "Return details on an individual monitor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "detector_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the monitor you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:read",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "FetchAMonitor": {
+                    "value": {
+                      "id": "123456",
+                      "projectId": "1",
+                      "name": "High Number of Errors",
+                      "description": null,
+                      "type": "metric_issue",
+                      "workflowIds": [
+                        "45678"
+                      ],
+                      "owner": {
+                        "type": "team",
+                        "id": "1234567",
+                        "name": "example-team"
+                      },
+                      "createdBy": "789123",
+                      "dateCreated": "2025-03-25T17:50:45.587657Z",
+                      "dateUpdated": "2025-07-22T17:10:45.069457Z",
+                      "dataSources": [
+                        {
+                          "id": "34567",
+                          "organizationId": "1",
+                          "type": "snuba_query_subscription",
+                          "sourceId": "56789",
+                          "queryObj": {
+                            "id": "23456",
+                            "status": 0,
+                            "subscription": "12/345acb678def912ghi",
+                            "snubaQuery": {
+                              "id": "12345",
+                              "dataset": "events",
+                              "query": "",
+                              "aggregate": "count()",
+                              "timeWindow": 900,
+                              "environment": null,
+                              "eventTypes": [
+                                "error"
+                              ],
+                              "extrapolationMode": "unknown"
+                            }
+                          }
+                        }
+                      ],
+                      "conditionGroup": {
+                        "id": "345678",
+                        "organizationId": "1",
+                        "logicType": "any",
+                        "conditions": [
+                          {
+                            "id": "234567",
+                            "type": "anomaly_detection",
+                            "comparison": {
+                              "seasonality": "auto",
+                              "sensitivity": "low",
+                              "thresholdType": 0
+                            },
+                            "conditionResult": 75
+                          }
+                        ],
+                        "actions": []
+                      },
+                      "config": {
+                        "detectionType": "dynamic",
+                        "comparisonDelta": null
+                      },
+                      "enabled": true,
+                      "latestGroup": {
+                        "id": "123456789",
+                        "title": "High Number of Errors",
+                        "culprit": "",
+                        "shortId": "EXAMPLE-1A2B",
+                        "level": "error",
+                        "status": "resolved",
+                        "substatus": null,
+                        "platform": "python",
+                        "project": {
+                          "id": "1",
+                          "name": "Backend",
+                          "slug": "sentry",
+                          "platform": "python"
+                        },
+                        "type": "generic",
+                        "issueType": "metric_issue",
+                        "issueCategory": "metric",
+                        "metadata": {
+                          "title": "High Number of Errors",
+                          "value": "Detected an error",
+                          "initial_priority": 75
+                        },
+                        "numComments": 0,
+                        "firstSeen": "2025-07-21T14:46:07.845207Z",
+                        "lastSeen": "2026-01-12T16:16:26.355334Z"
+                      },
+                      "openIssues": 0
+                    },
+                    "summary": "Fetch a Monitor"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update a Monitor by ID",
+        "description": "Update an existing monitor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "detector_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the monitor you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the monitor.",
+                    "maxLength": 200
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The type of monitor - `metric_issue`."
+                  },
+                  "data_sources": {
+                    "type": "array",
+                    "items": {},
+                    "description": "\n            The data sources for the monitor to use based on what you want to measure.\n\n            **Number of Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n"
+                  },
+                  "config": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "\n            The issue detection type configuration.\n\n\n            - `detectionType`\n                - `static`: Threshold based monitor\n                - `percent`: Change based monitor\n                - `dynamic`: Dynamic monitor\n            - `comparisonDelta`: If selecting a **change** detection type, the comparison delta is the time period at which to compare against in minutes.\n            For example, a value of 3600 compares the metric tracked against data 1 hour ago.\n                - `300`: 5 minutes\n                - `900`: 15 minutes\n                - `3600`: 1 hour\n                - `86400`: 1 day\n                - `604800`: 1 week\n                - `2592000`: 1 month\n\n            **Threshold**\n            ```json\n            {\n                \"detectionType\": \"static\",\n            }\n            ```\n            **Change**\n            ```json\n            {\n                \"detectionType\": \"percent\",\n                \"comparisonDelta\": 3600,\n            }\n            ```\n            **Dynamic**\n            ```json\n            {\n                \"detectionType\": \"dynamic\",\n            }\n            ```\n        "
+                  },
+                  "condition_group": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "logic_type": {
+                            "enum": [
+                              "any",
+                              "any-short",
+                              "all",
+                              "none"
+                            ],
+                            "type": "string",
+                            "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
+                          },
+                          "conditions": {
+                            "type": "array",
+                            "items": {}
+                          }
+                        },
+                        "required": [
+                          "logic_type"
+                        ]
+                      }
+                    ],
+                    "description": "\n            Issue detection configuration for when to create an issue and at what priority level.\n\n\n            - `logicType`: `any`\n            - `type`: Any of `gt` (greater than), `lte` (less than or equal), or `anomaly_detection` (dynamic)\n            - `comparison`: Any positive integer. This is threshold that must be crossed for the monitor to create an issue, e.g. \"Create a metric issue when there are more than 5 unresolved error events\".\n                - If creating a **dynamic** monitor, see the options below.\n                    - `seasonality`: `auto`\n                    - `sensitivity`: Level of responsiveness. Options are one of `low`, `medium`, or `high`\n                    - `thresholdType`: If you want to be alerted to anomalies that are moving above, below, or in both directions in relation to your threshold.\n                        - `0`: Above\n                        - `1`: Below\n                        - `2`: Above and below\n\n            - `conditionResult`: The issue state change when the threshold is crossed.\n                - `75`: High priority\n                - `50`: Low priority\n                - `0`: Resolved\n\n\n            **Threshold and Change Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"gt\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 75\n                    },\n                    {\n                        \"type\": \"lte\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Threshold Monitor with Medium Priority**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        type: \"gt\",\n                        comparison: 5,\n                        conditionResult: 75\n                    },\n                    {\n                        type: \"gt\",\n                        comparison: 2,\n                        conditionResult: 50\n                    },\n                    {\n                        type: \"lte\",\n                        comparison: 2,\n                        conditionResult: 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Dynamic Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"anomaly_detection\",\n                        \"comparison\": {\n                            \"seasonality\": \"auto\",\n                            \"sensitivity\": \"medium\",\n                            \"thresholdType\": 2\n                        },\n                        \"conditionResult\": 75\n                    }\n                ],\n                \"actions\": []\n            ```\n        "
+                  },
+                  "owner": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "\n            The user or team who owns the monitor.\n\n            **User**\n            ```json\n                \"type\": \"user\",\n                \"id\": \"12345\",\n                \"name\": \"Jane Doe\",\n                \"email\": \"jane.doe@sentry.io\"\n            ```\n\n            **Team**\n            ```json\n                \"type\": \"team\",\n                \"id\": \"123456789\",\n                \"name\": \"example-team\"\n            ```\n        "
+                  },
+                  "description": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "A description of the monitor. Will be used in the resulting issue."
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Set to False if you want to disable the monitor."
+                  }
+                },
+                "required": [
+                  "name",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "UpdateAMonitor": {
+                    "value": {
+                      "id": "12345",
+                      "projectId": "1",
+                      "name": "Updated monitor",
+                      "description": null,
+                      "type": "metric_issue",
+                      "workflowIds": [],
+                      "owner": {
+                        "type": "user",
+                        "id": "4567",
+                        "name": "Jane Doe",
+                        "email": "jane@example.io"
+                      },
+                      "createdBy": "45678",
+                      "dateCreated": "2026-01-09T18:47:41.596427Z",
+                      "dateUpdated": "2026-01-12T21:30:07.354861Z",
+                      "dataSources": [
+                        {
+                          "id": "2345",
+                          "organizationId": "1",
+                          "type": "snuba_query_subscription",
+                          "sourceId": "1234",
+                          "queryObj": {
+                            "id": "3456",
+                            "status": 0,
+                            "subscription": "55/abc123def456ghi789",
+                            "snubaQuery": {
+                              "id": "56789",
+                              "dataset": "events_analytics_platform",
+                              "query": "",
+                              "aggregate": "p95(measurements.lcp)",
+                              "timeWindow": 3600,
+                              "environment": null,
+                              "eventTypes": [
+                                "trace_item_span"
+                              ],
+                              "extrapolationMode": "unknown"
+                            }
+                          }
+                        }
+                      ],
+                      "conditionGroup": {
+                        "id": "12345678",
+                        "organizationId": "1",
+                        "logicType": "any",
+                        "conditions": [
+                          {
+                            "id": "234567",
+                            "type": "gt",
+                            "comparison": 5,
+                            "conditionResult": 75
+                          },
+                          {
+                            "id": "234568",
+                            "type": "lte",
+                            "comparison": 5,
+                            "conditionResult": 0
+                          }
+                        ],
+                        "actions": []
+                      },
+                      "config": {
+                        "detectionType": "static"
+                      },
+                      "enabled": true,
+                      "alertRuleId": null,
+                      "ruleId": null,
+                      "latestGroup": {
+                        "id": "123456789",
+                        "title": "Test monitor",
+                        "culprit": "",
+                        "shortId": "SENTRY-1A2B",
+                        "level": "error",
+                        "status": "resolved",
+                        "substatus": null,
+                        "platform": "python",
+                        "project": {
+                          "id": "1",
+                          "name": "Backend",
+                          "slug": "sentry",
+                          "platform": "python"
+                        },
+                        "type": "generic",
+                        "issueType": "metric_issue",
+                        "issueCategory": "metric",
+                        "metadata": {
+                          "title": "Test monitor",
+                          "value": "Critical: Number of events in the last hour above 5",
+                          "initial_priority": 75
+                        },
+                        "numComments": 0,
+                        "firstSeen": "2026-01-09T18:48:15.250134Z",
+                        "lastSeen": "2026-01-09T18:48:15.250134Z"
+                      },
+                      "openIssues": 0
+                    },
+                    "summary": "Update a Monitor"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a Monitor",
+        "description": "Delete a monitor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "detector_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the monitor you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/discover/saved/": {
       "get": {
         "operationId": "List an Organization's Discover Saved Queries",
@@ -31819,6 +32968,1261 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/workflows/": {
+      "get": {
+        "operationId": "Fetch Alerts",
+        "description": "Returns a list of alerts for a given organization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The field to sort results by. If not specified, the results are sorted by id.\n\nAvailable fields are:\n- `name`\n- `id`\n- `dateCreated`\n- `dateUpdated`\n- `connectedDetectors`\n- `actions`\n- `priorityDetector`\n\nPrefix with `-` to sort in descending order.\n    "
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An optional search query for filtering alerts."
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The ID of the alert you'd like to query."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:read",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "organizationId": {
+                        "type": "string"
+                      },
+                      "createdBy": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateUpdated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "triggers": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "organizationId": {
+                            "type": "string"
+                          },
+                          "logicType": {
+                            "type": "string"
+                          },
+                          "conditions": {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "comparison": {
+                                      "type": "boolean"
+                                    },
+                                    "conditionResult": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "comparison",
+                                    "conditionResult",
+                                    "id",
+                                    "type"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          },
+                          "actions": {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "integrationId": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "data": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "config": {
+                                      "type": "object",
+                                      "additionalProperties": {}
+                                    },
+                                    "status": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "config",
+                                    "data",
+                                    "id",
+                                    "integrationId",
+                                    "status",
+                                    "type"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "actions",
+                          "conditions",
+                          "id",
+                          "logicType",
+                          "organizationId"
+                        ],
+                        "nullable": true
+                      },
+                      "actionFilters": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "organizationId": {
+                              "type": "string"
+                            },
+                            "logicType": {
+                              "type": "string"
+                            },
+                            "conditions": {
+                              "anyOf": [
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "comparison": {
+                                        "type": "boolean"
+                                      },
+                                      "conditionResult": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "required": [
+                                      "comparison",
+                                      "conditionResult",
+                                      "id",
+                                      "type"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {}
+                                }
+                              ]
+                            },
+                            "actions": {
+                              "anyOf": [
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "integrationId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "data": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "config": {
+                                        "type": "object",
+                                        "additionalProperties": {}
+                                      },
+                                      "status": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "config",
+                                      "data",
+                                      "id",
+                                      "integrationId",
+                                      "status",
+                                      "type"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {}
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "actions",
+                            "conditions",
+                            "id",
+                            "logicType",
+                            "organizationId"
+                          ]
+                        }
+                      },
+                      "environment": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "config": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "detectorIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "enabled": {
+                        "type": "boolean"
+                      },
+                      "lastTriggered": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "actionFilters",
+                      "config",
+                      "createdBy",
+                      "dateCreated",
+                      "dateUpdated",
+                      "detectorIds",
+                      "enabled",
+                      "environment",
+                      "id",
+                      "lastTriggered",
+                      "name",
+                      "organizationId",
+                      "triggers"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListAllWorkflowsInAnOrganization": {
+                    "value": [
+                      {
+                        "id": "123",
+                        "name": "Send a notification for high priority issues",
+                        "organizationId": "1",
+                        "createdBy": null,
+                        "dateCreated": "2025-03-18T20:48:55.495059Z",
+                        "dateUpdated": "2025-03-18T20:48:55.579094Z",
+                        "triggers": {
+                          "id": "12345",
+                          "organizationId": "1",
+                          "logicType": "any-short",
+                          "conditions": [
+                            {
+                              "id": "2345",
+                              "type": "new_high_priority_issue",
+                              "comparison": true,
+                              "conditionResult": true
+                            },
+                            {
+                              "id": "3456",
+                              "type": "existing_high_priority_issue",
+                              "comparison": true,
+                              "conditionResult": true
+                            }
+                          ],
+                          "actions": []
+                        },
+                        "actionFilters": [
+                          {
+                            "id": "5678",
+                            "organizationId": "1",
+                            "logicType": "all",
+                            "conditions": [],
+                            "actions": [
+                              {
+                                "id": "234",
+                                "type": "email",
+                                "integrationId": null,
+                                "data": {
+                                  "fallthroughType": "ActiveMembers"
+                                },
+                                "config": {
+                                  "targetType": "issue_owners",
+                                  "targetDisplay": null,
+                                  "targetIdentifier": null
+                                },
+                                "status": "active"
+                              }
+                            ]
+                          }
+                        ],
+                        "environment": null,
+                        "config": {
+                          "frequency": 30
+                        },
+                        "detectorIds": [],
+                        "enabled": true,
+                        "lastTriggered": null
+                      },
+                      {
+                        "id": "456",
+                        "name": "Notify team #example-team",
+                        "organizationId": "1",
+                        "createdBy": "34567",
+                        "dateCreated": "2026-01-15T23:46:39.594915Z",
+                        "dateUpdated": "2026-01-15T23:46:39.594903Z",
+                        "triggers": {
+                          "id": "12345",
+                          "organizationId": "1",
+                          "logicType": "any-short",
+                          "conditions": [],
+                          "actions": []
+                        },
+                        "actionFilters": [
+                          {
+                            "id": "6789",
+                            "organizationId": "1",
+                            "logicType": "any-short",
+                            "conditions": [
+                              {
+                                "id": "5678",
+                                "type": "event_frequency_count",
+                                "comparison": {
+                                  "value": 100,
+                                  "interval": "1h"
+                                },
+                                "conditionResult": true
+                              }
+                            ],
+                            "actions": [
+                              {
+                                "id": "1234",
+                                "type": "email",
+                                "integrationId": null,
+                                "data": {},
+                                "config": {
+                                  "targetType": "team",
+                                  "targetDisplay": null,
+                                  "targetIdentifier": "1234567890"
+                                },
+                                "status": "active"
+                              }
+                            ]
+                          }
+                        ],
+                        "environment": null,
+                        "config": {
+                          "frequency": 1440
+                        },
+                        "detectorIds": [],
+                        "enabled": true,
+                        "lastTriggered": null
+                      },
+                      {
+                        "id": "789",
+                        "name": "Notify Jane Doe",
+                        "organizationId": "1",
+                        "createdBy": "2345",
+                        "dateCreated": "2026-01-15T23:46:39.594915Z",
+                        "dateUpdated": "2026-01-15T23:49:57.697583Z",
+                        "triggers": {
+                          "id": "56789",
+                          "organizationId": "1",
+                          "logicType": "any-short",
+                          "conditions": [],
+                          "actions": []
+                        },
+                        "actionFilters": [
+                          {
+                            "id": "56789",
+                            "organizationId": "1",
+                            "logicType": "any-short",
+                            "conditions": [
+                              {
+                                "id": "234567",
+                                "type": "event_unique_user_frequency_count",
+                                "comparison": {
+                                  "value": 100,
+                                  "filters": [
+                                    {
+                                      "key": "foo",
+                                      "match": "eq",
+                                      "value": "bar"
+                                    }
+                                  ],
+                                  "interval": "1h"
+                                },
+                                "conditionResult": true
+                              }
+                            ],
+                            "actions": [
+                              {
+                                "id": "456789",
+                                "type": "email",
+                                "integrationId": null,
+                                "data": {},
+                                "config": {
+                                  "targetType": "user",
+                                  "targetDisplay": null,
+                                  "targetIdentifier": "123456"
+                                },
+                                "status": "active"
+                              }
+                            ]
+                          }
+                        ],
+                        "environment": null,
+                        "config": {
+                          "frequency": 1440
+                        },
+                        "detectorIds": [],
+                        "enabled": true,
+                        "lastTriggered": null
+                      }
+                    ],
+                    "summary": "List all workflows in an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create an Alert for an Organization",
+        "description": "Creates an alert for an organization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the alert",
+                    "maxLength": 256
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "The ID of the existing alert"
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether the alert is enabled or disabled"
+                  },
+                  "config": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "\n        Typically the frequency at which the alert will fire, in minutes.\n\n        - `0`: 0 minutes\n        - `5`: 5 minutes\n        - `10`: 10 minutes\n        - `30`: 30 minutes\n        - `60`: 1 hour\n        - `180`: 3 hours\n        - `720`: 12 hours\n        - `1440`: 24 hours\n\n        ```json\n            {\n                \"frequency\":3600\n            }\n        ```\n        "
+                  },
+                  "environment": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The name of the environment for the alert to evaluate in"
+                  },
+                  "triggers": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "logic_type": {
+                            "enum": [
+                              "any",
+                              "any-short",
+                              "all",
+                              "none"
+                            ],
+                            "type": "string",
+                            "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
+                          },
+                          "conditions": {
+                            "type": "array",
+                            "items": {}
+                          }
+                        },
+                        "required": [
+                          "logic_type"
+                        ]
+                      }
+                    ],
+                    "description": "The conditions on which the alert will trigger. See available options below.\n        ```json\n            \"triggers\": {\n                \"id\": \"1234567\",\n                \"organizationId\": \"1\",\n                \"logicType\": \"any-short\",\n                \"conditions\": [\n                    {\n                        \"id\": \"123\",\n                        \"type\": \"first_seen_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"456\",\n                        \"type\": \"issue_resolved_trigger\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"789\",\n                        \"type\": \"reappeared_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"321\",\n                        \"type\": \"regression_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    }\n                ],\n                \"actions\": []\n            }\n        ```\n        "
+                  },
+                  "action_filters": {
+                    "type": "array",
+                    "items": {},
+                    "description": "The filters to run before the action will fire and the action(s) to fire.\n\n        Below is a basic example. See below for all other options.\n\n        ```json\n            \"actionFilters\": [\n                {\n                    \"logicType\": \"any-short\",\n                    \"conditions\": [\n                        {\n                            \"type\": \"level\",\n                            \"comparison\": {\n                                \"level\": 50,\n                                \"match\": \"eq\"\n                            },\n                            \"conditionResult\": true\n                        }\n                    ],\n                    \"actions\": [\n                        {\n                            \"id\": \"123\",\n                            \"type\": \"email\",\n                            \"integrationId\": null,\n                            \"data\": {},\n                            \"config\": {\n                                \"targetType\": \"user\",\n                                \"targetDisplay\": null,\n                                \"targetIdentifier\": \"56789\"\n                            },\n                            \"status\": \"active\"\n                        }\n                    ]\n                }\n            ]\n        ```\n\n        ## Conditions\n\n        **Issue Age**\n        - `time`: One of `minute`, `hour`, `day`, or `week`.\n        - `value`: A positive integer.\n        - `comparisonType`: One of `older` or `newer`.\n        ```json\n            {\n                \"type\": \"age_comparison\",\n                \"comparison\": {\n                    \"time\": \"minute\",\n                    \"value\": 10,\n                    \"comparisonType\": \"older\"\n                },\n                \"conditionResult\": true\n            }\n\n        ```\n\n        **Issue Assignment**\n        - `targetType`: Who the issue is assigned to\n            - `NoOne`: Unassigned\n            - `Member`: Assigned to a user\n            - `Team`: Assigned to a team\n        - `targetIdentifier`: The ID of the user or team from the `targetType`. Enter \"\" if `targetType` is `NoOne`.\n        ```json\n            {\n                \"type\": \"assigned_to\",\n                \"comparison\": {\n                    \"targetType\": \"Member\",\n                    \"targetIdentifier\": 123456\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Category**\n        - `value`: The issue category to filter to.\n            - `1`: Error issues\n            - `6`: Feedback issues\n            - `10`: Outage issues\n            - `11`: Metric issues\n            - `12`: DB Query issues\n            - `13`: HTTP Client issues\n            - `14`: Front end issues\n            - `15`: Mobile issues\n        ```json\n            {\n                \"type\": \"issue_category\",\n                \"comparison\": {\n                    \"value\": 1\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Frequency**\n        - `value`: A positive integer representing how many times the issue has to happen before the alert will fire.\n        ```json\n            {\n                \"type\": \"issue_occurrences\",\n                \"comparison\": {\n                    \"value\": 10\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **De-escalation**\n        ```json\n            {\n                \"type\": \"issue_priority_deescalating\",\n                \"comparison\": true,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Priority**\n        - `comparison`: The priority the issue must be for the alert to fire.\n            - `75`: High priority\n            - `50`: Medium priority\n            - `25`: Low priority\n        ```json\n            {\n                \"type\": \"issue_priority_greater_or_equal\",\n                \"comparison\": 75,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Number of Users Affected**\n        - `value`: A positive integer representing the number of users that must be affected before the alert will fire.\n        - `filters`: A list of additional sub-filters to evaluate before the alert will fire.\n        - `interval`: The time period in which to evaluate the value. e.g. Number of users affected by an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"event_unique_user_frequency_count\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"filters\": [{\"key\": \"foo\", \"match\": \"eq\", \"value\": \"bar\"}],\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Number of Events**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Number of events in an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"event_frequency_count\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Percent of Events**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Number of events in an issue is `comparisonInterval` percent higher `value` compared to `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        - `comparisonInterval`: The time period to compare against. See `interval` for options.\n        ```json\n            {\n                \"type\": \"event_frequency_percent\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"interval\": \"1h\",\n                    \"comparisonInterval\": \"1w\"\n                },\n                \"conditionResult\": true\n            }\n\n        ```\n\n        **Percentage of Sessions Affected Count**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Percentage of sessions affected by an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"percent_sessions_count\",\n                \"comparison\": {\n                    \"value\": 10,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Percentage of Sessions Affected Percent**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Percentage of sessions affected by an issue is `comparisonInterval` percent higher `value` compared to `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        - `comparisonInterval`: The time period to compare against. See `interval` for options.\n        ```json\n            {\n                \"type\": \"percent_sessions_percent\",\n                \"comparison\": {\n                    \"value\": 10,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Event Attribute**\n        The event's `attribute` value `match` `value`\n\n        - `attribute`: The event attribute to match on. Valid values are: `message`, `platform`, `environment`, `type`, `error.handled`, `error.unhandled`, `error.main_thread`, `exception.type`, `exception.value`, `user.id`, `user.email`, `user.username`, `user.ip_address`, `http.method`, `http.url`, `http.status_code`, `sdk.name`, `stacktrace.code`, `stacktrace.module`, `stacktrace.filename`, `stacktrace.abs_path`, `stacktrace.package`, `unreal.crash_type`, `app.in_foreground`.\n        - `match`: The comparison operator\n            - `co`: Contains\n            - `nc`: Does not contain\n            - `eq`: Equals\n            - `ne`: Does not equal\n            - `sw`: Starts with\n            - `ew`: Ends with\n            - `is`: Is set\n            - `ns`: Is not set\n        - `value`: A string. Not required when match is `is` or `ns`.\n\n        ```json\n            {\n                \"type\": \"event_attribute\",\n                \"comparison\": {\n                    \"match\": \"co\",\n                    \"value\": \"bar\",\n                    \"attribute\": \"message\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Tagged Event**\n        The event's tags `key` match `value`\n        - `key`: The tag value\n        - `match`: The comparison operator\n            - `co`: Contains\n            - `nc`: Does not contain\n            - `eq`: Equals\n            - `ne`: Does not equal\n            - `sw`: Starts with\n            - `ew`: Ends with\n            - `is`: Is set\n            - `ns`: Is not set\n        - `value`: A string. Not required when match is `is` or `ns`.\n\n        ```json\n            {\n                \"type\": \"tagged_event\",\n                \"comparison\": {\n                    \"key\": \"level\",\n                    \"match\": \"eq\",\n                    \"value\": \"error\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Latest Release**\n        The event is from the latest release\n\n        ```json\n            {\n                \"type\": \"latest_release\",\n                \"comparison\": true,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Release Age**\n        ```json\n            {\n                \"type\": \"latest_adopted_release\",\n                \"comparison\": {\n                    \"environment\": \"12345\",\n                    \"ageComparison\": \"older\",\n                    \"releaseAgeType\": \"oldest\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Event Level**\n        The event's level is `match` `level`\n        - `match`: The comparison operator\n            - `eq`: Equal\n            - `gte`: Greater than or equal\n            - `lte`: Less than or equal\n        - `level`: The event level\n            - `50`: Fatal\n            - `40`: Error\n            - `30`: Warning\n            - `20`: Info\n            - `10`: Debug\n            - `0`: Sample\n\n        ```json\n            {\n                \"type\": \"level\",\n                \"comparison\": {\n                    \"level\": 50,\n                    \"match\": \"eq\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        ## Actions\n        A list of actions that take place when all required conditions and filters for the alert are met. See below for a list of possible actions.\n\n\n        **Notify on Preferred Channel**\n        - `data`: A dictionary with the fallthrough type option when choosing to notify Suggested Assignees. Leave empty if notifying a user or team.\n            - `fallthroughType`\n                - `ActiveMembers`\n                - `AllMembers`\n                - `NoOne`\n        - `config`: A dictionary with the configuration options for notification.\n            - `targetType`: The type of recipient to notify\n                - `user`: User\n                - `team`: Team\n                - `issue_owners`: Suggested Assignees\n            - `targetDisplay`: null\n            - `targetIdentifier`: The id of the user or team to notify. Leave null for Suggested Assignees.\n\n        ```json\n            {\n                \"type\":\"email\",\n                \"integrationId\":null,\n                \"data\":{},\n                \"config\":{\n                    \"targetType\":\"user\",\n                    \"targetDisplay\":null,\n                    \"targetIdentifier\":\"232692\"\n                },\n                \"status\":\"active\"\n            },\n            {\n                \"type\":\"email\",\n                \"integrationId\":null,\n                \"data\":{\n                    \"fallthroughType\":\"ActiveMembers\"\n                },\n                \"config\":{\n                    \"targetType\":\"issue_owners\",\n                    \"targetDisplay\":null,\n                    \"targetIdentifier\":\"\"}\n                ,\n                \"status\":\"active\"\n            }\n        ```\n        **Notify on Slack**\n        - `targetDisplay`: The name of the channel to notify in.\n        `integrationId`: The stringified ID of the integration.\n\n        ```json\n            {\n                \"type\":\"slack\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"\",\n                    \"targetDisplay\":\"notify-errors\"\n                },\n                \"integrationId\":\"1\",\n                \"data\":{},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on PagerDuty**\n        - `targetDisplay`: The name of the service to create the ticket in.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"priority\"]`: The severity level for the notification.\n\n        ```json\n            {\n                \"type\":\"pagerduty\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"123456\",\n                    \"targetDisplay\":\"Error Service\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{\n                    \"priority\":\"default\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on Discord**\n        - `targetDisplay`: The name of the service to create the ticket in.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"tags\"]`: Comma separated list of tags to add to the notification.\n\n        ```json\n            {\n                \"type\":\"discord\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"12345\",\n                    \"targetDisplay\":\"\",\n                    },\n                \"integrationId\":\"1234\",\n                \"data\":{\n                    \"tags\":\"transaction,environment\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on MSTeams**\n        - `targetIdentifier` - The integration ID associated with the Microsoft Teams team.\n        - `targetDisplay` - The name of the channel to send the notification to.\n        - `integrationId`: The stringified ID of the integration.\n        ```json\n            {\n                \"type\":\"msteams\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"19:a4b3kghaghgkjah357y6847@thread.skype\",\n                    \"targetDisplay\":\"notify-errors\"\n                },\n                \"integrationId\":\"1\",\n                \"data\":{},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on OpsGenie**\n        - `targetDisplay`: The name of the Opsgenie team.\n        - `targetIdentifier`: The ID of the Opsgenie team to send the notification to.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"priority\"]`: The priority level for the notification.\n\n        ```json\n            {\n                \"type\":\"opsgenie\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"123456-Error-Service\",\n                    \"targetDisplay\":\"Error Service\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{\n                    \"priority\":\"P3\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on Azure DevOps**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"vsts\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a Jira ticket**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"jira\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a Jira Server ticket**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"jira_server\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a GitHub issue**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"github\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n        "
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "WorkflowSuccessfullyCreated": {
+                    "value": {
+                      "id": "1234567",
+                      "name": "Notify Jane Doe",
+                      "organizationId": "1",
+                      "createdBy": "2345",
+                      "dateCreated": "2026-01-13T21:21:15.975384Z",
+                      "dateUpdated": "2026-01-13T21:21:15.975376Z",
+                      "triggers": {
+                        "id": "456789",
+                        "organizationId": "1",
+                        "logicType": "any-short",
+                        "conditions": [
+                          {
+                            "id": "234567",
+                            "type": "first_seen_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "1234567",
+                            "type": "issue_resolved_trigger",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "678912",
+                            "type": "reappeared_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "7891234",
+                            "type": "regression_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          }
+                        ],
+                        "actions": []
+                      },
+                      "actionFilters": [
+                        {
+                          "id": "45678",
+                          "organizationId": "1",
+                          "logicType": "any-short",
+                          "conditions": [
+                            {
+                              "id": "23456789",
+                              "type": "issue_occurrences",
+                              "comparison": {
+                                "value": 10
+                              },
+                              "conditionResult": true
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "id": "1234789",
+                              "type": "email",
+                              "integrationId": null,
+                              "data": {},
+                              "config": {
+                                "targetType": "user",
+                                "targetDisplay": null,
+                                "targetIdentifier": "6789"
+                              },
+                              "status": "active"
+                            }
+                          ]
+                        }
+                      ],
+                      "environment": null,
+                      "config": {
+                        "frequency": 1440
+                      },
+                      "detectorIds": [
+                        "1000"
+                      ],
+                      "enabled": true,
+                      "lastTriggered": null
+                    },
+                    "summary": "Workflow successfully created"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Bulk Delete Alerts",
+        "description": "Bulk delete alerts for a given organization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An optional search query for filtering alerts."
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The ID of the alert you'd like to query."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/": {
+      "get": {
+        "operationId": "Fetch an Alert",
+        "description": "Returns an alert.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "workflow_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the alert you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:read",
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "FetchAnAlert": {
+                    "value": {
+                      "id": "6789123",
+                      "name": "My Alert",
+                      "organizationId": "1",
+                      "createdBy": "1234567",
+                      "dateCreated": "2026-01-14T20:08:32.273220Z",
+                      "dateUpdated": "2026-01-14T20:08:32.273209Z",
+                      "triggers": {
+                        "id": "345678",
+                        "organizationId": "1",
+                        "logicType": "any-short",
+                        "conditions": [
+                          {
+                            "id": "234",
+                            "type": "first_seen_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "567",
+                            "type": "issue_resolved_trigger",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "891",
+                            "type": "reappeared_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "789",
+                            "type": "regression_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          }
+                        ],
+                        "actions": []
+                      },
+                      "actionFilters": [
+                        {
+                          "id": "345678",
+                          "organizationId": "1",
+                          "logicType": "any-short",
+                          "conditions": [
+                            {
+                              "id": "234567",
+                              "type": "issue_priority_deescalating",
+                              "comparison": true,
+                              "conditionResult": true
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "id": "45678",
+                              "type": "slack",
+                              "integrationId": "1",
+                              "data": {},
+                              "config": {
+                                "targetType": "specific",
+                                "targetDisplay": "@jane-doe",
+                                "targetIdentifier": "ABCDE123456"
+                              },
+                              "status": "active"
+                            }
+                          ]
+                        }
+                      ],
+                      "environment": null,
+                      "config": {
+                        "frequency": 1440
+                      },
+                      "detectorIds": [
+                        "1234567"
+                      ],
+                      "enabled": true,
+                      "lastTriggered": null
+                    },
+                    "summary": "Fetch an Alert"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Update an Alert by ID",
+        "description": "Updates an alert.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "workflow_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the alert you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the alert",
+                    "maxLength": 256
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "The ID of the existing alert"
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether the alert is enabled or disabled"
+                  },
+                  "config": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "\n        Typically the frequency at which the alert will fire, in minutes.\n\n        - `0`: 0 minutes\n        - `5`: 5 minutes\n        - `10`: 10 minutes\n        - `30`: 30 minutes\n        - `60`: 1 hour\n        - `180`: 3 hours\n        - `720`: 12 hours\n        - `1440`: 24 hours\n\n        ```json\n            {\n                \"frequency\":3600\n            }\n        ```\n        "
+                  },
+                  "environment": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The name of the environment for the alert to evaluate in"
+                  },
+                  "triggers": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "logic_type": {
+                            "enum": [
+                              "any",
+                              "any-short",
+                              "all",
+                              "none"
+                            ],
+                            "type": "string",
+                            "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
+                          },
+                          "conditions": {
+                            "type": "array",
+                            "items": {}
+                          }
+                        },
+                        "required": [
+                          "logic_type"
+                        ]
+                      }
+                    ],
+                    "description": "The conditions on which the alert will trigger. See available options below.\n        ```json\n            \"triggers\": {\n                \"id\": \"1234567\",\n                \"organizationId\": \"1\",\n                \"logicType\": \"any-short\",\n                \"conditions\": [\n                    {\n                        \"id\": \"123\",\n                        \"type\": \"first_seen_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"456\",\n                        \"type\": \"issue_resolved_trigger\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"789\",\n                        \"type\": \"reappeared_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"321\",\n                        \"type\": \"regression_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    }\n                ],\n                \"actions\": []\n            }\n        ```\n        "
+                  },
+                  "action_filters": {
+                    "type": "array",
+                    "items": {},
+                    "description": "The filters to run before the action will fire and the action(s) to fire.\n\n        Below is a basic example. See below for all other options.\n\n        ```json\n            \"actionFilters\": [\n                {\n                    \"logicType\": \"any-short\",\n                    \"conditions\": [\n                        {\n                            \"type\": \"level\",\n                            \"comparison\": {\n                                \"level\": 50,\n                                \"match\": \"eq\"\n                            },\n                            \"conditionResult\": true\n                        }\n                    ],\n                    \"actions\": [\n                        {\n                            \"id\": \"123\",\n                            \"type\": \"email\",\n                            \"integrationId\": null,\n                            \"data\": {},\n                            \"config\": {\n                                \"targetType\": \"user\",\n                                \"targetDisplay\": null,\n                                \"targetIdentifier\": \"56789\"\n                            },\n                            \"status\": \"active\"\n                        }\n                    ]\n                }\n            ]\n        ```\n\n        ## Conditions\n\n        **Issue Age**\n        - `time`: One of `minute`, `hour`, `day`, or `week`.\n        - `value`: A positive integer.\n        - `comparisonType`: One of `older` or `newer`.\n        ```json\n            {\n                \"type\": \"age_comparison\",\n                \"comparison\": {\n                    \"time\": \"minute\",\n                    \"value\": 10,\n                    \"comparisonType\": \"older\"\n                },\n                \"conditionResult\": true\n            }\n\n        ```\n\n        **Issue Assignment**\n        - `targetType`: Who the issue is assigned to\n            - `NoOne`: Unassigned\n            - `Member`: Assigned to a user\n            - `Team`: Assigned to a team\n        - `targetIdentifier`: The ID of the user or team from the `targetType`. Enter \"\" if `targetType` is `NoOne`.\n        ```json\n            {\n                \"type\": \"assigned_to\",\n                \"comparison\": {\n                    \"targetType\": \"Member\",\n                    \"targetIdentifier\": 123456\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Category**\n        - `value`: The issue category to filter to.\n            - `1`: Error issues\n            - `6`: Feedback issues\n            - `10`: Outage issues\n            - `11`: Metric issues\n            - `12`: DB Query issues\n            - `13`: HTTP Client issues\n            - `14`: Front end issues\n            - `15`: Mobile issues\n        ```json\n            {\n                \"type\": \"issue_category\",\n                \"comparison\": {\n                    \"value\": 1\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Frequency**\n        - `value`: A positive integer representing how many times the issue has to happen before the alert will fire.\n        ```json\n            {\n                \"type\": \"issue_occurrences\",\n                \"comparison\": {\n                    \"value\": 10\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **De-escalation**\n        ```json\n            {\n                \"type\": \"issue_priority_deescalating\",\n                \"comparison\": true,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Priority**\n        - `comparison`: The priority the issue must be for the alert to fire.\n            - `75`: High priority\n            - `50`: Medium priority\n            - `25`: Low priority\n        ```json\n            {\n                \"type\": \"issue_priority_greater_or_equal\",\n                \"comparison\": 75,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Number of Users Affected**\n        - `value`: A positive integer representing the number of users that must be affected before the alert will fire.\n        - `filters`: A list of additional sub-filters to evaluate before the alert will fire.\n        - `interval`: The time period in which to evaluate the value. e.g. Number of users affected by an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"event_unique_user_frequency_count\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"filters\": [{\"key\": \"foo\", \"match\": \"eq\", \"value\": \"bar\"}],\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Number of Events**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Number of events in an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"event_frequency_count\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Percent of Events**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Number of events in an issue is `comparisonInterval` percent higher `value` compared to `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        - `comparisonInterval`: The time period to compare against. See `interval` for options.\n        ```json\n            {\n                \"type\": \"event_frequency_percent\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"interval\": \"1h\",\n                    \"comparisonInterval\": \"1w\"\n                },\n                \"conditionResult\": true\n            }\n\n        ```\n\n        **Percentage of Sessions Affected Count**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Percentage of sessions affected by an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"percent_sessions_count\",\n                \"comparison\": {\n                    \"value\": 10,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Percentage of Sessions Affected Percent**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Percentage of sessions affected by an issue is `comparisonInterval` percent higher `value` compared to `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        - `comparisonInterval`: The time period to compare against. See `interval` for options.\n        ```json\n            {\n                \"type\": \"percent_sessions_percent\",\n                \"comparison\": {\n                    \"value\": 10,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Event Attribute**\n        The event's `attribute` value `match` `value`\n\n        - `attribute`: The event attribute to match on. Valid values are: `message`, `platform`, `environment`, `type`, `error.handled`, `error.unhandled`, `error.main_thread`, `exception.type`, `exception.value`, `user.id`, `user.email`, `user.username`, `user.ip_address`, `http.method`, `http.url`, `http.status_code`, `sdk.name`, `stacktrace.code`, `stacktrace.module`, `stacktrace.filename`, `stacktrace.abs_path`, `stacktrace.package`, `unreal.crash_type`, `app.in_foreground`.\n        - `match`: The comparison operator\n            - `co`: Contains\n            - `nc`: Does not contain\n            - `eq`: Equals\n            - `ne`: Does not equal\n            - `sw`: Starts with\n            - `ew`: Ends with\n            - `is`: Is set\n            - `ns`: Is not set\n        - `value`: A string. Not required when match is `is` or `ns`.\n\n        ```json\n            {\n                \"type\": \"event_attribute\",\n                \"comparison\": {\n                    \"match\": \"co\",\n                    \"value\": \"bar\",\n                    \"attribute\": \"message\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Tagged Event**\n        The event's tags `key` match `value`\n        - `key`: The tag value\n        - `match`: The comparison operator\n            - `co`: Contains\n            - `nc`: Does not contain\n            - `eq`: Equals\n            - `ne`: Does not equal\n            - `sw`: Starts with\n            - `ew`: Ends with\n            - `is`: Is set\n            - `ns`: Is not set\n        - `value`: A string. Not required when match is `is` or `ns`.\n\n        ```json\n            {\n                \"type\": \"tagged_event\",\n                \"comparison\": {\n                    \"key\": \"level\",\n                    \"match\": \"eq\",\n                    \"value\": \"error\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Latest Release**\n        The event is from the latest release\n\n        ```json\n            {\n                \"type\": \"latest_release\",\n                \"comparison\": true,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Release Age**\n        ```json\n            {\n                \"type\": \"latest_adopted_release\",\n                \"comparison\": {\n                    \"environment\": \"12345\",\n                    \"ageComparison\": \"older\",\n                    \"releaseAgeType\": \"oldest\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Event Level**\n        The event's level is `match` `level`\n        - `match`: The comparison operator\n            - `eq`: Equal\n            - `gte`: Greater than or equal\n            - `lte`: Less than or equal\n        - `level`: The event level\n            - `50`: Fatal\n            - `40`: Error\n            - `30`: Warning\n            - `20`: Info\n            - `10`: Debug\n            - `0`: Sample\n\n        ```json\n            {\n                \"type\": \"level\",\n                \"comparison\": {\n                    \"level\": 50,\n                    \"match\": \"eq\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        ## Actions\n        A list of actions that take place when all required conditions and filters for the alert are met. See below for a list of possible actions.\n\n\n        **Notify on Preferred Channel**\n        - `data`: A dictionary with the fallthrough type option when choosing to notify Suggested Assignees. Leave empty if notifying a user or team.\n            - `fallthroughType`\n                - `ActiveMembers`\n                - `AllMembers`\n                - `NoOne`\n        - `config`: A dictionary with the configuration options for notification.\n            - `targetType`: The type of recipient to notify\n                - `user`: User\n                - `team`: Team\n                - `issue_owners`: Suggested Assignees\n            - `targetDisplay`: null\n            - `targetIdentifier`: The id of the user or team to notify. Leave null for Suggested Assignees.\n\n        ```json\n            {\n                \"type\":\"email\",\n                \"integrationId\":null,\n                \"data\":{},\n                \"config\":{\n                    \"targetType\":\"user\",\n                    \"targetDisplay\":null,\n                    \"targetIdentifier\":\"232692\"\n                },\n                \"status\":\"active\"\n            },\n            {\n                \"type\":\"email\",\n                \"integrationId\":null,\n                \"data\":{\n                    \"fallthroughType\":\"ActiveMembers\"\n                },\n                \"config\":{\n                    \"targetType\":\"issue_owners\",\n                    \"targetDisplay\":null,\n                    \"targetIdentifier\":\"\"}\n                ,\n                \"status\":\"active\"\n            }\n        ```\n        **Notify on Slack**\n        - `targetDisplay`: The name of the channel to notify in.\n        `integrationId`: The stringified ID of the integration.\n\n        ```json\n            {\n                \"type\":\"slack\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"\",\n                    \"targetDisplay\":\"notify-errors\"\n                },\n                \"integrationId\":\"1\",\n                \"data\":{},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on PagerDuty**\n        - `targetDisplay`: The name of the service to create the ticket in.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"priority\"]`: The severity level for the notification.\n\n        ```json\n            {\n                \"type\":\"pagerduty\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"123456\",\n                    \"targetDisplay\":\"Error Service\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{\n                    \"priority\":\"default\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on Discord**\n        - `targetDisplay`: The name of the service to create the ticket in.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"tags\"]`: Comma separated list of tags to add to the notification.\n\n        ```json\n            {\n                \"type\":\"discord\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"12345\",\n                    \"targetDisplay\":\"\",\n                    },\n                \"integrationId\":\"1234\",\n                \"data\":{\n                    \"tags\":\"transaction,environment\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on MSTeams**\n        - `targetIdentifier` - The integration ID associated with the Microsoft Teams team.\n        - `targetDisplay` - The name of the channel to send the notification to.\n        - `integrationId`: The stringified ID of the integration.\n        ```json\n            {\n                \"type\":\"msteams\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"19:a4b3kghaghgkjah357y6847@thread.skype\",\n                    \"targetDisplay\":\"notify-errors\"\n                },\n                \"integrationId\":\"1\",\n                \"data\":{},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on OpsGenie**\n        - `targetDisplay`: The name of the Opsgenie team.\n        - `targetIdentifier`: The ID of the Opsgenie team to send the notification to.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"priority\"]`: The priority level for the notification.\n\n        ```json\n            {\n                \"type\":\"opsgenie\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"123456-Error-Service\",\n                    \"targetDisplay\":\"Error Service\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{\n                    \"priority\":\"P3\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on Azure DevOps**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"vsts\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a Jira ticket**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"jira\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a Jira Server ticket**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"jira_server\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a GitHub issue**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"github\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n        "
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "UpdateAnAlert": {
+                    "value": {
+                      "id": "1234567",
+                      "name": "My Updated Alert",
+                      "organizationId": "1",
+                      "createdBy": "23456",
+                      "dateCreated": "2026-01-14T20:08:32.273220Z",
+                      "dateUpdated": "2026-01-14T21:59:45.609912Z",
+                      "triggers": {
+                        "id": "12345",
+                        "organizationId": "1",
+                        "logicType": "any-short",
+                        "conditions": [
+                          {
+                            "id": "1234",
+                            "type": "first_seen_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "2345",
+                            "type": "issue_resolved_trigger",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "3456",
+                            "type": "reappeared_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          },
+                          {
+                            "id": "4567",
+                            "type": "regression_event",
+                            "comparison": true,
+                            "conditionResult": true
+                          }
+                        ],
+                        "actions": []
+                      },
+                      "actionFilters": [
+                        {
+                          "id": "1234567",
+                          "organizationId": "1",
+                          "logicType": "any-short",
+                          "conditions": [
+                            {
+                              "id": "345678",
+                              "type": "issue_priority_deescalating",
+                              "comparison": true,
+                              "conditionResult": true
+                            }
+                          ],
+                          "actions": [
+                            {
+                              "id": "56789",
+                              "type": "slack",
+                              "integrationId": "1",
+                              "data": {},
+                              "config": {
+                                "targetType": "specific",
+                                "targetDisplay": "@jane-doe",
+                                "targetIdentifier": "ABCDE123456"
+                              },
+                              "status": "active"
+                            }
+                          ]
+                        }
+                      ],
+                      "environment": null,
+                      "config": {
+                        "frequency": 1440
+                      },
+                      "detectorIds": [
+                        "12345678"
+                      ],
+                      "enabled": true,
+                      "lastTriggered": null
+                    },
+                    "summary": "Update an Alert"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete an Alert",
+        "description": "Deletes an alert.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "workflow_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the alert you'd like to query.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "org:admin",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -58133,6 +60537,106 @@
           "autofix"
         ]
       },
+      "BaseDataConditionGroupValidator": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "logic_type": {
+            "enum": [
+              "any",
+              "any-short",
+              "all",
+              "none"
+            ],
+            "type": "string",
+            "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
+          },
+          "conditions": {
+            "type": "array",
+            "items": {}
+          }
+        },
+        "required": [
+          "logic_type"
+        ]
+      },
+      "BaseDetectorTypeValidator": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the monitor.",
+            "maxLength": 200
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of monitor - `metric_issue`."
+          },
+          "data_sources": {
+            "type": "array",
+            "items": {},
+            "description": "\n            The data sources for the monitor to use based on what you want to measure.\n\n            **Number of Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "\n            The issue detection type configuration.\n\n\n            - `detectionType`\n                - `static`: Threshold based monitor\n                - `percent`: Change based monitor\n                - `dynamic`: Dynamic monitor\n            - `comparisonDelta`: If selecting a **change** detection type, the comparison delta is the time period at which to compare against in minutes.\n            For example, a value of 3600 compares the metric tracked against data 1 hour ago.\n                - `300`: 5 minutes\n                - `900`: 15 minutes\n                - `3600`: 1 hour\n                - `86400`: 1 day\n                - `604800`: 1 week\n                - `2592000`: 1 month\n\n            **Threshold**\n            ```json\n            {\n                \"detectionType\": \"static\",\n            }\n            ```\n            **Change**\n            ```json\n            {\n                \"detectionType\": \"percent\",\n                \"comparisonDelta\": 3600,\n            }\n            ```\n            **Dynamic**\n            ```json\n            {\n                \"detectionType\": \"dynamic\",\n            }\n            ```\n        "
+          },
+          "condition_group": {
+            "allOf": [
+              {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "logic_type": {
+                    "enum": [
+                      "any",
+                      "any-short",
+                      "all",
+                      "none"
+                    ],
+                    "type": "string",
+                    "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "items": {}
+                  }
+                },
+                "required": [
+                  "logic_type"
+                ]
+              }
+            ],
+            "description": "\n            Issue detection configuration for when to create an issue and at what priority level.\n\n\n            - `logicType`: `any`\n            - `type`: Any of `gt` (greater than), `lte` (less than or equal), or `anomaly_detection` (dynamic)\n            - `comparison`: Any positive integer. This is threshold that must be crossed for the monitor to create an issue, e.g. \"Create a metric issue when there are more than 5 unresolved error events\".\n                - If creating a **dynamic** monitor, see the options below.\n                    - `seasonality`: `auto`\n                    - `sensitivity`: Level of responsiveness. Options are one of `low`, `medium`, or `high`\n                    - `thresholdType`: If you want to be alerted to anomalies that are moving above, below, or in both directions in relation to your threshold.\n                        - `0`: Above\n                        - `1`: Below\n                        - `2`: Above and below\n\n            - `conditionResult`: The issue state change when the threshold is crossed.\n                - `75`: High priority\n                - `50`: Low priority\n                - `0`: Resolved\n\n\n            **Threshold and Change Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"gt\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 75\n                    },\n                    {\n                        \"type\": \"lte\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Threshold Monitor with Medium Priority**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        type: \"gt\",\n                        comparison: 5,\n                        conditionResult: 75\n                    },\n                    {\n                        type: \"gt\",\n                        comparison: 2,\n                        conditionResult: 50\n                    },\n                    {\n                        type: \"lte\",\n                        comparison: 2,\n                        conditionResult: 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Dynamic Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"anomaly_detection\",\n                        \"comparison\": {\n                            \"seasonality\": \"auto\",\n                            \"sensitivity\": \"medium\",\n                            \"thresholdType\": 2\n                        },\n                        \"conditionResult\": 75\n                    }\n                ],\n                \"actions\": []\n            ```\n        "
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true,
+            "description": "\n            The user or team who owns the monitor.\n\n            **User**\n            ```json\n                \"type\": \"user\",\n                \"id\": \"12345\",\n                \"name\": \"Jane Doe\",\n                \"email\": \"jane.doe@sentry.io\"\n            ```\n\n            **Team**\n            ```json\n                \"type\": \"team\",\n                \"id\": \"123456789\",\n                \"name\": \"example-team\"\n            ```\n        "
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "A description of the monitor. Will be used in the resulting issue."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Set to False if you want to disable the monitor."
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ]
+      },
       "BaseTeam": {
         "type": "object",
         "properties": {
@@ -63457,6 +65961,10 @@
           "verifySSL"
         ]
       },
+      "Detector": {
+        "type": "object",
+        "additionalProperties": {}
+      },
       "DiscoverSavedQuery": {
         "type": "object",
         "properties": {
@@ -65958,6 +68466,117 @@
             "organizationId",
             "projectConfigs",
             "provider"
+          ]
+        }
+      },
+      "ListDetectorSerializerResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "enum": [
+                    "user",
+                    "team"
+                  ],
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "type"
+              ],
+              "nullable": true
+            },
+            "createdBy": {
+              "type": "string",
+              "nullable": true
+            },
+            "latestGroup": {
+              "type": "object",
+              "additionalProperties": {},
+              "nullable": true
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "id": {
+              "type": "string"
+            },
+            "projectId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "workflowIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "dateUpdated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "dataSources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "nullable": true
+            },
+            "conditionGroup": {
+              "type": "object",
+              "additionalProperties": {},
+              "nullable": true
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "openIssues": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "conditionGroup",
+            "config",
+            "dataSources",
+            "dateCreated",
+            "dateUpdated",
+            "enabled",
+            "id",
+            "name",
+            "openIssues",
+            "projectId",
+            "type",
+            "workflowIds"
           ]
         }
       },
@@ -68572,6 +71191,281 @@
             "slug",
             "team",
             "teams"
+          ]
+        }
+      },
+      "ListWorkflow": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "organizationId": {
+              "type": "string"
+            },
+            "createdBy": {
+              "type": "string",
+              "nullable": true
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "dateUpdated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "triggers": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "organizationId": {
+                  "type": "string"
+                },
+                "logicType": {
+                  "type": "string"
+                },
+                "conditions": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "comparison": {
+                            "type": "boolean"
+                          },
+                          "conditionResult": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "comparison",
+                          "conditionResult",
+                          "id",
+                          "type"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    }
+                  ]
+                },
+                "actions": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "integrationId": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "data": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "config": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "config",
+                          "data",
+                          "id",
+                          "integrationId",
+                          "status",
+                          "type"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "actions",
+                "conditions",
+                "id",
+                "logicType",
+                "organizationId"
+              ],
+              "nullable": true
+            },
+            "actionFilters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "organizationId": {
+                    "type": "string"
+                  },
+                  "logicType": {
+                    "type": "string"
+                  },
+                  "conditions": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "comparison": {
+                              "type": "boolean"
+                            },
+                            "conditionResult": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "comparison",
+                            "conditionResult",
+                            "id",
+                            "type"
+                          ]
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "items": {}
+                      }
+                    ]
+                  },
+                  "actions": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "integrationId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "data": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            "config": {
+                              "type": "object",
+                              "additionalProperties": {}
+                            },
+                            "status": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "config",
+                            "data",
+                            "id",
+                            "integrationId",
+                            "status",
+                            "type"
+                          ]
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "items": {}
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "actions",
+                  "conditions",
+                  "id",
+                  "logicType",
+                  "organizationId"
+                ]
+              }
+            },
+            "environment": {
+              "type": "string",
+              "nullable": true
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "detectorIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "lastTriggered": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          "required": [
+            "actionFilters",
+            "config",
+            "createdBy",
+            "dateCreated",
+            "dateUpdated",
+            "detectorIds",
+            "enabled",
+            "environment",
+            "id",
+            "lastTriggered",
+            "name",
+            "organizationId",
+            "triggers"
           ]
         }
       },
@@ -77673,6 +80567,79 @@
           }
         }
       },
+      "Workflow": {
+        "type": "object",
+        "additionalProperties": {}
+      },
+      "WorkflowValidator": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the alert",
+            "maxLength": 256
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the existing alert"
+          },
+          "enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether the alert is enabled or disabled"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "\n        Typically the frequency at which the alert will fire, in minutes.\n\n        - `0`: 0 minutes\n        - `5`: 5 minutes\n        - `10`: 10 minutes\n        - `30`: 30 minutes\n        - `60`: 1 hour\n        - `180`: 3 hours\n        - `720`: 12 hours\n        - `1440`: 24 hours\n\n        ```json\n            {\n                \"frequency\":3600\n            }\n        ```\n        "
+          },
+          "environment": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the environment for the alert to evaluate in"
+          },
+          "triggers": {
+            "allOf": [
+              {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "logic_type": {
+                    "enum": [
+                      "any",
+                      "any-short",
+                      "all",
+                      "none"
+                    ],
+                    "type": "string",
+                    "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "items": {}
+                  }
+                },
+                "required": [
+                  "logic_type"
+                ]
+              }
+            ],
+            "description": "The conditions on which the alert will trigger. See available options below.\n        ```json\n            \"triggers\": {\n                \"id\": \"1234567\",\n                \"organizationId\": \"1\",\n                \"logicType\": \"any-short\",\n                \"conditions\": [\n                    {\n                        \"id\": \"123\",\n                        \"type\": \"first_seen_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"456\",\n                        \"type\": \"issue_resolved_trigger\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"789\",\n                        \"type\": \"reappeared_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    },\n                    {\n                        \"id\": \"321\",\n                        \"type\": \"regression_event\",\n                        \"comparison\": true,\n                        \"conditionResult\": true\n                    }\n                ],\n                \"actions\": []\n            }\n        ```\n        "
+          },
+          "action_filters": {
+            "type": "array",
+            "items": {},
+            "description": "The filters to run before the action will fire and the action(s) to fire.\n\n        Below is a basic example. See below for all other options.\n\n        ```json\n            \"actionFilters\": [\n                {\n                    \"logicType\": \"any-short\",\n                    \"conditions\": [\n                        {\n                            \"type\": \"level\",\n                            \"comparison\": {\n                                \"level\": 50,\n                                \"match\": \"eq\"\n                            },\n                            \"conditionResult\": true\n                        }\n                    ],\n                    \"actions\": [\n                        {\n                            \"id\": \"123\",\n                            \"type\": \"email\",\n                            \"integrationId\": null,\n                            \"data\": {},\n                            \"config\": {\n                                \"targetType\": \"user\",\n                                \"targetDisplay\": null,\n                                \"targetIdentifier\": \"56789\"\n                            },\n                            \"status\": \"active\"\n                        }\n                    ]\n                }\n            ]\n        ```\n\n        ## Conditions\n\n        **Issue Age**\n        - `time`: One of `minute`, `hour`, `day`, or `week`.\n        - `value`: A positive integer.\n        - `comparisonType`: One of `older` or `newer`.\n        ```json\n            {\n                \"type\": \"age_comparison\",\n                \"comparison\": {\n                    \"time\": \"minute\",\n                    \"value\": 10,\n                    \"comparisonType\": \"older\"\n                },\n                \"conditionResult\": true\n            }\n\n        ```\n\n        **Issue Assignment**\n        - `targetType`: Who the issue is assigned to\n            - `NoOne`: Unassigned\n            - `Member`: Assigned to a user\n            - `Team`: Assigned to a team\n        - `targetIdentifier`: The ID of the user or team from the `targetType`. Enter \"\" if `targetType` is `NoOne`.\n        ```json\n            {\n                \"type\": \"assigned_to\",\n                \"comparison\": {\n                    \"targetType\": \"Member\",\n                    \"targetIdentifier\": 123456\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Category**\n        - `value`: The issue category to filter to.\n            - `1`: Error issues\n            - `6`: Feedback issues\n            - `10`: Outage issues\n            - `11`: Metric issues\n            - `12`: DB Query issues\n            - `13`: HTTP Client issues\n            - `14`: Front end issues\n            - `15`: Mobile issues\n        ```json\n            {\n                \"type\": \"issue_category\",\n                \"comparison\": {\n                    \"value\": 1\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Frequency**\n        - `value`: A positive integer representing how many times the issue has to happen before the alert will fire.\n        ```json\n            {\n                \"type\": \"issue_occurrences\",\n                \"comparison\": {\n                    \"value\": 10\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **De-escalation**\n        ```json\n            {\n                \"type\": \"issue_priority_deescalating\",\n                \"comparison\": true,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Issue Priority**\n        - `comparison`: The priority the issue must be for the alert to fire.\n            - `75`: High priority\n            - `50`: Medium priority\n            - `25`: Low priority\n        ```json\n            {\n                \"type\": \"issue_priority_greater_or_equal\",\n                \"comparison\": 75,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Number of Users Affected**\n        - `value`: A positive integer representing the number of users that must be affected before the alert will fire.\n        - `filters`: A list of additional sub-filters to evaluate before the alert will fire.\n        - `interval`: The time period in which to evaluate the value. e.g. Number of users affected by an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"event_unique_user_frequency_count\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"filters\": [{\"key\": \"foo\", \"match\": \"eq\", \"value\": \"bar\"}],\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Number of Events**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Number of events in an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"event_frequency_count\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Percent of Events**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Number of events in an issue is `comparisonInterval` percent higher `value` compared to `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        - `comparisonInterval`: The time period to compare against. See `interval` for options.\n        ```json\n            {\n                \"type\": \"event_frequency_percent\",\n                \"comparison\": {\n                    \"value\": 100,\n                    \"interval\": \"1h\",\n                    \"comparisonInterval\": \"1w\"\n                },\n                \"conditionResult\": true\n            }\n\n        ```\n\n        **Percentage of Sessions Affected Count**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Percentage of sessions affected by an issue is more than `value` in `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        ```json\n            {\n                \"type\": \"percent_sessions_count\",\n                \"comparison\": {\n                    \"value\": 10,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Percentage of Sessions Affected Percent**\n        - `value`: A positive integer representing the number of events in an issue that must come in before the alert will fire\n        - `interval`: The time period in which to evaluate the value. e.g. Percentage of sessions affected by an issue is `comparisonInterval` percent higher `value` compared to `interval`.\n            - `1min`: 1 minute\n            - `5min`: 5 minutes\n            - `15min`: 15 minutes\n            - `1hr`: 1 hour\n            - `1d`: 1 day\n            - `1w`: 1 week\n            - `30d`: 30 days\n        - `comparisonInterval`: The time period to compare against. See `interval` for options.\n        ```json\n            {\n                \"type\": \"percent_sessions_percent\",\n                \"comparison\": {\n                    \"value\": 10,\n                    \"interval\": \"1h\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Event Attribute**\n        The event's `attribute` value `match` `value`\n\n        - `attribute`: The event attribute to match on. Valid values are: `message`, `platform`, `environment`, `type`, `error.handled`, `error.unhandled`, `error.main_thread`, `exception.type`, `exception.value`, `user.id`, `user.email`, `user.username`, `user.ip_address`, `http.method`, `http.url`, `http.status_code`, `sdk.name`, `stacktrace.code`, `stacktrace.module`, `stacktrace.filename`, `stacktrace.abs_path`, `stacktrace.package`, `unreal.crash_type`, `app.in_foreground`.\n        - `match`: The comparison operator\n            - `co`: Contains\n            - `nc`: Does not contain\n            - `eq`: Equals\n            - `ne`: Does not equal\n            - `sw`: Starts with\n            - `ew`: Ends with\n            - `is`: Is set\n            - `ns`: Is not set\n        - `value`: A string. Not required when match is `is` or `ns`.\n\n        ```json\n            {\n                \"type\": \"event_attribute\",\n                \"comparison\": {\n                    \"match\": \"co\",\n                    \"value\": \"bar\",\n                    \"attribute\": \"message\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Tagged Event**\n        The event's tags `key` match `value`\n        - `key`: The tag value\n        - `match`: The comparison operator\n            - `co`: Contains\n            - `nc`: Does not contain\n            - `eq`: Equals\n            - `ne`: Does not equal\n            - `sw`: Starts with\n            - `ew`: Ends with\n            - `is`: Is set\n            - `ns`: Is not set\n        - `value`: A string. Not required when match is `is` or `ns`.\n\n        ```json\n            {\n                \"type\": \"tagged_event\",\n                \"comparison\": {\n                    \"key\": \"level\",\n                    \"match\": \"eq\",\n                    \"value\": \"error\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Latest Release**\n        The event is from the latest release\n\n        ```json\n            {\n                \"type\": \"latest_release\",\n                \"comparison\": true,\n                \"conditionResult\": true\n            }\n        ```\n\n        **Release Age**\n        ```json\n            {\n                \"type\": \"latest_adopted_release\",\n                \"comparison\": {\n                    \"environment\": \"12345\",\n                    \"ageComparison\": \"older\",\n                    \"releaseAgeType\": \"oldest\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        **Event Level**\n        The event's level is `match` `level`\n        - `match`: The comparison operator\n            - `eq`: Equal\n            - `gte`: Greater than or equal\n            - `lte`: Less than or equal\n        - `level`: The event level\n            - `50`: Fatal\n            - `40`: Error\n            - `30`: Warning\n            - `20`: Info\n            - `10`: Debug\n            - `0`: Sample\n\n        ```json\n            {\n                \"type\": \"level\",\n                \"comparison\": {\n                    \"level\": 50,\n                    \"match\": \"eq\"\n                },\n                \"conditionResult\": true\n            }\n        ```\n\n        ## Actions\n        A list of actions that take place when all required conditions and filters for the alert are met. See below for a list of possible actions.\n\n\n        **Notify on Preferred Channel**\n        - `data`: A dictionary with the fallthrough type option when choosing to notify Suggested Assignees. Leave empty if notifying a user or team.\n            - `fallthroughType`\n                - `ActiveMembers`\n                - `AllMembers`\n                - `NoOne`\n        - `config`: A dictionary with the configuration options for notification.\n            - `targetType`: The type of recipient to notify\n                - `user`: User\n                - `team`: Team\n                - `issue_owners`: Suggested Assignees\n            - `targetDisplay`: null\n            - `targetIdentifier`: The id of the user or team to notify. Leave null for Suggested Assignees.\n\n        ```json\n            {\n                \"type\":\"email\",\n                \"integrationId\":null,\n                \"data\":{},\n                \"config\":{\n                    \"targetType\":\"user\",\n                    \"targetDisplay\":null,\n                    \"targetIdentifier\":\"232692\"\n                },\n                \"status\":\"active\"\n            },\n            {\n                \"type\":\"email\",\n                \"integrationId\":null,\n                \"data\":{\n                    \"fallthroughType\":\"ActiveMembers\"\n                },\n                \"config\":{\n                    \"targetType\":\"issue_owners\",\n                    \"targetDisplay\":null,\n                    \"targetIdentifier\":\"\"}\n                ,\n                \"status\":\"active\"\n            }\n        ```\n        **Notify on Slack**\n        - `targetDisplay`: The name of the channel to notify in.\n        `integrationId`: The stringified ID of the integration.\n\n        ```json\n            {\n                \"type\":\"slack\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"\",\n                    \"targetDisplay\":\"notify-errors\"\n                },\n                \"integrationId\":\"1\",\n                \"data\":{},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on PagerDuty**\n        - `targetDisplay`: The name of the service to create the ticket in.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"priority\"]`: The severity level for the notification.\n\n        ```json\n            {\n                \"type\":\"pagerduty\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"123456\",\n                    \"targetDisplay\":\"Error Service\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{\n                    \"priority\":\"default\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on Discord**\n        - `targetDisplay`: The name of the service to create the ticket in.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"tags\"]`: Comma separated list of tags to add to the notification.\n\n        ```json\n            {\n                \"type\":\"discord\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"12345\",\n                    \"targetDisplay\":\"\",\n                    },\n                \"integrationId\":\"1234\",\n                \"data\":{\n                    \"tags\":\"transaction,environment\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on MSTeams**\n        - `targetIdentifier` - The integration ID associated with the Microsoft Teams team.\n        - `targetDisplay` - The name of the channel to send the notification to.\n        - `integrationId`: The stringified ID of the integration.\n        ```json\n            {\n                \"type\":\"msteams\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"19:a4b3kghaghgkjah357y6847@thread.skype\",\n                    \"targetDisplay\":\"notify-errors\"\n                },\n                \"integrationId\":\"1\",\n                \"data\":{},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on OpsGenie**\n        - `targetDisplay`: The name of the Opsgenie team.\n        - `targetIdentifier`: The ID of the Opsgenie team to send the notification to.\n        - `integrationId`: The stringified ID of the integration.\n        - `data[\"priority\"]`: The priority level for the notification.\n\n        ```json\n            {\n                \"type\":\"opsgenie\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\"123456-Error-Service\",\n                    \"targetDisplay\":\"Error Service\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{\n                    \"priority\":\"P3\"\n                },\n                \"status\":\"active\"\n            }\n        ```\n\n        **Notify on Azure DevOps**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"vsts\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a Jira ticket**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"jira\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a Jira Server ticket**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"jira_server\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n\n        **Create a GitHub issue**\n        - `integrationId`: The stringified ID of the integration.\n        - `data` - A list of any fields you want to include in the ticket as objects.\n\n        ```json\n            {\n                \"type\":\"github\",\n                \"config\":{\n                    \"targetType\":\"specific\",\n                    \"targetIdentifier\":\",\n                    \"targetDisplay\":\"\"\n                    },\n                \"integrationId\":\"2345\",\n                \"data\":{...},\n                \"status\":\"active\"\n            }\n        ```\n        "
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
       "_LegacyBrowserFilter": {
         "type": "object",
         "properties": {
@@ -77861,6 +80828,16 @@
       "externalDocs": {
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/integration-platform/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Monitors",
+      "x-sidebar-name": "Monitors & Alerts",
+      "description": "Endpoints for Monitors and Alerts",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/monitors/&template=api_error_template.md"
       }
     },
     {
