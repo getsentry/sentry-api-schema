@@ -7481,7 +7481,8 @@
                         "type": "array",
                         "items": {
                           "type": "string"
-                        }
+                        },
+                        "nullable": true
                       },
                       "dateCreated": {
                         "type": "string",
@@ -7863,7 +7864,112 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "properties": {
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "enum": [
+                            "user",
+                            "team"
+                          ],
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type"
+                      ],
+                      "nullable": true
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "latestGroup": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "workflowIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dataSources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "nullable": true
+                    },
+                    "conditionGroup": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "openIssues": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "conditionGroup",
+                    "config",
+                    "dataSources",
+                    "dateCreated",
+                    "dateUpdated",
+                    "enabled",
+                    "id",
+                    "name",
+                    "openIssues",
+                    "projectId",
+                    "type",
+                    "workflowIds"
+                  ]
                 },
                 "examples": {
                   "MonitorSuccessfullyCreated": {
@@ -8098,7 +8204,8 @@
                         "type": "array",
                         "items": {
                           "type": "string"
-                        }
+                        },
+                        "nullable": true
                       },
                       "dateCreated": {
                         "type": "string",
@@ -8496,7 +8603,112 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "properties": {
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "enum": [
+                            "user",
+                            "team"
+                          ],
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type"
+                      ],
+                      "nullable": true
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "latestGroup": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "workflowIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dataSources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "nullable": true
+                    },
+                    "conditionGroup": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "openIssues": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "conditionGroup",
+                    "config",
+                    "dataSources",
+                    "dateCreated",
+                    "dateUpdated",
+                    "enabled",
+                    "id",
+                    "name",
+                    "openIssues",
+                    "projectId",
+                    "type",
+                    "workflowIds"
+                  ]
                 },
                 "examples": {
                   "FetchAMonitor": {
@@ -8738,7 +8950,112 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "properties": {
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "enum": [
+                            "user",
+                            "team"
+                          ],
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type"
+                      ],
+                      "nullable": true
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "latestGroup": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "workflowIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dataSources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "nullable": true
+                    },
+                    "conditionGroup": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "openIssues": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "conditionGroup",
+                    "config",
+                    "dataSources",
+                    "dateCreated",
+                    "dateUpdated",
+                    "enabled",
+                    "id",
+                    "name",
+                    "openIssues",
+                    "projectId",
+                    "type",
+                    "workflowIds"
+                  ]
                 },
                 "examples": {
                   "UpdateAMonitor": {
@@ -8807,8 +9124,6 @@
                         "detectionType": "static"
                       },
                       "enabled": true,
-                      "alertRuleId": null,
-                      "ruleId": null,
                       "latestGroup": {
                         "id": "123456789",
                         "title": "Test monitor",
@@ -33509,7 +33824,14 @@
                                       "type": "string"
                                     },
                                     "comparison": {
-                                      "type": "boolean"
+                                      "anyOf": [
+                                        {
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "integer"
+                                        }
+                                      ]
                                     },
                                     "conditionResult": {
                                       "type": "boolean"
@@ -33559,15 +33881,7 @@
                                     "status": {
                                       "type": "string"
                                     }
-                                  },
-                                  "required": [
-                                    "config",
-                                    "data",
-                                    "id",
-                                    "integrationId",
-                                    "status",
-                                    "type"
-                                  ]
+                                  }
                                 }
                               },
                               {
@@ -33577,13 +33891,6 @@
                             ]
                           }
                         },
-                        "required": [
-                          "actions",
-                          "conditions",
-                          "id",
-                          "logicType",
-                          "organizationId"
-                        ],
                         "nullable": true
                       },
                       "actionFilters": {
@@ -33614,7 +33921,14 @@
                                         "type": "string"
                                       },
                                       "comparison": {
-                                        "type": "boolean"
+                                        "anyOf": [
+                                          {
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "integer"
+                                          }
+                                        ]
                                       },
                                       "conditionResult": {
                                         "type": "boolean"
@@ -33664,15 +33978,7 @@
                                       "status": {
                                         "type": "string"
                                       }
-                                    },
-                                    "required": [
-                                      "config",
-                                      "data",
-                                      "id",
-                                      "integrationId",
-                                      "status",
-                                      "type"
-                                    ]
+                                    }
                                   }
                                 },
                                 {
@@ -33681,15 +33987,9 @@
                                 }
                               ]
                             }
-                          },
-                          "required": [
-                            "actions",
-                            "conditions",
-                            "id",
-                            "logicType",
-                            "organizationId"
-                          ]
-                        }
+                          }
+                        },
+                        "nullable": true
                       },
                       "environment": {
                         "type": "string",
@@ -34039,7 +34339,260 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "triggers": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "organizationId": {
+                          "type": "string"
+                        },
+                        "logicType": {
+                          "type": "string"
+                        },
+                        "conditions": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "comparison": {
+                                    "anyOf": [
+                                      {
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "integer"
+                                      }
+                                    ]
+                                  },
+                                  "conditionResult": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "comparison",
+                                  "conditionResult",
+                                  "id",
+                                  "type"
+                                ]
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            }
+                          ]
+                        },
+                        "actions": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "integrationId": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "data": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "config": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            }
+                          ]
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "actionFilters": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "organizationId": {
+                            "type": "string"
+                          },
+                          "logicType": {
+                            "type": "string"
+                          },
+                          "conditions": {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "comparison": {
+                                      "anyOf": [
+                                        {
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "integer"
+                                        }
+                                      ]
+                                    },
+                                    "conditionResult": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "comparison",
+                                    "conditionResult",
+                                    "id",
+                                    "type"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          },
+                          "actions": {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "integrationId": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "data": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "config": {
+                                      "type": "object",
+                                      "additionalProperties": {}
+                                    },
+                                    "status": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "detectorIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "lastTriggered": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "actionFilters",
+                    "config",
+                    "createdBy",
+                    "dateCreated",
+                    "dateUpdated",
+                    "detectorIds",
+                    "enabled",
+                    "environment",
+                    "id",
+                    "lastTriggered",
+                    "name",
+                    "organizationId",
+                    "triggers"
+                  ]
                 },
                 "examples": {
                   "WorkflowSuccessfullyCreated": {
@@ -34275,7 +34828,14 @@
                                       "type": "string"
                                     },
                                     "comparison": {
-                                      "type": "boolean"
+                                      "anyOf": [
+                                        {
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "integer"
+                                        }
+                                      ]
                                     },
                                     "conditionResult": {
                                       "type": "boolean"
@@ -34325,15 +34885,7 @@
                                     "status": {
                                       "type": "string"
                                     }
-                                  },
-                                  "required": [
-                                    "config",
-                                    "data",
-                                    "id",
-                                    "integrationId",
-                                    "status",
-                                    "type"
-                                  ]
+                                  }
                                 }
                               },
                               {
@@ -34343,13 +34895,6 @@
                             ]
                           }
                         },
-                        "required": [
-                          "actions",
-                          "conditions",
-                          "id",
-                          "logicType",
-                          "organizationId"
-                        ],
                         "nullable": true
                       },
                       "actionFilters": {
@@ -34380,7 +34925,14 @@
                                         "type": "string"
                                       },
                                       "comparison": {
-                                        "type": "boolean"
+                                        "anyOf": [
+                                          {
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "integer"
+                                          }
+                                        ]
                                       },
                                       "conditionResult": {
                                         "type": "boolean"
@@ -34430,15 +34982,7 @@
                                       "status": {
                                         "type": "string"
                                       }
-                                    },
-                                    "required": [
-                                      "config",
-                                      "data",
-                                      "id",
-                                      "integrationId",
-                                      "status",
-                                      "type"
-                                    ]
+                                    }
                                   }
                                 },
                                 {
@@ -34447,15 +34991,9 @@
                                 }
                               ]
                             }
-                          },
-                          "required": [
-                            "actions",
-                            "conditions",
-                            "id",
-                            "logicType",
-                            "organizationId"
-                          ]
-                        }
+                          }
+                        },
+                        "nullable": true
                       },
                       "environment": {
                         "type": "string",
@@ -34818,7 +35356,260 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "triggers": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "organizationId": {
+                          "type": "string"
+                        },
+                        "logicType": {
+                          "type": "string"
+                        },
+                        "conditions": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "comparison": {
+                                    "anyOf": [
+                                      {
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "integer"
+                                      }
+                                    ]
+                                  },
+                                  "conditionResult": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "comparison",
+                                  "conditionResult",
+                                  "id",
+                                  "type"
+                                ]
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            }
+                          ]
+                        },
+                        "actions": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "integrationId": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "data": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "config": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            }
+                          ]
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "actionFilters": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "organizationId": {
+                            "type": "string"
+                          },
+                          "logicType": {
+                            "type": "string"
+                          },
+                          "conditions": {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "comparison": {
+                                      "anyOf": [
+                                        {
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "integer"
+                                        }
+                                      ]
+                                    },
+                                    "conditionResult": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "comparison",
+                                    "conditionResult",
+                                    "id",
+                                    "type"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          },
+                          "actions": {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "integrationId": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "data": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "config": {
+                                      "type": "object",
+                                      "additionalProperties": {}
+                                    },
+                                    "status": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "detectorIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "lastTriggered": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "actionFilters",
+                    "config",
+                    "createdBy",
+                    "dateCreated",
+                    "dateUpdated",
+                    "detectorIds",
+                    "enabled",
+                    "environment",
+                    "id",
+                    "lastTriggered",
+                    "name",
+                    "organizationId",
+                    "triggers"
+                  ]
                 },
                 "examples": {
                   "FetchAnAlert": {
@@ -35038,7 +35829,260 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organizationId": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "triggers": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "organizationId": {
+                          "type": "string"
+                        },
+                        "logicType": {
+                          "type": "string"
+                        },
+                        "conditions": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "comparison": {
+                                    "anyOf": [
+                                      {
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "integer"
+                                      }
+                                    ]
+                                  },
+                                  "conditionResult": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "comparison",
+                                  "conditionResult",
+                                  "id",
+                                  "type"
+                                ]
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            }
+                          ]
+                        },
+                        "actions": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "integrationId": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "data": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "config": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            }
+                          ]
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "actionFilters": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "organizationId": {
+                            "type": "string"
+                          },
+                          "logicType": {
+                            "type": "string"
+                          },
+                          "conditions": {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "comparison": {
+                                      "anyOf": [
+                                        {
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "integer"
+                                        }
+                                      ]
+                                    },
+                                    "conditionResult": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "comparison",
+                                    "conditionResult",
+                                    "id",
+                                    "type"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          },
+                          "actions": {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "integrationId": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "data": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "config": {
+                                      "type": "object",
+                                      "additionalProperties": {}
+                                    },
+                                    "status": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "detectorIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "lastTriggered": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "actionFilters",
+                    "config",
+                    "createdBy",
+                    "dateCreated",
+                    "dateUpdated",
+                    "detectorIds",
+                    "enabled",
+                    "environment",
+                    "id",
+                    "lastTriggered",
+                    "name",
+                    "organizationId",
+                    "triggers"
+                  ]
                 },
                 "examples": {
                   "UpdateAnAlert": {
@@ -66657,7 +67701,112 @@
       },
       "Detector": {
         "type": "object",
-        "additionalProperties": {}
+        "properties": {
+          "owner": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "user",
+                  "team"
+                ],
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "type"
+            ],
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "latestGroup": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "workflowIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dataSources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "nullable": true
+          },
+          "conditionGroup": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "openIssues": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "conditionGroup",
+          "config",
+          "dataSources",
+          "dateCreated",
+          "dateUpdated",
+          "enabled",
+          "id",
+          "name",
+          "openIssues",
+          "projectId",
+          "type",
+          "workflowIds"
+        ]
       },
       "DiscoverSavedQuery": {
         "type": "object",
@@ -69231,7 +70380,8 @@
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "nullable": true
             },
             "dateCreated": {
               "type": "string",
@@ -71951,7 +73101,14 @@
                             "type": "string"
                           },
                           "comparison": {
-                            "type": "boolean"
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
                           },
                           "conditionResult": {
                             "type": "boolean"
@@ -72001,15 +73158,7 @@
                           "status": {
                             "type": "string"
                           }
-                        },
-                        "required": [
-                          "config",
-                          "data",
-                          "id",
-                          "integrationId",
-                          "status",
-                          "type"
-                        ]
+                        }
                       }
                     },
                     {
@@ -72019,13 +73168,6 @@
                   ]
                 }
               },
-              "required": [
-                "actions",
-                "conditions",
-                "id",
-                "logicType",
-                "organizationId"
-              ],
               "nullable": true
             },
             "actionFilters": {
@@ -72056,7 +73198,14 @@
                               "type": "string"
                             },
                             "comparison": {
-                              "type": "boolean"
+                              "anyOf": [
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
                             },
                             "conditionResult": {
                               "type": "boolean"
@@ -72106,15 +73255,7 @@
                             "status": {
                               "type": "string"
                             }
-                          },
-                          "required": [
-                            "config",
-                            "data",
-                            "id",
-                            "integrationId",
-                            "status",
-                            "type"
-                          ]
+                          }
                         }
                       },
                       {
@@ -72123,15 +73264,9 @@
                       }
                     ]
                   }
-                },
-                "required": [
-                  "actions",
-                  "conditions",
-                  "id",
-                  "logicType",
-                  "organizationId"
-                ]
-              }
+                }
+              },
+              "nullable": true
             },
             "environment": {
               "type": "string",
@@ -81281,7 +82416,260 @@
       },
       "Workflow": {
         "type": "object",
-        "additionalProperties": {}
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "triggers": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "organizationId": {
+                "type": "string"
+              },
+              "logicType": {
+                "type": "string"
+              },
+              "conditions": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "comparison": {
+                          "anyOf": [
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "conditionResult": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "comparison",
+                        "conditionResult",
+                        "id",
+                        "type"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "array",
+                    "items": {}
+                  }
+                ]
+              },
+              "actions": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "integrationId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "data": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "config": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "status": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "array",
+                    "items": {}
+                  }
+                ]
+              }
+            },
+            "nullable": true
+          },
+          "actionFilters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "organizationId": {
+                  "type": "string"
+                },
+                "logicType": {
+                  "type": "string"
+                },
+                "conditions": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "comparison": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "conditionResult": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "comparison",
+                          "conditionResult",
+                          "id",
+                          "type"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    }
+                  ]
+                },
+                "actions": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "integrationId": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "data": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "config": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "status": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    }
+                  ]
+                }
+              }
+            },
+            "nullable": true
+          },
+          "environment": {
+            "type": "string",
+            "nullable": true
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "detectorIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "lastTriggered": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": [
+          "actionFilters",
+          "config",
+          "createdBy",
+          "dateCreated",
+          "dateUpdated",
+          "detectorIds",
+          "enabled",
+          "environment",
+          "id",
+          "lastTriggered",
+          "name",
+          "organizationId",
+          "triggers"
+        ]
       },
       "WorkflowValidator": {
         "type": "object",
