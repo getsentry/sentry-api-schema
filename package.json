@@ -1,0 +1,30 @@
+{
+  "name": "@sentry/api",
+  "version": "0.1.0",
+  "description": "Sentry API Client",
+  "license": "FSL-1.1-Apache-2.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/getsentry/sentry-api-schema.git"
+  },
+  "scripts": {
+    "generate": "openapi-ts",
+    "build": "bun build src/index.ts --outdir dist && tsc --emitDeclarationOnly"
+  },
+  "exports": {
+    "import": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "0.91.1",
+    "@types/node": "^22"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "bun@1.3.3"
+}
