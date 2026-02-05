@@ -27,7 +27,7 @@ async function main() {
   });
 
   // Building the package
-  exec("bun build src/index.ts --outdir dist && tsc --emitDeclarationOnly");
+  exec("bun run build");
 }
 
 main();

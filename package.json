@@ -11,13 +11,17 @@
     "type": "git",
     "url": "https://github.com/getsentry/sentry-api-schema.git"
   },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist && tsc --emitDeclarationOnly"
+  },
   "exports": {
     "import": "./dist/index.js",
     "types": "./dist/index.d.ts"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "0.91.1",
-    "@types/node": "^22"
+    "@types/node": "^22",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=22"
