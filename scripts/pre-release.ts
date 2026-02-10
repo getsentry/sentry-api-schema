@@ -7,7 +7,7 @@ function exec(command: string): void {
   execSync(command, { stdio: "inherit" });
 }
 
-async function main() {
+function main() {
   const version = process.env.CRAFT_NEW_VERSION;
   if (!version) {
     console.error("Error: CRAFT_NEW_VERSION environment variable is required");
