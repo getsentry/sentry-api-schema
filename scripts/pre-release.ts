@@ -1,5 +1,4 @@
 import { execSync } from "node:child_process";
-import { createClient } from "@hey-api/openapi-ts";
 
 /**
  * Execute a shell command with output inherited to stdout/stderr
@@ -19,14 +18,6 @@ async function main() {
 
   // Update package.json via npm (handles formatting consistently)
   exec(`npm --no-git-tag-version version ${version}`);
-
-  // Generate the API client source from the OpenAPI spec.
-  // The actual build (src -> dist) happens in the Build workflow,
-  // not here, since dist/ is gitignored and won't be committed.
-  await createClient({
-    input: "./openapi-derefed.json",
-    output: "src",
-  });
 }
 
 main();
