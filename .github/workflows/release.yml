@@ -27,6 +27,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     name: Release a new version
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      !startsWith(github.event.head_commit.message, 'Merge branch ''release/')
     steps:
       - name: Get auth token
         id: token
