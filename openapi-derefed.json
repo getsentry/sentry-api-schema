@@ -22450,6 +22450,711 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/size-analysis/": {
+      "get": {
+        "operationId": "Retrieve Size Analysis results for a given artifact",
+        "description": "Retrieve size analysis results for a given artifact.\n\nReturns size metrics including download size, install size, and optional insights.\nWhen a base artifact exists (either from commit comparison or via the `baseArtifactId` parameter),\ncomparison data showing size differences is included.\n\nThe response `state` field indicates the analysis status:\n- `PENDING`: Analysis has not started yet.\n- `PROCESSING`: Analysis is currently running.\n- `FAILED` / `NOT_RAN`: Analysis did not complete; `errorCode` and `errorMessage` are included.\n- `COMPLETED`: Analysis finished successfully with full size data.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "artifact_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the build artifact.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "baseArtifactId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional ID of the base artifact to compare against. If not provided, uses the default base head artifact."
+          }
+        ],
+        "tags": [
+          "Mobile Builds"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "buildId": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "appInfo": {
+                      "type": "object",
+                      "properties": {
+                        "appId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "buildNumber": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "artifactType": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "dateAdded": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "dateBuilt": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "appId",
+                        "artifactType",
+                        "buildNumber",
+                        "dateAdded",
+                        "dateBuilt",
+                        "name",
+                        "version"
+                      ]
+                    },
+                    "gitInfo": {
+                      "type": "object",
+                      "properties": {
+                        "headSha": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "baseSha": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "provider": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "headRepoName": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "baseRepoName": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "headRef": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "baseRef": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "prNumber": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "baseRef",
+                        "baseRepoName",
+                        "baseSha",
+                        "headRef",
+                        "headRepoName",
+                        "headSha",
+                        "prNumber",
+                        "provider"
+                      ],
+                      "nullable": true
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "downloadSize": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "installSize": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "analysisDuration": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "analysisVersion": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "insights": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "appComponents": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "componentType": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "appId": {
+                            "type": "string"
+                          },
+                          "path": {
+                            "type": "string"
+                          },
+                          "downloadSize": {
+                            "type": "integer"
+                          },
+                          "installSize": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "appId",
+                          "componentType",
+                          "downloadSize",
+                          "installSize",
+                          "name",
+                          "path"
+                        ]
+                      },
+                      "nullable": true
+                    },
+                    "baseBuildId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "baseAppInfo": {
+                      "type": "object",
+                      "properties": {
+                        "appId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "buildNumber": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "artifactType": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "dateAdded": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "dateBuilt": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "appId",
+                        "artifactType",
+                        "buildNumber",
+                        "dateAdded",
+                        "dateBuilt",
+                        "name",
+                        "version"
+                      ],
+                      "nullable": true
+                    },
+                    "comparisons": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "metricsArtifactType": {
+                            "type": "string"
+                          },
+                          "identifier": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "state": {
+                            "type": "string"
+                          },
+                          "errorCode": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "errorMessage": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "diffItems": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "sizeDiff": {
+                                  "type": "integer"
+                                },
+                                "headSize": {
+                                  "type": "integer",
+                                  "nullable": true
+                                },
+                                "baseSize": {
+                                  "type": "integer",
+                                  "nullable": true
+                                },
+                                "path": {
+                                  "type": "string"
+                                },
+                                "itemType": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "diffItems": {
+                                  "type": "array",
+                                  "items": {},
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "baseSize",
+                                "diffItems",
+                                "headSize",
+                                "itemType",
+                                "path",
+                                "sizeDiff",
+                                "type"
+                              ]
+                            },
+                            "nullable": true
+                          },
+                          "insightDiffItems": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "insightType": {
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "type": "string"
+                                },
+                                "totalSavingsChange": {
+                                  "type": "integer"
+                                },
+                                "fileDiffs": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "sizeDiff": {
+                                        "type": "integer"
+                                      },
+                                      "headSize": {
+                                        "type": "integer",
+                                        "nullable": true
+                                      },
+                                      "baseSize": {
+                                        "type": "integer",
+                                        "nullable": true
+                                      },
+                                      "path": {
+                                        "type": "string"
+                                      },
+                                      "itemType": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "diffItems": {
+                                        "type": "array",
+                                        "items": {},
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "baseSize",
+                                      "diffItems",
+                                      "headSize",
+                                      "itemType",
+                                      "path",
+                                      "sizeDiff",
+                                      "type"
+                                    ]
+                                  }
+                                },
+                                "groupDiffs": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "sizeDiff": {
+                                        "type": "integer"
+                                      },
+                                      "headSize": {
+                                        "type": "integer",
+                                        "nullable": true
+                                      },
+                                      "baseSize": {
+                                        "type": "integer",
+                                        "nullable": true
+                                      },
+                                      "path": {
+                                        "type": "string"
+                                      },
+                                      "itemType": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "diffItems": {
+                                        "type": "array",
+                                        "items": {},
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "baseSize",
+                                      "diffItems",
+                                      "headSize",
+                                      "itemType",
+                                      "path",
+                                      "sizeDiff",
+                                      "type"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "fileDiffs",
+                                "groupDiffs",
+                                "insightType",
+                                "status",
+                                "totalSavingsChange"
+                              ]
+                            },
+                            "nullable": true
+                          },
+                          "sizeMetricDiff": {
+                            "type": "object",
+                            "properties": {
+                              "metricsArtifactType": {
+                                "type": "string"
+                              },
+                              "identifier": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "headInstallSize": {
+                                "type": "integer"
+                              },
+                              "headDownloadSize": {
+                                "type": "integer"
+                              },
+                              "baseInstallSize": {
+                                "type": "integer"
+                              },
+                              "baseDownloadSize": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "baseDownloadSize",
+                              "baseInstallSize",
+                              "headDownloadSize",
+                              "headInstallSize",
+                              "identifier",
+                              "metricsArtifactType"
+                            ],
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "diffItems",
+                          "errorCode",
+                          "errorMessage",
+                          "identifier",
+                          "insightDiffItems",
+                          "metricsArtifactType",
+                          "sizeMetricDiff",
+                          "state"
+                        ]
+                      },
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "analysisDuration",
+                    "analysisVersion",
+                    "appComponents",
+                    "appInfo",
+                    "baseAppInfo",
+                    "baseBuildId",
+                    "buildId",
+                    "comparisons",
+                    "downloadSize",
+                    "errorCode",
+                    "errorMessage",
+                    "gitInfo",
+                    "insights",
+                    "installSize",
+                    "state"
+                  ]
+                },
+                "examples": {
+                  "PendingAnalysis": {
+                    "value": {
+                      "buildId": "12345",
+                      "appInfo": {
+                        "appId": "com.example.app",
+                        "name": "Example App",
+                        "version": "1.2.0",
+                        "buildNumber": 42,
+                        "artifactType": "AAB",
+                        "dateAdded": "2025-01-15T10:30:00+00:00",
+                        "dateBuilt": "2025-01-15T10:00:00+00:00"
+                      },
+                      "gitInfo": {
+                        "headSha": "abc123def456",
+                        "baseSha": "789xyz000111",
+                        "provider": "github",
+                        "headRepoName": "org/repo",
+                        "baseRepoName": "org/repo",
+                        "headRef": "feature-branch",
+                        "baseRef": "main",
+                        "prNumber": 42
+                      },
+                      "errorCode": null,
+                      "errorMessage": null,
+                      "downloadSize": null,
+                      "installSize": null,
+                      "analysisDuration": null,
+                      "analysisVersion": null,
+                      "insights": null,
+                      "appComponents": null,
+                      "baseBuildId": null,
+                      "baseAppInfo": null,
+                      "comparisons": null,
+                      "state": "PENDING"
+                    },
+                    "summary": "Pending Analysis"
+                  },
+                  "FailedAnalysis": {
+                    "value": {
+                      "buildId": "12345",
+                      "appInfo": {
+                        "appId": "com.example.app",
+                        "name": "Example App",
+                        "version": "1.2.0",
+                        "buildNumber": 42,
+                        "artifactType": "AAB",
+                        "dateAdded": "2025-01-15T10:30:00+00:00",
+                        "dateBuilt": "2025-01-15T10:00:00+00:00"
+                      },
+                      "gitInfo": {
+                        "headSha": "abc123def456",
+                        "baseSha": "789xyz000111",
+                        "provider": "github",
+                        "headRepoName": "org/repo",
+                        "baseRepoName": "org/repo",
+                        "headRef": "feature-branch",
+                        "baseRef": "main",
+                        "prNumber": 42
+                      },
+                      "errorCode": "TIMEOUT",
+                      "errorMessage": "Failed to analyze artifact: unsupported format",
+                      "downloadSize": null,
+                      "installSize": null,
+                      "analysisDuration": null,
+                      "analysisVersion": null,
+                      "insights": null,
+                      "appComponents": null,
+                      "baseBuildId": null,
+                      "baseAppInfo": null,
+                      "comparisons": null,
+                      "state": "FAILED"
+                    },
+                    "summary": "Failed Analysis"
+                  },
+                  "CompletedAnalysis": {
+                    "value": {
+                      "buildId": "12345",
+                      "appInfo": {
+                        "appId": "com.example.app",
+                        "name": "Example App",
+                        "version": "1.2.0",
+                        "buildNumber": 42,
+                        "artifactType": "AAB",
+                        "dateAdded": "2025-01-15T10:30:00+00:00",
+                        "dateBuilt": "2025-01-15T10:00:00+00:00"
+                      },
+                      "gitInfo": {
+                        "headSha": "abc123def456",
+                        "baseSha": "789xyz000111",
+                        "provider": "github",
+                        "headRepoName": "org/repo",
+                        "baseRepoName": "org/repo",
+                        "headRef": "feature-branch",
+                        "baseRef": "main",
+                        "prNumber": 42
+                      },
+                      "errorCode": null,
+                      "errorMessage": null,
+                      "downloadSize": 5120000,
+                      "installSize": 10240000,
+                      "analysisDuration": 3.5,
+                      "analysisVersion": "1.0.0",
+                      "insights": null,
+                      "appComponents": null,
+                      "baseBuildId": null,
+                      "baseAppInfo": null,
+                      "comparisons": null,
+                      "state": "COMPLETED"
+                    },
+                    "summary": "Completed Analysis"
+                  },
+                  "CompletedAnalysisWithComparison": {
+                    "value": {
+                      "buildId": "12345",
+                      "appInfo": {
+                        "appId": "com.example.app",
+                        "name": "Example App",
+                        "version": "1.2.0",
+                        "buildNumber": 42,
+                        "artifactType": "AAB",
+                        "dateAdded": "2025-01-15T10:30:00+00:00",
+                        "dateBuilt": "2025-01-15T10:00:00+00:00"
+                      },
+                      "gitInfo": {
+                        "headSha": "abc123def456",
+                        "baseSha": "789xyz000111",
+                        "provider": "github",
+                        "headRepoName": "org/repo",
+                        "baseRepoName": "org/repo",
+                        "headRef": "feature-branch",
+                        "baseRef": "main",
+                        "prNumber": 42
+                      },
+                      "errorCode": null,
+                      "errorMessage": null,
+                      "downloadSize": 5120000,
+                      "installSize": 10240000,
+                      "analysisDuration": 3.5,
+                      "analysisVersion": "1.0.0",
+                      "insights": null,
+                      "appComponents": null,
+                      "baseBuildId": "12344",
+                      "baseAppInfo": {
+                        "appId": "com.example.app",
+                        "name": "Example App",
+                        "version": "1.1.0",
+                        "buildNumber": 41,
+                        "artifactType": "AAB",
+                        "dateAdded": "2025-01-15T10:30:00+00:00",
+                        "dateBuilt": "2025-01-15T10:00:00+00:00"
+                      },
+                      "comparisons": [
+                        {
+                          "metricsArtifactType": "MAIN_ARTIFACT",
+                          "identifier": null,
+                          "state": "SUCCESS",
+                          "errorCode": null,
+                          "errorMessage": null,
+                          "diffItems": [
+                            {
+                              "sizeDiff": 1024,
+                              "headSize": 5120,
+                              "baseSize": 4096,
+                              "path": "lib/armeabi-v7a/libnative.so",
+                              "itemType": "native_library",
+                              "type": "modified",
+                              "diffItems": null
+                            }
+                          ],
+                          "insightDiffItems": null,
+                          "sizeMetricDiff": {
+                            "metricsArtifactType": "MAIN_ARTIFACT",
+                            "identifier": null,
+                            "headInstallSize": 10240000,
+                            "headDownloadSize": 5120000,
+                            "baseInstallSize": 9800000,
+                            "baseDownloadSize": 4900000
+                          }
+                        }
+                      ],
+                      "state": "COMPLETED"
+                    },
+                    "summary": "Completed Analysis with Comparison"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repositories/": {
       "get": {
         "operationId": "Retrieves list of repositories for a given owner",
@@ -81228,6 +81933,461 @@
           "shortId"
         ]
       },
+      "SizeAnalysisResponse": {
+        "type": "object",
+        "properties": {
+          "buildId": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "appInfo": {
+            "type": "object",
+            "properties": {
+              "appId": {
+                "type": "string",
+                "nullable": true
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "version": {
+                "type": "string",
+                "nullable": true
+              },
+              "buildNumber": {
+                "type": "integer",
+                "nullable": true
+              },
+              "artifactType": {
+                "type": "string",
+                "nullable": true
+              },
+              "dateAdded": {
+                "type": "string",
+                "nullable": true
+              },
+              "dateBuilt": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "appId",
+              "artifactType",
+              "buildNumber",
+              "dateAdded",
+              "dateBuilt",
+              "name",
+              "version"
+            ]
+          },
+          "gitInfo": {
+            "type": "object",
+            "properties": {
+              "headSha": {
+                "type": "string",
+                "nullable": true
+              },
+              "baseSha": {
+                "type": "string",
+                "nullable": true
+              },
+              "provider": {
+                "type": "string",
+                "nullable": true
+              },
+              "headRepoName": {
+                "type": "string",
+                "nullable": true
+              },
+              "baseRepoName": {
+                "type": "string",
+                "nullable": true
+              },
+              "headRef": {
+                "type": "string",
+                "nullable": true
+              },
+              "baseRef": {
+                "type": "string",
+                "nullable": true
+              },
+              "prNumber": {
+                "type": "integer",
+                "nullable": true
+              }
+            },
+            "required": [
+              "baseRef",
+              "baseRepoName",
+              "baseSha",
+              "headRef",
+              "headRepoName",
+              "headSha",
+              "prNumber",
+              "provider"
+            ],
+            "nullable": true
+          },
+          "errorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "downloadSize": {
+            "type": "integer",
+            "nullable": true
+          },
+          "installSize": {
+            "type": "integer",
+            "nullable": true
+          },
+          "analysisDuration": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "analysisVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "insights": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "appComponents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "componentType": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "appId": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "downloadSize": {
+                  "type": "integer"
+                },
+                "installSize": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "appId",
+                "componentType",
+                "downloadSize",
+                "installSize",
+                "name",
+                "path"
+              ]
+            },
+            "nullable": true
+          },
+          "baseBuildId": {
+            "type": "string",
+            "nullable": true
+          },
+          "baseAppInfo": {
+            "type": "object",
+            "properties": {
+              "appId": {
+                "type": "string",
+                "nullable": true
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "version": {
+                "type": "string",
+                "nullable": true
+              },
+              "buildNumber": {
+                "type": "integer",
+                "nullable": true
+              },
+              "artifactType": {
+                "type": "string",
+                "nullable": true
+              },
+              "dateAdded": {
+                "type": "string",
+                "nullable": true
+              },
+              "dateBuilt": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "appId",
+              "artifactType",
+              "buildNumber",
+              "dateAdded",
+              "dateBuilt",
+              "name",
+              "version"
+            ],
+            "nullable": true
+          },
+          "comparisons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "metricsArtifactType": {
+                  "type": "string"
+                },
+                "identifier": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "state": {
+                  "type": "string"
+                },
+                "errorCode": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "errorMessage": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "diffItems": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "sizeDiff": {
+                        "type": "integer"
+                      },
+                      "headSize": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "baseSize": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "itemType": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "diffItems": {
+                        "type": "array",
+                        "items": {},
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "baseSize",
+                      "diffItems",
+                      "headSize",
+                      "itemType",
+                      "path",
+                      "sizeDiff",
+                      "type"
+                    ]
+                  },
+                  "nullable": true
+                },
+                "insightDiffItems": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "insightType": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "totalSavingsChange": {
+                        "type": "integer"
+                      },
+                      "fileDiffs": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "sizeDiff": {
+                              "type": "integer"
+                            },
+                            "headSize": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "baseSize": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "path": {
+                              "type": "string"
+                            },
+                            "itemType": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "diffItems": {
+                              "type": "array",
+                              "items": {},
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "baseSize",
+                            "diffItems",
+                            "headSize",
+                            "itemType",
+                            "path",
+                            "sizeDiff",
+                            "type"
+                          ]
+                        }
+                      },
+                      "groupDiffs": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "sizeDiff": {
+                              "type": "integer"
+                            },
+                            "headSize": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "baseSize": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "path": {
+                              "type": "string"
+                            },
+                            "itemType": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "diffItems": {
+                              "type": "array",
+                              "items": {},
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "baseSize",
+                            "diffItems",
+                            "headSize",
+                            "itemType",
+                            "path",
+                            "sizeDiff",
+                            "type"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "fileDiffs",
+                      "groupDiffs",
+                      "insightType",
+                      "status",
+                      "totalSavingsChange"
+                    ]
+                  },
+                  "nullable": true
+                },
+                "sizeMetricDiff": {
+                  "type": "object",
+                  "properties": {
+                    "metricsArtifactType": {
+                      "type": "string"
+                    },
+                    "identifier": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "headInstallSize": {
+                      "type": "integer"
+                    },
+                    "headDownloadSize": {
+                      "type": "integer"
+                    },
+                    "baseInstallSize": {
+                      "type": "integer"
+                    },
+                    "baseDownloadSize": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "baseDownloadSize",
+                    "baseInstallSize",
+                    "headDownloadSize",
+                    "headInstallSize",
+                    "identifier",
+                    "metricsArtifactType"
+                  ],
+                  "nullable": true
+                }
+              },
+              "required": [
+                "diffItems",
+                "errorCode",
+                "errorMessage",
+                "identifier",
+                "insightDiffItems",
+                "metricsArtifactType",
+                "sizeMetricDiff",
+                "state"
+              ]
+            },
+            "nullable": true
+          }
+        },
+        "required": [
+          "analysisDuration",
+          "analysisVersion",
+          "appComponents",
+          "appInfo",
+          "baseAppInfo",
+          "baseBuildId",
+          "buildId",
+          "comparisons",
+          "downloadSize",
+          "errorCode",
+          "errorMessage",
+          "gitInfo",
+          "insights",
+          "installSize",
+          "state"
+        ]
+      },
       "Source": {
         "type": "object",
         "properties": {
@@ -83041,6 +84201,15 @@
       "externalDocs": {
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/seer/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Mobile Builds",
+      "description": "Endpoints for mobile build analysis",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/organizations/preprodartifacts/size-analysis/&template=api_error_template.md"
       }
     }
   ]
