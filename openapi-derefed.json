@@ -22488,6 +22488,235 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/install-details/": {
+      "get": {
+        "operationId": "Retrieve install info for a given artifact",
+        "description": "Retrieve install info for a given artifact.\n\nReturns distribution and installation details for a specific preprod artifact,\nincluding whether the artifact is installable, the install URL, download count,\nand iOS-specific code signing information.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "artifact_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the build artifact.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Mobile Builds"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "buildId": {
+                      "type": "string"
+                    },
+                    "appInfo": {
+                      "type": "object",
+                      "properties": {
+                        "appId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "buildNumber": {
+                          "type": "integer",
+                          "nullable": true
+                        },
+                        "artifactType": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "dateAdded": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "dateBuilt": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "appId",
+                        "artifactType",
+                        "buildNumber",
+                        "dateAdded",
+                        "dateBuilt",
+                        "name",
+                        "version"
+                      ]
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "isInstallable": {
+                      "type": "boolean"
+                    },
+                    "installUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "downloadCount": {
+                      "type": "integer"
+                    },
+                    "releaseNotes": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "installGroups": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "isCodeSignatureValid": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "profileName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "codesigningType": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "appInfo",
+                    "buildId",
+                    "codesigningType",
+                    "downloadCount",
+                    "installGroups",
+                    "installUrl",
+                    "isCodeSignatureValid",
+                    "isInstallable",
+                    "platform",
+                    "profileName",
+                    "releaseNotes"
+                  ]
+                },
+                "examples": {
+                  "InstallableArtifact": {
+                    "value": {
+                      "buildId": "12345",
+                      "appInfo": {
+                        "appId": "com.example.app",
+                        "name": "Example App",
+                        "version": "1.2.0",
+                        "buildNumber": 42,
+                        "artifactType": "AAB",
+                        "dateAdded": "2025-01-15T10:30:00+00:00",
+                        "dateBuilt": "2025-01-15T10:00:00+00:00"
+                      },
+                      "platform": "ANDROID",
+                      "isInstallable": true,
+                      "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=apk",
+                      "downloadCount": 5,
+                      "releaseNotes": "Bug fixes and performance improvements.",
+                      "installGroups": [
+                        "beta-testers"
+                      ],
+                      "isCodeSignatureValid": null,
+                      "profileName": null,
+                      "codesigningType": null
+                    },
+                    "summary": "Installable Artifact"
+                  },
+                  "Non-InstallableArtifact": {
+                    "value": {
+                      "buildId": "12345",
+                      "appInfo": {
+                        "appId": "com.example.app",
+                        "name": "Example App",
+                        "version": "1.2.0",
+                        "buildNumber": 42,
+                        "artifactType": "AAB",
+                        "dateAdded": "2025-01-15T10:30:00+00:00",
+                        "dateBuilt": "2025-01-15T10:00:00+00:00"
+                      },
+                      "platform": "ANDROID",
+                      "isInstallable": false,
+                      "installUrl": null,
+                      "downloadCount": 0,
+                      "releaseNotes": null,
+                      "installGroups": null,
+                      "isCodeSignatureValid": null,
+                      "profileName": null,
+                      "codesigningType": null
+                    },
+                    "summary": "Non-Installable Artifact"
+                  },
+                  "AppleArtifactWithCodeSigning": {
+                    "value": {
+                      "buildId": "12346",
+                      "appInfo": {
+                        "appId": "com.example.app",
+                        "name": "Example App",
+                        "version": "1.2.0",
+                        "buildNumber": 42,
+                        "artifactType": "XCARCHIVE",
+                        "dateAdded": "2025-01-15T10:30:00+00:00",
+                        "dateBuilt": "2025-01-15T10:00:00+00:00"
+                      },
+                      "platform": "APPLE",
+                      "isInstallable": true,
+                      "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=plist",
+                      "downloadCount": 3,
+                      "releaseNotes": null,
+                      "installGroups": null,
+                      "isCodeSignatureValid": true,
+                      "profileName": "iOS Team Provisioning Profile",
+                      "codesigningType": "development"
+                    },
+                    "summary": "Apple Artifact with Code Signing"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/size-analysis/": {
       "get": {
         "operationId": "Retrieve Size Analysis results for a given artifact",
@@ -70354,6 +70583,106 @@
         "required": [
           "commit",
           "repository"
+        ]
+      },
+      "InstallInfoResponse": {
+        "type": "object",
+        "properties": {
+          "buildId": {
+            "type": "string"
+          },
+          "appInfo": {
+            "type": "object",
+            "properties": {
+              "appId": {
+                "type": "string",
+                "nullable": true
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "version": {
+                "type": "string",
+                "nullable": true
+              },
+              "buildNumber": {
+                "type": "integer",
+                "nullable": true
+              },
+              "artifactType": {
+                "type": "string",
+                "nullable": true
+              },
+              "dateAdded": {
+                "type": "string",
+                "nullable": true
+              },
+              "dateBuilt": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "appId",
+              "artifactType",
+              "buildNumber",
+              "dateAdded",
+              "dateBuilt",
+              "name",
+              "version"
+            ]
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true
+          },
+          "isInstallable": {
+            "type": "boolean"
+          },
+          "installUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "downloadCount": {
+            "type": "integer"
+          },
+          "releaseNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "installGroups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "isCodeSignatureValid": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "profileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "codesigningType": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "appInfo",
+          "buildId",
+          "codesigningType",
+          "downloadCount",
+          "installGroups",
+          "installUrl",
+          "isCodeSignatureValid",
+          "isInstallable",
+          "platform",
+          "profileName",
+          "releaseNotes"
         ]
       },
       "IssueEventDetailsResponse": {
