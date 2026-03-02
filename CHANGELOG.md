@@ -1,3 +1,9 @@
+## 0.20.0
+
+### New Features
+
+- Bundle pagination utilities into the SDK entry point by @MathurAditya724 in [#61](https://github.com/getsentry/sentry-api-schema/pull/61)
+
 ## 0.19.0
 
 ### Schema Updates
