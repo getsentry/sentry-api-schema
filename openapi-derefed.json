@@ -22570,6 +22570,9 @@
                     "buildId": {
                       "type": "string"
                     },
+                    "state": {
+                      "type": "string"
+                    },
                     "appInfo": {
                       "type": "object",
                       "properties": {
@@ -22612,7 +22615,65 @@
                         "version"
                       ]
                     },
+                    "gitInfo": {
+                      "type": "object",
+                      "properties": {
+                        "headSha": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "baseSha": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "provider": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "headRepoName": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "baseRepoName": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "headRef": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "baseRef": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "prNumber": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "baseRef",
+                        "baseRepoName",
+                        "baseSha",
+                        "headRef",
+                        "headRepoName",
+                        "headSha",
+                        "prNumber",
+                        "provider"
+                      ],
+                      "nullable": true
+                    },
                     "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "projectSlug": {
+                      "type": "string"
+                    },
+                    "buildConfiguration": {
                       "type": "string",
                       "nullable": true
                     },
@@ -22652,22 +22713,28 @@
                   },
                   "required": [
                     "appInfo",
+                    "buildConfiguration",
                     "buildId",
                     "codesigningType",
                     "downloadCount",
+                    "gitInfo",
                     "installGroups",
                     "installUrl",
                     "isCodeSignatureValid",
                     "isInstallable",
                     "platform",
                     "profileName",
-                    "releaseNotes"
+                    "projectId",
+                    "projectSlug",
+                    "releaseNotes",
+                    "state"
                   ]
                 },
                 "examples": {
                   "InstallableArtifact": {
                     "value": {
                       "buildId": "12345",
+                      "state": "PROCESSED",
                       "appInfo": {
                         "appId": "com.example.app",
                         "name": "Example App",
@@ -22677,7 +22744,20 @@
                         "dateAdded": "2025-01-15T10:30:00+00:00",
                         "dateBuilt": "2025-01-15T10:00:00+00:00"
                       },
+                      "gitInfo": {
+                        "headSha": "abc123def456",
+                        "baseSha": "789xyz000111",
+                        "provider": "github",
+                        "headRepoName": "org/repo",
+                        "baseRepoName": "org/repo",
+                        "headRef": "feature-branch",
+                        "baseRef": "main",
+                        "prNumber": 42
+                      },
                       "platform": "ANDROID",
+                      "projectId": "1",
+                      "projectSlug": "my-project",
+                      "buildConfiguration": "release",
                       "isInstallable": true,
                       "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=apk",
                       "downloadCount": 5,
@@ -22694,6 +22774,7 @@
                   "Non-InstallableArtifact": {
                     "value": {
                       "buildId": "12345",
+                      "state": "PROCESSED",
                       "appInfo": {
                         "appId": "com.example.app",
                         "name": "Example App",
@@ -22703,7 +22784,11 @@
                         "dateAdded": "2025-01-15T10:30:00+00:00",
                         "dateBuilt": "2025-01-15T10:00:00+00:00"
                       },
+                      "gitInfo": null,
                       "platform": "ANDROID",
+                      "projectId": "1",
+                      "projectSlug": "my-project",
+                      "buildConfiguration": null,
                       "isInstallable": false,
                       "installUrl": null,
                       "downloadCount": 0,
@@ -22718,6 +22803,7 @@
                   "AppleArtifactWithCodeSigning": {
                     "value": {
                       "buildId": "12346",
+                      "state": "PROCESSED",
                       "appInfo": {
                         "appId": "com.example.app",
                         "name": "Example App",
@@ -22727,7 +22813,20 @@
                         "dateAdded": "2025-01-15T10:30:00+00:00",
                         "dateBuilt": "2025-01-15T10:00:00+00:00"
                       },
+                      "gitInfo": {
+                        "headSha": "abc123def456",
+                        "baseSha": "789xyz000111",
+                        "provider": "github",
+                        "headRepoName": "org/repo",
+                        "baseRepoName": "org/repo",
+                        "headRef": "feature-branch",
+                        "baseRef": "main",
+                        "prNumber": 42
+                      },
                       "platform": "APPLE",
+                      "projectId": "1",
+                      "projectSlug": "my-project",
+                      "buildConfiguration": "release",
                       "isInstallable": true,
                       "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=plist",
                       "downloadCount": 3,
@@ -44516,6 +44615,672 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/build-distribution/latest/": {
+      "get": {
+        "operationId": "Get the latest installable build for a project",
+        "description": "Get the latest installable build for a project.\n\nReturns the latest installable build matching filter criteria.\nWhen buildVersion is provided, also returns the current build and\nwhether an update is available.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "appId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "App identifier (exact match).",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Platform: \"apple\" or \"android\".",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "buildVersion",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Current build version. When provided, enables check-for-updates mode."
+          },
+          {
+            "in": "query",
+            "name": "buildNumber",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Current build number. Either this or mainBinaryIdentifier must be provided when buildVersion is set."
+          },
+          {
+            "in": "query",
+            "name": "mainBinaryIdentifier",
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID of the main binary (e.g. Mach-O UUID for Apple builds). Either this or buildNumber must be provided when buildVersion is set."
+          },
+          {
+            "in": "query",
+            "name": "buildConfiguration",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by build configuration name (exact match)."
+          },
+          {
+            "in": "query",
+            "name": "codesigningType",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by code signing type."
+          },
+          {
+            "in": "query",
+            "name": "installGroups",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Filter by install group name (repeatable for multiple groups)."
+          }
+        ],
+        "tags": [
+          "Mobile Builds"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:distribution"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "latestArtifact": {
+                      "type": "object",
+                      "properties": {
+                        "buildId": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "appInfo": {
+                          "type": "object",
+                          "properties": {
+                            "appId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "name": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "version": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "buildNumber": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "artifactType": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "dateAdded": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "dateBuilt": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "appId",
+                            "artifactType",
+                            "buildNumber",
+                            "dateAdded",
+                            "dateBuilt",
+                            "name",
+                            "version"
+                          ]
+                        },
+                        "gitInfo": {
+                          "type": "object",
+                          "properties": {
+                            "headSha": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "baseSha": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "provider": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "headRepoName": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "baseRepoName": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "headRef": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "baseRef": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "prNumber": {
+                              "type": "integer",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "baseRef",
+                            "baseRepoName",
+                            "baseSha",
+                            "headRef",
+                            "headRepoName",
+                            "headSha",
+                            "prNumber",
+                            "provider"
+                          ],
+                          "nullable": true
+                        },
+                        "platform": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "projectId": {
+                          "type": "string"
+                        },
+                        "projectSlug": {
+                          "type": "string"
+                        },
+                        "buildConfiguration": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "isInstallable": {
+                          "type": "boolean"
+                        },
+                        "installUrl": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "downloadCount": {
+                          "type": "integer"
+                        },
+                        "releaseNotes": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "installGroups": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "nullable": true
+                        },
+                        "isCodeSignatureValid": {
+                          "type": "boolean",
+                          "nullable": true
+                        },
+                        "profileName": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "codesigningType": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "appInfo",
+                        "buildConfiguration",
+                        "buildId",
+                        "codesigningType",
+                        "downloadCount",
+                        "gitInfo",
+                        "installGroups",
+                        "installUrl",
+                        "isCodeSignatureValid",
+                        "isInstallable",
+                        "platform",
+                        "profileName",
+                        "projectId",
+                        "projectSlug",
+                        "releaseNotes",
+                        "state"
+                      ],
+                      "nullable": true
+                    },
+                    "currentArtifact": {
+                      "type": "object",
+                      "properties": {
+                        "buildId": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "appInfo": {
+                          "type": "object",
+                          "properties": {
+                            "appId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "name": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "version": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "buildNumber": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "artifactType": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "dateAdded": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "dateBuilt": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "appId",
+                            "artifactType",
+                            "buildNumber",
+                            "dateAdded",
+                            "dateBuilt",
+                            "name",
+                            "version"
+                          ]
+                        },
+                        "gitInfo": {
+                          "type": "object",
+                          "properties": {
+                            "headSha": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "baseSha": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "provider": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "headRepoName": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "baseRepoName": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "headRef": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "baseRef": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "prNumber": {
+                              "type": "integer",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "baseRef",
+                            "baseRepoName",
+                            "baseSha",
+                            "headRef",
+                            "headRepoName",
+                            "headSha",
+                            "prNumber",
+                            "provider"
+                          ],
+                          "nullable": true
+                        },
+                        "platform": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "projectId": {
+                          "type": "string"
+                        },
+                        "projectSlug": {
+                          "type": "string"
+                        },
+                        "buildConfiguration": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "isInstallable": {
+                          "type": "boolean"
+                        },
+                        "installUrl": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "downloadCount": {
+                          "type": "integer"
+                        },
+                        "releaseNotes": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "installGroups": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "nullable": true
+                        },
+                        "isCodeSignatureValid": {
+                          "type": "boolean",
+                          "nullable": true
+                        },
+                        "profileName": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "codesigningType": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "appInfo",
+                        "buildConfiguration",
+                        "buildId",
+                        "codesigningType",
+                        "downloadCount",
+                        "gitInfo",
+                        "installGroups",
+                        "installUrl",
+                        "isCodeSignatureValid",
+                        "isInstallable",
+                        "platform",
+                        "profileName",
+                        "projectId",
+                        "projectSlug",
+                        "releaseNotes",
+                        "state"
+                      ],
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "currentArtifact",
+                    "latestArtifact"
+                  ]
+                },
+                "examples": {
+                  "LatestBuildOnly": {
+                    "value": {
+                      "latestArtifact": {
+                        "buildId": "12345",
+                        "state": "PROCESSED",
+                        "appInfo": {
+                          "appId": "com.example.app",
+                          "name": "Example App",
+                          "version": "1.2.0",
+                          "buildNumber": 42,
+                          "artifactType": "AAB",
+                          "dateAdded": "2025-01-15T10:30:00+00:00",
+                          "dateBuilt": "2025-01-15T10:00:00+00:00"
+                        },
+                        "gitInfo": {
+                          "headSha": "abc123def456",
+                          "baseSha": "789xyz000111",
+                          "provider": "github",
+                          "headRepoName": "org/repo",
+                          "baseRepoName": "org/repo",
+                          "headRef": "feature-branch",
+                          "baseRef": "main",
+                          "prNumber": 42
+                        },
+                        "platform": "ANDROID",
+                        "projectId": "1",
+                        "projectSlug": "my-project",
+                        "buildConfiguration": "release",
+                        "isInstallable": true,
+                        "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=apk",
+                        "downloadCount": 5,
+                        "releaseNotes": "Bug fixes and performance improvements.",
+                        "installGroups": [
+                          "beta-testers"
+                        ],
+                        "isCodeSignatureValid": null,
+                        "profileName": null,
+                        "codesigningType": null
+                      },
+                      "currentArtifact": null
+                    },
+                    "summary": "Latest Build Only"
+                  },
+                  "UpdateAvailable": {
+                    "value": {
+                      "latestArtifact": {
+                        "buildId": "12346",
+                        "state": "PROCESSED",
+                        "appInfo": {
+                          "appId": "com.example.app",
+                          "name": "Example App",
+                          "version": "1.3.0",
+                          "buildNumber": 50,
+                          "artifactType": "AAB",
+                          "dateAdded": "2025-01-15T10:30:00+00:00",
+                          "dateBuilt": "2025-01-15T10:00:00+00:00"
+                        },
+                        "gitInfo": {
+                          "headSha": "abc123def456",
+                          "baseSha": "789xyz000111",
+                          "provider": "github",
+                          "headRepoName": "org/repo",
+                          "baseRepoName": "org/repo",
+                          "headRef": "feature-branch",
+                          "baseRef": "main",
+                          "prNumber": 42
+                        },
+                        "platform": "ANDROID",
+                        "projectId": "1",
+                        "projectSlug": "my-project",
+                        "buildConfiguration": "release",
+                        "isInstallable": true,
+                        "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=apk",
+                        "downloadCount": 5,
+                        "releaseNotes": "Bug fixes and performance improvements.",
+                        "installGroups": [
+                          "beta-testers"
+                        ],
+                        "isCodeSignatureValid": null,
+                        "profileName": null,
+                        "codesigningType": null
+                      },
+                      "currentArtifact": {
+                        "buildId": "12345",
+                        "state": "PROCESSED",
+                        "appInfo": {
+                          "appId": "com.example.app",
+                          "name": "Example App",
+                          "version": "1.2.0",
+                          "buildNumber": 42,
+                          "artifactType": "AAB",
+                          "dateAdded": "2025-01-15T10:30:00+00:00",
+                          "dateBuilt": "2025-01-15T10:00:00+00:00"
+                        },
+                        "gitInfo": {
+                          "headSha": "abc123def456",
+                          "baseSha": "789xyz000111",
+                          "provider": "github",
+                          "headRepoName": "org/repo",
+                          "baseRepoName": "org/repo",
+                          "headRef": "feature-branch",
+                          "baseRef": "main",
+                          "prNumber": 42
+                        },
+                        "platform": "ANDROID",
+                        "projectId": "1",
+                        "projectSlug": "my-project",
+                        "buildConfiguration": "release",
+                        "isInstallable": true,
+                        "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=apk",
+                        "downloadCount": 5,
+                        "releaseNotes": "Bug fixes and performance improvements.",
+                        "installGroups": [
+                          "beta-testers"
+                        ],
+                        "isCodeSignatureValid": null,
+                        "profileName": null,
+                        "codesigningType": null
+                      }
+                    },
+                    "summary": "Update Available"
+                  },
+                  "NoUpdateAvailable": {
+                    "value": {
+                      "latestArtifact": {
+                        "buildId": "12345",
+                        "state": "PROCESSED",
+                        "appInfo": {
+                          "appId": "com.example.app",
+                          "name": "Example App",
+                          "version": "1.2.0",
+                          "buildNumber": 42,
+                          "artifactType": "AAB",
+                          "dateAdded": "2025-01-15T10:30:00+00:00",
+                          "dateBuilt": "2025-01-15T10:00:00+00:00"
+                        },
+                        "gitInfo": {
+                          "headSha": "abc123def456",
+                          "baseSha": "789xyz000111",
+                          "provider": "github",
+                          "headRepoName": "org/repo",
+                          "baseRepoName": "org/repo",
+                          "headRef": "feature-branch",
+                          "baseRef": "main",
+                          "prNumber": 42
+                        },
+                        "platform": "ANDROID",
+                        "projectId": "1",
+                        "projectSlug": "my-project",
+                        "buildConfiguration": "release",
+                        "isInstallable": true,
+                        "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=apk",
+                        "downloadCount": 5,
+                        "releaseNotes": "Bug fixes and performance improvements.",
+                        "installGroups": [
+                          "beta-testers"
+                        ],
+                        "isCodeSignatureValid": null,
+                        "profileName": null,
+                        "codesigningType": null
+                      },
+                      "currentArtifact": {
+                        "buildId": "12345",
+                        "state": "PROCESSED",
+                        "appInfo": {
+                          "appId": "com.example.app",
+                          "name": "Example App",
+                          "version": "1.2.0",
+                          "buildNumber": 42,
+                          "artifactType": "AAB",
+                          "dateAdded": "2025-01-15T10:30:00+00:00",
+                          "dateBuilt": "2025-01-15T10:00:00+00:00"
+                        },
+                        "gitInfo": {
+                          "headSha": "abc123def456",
+                          "baseSha": "789xyz000111",
+                          "provider": "github",
+                          "headRepoName": "org/repo",
+                          "baseRepoName": "org/repo",
+                          "headRef": "feature-branch",
+                          "baseRef": "main",
+                          "prNumber": 42
+                        },
+                        "platform": "ANDROID",
+                        "projectId": "1",
+                        "projectSlug": "my-project",
+                        "buildConfiguration": "release",
+                        "isInstallable": true,
+                        "installUrl": "https://sentry.io/api/0/projects/org/project/files/installablepreprodartifact/abc123/?response_format=apk",
+                        "downloadCount": 5,
+                        "releaseNotes": "Bug fixes and performance improvements.",
+                        "installGroups": [
+                          "beta-testers"
+                        ],
+                        "isCodeSignatureValid": null,
+                        "profileName": null,
+                        "codesigningType": null
+                      }
+                    },
+                    "summary": "No Update Available"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -70777,6 +71542,9 @@
           "buildId": {
             "type": "string"
           },
+          "state": {
+            "type": "string"
+          },
           "appInfo": {
             "type": "object",
             "properties": {
@@ -70819,7 +71587,65 @@
               "version"
             ]
           },
+          "gitInfo": {
+            "type": "object",
+            "properties": {
+              "headSha": {
+                "type": "string",
+                "nullable": true
+              },
+              "baseSha": {
+                "type": "string",
+                "nullable": true
+              },
+              "provider": {
+                "type": "string",
+                "nullable": true
+              },
+              "headRepoName": {
+                "type": "string",
+                "nullable": true
+              },
+              "baseRepoName": {
+                "type": "string",
+                "nullable": true
+              },
+              "headRef": {
+                "type": "string",
+                "nullable": true
+              },
+              "baseRef": {
+                "type": "string",
+                "nullable": true
+              },
+              "prNumber": {
+                "type": "integer",
+                "nullable": true
+              }
+            },
+            "required": [
+              "baseRef",
+              "baseRepoName",
+              "baseSha",
+              "headRef",
+              "headRepoName",
+              "headSha",
+              "prNumber",
+              "provider"
+            ],
+            "nullable": true
+          },
           "platform": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "projectSlug": {
+            "type": "string"
+          },
+          "buildConfiguration": {
             "type": "string",
             "nullable": true
           },
@@ -70859,16 +71685,21 @@
         },
         "required": [
           "appInfo",
+          "buildConfiguration",
           "buildId",
           "codesigningType",
           "downloadCount",
+          "gitInfo",
           "installGroups",
           "installUrl",
           "isCodeSignatureValid",
           "isInstallable",
           "platform",
           "profileName",
-          "releaseNotes"
+          "projectId",
+          "projectSlug",
+          "releaseNotes",
+          "state"
         ]
       },
       "IssueEventDetailsResponse": {
@@ -71289,6 +72120,349 @@
           "type",
           "user",
           "userReport"
+        ]
+      },
+      "LatestInstallableBuildResponse": {
+        "type": "object",
+        "properties": {
+          "latestArtifact": {
+            "type": "object",
+            "properties": {
+              "buildId": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "appInfo": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "version": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "buildNumber": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "artifactType": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "dateAdded": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "dateBuilt": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "appId",
+                  "artifactType",
+                  "buildNumber",
+                  "dateAdded",
+                  "dateBuilt",
+                  "name",
+                  "version"
+                ]
+              },
+              "gitInfo": {
+                "type": "object",
+                "properties": {
+                  "headSha": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "baseSha": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "provider": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "headRepoName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "baseRepoName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "headRef": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "baseRef": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "prNumber": {
+                    "type": "integer",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "baseRef",
+                  "baseRepoName",
+                  "baseSha",
+                  "headRef",
+                  "headRepoName",
+                  "headSha",
+                  "prNumber",
+                  "provider"
+                ],
+                "nullable": true
+              },
+              "platform": {
+                "type": "string",
+                "nullable": true
+              },
+              "projectId": {
+                "type": "string"
+              },
+              "projectSlug": {
+                "type": "string"
+              },
+              "buildConfiguration": {
+                "type": "string",
+                "nullable": true
+              },
+              "isInstallable": {
+                "type": "boolean"
+              },
+              "installUrl": {
+                "type": "string",
+                "nullable": true
+              },
+              "downloadCount": {
+                "type": "integer"
+              },
+              "releaseNotes": {
+                "type": "string",
+                "nullable": true
+              },
+              "installGroups": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              "isCodeSignatureValid": {
+                "type": "boolean",
+                "nullable": true
+              },
+              "profileName": {
+                "type": "string",
+                "nullable": true
+              },
+              "codesigningType": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "appInfo",
+              "buildConfiguration",
+              "buildId",
+              "codesigningType",
+              "downloadCount",
+              "gitInfo",
+              "installGroups",
+              "installUrl",
+              "isCodeSignatureValid",
+              "isInstallable",
+              "platform",
+              "profileName",
+              "projectId",
+              "projectSlug",
+              "releaseNotes",
+              "state"
+            ],
+            "nullable": true
+          },
+          "currentArtifact": {
+            "type": "object",
+            "properties": {
+              "buildId": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "appInfo": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "version": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "buildNumber": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "artifactType": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "dateAdded": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "dateBuilt": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "appId",
+                  "artifactType",
+                  "buildNumber",
+                  "dateAdded",
+                  "dateBuilt",
+                  "name",
+                  "version"
+                ]
+              },
+              "gitInfo": {
+                "type": "object",
+                "properties": {
+                  "headSha": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "baseSha": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "provider": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "headRepoName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "baseRepoName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "headRef": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "baseRef": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "prNumber": {
+                    "type": "integer",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "baseRef",
+                  "baseRepoName",
+                  "baseSha",
+                  "headRef",
+                  "headRepoName",
+                  "headSha",
+                  "prNumber",
+                  "provider"
+                ],
+                "nullable": true
+              },
+              "platform": {
+                "type": "string",
+                "nullable": true
+              },
+              "projectId": {
+                "type": "string"
+              },
+              "projectSlug": {
+                "type": "string"
+              },
+              "buildConfiguration": {
+                "type": "string",
+                "nullable": true
+              },
+              "isInstallable": {
+                "type": "boolean"
+              },
+              "installUrl": {
+                "type": "string",
+                "nullable": true
+              },
+              "downloadCount": {
+                "type": "integer"
+              },
+              "releaseNotes": {
+                "type": "string",
+                "nullable": true
+              },
+              "installGroups": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              "isCodeSignatureValid": {
+                "type": "boolean",
+                "nullable": true
+              },
+              "profileName": {
+                "type": "string",
+                "nullable": true
+              },
+              "codesigningType": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "appInfo",
+              "buildConfiguration",
+              "buildId",
+              "codesigningType",
+              "downloadCount",
+              "gitInfo",
+              "installGroups",
+              "installUrl",
+              "isCodeSignatureValid",
+              "isInstallable",
+              "platform",
+              "profileName",
+              "projectId",
+              "projectSlug",
+              "releaseNotes",
+              "state"
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "currentArtifact",
+          "latestArtifact"
         ]
       },
       "Layout": {
