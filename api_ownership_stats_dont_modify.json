@@ -477,10 +477,20 @@
             "DiscoverSavedQueryDetailEndpoint::GET",
             "DiscoverSavedQueryDetailEndpoint::PUT",
             "OrganizationEventsEndpoint::GET",
-            "OrganizationEventsTimeseriesEndpoint::GET"
+            "OrganizationEventsTimeseriesEndpoint::GET",
+            "OrganizationReplayCountEndpoint::GET",
+            "OrganizationReplayDetailsEndpoint::GET",
+            "OrganizationReplayIndexEndpoint::GET",
+            "OrganizationReplaySelectorIndexEndpoint::GET",
+            "ProjectReplayClicksIndexEndpoint::GET",
+            "ProjectReplayDetailsEndpoint::DELETE",
+            "ProjectReplayRecordingSegmentDetailsEndpoint::GET",
+            "ProjectReplayRecordingSegmentIndexEndpoint::GET",
+            "ProjectReplayViewedByEndpoint::GET"
         ],
         "private": [
             "DataExportDetailsEndpoint::GET",
+            "DataExportNotificationsEndpoint::POST",
             "DiscoverSavedQueryVisitEndpoint::POST",
             "KeyTransactionEndpoint::DELETE",
             "KeyTransactionEndpoint::GET",
@@ -507,8 +517,11 @@
             "OrganizationEventsTrendsEndpoint::GET",
             "OrganizationEventsTrendsStatsEndpoint::GET",
             "OrganizationEventsVitalsEndpoint::GET",
+            "OrganizationIssueMetricsEndpoint::GET",
+            "OrganizationIssueTimeSeriesEndpoint::GET",
             "OrganizationMetricsCompatibility::GET",
             "OrganizationMetricsCompatibilitySums::GET",
+            "OrganizationReplayEventsMetaEndpoint::GET",
             "OrganizationSpansFieldValuesEndpoint::GET",
             "OrganizationSpansFieldsEndpoint::GET",
             "OrganizationSpansSamplesEndpoint::GET",
@@ -525,6 +538,11 @@
             "ProjectCreateSampleTransactionEndpoint::POST",
             "ProjectPerformanceGeneralSettingsEndpoint::GET",
             "ProjectPerformanceGeneralSettingsEndpoint::POST",
+            "ProjectReplayDeletionJobDetailEndpoint::GET",
+            "ProjectReplayDeletionJobsIndexEndpoint::GET",
+            "ProjectReplayDeletionJobsIndexEndpoint::POST",
+            "ProjectReplayDetailsEndpoint::GET",
+            "ProjectReplayViewedByEndpoint::POST",
             "ProjectTransactionThresholdEndpoint::DELETE",
             "ProjectTransactionThresholdEndpoint::GET",
             "ProjectTransactionThresholdEndpoint::POST",
@@ -541,13 +559,16 @@
             "OrganizationMeasurementsMeta::GET",
             "OrganizationSpansFieldsStatsEndpoint::GET",
             "OrganizationTracesEndpoint::GET",
+            "ProjectReplaySummaryEndpoint::GET",
+            "ProjectReplaySummaryEndpoint::POST",
+            "ProjectReplayVideoDetailsEndpoint::GET",
             "ProjectTraceItemDetailsEndpoint::GET",
             "ProjectUserIssueEndpoint::POST"
         ],
         "unknown": []
     },
     "enterprise": {
-        "block_start": 549,
+        "block_start": 570,
         "public": [
             "ExternalTeamDetailsEndpoint::DELETE",
             "ExternalTeamDetailsEndpoint::PUT",
@@ -654,7 +675,7 @@
         "unknown": []
     },
     "product-owners-settings-integrations": {
-        "block_start": 656,
+        "block_start": 677,
         "public": [
             "DataForwardingDetailsEndpoint::DELETE",
             "DataForwardingDetailsEndpoint::PUT",
@@ -751,7 +772,7 @@
         ]
     },
     "explore": {
-        "block_start": 753,
+        "block_start": 774,
         "public": [],
         "private": [
             "DiscoverHomepageQueryEndpoint::DELETE",
@@ -772,7 +793,7 @@
         "unknown": []
     },
     "dashboards": {
-        "block_start": 774,
+        "block_start": 795,
         "public": [
             "OrganizationDashboardDetailsEndpoint::DELETE",
             "OrganizationDashboardDetailsEndpoint::GET",
@@ -793,7 +814,7 @@
         "unknown": []
     },
     "profiling": {
-        "block_start": 795,
+        "block_start": 816,
         "public": [],
         "private": [
             "OrganizationProfilingChunksEndpoint::GET",
@@ -810,7 +831,7 @@
         "unknown": []
     },
     "alerts-notifications": {
-        "block_start": 812,
+        "block_start": 833,
         "public": [
             "OrganizationDetectorDetailsEndpoint::DELETE",
             "OrganizationDetectorDetailsEndpoint::GET",
@@ -837,45 +858,8 @@
         ],
         "unknown": []
     },
-    "replay-backend": {
-        "block_start": 840,
-        "public": [
-            "OrganizationReplayCountEndpoint::GET",
-            "OrganizationReplayDetailsEndpoint::GET",
-            "OrganizationReplayIndexEndpoint::GET",
-            "OrganizationReplaySelectorIndexEndpoint::GET",
-            "ProjectReplayClicksIndexEndpoint::GET",
-            "ProjectReplayDetailsEndpoint::DELETE",
-            "ProjectReplayRecordingSegmentDetailsEndpoint::GET",
-            "ProjectReplayRecordingSegmentIndexEndpoint::GET",
-            "ProjectReplayViewedByEndpoint::GET"
-        ],
-        "private": [
-            "DataExportNotificationsEndpoint::POST",
-            "OrganizationFlagLogDetailsEndpoint::GET",
-            "OrganizationFlagLogIndexEndpoint::GET",
-            "OrganizationFlagsHooksEndpoint::POST",
-            "OrganizationFlagsWebHookSigningSecretEndpoint::DELETE",
-            "OrganizationFlagsWebHookSigningSecretsEndpoint::GET",
-            "OrganizationFlagsWebHookSigningSecretsEndpoint::POST",
-            "OrganizationIssueMetricsEndpoint::GET",
-            "OrganizationIssueTimeSeriesEndpoint::GET",
-            "OrganizationReplayEventsMetaEndpoint::GET",
-            "ProjectReplayDeletionJobDetailEndpoint::GET",
-            "ProjectReplayDeletionJobsIndexEndpoint::GET",
-            "ProjectReplayDeletionJobsIndexEndpoint::POST",
-            "ProjectReplayDetailsEndpoint::GET",
-            "ProjectReplayViewedByEndpoint::POST"
-        ],
-        "experimental": [
-            "ProjectReplaySummaryEndpoint::GET",
-            "ProjectReplaySummaryEndpoint::POST",
-            "ProjectReplayVideoDetailsEndpoint::GET"
-        ],
-        "unknown": []
-    },
     "crons": {
-        "block_start": 877,
+        "block_start": 861,
         "public": [
             "OrganizationMonitorCheckInIndexEndpoint::GET",
             "OrganizationMonitorDetailsEndpoint::DELETE",
@@ -927,7 +911,7 @@
         "unknown": []
     },
     "value-discovery": {
-        "block_start": 929,
+        "block_start": 913,
         "public": [],
         "private": [
             "OrganizationOnboardingContinuationEmail::POST",
@@ -939,7 +923,7 @@
         "unknown": []
     },
     "coding-workflows-sentry-backend": {
-        "block_start": 941,
+        "block_start": 925,
         "public": [],
         "private": [
             "OrganizationAutofixAutomationSettingsEndpoint::GET",
@@ -953,7 +937,7 @@
         "unknown": []
     },
     "feedback-backend": {
-        "block_start": 955,
+        "block_start": 939,
         "public": [],
         "private": [
             "OrganizationUserReportsEndpoint::GET",
@@ -967,7 +951,7 @@
         "unknown": []
     },
     "issue-detection-backend": {
-        "block_start": 969,
+        "block_start": 953,
         "public": [],
         "private": [
             "ProjectPerformanceIssueSettingsEndpoint::DELETE",
@@ -980,8 +964,22 @@
         ],
         "unknown": []
     },
+    "replay-backend": {
+        "block_start": 967,
+        "public": [],
+        "private": [
+            "OrganizationFlagLogDetailsEndpoint::GET",
+            "OrganizationFlagLogIndexEndpoint::GET",
+            "OrganizationFlagsHooksEndpoint::POST",
+            "OrganizationFlagsWebHookSigningSecretEndpoint::DELETE",
+            "OrganizationFlagsWebHookSigningSecretsEndpoint::GET",
+            "OrganizationFlagsWebHookSigningSecretsEndpoint::POST"
+        ],
+        "experimental": [],
+        "unknown": []
+    },
     "hybrid-cloud": {
-        "block_start": 983,
+        "block_start": 981,
         "public": [],
         "private": [
             "FrontendVersionEndpoint::GET",
@@ -1023,7 +1021,7 @@
         "unknown": []
     },
     "codecov": {
-        "block_start": 1025,
+        "block_start": 1023,
         "public": [
             "RepositoriesEndpoint::GET",
             "RepositoryBranchesEndpoint::GET",
@@ -1041,7 +1039,7 @@
         "unknown": []
     },
     "sre-infrastructure-engineering": {
-        "block_start": 1043,
+        "block_start": 1041,
         "public": [],
         "private": [
             "OrgCellMappingsEndpoint::GET",
@@ -1051,7 +1049,7 @@
         "unknown": []
     },
     "foundational-storage": {
-        "block_start": 1053,
+        "block_start": 1051,
         "public": [],
         "private": [],
         "experimental": [
@@ -1063,7 +1061,7 @@
         "unknown": []
     },
     "emerge-tools": {
-        "block_start": 1065,
+        "block_start": 1063,
         "public": [
             "OrganizationPreprodArtifactPublicInstallDetailsEndpoint::GET",
             "OrganizationPreprodPublicSizeAnalysisEndpoint::GET",
@@ -1108,7 +1106,7 @@
         "unknown": []
     },
     "team-javascript-sdks": {
-        "block_start": 1110,
+        "block_start": 1108,
         "public": [],
         "private": [
             "SourceMapDebugBlueThunderEditionEndpoint::GET"
@@ -1120,7 +1118,7 @@
         "unknown": []
     },
     "gdx": {
-        "block_start": 1122,
+        "block_start": 1120,
         "public": [],
         "private": [
             "TempestCredentialsDetailsEndpoint::DELETE",
@@ -1132,7 +1130,7 @@
         "unknown": []
     },
     "security": {
-        "block_start": 1134,
+        "block_start": 1132,
         "public": [],
         "private": [
             "ApiTokenDetailsEndpoint::DELETE",
