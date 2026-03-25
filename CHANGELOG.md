@@ -1,3 +1,9 @@
+## 0.76.1
+
+### Internal Changes
+
+- Pin GitHub Actions to full-length commit SHAs by @joshuarli in [#62](https://github.com/getsentry/sentry-api-schema/pull/62)
+
 ## 0.76.0
 
 ### Schema Updates
