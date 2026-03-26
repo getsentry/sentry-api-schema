@@ -23182,46 +23182,6 @@
                       "type": "string",
                       "nullable": true
                     },
-                    "insights": {
-                      "type": "object",
-                      "additionalProperties": {},
-                      "nullable": true
-                    },
-                    "appComponents": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "componentType": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "appId": {
-                            "type": "string"
-                          },
-                          "path": {
-                            "type": "string"
-                          },
-                          "downloadSize": {
-                            "type": "integer"
-                          },
-                          "installSize": {
-                            "type": "integer"
-                          }
-                        },
-                        "required": [
-                          "appId",
-                          "componentType",
-                          "downloadSize",
-                          "installSize",
-                          "name",
-                          "path"
-                        ]
-                      },
-                      "nullable": true
-                    },
                     "baseBuildId": {
                       "type": "string",
                       "nullable": true
@@ -23269,6 +23229,46 @@
                       ],
                       "nullable": true
                     },
+                    "insights": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "appComponents": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "componentType": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "appId": {
+                            "type": "string"
+                          },
+                          "path": {
+                            "type": "string"
+                          },
+                          "downloadSize": {
+                            "type": "integer"
+                          },
+                          "installSize": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "appId",
+                          "componentType",
+                          "downloadSize",
+                          "installSize",
+                          "name",
+                          "path"
+                        ]
+                      },
+                      "nullable": true
+                    },
                     "comparisons": {
                       "type": "array",
                       "items": {
@@ -23290,6 +23290,39 @@
                           },
                           "errorMessage": {
                             "type": "string",
+                            "nullable": true
+                          },
+                          "sizeMetricDiff": {
+                            "type": "object",
+                            "properties": {
+                              "metricsArtifactType": {
+                                "type": "string"
+                              },
+                              "identifier": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "headInstallSize": {
+                                "type": "integer"
+                              },
+                              "headDownloadSize": {
+                                "type": "integer"
+                              },
+                              "baseInstallSize": {
+                                "type": "integer"
+                              },
+                              "baseDownloadSize": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "baseDownloadSize",
+                              "baseInstallSize",
+                              "headDownloadSize",
+                              "headInstallSize",
+                              "identifier",
+                              "metricsArtifactType"
+                            ],
                             "nullable": true
                           },
                           "diffItems": {
@@ -23445,39 +23478,6 @@
                                 "totalSavingsChange"
                               ]
                             },
-                            "nullable": true
-                          },
-                          "sizeMetricDiff": {
-                            "type": "object",
-                            "properties": {
-                              "metricsArtifactType": {
-                                "type": "string"
-                              },
-                              "identifier": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "headInstallSize": {
-                                "type": "integer"
-                              },
-                              "headDownloadSize": {
-                                "type": "integer"
-                              },
-                              "baseInstallSize": {
-                                "type": "integer"
-                              },
-                              "baseDownloadSize": {
-                                "type": "integer"
-                              }
-                            },
-                            "required": [
-                              "baseDownloadSize",
-                              "baseInstallSize",
-                              "headDownloadSize",
-                              "headInstallSize",
-                              "identifier",
-                              "metricsArtifactType"
-                            ],
                             "nullable": true
                           }
                         },
@@ -84404,46 +84404,6 @@
             "type": "string",
             "nullable": true
           },
-          "insights": {
-            "type": "object",
-            "additionalProperties": {},
-            "nullable": true
-          },
-          "appComponents": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "componentType": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "appId": {
-                  "type": "string"
-                },
-                "path": {
-                  "type": "string"
-                },
-                "downloadSize": {
-                  "type": "integer"
-                },
-                "installSize": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "appId",
-                "componentType",
-                "downloadSize",
-                "installSize",
-                "name",
-                "path"
-              ]
-            },
-            "nullable": true
-          },
           "baseBuildId": {
             "type": "string",
             "nullable": true
@@ -84491,6 +84451,46 @@
             ],
             "nullable": true
           },
+          "insights": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "appComponents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "componentType": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "appId": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "downloadSize": {
+                  "type": "integer"
+                },
+                "installSize": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "appId",
+                "componentType",
+                "downloadSize",
+                "installSize",
+                "name",
+                "path"
+              ]
+            },
+            "nullable": true
+          },
           "comparisons": {
             "type": "array",
             "items": {
@@ -84512,6 +84512,39 @@
                 },
                 "errorMessage": {
                   "type": "string",
+                  "nullable": true
+                },
+                "sizeMetricDiff": {
+                  "type": "object",
+                  "properties": {
+                    "metricsArtifactType": {
+                      "type": "string"
+                    },
+                    "identifier": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "headInstallSize": {
+                      "type": "integer"
+                    },
+                    "headDownloadSize": {
+                      "type": "integer"
+                    },
+                    "baseInstallSize": {
+                      "type": "integer"
+                    },
+                    "baseDownloadSize": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "baseDownloadSize",
+                    "baseInstallSize",
+                    "headDownloadSize",
+                    "headInstallSize",
+                    "identifier",
+                    "metricsArtifactType"
+                  ],
                   "nullable": true
                 },
                 "diffItems": {
@@ -84667,39 +84700,6 @@
                       "totalSavingsChange"
                     ]
                   },
-                  "nullable": true
-                },
-                "sizeMetricDiff": {
-                  "type": "object",
-                  "properties": {
-                    "metricsArtifactType": {
-                      "type": "string"
-                    },
-                    "identifier": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "headInstallSize": {
-                      "type": "integer"
-                    },
-                    "headDownloadSize": {
-                      "type": "integer"
-                    },
-                    "baseInstallSize": {
-                      "type": "integer"
-                    },
-                    "baseDownloadSize": {
-                      "type": "integer"
-                    }
-                  },
-                  "required": [
-                    "baseDownloadSize",
-                    "baseInstallSize",
-                    "headDownloadSize",
-                    "headInstallSize",
-                    "identifier",
-                    "metricsArtifactType"
-                  ],
                   "nullable": true
                 }
               },
