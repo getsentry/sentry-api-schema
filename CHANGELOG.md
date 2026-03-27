@@ -1,3 +1,9 @@
+## 0.80.1
+
+### Bug Fixes
+
+- (workflow) Replace `getSantry` with dedicated GH app for api schema workflow by @Jeffreyhung in [#64](https://github.com/getsentry/sentry-api-schema/pull/64)
+
 ## 0.80.0
 
 ### Schema Updates
