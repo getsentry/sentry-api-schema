@@ -46190,6 +46190,437 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/": {
+      "get": {
+        "operationId": "List Replay Deletion Jobs",
+        "description": "Retrieve a collection of replay delete jobs.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "dateCreated": {
+                            "type": "string"
+                          },
+                          "dateUpdated": {
+                            "type": "string"
+                          },
+                          "rangeStart": {
+                            "type": "string"
+                          },
+                          "rangeEnd": {
+                            "type": "string"
+                          },
+                          "environments": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "query": {
+                            "type": "string"
+                          },
+                          "countDeleted": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "countDeleted",
+                          "dateCreated",
+                          "dateUpdated",
+                          "environments",
+                          "id",
+                          "query",
+                          "rangeEnd",
+                          "rangeStart",
+                          "status"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "ListReplayDeletionJobs": {
+                    "value": {
+                      "data": [
+                        {
+                          "id": 1,
+                          "dateCreated": "2024-01-01T00:00:00Z",
+                          "dateUpdated": "2024-01-01T00:05:00Z",
+                          "rangeStart": "2023-12-01T00:00:00Z",
+                          "rangeEnd": "2024-01-01T00:00:00Z",
+                          "environments": [
+                            "production"
+                          ],
+                          "status": "pending",
+                          "query": "user.email:test@example.com",
+                          "countDeleted": 0
+                        }
+                      ]
+                    },
+                    "summary": "List replay deletion jobs"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create a Replay Deletion Job",
+        "description": "Create a new replay deletion job.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "rangeStart": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "rangeEnd": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "environments": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "query": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "environments",
+                      "query",
+                      "rangeEnd",
+                      "rangeStart"
+                    ]
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "dateCreated": {
+                          "type": "string"
+                        },
+                        "dateUpdated": {
+                          "type": "string"
+                        },
+                        "rangeStart": {
+                          "type": "string"
+                        },
+                        "rangeEnd": {
+                          "type": "string"
+                        },
+                        "environments": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "query": {
+                          "type": "string"
+                        },
+                        "countDeleted": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "countDeleted",
+                        "dateCreated",
+                        "dateUpdated",
+                        "environments",
+                        "id",
+                        "query",
+                        "rangeEnd",
+                        "rangeStart",
+                        "status"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "CreateAReplayDeletionJob": {
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "dateCreated": "2024-01-01T00:00:00Z",
+                        "dateUpdated": "2024-01-01T00:05:00Z",
+                        "rangeStart": "2023-12-01T00:00:00Z",
+                        "rangeEnd": "2024-01-01T00:00:00Z",
+                        "environments": [
+                          "production"
+                        ],
+                        "status": "pending",
+                        "query": "user.email:test@example.com",
+                        "countDeleted": 0
+                      }
+                    },
+                    "summary": "Create a replay deletion job"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/{job_id}/": {
+      "get": {
+        "operationId": "Get a Replay Deletion Job",
+        "description": "Fetch a replay delete job instance.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "job_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the replay deletion job you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Replays"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "dateCreated": {
+                          "type": "string"
+                        },
+                        "dateUpdated": {
+                          "type": "string"
+                        },
+                        "rangeStart": {
+                          "type": "string"
+                        },
+                        "rangeEnd": {
+                          "type": "string"
+                        },
+                        "environments": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "query": {
+                          "type": "string"
+                        },
+                        "countDeleted": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "countDeleted",
+                        "dateCreated",
+                        "dateUpdated",
+                        "environments",
+                        "id",
+                        "query",
+                        "rangeEnd",
+                        "rangeStart",
+                        "status"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "GetAReplayDeletionJob": {
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "dateCreated": "2024-01-01T00:00:00Z",
+                        "dateUpdated": "2024-01-01T00:05:00Z",
+                        "rangeStart": "2023-12-01T00:00:00Z",
+                        "rangeEnd": "2024-01-01T00:00:00Z",
+                        "environments": [
+                          "production"
+                        ],
+                        "status": "pending",
+                        "query": "user.email:test@example.com",
+                        "countDeleted": 0
+                      }
+                    },
+                    "summary": "Get a replay deletion job"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/rules/": {
       "get": {
         "operationId": "(DEPRECATED) List a Project's Issue Alert Rules",
@@ -66236,6 +66667,60 @@
           "schedule"
         ]
       },
+      "CreateReplayDeletionJob": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "dateCreated": {
+                "type": "string"
+              },
+              "dateUpdated": {
+                "type": "string"
+              },
+              "rangeStart": {
+                "type": "string"
+              },
+              "rangeEnd": {
+                "type": "string"
+              },
+              "environments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "status": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              },
+              "countDeleted": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "countDeleted",
+              "dateCreated",
+              "dateUpdated",
+              "environments",
+              "id",
+              "query",
+              "rangeEnd",
+              "rangeStart",
+              "status"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
       "Dashboard": {
         "type": "object",
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
@@ -71682,6 +72167,60 @@
           }
         }
       },
+      "GetReplayDeletionJob": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "dateCreated": {
+                "type": "string"
+              },
+              "dateUpdated": {
+                "type": "string"
+              },
+              "rangeStart": {
+                "type": "string"
+              },
+              "rangeEnd": {
+                "type": "string"
+              },
+              "environments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "status": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              },
+              "countDeleted": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "countDeleted",
+              "dateCreated",
+              "dateUpdated",
+              "environments",
+              "id",
+              "query",
+              "rangeEnd",
+              "rangeStart",
+              "status"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
       "GetReplayRecordingSegment": {
         "type": "array",
         "items": {
@@ -75354,6 +75893,63 @@
               "required": [
                 "node_id",
                 "timestamp"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ListReplayDeletionJobs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "dateCreated": {
+                  "type": "string"
+                },
+                "dateUpdated": {
+                  "type": "string"
+                },
+                "rangeStart": {
+                  "type": "string"
+                },
+                "rangeEnd": {
+                  "type": "string"
+                },
+                "environments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string"
+                },
+                "query": {
+                  "type": "string"
+                },
+                "countDeleted": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "countDeleted",
+                "dateCreated",
+                "dateUpdated",
+                "environments",
+                "id",
+                "query",
+                "rangeEnd",
+                "rangeStart",
+                "status"
               ]
             }
           }
@@ -82844,6 +83440,72 @@
         "additionalProperties": {
           "type": "integer"
         }
+      },
+      "ReplayDeletionJobCreate": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "rangeStart": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "rangeEnd": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "environments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "query": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "environments",
+              "query",
+              "rangeEnd",
+              "rangeStart"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ReplayDeletionJobCreateData": {
+        "type": "object",
+        "properties": {
+          "rangeStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rangeEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "environments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "query": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "environments",
+          "query",
+          "rangeEnd",
+          "rangeStart"
+        ]
       },
       "Repositories": {
         "type": "object",
