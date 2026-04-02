@@ -7944,326 +7944,6 @@
           }
         }
       },
-      "post": {
-        "operationId": "Create a Monitor for a Project",
-        "description": "⚠️ This endpoint is currently in **beta** and may be subject to change. It is supported by [New Monitors and Alerts](/product/new-monitors-and-alerts/) and may not be viewable in the UI today.\n\nCreate a Monitor for a project",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID or slug of the organization the resource belongs to.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Monitors"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "Name of the monitor.",
-                    "maxLength": 200
-                  },
-                  "type": {
-                    "type": "string",
-                    "description": "The type of monitor - `metric_issue`."
-                  },
-                  "workflow_ids": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer"
-                    },
-                    "description": "The IDs of the alerts to connect this monitor to. Use the 'Fetch Alerts' endpoint to find the IDs."
-                  },
-                  "data_sources": {
-                    "type": "array",
-                    "items": {},
-                    "description": "\n            The data sources for the monitor to use based on what you want to measure.\n\n            **Number of Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n"
-                  },
-                  "config": {
-                    "type": "object",
-                    "additionalProperties": {},
-                    "description": "\n            The issue detection type configuration.\n\n\n            - `detectionType`\n                - `static`: Threshold based monitor\n                - `percent`: Change based monitor\n                - `dynamic`: Dynamic monitor\n            - `comparisonDelta`: If selecting a **change** detection type, the comparison delta is the time period at which to compare against in minutes.\n            For example, a value of 3600 compares the metric tracked against data 1 hour ago.\n                - `300`: 5 minutes\n                - `900`: 15 minutes\n                - `3600`: 1 hour\n                - `86400`: 1 day\n                - `604800`: 1 week\n                - `2592000`: 1 month\n\n            **Threshold**\n            ```json\n            {\n                \"detectionType\": \"static\",\n            }\n            ```\n            **Change**\n            ```json\n            {\n                \"detectionType\": \"percent\",\n                \"comparisonDelta\": 3600,\n            }\n            ```\n            **Dynamic**\n            ```json\n            {\n                \"detectionType\": \"dynamic\",\n            }\n            ```\n        "
-                  },
-                  "condition_group": {
-                    "allOf": [
-                      {
-                        "type": "object",
-                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "logic_type": {
-                            "enum": [
-                              "any",
-                              "any-short",
-                              "all",
-                              "none"
-                            ],
-                            "type": "string",
-                            "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
-                          },
-                          "conditions": {
-                            "type": "array",
-                            "items": {}
-                          }
-                        },
-                        "required": [
-                          "logic_type"
-                        ]
-                      }
-                    ],
-                    "description": "\n            Issue detection configuration for when to create an issue and at what priority level.\n\n\n            - `logicType`: `any`\n            - `type`: Any of `gt` (greater than), `lte` (less than or equal), or `anomaly_detection` (dynamic)\n            - `comparison`: Any positive integer. This is threshold that must be crossed for the monitor to create an issue, e.g. \"Create a metric issue when there are more than 5 unresolved error events\".\n                - If creating a **dynamic** monitor, see the options below.\n                    - `seasonality`: `auto`\n                    - `sensitivity`: Level of responsiveness. Options are one of `low`, `medium`, or `high`\n                    - `thresholdType`: If you want to be alerted to anomalies that are moving above, below, or in both directions in relation to your threshold.\n                        - `0`: Above\n                        - `1`: Below\n                        - `2`: Above and below\n\n            - `conditionResult`: The issue state change when the threshold is crossed.\n                - `75`: High priority\n                - `50`: Low priority\n                - `0`: Resolved\n\n\n            **Threshold and Change Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"gt\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 75\n                    },\n                    {\n                        \"type\": \"lte\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Threshold Monitor with Medium Priority**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        type: \"gt\",\n                        comparison: 5,\n                        conditionResult: 75\n                    },\n                    {\n                        type: \"gt\",\n                        comparison: 2,\n                        conditionResult: 50\n                    },\n                    {\n                        type: \"lte\",\n                        comparison: 2,\n                        conditionResult: 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Dynamic Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"anomaly_detection\",\n                        \"comparison\": {\n                            \"seasonality\": \"auto\",\n                            \"sensitivity\": \"medium\",\n                            \"thresholdType\": 2\n                        },\n                        \"conditionResult\": 75\n                    }\n                ],\n                \"actions\": []\n            ```\n        "
-                  },
-                  "owner": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "\n            The ID user or team who owns the monitor or alert prefaced by the string 'user' or 'team'.\n\n            **User**\n            ```json\n                \"user:123456\"\n            ```\n\n            **Team**\n            ```json\n                \"team:456789\"\n            ```\n        "
-                  },
-                  "description": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "A description of the monitor. Will be used in the resulting issue."
-                  },
-                  "enabled": {
-                    "type": "boolean",
-                    "description": "Set to False if you want to disable the monitor."
-                  }
-                },
-                "required": [
-                  "name",
-                  "type"
-                ]
-              }
-            }
-          },
-          "required": true
-        },
-        "security": [
-          {
-            "auth_token": [
-              "alerts:write",
-              "org:admin",
-              "org:read",
-              "org:write"
-            ]
-          }
-        ],
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "owner": {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "enum": [
-                            "user",
-                            "team"
-                          ],
-                          "type": "string"
-                        },
-                        "id": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "name",
-                        "type"
-                      ],
-                      "nullable": true
-                    },
-                    "createdBy": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "latestGroup": {
-                      "type": "object",
-                      "additionalProperties": {},
-                      "nullable": true
-                    },
-                    "description": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "projectId": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    },
-                    "workflowIds": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "nullable": true
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "dateUpdated": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "dataSources": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      },
-                      "nullable": true
-                    },
-                    "conditionGroup": {
-                      "type": "object",
-                      "additionalProperties": {},
-                      "nullable": true
-                    },
-                    "config": {
-                      "type": "object",
-                      "additionalProperties": {}
-                    },
-                    "enabled": {
-                      "type": "boolean"
-                    },
-                    "openIssues": {
-                      "type": "integer"
-                    }
-                  },
-                  "required": [
-                    "conditionGroup",
-                    "config",
-                    "dataSources",
-                    "dateCreated",
-                    "dateUpdated",
-                    "enabled",
-                    "id",
-                    "name",
-                    "openIssues",
-                    "projectId",
-                    "type",
-                    "workflowIds"
-                  ]
-                },
-                "examples": {
-                  "MonitorSuccessfullyCreated": {
-                    "value": {
-                      "id": "12345",
-                      "projectId": "1",
-                      "name": "Example metric monitor",
-                      "description": "Example description",
-                      "type": "metric_issue",
-                      "workflowIds": [],
-                      "owner": {
-                        "type": "user",
-                        "id": "12345",
-                        "name": "Jane Doe",
-                        "email": "jane@sentry.io"
-                      },
-                      "createdBy": "12345",
-                      "dateCreated": "2026-01-08T23:45:13.235259Z",
-                      "dateUpdated": "2026-01-08T23:45:13.235243Z",
-                      "dataSources": [
-                        {
-                          "id": "123456",
-                          "organizationId": "1",
-                          "type": "snuba_query_subscription",
-                          "sourceId": "12345",
-                          "queryObj": {
-                            "id": "23456",
-                            "status": 1,
-                            "subscription": null,
-                            "snubaQuery": {
-                              "id": "45678",
-                              "dataset": "events",
-                              "query": "is:unresolved",
-                              "aggregate": "count()",
-                              "timeWindow": 3600,
-                              "environment": null,
-                              "eventTypes": [
-                                "error",
-                                "default"
-                              ],
-                              "extrapolationMode": "unknown"
-                            }
-                          }
-                        }
-                      ],
-                      "conditionGroup": {
-                        "id": "1234567",
-                        "organizationId": "1",
-                        "logicType": "any",
-                        "conditions": [
-                          {
-                            "id": "2345677",
-                            "type": "gt",
-                            "comparison": 10,
-                            "conditionResult": 75
-                          },
-                          {
-                            "id": "567891",
-                            "type": "lte",
-                            "comparison": 10,
-                            "conditionResult": 0
-                          }
-                        ],
-                        "actions": []
-                      },
-                      "config": {
-                        "detectionType": "static"
-                      },
-                      "enabled": true,
-                      "latestGroup": null,
-                      "openIssues": 0
-                    },
-                    "summary": "Monitor successfully created"
-                  }
-                }
-              }
-            },
-            "description": ""
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
       "put": {
         "operationId": "Mutate an Organization's Monitors",
         "description": "⚠️ This endpoint is currently in **beta** and may be subject to change. It is supported by [New Monitors and Alerts](/product/new-monitors-and-alerts/) and may not be viewable in the UI today.\n\nBulk enable or disable an Organization's Monitors",
@@ -25676,6 +25356,336 @@
               }
             },
             "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/projects/{project_id_or_slug}/detectors/": {
+      "post": {
+        "operationId": "Create a Monitor for a Project",
+        "description": "⚠️ This endpoint is currently in **beta** and may be subject to change. It is supported by [New Monitors and Alerts](/product/new-monitors-and-alerts/) and may not be viewable in the UI today.\n\nCreate a Monitor for a project",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Monitors"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the monitor.",
+                    "maxLength": 200
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The type of monitor - `metric_issue`."
+                  },
+                  "workflow_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "The IDs of the alerts to connect this monitor to. Use the 'Fetch Alerts' endpoint to find the IDs."
+                  },
+                  "data_sources": {
+                    "type": "array",
+                    "items": {},
+                    "description": "\n            The data sources for the monitor to use based on what you want to measure.\n\n            **Number of Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600,\n                    },\n                ],\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"]\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\",\n                    },\n                ],\n            ```\n"
+                  },
+                  "config": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "\n            The issue detection type configuration.\n\n\n            - `detectionType`\n                - `static`: Threshold based monitor\n                - `percent`: Change based monitor\n                - `dynamic`: Dynamic monitor\n            - `comparisonDelta`: If selecting a **change** detection type, the comparison delta is the time period at which to compare against in minutes.\n            For example, a value of 3600 compares the metric tracked against data 1 hour ago.\n                - `300`: 5 minutes\n                - `900`: 15 minutes\n                - `3600`: 1 hour\n                - `86400`: 1 day\n                - `604800`: 1 week\n                - `2592000`: 1 month\n\n            **Threshold**\n            ```json\n            {\n                \"detectionType\": \"static\",\n            }\n            ```\n            **Change**\n            ```json\n            {\n                \"detectionType\": \"percent\",\n                \"comparisonDelta\": 3600,\n            }\n            ```\n            **Dynamic**\n            ```json\n            {\n                \"detectionType\": \"dynamic\",\n            }\n            ```\n        "
+                  },
+                  "condition_group": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "logic_type": {
+                            "enum": [
+                              "any",
+                              "any-short",
+                              "all",
+                              "none"
+                            ],
+                            "type": "string",
+                            "description": "* `any`\n* `any-short`\n* `all`\n* `none`"
+                          },
+                          "conditions": {
+                            "type": "array",
+                            "items": {}
+                          }
+                        },
+                        "required": [
+                          "logic_type"
+                        ]
+                      }
+                    ],
+                    "description": "\n            Issue detection configuration for when to create an issue and at what priority level.\n\n\n            - `logicType`: `any`\n            - `type`: Any of `gt` (greater than), `lte` (less than or equal), or `anomaly_detection` (dynamic)\n            - `comparison`: Any positive integer. This is threshold that must be crossed for the monitor to create an issue, e.g. \"Create a metric issue when there are more than 5 unresolved error events\".\n                - If creating a **dynamic** monitor, see the options below.\n                    - `seasonality`: `auto`\n                    - `sensitivity`: Level of responsiveness. Options are one of `low`, `medium`, or `high`\n                    - `thresholdType`: If you want to be alerted to anomalies that are moving above, below, or in both directions in relation to your threshold.\n                        - `0`: Above\n                        - `1`: Below\n                        - `2`: Above and below\n\n            - `conditionResult`: The issue state change when the threshold is crossed.\n                - `75`: High priority\n                - `50`: Low priority\n                - `0`: Resolved\n\n\n            **Threshold and Change Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"gt\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 75\n                    },\n                    {\n                        \"type\": \"lte\",\n                        \"comparison\": 10,\n                        \"conditionResult\": 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Threshold Monitor with Medium Priority**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        type: \"gt\",\n                        comparison: 5,\n                        conditionResult: 75\n                    },\n                    {\n                        type: \"gt\",\n                        comparison: 2,\n                        conditionResult: 50\n                    },\n                    {\n                        type: \"lte\",\n                        comparison: 2,\n                        conditionResult: 0\n                    }\n                ],\n                \"actions\": []\n            ```\n\n            **Dynamic Monitor**\n            ```json\n                \"logicType\": \"any\",\n                \"conditions\": [\n                    {\n                        \"type\": \"anomaly_detection\",\n                        \"comparison\": {\n                            \"seasonality\": \"auto\",\n                            \"sensitivity\": \"medium\",\n                            \"thresholdType\": 2\n                        },\n                        \"conditionResult\": 75\n                    }\n                ],\n                \"actions\": []\n            ```\n        "
+                  },
+                  "owner": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "\n            The ID user or team who owns the monitor or alert prefaced by the string 'user' or 'team'.\n\n            **User**\n            ```json\n                \"user:123456\"\n            ```\n\n            **Team**\n            ```json\n                \"team:456789\"\n            ```\n        "
+                  },
+                  "description": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "A description of the monitor. Will be used in the resulting issue."
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Set to False if you want to disable the monitor."
+                  }
+                },
+                "required": [
+                  "name",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "alerts:write",
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "enum": [
+                            "user",
+                            "team"
+                          ],
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type"
+                      ],
+                      "nullable": true
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "latestGroup": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "workflowIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dataSources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "nullable": true
+                    },
+                    "conditionGroup": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "openIssues": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "conditionGroup",
+                    "config",
+                    "dataSources",
+                    "dateCreated",
+                    "dateUpdated",
+                    "enabled",
+                    "id",
+                    "name",
+                    "openIssues",
+                    "projectId",
+                    "type",
+                    "workflowIds"
+                  ]
+                },
+                "examples": {
+                  "MonitorSuccessfullyCreated": {
+                    "value": {
+                      "id": "12345",
+                      "projectId": "1",
+                      "name": "Example metric monitor",
+                      "description": "Example description",
+                      "type": "metric_issue",
+                      "workflowIds": [],
+                      "owner": {
+                        "type": "user",
+                        "id": "12345",
+                        "name": "Jane Doe",
+                        "email": "jane@sentry.io"
+                      },
+                      "createdBy": "12345",
+                      "dateCreated": "2026-01-08T23:45:13.235259Z",
+                      "dateUpdated": "2026-01-08T23:45:13.235243Z",
+                      "dataSources": [
+                        {
+                          "id": "123456",
+                          "organizationId": "1",
+                          "type": "snuba_query_subscription",
+                          "sourceId": "12345",
+                          "queryObj": {
+                            "id": "23456",
+                            "status": 1,
+                            "subscription": null,
+                            "snubaQuery": {
+                              "id": "45678",
+                              "dataset": "events",
+                              "query": "is:unresolved",
+                              "aggregate": "count()",
+                              "timeWindow": 3600,
+                              "environment": null,
+                              "eventTypes": [
+                                "error",
+                                "default"
+                              ],
+                              "extrapolationMode": "unknown"
+                            }
+                          }
+                        }
+                      ],
+                      "conditionGroup": {
+                        "id": "1234567",
+                        "organizationId": "1",
+                        "logicType": "any",
+                        "conditions": [
+                          {
+                            "id": "2345677",
+                            "type": "gt",
+                            "comparison": 10,
+                            "conditionResult": 75
+                          },
+                          {
+                            "id": "567891",
+                            "type": "lte",
+                            "comparison": 10,
+                            "conditionResult": 0
+                          }
+                        ],
+                        "actions": []
+                      },
+                      "config": {
+                        "detectionType": "static"
+                      },
+                      "enabled": true,
+                      "latestGroup": null,
+                      "openIssues": 0
+                    },
+                    "summary": "Monitor successfully created"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
