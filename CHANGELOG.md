@@ -1,3 +1,9 @@
+## 0.112.1
+
+### Internal Changes
+
+- Sync rpc_method_schema for optional user by @geoffg-sentry in [#66](https://github.com/getsentry/sentry-api-schema/pull/66)
+
 ## 0.112.0
 
 ### Schema Updates
