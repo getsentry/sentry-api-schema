@@ -1,3 +1,9 @@
+## 0.115.1
+
+### Internal Changes
+
+- Rewrite README and add npm keywords for discoverability by @MathurAditya724 in [#68](https://github.com/getsentry/sentry-api-schema/pull/68)
+
 ## 0.115.0
 
 ### Schema Updates
