@@ -13,15 +13,16 @@ npm install @sentry/api
 
 ## Usage
 
-```ts
-import { client, listYourProjects } from "@sentry/api";
+Pass `baseUrl` and an auth header to each call:
 
-client.setConfig({
+```ts
+import { listYourOrganizations } from "@sentry/api";
+
+const { data, error } = await listYourOrganizations({
   baseUrl: "https://sentry.io",
   headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
 });
 
-const { data, error } = await listYourProjects();
 if (error) throw error;
 console.log(data);
 ```
@@ -33,11 +34,16 @@ Auth tokens and base URLs (including self-hosted and region URLs) are documented
 Sentry uses cursor-based pagination via `Link` headers. Use `paginateAll` to collect all pages:
 
 ```ts
-import { paginateAll, listYourProjects } from "@sentry/api";
+import { paginateAll, listAnOrganization_sProjects } from "@sentry/api";
 
-const all = await paginateAll(
-  (cursor) => listYourProjects({ query: { cursor } }),
-  "listYourProjects",
+const projects = await paginateAll(
+  (cursor) => listAnOrganization_sProjects({
+    baseUrl: "https://sentry.io",
+    headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
+    path: { organization_id_or_slug: "my-org" },
+    query: { cursor },
+  }),
+  "listAnOrganization_sProjects",
 );
 ```
 
