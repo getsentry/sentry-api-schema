@@ -12,9 +12,12 @@
  */
 
 import {
+  fetchPage_deprecatedListAnOrganization_sMetricAlertRules,
   fetchPage_listAnOrganization_sIssues,
+  fetchPage_listAnOrganization_sProjects,
   fetchPage_listClickedNodes,
   paginateAll_listAnOrganization_sIssues,
+  paginateAll_listAnOrganization_sProjects,
   paginateUpTo_listAnOrganization_sIssues,
 } from "../src/index";
 
@@ -112,9 +115,75 @@ async function fetchPageCompoundOp() {
   void result.data;
 }
 
+// =====================================================================
+// per_page widening — undocumented but runtime-supported
+// =====================================================================
+
+async function perPageAcceptedEvenWhenSpecOmitsIt() {
+  // /organizations/{org}/projects/ has only `cursor` declared in the spec,
+  // but the runtime accepts `per_page`. PaginationQuery widens with it so
+  // callers don't need an `as` cast.
+  await paginateAll_listAnOrganization_sProjects({
+    ...config,
+    path: { organization_id_or_slug: "my-org" },
+    query: { per_page: 100 },
+  });
+
+  // Same for fetchPage on issues — per_page co-exists with documented
+  // params (collapse, limit, sort, etc.).
+  await fetchPage_listAnOrganization_sProjects({
+    ...config,
+    path: { organization_id_or_slug: "my-org" },
+    query: { per_page: 100 },
+  });
+}
+
+// =====================================================================
+// Allow-list: spec-incomplete operations get wrappers anyway
+// =====================================================================
+
+async function metricAlertsWrapperExists() {
+  // /alert-rules/ has `query?: never` in the spec (no cursor declared),
+  // but the PAGINATED_BUT_UNMARKED allow-list emits wrappers. Callers
+  // can pass per_page (added by PaginationQuery) and cursor is managed.
+  const result = await fetchPage_deprecatedListAnOrganization_sMetricAlertRules({
+    ...config,
+    path: { organization_id_or_slug: "my-org" },
+    query: { per_page: 50 },
+  });
+  void result.data;
+}
+
+// =====================================================================
+// keepCursorOnOvershoot — opt-in option for endpoints with no per_page
+// =====================================================================
+
+async function paginateUpToKeepCursorOnOvershoot() {
+  // For /issues/{id}/events/ (and any endpoint with no server-side
+  // per_page), passing keepCursorOnOvershoot:true preserves access to
+  // trimmed-tail items via the same cursor on the next call.
+  const result = await paginateUpTo_listAnOrganization_sIssues(
+    {
+      ...config,
+      path: { organization_id_or_slug: "my-org" },
+    },
+    {
+      limit: 250,
+      keepCursorOnOvershoot: true,
+    },
+  );
+  void result.data;
+  if (result.nextCursor) {
+    const _: string = result.nextCursor;
+  }
+}
+
 void fetchPageHappyPath;
 void fetchPageRejectsCursor;
 void fetchPageRequiresPath;
 void paginateAllHappyPath;
 void paginateUpToHappyPath;
 void fetchPageCompoundOp;
+void perPageAcceptedEvenWhenSpecOmitsIt;
+void metricAlertsWrapperExists;
+void paginateUpToKeepCursorOnOvershoot;

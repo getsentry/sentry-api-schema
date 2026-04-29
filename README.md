@@ -37,7 +37,7 @@ Sentry uses cursor-based pagination via `Link` headers. Every operation in the S
 - `paginateAll_<operation>(options, paginateOptions?)` — eagerly fetch all pages, returning the concatenated array. Bounded by `maxPages` (default 50) for safety. Available only for endpoints whose 200 response is `Array<...>`.
 - `paginateUpTo_<operation>(options, paginateOptions)` — fetch up to a hard `limit` of items; suppresses `nextCursor` when the last page is trimmed (so callers resuming pagination won't skip records). Available only for endpoints whose 200 response is `Array<...>`.
 
-The wrappers manage `cursor` for you — passing one in `query` is a type error.
+The wrappers manage `cursor` for you — passing one in `query` is a type error. Every wrapper's `query` is also widened with an optional `per_page?: number` field, since Sentry's pagination framework accepts `per_page` on every cursor-paginated route at runtime even when the spec omits it.
 
 ### Single page
 
@@ -82,6 +82,8 @@ const { data, nextCursor } = await paginateUpTo_listAnOrganization_sIssues(
   },
 );
 ```
+
+By default, `paginateUpTo` drops `nextCursor` if the last fetched page had to be trimmed to fit `limit` — returning a cursor that points past the trimmed items would cause callers resuming pagination to skip records. For endpoints with no server-side `per_page` control (e.g. `/issues/{id}/events/`), pass `keepCursorOnOvershoot: true` to preserve the cursor; the trimmed-tail items remain reachable via the same cursor on the next call.
 
 ### Generic pagination helpers
 

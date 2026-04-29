@@ -44,6 +44,21 @@ export type PaginateUpToOptions = {
   startCursor?: string;
   /** Called after each page is fetched. Useful for progress indicators. */
   onPage?: (fetched: number, limit: number) => void;
+  /**
+   * When true, preserve `nextCursor` even when the last page was trimmed
+   * to fit `limit`. Default: false (the safe default — see body comment).
+   *
+   * Use this only for endpoints that have **no** server-side per-page
+   * control (so the trimmed tail items remain reachable via the same
+   * cursor on the next call). Sentry's `/issues/{id}/events/` is one
+   * such endpoint: it has no `per_page` param, so dropping the cursor
+   * on overshoot would orphan the items the helper trimmed.
+   *
+   * For endpoints that DO support `per_page` / `limit`, leave this
+   * `false` — returning a cursor that points past trimmed items would
+   * cause callers resuming pagination to skip records.
+   */
+  keepCursorOnOvershoot?: boolean;
 };
 
 export type PageFetcher<TData, TError> = (
@@ -273,11 +288,22 @@ export const paginateUpTo = async <TItem, TError = unknown>(
     options.onPage?.(Math.min(allItems.length, options.limit), options.limit);
 
     if (allItems.length >= options.limit || !nextCursor) {
-      // If we overshot the limit, trim and DON'T return a nextCursor —
-      // the cursor would point past the trimmed items, causing skips
-      // when the caller resumes pagination.
+      // If we overshot the limit, trim. The cursor handling depends on
+      // `keepCursorOnOvershoot`:
+      //   - default (`false`): drop the cursor — returning one that points
+      //     past the trimmed items causes callers resuming pagination to
+      //     skip records. Safe for endpoints with `per_page` / `limit`
+      //     control where the caller can avoid overshoot in the first place.
+      //   - `true`: preserve the cursor — required for endpoints with no
+      //     server-side page-size control, where the trimmed tail items
+      //     are still reachable via the same cursor on the next call
+      //     (e.g. Sentry's `/issues/{id}/events/`).
       if (allItems.length > options.limit) {
-        return { data: allItems.slice(0, options.limit) };
+        const trimmed = allItems.slice(0, options.limit);
+        if (options.keepCursorOnOvershoot && nextCursor !== undefined) {
+          return { data: trimmed, nextCursor };
+        }
+        return { data: trimmed };
       }
       const out: { data: Array<TItem>; nextCursor?: string } = { data: allItems };
       if (nextCursor !== undefined) out.nextCursor = nextCursor;

@@ -54,6 +54,31 @@ const sdkSource = readFileSync(SDK_PATH, "utf8");
 const typesSource = readFileSync(TYPES_PATH, "utf8");
 
 /**
+ * Allow-list of operations that the runtime API paginates via Link-header
+ * cursors but whose OpenAPI spec is incomplete (no `cursor` parameter
+ * declared). These get wrappers generated regardless of the spec.
+ *
+ * Each entry is a `${METHOD} ${path}` key matching what `paginatedRoutes`
+ * would otherwise contain. Add a justification comment with each entry so
+ * future maintainers understand WHY the spec is being overridden — and so
+ * entries can be removed once the upstream `getsentry/sentry` schema is
+ * fixed.
+ *
+ * Verification: every entry should be confirmed against the live API
+ * (response includes a `Link` header with `rel="next"; cursor="..."`)
+ * before being added. The CLI's existing raw-fetch call sites are a good
+ * source of these — they're working code paths that prove the runtime
+ * supports pagination.
+ */
+const PAGINATED_BUT_UNMARKED = new Set([
+  // /organizations/{org}/alert-rules/ — used by getsentry/cli's
+  // listMetricAlertsPaginated. The runtime accepts `cursor` and `per_page`
+  // (CLI proves it via raw apiRequestToRegion); the spec only declares the
+  // path param. Remove this entry once the upstream OpenAPI spec is fixed.
+  "GET /api/0/organizations/{organization_id_or_slug}/alert-rules/",
+]);
+
+/**
  * Extract the set of operations that accept a `cursor` query parameter,
  * keyed by `${METHOD} ${path}`. Sentry's API uses cursor-based pagination
  * via Link headers; the presence of `cursor` is our paginated-operation
@@ -66,19 +91,36 @@ const typesSource = readFileSync(TYPES_PATH, "utf8");
  * pagination model is something else (offset, etc.) and our helpers
  * wouldn't match. If the spec ever introduces non-cursor paginated
  * endpoints, this is the place to extend.
+ *
+ * The detection result is unioned with `PAGINATED_BUT_UNMARKED` (above)
+ * to cover routes whose spec is incomplete.
  */
 const paginatedRoutes = new Map();
 for (const [path, methods] of Object.entries(spec.paths ?? {})) {
   for (const [method, op] of Object.entries(methods)) {
     if (typeof op !== "object" || op === null) continue;
+    const key = `${method.toUpperCase()} ${path}`;
     const params = op.parameters;
-    if (!Array.isArray(params)) continue;
-    const hasCursor = params.some(
-      (p) => p && p.name === "cursor" && p.in === "query",
-    );
-    if (hasCursor) {
-      paginatedRoutes.set(`${method.toUpperCase()} ${path}`, op);
+    const hasCursor =
+      Array.isArray(params) &&
+      params.some((p) => p && p.name === "cursor" && p.in === "query");
+    if (hasCursor || PAGINATED_BUT_UNMARKED.has(key)) {
+      paginatedRoutes.set(key, op);
     }
+  }
+}
+
+// Sanity check: every allow-listed route should actually exist in the
+// spec (otherwise the entry is stale or misspelled). Warn loudly so
+// maintainers don't ship a generator that silently does nothing.
+for (const key of PAGINATED_BUT_UNMARKED) {
+  if (!paginatedRoutes.has(key)) {
+    console.warn(
+      `generate-pagination: PAGINATED_BUT_UNMARKED entry "${key}" did not\n` +
+        `  match any operation in openapi-derefed.json. Either the path was\n` +
+        `  renamed upstream or the entry is misspelled. No wrapper will be\n` +
+        `  emitted for this route.`,
+    );
   }
 }
 
@@ -173,6 +215,13 @@ if (targets.length === 0) {
  *   silently shadow the helper-managed value. Surfacing a clear "you
  *   can't pass cursor here, use the helper's cursor argument" is far
  *   safer than the silent-shadow bug.
+ *
+ * Why widen with `per_page`?
+ *   Sentry's pagination framework accepts `per_page` on every
+ *   cursor-paginated route at runtime, but the OpenAPI spec only
+ *   declares it on a few. Widening the wrapper's query type with an
+ *   optional `per_page?: number` lets callers pass it without an
+ *   `as` cast, while keeping all documented params strongly typed.
  */
 const lines = [];
 lines.push(FILE_HEADER);
@@ -206,11 +255,17 @@ lines.push(
 lines.push("");
 lines.push(
   `/**`,
-  ` * Strip \`cursor\` from a query type (the wrapper manages the cursor).`,
+  ` * Strip \`cursor\` from a query type (the wrapper manages the cursor)`,
+  ` * and widen with \`per_page\`, which Sentry's API accepts on every`,
+  ` * cursor-paginated route at runtime even when the OpenAPI spec`,
+  ` * omits it. The widening is opt-in (the field is optional), so`,
+  ` * documented query params remain strongly typed and undocumented`,
+  ` * \`per_page\` becomes addressable without forcing every caller into`,
+  ` * an \`as\` cast.`,
   ` */`,
-  `type WithoutCursor<TQuery> = TQuery extends undefined`,
-  `    ? undefined`,
-  `    : Omit<NonNullable<TQuery>, 'cursor'>;`,
+  `type PaginationQuery<TQuery> = TQuery extends undefined`,
+  `    ? { per_page?: number }`,
+  `    : Omit<NonNullable<TQuery>, 'cursor'> & { per_page?: number };`,
   ``,
 );
 
@@ -219,7 +274,7 @@ for (const op of targets) {
   const responsesType = `${op.typeBase}Responses`;
   const item200Type = `${responsesType}[200]`;
   const optionsType = `Options<${dataType}>`;
-  const userOptionsType = `Omit<${optionsType}, 'query'> & { query?: WithoutCursor<${dataType}['query']> }`;
+  const userOptionsType = `Omit<${optionsType}, 'query'> & { query?: PaginationQuery<${dataType}['query']> }`;
 
   // Helper to construct the SDK call expression — shared across the trio.
   //
@@ -238,7 +293,7 @@ for (const op of targets) {
   const sdkCallExpr = (cursorIdent) => [
     `            ${op.fn}({`,
     `                ...options,`,
-    `                query: { ...(options.query as Record<string, unknown> | undefined), cursor: ${cursorIdent} } as ${dataType}['query'],`,
+    `                query: { ...(options.query as Record<string, unknown> | undefined), cursor: ${cursorIdent} } as unknown as ${dataType}['query'],`,
     `            } as unknown as ${optionsType}) as unknown as Promise<{ data: ${item200Type}; error: undefined; request: Request; response: Response }>,`,
   ];
 

@@ -232,6 +232,37 @@ describe("paginateUpTo", () => {
     expect(result.nextCursor).toBeUndefined();
   });
 
+  test("preserves nextCursor on overshoot when keepCursorOnOvershoot:true", async () => {
+    // For endpoints with no per_page control (e.g. /issues/{id}/events/),
+    // the trimmed-tail items are still reachable via the same cursor on
+    // the next call. keepCursorOnOvershoot:true preserves access to them.
+    const result = await paginateUpTo<number>(
+      () =>
+        Promise.resolve(
+          mkSuccess(
+            [1, 2, 3, 4, 5],
+            '<u>; rel="next"; results="true"; cursor="reachable"',
+          ),
+        ),
+      { limit: 3, keepCursorOnOvershoot: true },
+      "test",
+    );
+    expect(result.data).toEqual([1, 2, 3]);
+    expect(result.nextCursor).toBe("reachable");
+  });
+
+  test("keepCursorOnOvershoot is a no-op when there's no nextCursor to preserve", async () => {
+    // Last page, overshoot, no next cursor in the API response — there's
+    // nothing to preserve, so the result is identical to the default path.
+    const result = await paginateUpTo<number>(
+      () => Promise.resolve(mkSuccess([1, 2, 3, 4, 5])), // no link header
+      { limit: 3, keepCursorOnOvershoot: true },
+      "test",
+    );
+    expect(result.data).toEqual([1, 2, 3]);
+    expect(result.nextCursor).toBeUndefined();
+  });
+
   test("invokes onPage callback after each page", async () => {
     const observed: Array<{ fetched: number; limit: number }> = [];
     await paginateUpTo<number>(
@@ -311,5 +342,24 @@ describe("generated wrappers (pagination.gen.ts)", () => {
     expect(keys).toContain("fetchPage_listClickedNodes");
     expect(keys).not.toContain("paginateAll_listClickedNodes");
     expect(keys).not.toContain("paginateUpTo_listClickedNodes");
+  });
+
+  test("allow-list: emits wrappers for spec-incomplete paginated ops", () => {
+    // /organizations/{org}/alert-rules/ runtime-supports cursor pagination
+    // but its OpenAPI spec doesn't declare the cursor parameter. The
+    // PAGINATED_BUT_UNMARKED allow-list in the generator forces wrappers
+    // to be emitted anyway. Without this entry, the CLI's
+    // listMetricAlertsPaginated call site can't be migrated.
+    const indexModule = require("../src/index") as Record<string, unknown>;
+    const keys = Object.keys(indexModule);
+    expect(keys).toContain(
+      "fetchPage_deprecatedListAnOrganization_sMetricAlertRules",
+    );
+    expect(keys).toContain(
+      "paginateAll_deprecatedListAnOrganization_sMetricAlertRules",
+    );
+    expect(keys).toContain(
+      "paginateUpTo_deprecatedListAnOrganization_sMetricAlertRules",
+    );
   });
 });
