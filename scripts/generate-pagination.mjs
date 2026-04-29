@@ -221,7 +221,20 @@ for (const op of targets) {
   const optionsType = `Options<${dataType}>`;
   const userOptionsType = `Omit<${optionsType}, 'query'> & { query?: WithoutCursor<${dataType}['query']> }`;
 
-  // Helper to construct the SDK call expression — shared across the trio
+  // Helper to construct the SDK call expression — shared across the trio.
+  //
+  // The cast chain `as unknown as Promise<{ data; error: undefined; ... }>`
+  // is a deliberate compromise:
+  //   1. The user-facing `options` type has `query.cursor` Omit-ted, so we
+  //      can't directly assign back to the SDK's `Options<...Data>` shape.
+  //   2. The SDK's `RequestResult` return type distributes over the
+  //      defaulted `ThrowOnError extends boolean = boolean` generic, which
+  //      collapses unpredictably and doesn't structurally match our
+  //      `SdkResult<TData, TError>` discriminated union (defined locally
+  //      in `lib/sentry-pagination.ts` to keep that module zero-dep).
+  // The runtime path is correct: `unwrapResult` inside the helpers handles
+  // both `{ error: undefined }` and `{ error: ... }` cases via a check on
+  // `result.error`. The cast is purely structural-typing glue.
   const sdkCallExpr = (cursorIdent) => [
     `            ${op.fn}({`,
     `                ...options,`,
