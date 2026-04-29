@@ -32060,6 +32060,24 @@
             },
             "description": "The short ID of the issue to resolve.",
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "collapse",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "base",
+                  "filtered",
+                  "lifetime",
+                  "stats",
+                  "unhandled"
+                ]
+              }
+            },
+            "description": "Fields to remove from the response to improve query performance."
           }
         ],
         "tags": [
@@ -59428,6 +59446,25 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "collapse",
+            "in": "query",
+            "description": "Fields to remove from the response to improve query performance.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "stats",
+                  "lifetime",
+                  "base",
+                  "unhandled",
+                  "filtered"
+                ]
+              }
             }
           }
         ],
