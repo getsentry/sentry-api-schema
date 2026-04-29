@@ -1,6 +1,10 @@
 import { createClient } from "@hey-api/openapi-ts";
 import { cpSync, appendFileSync } from "node:fs";
 import { execSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // 1. Generate TypeScript client from OpenAPI spec
 await createClient({
@@ -17,7 +21,7 @@ cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 //    emits typed fetchPage / paginateAll / paginateUpTo wrappers for each.
 //    Done as a post-processor (not a Hey API plugin) because the plugin API
 //    is documented as in-development and unstable.
-execSync("node scripts/generate-pagination.mjs", { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.mjs"))}`, { stdio: "inherit" });
 
 // 4. Append re-exports to the generated index.ts so the pagination
 //    utilities and the per-operation wrappers are part of the public API.
