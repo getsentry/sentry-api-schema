@@ -11,17 +11,27 @@ await createClient({
 // 2. Copy hand-written pagination utilities into the generated src/ directory
 cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 
-// 3. Append re-exports to the generated index.ts so pagination is part of the public API
+// 3. Generate per-operation pagination wrappers from the SDK output + spec.
+//    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
+//    detects every operation that accepts a `cursor` query parameter, and
+//    emits typed fetchPage / paginateAll / paginateUpTo wrappers for each.
+//    Done as a post-processor (not a Hey API plugin) because the plugin API
+//    is documented as in-development and unstable.
+execSync("node scripts/generate-pagination.mjs", { stdio: "inherit" });
+
+// 4. Append re-exports to the generated index.ts so the pagination
+//    utilities and the per-operation wrappers are part of the public API.
 appendFileSync(
   "src/index.ts",
   [
     "",
-    "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, paginateAll } from './sentry-pagination.ts';",
-    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PageFetcher } from './sentry-pagination.ts';",
+    "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
+    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher } from './sentry-pagination.ts';",
+    "export * from './pagination.gen.ts';",
     "",
   ].join("\n"),
 );
 
-// 4. Bundle into a single JS file and emit type declarations
+// 5. Bundle into a single JS file and emit type declarations
 execSync("bun build src/index.ts --outdir dist", { stdio: "inherit" });
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });
