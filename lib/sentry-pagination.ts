@@ -134,6 +134,38 @@ export const parseSentryLinkHeader = (
 };
 
 /**
+ * Internal: merge a managed `cursor` into an SDK call's `options.query`
+ * and re-shape the result back to the SDK's `Options<TData>` type.
+ *
+ * Used exclusively by the auto-generated wrappers in `pagination.gen.ts`
+ * (one call per wrapper kind, one `_withCursor` invocation per page).
+ * Centralizes the cast chain — every wrapper used to inline its own
+ * `as unknown as ...` quartet, which meant the same logic was repeated
+ * once per generated wrapper (~115 places). This helper makes that
+ * exactly one place.
+ *
+ * Type-erasure rationale: each SDK operation has its own `Options<TData>`
+ * shape with operation-specific `query`, `path`, and `body` types. We
+ * can't write a generic that's tight enough to satisfy all 200+ SDK
+ * functions structurally without committing to a discriminated-union
+ * encoding of every operation. The `_` prefix marks this as internal —
+ * the typed wrappers in `pagination.gen.ts` are the supported public API.
+ *
+ * @internal
+ */
+export const _withCursor = <TOptions>(
+  options: { query?: unknown; [k: string]: unknown },
+  cursor: string | undefined,
+): TOptions =>
+  ({
+    ...options,
+    query: {
+      ...(options.query as Record<string, unknown> | undefined),
+      cursor,
+    },
+  }) as unknown as TOptions;
+
+/**
  * Unwrap an SDK result, throwing on error.
  *
  * Returns `{ data, response }` so callers retain access to the
