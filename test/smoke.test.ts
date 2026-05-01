@@ -334,6 +334,23 @@ describe("paginateUpTo", () => {
     expect(receivedFirstCursor).toBe("resume-here");
   });
 
+  test("drops nextCursor when maxPages cap fires before limit is reached", async () => {
+    let calls = 0;
+    const result = await paginateUpTo<number>(
+      () => {
+        calls += 1;
+        return Promise.resolve(
+          mkSuccess([calls], '<u>; rel="next"; results="true"; cursor="more"'),
+        );
+      },
+      { limit: 1000, maxPages: 2 },
+      "test",
+    );
+    expect(calls).toBe(2);
+    expect(result.data).toEqual([1, 2]);
+    expect(result.nextCursor).toBeUndefined();
+  });
+
   test("rejects limit < 1", async () => {
     await expect(
       paginateUpTo<number>(
