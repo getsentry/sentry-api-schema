@@ -23,6 +23,9 @@ import {
   unwrapPaginatedResult,
   unwrapResult,
 } from "../src/index";
+// `_withCursor` is internal — the generated wrappers use it but it's not
+// re-exported from src/index. Import directly to cover the runtime helper.
+import { _withCursor } from "../src/sentry-pagination";
 
 // =====================================================================
 // parseSentryLinkHeader
@@ -123,6 +126,35 @@ describe("unwrapPaginatedResult", () => {
     expect(out.data).toEqual([1, 2, 3]);
     expect(out.nextCursor).toBeUndefined();
     expect(out.prevCursor).toBeUndefined();
+  });
+});
+
+// =====================================================================
+// _withCursor
+// =====================================================================
+
+describe("_withCursor", () => {
+  test("leaves query unchanged when cursor is undefined", () => {
+    const opts = { query: { foo: "bar" }, headers: { x: "y" } };
+    const out = _withCursor<typeof opts & { query: { cursor: undefined } }>(
+      opts,
+      undefined,
+    );
+    expect(out.query).toEqual({ foo: "bar", cursor: undefined });
+    expect(out.headers).toEqual({ x: "y" });
+  });
+
+  test("merges cursor into existing query, preserving other fields", () => {
+    const out = _withCursor<{ query: { foo: string; cursor: string } }>(
+      { query: { foo: "bar" } },
+      "abc",
+    );
+    expect(out.query).toEqual({ foo: "bar", cursor: "abc" });
+  });
+
+  test("creates query when none was provided", () => {
+    const out = _withCursor<{ query: { cursor: string } }>({}, "abc");
+    expect(out.query).toEqual({ cursor: "abc" });
   });
 });
 
