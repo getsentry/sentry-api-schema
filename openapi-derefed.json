@@ -11608,9 +11608,12 @@
             "schema": {
               "type": "string",
               "enum": [
+                "discover",
+                "errors",
                 "logs",
                 "profile_functions",
                 "spans",
+                "transactions",
                 "uptime_results"
               ]
             },
@@ -11688,6 +11691,15 @@
               "type": "string"
             },
             "description": "What to order the results of the query by. Must be something in the `field` list, excluding equations."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
           }
         ],
         "tags": [
@@ -11813,9 +11825,12 @@
             "schema": {
               "type": "string",
               "enum": [
+                "discover",
+                "errors",
                 "logs",
                 "profile_functions",
                 "spans",
+                "transactions",
                 "uptime_results"
               ]
             },
