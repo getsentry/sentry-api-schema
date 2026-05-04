@@ -156,14 +156,18 @@ export const parseSentryLinkHeader = (
 export const _withCursor = <TOptions>(
   options: { query?: unknown; [k: string]: unknown },
   cursor: string | undefined,
-): TOptions =>
-  ({
+): TOptions => {
+  if (options.query === undefined && cursor === undefined) {
+    return options as unknown as TOptions;
+  }
+  return {
     ...options,
     query: {
       ...(options.query as Record<string, unknown> | undefined),
       ...(cursor !== undefined ? { cursor } : undefined),
     },
-  }) as unknown as TOptions;
+  } as unknown as TOptions;
+};
 
 /**
  * Unwrap an SDK result, throwing on error.

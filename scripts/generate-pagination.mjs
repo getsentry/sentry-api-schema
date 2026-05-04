@@ -192,7 +192,10 @@ const isArrayResponse = (typeBase) => {
     nextExport > 0
       ? typesSource.slice(start, nextExport)
       : typesSource.slice(start);
-  const m = slice.match(/200:\s*(\w+)?\s*<?/);
+  // Strip block comments so JSDoc between the opening brace and the
+  // `200:` member can't fool the regex (e.g. `/** Returns 200: OK */`).
+  const stripped = slice.replace(/\/\*[\s\S]*?\*\//g, "");
+  const m = stripped.match(/200:\s*(\w+)?\s*<?/);
   return m?.[1] === "Array";
 };
 
