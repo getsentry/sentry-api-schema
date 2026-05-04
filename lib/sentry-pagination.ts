@@ -161,7 +161,7 @@ export const _withCursor = <TOptions>(
     ...options,
     query: {
       ...(options.query as Record<string, unknown> | undefined),
-      cursor,
+      ...(cursor !== undefined ? { cursor } : undefined),
     },
   }) as unknown as TOptions;
 

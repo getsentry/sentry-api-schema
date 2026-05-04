@@ -136,11 +136,11 @@ describe("unwrapPaginatedResult", () => {
 describe("_withCursor", () => {
   test("leaves query unchanged when cursor is undefined", () => {
     const opts = { query: { foo: "bar" }, headers: { x: "y" } };
-    const out = _withCursor<typeof opts & { query: { cursor: undefined } }>(
+    const out = _withCursor<typeof opts & { query: { foo: string } }>(
       opts,
       undefined,
     );
-    expect(out.query).toEqual({ foo: "bar", cursor: undefined });
+    expect(out.query).toEqual({ foo: "bar" });
     expect(out.headers).toEqual({ x: "y" });
   });
 

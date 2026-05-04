@@ -187,7 +187,12 @@ const isArrayResponse = (typeBase) => {
     `export type ${typeBase}Responses = {`,
   );
   if (start < 0) return false;
-  const m = typesSource.slice(start).match(/200:\s*(\w+)?\s*<?/);
+  const nextExport = typesSource.indexOf("\nexport type ", start + 1);
+  const slice =
+    nextExport > 0
+      ? typesSource.slice(start, nextExport)
+      : typesSource.slice(start);
+  const m = slice.match(/200:\s*(\w+)?\s*<?/);
   return m?.[1] === "Array";
 };
 
