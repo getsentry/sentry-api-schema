@@ -1,3 +1,9 @@
+## 0.133.0
+
+### New Features
+
+- Auto-generate typed pagination wrappers per operation by @MathurAditya724 in [#69](https://github.com/getsentry/sentry-api-schema/pull/69)
+
 ## 0.132.0
 
 ### Schema Updates
