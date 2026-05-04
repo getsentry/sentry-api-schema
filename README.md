@@ -85,6 +85,8 @@ const { data, nextCursor } = await paginateUpTo_listAnOrganization_sIssues(
 
 By default, `paginateUpTo` drops `nextCursor` if the last fetched page had to be trimmed to fit `limit` — returning a cursor that points past the trimmed items would cause callers resuming pagination to skip records. For endpoints with no server-side `per_page` control (e.g. `/issues/{id}/events/`), pass `keepCursorOnOvershoot: true` to preserve the cursor; the trimmed-tail items remain reachable via the same cursor on the next call.
 
+`nextCursor` is also dropped if `paginateUpTo` reaches `maxPages` (default 50) before fulfilling `limit` — raise `maxPages` to continue paginating.
+
 ### Generic pagination helpers
 
 The same low-level helpers used by the generated wrappers are also exported for advanced use cases:

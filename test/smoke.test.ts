@@ -319,19 +319,27 @@ describe("paginateUpTo", () => {
     ]);
   });
 
-  test("respects startCursor when resuming", async () => {
-    let receivedFirstCursor: string | undefined = "<not-set>";
+  test("respects startCursor on first call, advances to server nextCursor on subsequent calls", async () => {
+    const cursorsSeen: Array<string | undefined> = [];
     await paginateUpTo<number>(
       (cursor) => {
-        if (receivedFirstCursor === "<not-set>") {
-          receivedFirstCursor = cursor;
-        }
-        return Promise.resolve(mkSuccess([], undefined));
+        cursorsSeen.push(cursor);
+        const isFirst = cursorsSeen.length === 1;
+        return Promise.resolve(
+          mkSuccess(
+            isFirst ? [1] : [],
+            isFirst
+              ? '<u>; rel="next"; results="true"; cursor="server-side"'
+              : undefined,
+          ),
+        );
       },
-      { limit: 1, startCursor: "resume-here" },
+      { limit: 100, startCursor: "resume-here" },
       "test",
     );
-    expect(receivedFirstCursor).toBe("resume-here");
+    // First call honors startCursor; second call uses the server-returned
+    // cursor (not startCursor again — that would re-fetch the same page).
+    expect(cursorsSeen).toEqual(["resume-here", "server-side"]);
   });
 
   test("drops nextCursor when maxPages cap fires before limit is reached", async () => {

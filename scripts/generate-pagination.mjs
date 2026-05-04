@@ -171,16 +171,24 @@ for (const block of sdkSource.split(/^export const /m).slice(1)) {
  *         404: ...;
  *     };
  *
- * We find the first `<indent>200:` line and inspect its first non-whitespace
- * character: `A` for `Array<`, anything else for compound.
+ * We find the first `<indent>200:` line within the type's body and check
+ * whether it begins with `Array<`. Anything else (object literal, named
+ * alias, primitive like `unknown`) is treated as compound — for those,
+ * only `fetchPage_` is emitted, since automatic array-extraction would
+ * require spec-specific knowledge of which field holds the array.
+ *
+ * Important: the regex must be anchored to the *first* `200:` after the
+ * type-def start — not the first one anywhere in the rest of the file.
+ * A naive `/^\s*200:\s*Array</m.test(slice)` would skip past a compound
+ * type's `200: {` and falsely match the next type's `200: Array<`.
  */
 const isArrayResponse = (typeBase) => {
   const start = typesSource.indexOf(
     `export type ${typeBase}Responses = {`,
   );
   if (start < 0) return false;
-  const m = typesSource.slice(start).match(/^\s*200:\s*([A-Za-z<{])/m);
-  return !!m && m[1] === "A";
+  const m = typesSource.slice(start).match(/200:\s*(\w+)?\s*<?/);
+  return m?.[1] === "Array";
 };
 
 // =====================================================================
