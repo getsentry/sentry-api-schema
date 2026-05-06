@@ -1,15 +1,26 @@
 import { createClient } from "@hey-api/openapi-ts";
-import { cpSync, appendFileSync } from "node:fs";
+import { cpSync, appendFileSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// 1. Generate TypeScript client from OpenAPI spec
+// 1. Generate TypeScript client from OpenAPI spec (including Zod schemas).
+//    When `plugins` is specified, the defaults (TypeScript + SDK + client) are
+//    no longer implicit — list them explicitly so the previous output is
+//    preserved alongside the new Zod schemas.
 await createClient({
   input: "./openapi-derefed.json",
   output: "src",
+  plugins: [
+    "@hey-api/typescript",
+    "@hey-api/sdk",
+    {
+      name: "zod",
+      compatibilityVersion: 3,
+    },
+  ],
 });
 
 // 2. Copy hand-written pagination utilities into the generated src/ directory
@@ -36,6 +47,17 @@ appendFileSync(
   ].join("\n"),
 );
 
-// 5. Bundle into a single JS file and emit type declarations
+// 5. Create a standalone Zod entry point that re-exports the generated schemas.
+//    This lets consumers import from "@sentry/api/zod" without pulling zod into
+//    code that only needs the SDK types and functions.
+writeFileSync(
+  "src/zod.ts",
+  'export * from "./zod.gen.ts";\n',
+);
+
+// 6. Bundle into JS files and emit type declarations.
+//    The main entry stays self-contained (zero runtime deps).
+//    The Zod entry externalises "zod" — consumers provide it themselves.
 execSync("bun build src/index.ts --outdir dist", { stdio: "inherit" });
+execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });
