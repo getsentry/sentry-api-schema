@@ -1,3 +1,9 @@
+## 0.141.0
+
+### New Features
+
+- Add auto-generated Zod schemas via Hey API plugin by @MathurAditya724 in [#70](https://github.com/getsentry/sentry-api-schema/pull/70)
+
 ## 0.140.0
 
 ### Schema Updates
