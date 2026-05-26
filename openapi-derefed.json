@@ -22325,6 +22325,1221 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/": {
+      "get": {
+        "operationId": "Retrieve Snapshot details",
+        "description": "Retrieve full details for a snapshot, including categorized image lists\nand comparison status.\n\nWhen a comparison exists, images are categorized into `changed`, `added`,\n`removed`, `renamed`, `unchanged`, `errored`, and `skipped` lists with\ncounts. Without a comparison, only the `images` list is populated.\n\nUse `compact_metadata=1` to strip image objects down to `display_name`,\n`image_file_name`, `group`, and `description` only.\n\nThis endpoint requires a bearer token with `project:read` access.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "snapshot_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the snapshot.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "compact_metadata",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Set to '1' or 'true' to strip image metadata to display_name, image_file_name, group, and description only."
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:read",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "head_artifact_id": {
+                      "type": "string"
+                    },
+                    "base_artifact_id": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "comparison_type": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "vcs_info": {
+                      "type": "object",
+                      "properties": {
+                        "head_sha": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "base_sha": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "provider": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "head_repo_name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "base_repo_name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "head_ref": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "base_ref": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "pr_number": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "app_id": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "is_selective": {
+                      "type": "boolean"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "group": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "image_file_name": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "integer"
+                          },
+                          "height": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "image_count": {
+                      "type": "integer"
+                    },
+                    "added": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "group": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "image_file_name": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "integer"
+                          },
+                          "height": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "added_count": {
+                      "type": "integer"
+                    },
+                    "removed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "group": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "image_file_name": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "integer"
+                          },
+                          "height": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "removed_count": {
+                      "type": "integer"
+                    },
+                    "renamed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "base_image": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "group": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image_file_name": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "integer"
+                              },
+                              "height": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "head_image": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "group": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image_file_name": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "integer"
+                              },
+                              "height": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "diff_image_key": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "diff": {
+                            "type": "number",
+                            "format": "double",
+                            "nullable": true
+                          }
+                        }
+                      }
+                    },
+                    "renamed_count": {
+                      "type": "integer"
+                    },
+                    "changed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "base_image": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "group": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image_file_name": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "integer"
+                              },
+                              "height": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "head_image": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "group": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image_file_name": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "integer"
+                              },
+                              "height": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "diff_image_key": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "diff": {
+                            "type": "number",
+                            "format": "double",
+                            "nullable": true
+                          }
+                        }
+                      }
+                    },
+                    "changed_count": {
+                      "type": "integer"
+                    },
+                    "unchanged": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "group": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "image_file_name": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "integer"
+                          },
+                          "height": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "unchanged_count": {
+                      "type": "integer"
+                    },
+                    "errored": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "base_image": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "group": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image_file_name": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "integer"
+                              },
+                              "height": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "head_image": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "group": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image_file_name": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "integer"
+                              },
+                              "height": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "diff_image_key": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "diff": {
+                            "type": "number",
+                            "format": "double",
+                            "nullable": true
+                          }
+                        }
+                      }
+                    },
+                    "errored_count": {
+                      "type": "integer"
+                    },
+                    "skipped": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "group": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "image_file_name": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "integer"
+                          },
+                          "height": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "skipped_count": {
+                      "type": "integer"
+                    },
+                    "diff_threshold": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "comparison_state": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "approval_status": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "comparison_error_message": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "approvers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "email": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "username": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "avatar_url": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "approved_at": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "source": {
+                            "enum": [
+                              "sentry",
+                              "github"
+                            ],
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "SnapshotWithComparison(Diff)": {
+                    "value": {
+                      "head_artifact_id": "100",
+                      "base_artifact_id": "99",
+                      "project_id": "1",
+                      "comparison_type": "diff",
+                      "state": "UPLOADED",
+                      "vcs_info": {
+                        "head_sha": "abc123def456",
+                        "base_sha": "789xyz000111",
+                        "provider": "github",
+                        "head_repo_name": "org/repo",
+                        "base_repo_name": "org/repo",
+                        "head_ref": "feature-branch",
+                        "base_ref": "main",
+                        "pr_number": 42
+                      },
+                      "app_id": "com.example.app",
+                      "is_selective": false,
+                      "images": [
+                        {
+                          "key": "a1b2c3d4e5f6",
+                          "display_name": "Home Screen",
+                          "group": "iPhone 15",
+                          "image_file_name": "home_screen_iphone15.png",
+                          "width": 1170,
+                          "height": 2532
+                        }
+                      ],
+                      "image_count": 1,
+                      "added": [],
+                      "added_count": 0,
+                      "removed": [],
+                      "removed_count": 0,
+                      "renamed": [],
+                      "renamed_count": 0,
+                      "changed": [
+                        {
+                          "base_image": {
+                            "key": "old_hash_123",
+                            "display_name": "Home Screen",
+                            "group": "iPhone 15",
+                            "image_file_name": "home_screen_iphone15.png",
+                            "width": 1170,
+                            "height": 2532
+                          },
+                          "head_image": {
+                            "key": "a1b2c3d4e5f6",
+                            "display_name": "Home Screen",
+                            "group": "iPhone 15",
+                            "image_file_name": "home_screen_iphone15.png",
+                            "width": 1170,
+                            "height": 2532
+                          },
+                          "diff_image_key": "diff_hash_456",
+                          "diff": 0.02
+                        }
+                      ],
+                      "changed_count": 1,
+                      "unchanged": [],
+                      "unchanged_count": 0,
+                      "errored": [],
+                      "errored_count": 0,
+                      "skipped": [],
+                      "skipped_count": 0,
+                      "diff_threshold": 0.01,
+                      "comparison_state": "success",
+                      "approval_status": "requires_approval",
+                      "comparison_error_message": null,
+                      "approvers": []
+                    },
+                    "summary": "Snapshot with Comparison (Diff)"
+                  },
+                  "SnapshotWithoutComparison(Solo)": {
+                    "value": {
+                      "head_artifact_id": "100",
+                      "base_artifact_id": null,
+                      "project_id": "1",
+                      "comparison_type": "solo",
+                      "state": "UPLOADED",
+                      "vcs_info": {
+                        "head_sha": "abc123def456",
+                        "base_sha": null,
+                        "provider": "github",
+                        "head_repo_name": "org/repo",
+                        "base_repo_name": null,
+                        "head_ref": "main",
+                        "base_ref": null,
+                        "pr_number": null
+                      },
+                      "app_id": "com.example.app",
+                      "is_selective": false,
+                      "images": [
+                        {
+                          "key": "a1b2c3d4e5f6",
+                          "display_name": "Home Screen",
+                          "group": "iPhone 15",
+                          "image_file_name": "home_screen_iphone15.png",
+                          "width": 1170,
+                          "height": 2532
+                        }
+                      ],
+                      "image_count": 1,
+                      "added": [],
+                      "added_count": 0,
+                      "removed": [],
+                      "removed_count": 0,
+                      "renamed": [],
+                      "renamed_count": 0,
+                      "changed": [],
+                      "changed_count": 0,
+                      "unchanged": [],
+                      "unchanged_count": 0,
+                      "errored": [],
+                      "errored_count": 0,
+                      "skipped": [],
+                      "skipped_count": 0,
+                      "diff_threshold": 0.01,
+                      "comparison_state": null,
+                      "approval_status": null,
+                      "comparison_error_message": null,
+                      "approvers": []
+                    },
+                    "summary": "Snapshot without Comparison (Solo)"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Delete a Snapshot",
+        "description": "Delete a snapshot and all associated data (images, comparisons, metrics).\n\nThis is a permanent, irreversible operation. The snapshot and its images\nwill no longer be accessible after deletion.\n\nThis endpoint requires a bearer token with `project:write` access.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "snapshot_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the snapshot to delete.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:releases"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No response body"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/download/": {
+      "get": {
+        "operationId": "Download Snapshot images as ZIP",
+        "description": "Download all images in a snapshot as a ZIP archive.\n\nThe response is a streaming `application/zip` file. Images that share\nthe same content hash are deduplicated during fetch but written under\ntheir original filenames in the archive.\n\nThis endpoint requires a bearer token with `project:read` access.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "snapshot_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the snapshot to download.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:read",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A ZIP archive containing all snapshot images."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/images/{image_identifier}/": {
+      "get": {
+        "operationId": "Retrieve Snapshot image detail",
+        "description": "Retrieve detailed information for a single image within a snapshot.\n\nThe `image_identifier` can be either the image filename or its content\nhash. The response includes head and base image metadata, comparison\nstatus, diff image URL, diff percentage, and previous filename for\nrenames.\n\nThis endpoint uses a flat response format with nullable fields designed\nfor LLM/MCP consumers.\n\nThis endpoint requires a bearer token with `project:read` access.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "snapshot_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the snapshot.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "image_identifier",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The image filename or content hash.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:read",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "image_file_name": {
+                      "type": "string"
+                    },
+                    "comparison_status": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "head_image": {
+                      "type": "object",
+                      "properties": {
+                        "content_hash": {
+                          "type": "string"
+                        },
+                        "display_name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "group": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "image_file_name": {
+                          "type": "string"
+                        },
+                        "width": {
+                          "type": "integer"
+                        },
+                        "height": {
+                          "type": "integer"
+                        },
+                        "diff_threshold": {
+                          "type": "number",
+                          "format": "double",
+                          "nullable": true
+                        },
+                        "description": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "tags": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "nullable": true
+                        },
+                        "image_url": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "base_image": {
+                      "type": "object",
+                      "properties": {
+                        "content_hash": {
+                          "type": "string"
+                        },
+                        "display_name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "group": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "image_file_name": {
+                          "type": "string"
+                        },
+                        "width": {
+                          "type": "integer"
+                        },
+                        "height": {
+                          "type": "integer"
+                        },
+                        "diff_threshold": {
+                          "type": "number",
+                          "format": "double",
+                          "nullable": true
+                        },
+                        "description": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "tags": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "nullable": true
+                        },
+                        "image_url": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "diff_image_url": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "diff_percentage": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "previous_image_file_name": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "examples": {
+                  "ChangedImage": {
+                    "value": {
+                      "image_file_name": "home_screen_iphone15.png",
+                      "comparison_status": "changed",
+                      "head_image": {
+                        "content_hash": "a1b2c3d4e5f6",
+                        "display_name": "Home Screen",
+                        "group": "iPhone 15",
+                        "image_file_name": "home_screen_iphone15.png",
+                        "width": 1170,
+                        "height": 2532,
+                        "diff_threshold": 0.01,
+                        "description": null,
+                        "tags": null,
+                        "image_url": "/api/0/projects/org-slug/project-slug/files/images/a1b2c3d4e5f6/"
+                      },
+                      "base_image": {
+                        "content_hash": "old_hash_123",
+                        "display_name": "Home Screen",
+                        "group": "iPhone 15",
+                        "image_file_name": "home_screen_iphone15.png",
+                        "width": 1170,
+                        "height": 2532,
+                        "diff_threshold": 0.01,
+                        "description": null,
+                        "tags": null,
+                        "image_url": "/api/0/projects/org-slug/project-slug/files/images/old_hash_123/"
+                      },
+                      "diff_image_url": "/api/0/projects/org-slug/project-slug/files/images/diff_hash_456/",
+                      "diff_percentage": 0.02,
+                      "previous_image_file_name": null
+                    },
+                    "summary": "Changed Image"
+                  },
+                  "AddedImage": {
+                    "value": {
+                      "image_file_name": "new_screen.png",
+                      "comparison_status": "added",
+                      "head_image": {
+                        "content_hash": "new_hash_789",
+                        "display_name": "New Screen",
+                        "group": "iPhone 15",
+                        "image_file_name": "new_screen.png",
+                        "width": 1170,
+                        "height": 2532,
+                        "diff_threshold": null,
+                        "description": null,
+                        "tags": null,
+                        "image_url": "/api/0/projects/org-slug/project-slug/files/images/new_hash_789/"
+                      },
+                      "base_image": null,
+                      "diff_image_url": null,
+                      "diff_percentage": null,
+                      "previous_image_file_name": null
+                    },
+                    "summary": "Added Image"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/latest-base/": {
+      "get": {
+        "operationId": "Retrieve latest base Snapshot",
+        "description": "Retrieve the most recent base snapshot for a given app.\n\nA base snapshot is one uploaded without a `base_sha` (i.e., a snapshot\nfrom a base branch like `main`). Use the optional `branch` and `project`\nparameters to narrow the search.\n\nThe response includes the full image list with download URLs. Use\n`compact_metadata=1` to reduce image metadata.\n\nThis endpoint requires a bearer token with `project:read` access.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "app_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "App identifier to match.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "branch",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Git branch name to filter on."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Project ID to scope the lookup."
+          },
+          {
+            "in": "query",
+            "name": "compact_metadata",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Set to '1' or 'true' to strip image metadata to display_name, image_file_name, group, description, and image_url only."
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:read",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "head_artifact_id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "project_slug": {
+                      "type": "string"
+                    },
+                    "app_id": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "image_count": {
+                      "type": "integer"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "group": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "image_file_name": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "integer"
+                          },
+                          "height": {
+                            "type": "integer"
+                          },
+                          "image_url": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "diff_threshold": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "date_added": {
+                      "type": "string"
+                    },
+                    "vcs_info": {
+                      "type": "object",
+                      "properties": {
+                        "head_sha": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "base_sha": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "head_ref": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "base_ref": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "head_repo_name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "pr_number": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "LatestBaseSnapshot": {
+                    "value": {
+                      "head_artifact_id": "99",
+                      "project_id": "1",
+                      "project_slug": "my-project",
+                      "app_id": "com.example.app",
+                      "image_count": 2,
+                      "images": [
+                        {
+                          "key": "a1b2c3d4e5f6",
+                          "display_name": "Home Screen",
+                          "group": "iPhone 15",
+                          "image_file_name": "home_screen_iphone15.png",
+                          "width": 1170,
+                          "height": 2532,
+                          "image_url": "/api/0/projects/org-slug/my-project/files/images/a1b2c3d4e5f6/"
+                        }
+                      ],
+                      "diff_threshold": 0.01,
+                      "date_added": "2025-01-15T10:30:00+00:00",
+                      "vcs_info": {
+                        "head_sha": "abc123def456",
+                        "base_sha": null,
+                        "head_ref": "main",
+                        "base_ref": null,
+                        "head_repo_name": "org/repo",
+                        "pr_number": null
+                      }
+                    },
+                    "summary": "Latest Base Snapshot"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/prevent/owner/{owner}/repositories/": {
       "get": {
         "operationId": "Retrieves list of repositories for a given owner",
@@ -46038,6 +47253,94 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/": {
+      "post": {
+        "operationId": "Upload a Snapshot",
+        "description": "Upload a new snapshot with image metadata.\n\nThe request body is a JSON object containing `app_id` (required),\n`images` (required, a mapping of filenames to image metadata objects),\nand optional VCS fields (`head_sha`, `base_sha`, `provider`,\n`head_repo_name`, `head_ref`, `base_repo_name`, `base_ref`, `pr_number`).\n\nWhen VCS info with a `base_sha` is provided and a matching base snapshot\nexists, a comparison is automatically triggered.\n\nThis endpoint requires a bearer token with `project:write` access.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "artifactId": {
+                      "type": "string"
+                    },
+                    "snapshotMetricsId": {
+                      "type": "string"
+                    },
+                    "imageCount": {
+                      "type": "integer"
+                    },
+                    "snapshotUrl": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "artifactId",
+                    "imageCount",
+                    "snapshotMetricsId",
+                    "snapshotUrl"
+                  ]
+                },
+                "examples": {
+                  "SnapshotCreated": {
+                    "value": {
+                      "artifactId": "100",
+                      "snapshotMetricsId": "200",
+                      "imageCount": 5,
+                      "snapshotUrl": "https://sentry.io/organizations/org/preprod/snapshots/100/"
+                    },
+                    "summary": "Snapshot Created"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/": {
       "delete": {
         "operationId": "Delete a Replay Instance",
@@ -69656,6 +70959,95 @@
           "userReport"
         ]
       },
+      "LatestBaseSnapshotResponse": {
+        "type": "object",
+        "properties": {
+          "head_artifact_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          },
+          "project_slug": {
+            "type": "string"
+          },
+          "app_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "image_count": {
+            "type": "integer"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "image_file_name": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                },
+                "image_url": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "diff_threshold": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "date_added": {
+            "type": "string"
+          },
+          "vcs_info": {
+            "type": "object",
+            "properties": {
+              "head_sha": {
+                "type": "string",
+                "nullable": true
+              },
+              "base_sha": {
+                "type": "string",
+                "nullable": true
+              },
+              "head_ref": {
+                "type": "string",
+                "nullable": true
+              },
+              "base_ref": {
+                "type": "string",
+                "nullable": true
+              },
+              "head_repo_name": {
+                "type": "string",
+                "nullable": true
+              },
+              "pr_number": {
+                "type": "integer",
+                "nullable": true
+              }
+            }
+          }
+        }
+      },
       "LatestInstallableBuildResponse": {
         "type": "object",
         "properties": {
@@ -82915,6 +84307,630 @@
           "installSize",
           "state"
         ]
+      },
+      "SnapshotCreateResponse": {
+        "type": "object",
+        "properties": {
+          "artifactId": {
+            "type": "string"
+          },
+          "snapshotMetricsId": {
+            "type": "string"
+          },
+          "imageCount": {
+            "type": "integer"
+          },
+          "snapshotUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "artifactId",
+          "imageCount",
+          "snapshotMetricsId",
+          "snapshotUrl"
+        ]
+      },
+      "SnapshotDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "head_artifact_id": {
+            "type": "string"
+          },
+          "base_artifact_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "project_id": {
+            "type": "string"
+          },
+          "comparison_type": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "vcs_info": {
+            "type": "object",
+            "properties": {
+              "head_sha": {
+                "type": "string",
+                "nullable": true
+              },
+              "base_sha": {
+                "type": "string",
+                "nullable": true
+              },
+              "provider": {
+                "type": "string",
+                "nullable": true
+              },
+              "head_repo_name": {
+                "type": "string",
+                "nullable": true
+              },
+              "base_repo_name": {
+                "type": "string",
+                "nullable": true
+              },
+              "head_ref": {
+                "type": "string",
+                "nullable": true
+              },
+              "base_ref": {
+                "type": "string",
+                "nullable": true
+              },
+              "pr_number": {
+                "type": "integer",
+                "nullable": true
+              }
+            }
+          },
+          "app_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_selective": {
+            "type": "boolean"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "image_file_name": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "image_count": {
+            "type": "integer"
+          },
+          "added": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "image_file_name": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "added_count": {
+            "type": "integer"
+          },
+          "removed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "image_file_name": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "removed_count": {
+            "type": "integer"
+          },
+          "renamed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "base_image": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "group": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "image_file_name": {
+                      "type": "string"
+                    },
+                    "width": {
+                      "type": "integer"
+                    },
+                    "height": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "head_image": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "group": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "image_file_name": {
+                      "type": "string"
+                    },
+                    "width": {
+                      "type": "integer"
+                    },
+                    "height": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "diff_image_key": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "diff": {
+                  "type": "number",
+                  "format": "double",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "renamed_count": {
+            "type": "integer"
+          },
+          "changed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "base_image": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "group": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "image_file_name": {
+                      "type": "string"
+                    },
+                    "width": {
+                      "type": "integer"
+                    },
+                    "height": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "head_image": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "group": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "image_file_name": {
+                      "type": "string"
+                    },
+                    "width": {
+                      "type": "integer"
+                    },
+                    "height": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "diff_image_key": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "diff": {
+                  "type": "number",
+                  "format": "double",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "changed_count": {
+            "type": "integer"
+          },
+          "unchanged": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "image_file_name": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "unchanged_count": {
+            "type": "integer"
+          },
+          "errored": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "base_image": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "group": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "image_file_name": {
+                      "type": "string"
+                    },
+                    "width": {
+                      "type": "integer"
+                    },
+                    "height": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "head_image": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "group": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "image_file_name": {
+                      "type": "string"
+                    },
+                    "width": {
+                      "type": "integer"
+                    },
+                    "height": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "diff_image_key": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "diff": {
+                  "type": "number",
+                  "format": "double",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "errored_count": {
+            "type": "integer"
+          },
+          "skipped": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "image_file_name": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "skipped_count": {
+            "type": "integer"
+          },
+          "diff_threshold": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "comparison_state": {
+            "type": "string",
+            "nullable": true
+          },
+          "approval_status": {
+            "type": "string",
+            "nullable": true
+          },
+          "comparison_error_message": {
+            "type": "string",
+            "nullable": true
+          },
+          "approvers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "email": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "username": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "avatar_url": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "approved_at": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "source": {
+                  "enum": [
+                    "sentry",
+                    "github"
+                  ],
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SnapshotImageDetailResponse": {
+        "type": "object",
+        "properties": {
+          "image_file_name": {
+            "type": "string"
+          },
+          "comparison_status": {
+            "type": "string",
+            "nullable": true
+          },
+          "head_image": {
+            "type": "object",
+            "properties": {
+              "content_hash": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string",
+                "nullable": true
+              },
+              "group": {
+                "type": "string",
+                "nullable": true
+              },
+              "image_file_name": {
+                "type": "string"
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "diff_threshold": {
+                "type": "number",
+                "format": "double",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "tags": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              "image_url": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "base_image": {
+            "type": "object",
+            "properties": {
+              "content_hash": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string",
+                "nullable": true
+              },
+              "group": {
+                "type": "string",
+                "nullable": true
+              },
+              "image_file_name": {
+                "type": "string"
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "diff_threshold": {
+                "type": "number",
+                "format": "double",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "tags": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              "image_url": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "diff_image_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "diff_percentage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "previous_image_file_name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "Source": {
         "type": "object",
