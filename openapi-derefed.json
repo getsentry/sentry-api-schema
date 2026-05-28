@@ -25481,6 +25481,413 @@
             "description": "Not Found"
           }
         }
+      },
+      "post": {
+        "operationId": "Create a Project for an Organization",
+        "description": "Create a new project for an organization. A personal team (`team-{username}`) is automatically created for the caller with Team Admin role, and the project is bound to it. If the org has member project creation disabled (`disable_member_project_creation`), `org:write` scope is required.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name for the project.",
+                    "maxLength": 50
+                  },
+                  "slug": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Uniquely identifies a project and is used for the interface.\n        If not provided, it is automatically generated from the name.",
+                    "maxLength": 100,
+                    "pattern": "^(?![0-9]+$)[a-z0-9_\\-]+$"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The platform for the project."
+                  },
+                  "default_rules": {
+                    "type": "boolean",
+                    "description": "\nDefaults to true where the behavior is to alert the user on every new\nissue. Setting this to false will turn this off and the user must create\ntheir own alerts to be notified of new issues.\n        "
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "latestDeploys": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "options": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "stats": {},
+                    "transactionStats": {},
+                    "sessionStats": {},
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isBookmarked": {
+                      "type": "boolean"
+                    },
+                    "isMember": {
+                      "type": "boolean"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "firstEvent": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "firstTransactionEvent": {
+                      "type": "boolean"
+                    },
+                    "access": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasAccess": {
+                      "type": "boolean"
+                    },
+                    "hasFeedbacks": {
+                      "type": "boolean"
+                    },
+                    "hasFlags": {
+                      "type": "boolean"
+                    },
+                    "hasMinifiedStackTrace": {
+                      "type": "boolean"
+                    },
+                    "hasMonitors": {
+                      "type": "boolean"
+                    },
+                    "hasNewFeedbacks": {
+                      "type": "boolean"
+                    },
+                    "hasProfiles": {
+                      "type": "boolean"
+                    },
+                    "hasReplays": {
+                      "type": "boolean"
+                    },
+                    "hasSessions": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsHttp": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsDb": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsAssets": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsAppStart": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsScreenLoad": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsVitals": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsCaches": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsQueues": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsAgentMonitoring": {
+                      "type": "boolean"
+                    },
+                    "hasInsightsMCP": {
+                      "type": "boolean"
+                    },
+                    "hasLogs": {
+                      "type": "boolean"
+                    },
+                    "hasTraceMetrics": {
+                      "type": "boolean"
+                    },
+                    "team": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug"
+                      ],
+                      "nullable": true
+                    },
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ]
+                      }
+                    },
+                    "platforms": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hasUserReports": {
+                      "type": "boolean"
+                    },
+                    "environments": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "latestRelease": {
+                      "type": "object",
+                      "properties": {
+                        "version": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "version"
+                      ],
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "dateCreated",
+                    "environments",
+                    "features",
+                    "firstEvent",
+                    "firstTransactionEvent",
+                    "hasAccess",
+                    "hasFeedbacks",
+                    "hasFlags",
+                    "hasInsightsAgentMonitoring",
+                    "hasInsightsAppStart",
+                    "hasInsightsAssets",
+                    "hasInsightsCaches",
+                    "hasInsightsDb",
+                    "hasInsightsHttp",
+                    "hasInsightsMCP",
+                    "hasInsightsQueues",
+                    "hasInsightsScreenLoad",
+                    "hasInsightsVitals",
+                    "hasLogs",
+                    "hasMinifiedStackTrace",
+                    "hasMonitors",
+                    "hasNewFeedbacks",
+                    "hasProfiles",
+                    "hasReplays",
+                    "hasSessions",
+                    "hasTraceMetrics",
+                    "hasUserReports",
+                    "id",
+                    "isBookmarked",
+                    "isMember",
+                    "latestRelease",
+                    "name",
+                    "platform",
+                    "platforms",
+                    "slug",
+                    "team",
+                    "teams"
+                  ]
+                },
+                "examples": {
+                  "ProjectSuccessfullyCreated": {
+                    "value": {
+                      "team": {
+                        "id": "2349234102",
+                        "name": "Prime Mover",
+                        "slug": "prime-mover"
+                      },
+                      "teams": [
+                        {
+                          "id": "2349234102",
+                          "name": "Prime Mover",
+                          "slug": "prime-mover"
+                        },
+                        {
+                          "id": "47584447",
+                          "name": "Powerful Abolitionist",
+                          "slug": "powerful-abolitionist"
+                        }
+                      ],
+                      "id": "6758470122493650",
+                      "slug": "the-spoiled-yoghurt",
+                      "name": "The Spoiled Yoghurt",
+                      "isBookmarked": false,
+                      "isMember": true,
+                      "access": [
+                        "project:read",
+                        "event:read",
+                        "team:read",
+                        "alerts:read",
+                        "org:read",
+                        "event:write",
+                        "project:releases",
+                        "member:read"
+                      ],
+                      "hasAccess": true,
+                      "dateCreated": "2023-03-29T15:25:21.344565Z",
+                      "environments": [
+                        "production"
+                      ],
+                      "features": [
+                        "alert-filters",
+                        "custom-inbound-filters",
+                        "discard-groups",
+                        "minidump",
+                        "rate-limits",
+                        "servicehooks",
+                        "similarity-indexing",
+                        "similarity-indexing-v2",
+                        "similarity-view",
+                        "similarity-view-v2"
+                      ],
+                      "firstEvent": null,
+                      "firstTransactionEvent": true,
+                      "hasSessions": false,
+                      "hasProfiles": false,
+                      "hasReplays": false,
+                      "hasFlags": false,
+                      "hasMonitors": false,
+                      "hasFeedbacks": false,
+                      "hasNewFeedbacks": false,
+                      "hasMinifiedStackTrace": false,
+                      "hasInsightsHttp": true,
+                      "hasInsightsDb": false,
+                      "hasInsightsAssets": false,
+                      "hasInsightsAppStart": false,
+                      "hasInsightsScreenLoad": false,
+                      "hasInsightsVitals": false,
+                      "hasInsightsCaches": true,
+                      "hasInsightsQueues": true,
+                      "hasInsightsAgentMonitoring": false,
+                      "hasInsightsMCP": false,
+                      "hasLogs": false,
+                      "hasTraceMetrics": false,
+                      "platform": "node-express",
+                      "platforms": [],
+                      "latestRelease": null,
+                      "hasUserReports": false,
+                      "latestDeploys": null
+                    },
+                    "summary": "Project successfully created"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
       }
     },
     "/api/0/organizations/{organization_id_or_slug}/projects/{project_id_or_slug}/detectors/": {
