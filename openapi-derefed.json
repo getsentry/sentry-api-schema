@@ -48727,6 +48727,104 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/repo/": {
+      "post": {
+        "operationId": "Link a Repository to a Project",
+        "description": "Link a repository to a project. The repository must already exist\nin the organization (connected via a VCS integration). Idempotent:\nreturns 200 if the link already exists, 201 if created.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "repositoryId": {
+                    "type": "integer",
+                    "description": "The ID of the repository to link."
+                  }
+                },
+                "required": [
+                  "repositoryId"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "repositoryId": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "created": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "created",
+                    "id",
+                    "projectId",
+                    "repositoryId",
+                    "source"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/": {
       "get": {
         "operationId": "Retrieve a Project's Symbol Sources",
@@ -83449,6 +83547,45 @@
         },
         "required": [
           "name"
+        ]
+      },
+      "ProjectRepoLinkRequest": {
+        "type": "object",
+        "properties": {
+          "repositoryId": {
+            "type": "integer",
+            "description": "The ID of the repository to link."
+          }
+        },
+        "required": [
+          "repositoryId"
+        ]
+      },
+      "ProjectRepoLinkResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "repositoryId": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "created": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "created",
+          "id",
+          "projectId",
+          "repositoryId",
+          "source"
         ]
       },
       "ProjectSizeStatusCheckRulesResponse": {
