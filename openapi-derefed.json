@@ -42235,6 +42235,220 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/dsyms/": {
+      "get": {
+        "operationId": "List a Project's Debug Information Files",
+        "description": "Retrieve a list of debug information files for a given project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Substring filter matched against object name, debug ID, code ID, CPU name, and file headers."
+          },
+          {
+            "in": "query",
+            "name": "debug_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter results to debug information files matching the given debug ID."
+          },
+          {
+            "in": "query",
+            "name": "code_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter results to debug information files matching the given code ID."
+          },
+          {
+            "in": "query",
+            "name": "file_formats",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Restrict results to one or more file formats."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:read",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "uuid": {
+                        "type": "string"
+                      },
+                      "debugId": {
+                        "type": "string"
+                      },
+                      "codeId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "cpuName": {
+                        "type": "string"
+                      },
+                      "objectName": {
+                        "type": "string"
+                      },
+                      "symbolType": {
+                        "type": "string"
+                      },
+                      "headers": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "size": {
+                        "type": "integer"
+                      },
+                      "sha1": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "data": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "codeId",
+                      "cpuName",
+                      "data",
+                      "dateCreated",
+                      "debugId",
+                      "headers",
+                      "id",
+                      "objectName",
+                      "sha1",
+                      "size",
+                      "symbolType",
+                      "uuid"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ReturnAListOfDebugInformationFilesForAProject": {
+                    "value": [
+                      {
+                        "id": "1066716922",
+                        "uuid": "d8f92f82-3dbc-4fbb-ae68-69e881a9becc",
+                        "debugId": "d8f92f82-3dbc-4fbb-ae68-69e881a9becc",
+                        "codeId": null,
+                        "cpuName": "any",
+                        "objectName": "proguard-mapping",
+                        "symbolType": "proguard",
+                        "headers": {
+                          "Content-Type": "text/x-proguard+plain"
+                        },
+                        "size": 12868987,
+                        "sha1": "c31bcca43ff75e8c94c336e647d518fb05dcf658",
+                        "dateCreated": "2026-03-24T23:31:18.583107Z",
+                        "data": {
+                          "features": [
+                            "mapping"
+                          ]
+                        }
+                      },
+                      {
+                        "id": "1066716918",
+                        "uuid": "d50e6bca-81a4-662b-8461-e1c5e27f157b",
+                        "debugId": "d50e6bca-81a4-662b-8461-e1c5e27f157b",
+                        "codeId": "ca6b0ed5a4812b668461e1c5e27f157b8422d5bd",
+                        "cpuName": "arm64",
+                        "objectName": "libxamarin-app.dbg.so",
+                        "symbolType": "elf",
+                        "headers": {
+                          "Content-Type": "application/x-elf-binary"
+                        },
+                        "size": 41584,
+                        "sha1": "ac40db6f7fff550f82c63242f618e2d3987cc3c7",
+                        "dateCreated": "2026-03-24T23:31:18.465820Z",
+                        "data": {
+                          "type": "dbg",
+                          "features": [
+                            "symtab"
+                          ]
+                        }
+                      }
+                    ],
+                    "summary": "Return a list of debug information files for a project"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/": {
       "get": {
         "operationId": "List a Project's Data Filters",
@@ -55241,190 +55455,6 @@
           {
             "auth_token": [
               "org: read"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/dsyms/": {
-      "get": {
-        "tags": [
-          "Projects"
-        ],
-        "description": "Retrieve a list of debug information files for a given project.",
-        "operationId": "List a Project's Debug Information Files",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the organization the file belongs to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "project_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the project to list the DIFs of.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {}
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "The requested resource does not exist"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "project:read"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Projects"
-        ],
-        "description": "Upload a new debug information file for the given release.\n\nUnlike other API requests, files must be uploaded using the\ntraditional multipart/form-data content-type.\n\nRequests to this endpoint should use the region-specific domain eg. `us.sentry.io` or `de.sentry.io`.\n\nThe file uploaded is a zip archive of an Apple .dSYM folder which\ncontains the individual debug images.  Uploading through this endpoint\nwill create different files for the contained images.",
-        "operationId": "Upload a New File",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the organization the project belongs to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "project_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the project to upload a file to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "required": [
-                  "file"
-                ],
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "The multipart encoded file."
-                  }
-                }
-              },
-              "example": {
-                "file": "debug.zip"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Success",
-            "content": {
-              "application/json": {}
-            }
-          },
-          "400": {
-            "description": "Bad Input"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "The requested resource does not exist"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "project:write"
-            ]
-          }
-        ],
-        "servers": [
-          {
-            "url": "https://{region}.sentry.io"
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Projects"
-        ],
-        "description": "Delete a debug information file for a given project.",
-        "operationId": "Delete a Specific Project's Debug Information File",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the organization the file belongs to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "project_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the project to delete the DIF.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "description": "The ID of the DIF to delete.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "The requested resource does not exist"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "project:admin",
-              "project:releases"
             ]
           }
         ]
@@ -75522,6 +75552,70 @@
             "require2FA",
             "slug",
             "status"
+          ]
+        }
+      },
+      "ListProjectDebugFilesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "uuid": {
+              "type": "string"
+            },
+            "debugId": {
+              "type": "string"
+            },
+            "codeId": {
+              "type": "string",
+              "nullable": true
+            },
+            "cpuName": {
+              "type": "string"
+            },
+            "objectName": {
+              "type": "string"
+            },
+            "symbolType": {
+              "type": "string"
+            },
+            "headers": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "size": {
+              "type": "integer"
+            },
+            "sha1": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "codeId",
+            "cpuName",
+            "data",
+            "dateCreated",
+            "debugId",
+            "headers",
+            "id",
+            "objectName",
+            "sha1",
+            "size",
+            "symbolType",
+            "uuid"
           ]
         }
       },
