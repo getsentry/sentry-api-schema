@@ -73,11 +73,8 @@ const typesSource = readFileSync(TYPES_PATH, "utf8");
  * before being added.
  */
 const PAGINATED_BUT_UNMARKED = new Set([
-  // /organizations/{org}/alert-rules/ — used by getsentry/cli's
-  // listMetricAlertsPaginated. The runtime accepts `cursor` and `per_page`
-  // (CLI proves it via raw apiRequestToRegion); the spec only declares the
-  // path param. Remove this entry once the upstream OpenAPI spec is fixed.
-  "GET /api/0/organizations/{organization_id_or_slug}/alert-rules/",
+  // Add entries here for endpoints that paginate via Link-header cursors
+  // but whose OpenAPI spec doesn't declare a `cursor` query parameter.
 ]);
 
 /**
