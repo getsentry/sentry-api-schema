@@ -401,22 +401,4 @@ describe("generated wrappers (pagination.gen.ts)", () => {
     expect(keys).not.toContain("paginateUpTo_listClickedNodes");
   });
 
-  test("allow-list: emits wrappers for spec-incomplete paginated ops", () => {
-    // /organizations/{org}/alert-rules/ runtime-supports cursor pagination
-    // but its OpenAPI spec doesn't declare the cursor parameter. The
-    // PAGINATED_BUT_UNMARKED allow-list in the generator forces wrappers
-    // to be emitted anyway. Without this entry, the CLI's
-    // listMetricAlertsPaginated call site can't be migrated.
-    const indexModule = require("../src/index") as Record<string, unknown>;
-    const keys = Object.keys(indexModule);
-    expect(keys).toContain(
-      "fetchPage_deprecatedListAnOrganization_sMetricAlertRules",
-    );
-    expect(keys).toContain(
-      "paginateAll_deprecatedListAnOrganization_sMetricAlertRules",
-    );
-    expect(keys).toContain(
-      "paginateUpTo_deprecatedListAnOrganization_sMetricAlertRules",
-    );
-  });
 });

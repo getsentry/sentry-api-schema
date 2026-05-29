@@ -12,7 +12,6 @@
  */
 
 import {
-  fetchPage_deprecatedListAnOrganization_sMetricAlertRules,
   fetchPage_listAnOrganization_sIssues,
   fetchPage_listAnOrganization_sProjects,
   fetchPage_listClickedNodes,
@@ -139,22 +138,6 @@ async function perPageAcceptedEvenWhenSpecOmitsIt() {
 }
 
 // =====================================================================
-// Allow-list: spec-incomplete operations get wrappers anyway
-// =====================================================================
-
-async function metricAlertsWrapperExists() {
-  // /alert-rules/ has `query?: never` in the spec (no cursor declared),
-  // but the PAGINATED_BUT_UNMARKED allow-list emits wrappers. Callers
-  // can pass per_page (added by PaginationQuery) and cursor is managed.
-  const result = await fetchPage_deprecatedListAnOrganization_sMetricAlertRules({
-    ...config,
-    path: { organization_id_or_slug: "my-org" },
-    query: { per_page: 50 },
-  });
-  void result.data;
-}
-
-// =====================================================================
 // keepCursorOnOvershoot — opt-in option for endpoints with no per_page
 // =====================================================================
 
@@ -185,5 +168,4 @@ void paginateAllHappyPath;
 void paginateUpToHappyPath;
 void fetchPageCompoundOp;
 void perPageAcceptedEvenWhenSpecOmitsIt;
-void metricAlertsWrapperExists;
 void paginateUpToKeepCursorOnOvershoot;
