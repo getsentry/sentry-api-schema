@@ -41622,6 +41622,149 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/{attachment_id}/": {
+      "get": {
+        "operationId": "Retrieve an Event Attachment",
+        "description": "Retrieve metadata for a single attachment on an event.\n\nRequires the `event-attachments` organization feature.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "event_id",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "description": "The ID of the event. It is a 32-character hexadecimal string as reported by the client.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "attachment_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The numeric ID of the attachment, as returned from the attachments list endpoint.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "event_id": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "headers": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "sha1": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "event_id",
+                    "headers",
+                    "id",
+                    "mimetype",
+                    "name",
+                    "sha1",
+                    "size",
+                    "type"
+                  ]
+                },
+                "examples": {
+                  "ReturnASingleEventAttachment": {
+                    "value": {
+                      "id": "1234",
+                      "event_id": "9b29bbe17e9d4ee3a6d0fe9b2e8a3b1c",
+                      "type": "event.attachment",
+                      "name": "screenshot.png",
+                      "mimetype": "image/png",
+                      "dateCreated": "2026-04-15T18:22:31Z",
+                      "size": 248137,
+                      "headers": {
+                        "Content-Type": "image/png"
+                      },
+                      "sha1": "d3f299af02d6abbe92dd8368bab781824a9702ed"
+                    },
+                    "summary": "Return a single event attachment"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/source-map-debug/": {
       "get": {
         "operationId": "Debug Issues Related to Source Maps for a Given Event",
@@ -70251,6 +70394,56 @@
           "id",
           "isHidden",
           "name"
+        ]
+      },
+      "EventAttachmentDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "event_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mimetype": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "sha1": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "dateCreated",
+          "event_id",
+          "headers",
+          "id",
+          "mimetype",
+          "name",
+          "sha1",
+          "size",
+          "type"
         ]
       },
       "EventIdLookupResponse": {
