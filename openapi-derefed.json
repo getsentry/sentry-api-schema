@@ -23507,6 +23507,285 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/profiling/flamegraph/": {
+      "get": {
+        "operationId": "Retrieve a Flamegraph for an Organization",
+        "description": "Retrieve an aggregated flamegraph for the organization, built from the\nrequested data source (transactions, profiles, functions, or spans).\n\nThe response is forwarded from Sentry's internal profiling service and includes\nper-profile shared frame tables, sample counts, platform metadata, and\noptionally flamegraph metrics when `expand=metrics` is passed.\n\nRequires the `profiling` organization feature.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "dataSource",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "functions",
+                "profiles",
+                "spans",
+                "transactions"
+              ]
+            },
+            "description": "Source dataset to build the flamegraph from. Defaults to `functions` when `fingerprint` is set and `transactions` otherwise."
+          },
+          {
+            "in": "query",
+            "name": "fingerprint",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A UInt32 function fingerprint. Only valid when `dataSource=functions`."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Sentry [search syntax](https://docs.sentry.io/concepts/search/) to filter the candidate profiles."
+          },
+          {
+            "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "metrics"
+                ]
+              }
+            },
+            "description": "Optional expansions. Pass `metrics` to include flamegraph metric aggregates in the response."
+          }
+        ],
+        "tags": [
+          "Profiling"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "ReturnAFlamegraphForTheOrganization": {
+                    "value": {
+                      "activeProfileIndex": 0,
+                      "metadata": {
+                        "deviceClassification": "",
+                        "deviceLocale": "",
+                        "deviceManufacturer": "",
+                        "deviceModel": "",
+                        "deviceOSName": "",
+                        "deviceOSVersion": "",
+                        "durationNS": 0,
+                        "organizationID": 0,
+                        "platform": "python",
+                        "profileID": "",
+                        "projectID": 0,
+                        "received": "2026-04-15T18:22:31Z",
+                        "sampled": false,
+                        "timestamp": "2026-04-15T18:22:31Z",
+                        "traceID": "",
+                        "transactionID": "",
+                        "transactionName": "GET /api/0/projects/{org}/{proj}/files/dsyms/",
+                        "version": ""
+                      },
+                      "platform": "python",
+                      "transactionName": "GET /api/0/projects/{org}/{proj}/files/dsyms/",
+                      "projectID": 1,
+                      "shared": {
+                        "frames": [
+                          {
+                            "name": "handle_request",
+                            "file": "app/web.py",
+                            "is_application": true,
+                            "line": 88,
+                            "fingerprint": 1111111111
+                          },
+                          {
+                            "name": "do_work",
+                            "file": "app/worker.py",
+                            "is_application": true,
+                            "line": 42,
+                            "fingerprint": 2222222222
+                          },
+                          {
+                            "name": "loads",
+                            "file": "json/__init__.py",
+                            "is_application": false,
+                            "line": 299,
+                            "fingerprint": 3333333333
+                          }
+                        ],
+                        "frame_infos": [
+                          {
+                            "count": 40,
+                            "weight": 40,
+                            "sumDuration": 4000000000,
+                            "sumSelfTime": 0,
+                            "p75Duration": 110000000,
+                            "p95Duration": 180000000,
+                            "p99Duration": 240000000
+                          },
+                          {
+                            "count": 40,
+                            "weight": 40,
+                            "sumDuration": 4000000000,
+                            "sumSelfTime": 1000000000,
+                            "p75Duration": 95000000,
+                            "p95Duration": 150000000,
+                            "p99Duration": 210000000
+                          },
+                          {
+                            "count": 30,
+                            "weight": 30,
+                            "sumDuration": 3000000000,
+                            "sumSelfTime": 3000000000,
+                            "p75Duration": 81000000,
+                            "p95Duration": 120000000,
+                            "p99Duration": 160000000
+                          }
+                        ],
+                        "profiles": [
+                          {
+                            "project_id": 1,
+                            "profile_id": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+                            "start": 1780084617.323,
+                            "end": 1780084617.8065438
+                          }
+                        ]
+                      },
+                      "profiles": [
+                        {
+                          "endValue": 40,
+                          "isMainThread": true,
+                          "name": "MainThread",
+                          "samples": [
+                            [
+                              0,
+                              1,
+                              2
+                            ],
+                            [
+                              0,
+                              1
+                            ]
+                          ],
+                          "sample_counts": [
+                            30,
+                            10
+                          ],
+                          "samples_examples": [
+                            [
+                              0
+                            ],
+                            [
+                              0
+                            ]
+                          ],
+                          "sample_durations_ns": [
+                            3000000000,
+                            1000000000
+                          ],
+                          "startValue": 0,
+                          "threadID": 1,
+                          "type": "sampled",
+                          "unit": "count",
+                          "weights": [
+                            30,
+                            10
+                          ]
+                        }
+                      ],
+                      "metrics": null
+                    },
+                    "summary": "Return a flamegraph for the organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/project-keys/": {
       "get": {
         "operationId": "List an Organization's Client Keys",
@@ -81258,6 +81537,10 @@
           "teams"
         ]
       },
+      "OrganizationProfilingFlamegraphResponse": {
+        "type": "object",
+        "additionalProperties": {}
+      },
       "OrganizationProjectResponseDict": {
         "type": "array",
         "items": {
@@ -88929,6 +89212,15 @@
       "externalDocs": {
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/snapshots/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Profiling",
+      "description": "Endpoints for retrieving profiling data, flamegraphs, and profile chunks",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/profiling/&template=api_error_template.md"
       }
     }
   ]
