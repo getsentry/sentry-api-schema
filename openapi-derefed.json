@@ -34522,6 +34522,715 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/trace/{trace_id}/": {
+      "get": {
+        "operationId": "Retrieve a Trace",
+        "description": "Retrieve the spans, errors, and (optionally) uptime checks that make up a single trace.\n\nThe response is a list of top-level events; each item may have nested `children`, `errors`,\nand `occurrences` arrays representing related items. Top-level entries are spans by default\nand may also be uptime checks when `include_uptime=1` is passed.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "trace_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the trace, a 32-character hexadecimal string.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "referrer",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Internal referrer identifier used for query tracing. Most clients can omit this."
+          },
+          {
+            "in": "query",
+            "name": "errorId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A 32-character hexadecimal event ID to bias the trace results toward including."
+          },
+          {
+            "in": "query",
+            "name": "additional_attributes",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Additional span attributes to include on each event. Repeat to request multiple."
+          },
+          {
+            "in": "query",
+            "name": "include_uptime",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ]
+            },
+            "description": "Set to `1` to include uptime check results in the trace. Defaults to `0`."
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "description": {
+                            "type": "string"
+                          },
+                          "event_id": {
+                            "type": "string"
+                          },
+                          "event_type": {
+                            "type": "string"
+                          },
+                          "project_id": {
+                            "type": "integer"
+                          },
+                          "project_slug": {
+                            "type": "string"
+                          },
+                          "transaction": {
+                            "type": "string"
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "description": {
+                                  "type": "string"
+                                },
+                                "event_id": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "type": "string"
+                                },
+                                "project_id": {
+                                  "type": "integer"
+                                },
+                                "project_slug": {
+                                  "type": "string"
+                                },
+                                "transaction": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "description",
+                                "event_id",
+                                "event_type",
+                                "project_id",
+                                "project_slug",
+                                "transaction"
+                              ]
+                            }
+                          },
+                          "errors": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "description": {
+                                  "type": "string"
+                                },
+                                "event_id": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "type": "string"
+                                },
+                                "project_id": {
+                                  "type": "integer"
+                                },
+                                "project_slug": {
+                                  "type": "string"
+                                },
+                                "transaction": {
+                                  "type": "string"
+                                },
+                                "issue_id": {
+                                  "type": "integer"
+                                },
+                                "level": {
+                                  "type": "string"
+                                },
+                                "start_timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "end_timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "culprit": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "short_id": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "issue_type": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "culprit",
+                                "description",
+                                "event_id",
+                                "event_type",
+                                "issue_id",
+                                "issue_type",
+                                "level",
+                                "project_id",
+                                "project_slug",
+                                "short_id",
+                                "start_timestamp",
+                                "transaction"
+                              ]
+                            }
+                          },
+                          "occurrences": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "description": {
+                                  "type": "string"
+                                },
+                                "event_id": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "type": "string"
+                                },
+                                "project_id": {
+                                  "type": "integer"
+                                },
+                                "project_slug": {
+                                  "type": "string"
+                                },
+                                "transaction": {
+                                  "type": "string"
+                                },
+                                "issue_id": {
+                                  "type": "integer"
+                                },
+                                "level": {
+                                  "type": "string"
+                                },
+                                "start_timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "end_timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "culprit": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "short_id": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "issue_type": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "culprit",
+                                "description",
+                                "event_id",
+                                "event_type",
+                                "issue_id",
+                                "issue_type",
+                                "level",
+                                "project_id",
+                                "project_slug",
+                                "short_id",
+                                "start_timestamp",
+                                "transaction"
+                              ]
+                            }
+                          },
+                          "duration": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "end_timestamp": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "measurements": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "op": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "parent_span_id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "profile_id": {
+                            "type": "string"
+                          },
+                          "profiler_id": {
+                            "type": "string"
+                          },
+                          "sdk_name": {
+                            "type": "string"
+                          },
+                          "start_timestamp": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "is_transaction": {
+                            "type": "boolean"
+                          },
+                          "transaction_id": {
+                            "type": "string"
+                          },
+                          "additional_attributes": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "required": [
+                          "children",
+                          "description",
+                          "duration",
+                          "end_timestamp",
+                          "errors",
+                          "event_id",
+                          "event_type",
+                          "is_transaction",
+                          "measurements",
+                          "name",
+                          "occurrences",
+                          "op",
+                          "parent_span_id",
+                          "profile_id",
+                          "profiler_id",
+                          "project_id",
+                          "project_slug",
+                          "sdk_name",
+                          "start_timestamp",
+                          "transaction",
+                          "transaction_id"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "description": {
+                            "type": "string"
+                          },
+                          "event_id": {
+                            "type": "string"
+                          },
+                          "event_type": {
+                            "type": "string"
+                          },
+                          "project_id": {
+                            "type": "integer"
+                          },
+                          "project_slug": {
+                            "type": "string"
+                          },
+                          "transaction": {
+                            "type": "string"
+                          },
+                          "issue_id": {
+                            "type": "integer"
+                          },
+                          "level": {
+                            "type": "string"
+                          },
+                          "start_timestamp": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "end_timestamp": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "culprit": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "short_id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "issue_type": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "culprit",
+                          "description",
+                          "event_id",
+                          "event_type",
+                          "issue_id",
+                          "issue_type",
+                          "level",
+                          "project_id",
+                          "project_slug",
+                          "short_id",
+                          "start_timestamp",
+                          "transaction"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "description": {
+                            "type": "string"
+                          },
+                          "event_id": {
+                            "type": "string"
+                          },
+                          "event_type": {
+                            "type": "string"
+                          },
+                          "project_id": {
+                            "type": "integer"
+                          },
+                          "project_slug": {
+                            "type": "string"
+                          },
+                          "transaction": {
+                            "type": "string"
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "description": {
+                                  "type": "string"
+                                },
+                                "event_id": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "type": "string"
+                                },
+                                "project_id": {
+                                  "type": "integer"
+                                },
+                                "project_slug": {
+                                  "type": "string"
+                                },
+                                "transaction": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "description",
+                                "event_id",
+                                "event_type",
+                                "project_id",
+                                "project_slug",
+                                "transaction"
+                              ]
+                            }
+                          },
+                          "errors": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "description": {
+                                  "type": "string"
+                                },
+                                "event_id": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "type": "string"
+                                },
+                                "project_id": {
+                                  "type": "integer"
+                                },
+                                "project_slug": {
+                                  "type": "string"
+                                },
+                                "transaction": {
+                                  "type": "string"
+                                },
+                                "issue_id": {
+                                  "type": "integer"
+                                },
+                                "level": {
+                                  "type": "string"
+                                },
+                                "start_timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "end_timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "culprit": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "short_id": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "issue_type": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "culprit",
+                                "description",
+                                "event_id",
+                                "event_type",
+                                "issue_id",
+                                "issue_type",
+                                "level",
+                                "project_id",
+                                "project_slug",
+                                "short_id",
+                                "start_timestamp",
+                                "transaction"
+                              ]
+                            }
+                          },
+                          "occurrences": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "description": {
+                                  "type": "string"
+                                },
+                                "event_id": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "type": "string"
+                                },
+                                "project_id": {
+                                  "type": "integer"
+                                },
+                                "project_slug": {
+                                  "type": "string"
+                                },
+                                "transaction": {
+                                  "type": "string"
+                                },
+                                "issue_id": {
+                                  "type": "integer"
+                                },
+                                "level": {
+                                  "type": "string"
+                                },
+                                "start_timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "end_timestamp": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "culprit": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "short_id": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "issue_type": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "culprit",
+                                "description",
+                                "event_id",
+                                "event_type",
+                                "issue_id",
+                                "issue_type",
+                                "level",
+                                "project_id",
+                                "project_slug",
+                                "short_id",
+                                "start_timestamp",
+                                "transaction"
+                              ]
+                            }
+                          },
+                          "transaction_id": {
+                            "type": "string"
+                          },
+                          "op": {
+                            "type": "string"
+                          },
+                          "start_timestamp": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "end_timestamp": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "duration": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "region_name": {
+                            "type": "string"
+                          },
+                          "additional_attributes": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "required": [
+                          "additional_attributes",
+                          "children",
+                          "description",
+                          "duration",
+                          "end_timestamp",
+                          "errors",
+                          "event_id",
+                          "event_type",
+                          "name",
+                          "occurrences",
+                          "op",
+                          "project_id",
+                          "project_slug",
+                          "region_name",
+                          "start_timestamp",
+                          "transaction",
+                          "transaction_id"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "examples": {
+                  "ReturnTheSpans,Errors,AndOccurrencesOfATrace": {
+                    "value": [
+                      {
+                        "event_id": "0123456789abcdef0123456789abcdef",
+                        "event_type": "span",
+                        "transaction_id": "280027d94f30428c83a2de46f932612a",
+                        "project_id": 4505281256090153,
+                        "project_slug": "javascript",
+                        "transaction": "POST /api/0/projects/{org}/{proj}/events/{event_id}/attachments/",
+                        "description": "POST /api/0/projects/{org}/{proj}/events/{event_id}/attachments/",
+                        "op": "http.server",
+                        "name": "http.server",
+                        "parent_span_id": null,
+                        "profile_id": "",
+                        "profiler_id": "",
+                        "sdk_name": "sentry.python",
+                        "is_transaction": true,
+                        "start_timestamp": "2026-04-15T18:22:31.000000Z",
+                        "end_timestamp": "2026-04-15T18:22:31.250000Z",
+                        "duration": 250,
+                        "measurements": {},
+                        "children": [],
+                        "errors": [],
+                        "occurrences": []
+                      }
+                    ],
+                    "summary": "Return the spans, errors, and occurrences of a trace"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/user-teams/": {
       "get": {
         "operationId": "List a User's Teams for an Organization",
@@ -82480,6 +83189,564 @@
           "spansCountMap",
           "transactionChildCountMap"
         ]
+      },
+      "OrganizationTraceResponse": {
+        "type": "array",
+        "items": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "event_id": {
+                  "type": "string"
+                },
+                "event_type": {
+                  "type": "string"
+                },
+                "project_id": {
+                  "type": "integer"
+                },
+                "project_slug": {
+                  "type": "string"
+                },
+                "transaction": {
+                  "type": "string"
+                },
+                "children": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "type": "string"
+                      },
+                      "event_id": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "integer"
+                      },
+                      "project_slug": {
+                        "type": "string"
+                      },
+                      "transaction": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "description",
+                      "event_id",
+                      "event_type",
+                      "project_id",
+                      "project_slug",
+                      "transaction"
+                    ]
+                  }
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "type": "string"
+                      },
+                      "event_id": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "integer"
+                      },
+                      "project_slug": {
+                        "type": "string"
+                      },
+                      "transaction": {
+                        "type": "string"
+                      },
+                      "issue_id": {
+                        "type": "integer"
+                      },
+                      "level": {
+                        "type": "string"
+                      },
+                      "start_timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "end_timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "culprit": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "short_id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "issue_type": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "culprit",
+                      "description",
+                      "event_id",
+                      "event_type",
+                      "issue_id",
+                      "issue_type",
+                      "level",
+                      "project_id",
+                      "project_slug",
+                      "short_id",
+                      "start_timestamp",
+                      "transaction"
+                    ]
+                  }
+                },
+                "occurrences": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "type": "string"
+                      },
+                      "event_id": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "integer"
+                      },
+                      "project_slug": {
+                        "type": "string"
+                      },
+                      "transaction": {
+                        "type": "string"
+                      },
+                      "issue_id": {
+                        "type": "integer"
+                      },
+                      "level": {
+                        "type": "string"
+                      },
+                      "start_timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "end_timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "culprit": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "short_id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "issue_type": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "culprit",
+                      "description",
+                      "event_id",
+                      "event_type",
+                      "issue_id",
+                      "issue_type",
+                      "level",
+                      "project_id",
+                      "project_slug",
+                      "short_id",
+                      "start_timestamp",
+                      "transaction"
+                    ]
+                  }
+                },
+                "duration": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "end_timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "measurements": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "op": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "parent_span_id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "profile_id": {
+                  "type": "string"
+                },
+                "profiler_id": {
+                  "type": "string"
+                },
+                "sdk_name": {
+                  "type": "string"
+                },
+                "start_timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "is_transaction": {
+                  "type": "boolean"
+                },
+                "transaction_id": {
+                  "type": "string"
+                },
+                "additional_attributes": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "children",
+                "description",
+                "duration",
+                "end_timestamp",
+                "errors",
+                "event_id",
+                "event_type",
+                "is_transaction",
+                "measurements",
+                "name",
+                "occurrences",
+                "op",
+                "parent_span_id",
+                "profile_id",
+                "profiler_id",
+                "project_id",
+                "project_slug",
+                "sdk_name",
+                "start_timestamp",
+                "transaction",
+                "transaction_id"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "event_id": {
+                  "type": "string"
+                },
+                "event_type": {
+                  "type": "string"
+                },
+                "project_id": {
+                  "type": "integer"
+                },
+                "project_slug": {
+                  "type": "string"
+                },
+                "transaction": {
+                  "type": "string"
+                },
+                "issue_id": {
+                  "type": "integer"
+                },
+                "level": {
+                  "type": "string"
+                },
+                "start_timestamp": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "end_timestamp": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "culprit": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "short_id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "issue_type": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "culprit",
+                "description",
+                "event_id",
+                "event_type",
+                "issue_id",
+                "issue_type",
+                "level",
+                "project_id",
+                "project_slug",
+                "short_id",
+                "start_timestamp",
+                "transaction"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "event_id": {
+                  "type": "string"
+                },
+                "event_type": {
+                  "type": "string"
+                },
+                "project_id": {
+                  "type": "integer"
+                },
+                "project_slug": {
+                  "type": "string"
+                },
+                "transaction": {
+                  "type": "string"
+                },
+                "children": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "type": "string"
+                      },
+                      "event_id": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "integer"
+                      },
+                      "project_slug": {
+                        "type": "string"
+                      },
+                      "transaction": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "description",
+                      "event_id",
+                      "event_type",
+                      "project_id",
+                      "project_slug",
+                      "transaction"
+                    ]
+                  }
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "type": "string"
+                      },
+                      "event_id": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "integer"
+                      },
+                      "project_slug": {
+                        "type": "string"
+                      },
+                      "transaction": {
+                        "type": "string"
+                      },
+                      "issue_id": {
+                        "type": "integer"
+                      },
+                      "level": {
+                        "type": "string"
+                      },
+                      "start_timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "end_timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "culprit": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "short_id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "issue_type": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "culprit",
+                      "description",
+                      "event_id",
+                      "event_type",
+                      "issue_id",
+                      "issue_type",
+                      "level",
+                      "project_id",
+                      "project_slug",
+                      "short_id",
+                      "start_timestamp",
+                      "transaction"
+                    ]
+                  }
+                },
+                "occurrences": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "type": "string"
+                      },
+                      "event_id": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "integer"
+                      },
+                      "project_slug": {
+                        "type": "string"
+                      },
+                      "transaction": {
+                        "type": "string"
+                      },
+                      "issue_id": {
+                        "type": "integer"
+                      },
+                      "level": {
+                        "type": "string"
+                      },
+                      "start_timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "end_timestamp": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "culprit": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "short_id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "issue_type": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "culprit",
+                      "description",
+                      "event_id",
+                      "event_type",
+                      "issue_id",
+                      "issue_type",
+                      "level",
+                      "project_id",
+                      "project_slug",
+                      "short_id",
+                      "start_timestamp",
+                      "transaction"
+                    ]
+                  }
+                },
+                "transaction_id": {
+                  "type": "string"
+                },
+                "op": {
+                  "type": "string"
+                },
+                "start_timestamp": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "end_timestamp": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "duration": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "region_name": {
+                  "type": "string"
+                },
+                "additional_attributes": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "additional_attributes",
+                "children",
+                "description",
+                "duration",
+                "end_timestamp",
+                "errors",
+                "event_id",
+                "event_type",
+                "name",
+                "occurrences",
+                "op",
+                "project_id",
+                "project_slug",
+                "region_name",
+                "start_timestamp",
+                "transaction",
+                "transaction_id"
+              ]
+            }
+          ]
+        }
       },
       "OrganizationWithProjectsAndTeams": {
         "type": "object",
