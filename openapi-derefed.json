@@ -34073,6 +34073,176 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/trace-meta/{trace_id}/": {
+      "get": {
+        "operationId": "Retrieve Trace Metadata",
+        "description": "Retrieve aggregate metadata for a single trace, including counts of spans,\nerrors, performance issues, logs, and metrics, along with per-span-operation\nand per-transaction child-count breakdowns.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "trace_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the trace, a 32-character hexadecimal string.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "include_uptime",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ]
+            },
+            "description": "Set to `1` to include uptime check counts in the response. Defaults to `0` (disabled)."
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uptimeCount": {
+                      "type": "integer"
+                    },
+                    "errorsCount": {
+                      "type": "integer"
+                    },
+                    "logsCount": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "metricsCount": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "performanceIssuesCount": {
+                      "type": "integer"
+                    },
+                    "spansCount": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "transactionChildCountMap": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "spansCountMap": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errorsCount",
+                    "logsCount",
+                    "metricsCount",
+                    "performanceIssuesCount",
+                    "spansCount",
+                    "spansCountMap",
+                    "transactionChildCountMap"
+                  ]
+                },
+                "examples": {
+                  "ReturnAggregateMetadataForATrace": {
+                    "value": {
+                      "errorsCount": 0,
+                      "logsCount": 5,
+                      "metricsCount": 0,
+                      "performanceIssuesCount": 0,
+                      "spansCount": 195,
+                      "transactionChildCountMap": [
+                        {
+                          "transaction.event_id": "280027d94f30428c83a2de46f932612a",
+                          "count()": 7
+                        },
+                        {
+                          "transaction.event_id": "66087f4e87c847759db67fd62e32829c",
+                          "count()": 38
+                        }
+                      ],
+                      "spansCountMap": {
+                        "db": 58,
+                        "cache.get": 56,
+                        "http.server": 6
+                      }
+                    },
+                    "summary": "Return aggregate metadata for a trace"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/user-teams/": {
       "get": {
         "operationId": "List a User's Teams for an Organization",
@@ -82022,6 +82192,55 @@
           "require2FA",
           "slug",
           "status"
+        ]
+      },
+      "OrganizationTraceMetaResponse": {
+        "type": "object",
+        "properties": {
+          "uptimeCount": {
+            "type": "integer"
+          },
+          "errorsCount": {
+            "type": "integer"
+          },
+          "logsCount": {
+            "type": "number",
+            "format": "double"
+          },
+          "metricsCount": {
+            "type": "number",
+            "format": "double"
+          },
+          "performanceIssuesCount": {
+            "type": "integer"
+          },
+          "spansCount": {
+            "type": "number",
+            "format": "double"
+          },
+          "transactionChildCountMap": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "spansCountMap": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "required": [
+          "errorsCount",
+          "logsCount",
+          "metricsCount",
+          "performanceIssuesCount",
+          "spansCount",
+          "spansCountMap",
+          "transactionChildCountMap"
         ]
       },
       "OrganizationWithProjectsAndTeams": {
