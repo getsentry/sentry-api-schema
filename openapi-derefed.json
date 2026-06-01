@@ -33862,6 +33862,226 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/trace-items/attributes/": {
+      "get": {
+        "operationId": "List Trace Item Attributes",
+        "description": "List the attribute keys available on a given trace item dataset (spans, logs,\ntrace metrics, etc.), with optional substring and structured filtering.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "dataset",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "logs",
+                "preprod",
+                "processing_errors",
+                "spans",
+                "tracemetrics"
+              ]
+            },
+            "description": "The trace item dataset to list attributes for. One of `itemType` or `dataset` is required."
+          },
+          {
+            "in": "query",
+            "name": "itemType",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "logs",
+                "preprod",
+                "processing_errors",
+                "spans",
+                "tracemetrics"
+              ]
+            },
+            "description": "Deprecated alias of `dataset`. Use `dataset` instead.",
+            "deprecated": true
+          },
+          {
+            "in": "query",
+            "name": "attributeType",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "boolean",
+                  "number",
+                  "string"
+                ]
+              }
+            },
+            "description": "Filter to attributes of one or more types. Defaults to all types."
+          },
+          {
+            "in": "query",
+            "name": "substringMatch",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Restrict results to attribute names containing this substring (case-sensitive)."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Sentry [search syntax](https://docs.sentry.io/concepts/search/) to filter trace items before computing attributes."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "secondaryAliases": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "attributeSource": {
+                        "type": "object",
+                        "properties": {
+                          "source_type": {
+                            "enum": [
+                              "sentry",
+                              "user"
+                            ],
+                            "type": "string"
+                          },
+                          "is_transformed_alias": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "source_type"
+                        ]
+                      },
+                      "attributeType": {
+                        "enum": [
+                          "string",
+                          "number",
+                          "boolean"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "attributeSource",
+                      "attributeType",
+                      "key",
+                      "name"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ReturnAListOfTraceItemAttributeKeys": {
+                    "value": [
+                      {
+                        "key": "device.class",
+                        "name": "device.class",
+                        "attributeSource": {
+                          "source_type": "sentry"
+                        },
+                        "attributeType": "string"
+                      },
+                      {
+                        "key": "tags[Batch Size,number]",
+                        "name": "Batch Size",
+                        "attributeSource": {
+                          "source_type": "user"
+                        },
+                        "attributeType": "number"
+                      }
+                    ],
+                    "summary": "Return a list of trace item attribute keys"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/user-teams/": {
       "get": {
         "operationId": "List a User's Teams for an Organization",
@@ -75180,6 +75400,58 @@
             "slug",
             "team",
             "teams"
+          ]
+        }
+      },
+      "ListTraceItemAttributesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "secondaryAliases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "attributeSource": {
+              "type": "object",
+              "properties": {
+                "source_type": {
+                  "enum": [
+                    "sentry",
+                    "user"
+                  ],
+                  "type": "string"
+                },
+                "is_transformed_alias": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "source_type"
+              ]
+            },
+            "attributeType": {
+              "enum": [
+                "string",
+                "number",
+                "boolean"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "attributeSource",
+            "attributeType",
+            "key",
+            "name"
           ]
         }
       },
