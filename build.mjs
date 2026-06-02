@@ -23,8 +23,9 @@ await createClient({
   ],
 });
 
-// 2. Copy hand-written pagination utilities into the generated src/ directory
+// 2. Copy hand-written utilities into the generated src/ directory
 cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
+cpSync("lib/browser-client.ts", "src/browser-client.ts");
 
 // 3. Generate per-operation pagination wrappers from the SDK output + spec.
 //    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
@@ -47,17 +48,17 @@ appendFileSync(
   ].join("\n"),
 );
 
-// 5. Create a standalone Zod entry point that re-exports the generated schemas.
-//    This lets consumers import from "@sentry/api/zod" without pulling zod into
+// 5. Create standalone entry points.
+//    zod: lets consumers import from "@sentry/api/zod" without pulling zod into
 //    code that only needs the SDK types and functions.
-writeFileSync(
-  "src/zod.ts",
-  'export * from "./zod.gen.ts";\n',
-);
+//    browser: CSRF + cookie auth helpers for browser/frontend use.
+writeFileSync("src/zod.ts", 'export * from "./zod.gen.ts";\n');
+writeFileSync("src/browser.ts", 'export * from "./browser-client.ts";\n');
 
 // 6. Bundle into JS files and emit type declarations.
 //    The main entry stays self-contained (zero runtime deps).
 //    The Zod entry externalises "zod" — consumers provide it themselves.
 execSync("bun build src/index.ts --outdir dist", { stdio: "inherit" });
 execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
+execSync("bun build src/browser.ts --outdir dist", { stdio: "inherit" });
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });
