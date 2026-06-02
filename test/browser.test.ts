@@ -1,10 +1,10 @@
 import {describe, expect, it} from 'bun:test';
-import {createBrowserFetch, createBrowserSdkConfig} from '../lib/browser-client.ts';
+import {createBrowserFetch, createBrowserSdkConfig, type FetchFn} from '../lib/browser-client.ts';
 
 // Helper to capture headers/init from a fetch call
-function captureFetch(): {mock: typeof fetch; captured: {headers?: Headers; init?: RequestInit}} {
+function captureFetch(): {mock: FetchFn; captured: {headers?: Headers; init?: RequestInit}} {
   const captured: {headers?: Headers; init?: RequestInit} = {};
-  const mock: typeof fetch = async (_input, init) => {
+  const mock: FetchFn = async (_input, init) => {
     captured.headers = new Headers(init?.headers);
     captured.init = init;
     return new Response('{}', {status: 200});
@@ -12,9 +12,9 @@ function captureFetch(): {mock: typeof fetch; captured: {headers?: Headers; init
   return {mock, captured};
 }
 
-async function withMockFetch<T>(mock: typeof fetch, fn: () => Promise<T>): Promise<T> {
+async function withMockFetch<T>(mock: FetchFn, fn: () => Promise<T>): Promise<T> {
   const original = globalThis.fetch;
-  globalThis.fetch = mock;
+  globalThis.fetch = mock as typeof fetch;
   try {
     return await fn();
   } finally {

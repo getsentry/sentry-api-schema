@@ -9,7 +9,7 @@
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS', 'TRACE']);
 
 /** Matches the standard fetch signature without Bun/Node runtime extensions. */
-type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+export type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
 export type BrowserClientOptions = {
   /** Cookie name to read the CSRF token from. Defaults to 'sc' (Sentry's Django default). */
