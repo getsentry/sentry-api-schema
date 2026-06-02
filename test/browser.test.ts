@@ -116,6 +116,36 @@ describe('createBrowserFetch', () => {
     expect(captured.headers?.get('X-CSRFToken')).toBeNull();
   });
 
+  it('injects X-CSRFToken when input is a URL object with POST in init', async () => {
+    const {mock, captured} = captureFetch();
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
+    await withMockFetch(mock, () =>
+      browserFetch(new URL('https://sentry.io/api/0/projects/'), {method: 'POST'}),
+    );
+    expect(captured.headers?.get('X-CSRFToken')).toBe('token');
+  });
+
+  it('preserves Request headers when init provides method but no headers', async () => {
+    const {mock, captured} = captureFetch();
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
+    const request = new Request('https://sentry.io/api/0/projects/my-proj/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+    });
+    await withMockFetch(mock, () => browserFetch(request, {method: 'PUT'}));
+    expect(captured.headers?.get('Content-Type')).toBe('application/json');
+    expect(captured.headers?.get('X-CSRFToken')).toBe('token');
+  });
+
+  it('injects X-CSRFToken when init.method is lowercase', async () => {
+    const {mock, captured} = captureFetch();
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
+    await withMockFetch(mock, () =>
+      browserFetch('/api/0/projects/', {method: 'post' as RequestInit['method']}),
+    );
+    expect(captured.headers?.get('X-CSRFToken')).toBe('token');
+  });
+
   it('does not inject empty CSRF token', async () => {
     const {mock, captured} = captureFetch();
     const browserFetch = createBrowserFetch({getCsrfToken: () => ''});
