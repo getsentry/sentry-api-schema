@@ -47,7 +47,9 @@ export function createBrowserFetch(opts: BrowserClientOptions = {}): FetchFn {
   const getCsrf = opts.getCsrfToken ?? (() => readCookie(opts.csrfCookieName ?? 'sc'));
 
   return (input, init) => {
-    const method = (init?.method ?? 'GET').toUpperCase();
+    // init.method takes precedence; fall back to the Request object's method if
+    // input is a Request, then to 'GET' — mirrors the Fetch spec resolution order.
+    const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase();
     const headers = new Headers(init?.headers);
     if (!SAFE_METHODS.has(method)) {
       const token = getCsrf();

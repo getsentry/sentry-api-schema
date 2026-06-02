@@ -72,6 +72,23 @@ describe('createBrowserFetch', () => {
     expect(captured.headers?.get('X-CSRFToken')).toBeNull();
   });
 
+  it('injects X-CSRFToken when input is a Request object with POST method', async () => {
+    const {mock, captured} = captureFetch();
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
+    // Must use a full URL — relative paths are invalid in the Request constructor in Node/Bun.
+    const request = new Request('https://sentry.io/api/0/projects/', {method: 'POST'});
+    await withMockFetch(mock, () => browserFetch(request));
+    expect(captured.headers?.get('X-CSRFToken')).toBe('token');
+  });
+
+  it('does not inject X-CSRFToken when input is a Request object with GET method', async () => {
+    const {mock, captured} = captureFetch();
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
+    const request = new Request('https://sentry.io/api/0/projects/');
+    await withMockFetch(mock, () => browserFetch(request));
+    expect(captured.headers?.get('X-CSRFToken')).toBeNull();
+  });
+
   it('does not inject empty CSRF token', async () => {
     const {mock, captured} = captureFetch();
     const browserFetch = createBrowserFetch({getCsrfToken: () => ''});
