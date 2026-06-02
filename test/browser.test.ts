@@ -140,9 +140,7 @@ describe('createBrowserFetch', () => {
   it('injects X-CSRFToken when init.method is lowercase', async () => {
     const {mock, captured} = captureFetch();
     const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
-    await withMockFetch(mock, () =>
-      browserFetch('/api/0/projects/', {method: 'post' as RequestInit['method']}),
-    );
+    await withMockFetch(mock, () => browserFetch('/api/0/projects/', {method: 'post'}));
     expect(captured.headers?.get('X-CSRFToken')).toBe('token');
   });
 
