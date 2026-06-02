@@ -81,6 +81,33 @@ describe('createBrowserFetch', () => {
     expect(captured.headers?.get('X-CSRFToken')).toBe('token');
   });
 
+  it('preserves Request object headers when no init.headers is provided', async () => {
+    const {mock, captured} = captureFetch();
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
+    const request = new Request('https://sentry.io/api/0/projects/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-Custom': 'value'},
+    });
+    await withMockFetch(mock, () => browserFetch(request));
+    expect(captured.headers?.get('Content-Type')).toBe('application/json');
+    expect(captured.headers?.get('X-Custom')).toBe('value');
+    expect(captured.headers?.get('X-CSRFToken')).toBe('token');
+  });
+
+  it('uses init.headers over Request object headers when both are provided', async () => {
+    const {mock, captured} = captureFetch();
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
+    const request = new Request('https://sentry.io/api/0/projects/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+    });
+    await withMockFetch(mock, () =>
+      browserFetch(request, {headers: {'Content-Type': 'text/plain'}}),
+    );
+    // init.headers wins — matches native fetch spec behavior
+    expect(captured.headers?.get('Content-Type')).toBe('text/plain');
+  });
+
   it('does not inject X-CSRFToken when input is a Request object with GET method', async () => {
     const {mock, captured} = captureFetch();
     const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});

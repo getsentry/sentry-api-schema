@@ -50,7 +50,11 @@ export function createBrowserFetch(opts: BrowserClientOptions = {}): FetchFn {
     // init.method takes precedence; fall back to the Request object's method if
     // input is a Request, then to 'GET' — mirrors the Fetch spec resolution order.
     const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase();
-    const headers = new Headers(init?.headers);
+    // Seed headers from the Request object when init provides none; otherwise
+    // init.headers wins (Fetch spec: init completely replaces Request headers).
+    const headers = new Headers(
+      init?.headers ?? (input instanceof Request ? input.headers : undefined),
+    );
     if (!SAFE_METHODS.has(method)) {
       const token = getCsrf();
       if (token) headers.set('X-CSRFToken', token);
