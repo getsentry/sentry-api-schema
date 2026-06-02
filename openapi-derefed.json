@@ -23507,6 +23507,157 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/profiling/chunks/": {
+      "get": {
+        "operationId": "Retrieve Profile Chunks for an Organization",
+        "description": "Retrieve continuous profiling data for a profiler over a time range.\n\nExactly one project must be specified via the `project` query parameter.\n\nRequires continuous profiling to be enabled for the organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the project to fetch chunks for. Exactly one project must be specified.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "profiler_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The continuous-profiler ID to fetch chunks for.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          }
+        ],
+        "tags": [
+          "Profiling"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "examples": {
+                  "ReturnContinuous-profileChunksForAProfiler": {
+                    "value": {
+                      "chunk": {
+                        "chunk_id": "0123456789abcdef0123456789abcdef",
+                        "profiler_id": "fedcba9876543210fedcba9876543210",
+                        "project_id": 1,
+                        "organization_id": 1,
+                        "environment": "production",
+                        "platform": "python",
+                        "release": "1.0.0",
+                        "received": 1779957840,
+                        "retention_days": 30,
+                        "version": "2",
+                        "profile": {
+                          "samples": [
+                            {
+                              "stack_id": 0,
+                              "thread_id": "1",
+                              "timestamp": 1779957840
+                            }
+                          ],
+                          "stacks": [
+                            [
+                              0,
+                              1
+                            ]
+                          ],
+                          "frames": [
+                            {
+                              "function": "main",
+                              "module": "app.main",
+                              "in_app": true,
+                              "lineno": 10
+                            },
+                            {
+                              "function": "do_work",
+                              "module": "app.worker",
+                              "in_app": true,
+                              "lineno": 42
+                            }
+                          ],
+                          "thread_metadata": {
+                            "1": {
+                              "name": "MainThread"
+                            }
+                          }
+                        }
+                      },
+                      "debug_chunk_ids": [
+                        "0123456789abcdef0123456789abcdef"
+                      ]
+                    },
+                    "summary": "Return continuous-profile chunks for a profiler"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/profiling/flamegraph/": {
       "get": {
         "operationId": "Retrieve a Flamegraph for an Organization",
@@ -82417,6 +82568,10 @@
           "teamRoles",
           "teams"
         ]
+      },
+      "OrganizationProfilingChunksResponse": {
+        "type": "object",
+        "additionalProperties": {}
       },
       "OrganizationProfilingFlamegraphResponse": {
         "type": "object",
