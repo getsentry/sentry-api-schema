@@ -42904,6 +42904,440 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/source-map-debug/": {
+      "get": {
+        "operationId": "Get Debug Information Related to Source Maps for a Given Event",
+        "description": "Return a list of source map errors for a given event.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "event_id",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "description": "The ID of the event. It is a 32-character hexadecimal string as reported by the client.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dist": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "release": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "exceptions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "frames": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "debug_id_process": {
+                                  "type": "object",
+                                  "properties": {
+                                    "debug_id": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "uploaded_source_file_with_correct_debug_id": {
+                                      "type": "boolean"
+                                    },
+                                    "uploaded_source_map_with_correct_debug_id": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "debug_id",
+                                    "uploaded_source_file_with_correct_debug_id",
+                                    "uploaded_source_map_with_correct_debug_id"
+                                  ]
+                                },
+                                "release_process": {
+                                  "type": "object",
+                                  "properties": {
+                                    "abs_path": {
+                                      "type": "string"
+                                    },
+                                    "matching_source_file_names": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "matching_source_map_name": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "source_map_reference": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "source_file_lookup_result": {
+                                      "enum": [
+                                        "found",
+                                        "wrong-dist",
+                                        "unsuccessful"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "source_map_lookup_result": {
+                                      "enum": [
+                                        "found",
+                                        "wrong-dist",
+                                        "unsuccessful"
+                                      ],
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "abs_path",
+                                    "matching_source_file_names",
+                                    "matching_source_map_name",
+                                    "source_file_lookup_result",
+                                    "source_map_lookup_result",
+                                    "source_map_reference"
+                                  ],
+                                  "nullable": true
+                                },
+                                "scraping_process": {
+                                  "type": "object",
+                                  "properties": {
+                                    "source_file": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "status": {
+                                              "enum": [
+                                                "success"
+                                              ],
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "status",
+                                            "url"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "status": {
+                                              "enum": [
+                                                "not_attempted"
+                                              ],
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "status",
+                                            "url"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "status": {
+                                              "enum": [
+                                                "failure"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "reason": {
+                                              "enum": [
+                                                "not_found",
+                                                "disabled",
+                                                "invalid_host",
+                                                "permission_denied",
+                                                "timeout",
+                                                "download_error",
+                                                "other"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "details": {
+                                              "type": "string",
+                                              "nullable": true
+                                            }
+                                          },
+                                          "required": [
+                                            "details",
+                                            "reason",
+                                            "status",
+                                            "url"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "nullable": true
+                                        }
+                                      ]
+                                    },
+                                    "source_map": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "status": {
+                                              "enum": [
+                                                "success"
+                                              ],
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "status",
+                                            "url"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "status": {
+                                              "enum": [
+                                                "not_attempted"
+                                              ],
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "status",
+                                            "url"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "status": {
+                                              "enum": [
+                                                "failure"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "reason": {
+                                              "enum": [
+                                                "not_found",
+                                                "disabled",
+                                                "invalid_host",
+                                                "permission_denied",
+                                                "timeout",
+                                                "download_error",
+                                                "other"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "details": {
+                                              "type": "string",
+                                              "nullable": true
+                                            }
+                                          },
+                                          "required": [
+                                            "details",
+                                            "reason",
+                                            "status",
+                                            "url"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "nullable": true
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "source_file",
+                                    "source_map"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "debug_id_process",
+                                "release_process",
+                                "scraping_process"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "frames"
+                        ]
+                      }
+                    },
+                    "has_debug_ids": {
+                      "type": "boolean"
+                    },
+                    "min_debug_id_sdk_version": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "sdk_version": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "project_has_some_artifact_bundle": {
+                      "type": "boolean"
+                    },
+                    "release_has_some_artifact": {
+                      "type": "boolean"
+                    },
+                    "has_uploaded_some_artifact_with_a_debug_id": {
+                      "type": "boolean"
+                    },
+                    "sdk_debug_id_support": {
+                      "enum": [
+                        "not-supported",
+                        "unofficial-sdk",
+                        "needs-upgrade",
+                        "full"
+                      ],
+                      "type": "string"
+                    },
+                    "has_scraping_data": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "dist",
+                    "exceptions",
+                    "has_debug_ids",
+                    "has_scraping_data",
+                    "has_uploaded_some_artifact_with_a_debug_id",
+                    "min_debug_id_sdk_version",
+                    "project_has_some_artifact_bundle",
+                    "release",
+                    "release_has_some_artifact",
+                    "sdk_debug_id_support",
+                    "sdk_version"
+                  ]
+                },
+                "examples": {
+                  "SourceMapDebugInformationForAnEvent": {
+                    "value": {
+                      "dist": "1.0.0",
+                      "release": "frontend@1.0.0",
+                      "exceptions": [
+                        {
+                          "frames": [
+                            {
+                              "debug_id_process": {
+                                "debug_id": "f206e0e7-3d0c-41cb-bccc-11b716728e27",
+                                "uploaded_source_file_with_correct_debug_id": true,
+                                "uploaded_source_map_with_correct_debug_id": true
+                              },
+                              "release_process": {
+                                "abs_path": "https://example.com/static/js/main.js",
+                                "matching_source_file_names": [
+                                  "~/static/js/main.js"
+                                ],
+                                "matching_source_map_name": "~/static/js/main.js.map",
+                                "source_map_reference": "main.js.map",
+                                "source_file_lookup_result": "found",
+                                "source_map_lookup_result": "found"
+                              },
+                              "scraping_process": {
+                                "source_file": {
+                                  "url": "https://example.com/static/js/main.js",
+                                  "status": "success"
+                                },
+                                "source_map": {
+                                  "url": "https://example.com/static/js/main.js.map",
+                                  "status": "success"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "has_debug_ids": true,
+                      "min_debug_id_sdk_version": "7.56.0",
+                      "sdk_version": "7.60.0",
+                      "project_has_some_artifact_bundle": true,
+                      "release_has_some_artifact": true,
+                      "has_uploaded_some_artifact_with_a_debug_id": true,
+                      "sdk_debug_id_support": "full",
+                      "has_scraping_data": true
+                    },
+                    "summary": "Source map debug information for an event"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/dsyms/": {
       "get": {
         "operationId": "List a Project's Debug Information Files",
@@ -89381,6 +89815,324 @@
         "required": [
           "name",
           "type"
+        ]
+      },
+      "SourceMapDebug": {
+        "type": "object",
+        "properties": {
+          "dist": {
+            "type": "string",
+            "nullable": true
+          },
+          "release": {
+            "type": "string",
+            "nullable": true
+          },
+          "exceptions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "frames": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "debug_id_process": {
+                        "type": "object",
+                        "properties": {
+                          "debug_id": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "uploaded_source_file_with_correct_debug_id": {
+                            "type": "boolean"
+                          },
+                          "uploaded_source_map_with_correct_debug_id": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "debug_id",
+                          "uploaded_source_file_with_correct_debug_id",
+                          "uploaded_source_map_with_correct_debug_id"
+                        ]
+                      },
+                      "release_process": {
+                        "type": "object",
+                        "properties": {
+                          "abs_path": {
+                            "type": "string"
+                          },
+                          "matching_source_file_names": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "matching_source_map_name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "source_map_reference": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "source_file_lookup_result": {
+                            "enum": [
+                              "found",
+                              "wrong-dist",
+                              "unsuccessful"
+                            ],
+                            "type": "string"
+                          },
+                          "source_map_lookup_result": {
+                            "enum": [
+                              "found",
+                              "wrong-dist",
+                              "unsuccessful"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "abs_path",
+                          "matching_source_file_names",
+                          "matching_source_map_name",
+                          "source_file_lookup_result",
+                          "source_map_lookup_result",
+                          "source_map_reference"
+                        ],
+                        "nullable": true
+                      },
+                      "scraping_process": {
+                        "type": "object",
+                        "properties": {
+                          "source_file": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "success"
+                                    ],
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "status",
+                                  "url"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "not_attempted"
+                                    ],
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "status",
+                                  "url"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "failure"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "reason": {
+                                    "enum": [
+                                      "not_found",
+                                      "disabled",
+                                      "invalid_host",
+                                      "permission_denied",
+                                      "timeout",
+                                      "download_error",
+                                      "other"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "details": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "required": [
+                                  "details",
+                                  "reason",
+                                  "status",
+                                  "url"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "nullable": true
+                              }
+                            ]
+                          },
+                          "source_map": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "success"
+                                    ],
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "status",
+                                  "url"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "not_attempted"
+                                    ],
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "status",
+                                  "url"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "failure"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "reason": {
+                                    "enum": [
+                                      "not_found",
+                                      "disabled",
+                                      "invalid_host",
+                                      "permission_denied",
+                                      "timeout",
+                                      "download_error",
+                                      "other"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "details": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "required": [
+                                  "details",
+                                  "reason",
+                                  "status",
+                                  "url"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "nullable": true
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "source_file",
+                          "source_map"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "debug_id_process",
+                      "release_process",
+                      "scraping_process"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "frames"
+              ]
+            }
+          },
+          "has_debug_ids": {
+            "type": "boolean"
+          },
+          "min_debug_id_sdk_version": {
+            "type": "string",
+            "nullable": true
+          },
+          "sdk_version": {
+            "type": "string",
+            "nullable": true
+          },
+          "project_has_some_artifact_bundle": {
+            "type": "boolean"
+          },
+          "release_has_some_artifact": {
+            "type": "boolean"
+          },
+          "has_uploaded_some_artifact_with_a_debug_id": {
+            "type": "boolean"
+          },
+          "sdk_debug_id_support": {
+            "enum": [
+              "not-supported",
+              "unofficial-sdk",
+              "needs-upgrade",
+              "full"
+            ],
+            "type": "string"
+          },
+          "has_scraping_data": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "dist",
+          "exceptions",
+          "has_debug_ids",
+          "has_scraping_data",
+          "has_uploaded_some_artifact_with_a_debug_id",
+          "min_debug_id_sdk_version",
+          "project_has_some_artifact_bundle",
+          "release",
+          "release_has_some_artifact",
+          "sdk_debug_id_support",
+          "sdk_version"
         ]
       },
       "StatusDetailsValidator": {
