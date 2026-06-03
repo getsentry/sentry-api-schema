@@ -1,3 +1,9 @@
+## 0.172.0
+
+### New Features
+
+- (pagination) Export SdkResult type for consumer use by @sentry-junior in [#74](https://github.com/getsentry/sentry-api-schema/pull/74)
+
 ## 0.171.0
 
 ### New Features
