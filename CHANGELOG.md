@@ -1,3 +1,9 @@
+## 0.171.0
+
+### New Features
+
+- Add @sentry/api/browser entry point for cookie+CSRF auth by @betegon in [#73](https://github.com/getsentry/sentry-api-schema/pull/73)
+
 ## 0.170.0
 
 ### Schema Updates
