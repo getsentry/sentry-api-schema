@@ -33073,6 +33073,245 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/tags/": {
+      "get": {
+        "operationId": "List an Organization's Tags",
+        "description": "Return a list of tag keys for the given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "The IDs of projects to filter by. `-1` means all available projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "dataset",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "discover",
+                "events",
+                "replays",
+                "search_issues"
+              ]
+            },
+            "description": "The dataset to query. Defaults to `discover`."
+          },
+          {
+            "in": "query",
+            "name": "use_cache",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ]
+            },
+            "description": "Set to `\"1\"` to enable caching for the tag key query."
+          },
+          {
+            "in": "query",
+            "name": "useFlagsBackend",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ]
+            },
+            "description": "Set to `\"1\"` to query feature flags instead of tags."
+          }
+        ],
+        "tags": [
+          "Discover"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "uniqueValues": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "totalValues": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "topValues": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "query": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "key": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "count": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "lastSeen": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "firstSeen": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "count",
+                            "firstSeen",
+                            "key",
+                            "lastSeen",
+                            "name",
+                            "value"
+                          ]
+                        },
+                        "nullable": true
+                      },
+                      "key": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "name"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ReturnAListOfTagKeysForAnOrganization": {
+                    "value": [
+                      {
+                        "key": "browser",
+                        "name": "Browser",
+                        "totalValues": 350
+                      },
+                      {
+                        "key": "browser.name",
+                        "name": "Browser Name",
+                        "totalValues": 350
+                      },
+                      {
+                        "key": "environment",
+                        "name": "Environment",
+                        "totalValues": 500
+                      },
+                      {
+                        "key": "level",
+                        "name": "Level",
+                        "totalValues": 500
+                      },
+                      {
+                        "key": "os",
+                        "name": "OS",
+                        "totalValues": 420
+                      },
+                      {
+                        "key": "release",
+                        "name": "Release",
+                        "totalValues": 100
+                      }
+                    ],
+                    "summary": "Return a list of tag keys for an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/teams/": {
       "get": {
         "operationId": "List an Organization's Teams",
@@ -77098,6 +77337,75 @@
             "name",
             "orgRole",
             "pending"
+          ]
+        }
+      },
+      "ListOrganizationTagsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "uniqueValues": {
+              "type": "integer",
+              "nullable": true
+            },
+            "totalValues": {
+              "type": "integer",
+              "nullable": true
+            },
+            "topValues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "count": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "lastSeen": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "firstSeen": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "count",
+                  "firstSeen",
+                  "key",
+                  "lastSeen",
+                  "name",
+                  "value"
+                ]
+              },
+              "nullable": true
+            },
+            "key": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "key",
+            "name"
           ]
         }
       },
