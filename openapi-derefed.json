@@ -51,6 +51,14 @@
               "type": "string"
             },
             "description": "The field to sort results by, in descending order. If not specified the results are sorted by the date they were created.\n\nValid fields include:\n- `members`: By number of members\n- `events`: By number of events in the past 24 hours\n"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
           }
         ],
         "tags": [
@@ -10493,6 +10501,14 @@
               "type": "string"
             },
             "description": "What to order the results of the query by. Must be something in the `field` list, excluding equations."
+          },
+          {
+            "in": "query",
+            "name": "allowAggregateConditions",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "If false, aggregate conditions in the query string are disallowed. Defaults to true."
           },
           {
             "in": "query",
@@ -28047,6 +28063,28 @@
               "type": "string"
             },
             "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nExample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
+          },
+          {
+            "in": "query",
+            "name": "data_source",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "discover",
+                "events",
+                "search_issues",
+                "transactions"
+              ]
+            },
+            "description": "The data source to query replays from. Defaults to 'discover'."
+          },
+          {
+            "in": "query",
+            "name": "returnIds",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "If true, return issue IDs rather than counts."
           }
         ],
         "tags": [
@@ -59234,7 +59272,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -61835,7 +61873,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -62606,7 +62644,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -63273,7 +63311,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -63323,7 +63361,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -63563,7 +63601,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -63704,7 +63742,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -64023,7 +64061,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -65074,7 +65112,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -65165,7 +65203,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
@@ -65820,7 +65858,7 @@
             "in": "path",
             "name": "issue_id",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
