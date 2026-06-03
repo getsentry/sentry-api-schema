@@ -42,7 +42,7 @@ appendFileSync(
   [
     "",
     "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
-    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher } from './sentry-pagination.ts';",
+    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher, SdkResult } from './sentry-pagination.ts';",
     "export * from './pagination.gen.ts';",
     "",
   ].join("\n"),

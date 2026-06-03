@@ -9,7 +9,8 @@
 // This type mirrors the SDK's RequestResult<TData, TError, false, 'fields'>
 // discriminated union shape. We define it locally so this module has zero
 // imports from generated code — it must remain self-contained.
-type SdkResult<TData = unknown, TError = unknown> = (
+// Exported so consumers can write properly-typed wrappers without `any`.
+export type SdkResult<TData = unknown, TError = unknown> = (
   | { data: TData; error: undefined }
   | { data: undefined; error: TError }
 ) & {
