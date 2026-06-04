@@ -51455,6 +51455,221 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stats/": {
+      "get": {
+        "operationId": "Retrieve Event Counts for a Project",
+        "description": "Return a set of points representing a normalized timestamp and the number of\nevents seen in the period.\n\nQuery ranges are limited to Sentry's configured time-series resolutions.\nThis endpoint may change in the future without notice.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "stat",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "blacklisted",
+                "generated",
+                "received",
+                "rejected"
+              ]
+            },
+            "description": "The name of the stat to query. Defaults to `received`."
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "description": "A UNIX timestamp (in seconds) that sets the start of the query range."
+          },
+          {
+            "in": "query",
+            "name": "until",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "description": "A UNIX timestamp (in seconds) that sets the end of the query range."
+          },
+          {
+            "in": "query",
+            "name": "resolution",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "10s",
+                "1d",
+                "1h"
+              ]
+            },
+            "description": "An explicit time series resolution."
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "minLength": 2,
+                    "maxLength": 2
+                  }
+                },
+                "examples": {
+                  "ProjectEventCounts": {
+                    "value": [
+                      [
+                        1541455200,
+                        1184
+                      ],
+                      [
+                        1541458800,
+                        1410
+                      ],
+                      [
+                        1541462400,
+                        1440
+                      ],
+                      [
+                        1541466000,
+                        1682
+                      ],
+                      [
+                        1541469600,
+                        1203
+                      ],
+                      [
+                        1541473200,
+                        497
+                      ],
+                      [
+                        1541476800,
+                        661
+                      ],
+                      [
+                        1541480400,
+                        1481
+                      ],
+                      [
+                        1541484000,
+                        678
+                      ],
+                      [
+                        1541487600,
+                        1857
+                      ],
+                      [
+                        1541491200,
+                        819
+                      ],
+                      [
+                        1541494800,
+                        1013
+                      ],
+                      [
+                        1541498400,
+                        1883
+                      ],
+                      [
+                        1541502000,
+                        1450
+                      ],
+                      [
+                        1541505600,
+                        1102
+                      ],
+                      [
+                        1541509200,
+                        1317
+                      ],
+                      [
+                        1541512800,
+                        1017
+                      ],
+                      [
+                        1541516400,
+                        813
+                      ],
+                      [
+                        1541520000,
+                        1189
+                      ],
+                      [
+                        1541523600,
+                        496
+                      ],
+                      [
+                        1541527200,
+                        1936
+                      ],
+                      [
+                        1541530800,
+                        1405
+                      ],
+                      [
+                        1541534400,
+                        617
+                      ],
+                      [
+                        1541538000,
+                        1533
+                      ]
+                    ],
+                    "summary": "Project event counts"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/": {
       "get": {
         "operationId": "Retrieve a Project's Symbol Sources",
@@ -57956,207 +58171,6 @@
                   {
                     "name": "mint_choco"
                   }
-                ]
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "project:read"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stats/": {
-      "get": {
-        "tags": [
-          "Projects"
-        ],
-        "summary": "Caution\nThis endpoint may change in the future without  notice.",
-        "description": "Return a set of points representing a normalized timestamp and the\nnumber of events seen in the period.\n\nQuery ranges are limited to Sentry's configured time-series resolutions.",
-        "operationId": "Retrieve Event Counts for a Project",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the organization.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "project_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the project.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stat",
-            "in": "query",
-            "description": "The name of the stat to query `(\"received\", \"rejected\", \"blacklisted\", \"generated\")`.",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "received",
-                "rejected",
-                "blacklisted",
-                "generated"
-              ]
-            }
-          },
-          {
-            "name": "since",
-            "in": "query",
-            "description": "A timestamp to set the start of the query in seconds since UNIX epoch.",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "until",
-            "in": "query",
-            "description": "A timestamp to set the end of the query in seconds since UNIX epoch.",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "resolution",
-            "in": "query",
-            "description": "An explicit resolution to search for (one of `10s`, `1h`, and `1d`).",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "10s",
-                "1h",
-                "1d"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer"
-                    }
-                  }
-                },
-                "example": [
-                  [
-                    1541455200,
-                    1184
-                  ],
-                  [
-                    1541458800,
-                    1410
-                  ],
-                  [
-                    1541462400,
-                    1440
-                  ],
-                  [
-                    1541466000,
-                    1682
-                  ],
-                  [
-                    1541469600,
-                    1203
-                  ],
-                  [
-                    1541473200,
-                    497
-                  ],
-                  [
-                    1541476800,
-                    661
-                  ],
-                  [
-                    1541480400,
-                    1481
-                  ],
-                  [
-                    1541484000,
-                    678
-                  ],
-                  [
-                    1541487600,
-                    1857
-                  ],
-                  [
-                    1541491200,
-                    819
-                  ],
-                  [
-                    1541494800,
-                    1013
-                  ],
-                  [
-                    1541498400,
-                    1883
-                  ],
-                  [
-                    1541502000,
-                    1450
-                  ],
-                  [
-                    1541505600,
-                    1102
-                  ],
-                  [
-                    1541509200,
-                    1317
-                  ],
-                  [
-                    1541512800,
-                    1017
-                  ],
-                  [
-                    1541516400,
-                    813
-                  ],
-                  [
-                    1541520000,
-                    1189
-                  ],
-                  [
-                    1541523600,
-                    496
-                  ],
-                  [
-                    1541527200,
-                    1936
-                  ],
-                  [
-                    1541530800,
-                    1405
-                  ],
-                  [
-                    1541534400,
-                    617
-                  ],
-                  [
-                    1541538000,
-                    1533
-                  ]
                 ]
               }
             }
@@ -87287,6 +87301,17 @@
           "enabled",
           "rules"
         ]
+      },
+      "ProjectStats": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minLength": 2,
+          "maxLength": 2
+        }
       },
       "ProjectSummary": {
         "type": "object",
