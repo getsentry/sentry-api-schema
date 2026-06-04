@@ -54577,6 +54577,151 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/users/": {
+      "get": {
+        "operationId": "List a Project's Users",
+        "description": "Return a list of users seen within this project.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Limit results to users matching the given query. Prefixes should be used to suggest the field to match on: `id`, `email`, `username`, `ip`. For example, `query=email:foo@example.com`."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "tagValue": {
+                        "type": "string"
+                      },
+                      "identifier": {
+                        "type": "string"
+                      },
+                      "username": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "ipAddress": {
+                        "type": "string"
+                      },
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "hash": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "dateCreated",
+                      "email",
+                      "hash",
+                      "id",
+                      "identifier",
+                      "ipAddress",
+                      "name",
+                      "tagValue",
+                      "username"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ProjectUsers": {
+                    "value": [
+                      {
+                        "id": "1",
+                        "tagValue": "email:sentry@example.com",
+                        "identifier": "1",
+                        "username": "sentry",
+                        "email": "sentry@example.com",
+                        "name": "Sentry",
+                        "ipAddress": "127.0.0.1",
+                        "avatarUrl": "https://secure.gravatar.com/avatar/7ddf6ed64b36a1a28182f2c9af87c910?s=32",
+                        "hash": "7ddf6ed64b36a1a28182f2c9af87c910",
+                        "dateCreated": null
+                      }
+                    ],
+                    "summary": "Project users"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/seer/models/": {
       "get": {
         "operationId": "List Seer AI Models",
@@ -58008,98 +58153,6 @@
             "description": "A project with this slug already exists."
           }
         }
-      }
-    },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/users/": {
-      "get": {
-        "tags": [
-          "Projects"
-        ],
-        "description": "Return a list of users seen within this project.",
-        "operationId": "List a Project's Users",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the organization.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "project_id_or_slug",
-            "in": "path",
-            "description": "The ID or slug of the project.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "query",
-            "in": "query",
-            "description": "Limit results to users matching the given query. Prefixes should be used to suggest the field to match on: `id`, `email`, `username`, `ip`. For example, `query=email:foo@example.com`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
-            "x-learn-more": "https://docs.sentry.io/api/pagination/",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "username",
-                      "email"
-                    ],
-                    "properties": {
-                      "username": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "email": {
-                        "type": "string",
-                        "nullable": true
-                      }
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "username": "sentry",
-                    "email": "sentry@example.com"
-                  }
-                ]
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "project:read"
-            ]
-          }
-        ]
       }
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/tags/{key}/values/": {
@@ -78375,6 +78428,59 @@
             "status",
             "version",
             "versionInfo"
+          ]
+        }
+      },
+      "ListProjectUsersResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "nullable": true
+            },
+            "tagValue": {
+              "type": "string"
+            },
+            "identifier": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "ipAddress": {
+              "type": "string"
+            },
+            "avatarUrl": {
+              "type": "string"
+            },
+            "hash": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          "required": [
+            "avatarUrl",
+            "dateCreated",
+            "email",
+            "hash",
+            "id",
+            "identifier",
+            "ipAddress",
+            "name",
+            "tagValue",
+            "username"
           ]
         }
       },
