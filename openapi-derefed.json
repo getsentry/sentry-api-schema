@@ -29467,6 +29467,182 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/repos/": {
+      "get": {
+        "operationId": "List an Organization's Repositories",
+        "description": "Return a list of version control repositories for a given organization.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter repositories by name."
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "deleted"
+              ]
+            },
+            "description": "Filter repositories by status. Defaults to `active`."
+          },
+          {
+            "in": "query",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter repositories by integration ID."
+          },
+          {
+            "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Optional repository fields to expand, such as `settings`."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results."
+          }
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:ci",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "provider": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "integrationId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "externalSlug": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "externalId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "settings": {
+                        "type": "object",
+                        "properties": {
+                          "enabledCodeReview": {
+                            "type": "boolean"
+                          },
+                          "codeReviewTriggers": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "codeReviewTriggers",
+                          "enabledCodeReview"
+                        ],
+                        "nullable": true
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "name"
+                    ]
+                  }
+                },
+                "examples": {
+                  "OrganizationRepositories": {
+                    "value": [
+                      {
+                        "dateCreated": "2018-11-06T21:19:58.536Z",
+                        "id": "3",
+                        "name": "sentry/sentry"
+                      }
+                    ],
+                    "summary": "Organization Repositories"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/repos/{repo_id}/commits/": {
       "get": {
         "operationId": "List a Repository's Commits",
@@ -29553,12 +29729,6 @@
                           "repository": {
                             "type": "object",
                             "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
                               "url": {
                                 "type": "string",
                                 "nullable": true
@@ -29571,10 +29741,6 @@
                               },
                               "status": {
                                 "type": "string"
-                              },
-                              "dateCreated": {
-                                "type": "string",
-                                "format": "date-time"
                               },
                               "integrationId": {
                                 "type": "string",
@@ -29606,8 +29772,23 @@
                                   "enabledCodeReview"
                                 ],
                                 "nullable": true
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "dateCreated": {
+                                "type": "string",
+                                "format": "date-time"
                               }
-                            }
+                            },
+                            "required": [
+                              "dateCreated",
+                              "id",
+                              "name"
+                            ]
                           },
                           "author": {
                             "anyOf": [
@@ -29833,12 +30014,6 @@
                       "repository": {
                         "type": "object",
                         "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
                           "url": {
                             "type": "string",
                             "nullable": true
@@ -29851,10 +30026,6 @@
                           },
                           "status": {
                             "type": "string"
-                          },
-                          "dateCreated": {
-                            "type": "string",
-                            "format": "date-time"
                           },
                           "integrationId": {
                             "type": "string",
@@ -29886,8 +30057,23 @@
                               "enabledCodeReview"
                             ],
                             "nullable": true
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time"
                           }
-                        }
+                        },
+                        "required": [
+                          "dateCreated",
+                          "id",
+                          "name"
+                        ]
                       },
                       "author": {
                         "anyOf": [
@@ -57609,87 +57795,6 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/repos/": {
-      "get": {
-        "tags": [
-          "Organizations"
-        ],
-        "description": "Return a list of version control repositories for a given organization.",
-        "operationId": "List an Organization's Repositories",
-        "parameters": [
-          {
-            "name": "organization_id_or_slug",
-            "in": "path",
-            "description": "The organization short name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
-            "x-learn-more": "https://docs.sentry.io/api/pagination/",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "dateCreated",
-                      "id",
-                      "name"
-                    ],
-                    "properties": {
-                      "dateCreated": {
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "dateCreated": "2018-11-06T21:19:58.536Z",
-                    "id": "3",
-                    "name": "sentry/sentry"
-                  }
-                ]
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "auth_token": [
-              "org: read"
-            ]
-          }
-        ]
-      }
-    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/users/": {
       "get": {
         "tags": [
@@ -66766,12 +66871,6 @@
                 "repository": {
                   "type": "object",
                   "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
                     "url": {
                       "type": "string",
                       "nullable": true
@@ -66784,10 +66883,6 @@
                     },
                     "status": {
                       "type": "string"
-                    },
-                    "dateCreated": {
-                      "type": "string",
-                      "format": "date-time"
                     },
                     "integrationId": {
                       "type": "string",
@@ -66819,8 +66914,23 @@
                         "enabledCodeReview"
                       ],
                       "nullable": true
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time"
                     }
-                  }
+                  },
+                  "required": [
+                    "dateCreated",
+                    "id",
+                    "name"
+                  ]
                 },
                 "author": {
                   "anyOf": [
@@ -67046,12 +67156,6 @@
             "repository": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
                 "url": {
                   "type": "string",
                   "nullable": true
@@ -67064,10 +67168,6 @@
                 },
                 "status": {
                   "type": "string"
-                },
-                "dateCreated": {
-                  "type": "string",
-                  "format": "date-time"
                 },
                 "integrationId": {
                   "type": "string",
@@ -67099,8 +67199,23 @@
                     "enabledCodeReview"
                   ],
                   "nullable": true
+                },
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "dateCreated": {
+                  "type": "string",
+                  "format": "date-time"
                 }
-              }
+              },
+              "required": [
+                "dateCreated",
+                "id",
+                "name"
+              ]
             },
             "author": {
               "anyOf": [
@@ -77369,6 +77484,73 @@
             "name",
             "orgRole",
             "pending"
+          ]
+        }
+      },
+      "ListOrganizationRepositoriesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "nullable": true
+            },
+            "provider": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "integrationId": {
+              "type": "string",
+              "nullable": true
+            },
+            "externalSlug": {
+              "type": "string",
+              "nullable": true
+            },
+            "externalId": {
+              "type": "string",
+              "nullable": true
+            },
+            "settings": {
+              "type": "object",
+              "properties": {
+                "enabledCodeReview": {
+                  "type": "boolean"
+                },
+                "codeReviewTriggers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "codeReviewTriggers",
+                "enabledCodeReview"
+              ],
+              "nullable": true
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "dateCreated",
+            "id",
+            "name"
           ]
         }
       },
