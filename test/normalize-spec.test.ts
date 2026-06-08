@@ -108,6 +108,15 @@ describe("parsePath", () => {
     expect(statics.at(-1)?.value).toBe("releaseThresholdStatuses");
   });
 
+  it("handles consecutive separators without crashing", () => {
+    // "foo--bar" and "a__b" must not crash on the empty word between separators.
+    // Both value and singularValue go through the same split-filter-join path.
+    const segs = parsePath("/api/0/foo--bar/a__b/");
+    expect(segs[0]?.value).toBe("fooBar");
+    expect(segs[0]?.singularValue).toBe("fooBar");
+    expect(segs[1]?.value).toBe("aB");
+  });
+
   it("drops empty segments from leading slashes (non-/api/0/ paths)", () => {
     const segs = parsePath("/custom/resources/");
     expect(segs.every((s) => s.value.length > 0)).toBe(true);
