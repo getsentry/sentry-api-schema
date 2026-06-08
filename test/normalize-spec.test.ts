@@ -34,6 +34,15 @@ describe("singularize", () => {
     expect(singularize("checkins")).toBe("checkin");
   });
 
+  it("handles -shes, -ches, -xes, -zes plurals", () => {
+    expect(singularize("hashes")).toBe("hash");
+    expect(singularize("crashes")).toBe("crash");
+    expect(singularize("matches")).toBe("match");
+    expect(singularize("boxes")).toBe("box");
+    expect(singularize("indexes")).toBe("index");
+    expect(singularize("buzzes")).toBe("buzz");
+  });
+
   it("correctly singularizes releases (regression: -ses rule must not apply)", () => {
     expect(singularize("releases")).toBe("release");
   });

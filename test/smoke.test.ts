@@ -388,9 +388,9 @@ describe("generated wrappers (pagination.gen.ts)", () => {
   });
 
   test("only fetchPage_ is generated for compound-shaped ops", () => {
-    // listAnOrganization_sIssues is array-shaped, so all three exist.
+    // listOrganizationIssues is array-shaped, so all three exist.
     expect(typeof fetchPage_listOrganizationIssues).toBe("function");
-    // For a compound op like listClickedNodes (200: { ... } not Array<>),
+    // For a compound op like listProjectReplayClicks (200: { ... } not Array<>),
     // paginateAll/paginateUpTo are intentionally not generated — items
     // can't be flattened across pages without knowing which field holds
     // the array, and that's spec-specific.

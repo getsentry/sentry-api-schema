@@ -133,8 +133,8 @@ for (const key of PAGINATED_BUT_UNMARKED) {
 
 /**
  * Parse `src/sdk.gen.ts` to extract, for each exported function:
- *   - fn:        function identifier (e.g. `listAnOrganization_sIssues`)
- *   - typeBase:  type name root (e.g. `ListAnOrganizationSissues`)
+ *   - fn:        function identifier (e.g. `listOrganizationIssues`)
+ *   - typeBase:  type name root (e.g. `ListOrganizationIssues`)
  *   - method:    HTTP method (`get`, `post`, ...)
  *   - url:       URL template
  *
