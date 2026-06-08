@@ -39,6 +39,18 @@ describe("singularize", () => {
     expect(singularize("event")).toBe("event");
     expect(singularize("monitor")).toBe("monitor");
   });
+
+  it("is idempotent — applying twice produces the same result", () => {
+    // Segments that get singularized in the loop AND again in the post-loop
+    // pass must not produce a garbled result. Since singularized words no
+    // longer end in 's', the second call is always a no-op.
+    const words = ["issues", "teams", "releases", "queries", "activities"];
+    for (const w of words) {
+      const once = singularize(w);
+      const twice = singularize(once);
+      expect(twice).toBe(once);
+    }
+  });
 });
 
 describe("normalizeOperationId", () => {
@@ -182,5 +194,53 @@ describe("normalizeOperationId", () => {
         "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/",
       ),
     ).toBe("listOrganizationIssueEvents");
+  });
+
+  // Edge cases
+  it("throws when path has no static segments at all", () => {
+    // All-param paths cannot produce a meaningful name; they should have
+    // an explicit operation_id set via @extend_schema instead.
+    expect(() => normalizeOperationId("get", "/api/0/{id}/")).toThrow(
+      /no static segments/,
+    );
+    expect(() => normalizeOperationId("get", "/api/0/{a}/{b}/")).toThrow(
+      /no static segments/,
+    );
+  });
+
+  it("handles paths not under /api/0/ prefix", () => {
+    // Paths without the standard prefix still work; static segments are used as-is
+    expect(normalizeOperationId("get", "/custom/resources/")).toBe(
+      "listCustomResources",
+    );
+  });
+
+  it("handles consecutive params (projects/{org}/{project}/)", () => {
+    // projects is singularized (followed by {org}), then {org} and {project} are skipped
+    expect(
+      normalizeOperationId(
+        "get",
+        "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/",
+      ),
+    ).toBe("getProject");
+  });
+
+  it("already-clean identifiers are not passed through normalizeOperationId", () => {
+    // normalizeSpec skips these, but document that the function itself would
+    // still try to normalize if called directly — it treats the path, not the ID.
+    // The guard lives in normalizeSpec, not here.
+    expect(normalizeOperationId("get", "/api/0/organizations/")).toBe(
+      "listOrganizations",
+    );
+  });
+
+  it("handles path with trailing slash stripped correctly", () => {
+    // With and without trailing slash should produce the same result
+    expect(normalizeOperationId("get", "/api/0/organizations")).toBe(
+      "listOrganizations",
+    );
+    expect(normalizeOperationId("get", "/api/0/organizations/")).toBe(
+      "listOrganizations",
+    );
   });
 });

@@ -27,15 +27,25 @@
  *   - src/pagination.gen.ts
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
-// Use the normalized spec so cursor detection uses the same operationIds the SDK was built from.
-const SPEC_PATH = join(ROOT, "openapi-normalized.json");
+// Prefer the normalized spec (written by build step 0.5) so cursor detection
+// uses the same operationIds the SDK was built from. Fall back to the source
+// spec if run in isolation (e.g. during development without a full build).
+const NORMALIZED_SPEC = join(ROOT, "openapi-normalized.json");
+const SOURCE_SPEC = join(ROOT, "openapi-derefed.json");
+const SPEC_PATH = existsSync(NORMALIZED_SPEC) ? NORMALIZED_SPEC : SOURCE_SPEC;
+if (SPEC_PATH === SOURCE_SPEC) {
+  process.stderr.write(
+    "[generate-pagination] openapi-normalized.json not found; " +
+      "falling back to openapi-derefed.json (run `bun run build` for normalized names)\n",
+  );
+}
 const SDK_PATH = join(ROOT, "src", "sdk.gen.ts");
 const TYPES_PATH = join(ROOT, "src", "types.gen.ts");
 const OUT_PATH = join(ROOT, "src", "pagination.gen.ts");
