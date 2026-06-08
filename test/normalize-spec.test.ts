@@ -5,7 +5,7 @@ import {
   parsePath,
   singularize,
 } from "../lib/normalize-spec.mjs";
-import { writeFileSync, unlinkSync } from "node:fs";
+import { writeFileSync, readFileSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
@@ -269,6 +269,26 @@ describe("normalizeSpec collision detection", () => {
     try { unlinkSync(output); } catch {}
   });
 
+  it("throws when a clean identifier collides with a path-derived one", () => {
+    // Pre-existing clean IDs must be tracked: if path A has operationId
+    // "listOrganizationIssues" (clean) and path B sentence-style normalizes to
+    // the same name, that's a collision even though B's ID was a sentence.
+    const input = writeSpec({
+      "/api/0/something/": {
+        // Manually set to the same name that the other path would generate.
+        get: { operationId: "listOrganizationIssues" },
+      },
+      "/api/0/organizations/{org}/issues/": {
+        // Sentence-style → normalizes to "listOrganizationIssues".
+        get: { operationId: "List An Organization's Issues" },
+      },
+    });
+    const output = join(tmpdir(), `out-${Date.now()}.json`);
+    expect(() => normalizeSpec(input, output)).toThrow(/collision/);
+    unlinkSync(input);
+    try { unlinkSync(output); } catch {}
+  });
+
   it("does not throw when operationIds are already clean identifiers", () => {
     const input = writeSpec({
       "/api/0/organizations/": {
@@ -290,7 +310,7 @@ describe("normalizeSpec collision detection", () => {
     });
     const output = join(tmpdir(), `out-${Date.now()}.json`);
     normalizeSpec(input, output);
-    const result = JSON.parse(require("node:fs").readFileSync(output, "utf8"));
+    const result = JSON.parse(readFileSync(output, "utf8"));
     expect(result.paths["/api/0/organizations/"].get.operationId).toBe(
       "listOrganizations",
     );
