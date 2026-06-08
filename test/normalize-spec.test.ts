@@ -54,6 +54,12 @@ describe("singularize", () => {
       expect(singularize(singularize(w))).toBe(singularize(w));
     }
   });
+
+  it("never returns an empty string", () => {
+    // Single-char input ending in s would produce "" without the stem guard.
+    expect(singularize("s")).toBe("s");
+    expect(singularize("")).toBe("");
+  });
 });
 
 // ---------------------------------------------------------------------------
