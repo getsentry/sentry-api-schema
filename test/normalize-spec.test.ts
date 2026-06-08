@@ -70,7 +70,7 @@ describe("parsePath", () => {
   it("strips /api/0/ prefix and trailing slash", () => {
     const segs = parsePath("/api/0/organizations/");
     expect(segs).toEqual([
-      { value: "organizations", isParam: false, followedByParam: false },
+      { value: "organizations", singularValue: "organization", isParam: false, followedByParam: false },
     ]);
   });
 
@@ -95,6 +95,17 @@ describe("parsePath", () => {
     const segs = parsePath("/api/0/organizations/{org}/stats_v2/");
     const statics = segs.filter((s) => !s.isParam);
     expect(statics.at(-1)?.value).toBe("statsV2");
+  });
+
+  it("singularValue singularizes the last word of a compound segment", () => {
+    const segs = parsePath(
+      "/api/0/organizations/{org}/release-threshold-statuses/{id}/",
+    );
+    const statics = segs.filter((s) => !s.isParam);
+    // "statuses" (last word) hits IRREGULAR → "status"; full camelCase result:
+    expect(statics.at(-1)?.singularValue).toBe("releaseThresholdStatus");
+    // value keeps the plural form
+    expect(statics.at(-1)?.value).toBe("releaseThresholdStatuses");
   });
 
   it("drops empty segments from leading slashes (non-/api/0/ paths)", () => {
@@ -204,6 +215,24 @@ describe("normalizeOperationId", () => {
     expect(normalizeOperationId("get", "/api/0/organizations/{org}/relay_usage/")).toBe(
       "listOrganizationRelayUsage",
     );
+  });
+
+  it("singularizes compound segments via last-word rule (regression)", () => {
+    // GET detail — last word "statuses" hits IRREGULAR → "status"
+    expect(
+      normalizeOperationId(
+        "get",
+        "/api/0/organizations/{org}/release-threshold-statuses/{id}/",
+      ),
+    ).toBe("getOrganizationReleaseThresholdStatus"); // not "...Statuse"
+
+    // POST to collection — last word "issues" → "issue"
+    expect(
+      normalizeOperationId(
+        "post",
+        "/api/0/organizations/{org}/external-issues/",
+      ),
+    ).toBe("createOrganizationExternalIssue");
   });
 
   it("handles multi-level nesting", () => {
