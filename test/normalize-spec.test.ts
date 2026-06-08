@@ -225,10 +225,9 @@ describe("normalizeOperationId", () => {
     ).toBe("getProject");
   });
 
-  it("already-clean identifiers are not passed through normalizeOperationId", () => {
-    // normalizeSpec skips these, but document that the function itself would
-    // still try to normalize if called directly — it treats the path, not the ID.
-    // The guard lives in normalizeSpec, not here.
+  it("normalizes the path regardless of what the original operationId was", () => {
+    // normalizeOperationId derives a name purely from method + path.
+    // The guard that skips already-clean identifiers lives in normalizeSpec.
     expect(normalizeOperationId("get", "/api/0/organizations/")).toBe(
       "listOrganizations",
     );
