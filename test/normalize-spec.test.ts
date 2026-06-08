@@ -294,13 +294,25 @@ describe("normalizeOperationId", () => {
 
   it("throws when path has no static segments", () => {
     expect(() => normalizeOperationId("get", "/api/0/{id}/")).toThrow(
-      /no static segments/,
+      /no .*usable static segments/,
     );
   });
 
   it("throws on degenerate all-param path", () => {
     expect(() => normalizeOperationId("get", "/api/0/{a}/{b}/")).toThrow(
-      /no static segments/,
+      /no .*usable static segments/,
+    );
+  });
+
+  it("throws when the only static segment is separators (empty resource)", () => {
+    // splitWords("---") → [] → camelJoin → "", so statics.length is 1 but the
+    // assembled resource is empty. The guard must catch this, not crash on
+    // resource[0].toUpperCase().
+    expect(() => normalizeOperationId("get", "/api/0/---/")).toThrow(
+      /no .*usable static segments/,
+    );
+    expect(() => normalizeOperationId("get", "/api/0/___/")).toThrow(
+      /no .*usable static segments/,
     );
   });
 });
