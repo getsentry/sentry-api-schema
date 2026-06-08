@@ -91,6 +91,12 @@ describe("parsePath", () => {
     expect(segs[0]?.value).toBe("fooBar");
   });
 
+  it("converts underscores to camelCase (e.g. stats_v2 → statsV2)", () => {
+    const segs = parsePath("/api/0/organizations/{org}/stats_v2/");
+    const statics = segs.filter((s) => !s.isParam);
+    expect(statics.at(-1)?.value).toBe("statsV2");
+  });
+
   it("drops empty segments from leading slashes (non-/api/0/ paths)", () => {
     const segs = parsePath("/custom/resources/");
     expect(segs.every((s) => s.value.length > 0)).toBe(true);
@@ -189,6 +195,15 @@ describe("normalizeOperationId", () => {
 
   it("handles uppercase letters after a hyphen", () => {
     expect(normalizeOperationId("get", "/api/0/foo-Bar/")).toBe("listFooBar");
+  });
+
+  it("converts underscores in path segments to camelCase", () => {
+    expect(normalizeOperationId("get", "/api/0/organizations/{org}/stats_v2/")).toBe(
+      "listOrganizationStatsV2",
+    );
+    expect(normalizeOperationId("get", "/api/0/organizations/{org}/relay_usage/")).toBe(
+      "listOrganizationRelayUsage",
+    );
   });
 
   it("handles multi-level nesting", () => {
