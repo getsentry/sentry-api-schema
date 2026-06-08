@@ -242,4 +242,18 @@ describe("normalizeOperationId", () => {
       "listOrganizations",
     );
   });
+
+  it("converts uppercase letters after a hyphen (Bug: regex was [a-z0-9] only)", () => {
+    // Hypothetical segment foo-Bar — B must be uppercased and hyphen removed.
+    // Real Sentry paths are lowercase, but the regex should be correct regardless.
+    expect(normalizeOperationId("get", "/api/0/foo-Bar/")).toBe("listFooBar");
+  });
+
+  it("throws when all static segments are empty strings (degenerate path)", () => {
+    // A path like // produces empty-string segments. Even if parts.length > 0,
+    // an all-empty resource name must not silently produce 'listUndefined'.
+    expect(() => normalizeOperationId("get", "//")).toThrow(
+      /empty resource name/,
+    );
+  });
 });
