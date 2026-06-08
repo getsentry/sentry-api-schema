@@ -43,14 +43,22 @@ describe("singularize", () => {
     expect(singularize("buzzes")).toBe("buzz");
   });
 
+  it("handles -sses plurals (classes → class)", () => {
+    expect(singularize("classes")).toBe("class");
+    expect(singularize("processes")).toBe("process");
+    expect(singularize("addresses")).toBe("address");
+  });
+
   it("correctly singularizes releases (regression: -ses rule must not apply)", () => {
     expect(singularize("releases")).toBe("release");
   });
 
-  it("leaves words ending in -ss, -us, -is untouched", () => {
+  it("leaves words ending in -ss, -us, -is, -as untouched", () => {
     expect(singularize("class")).toBe("class");
     expect(singularize("status")).toBe("status");
     expect(singularize("analysis")).toBe("analysis");
+    expect(singularize("alias")).toBe("alias");
+    expect(singularize("atlas")).toBe("atlas");
   });
 
   it("leaves already-singular words untouched", () => {
@@ -59,7 +67,10 @@ describe("singularize", () => {
   });
 
   it("is idempotent — applying twice produces the same result", () => {
-    for (const w of ["issues", "teams", "releases", "queries", "activities"]) {
+    for (const w of [
+      "issues", "teams", "releases", "queries", "activities",
+      "aliases", "hashes", "classes", "boxes", "processes",
+    ]) {
       expect(singularize(singularize(w))).toBe(singularize(w));
     }
   });
