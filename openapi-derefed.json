@@ -13477,6 +13477,14 @@
                       },
                       "latestEventHasAttachments": {
                         "type": "boolean"
+                      },
+                      "matchingEventId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "matchingEventEnvironment": {
+                        "type": "string",
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -13501,6 +13509,8 @@
                       "level",
                       "lifetime",
                       "logger",
+                      "matchingEventEnvironment",
+                      "matchingEventId",
                       "metadata",
                       "numComments",
                       "owners",
@@ -13702,7 +13712,9 @@
                         "issueCategory": "performance",
                         "issueType": "performance_n_plus_one_db_queries",
                         "sessionCount": 0,
-                        "latestEventHasAttachments": false
+                        "latestEventHasAttachments": false,
+                        "matchingEventId": null,
+                        "matchingEventEnvironment": null
                       }
                     ],
                     "summary": "Return a list of issues for an organization"
@@ -62871,14 +62883,76 @@
                     },
                     "inbox": {
                       "type": "object",
-                      "additionalProperties": {},
+                      "properties": {
+                        "reason": {
+                          "type": "integer"
+                        },
+                        "reason_details": {
+                          "type": "object",
+                          "properties": {
+                            "until": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "count": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "window": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "user_count": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "user_window": {
+                              "type": "integer",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "count",
+                            "until",
+                            "user_count",
+                            "user_window",
+                            "window"
+                          ],
+                          "nullable": true
+                        },
+                        "date_added": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "date_added",
+                        "reason",
+                        "reason_details"
+                      ],
                       "nullable": true
                     },
                     "owners": {
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "additionalProperties": {}
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "owner": {
+                            "type": "string"
+                          },
+                          "date_added": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "date_added",
+                          "owner",
+                          "type"
+                        ]
                       },
                       "nullable": true
                     },
@@ -62897,7 +62971,30 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "additionalProperties": {}
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "issueId": {
+                            "type": "string"
+                          },
+                          "serviceType": {
+                            "type": "string"
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "webUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "displayName",
+                          "id",
+                          "issueId",
+                          "serviceType",
+                          "webUrl"
+                        ]
                       }
                     },
                     "latestEventHasAttachments": {
@@ -73192,14 +73289,76 @@
           },
           "inbox": {
             "type": "object",
-            "additionalProperties": {},
+            "properties": {
+              "reason": {
+                "type": "integer"
+              },
+              "reason_details": {
+                "type": "object",
+                "properties": {
+                  "until": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "count": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "window": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "user_count": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "user_window": {
+                    "type": "integer",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "count",
+                  "until",
+                  "user_count",
+                  "user_window",
+                  "window"
+                ],
+                "nullable": true
+              },
+              "date_added": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "date_added",
+              "reason",
+              "reason_details"
+            ],
             "nullable": true
           },
           "owners": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {}
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "owner": {
+                  "type": "string"
+                },
+                "date_added": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "date_added",
+                "owner",
+                "type"
+              ]
             },
             "nullable": true
           },
@@ -73218,7 +73377,30 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {}
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "issueId": {
+                  "type": "string"
+                },
+                "serviceType": {
+                  "type": "string"
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "webUrl": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "displayName",
+                "id",
+                "issueId",
+                "serviceType",
+                "webUrl"
+              ]
             }
           },
           "latestEventHasAttachments": {
@@ -82579,6 +82761,14 @@
             },
             "latestEventHasAttachments": {
               "type": "boolean"
+            },
+            "matchingEventId": {
+              "type": "string",
+              "nullable": true
+            },
+            "matchingEventEnvironment": {
+              "type": "string",
+              "nullable": true
             }
           },
           "required": [
@@ -82603,6 +82793,8 @@
             "level",
             "lifetime",
             "logger",
+            "matchingEventEnvironment",
+            "matchingEventId",
             "metadata",
             "numComments",
             "owners",
