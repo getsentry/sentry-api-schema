@@ -315,6 +315,17 @@ describe("normalizeOperationId", () => {
       /no .*usable static segments/,
     );
   });
+
+  it("skips interior all-separator segments instead of crashing", () => {
+    // An interior segment of pure separators camelCases to "". It must be
+    // dropped before assembly, not crash camelJoin on p[0].toUpperCase().
+    expect(normalizeOperationId("get", "/api/0/organizations/---/issues/")).toBe(
+      "listOrganizationsIssues",
+    );
+    expect(normalizeOperationId("get", "/api/0/orgs/___/issues/")).toBe(
+      "listOrgsIssues",
+    );
+  });
 });
 
 // ---------------------------------------------------------------------------
