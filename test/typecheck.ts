@@ -12,12 +12,12 @@
  */
 
 import {
-  fetchPage_listAnOrganization_sIssues,
-  fetchPage_listAnOrganization_sProjects,
-  fetchPage_listClickedNodes,
-  paginateAll_listAnOrganization_sIssues,
-  paginateAll_listAnOrganization_sProjects,
-  paginateUpTo_listAnOrganization_sIssues,
+  fetchPage_listOrganizationIssues,
+  fetchPage_listOrganizationProjects,
+  fetchPage_listProjectReplayClicks,
+  paginateAll_listOrganizationIssues,
+  paginateAll_listOrganizationProjects,
+  paginateUpTo_listOrganizationIssues,
 } from "../src/index";
 
 const config = {
@@ -30,7 +30,7 @@ const config = {
 // =====================================================================
 
 async function fetchPageHappyPath() {
-  const result = await fetchPage_listAnOrganization_sIssues({
+  const result = await fetchPage_listOrganizationIssues({
     ...config,
     path: { organization_id_or_slug: "my-org" },
     query: {
@@ -49,7 +49,7 @@ async function fetchPageHappyPath() {
 }
 
 async function fetchPageRejectsCursor() {
-  await fetchPage_listAnOrganization_sIssues({
+  await fetchPage_listOrganizationIssues({
     ...config,
     path: { organization_id_or_slug: "my-org" },
     query: {
@@ -61,7 +61,7 @@ async function fetchPageRejectsCursor() {
 
 async function fetchPageRequiresPath() {
   // @ts-expect-error — required path param must still be required
-  await fetchPage_listAnOrganization_sIssues({
+  await fetchPage_listOrganizationIssues({
     ...config,
     query: { limit: 25 },
   });
@@ -72,7 +72,7 @@ async function fetchPageRequiresPath() {
 // =====================================================================
 
 async function paginateAllHappyPath() {
-  const items = await paginateAll_listAnOrganization_sIssues({
+  const items = await paginateAll_listOrganizationIssues({
     ...config,
     path: { organization_id_or_slug: "my-org" },
     query: { limit: 100 },
@@ -82,7 +82,7 @@ async function paginateAllHappyPath() {
 }
 
 async function paginateUpToHappyPath() {
-  const result = await paginateUpTo_listAnOrganization_sIssues(
+  const result = await paginateUpTo_listOrganizationIssues(
     {
       ...config,
       path: { organization_id_or_slug: "my-org" },
@@ -101,7 +101,7 @@ async function paginateUpToHappyPath() {
 // =====================================================================
 
 async function fetchPageCompoundOp() {
-  const result = await fetchPage_listClickedNodes({
+  const result = await fetchPage_listProjectReplayClicks({
     ...config,
     path: {
       organization_id_or_slug: "my-org",
@@ -122,7 +122,7 @@ async function perPageAcceptedEvenWhenSpecOmitsIt() {
   // /organizations/{org}/projects/ has only `cursor` declared in the spec,
   // but the runtime accepts `per_page`. PaginationQuery widens with it so
   // callers don't need an `as` cast.
-  await paginateAll_listAnOrganization_sProjects({
+  await paginateAll_listOrganizationProjects({
     ...config,
     path: { organization_id_or_slug: "my-org" },
     query: { per_page: 100 },
@@ -130,7 +130,7 @@ async function perPageAcceptedEvenWhenSpecOmitsIt() {
 
   // Same for fetchPage on issues — per_page co-exists with documented
   // params (collapse, limit, sort, etc.).
-  await fetchPage_listAnOrganization_sProjects({
+  await fetchPage_listOrganizationProjects({
     ...config,
     path: { organization_id_or_slug: "my-org" },
     query: { per_page: 100 },
@@ -145,7 +145,7 @@ async function paginateUpToKeepCursorOnOvershoot() {
   // For /issues/{id}/events/ (and any endpoint with no server-side
   // per_page), passing keepCursorOnOvershoot:true preserves access to
   // trimmed-tail items via the same cursor on the next call.
-  const result = await paginateUpTo_listAnOrganization_sIssues(
+  const result = await paginateUpTo_listOrganizationIssues(
     {
       ...config,
       path: { organization_id_or_slug: "my-org" },

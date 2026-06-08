@@ -13,12 +13,12 @@
 import { describe, expect, test } from "bun:test";
 import {
   fetchPage,
-  fetchPage_listAnOrganization_sIssues,
-  fetchPage_listYourOrganizations,
+  fetchPage_listOrganizationIssues,
+  fetchPage_listOrganizations,
   paginateAll,
-  paginateAll_listYourOrganizations,
+  paginateAll_listOrganizations,
   paginateUpTo,
-  paginateUpTo_listYourOrganizations,
+  paginateUpTo_listOrganizations,
   parseSentryLinkHeader,
   unwrapPaginatedResult,
   unwrapResult,
@@ -375,30 +375,30 @@ describe("paginateUpTo", () => {
 // =====================================================================
 
 describe("generated wrappers (pagination.gen.ts)", () => {
-  test("fetchPage_listYourOrganizations is callable with no args", () => {
+  test("fetchPage_listOrganizations is callable with no args", () => {
     // We don't actually invoke (would need network); we assert it exists,
     // is a function, and has the expected arity (options + cursor = 2 named
     // params, but JS reports the count up to the first default — so 1).
-    expect(typeof fetchPage_listYourOrganizations).toBe("function");
+    expect(typeof fetchPage_listOrganizations).toBe("function");
   });
 
   test("paginateAll_/paginateUpTo_ wrappers exist for array-shaped ops", () => {
-    expect(typeof paginateAll_listYourOrganizations).toBe("function");
-    expect(typeof paginateUpTo_listYourOrganizations).toBe("function");
+    expect(typeof paginateAll_listOrganizations).toBe("function");
+    expect(typeof paginateUpTo_listOrganizations).toBe("function");
   });
 
   test("only fetchPage_ is generated for compound-shaped ops", () => {
-    // listAnOrganization_sIssues is array-shaped, so all three exist.
-    expect(typeof fetchPage_listAnOrganization_sIssues).toBe("function");
-    // For a compound op like listClickedNodes (200: { ... } not Array<>),
+    // listOrganizationIssues is array-shaped, so all three exist.
+    expect(typeof fetchPage_listOrganizationIssues).toBe("function");
+    // For a compound op like listProjectReplayClicks (200: { ... } not Array<>),
     // paginateAll/paginateUpTo are intentionally not generated — items
     // can't be flattened across pages without knowing which field holds
     // the array, and that's spec-specific.
     const indexModule = require("../src/index") as Record<string, unknown>;
     const keys = Object.keys(indexModule);
-    expect(keys).toContain("fetchPage_listClickedNodes");
-    expect(keys).not.toContain("paginateAll_listClickedNodes");
-    expect(keys).not.toContain("paginateUpTo_listClickedNodes");
+    expect(keys).toContain("fetchPage_listProjectReplayClicks");
+    expect(keys).not.toContain("paginateAll_listProjectReplayClicks");
+    expect(keys).not.toContain("paginateUpTo_listProjectReplayClicks");
   });
 
 });

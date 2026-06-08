@@ -3,15 +3,24 @@ import { cpSync, appendFileSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { normalizeSpec } from "./lib/normalize-spec.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// 0.5 Normalize verbose English sentence operationIds to short REST-conventional
+//     identifiers (e.g. "List Your Organizations" → "listOrganizations").
+//     Writes a temporary openapi-normalized.json that the generator reads instead
+//     of the source spec. The source spec is never modified.
+//     OperationIds that are already identifiers (no spaces) are left untouched —
+//     those were set intentionally via @extend_schema(operation_id=...).
+normalizeSpec("./openapi-derefed.json", "./openapi-normalized.json");
 
 // 1. Generate TypeScript client from OpenAPI spec (including Zod schemas).
 //    When `plugins` is specified, the defaults (TypeScript + SDK + client) are
 //    no longer implicit — list them explicitly so the previous output is
 //    preserved alongside the new Zod schemas.
 await createClient({
-  input: "./openapi-derefed.json",
+  input: "./openapi-normalized.json",
   output: "src",
   plugins: [
     "@hey-api/typescript",
