@@ -34,7 +34,8 @@ import { dirname, join, resolve } from "node:path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
-const SPEC_PATH = join(ROOT, "openapi-derefed.json");
+// Use the normalized spec so cursor detection uses the same operationIds the SDK was built from.
+const SPEC_PATH = join(ROOT, "openapi-normalized.json");
 const SDK_PATH = join(ROOT, "src", "sdk.gen.ts");
 const TYPES_PATH = join(ROOT, "src", "types.gen.ts");
 const OUT_PATH = join(ROOT, "src", "pagination.gen.ts");
