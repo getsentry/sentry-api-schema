@@ -1,3 +1,9 @@
+## 0.193.0
+
+### New Features
+
+- Normalize operationIds to short REST-conventional names by @betegon in [#75](https://github.com/getsentry/sentry-api-schema/pull/75)
+
 ## 0.192.0
 
 ### Schema Updates
