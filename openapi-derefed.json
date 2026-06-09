@@ -28636,322 +28636,332 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "project_id": {
-                        "type": "string"
-                      },
-                      "trace_ids": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "error_ids": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "environment": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "tags": {
-                        "anyOf": [
-                          {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          {
-                            "type": "array",
-                            "items": {}
-                          }
-                        ]
-                      },
-                      "user": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
                           "id": {
+                            "type": "string"
+                          },
+                          "project_id": {
+                            "type": "string"
+                          },
+                          "trace_ids": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "error_ids": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "environment": {
                             "type": "string",
                             "nullable": true
                           },
-                          "username": {
-                            "type": "string",
-                            "nullable": true
+                          "tags": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
                           },
-                          "email": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "ip": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "display_name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "geo": {
+                          "user": {
                             "type": "object",
                             "properties": {
-                              "city": {
+                              "id": {
                                 "type": "string",
                                 "nullable": true
                               },
-                              "country_code": {
+                              "username": {
                                 "type": "string",
                                 "nullable": true
                               },
-                              "region": {
+                              "email": {
                                 "type": "string",
                                 "nullable": true
                               },
-                              "subdivision": {
+                              "ip": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "display_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "geo": {
+                                "type": "object",
+                                "properties": {
+                                  "city": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "country_code": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "region": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "subdivision": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "sdk": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "version": {
                                 "type": "string",
                                 "nullable": true
                               }
                             }
+                          },
+                          "os": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "version": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "browser": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "version": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "device": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "brand": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "model": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "family": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "ota_updates": {
+                            "type": "object",
+                            "properties": {
+                              "channel": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "runtime_version": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "update_id": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "is_archived": {
+                            "type": "boolean",
+                            "nullable": true
+                          },
+                          "urls": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
+                          },
+                          "clicks": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          },
+                          "count_dead_clicks": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "count_rage_clicks": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "count_errors": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "duration": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "finished_at": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "started_at": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "activity": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "count_urls": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "replay_type": {
+                            "type": "string"
+                          },
+                          "count_segments": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "platform": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "releases": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "dist": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "count_warnings": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "count_infos": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "has_viewed": {
+                            "type": "boolean"
                           }
                         }
-                      },
-                      "sdk": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "version": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "os": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "version": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "browser": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "version": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "device": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "brand": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "model": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "family": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "ota_updates": {
-                        "type": "object",
-                        "properties": {
-                          "channel": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "runtime_version": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "update_id": {
-                            "type": "string",
-                            "nullable": true
-                          }
-                        }
-                      },
-                      "is_archived": {
-                        "type": "boolean",
-                        "nullable": true
-                      },
-                      "urls": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "nullable": true
-                      },
-                      "clicks": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        }
-                      },
-                      "count_dead_clicks": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "count_rage_clicks": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "count_errors": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "duration": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "finished_at": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "started_at": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "activity": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "count_urls": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "replay_type": {
-                        "type": "string"
-                      },
-                      "count_segments": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "platform": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "releases": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "dist": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "count_warnings": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "count_infos": {
-                        "type": "integer",
-                        "nullable": true
-                      },
-                      "has_viewed": {
-                        "type": "boolean"
                       }
                     }
-                  }
+                  },
+                  "required": [
+                    "data"
+                  ]
                 },
                 "examples": {
                   "GetListOfReplays": {
-                    "value": [
-                      {
-                        "activity": 5,
-                        "browser": {
-                          "name": "Chome",
-                          "version": "103.0.38"
-                        },
-                        "count_dead_clicks": 6,
-                        "count_rage_clicks": 1,
-                        "count_errors": 1,
-                        "count_segments": 0,
-                        "count_urls": 1,
-                        "device": {
-                          "brand": "Apple",
-                          "family": "iPhone",
-                          "model": "11",
-                          "name": "iPhone 11"
-                        },
-                        "dist": null,
-                        "duration": 576,
-                        "environment": "production",
-                        "error_ids": [
-                          "7e07485f-12f9-416b-8b14-26260799b51f"
-                        ],
-                        "finished_at": "2022-07-07T14:15:33.201019",
-                        "has_viewed": true,
-                        "id": "7e07485f-12f9-416b-8b14-26260799b51f",
-                        "is_archived": null,
-                        "os": {
-                          "name": "iOS",
-                          "version": "16.2"
-                        },
-                        "platform": "Sentry",
-                        "project_id": "639195",
-                        "releases": [
-                          "version@1.4"
-                        ],
-                        "sdk": {
-                          "name": "Thundercat",
-                          "version": "27.1"
-                        },
-                        "started_at": "2022-07-07T14:05:57.909921",
-                        "tags": {
-                          "hello": [
-                            "world",
-                            "Lionel Richie"
-                          ]
-                        },
-                        "trace_ids": [
-                          "7e07485f-12f9-416b-8b14-26260799b51f"
-                        ],
-                        "urls": [
-                          "/organizations/abc123/issues"
-                        ],
-                        "user": {
-                          "display_name": "John Doe",
-                          "email": "john.doe@example.com",
-                          "id": "30246326",
-                          "ip": "213.164.1.114",
-                          "username": "John Doe"
+                    "value": {
+                      "data": [
+                        {
+                          "activity": 5,
+                          "browser": {
+                            "name": "Chome",
+                            "version": "103.0.38"
+                          },
+                          "count_dead_clicks": 6,
+                          "count_rage_clicks": 1,
+                          "count_errors": 1,
+                          "count_segments": 0,
+                          "count_urls": 1,
+                          "device": {
+                            "brand": "Apple",
+                            "family": "iPhone",
+                            "model": "11",
+                            "name": "iPhone 11"
+                          },
+                          "dist": null,
+                          "duration": 576,
+                          "environment": "production",
+                          "error_ids": [
+                            "7e07485f-12f9-416b-8b14-26260799b51f"
+                          ],
+                          "finished_at": "2022-07-07T14:15:33.201019",
+                          "has_viewed": true,
+                          "id": "7e07485f-12f9-416b-8b14-26260799b51f",
+                          "is_archived": null,
+                          "os": {
+                            "name": "iOS",
+                            "version": "16.2"
+                          },
+                          "platform": "Sentry",
+                          "project_id": "639195",
+                          "releases": [
+                            "version@1.4"
+                          ],
+                          "sdk": {
+                            "name": "Thundercat",
+                            "version": "27.1"
+                          },
+                          "started_at": "2022-07-07T14:05:57.909921",
+                          "tags": {
+                            "hello": [
+                              "world",
+                              "Lionel Richie"
+                            ]
+                          },
+                          "trace_ids": [
+                            "7e07485f-12f9-416b-8b14-26260799b51f"
+                          ],
+                          "urls": [
+                            "/organizations/abc123/issues"
+                          ],
+                          "user": {
+                            "display_name": "John Doe",
+                            "email": "john.doe@example.com",
+                            "id": "30246326",
+                            "ip": "213.164.1.114",
+                            "username": "John Doe"
+                          }
                         }
-                      }
-                    ],
+                      ]
+                    },
                     "summary": "Get list of replays"
                   }
                 }
@@ -78971,256 +78981,264 @@
         }
       },
       "ListReplays": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "project_id": {
-              "type": "string"
-            },
-            "trace_ids": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "error_ids": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "environment": {
-              "type": "string",
-              "nullable": true
-            },
-            "tags": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                {
-                  "type": "array",
-                  "items": {}
-                }
-              ]
-            },
-            "user": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
               "type": "object",
               "properties": {
                 "id": {
+                  "type": "string"
+                },
+                "project_id": {
+                  "type": "string"
+                },
+                "trace_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "error_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "environment": {
                   "type": "string",
                   "nullable": true
                 },
-                "username": {
-                  "type": "string",
-                  "nullable": true
+                "tags": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    }
+                  ]
                 },
-                "email": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "ip": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "display_name": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "geo": {
+                "user": {
                   "type": "object",
                   "properties": {
-                    "city": {
+                    "id": {
                       "type": "string",
                       "nullable": true
                     },
-                    "country_code": {
+                    "username": {
                       "type": "string",
                       "nullable": true
                     },
-                    "region": {
+                    "email": {
                       "type": "string",
                       "nullable": true
                     },
-                    "subdivision": {
+                    "ip": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "geo": {
+                      "type": "object",
+                      "properties": {
+                        "city": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "country_code": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "region": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "subdivision": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "sdk": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "version": {
                       "type": "string",
                       "nullable": true
                     }
                   }
+                },
+                "os": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "version": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "browser": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "version": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "device": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "brand": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "model": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "family": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "ota_updates": {
+                  "type": "object",
+                  "properties": {
+                    "channel": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "runtime_version": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "update_id": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "is_archived": {
+                  "type": "boolean",
+                  "nullable": true
+                },
+                "urls": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "clicks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "count_dead_clicks": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "count_rage_clicks": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "count_errors": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "duration": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "finished_at": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "started_at": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "activity": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "count_urls": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "replay_type": {
+                  "type": "string"
+                },
+                "count_segments": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "platform": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "releases": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "dist": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "count_warnings": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "count_infos": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "has_viewed": {
+                  "type": "boolean"
                 }
               }
-            },
-            "sdk": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "version": {
-                  "type": "string",
-                  "nullable": true
-                }
-              }
-            },
-            "os": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "version": {
-                  "type": "string",
-                  "nullable": true
-                }
-              }
-            },
-            "browser": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "version": {
-                  "type": "string",
-                  "nullable": true
-                }
-              }
-            },
-            "device": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "brand": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "model": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "family": {
-                  "type": "string",
-                  "nullable": true
-                }
-              }
-            },
-            "ota_updates": {
-              "type": "object",
-              "properties": {
-                "channel": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "runtime_version": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "update_id": {
-                  "type": "string",
-                  "nullable": true
-                }
-              }
-            },
-            "is_archived": {
-              "type": "boolean",
-              "nullable": true
-            },
-            "urls": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "nullable": true
-            },
-            "clicks": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": {}
-              }
-            },
-            "count_dead_clicks": {
-              "type": "integer",
-              "nullable": true
-            },
-            "count_rage_clicks": {
-              "type": "integer",
-              "nullable": true
-            },
-            "count_errors": {
-              "type": "integer",
-              "nullable": true
-            },
-            "duration": {
-              "type": "integer",
-              "nullable": true
-            },
-            "finished_at": {
-              "type": "string",
-              "nullable": true
-            },
-            "started_at": {
-              "type": "string",
-              "nullable": true
-            },
-            "activity": {
-              "type": "integer",
-              "nullable": true
-            },
-            "count_urls": {
-              "type": "integer",
-              "nullable": true
-            },
-            "replay_type": {
-              "type": "string"
-            },
-            "count_segments": {
-              "type": "integer",
-              "nullable": true
-            },
-            "platform": {
-              "type": "string",
-              "nullable": true
-            },
-            "releases": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "dist": {
-              "type": "string",
-              "nullable": true
-            },
-            "count_warnings": {
-              "type": "integer",
-              "nullable": true
-            },
-            "count_infos": {
-              "type": "integer",
-              "nullable": true
-            },
-            "has_viewed": {
-              "type": "boolean"
             }
           }
-        }
+        },
+        "required": [
+          "data"
+        ]
       },
       "ListSelectors": {
         "type": "object",
