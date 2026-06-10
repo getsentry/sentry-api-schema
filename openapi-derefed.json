@@ -10562,8 +10562,22 @@
                     },
                     "meta": {
                       "type": "object",
+                      "description": "Meta envelope emitted by `handle_results_with_meta` and the\nempty-projects short-circuit. Every key is optional because the path\nthat emits it depends on flags (`standard_meta`, debug, dataset) — the\nno-projects path only carries `tips`, the standard path carries\neverything below.",
                       "properties": {
                         "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "units": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "tips": {
                           "type": "object",
                           "additionalProperties": {
                             "type": "string"
@@ -10577,11 +10591,19 @@
                         },
                         "isMetricsExtractedData": {
                           "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "fields"
-                      ]
+                        },
+                        "dataset": {
+                          "type": "string"
+                        },
+                        "discoverSplitDecision": {},
+                        "dataScanned": {
+                          "type": "string"
+                        },
+                        "bytesScanned": {
+                          "type": "integer"
+                        },
+                        "debug_info": {}
+                      }
                     }
                   },
                   "required": [
@@ -64670,7 +64692,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "description": "Response type for the POST endpoint",
+                  "description": "Response type for the POST endpoint (default kickoff and step paths).",
                   "properties": {
                     "run_id": {
                       "type": "integer"
@@ -67013,7 +67035,7 @@
     "schemas": {
       "AutofixPostResponse": {
         "type": "object",
-        "description": "Response type for the POST endpoint",
+        "description": "Response type for the POST endpoint (default kickoff and step paths).",
         "properties": {
           "run_id": {
             "type": "integer"
@@ -82492,8 +82514,22 @@
           },
           "meta": {
             "type": "object",
+            "description": "Meta envelope emitted by `handle_results_with_meta` and the\nempty-projects short-circuit. Every key is optional because the path\nthat emits it depends on flags (`standard_meta`, debug, dataset) — the\nno-projects path only carries `tips`, the standard path carries\neverything below.",
             "properties": {
               "fields": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "units": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "tips": {
                 "type": "object",
                 "additionalProperties": {
                   "type": "string"
@@ -82507,11 +82543,19 @@
               },
               "isMetricsExtractedData": {
                 "type": "boolean"
-              }
-            },
-            "required": [
-              "fields"
-            ]
+              },
+              "dataset": {
+                "type": "string"
+              },
+              "discoverSplitDecision": {},
+              "dataScanned": {
+                "type": "string"
+              },
+              "bytesScanned": {
+                "type": "integer"
+              },
+              "debug_info": {}
+            }
           }
         },
         "required": [
