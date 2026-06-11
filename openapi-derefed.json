@@ -23221,57 +23221,6 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/download/": {
-      "get": {
-        "operationId": "Download Snapshot images as ZIP",
-        "description": "Download all images in a snapshot as a ZIP archive.\n\nThe response is a streaming `application/zip` file. Images that share\nthe same content hash are deduplicated during fetch but written under\ntheir original filenames in the archive.\n\nThis endpoint requires a bearer token with `project:read` access.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_id_or_slug",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID or slug of the organization the resource belongs to.",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "snapshot_id",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The ID of the snapshot to download.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "Snapshots"
-        ],
-        "security": [
-          {
-            "auth_token": [
-              "org:ci",
-              "project:admin",
-              "project:read",
-              "project:releases",
-              "project:write"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A ZIP archive containing all snapshot images."
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/images/{image_identifier}/": {
       "get": {
         "operationId": "Retrieve Snapshot image detail",
