@@ -25788,6 +25788,24 @@
               }
             },
             "description": "A list of release versions to filter your results by."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "description": "A list of project IDs or slugs to filter your results by."
           }
         ],
         "tags": [
@@ -26028,7 +26046,23 @@
             "schema": {
               "type": "string"
             },
-            "description": "The project ID to filter by."
+            "description": "Deprecated. Use project instead.",
+            "deprecated": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "The project ID or slug to filter by. Overrides project_id when both are sent."
           },
           {
             "in": "query",
