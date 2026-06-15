@@ -17817,7 +17817,7 @@
                 "properties": {
                   "project": {
                     "type": "string",
-                    "description": "The project slug to associate the monitor to."
+                    "description": "The project ID or slug to associate the monitor to."
                   },
                   "name": {
                     "type": "string",
@@ -19482,7 +19482,7 @@
                 "properties": {
                   "project": {
                     "type": "string",
-                    "description": "The project slug to associate the monitor to."
+                    "description": "The project ID or slug to associate the monitor to."
                   },
                   "name": {
                     "type": "string",
@@ -21087,7 +21087,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "List of projects slugs that the Notification Action is created for."
+                    "description": "List of project IDs or slugs that the Notification Action is created for."
                   }
                 },
                 "required": [
@@ -21379,7 +21379,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "List of projects slugs that the Notification Action is created for."
+                    "description": "List of project IDs or slugs that the Notification Action is created for."
                   }
                 },
                 "required": [
@@ -23566,9 +23566,16 @@
             "in": "query",
             "name": "project",
             "schema": {
-              "type": "integer"
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
             },
-            "description": "Project ID to scope the lookup."
+            "description": "Project ID or slug to scope the lookup."
           },
           {
             "in": "query",
@@ -47075,7 +47082,7 @@
                 "properties": {
                   "project": {
                     "type": "string",
-                    "description": "The project slug to associate the monitor to."
+                    "description": "The project ID or slug to associate the monitor to."
                   },
                   "name": {
                     "type": "string",
@@ -81095,7 +81102,7 @@
         "properties": {
           "project": {
             "type": "string",
-            "description": "The project slug to associate the monitor to."
+            "description": "The project ID or slug to associate the monitor to."
           },
           "name": {
             "type": "string",
@@ -81819,7 +81826,7 @@
             "items": {
               "type": "string"
             },
-            "description": "List of projects slugs that the Notification Action is created for."
+            "description": "List of project IDs or slugs that the Notification Action is created for."
           }
         },
         "required": [
