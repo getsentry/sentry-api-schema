@@ -2290,8 +2290,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/config/integrations/": {
       "get": {
-        "operationId": "Get Integration Provider Information",
+        "operationId": "getOrganizationConfigIntegrations",
         "description": "Get integration provider information about all available integrations for an organization.",
+        "summary": "Get Integration Provider Information",
         "parameters": [
           {
             "in": "path",
@@ -6302,8 +6303,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/detectors/": {
       "get": {
-        "operationId": "Fetch an Organization's Monitors",
+        "operationId": "listOrganizationDetectors",
         "description": "List an Organization's Monitors",
+        "summary": "Fetch an Organization's Monitors",
         "parameters": [
           {
             "in": "path",
@@ -6701,8 +6703,9 @@
         }
       },
       "put": {
-        "operationId": "Mutate an Organization's Monitors",
+        "operationId": "updateOrganizationDetectors",
         "description": "Bulk enable or disable an Organization's Monitors",
+        "summary": "Mutate an Organization's Monitors",
         "parameters": [
           {
             "in": "path",
@@ -7111,8 +7114,9 @@
         }
       },
       "delete": {
-        "operationId": "Bulk Delete Monitors",
+        "operationId": "deleteOrganizationDetectors",
         "description": "Bulk delete Monitors for a given organization",
+        "summary": "Bulk Delete Monitors",
         "parameters": [
           {
             "in": "path",
@@ -7206,8 +7210,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/": {
       "get": {
-        "operationId": "Fetch a Monitor",
+        "operationId": "getOrganizationDetector",
         "description": "Return details on an individual monitor",
+        "summary": "Fetch a Monitor",
         "parameters": [
           {
             "in": "path",
@@ -7467,8 +7472,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Monitor by ID",
+        "operationId": "updateOrganizationDetector",
         "description": "Update an existing monitor",
+        "summary": "Update a Monitor by ID",
         "parameters": [
           {
             "in": "path",
@@ -7816,8 +7822,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Monitor",
+        "operationId": "deleteOrganizationDetector",
         "description": "Delete a monitor",
+        "summary": "Delete a Monitor",
         "parameters": [
           {
             "in": "path",
@@ -9947,8 +9954,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/eventids/{event_id}/": {
       "get": {
-        "operationId": "Resolve an Event ID",
+        "operationId": "resolveOrganizationEventId",
         "description": "This resolves an event ID to the project slug and internal issue ID and internal event ID.",
+        "summary": "Resolve an Event ID",
         "parameters": [
           {
             "in": "path",
@@ -11067,8 +11075,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/external-users/": {
       "post": {
-        "operationId": "Create an External User",
+        "operationId": "createOrganizationExternalUser",
         "description": "Link a user from an external provider to a Sentry user.",
+        "summary": "Create an External User",
         "parameters": [
           {
             "in": "path",
@@ -11262,8 +11271,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/": {
       "put": {
-        "operationId": "Update an External User",
+        "operationId": "updateOrganizationExternalUser",
         "description": "Update a user in an external provider that is currently linked to a Sentry user.",
+        "summary": "Update an External User",
         "parameters": [
           {
             "in": "path",
@@ -11413,8 +11423,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an External User",
+        "operationId": "deleteOrganizationExternalUser",
         "description": "Delete the link between a user from an external provider and a Sentry user.",
+        "summary": "Delete an External User",
         "parameters": [
           {
             "in": "path",
@@ -11461,8 +11472,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/forwarding/": {
       "get": {
-        "operationId": "Retrieve Data Forwarders for an Organization",
+        "operationId": "listOrganizationForwarding",
         "description": "Returns a list of data forwarders for an organization.",
+        "summary": "Retrieve Data Forwarders for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -11764,8 +11776,9 @@
         }
       },
       "post": {
-        "operationId": "Create a Data Forwarder for an Organization",
+        "operationId": "createOrganizationForwarding",
         "description": "Creates a new data forwarder for an organization.\nOnly one data forwarder can be created per provider for a given organization.\n\nProject-specific overrides can only be created after creating the data forwarder.",
+        "summary": "Create a Data Forwarder for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -11996,8 +12009,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/": {
       "put": {
-        "operationId": "Update a Data Forwarder for an Organization",
+        "operationId": "updateOrganizationForwarding",
         "description": "Updates a data forwarder for an organization or update a project-specific override.\nUpdates to the data forwarder's configuration require `org:write` permissions, and the entire\nconfiguration to be provided, including the `project_ids` field.\n\nTo configure project-specific overrides, specify only the following fields:\n\n  - 'project_id': The ID of the project to create/modify the override for.\n  - 'overrides': Follows the same format as `config` but all provider fields are optional, since only specified fields are overridden.\n  - 'is_enabled': To enable/disable the forwarder for events on the specific project.\n\nOverrides can be performed with `project:write` permissions on the project being modified.",
+        "summary": "Update a Data Forwarder for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -12259,8 +12273,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Data Forwarder for an Organization",
+        "operationId": "deleteOrganizationForwarding",
         "description": "Deletes a data forwarder for an organization. All project-specific overrides will be deleted as well.",
+        "summary": "Delete a Data Forwarder for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -12303,8 +12318,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/integrations/": {
       "get": {
-        "operationId": "List an Organization's Available Integrations",
+        "operationId": "listOrganizationIntegrations",
         "description": "Lists all the available Integrations for an Organization.",
+        "summary": "List an Organization's Available Integrations",
         "parameters": [
           {
             "in": "path",
@@ -12503,8 +12519,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/": {
       "get": {
-        "operationId": "Retrieve an Integration for an Organization",
+        "operationId": "getOrganizationIntegration",
         "description": "OrganizationIntegrationBaseEndpoints expect both Integration and\nOrganizationIntegration DB entries to exist for a given organization and\nintegration_id.",
+        "summary": "Retrieve an Integration for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -12668,8 +12685,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an Integration for an Organization",
+        "operationId": "deleteOrganizationIntegration",
         "description": "OrganizationIntegrationBaseEndpoints expect both Integration and\nOrganizationIntegration DB entries to exist for a given organization and\nintegration_id.",
+        "summary": "Delete an Integration for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -12713,8 +12731,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/": {
       "get": {
-        "operationId": "List an Organization's Issues",
+        "operationId": "listOrganizationIssues",
         "description": "Return a list of issues for an organization. All parameters are supplied as query string parameters. A default query of `is:unresolved` is applied. To return all results, use an empty query value (i.e. ``?query=`). ",
+        "summary": "List an Organization's Issues",
         "parameters": [
           {
             "in": "path",
@@ -13741,8 +13760,9 @@
         }
       },
       "put": {
-        "operationId": "Bulk Mutate an Organization's Issues",
+        "operationId": "updateOrganizationIssues",
         "description": "Bulk mutate various attributes on a maxmimum of 1000 issues. \n- For non-status updates, the `id` query parameter is required. \n- For status updates, the `id` query parameter may be omitted to update issues that match the filtering. \nIf any IDs are out of scope, the data won't be mutated but the endpoint will still produce a successful response. For example, if no issues were found matching the criteria, a HTTP 204 is returned.",
+        "summary": "Bulk Mutate an Organization's Issues",
         "parameters": [
           {
             "in": "path",
@@ -14218,8 +14238,9 @@
         }
       },
       "delete": {
-        "operationId": "Bulk Remove an Organization's Issues",
+        "operationId": "deleteOrganizationIssues",
         "description": "Permanently remove the given issues. If IDs are provided, queries and filtering will be ignored. If any IDs are out of scope, the data won't be mutated but the endpoint will still produce a successful response. For example, if no issues were found matching the criteria, a HTTP 204 is returned.",
+        "summary": "Bulk Remove an Organization's Issues",
         "parameters": [
           {
             "in": "path",
@@ -25339,8 +25360,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/projects/{project_id_or_slug}/detectors/": {
       "post": {
-        "operationId": "Create a Monitor for a Project",
+        "operationId": "createOrganizationProjectDetector",
         "description": "Create a Monitor for a project",
+        "summary": "Create a Monitor for a Project",
         "parameters": [
           {
             "in": "path",
@@ -26049,8 +26071,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/releases/{version}/": {
       "get": {
-        "operationId": "Retrieve an Organization's Release",
+        "operationId": "getOrganizationRelease",
         "description": "Return details on an individual release.",
+        "summary": "Retrieve an Organization's Release",
         "parameters": [
           {
             "in": "path",
@@ -27023,8 +27046,9 @@
         }
       },
       "put": {
-        "operationId": "Update an Organization's Release",
+        "operationId": "updateOrganizationRelease",
         "description": "Update a release. This can change some metadata associated with\nthe release (the ref, url, and dates).",
+        "summary": "Update an Organization's Release",
         "parameters": [
           {
             "in": "path",
@@ -27998,8 +28022,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an Organization's Release",
+        "operationId": "deleteOrganizationRelease",
         "description": "Permanently remove a release and all of its files.",
+        "summary": "Delete an Organization's Release",
         "parameters": [
           {
             "in": "path",
@@ -28049,8 +28074,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/releases/{version}/deploys/": {
       "get": {
-        "operationId": "List a Release's Deploys",
+        "operationId": "listOrganizationReleaseDeploys",
         "description": "Returns a list of deploys based on the organization, version, and project.",
+        "summary": "List a Release's Deploys",
         "parameters": [
           {
             "in": "path",
@@ -28153,8 +28179,9 @@
         }
       },
       "post": {
-        "operationId": "Create a Deploy",
+        "operationId": "createOrganizationReleaseDeploy",
         "description": "Create a deploy for a given release.",
+        "summary": "Create a Deploy",
         "parameters": [
           {
             "in": "path",
@@ -29810,8 +29837,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/repos/": {
       "get": {
-        "operationId": "List an Organization's Repositories",
+        "operationId": "listOrganizationRepos",
         "description": "Return a list of version control repositories for a given organization.",
+        "summary": "List an Organization's Repositories",
         "parameters": [
           {
             "in": "path",
@@ -29987,8 +30015,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/repos/{repo_id}/commits/": {
       "get": {
-        "operationId": "List a Repository's Commits",
+        "operationId": "listOrganizationRepoCommits",
         "description": "List a Repository's Commits",
+        "summary": "List a Repository's Commits",
         "parameters": [
           {
             "in": "path",
@@ -32541,8 +32570,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/shortids/{issue_id}/": {
       "get": {
-        "operationId": "Resolve a Short ID",
+        "operationId": "resolveOrganizationShortId",
         "description": "Resolve a short ID to the project slug and group details.",
+        "summary": "Resolve a Short ID",
         "parameters": [
           {
             "in": "path",
@@ -36946,8 +36976,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/workflows/": {
       "get": {
-        "operationId": "Fetch Alerts",
+        "operationId": "listOrganizationWorkflows",
         "description": "Returns a list of alerts for a given organization",
+        "summary": "Fetch Alerts",
         "parameters": [
           {
             "in": "path",
@@ -37489,8 +37520,9 @@
         }
       },
       "post": {
-        "operationId": "Create an Alert for an Organization",
+        "operationId": "createOrganizationWorkflow",
         "description": "Creates an alert for an organization",
+        "summary": "Create an Alert for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -37976,8 +38008,9 @@
         }
       },
       "put": {
-        "operationId": "Mutate an Organization's Alerts",
+        "operationId": "updateOrganizationWorkflows",
         "description": "Bulk enable or disable alerts for a given Organization",
+        "summary": "Mutate an Organization's Alerts",
         "parameters": [
           {
             "in": "path",
@@ -38529,8 +38562,9 @@
         }
       },
       "delete": {
-        "operationId": "Bulk Delete Alerts",
+        "operationId": "deleteOrganizationWorkflows",
         "description": "Bulk delete alerts for a given organization",
+        "summary": "Bulk Delete Alerts",
         "parameters": [
           {
             "in": "path",
@@ -38615,8 +38649,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/": {
       "get": {
-        "operationId": "Fetch an Alert",
+        "operationId": "getOrganizationWorkflow",
         "description": "Returns an alert.",
+        "summary": "Fetch an Alert",
         "parameters": [
           {
             "in": "path",
@@ -39019,8 +39054,9 @@
         }
       },
       "put": {
-        "operationId": "Update an Alert by ID",
+        "operationId": "updateOrganizationWorkflow",
         "description": "Updates an alert.",
+        "summary": "Update an Alert by ID",
         "parameters": [
           {
             "in": "path",
@@ -39513,8 +39549,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an Alert",
+        "operationId": "deleteOrganizationWorkflow",
         "description": "Deletes an alert.",
+        "summary": "Delete an Alert",
         "parameters": [
           {
             "in": "path",
@@ -42288,8 +42325,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/": {
       "get": {
-        "operationId": "List a Project's Error Events",
+        "operationId": "listProjectEvents",
         "description": "Return a list of events bound to a project.",
+        "summary": "List a Project's Error Events",
         "parameters": [
           {
             "in": "path",
@@ -42586,8 +42624,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/": {
       "get": {
-        "operationId": "Retrieve an Event for a Project",
+        "operationId": "getProjectEvent",
         "description": "Return details on an individual event.",
+        "summary": "Retrieve an Event for a Project",
         "parameters": [
           {
             "in": "path",
@@ -48552,8 +48591,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/ownership/": {
       "get": {
-        "operationId": "Retrieve Ownership Configuration for a Project",
+        "operationId": "getProjectOwnership",
         "description": "Returns details on a project's ownership configuration.",
+        "summary": "Retrieve Ownership Configuration for a Project",
         "parameters": [
           {
             "in": "path",
@@ -48754,8 +48794,9 @@
         }
       },
       "put": {
-        "operationId": "Update Ownership Configuration for a Project",
+        "operationId": "updateProjectOwnership",
         "description": "Updates ownership configurations for a project. Note that only the\nattributes submitted are modified.",
+        "summary": "Update Ownership Configuration for a Project",
         "parameters": [
           {
             "in": "path",
@@ -50262,8 +50303,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/": {
       "get": {
-        "operationId": "List a Project's Releases",
+        "operationId": "listProjectReleases",
         "description": "Retrieve a list of releases for a given project.",
+        "summary": "List a Project's Releases",
         "parameters": [
           {
             "in": "path",
@@ -57137,8 +57179,9 @@
     },
     "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/": {
       "post": {
-        "operationId": "Create an External Team",
+        "operationId": "createTeamExternalTeam",
         "description": "Link a team from an external provider to a Sentry team.",
+        "summary": "Create an External Team",
         "parameters": [
           {
             "in": "path",
@@ -57332,8 +57375,9 @@
     },
     "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/": {
       "put": {
-        "operationId": "Update an External Team",
+        "operationId": "updateTeamExternalTeam",
         "description": "Update a team in an external provider that is currently linked to a Sentry team.",
+        "summary": "Update an External Team",
         "parameters": [
           {
             "in": "path",
@@ -57482,8 +57526,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an External Team",
+        "operationId": "deleteTeamExternalTeam",
         "description": "Delete the link between a team from an external provider and a Sentry team.",
+        "summary": "Delete an External Team",
         "parameters": [
           {
             "in": "path",
@@ -60355,8 +60400,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/values/": {
       "get": {
-        "operationId": "List a Tag's Values for an Issue",
+        "operationId": "listOrganizationIssueTagValues",
         "description": "Returns a list of values associated with this key for an issue.\nReturns at most 1000 values when paginated.",
+        "summary": "List a Tag's Values for an Issue",
         "parameters": [
           {
             "in": "path",
@@ -62966,8 +63012,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/": {
       "get": {
-        "operationId": "Retrieve an Issue",
+        "operationId": "getOrganizationIssue",
         "description": "Return details on an individual issue, including its basic stats, comment\nand user-report counts, and a summary of the latest event.",
+        "summary": "Retrieve an Issue",
         "parameters": [
           {
             "in": "path",
@@ -63822,8 +63869,9 @@
         }
       },
       "put": {
-        "operationId": "Update an Issue",
+        "operationId": "updateOrganizationIssue",
         "description": "Update an individual issue's attributes. Only the attributes submitted\nare modified.",
+        "summary": "Update an Issue",
         "parameters": [
           {
             "in": "path",
@@ -64489,8 +64537,9 @@
         }
       },
       "delete": {
-        "operationId": "Remove an Issue",
+        "operationId": "deleteOrganizationIssue",
         "description": "Asynchronously queue an individual issue for deletion.",
+        "summary": "Remove an Issue",
         "parameters": [
           {
             "in": "path",
@@ -64932,8 +64981,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/": {
       "get": {
-        "operationId": "List an Issue's Events",
+        "operationId": "listOrganizationIssueEvents",
         "description": "Return a list of error events bound to an issue",
+        "summary": "List an Issue's Events",
         "parameters": [
           {
             "in": "path",
@@ -65260,8 +65310,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/{event_id}/": {
       "get": {
-        "operationId": "Retrieve an Issue Event",
+        "operationId": "getOrganizationIssueEvent",
         "description": "Retrieves the details of an issue event.",
+        "summary": "Retrieve an Issue Event",
         "parameters": [
           {
             "in": "path",
@@ -66402,8 +66453,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/": {
       "get": {
-        "operationId": "List an Issue's Hashes",
+        "operationId": "listOrganizationIssueHashes",
         "description": "List the hashes that make up an issue. Each hash represents a grouping\nsignature used to aggregate individual events into this issue.",
+        "summary": "List an Issue's Hashes",
         "parameters": [
           {
             "in": "path",
@@ -67067,8 +67119,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/": {
       "get": {
-        "operationId": "Retrieve Tag Details",
+        "operationId": "getOrganizationIssueTag",
         "description": "Return a list of values associated with this key for an issue. When paginated can return at most 1000 values.",
+        "summary": "Retrieve Tag Details",
         "parameters": [
           {
             "in": "path",
