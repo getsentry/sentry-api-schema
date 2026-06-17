@@ -16,8 +16,9 @@
   "paths": {
     "/api/0/organizations/": {
       "get": {
-        "operationId": "List Your Organizations",
+        "operationId": "listOrganizations",
         "description": "Return a list of organizations available to the authenticated session in a region.\nThis is particularly useful for requests with a user bound context. For API key-based requests this will only return the organization that belongs to the key.",
+        "summary": "List Your Organizations",
         "parameters": [
           {
             "in": "query",
@@ -285,8 +286,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/": {
       "get": {
-        "operationId": "Retrieve an Organization",
+        "operationId": "getOrganization",
         "description": "Return details on an individual organization, including various details\nsuch as membership access and teams.",
+        "summary": "Retrieve an Organization",
         "parameters": [
           {
             "in": "path",
@@ -515,8 +517,9 @@
         }
       },
       "put": {
-        "operationId": "Update an Organization",
+        "operationId": "updateOrganization",
         "description": "Update various attributes and configurable settings for the given organization.",
+        "summary": "Update an Organization",
         "parameters": [
           {
             "in": "path",
@@ -9853,8 +9856,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/environments/": {
       "get": {
-        "operationId": "List an Organization's Environments",
+        "operationId": "listOrganizationEnvironments",
         "description": "Lists an organization's environments.",
+        "summary": "List an Organization's Environments",
         "parameters": [
           {
             "in": "path",
@@ -10345,8 +10349,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/events/": {
       "get": {
-        "operationId": "Query Explore Events in Table Format",
+        "operationId": "listOrganizationEvents",
         "description": "Retrieves explore data for a given organization.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested",
+        "summary": "Query Explore Events in Table Format",
         "parameters": [
           {
             "in": "path",
@@ -10611,8 +10616,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/events-timeseries/": {
       "get": {
-        "operationId": "Query Explore Events in Timeseries Format",
+        "operationId": "listOrganizationEventsTimeseries",
         "description": "Retrieves explore data for a given organization as a timeseries.\n\nThis endpoint can return timeseries for either 1 or many axis, and results grouped to the top events depending\non the parameters passed\n\n**Note**: For queries extending past `30d`, spanning billions of rows, or running on projects with low\nsample rates, the aggregation `yAxis=count_unique()` and filters on high-cardinality\nfields (such as `query=user.id:bc`) will not return accurate results. Use these queries for rough\nestimation only.",
+        "summary": "Query Explore Events in Timeseries Format",
         "parameters": [
           {
             "in": "path",
@@ -14340,8 +14346,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/members/": {
       "get": {
-        "operationId": "List an Organization's Members",
+        "operationId": "listOrganizationMembers",
         "description": "List all organization members.\n\nResponse includes pending invites that are approved by organization owners or managers but waiting to be accepted by the invitee.",
+        "summary": "List an Organization's Members",
         "parameters": [
           {
             "in": "path",
@@ -14768,8 +14775,9 @@
         }
       },
       "post": {
-        "operationId": "Add a Member to an Organization",
+        "operationId": "addOrganizationMember",
         "description": "Add or invite a member to an organization.",
+        "summary": "Add a Member to an Organization",
         "parameters": [
           {
             "in": "path",
@@ -15216,8 +15224,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/": {
       "get": {
-        "operationId": "Retrieve an Organization Member",
+        "operationId": "getOrganizationMember",
         "description": "Retrieve an organization member's details.\n\nResponse will be a pending invite if it has been approved by organization owners or managers but is waiting to be accepted by the invitee.",
+        "summary": "Retrieve an Organization Member",
         "parameters": [
           {
             "in": "path",
@@ -15974,8 +15983,9 @@
         }
       },
       "put": {
-        "operationId": "Update an Organization Member's Roles",
+        "operationId": "updateOrganizationMember",
         "description": "Update a member's [organization-level](https://docs.sentry.io/organization/membership/#organization-level-roles) and [team-level](https://docs.sentry.io/organization/membership/#team-level-roles) roles.\n\nNote that for changing organization-roles, this endpoint is restricted to\n[user auth tokens](https://docs.sentry.io/account/auth-tokens/#user-auth-tokens).\nAdditionally, both the original and desired organization role must have\nthe same or lower permissions than the role of the organization user making the request\n\nFor example, an organization Manager may change someone's role from\nMember to Manager, but not to Owner.",
+        "summary": "Update an Organization Member's Roles",
         "parameters": [
           {
             "in": "path",
@@ -16763,8 +16773,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an Organization Member",
+        "operationId": "deleteOrganizationMember",
         "description": "Remove an organization member.",
+        "summary": "Delete an Organization Member",
         "parameters": [
           {
             "in": "path",
@@ -16815,8 +16826,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/": {
       "post": {
-        "operationId": "Add an Organization Member to a Team",
+        "operationId": "addOrganizationMemberTeam",
         "description": "This request can return various success codes depending on the context of the team:\n- **`201`**: The member has been successfully added.\n- **`202`**: The member needs permission to join the team and an access request\nhas been generated.\n- **`204`**: The member is already on the team.\n\nIf the team is provisioned through an identity provider, the member cannot join the\nteam through Sentry.\n\nNote the permission scopes vary depending on the organization setting `\"Open Membership\"`\nand the type of authorization token. The following table outlines the accepted scopes.\n<table style=\"width: 100%;\">\n<thead>\n    <tr>\n    <th style=\"width: 33%;\"></th>\n    <th colspan=\"2\" style=\"text-align: center; font-weight: bold; width: 33%;\">Open Membership</th>\n    </tr>\n</thead>\n<tbody>\n    <tr>\n    <td style=\"width: 34%;\"></td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">On</td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">Off</td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/account/auth-tokens/#internal-integrations\">Internal Integration Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; team:write</strong></li>\n        </ul>\n    </td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/account/auth-tokens/#user-auth-tokens\">User Auth Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read +</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&nbsp; &nbsp;team:write**</strong></li>\n        </ul>\n    </td>\n    </tr>\n</tbody>\n</table>\n\n\n*Organization members are restricted to this scope. When sending a request, it will always\nreturn a 202 and request an invite to the team.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:write`** scopes in their user\nauthorization token to add members to their teams.",
+        "summary": "Add an Organization Member to a Team",
         "parameters": [
           {
             "in": "path",
@@ -16993,8 +17005,9 @@
         }
       },
       "put": {
-        "operationId": "Update an Organization Member's Team Role",
+        "operationId": "updateOrganizationMemberTeam",
         "description": "The relevant organization member must already be a part of the team.\n\nNote that for organization admins, managers, and owners, they are\nautomatically granted a minimum team role of `admin` on all teams they\nare part of. Read more about [team roles](https://docs.sentry.io/product/teams/roles/).",
+        "summary": "Update an Organization Member's Team Role",
         "parameters": [
           {
             "in": "path",
@@ -17106,8 +17119,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an Organization Member from a Team",
+        "operationId": "deleteOrganizationMemberTeam",
         "description": "Delete an organization member from a team.\n\nNote the permission scopes vary depending on the type of authorization token. The following\ntable outlines the accepted scopes.\n<table style=\"width: 100%;\">\n    <tr style=\"width: 50%;\">\n        <td style=\"width: 50%; text-align: center; font-weight: bold; vertical-align: middle;\"><a href=\"https://docs.sentry.io/api/auth/#auth-tokens\">Org Auth Token</a></td>\n        <td style=\"width: 50%; text-align: left;\">\n            <ul style=\"list-style-type: none; padding-left: 0;\">\n                <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; team:admin</strong></li>\n            </ul>\n        </td>\n    </tr>\n    <tr style=\"width: 50%;\">\n        <td style=\"width: 50%; text-align: center; font-weight: bold; vertical-align: middle;\"><a href=\"https://docs.sentry.io/api/auth/#user-authentication-tokens\">User Auth Token</a></td>\n        <td style=\"width: 50%; text-align: left;\">\n            <ul style=\"list-style-type: none; padding-left: 0;\">\n                <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; team:admin</strong></li>\n                <li><strong style=\"color: #9c5f99;\">&bull; org:read + team:admin**</strong></li>\n            </ul>\n        </td>\n    </tr>\n</table>\n\n\n\\***`org:read`** can only be used to remove yourself from the teams you are a member of.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:admin`** scopes in their user\nauthorization token to delete members from their teams.",
+        "summary": "Delete an Organization Member from a Team",
         "parameters": [
           {
             "in": "path",
@@ -23744,8 +23758,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/profiling/chunks/": {
       "get": {
-        "operationId": "Retrieve Profile Chunks for an Organization",
+        "operationId": "listOrganizationProfilingChunks",
         "description": "Retrieve continuous profiling data for a profiler over a time range.\n\nExactly one project must be specified via the `project` query parameter.\n\nRequires continuous profiling to be enabled for the organization.",
+        "summary": "Retrieve Profile Chunks for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -23895,8 +23910,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/profiling/flamegraph/": {
       "get": {
-        "operationId": "Retrieve a Flamegraph for an Organization",
+        "operationId": "getOrganizationProfilingFlamegraph",
         "description": "Retrieve an aggregated flamegraph for the organization, built from the\nrequested data source (transactions, profiles, functions, or spans).\n\nPass `expand=metrics` to include aggregated function metrics in the response.\n\nRequires profiling to be enabled for the organization.",
+        "summary": "Retrieve a Flamegraph for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -24181,8 +24197,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/project-keys/": {
       "get": {
-        "operationId": "List an Organization's Client Keys",
+        "operationId": "listOrganizationProjectKeys",
         "description": "Return a list of client keys (DSNs) for all projects in an organization.\n\nThis paginated endpoint lists client keys across all projects in an organization. Each key includes the project ID\nto identify which project it belongs to.\n\nQuery Parameters:\n- team: Filter by team slug or ID to get keys only for that team's projects\n- status: Filter by 'active' or 'inactive' to get keys with specific status",
+        "summary": "List an Organization's Client Keys",
         "parameters": [
           {
             "in": "path",
@@ -24539,8 +24556,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/projects/": {
       "get": {
-        "operationId": "List an Organization's Projects",
+        "operationId": "listOrganizationProjects",
         "description": "Return a list of projects bound to a organization.",
+        "summary": "List an Organization's Projects",
         "parameters": [
           {
             "in": "path",
@@ -24911,8 +24929,9 @@
         }
       },
       "post": {
-        "operationId": "Create a Project for an Organization",
+        "operationId": "createOrganizationProject",
         "description": "Create a new project for an organization. A personal team (`team-{username}`) is automatically created for the caller with Team Admin role, and the project is bound to it. If the org has member project creation disabled (`disable_member_project_creation`), `org:write` scope is required.",
+        "summary": "Create a Project for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -25645,8 +25664,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/relay_usage/": {
       "get": {
-        "operationId": "List an Organization's trusted Relays",
+        "operationId": "listOrganizationRelayUsage",
         "description": "Return a list of trusted relays bound to an organization.",
+        "summary": "List an Organization's trusted Relays",
         "parameters": [
           {
             "in": "path",
@@ -25733,8 +25753,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/release-threshold-statuses/": {
       "get": {
-        "operationId": "Retrieve Statuses of Release Thresholds (Alpha)",
+        "operationId": "listOrganizationReleaseThresholdStatuses",
         "description": "**`[WARNING]`**: This API is an experimental Alpha feature and is subject to change!\n\nList all derived statuses of releases that fall within the provided start/end datetimes.\n\nConstructs a response key'd off \\{`release_version`\\}-\\{`project_slug`\\} that lists thresholds with their status for *specified* projects.\nEach returned enriched threshold will contain the full serialized `release_threshold` instance as well as it's derived health statuses.",
+        "summary": "Retrieve Statuses of Release Thresholds (Alpha)",
         "parameters": [
           {
             "in": "path",
@@ -30645,8 +30666,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups": {
       "get": {
-        "operationId": "List an Organization's Paginated Teams",
+        "operationId": "listOrganizationScimV2Groups",
         "description": "Returns a paginated list of teams bound to a organization with a SCIM Groups GET Request.\n\nNote that the members field will only contain up to 10,000 members.",
+        "summary": "List an Organization's Paginated Teams",
         "parameters": [
           {
             "in": "path",
@@ -30838,8 +30860,9 @@
         }
       },
       "post": {
-        "operationId": "Provision a New Team",
+        "operationId": "provisionOrganizationScimV2Group",
         "description": "Create a new team bound to an organization via a SCIM Groups POST\nRequest. The slug will have a normalization of uppercases/spaces to\nlowercases and dashes.\n\nNote that teams are always created with an empty member set.",
+        "summary": "Provision a New Team",
         "parameters": [
           {
             "in": "path",
@@ -30971,8 +30994,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}": {
       "get": {
-        "operationId": "Query an Individual Team",
+        "operationId": "getOrganizationScimV2Group",
         "description": "Query an individual team with a SCIM Group GET Request.\n- Note that the members field will only contain up to 10000 members.",
+        "summary": "Query an Individual Team",
         "parameters": [
           {
             "in": "path",
@@ -31093,8 +31117,9 @@
         }
       },
       "patch": {
-        "operationId": "Update a Team's Attributes",
+        "operationId": "updateOrganizationScimV2Group",
         "description": "Update a team's attributes with a SCIM Group PATCH Request.",
+        "summary": "Update a Team's Attributes",
         "parameters": [
           {
             "in": "path",
@@ -31179,8 +31204,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an Individual Team",
+        "operationId": "deleteOrganizationScimV2Group",
         "description": "Delete a team with a SCIM Group DELETE Request.",
+        "summary": "Delete an Individual Team",
         "parameters": [
           {
             "in": "path",
@@ -31229,8 +31255,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users": {
       "get": {
-        "operationId": "List an Organization's SCIM Members",
+        "operationId": "listOrganizationScimV2Users",
         "description": "Returns a paginated list of members bound to a organization with a SCIM Users GET Request.",
+        "summary": "List an Organization's SCIM Members",
         "parameters": [
           {
             "in": "path",
@@ -31463,8 +31490,9 @@
         }
       },
       "post": {
-        "operationId": "Provision a New Organization Member",
+        "operationId": "provisionOrganizationScimV2User",
         "description": "Create a new Organization Member via a SCIM Users POST Request.\n\nNote that this API does not support setting secondary emails.",
+        "summary": "Provision a New Organization Member",
         "parameters": [
           {
             "in": "path",
@@ -31648,8 +31676,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}": {
       "get": {
-        "operationId": "Query an Individual Organization Member",
+        "operationId": "getOrganizationScimV2User",
         "description": "Query an individual organization member with a SCIM User GET Request.\n- The `name` object will contain fields `firstName` and `lastName` with the values of `N/A`.\nSentry's SCIM API does not currently support these fields but returns them for compatibility purposes.",
+        "summary": "Query an Individual Organization Member",
         "parameters": [
           {
             "in": "path",
@@ -31811,8 +31840,9 @@
         }
       },
       "patch": {
-        "operationId": "Update an Organization Member's Attributes",
+        "operationId": "updateOrganizationScimV2User",
         "description": "Update an organization member's attributes with a SCIM PATCH Request.",
+        "summary": "Update an Organization Member's Attributes",
         "parameters": [
           {
             "in": "path",
@@ -31896,8 +31926,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete an Organization Member via SCIM",
+        "operationId": "deleteOrganizationScimV2User",
         "description": "Delete an organization member with a SCIM User DELETE Request.",
+        "summary": "Delete an Organization Member via SCIM",
         "parameters": [
           {
             "in": "path",
@@ -32214,8 +32245,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/sessions/": {
       "get": {
-        "operationId": "Retrieve Release Health Session Statistics",
+        "operationId": "getOrganizationSessions",
         "description": "Returns a time series of release health session statistics for projects bound to an organization.\n\nThe interval and date range are subject to certain restrictions and rounding rules.\n\nThe date range is rounded to align with the interval, and is rounded to at least one\nhour. The interval can at most be one day and at least one hour currently. It has to cleanly\ndivide one day, for rounding reasons.\n\nBecause of technical limitations, this endpoint returns\nat most 10000 data points. For example, if you select a 90 day window grouped by releases,\nyou will see at most `floor(10k / (90 + 1)) = 109` releases. To get more results, reduce the\n`statsPeriod`.",
+        "summary": "Retrieve Release Health Session Statistics",
         "parameters": [
           {
             "in": "path",
@@ -33116,8 +33148,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/stats-summary/": {
       "get": {
-        "operationId": "Retrieve an Organization's Events Count by Project",
+        "operationId": "getOrganizationStatsSummary",
         "description": "Query summarized event counts by project for your Organization. Also see https://docs.sentry.io/api/organizations/retrieve-event-counts-for-an-organization-v2/ for reference.",
+        "summary": "Retrieve an Organization's Events Count by Project",
         "parameters": [
           {
             "in": "path",
@@ -33361,8 +33394,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/stats_v2/": {
       "get": {
-        "operationId": "Retrieve Event Counts for an Organization (v2)",
+        "operationId": "listOrganizationStatsV2",
         "description": "Query event counts for your Organization.\nSelect a field, define a date range, and group or filter by columns.",
+        "summary": "Retrieve Event Counts for an Organization (v2)",
         "parameters": [
           {
             "in": "path",
@@ -33606,8 +33640,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/tags/": {
       "get": {
-        "operationId": "List an Organization's Tags",
+        "operationId": "listOrganizationTags",
         "description": "Return a list of tag keys for the given organization.",
+        "summary": "List an Organization's Tags",
         "parameters": [
           {
             "in": "path",
@@ -33852,8 +33887,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/teams/": {
       "get": {
-        "operationId": "List an Organization's Teams",
+        "operationId": "listOrganizationTeams",
         "description": "Returns a list of teams bound to a organization.",
+        "summary": "List an Organization's Teams",
         "parameters": [
           {
             "in": "path",
@@ -34567,8 +34603,9 @@
         }
       },
       "post": {
-        "operationId": "Create a New Team",
+        "operationId": "createOrganizationTeam",
         "description": "Create a new team bound to an organization. Requires at least one of the `name`\nor `slug` body params to be set.",
+        "summary": "Create a New Team",
         "parameters": [
           {
             "in": "path",
@@ -35122,8 +35159,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/trace-items/attributes/": {
       "get": {
-        "operationId": "List Trace Item Attributes",
+        "operationId": "listOrganizationTraceItemAttributes",
         "description": "List the attribute keys available on a given trace item dataset (spans, logs,\ntrace metrics, etc.), with optional substring and structured filtering.",
+        "summary": "List Trace Item Attributes",
         "parameters": [
           {
             "in": "path",
@@ -35343,8 +35381,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/trace-meta/{trace_id}/": {
       "get": {
-        "operationId": "Retrieve Trace Metadata",
+        "operationId": "getOrganizationTraceMeta",
         "description": "Retrieve aggregate metadata for a single trace, including counts of spans,\nerrors, performance issues, logs, and metrics, along with per-span-operation\nand per-transaction child-count breakdowns.",
+        "summary": "Retrieve Trace Metadata",
         "parameters": [
           {
             "in": "path",
@@ -35513,8 +35552,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/trace/{trace_id}/": {
       "get": {
-        "operationId": "Retrieve a Trace",
+        "operationId": "getOrganizationTrace",
         "description": "Retrieve the spans, errors, and (optionally) uptime checks that make up a single trace.\n\nThe response is a list of top-level events; each item may have nested `children`, `errors`,\nand `occurrences` arrays representing related items. Top-level entries are spans by default\nand may also be uptime checks when `include_uptime=1` is passed.",
+        "summary": "Retrieve a Trace",
         "parameters": [
           {
             "in": "path",
@@ -36222,8 +36262,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/user-teams/": {
       "get": {
-        "operationId": "List a User's Teams for an Organization",
+        "operationId": "listOrganizationUserTeams",
         "description": "Returns a list of teams the user has access to in the specified organization.\nNote that this endpoint is restricted to [user auth tokens](https://docs.sentry.io/account/auth-tokens/#user-auth-tokens).",
+        "summary": "List a User's Teams for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -39527,8 +39568,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/": {
       "get": {
-        "operationId": "Retrieve a Project",
+        "operationId": "getProject",
         "description": "Return details on an individual project.",
+        "summary": "Retrieve a Project",
         "parameters": [
           {
             "in": "path",
@@ -40609,8 +40651,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Project",
+        "operationId": "updateProject",
         "description": "Update various attributes and configurable settings for the given project.\n\nNote that solely having the **`project:read`** scope restricts updatable settings to\n`isBookmarked`, `autofixAutomationTuning`, `seerScannerAutomation`,\n`preprodSizeStatusChecksEnabled`, `preprodSizeStatusChecksRules`,\n`preprodSizeEnabledQuery`, `preprodDistributionEnabledQuery`,\n`preprodSizeEnabledByCustomer`, `preprodDistributionEnabledByCustomer`,\nand `preprodDistributionPrCommentsEnabledByCustomer`.",
+        "summary": "Update a Project",
         "parameters": [
           {
             "in": "path",
@@ -41753,8 +41796,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Project",
+        "operationId": "deleteProject",
         "description": "Schedules a project for deletion.\n\nDeletion happens asynchronously and therefore is not immediate. However once deletion has\nbegun the state of a project changes and will be hidden from most public views.",
+        "summary": "Delete a Project",
         "parameters": [
           {
             "in": "path",
@@ -41800,8 +41844,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/": {
       "get": {
-        "operationId": "List a Project's Environments",
+        "operationId": "listProjectEnvironments",
         "description": "Lists a project's environments.",
+        "summary": "List a Project's Environments",
         "parameters": [
           {
             "in": "path",
@@ -42034,8 +42079,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/{environment}/": {
       "get": {
-        "operationId": "Retrieve a Project Environment",
+        "operationId": "getProjectEnvironment",
         "description": "Return details on a project environment.",
+        "summary": "Retrieve a Project Environment",
         "parameters": [
           {
             "in": "path",
@@ -42126,8 +42172,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Project Environment",
+        "operationId": "updateProjectEnvironment",
         "description": "Update the visibility for a project environment.",
+        "summary": "Update a Project Environment",
         "parameters": [
           {
             "in": "path",
@@ -43583,8 +43630,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/": {
       "get": {
-        "operationId": "List an Event's Attachments",
+        "operationId": "listProjectEventAttachments",
         "description": "Retrieve a list of attachments uploaded for a given event.\n\nRequires the `event-attachments` organization feature.",
+        "summary": "List an Event's Attachments",
         "parameters": [
           {
             "in": "path",
@@ -43753,8 +43801,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/{attachment_id}/": {
       "get": {
-        "operationId": "Retrieve an Event Attachment",
+        "operationId": "getProjectEventAttachment",
         "description": "Retrieve metadata for a single attachment on an event.\n\nRequires the `event-attachments` organization feature.",
+        "summary": "Retrieve an Event Attachment",
         "parameters": [
           {
             "in": "path",
@@ -43896,8 +43945,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/source-map-debug/": {
       "get": {
-        "operationId": "Get Debug Information Related to Source Maps for a Given Event",
+        "operationId": "getProjectEventSourceMapDebug",
         "description": "Return a list of source map errors for a given event.",
+        "summary": "Get Debug Information Related to Source Maps for a Given Event",
         "parameters": [
           {
             "in": "path",
@@ -44330,8 +44380,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/dsyms/": {
       "get": {
-        "operationId": "List a Project's Debug Information Files",
+        "operationId": "listProjectDebugFiles",
         "description": "Retrieve a list of debug information files for a given project.",
+        "summary": "List a Project's Debug Information Files",
         "parameters": [
           {
             "in": "path",
@@ -44545,8 +44596,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/": {
       "get": {
-        "operationId": "List a Project's Data Filters",
+        "operationId": "listProjectFilters",
         "description": "Retrieve a list of filters for a given project.\n`active` will be either a boolean or a list for the legacy browser filters.",
+        "summary": "List a Project's Data Filters",
         "parameters": [
           {
             "in": "path",
@@ -44659,8 +44711,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/{filter_id}/": {
       "put": {
-        "operationId": "Update an Inbound Data Filter",
+        "operationId": "updateProjectFilter",
         "description": "Update various inbound data filters for a project.",
+        "summary": "Update an Inbound Data Filter",
         "parameters": [
           {
             "in": "path",
@@ -44761,8 +44814,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/": {
       "get": {
-        "operationId": "List a Project's Client Keys",
+        "operationId": "listProjectKeys",
         "description": "Return a list of client keys bound to a project.",
+        "summary": "List a Project's Client Keys",
         "parameters": [
           {
             "in": "path",
@@ -45109,8 +45163,9 @@
         }
       },
       "post": {
-        "operationId": "Create a New Client Key",
+        "operationId": "createProjectKey",
         "description": "Create a new client key bound to a project.  The key's secret and public key\nare generated by the server.",
+        "summary": "Create a New Client Key",
         "parameters": [
           {
             "in": "path",
@@ -45434,8 +45489,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/": {
       "get": {
-        "operationId": "Retrieve a Client Key",
+        "operationId": "getProjectKey",
         "description": "Return a client key bound to a project.",
+        "summary": "Retrieve a Client Key",
         "parameters": [
           {
             "in": "path",
@@ -45722,8 +45778,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Client Key",
+        "operationId": "updateProjectKey",
         "description": "Update various settings for a client key.",
+        "summary": "Update a Client Key",
         "parameters": [
           {
             "in": "path",
@@ -46077,8 +46134,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Client Key",
+        "operationId": "deleteProjectKey",
         "description": "Delete a client key for a given project.",
+        "summary": "Delete a Client Key",
         "parameters": [
           {
             "in": "path",
@@ -46133,8 +46191,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/members/": {
       "get": {
-        "operationId": "List a Project's Organization Members",
+        "operationId": "listProjectMembers",
         "description": "Returns a list of active organization members that belong to any team assigned to the project.",
+        "summary": "List a Project's Organization Members",
         "parameters": [
           {
             "in": "path",
@@ -50030,8 +50089,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/profiling/profiles/{profile_id}/": {
       "get": {
-        "operationId": "Retrieve a Profile",
+        "operationId": "getProjectProfilingProfile",
         "description": "Retrieve a single profile by its ID.\n\nThe response includes the profile's metadata, its sampled stack data, and the\nassociated release, when one is found.\n\nRequires profiling to be enabled for the organization.",
+        "summary": "Retrieve a Profile",
         "parameters": [
           {
             "in": "path",
@@ -51886,8 +51946,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/repo/": {
       "post": {
-        "operationId": "Link a Repository to a Project",
+        "operationId": "linkProjectRepository",
         "description": "Link a repository to a project. The repository must already exist\nin the organization (connected via a VCS integration). Idempotent:\nreturns 200 if the link already exists, 201 if created.",
+        "summary": "Link a Repository to a Project",
         "parameters": [
           {
             "in": "path",
@@ -51984,8 +52045,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stats/": {
       "get": {
-        "operationId": "Retrieve Event Counts for a Project",
+        "operationId": "listProjectStats",
         "description": "Return a set of points representing a normalized timestamp and the number of\nevents seen in the period.\n\nQuery ranges are limited to Sentry's configured time-series resolutions.\nThis endpoint may change in the future without notice.",
+        "summary": "Retrieve Event Counts for a Project",
         "parameters": [
           {
             "in": "path",
@@ -52199,8 +52261,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/": {
       "get": {
-        "operationId": "Retrieve a Project's Symbol Sources",
+        "operationId": "listProjectSymbolSources",
         "description": "List custom symbol sources configured for a project.",
+        "summary": "Retrieve a Project's Symbol Sources",
         "parameters": [
           {
             "in": "path",
@@ -52734,8 +52797,9 @@
         }
       },
       "post": {
-        "operationId": "Add a Symbol Source to a Project",
+        "operationId": "addProjectSymbolSource",
         "description": "Add a custom symbol source to a project.",
+        "summary": "Add a Symbol Source to a Project",
         "parameters": [
           {
             "in": "path",
@@ -53413,8 +53477,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Project's Symbol Source",
+        "operationId": "updateProjectSymbolSource",
         "description": "Update a custom symbol source in a project.",
+        "summary": "Update a Project's Symbol Source",
         "parameters": [
           {
             "in": "path",
@@ -54104,8 +54169,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Symbol Source from a Project",
+        "operationId": "deleteProjectSymbolSource",
         "description": "Delete a custom symbol source from a project.",
+        "summary": "Delete a Symbol Source from a Project",
         "parameters": [
           {
             "in": "path",
@@ -54160,8 +54226,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/": {
       "get": {
-        "operationId": "List a Project's Teams",
+        "operationId": "listProjectTeams",
         "description": "Return a list of teams that have access to this project.",
+        "summary": "List a Project's Teams",
         "parameters": [
           {
             "in": "path",
@@ -54366,8 +54433,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/": {
       "post": {
-        "operationId": "Add a Team to a Project",
+        "operationId": "addProjectTeam",
         "description": "Give a team access to a project.",
+        "summary": "Add a Team to a Project",
         "parameters": [
           {
             "in": "path",
@@ -54739,8 +54807,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Team from a Project",
+        "operationId": "deleteProjectTeam",
         "description": "Revoke a team's access to a project.\n\nNote that Team Admins can only revoke access to teams they are admins of.",
+        "summary": "Delete a Team from a Project",
         "parameters": [
           {
             "in": "path",
@@ -55109,8 +55178,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/users/": {
       "get": {
-        "operationId": "List a Project's Users",
+        "operationId": "listProjectUsers",
         "description": "Return a list of users seen within this project.",
+        "summary": "List a Project's Users",
         "parameters": [
           {
             "in": "path",
@@ -55255,8 +55325,9 @@
     },
     "/api/0/seer/models/": {
       "get": {
-        "operationId": "List Seer AI Models",
+        "operationId": "listSeerModels",
         "description": "Get list of actively used LLM model names from Seer.\n\nReturns the list of AI models that are currently used in production in Seer.\nThis endpoint does not require authentication and can be used to discover which models Seer uses.\n\nRequests to this endpoint should use the region-specific domain\neg. `us.sentry.io` or `de.sentry.io`",
+        "summary": "List Seer AI Models",
         "tags": [
           "Seer"
         ],
@@ -55886,8 +55957,9 @@
     },
     "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/": {
       "get": {
-        "operationId": "Retrieve a Team",
+        "operationId": "getTeam",
         "description": "Return details on an individual team.",
+        "summary": "Retrieve a Team",
         "parameters": [
           {
             "in": "path",
@@ -56460,8 +56532,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Team",
+        "operationId": "updateTeam",
         "description": "Update various attributes and configurable settings for the given\nteam.",
+        "summary": "Update a Team",
         "parameters": [
           {
             "in": "path",
@@ -57016,8 +57089,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Team",
+        "operationId": "deleteTeam",
         "description": "Schedules a team for deletion.\n\n**Note:** Deletion happens asynchronously and therefore is not\nimmediate. Teams will have their slug released while waiting for deletion.",
+        "summary": "Delete a Team",
         "parameters": [
           {
             "in": "path",
@@ -57464,8 +57538,9 @@
     },
     "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/": {
       "get": {
-        "operationId": "List a Team's Members",
+        "operationId": "listTeamMembers",
         "description": "List all members on a team.\n\nThe response will not include members with pending invites.",
+        "summary": "List a Team's Members",
         "parameters": [
           {
             "in": "path",
@@ -57899,8 +57974,9 @@
     },
     "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/projects/": {
       "get": {
-        "operationId": "List a Team's Projects",
+        "operationId": "listTeamProjects",
         "description": "Return a list of projects bound to a team.",
+        "summary": "List a Team's Projects",
         "parameters": [
           {
             "in": "path",
@@ -58285,8 +58361,9 @@
         }
       },
       "post": {
-        "operationId": "Create a New Project",
+        "operationId": "createTeamProject",
         "description": "Create a new project bound to a team.\n\n        Note: If your organization has disabled member project creation, the `org:write` or `team:admin` scope is required.\n        ",
+        "summary": "Create a New Project",
         "parameters": [
           {
             "in": "path",
