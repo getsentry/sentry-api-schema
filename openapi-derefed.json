@@ -35378,6 +35378,35 @@
                           "boolean"
                         ],
                         "type": "string"
+                      },
+                      "context": {
+                        "type": "object",
+                        "description": "Additional, mostly-static metadata about an attribute sourced from the\nsentry conventions (``sentry_conventions.attributes.ATTRIBUTE_METADATA``).\n\nOnly attributes that map to a known sentry convention have context, and\nwithin the context only the fields actually present in the conventions\nmetadata are included. This is only attached when the caller passes\n``expand=context`` and the ``data-browsing-attribute-context`` feature is\nenabled.",
+                        "properties": {
+                          "brief": {
+                            "type": "string"
+                          },
+                          "isDeprecated": {
+                            "type": "boolean"
+                          },
+                          "details": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "examples": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "replacementAttribute": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "brief",
+                          "isDeprecated"
+                        ]
                       }
                     },
                     "required": [
@@ -80232,6 +80261,35 @@
                 "boolean"
               ],
               "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "description": "Additional, mostly-static metadata about an attribute sourced from the\nsentry conventions (``sentry_conventions.attributes.ATTRIBUTE_METADATA``).\n\nOnly attributes that map to a known sentry convention have context, and\nwithin the context only the fields actually present in the conventions\nmetadata are included. This is only attached when the caller passes\n``expand=context`` and the ``data-browsing-attribute-context`` feature is\nenabled.",
+              "properties": {
+                "brief": {
+                  "type": "string"
+                },
+                "isDeprecated": {
+                  "type": "boolean"
+                },
+                "details": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "examples": {
+                  "type": "array",
+                  "items": {}
+                },
+                "replacementAttribute": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "brief",
+                "isDeprecated"
+              ]
             }
           },
           "required": [
