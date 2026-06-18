@@ -17316,8 +17316,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/monitors/": {
       "get": {
-        "operationId": "Retrieve Monitors for an Organization",
+        "operationId": "listOrganizationMonitors",
         "description": "Lists monitors, including nested monitor environments. May be filtered to a project or environment.",
+        "summary": "Retrieve Monitors for an Organization",
         "parameters": [
           {
             "in": "path",
@@ -17827,8 +17828,9 @@
         }
       },
       "post": {
-        "operationId": "Create a Monitor",
+        "operationId": "createOrganizationMonitor",
         "description": "Create a new monitor.",
+        "summary": "Create a Monitor",
         "parameters": [
           {
             "in": "path",
@@ -19001,8 +19003,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/": {
       "get": {
-        "operationId": "Retrieve a Monitor",
+        "operationId": "getOrganizationMonitor",
         "description": "Retrieves details for a monitor.",
+        "summary": "Retrieve a Monitor",
         "parameters": [
           {
             "in": "path",
@@ -19483,8 +19486,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Monitor",
+        "operationId": "updateOrganizationMonitor",
         "description": "Update a monitor.",
+        "summary": "Update a Monitor",
         "parameters": [
           {
             "in": "path",
@@ -20663,8 +20667,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Monitor or Monitor Environments",
+        "operationId": "deleteOrganizationMonitor",
         "description": "Delete a monitor or monitor environments.",
+        "summary": "Delete a Monitor or Monitor Environments",
         "parameters": [
           {
             "in": "path",
@@ -20726,8 +20731,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/checkins/": {
       "get": {
-        "operationId": "Retrieve Check-Ins for a Monitor",
+        "operationId": "listOrganizationMonitorCheckins",
         "description": "Retrieve a list of check-ins for a monitor",
+        "summary": "Retrieve Check-Ins for a Monitor",
         "parameters": [
           {
             "in": "path",
@@ -20920,8 +20926,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/notifications/actions/": {
       "get": {
-        "operationId": "List Spike Protection Notifications",
+        "operationId": "listOrganizationNotificationsActions",
         "description": "Returns all Spike Protection Notification Actions for an organization.\n\nNotification Actions notify a set of members when an action has been triggered through a notification service such as Slack or Sentry.\nFor example, organization owners and managers can receive an email when a spike occurs.\n\nYou can use the `project` query parameter with project IDs or slugs to filter for certain projects.\nA legacy project slug query parameter is also supported and takes priority if both are present.",
+        "summary": "List Spike Protection Notifications",
         "parameters": [
           {
             "in": "path",
@@ -21074,8 +21081,9 @@
         }
       },
       "post": {
-        "operationId": "Create a Spike Protection Notification Action",
+        "operationId": "createOrganizationNotificationsAction",
         "description": "Creates a new Notification Action for Spike Protection.\n\nNotification Actions notify a set of members when an action has been triggered through a notification service such as Slack or Sentry.\nFor example, organization owners and managers can receive an email when a spike occurs.",
+        "summary": "Create a Spike Protection Notification Action",
         "parameters": [
           {
             "in": "path",
@@ -21237,8 +21245,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/": {
       "get": {
-        "operationId": "Retrieve a Spike Protection Notification Action",
+        "operationId": "getOrganizationNotificationsAction",
         "description": "Returns a serialized Spike Protection Notification Action object.\n\nNotification Actions notify a set of members when an action has been triggered through a notification service such as Slack or Sentry.\nFor example, organization owners and managers can receive an email when a spike occurs.",
+        "summary": "Retrieve a Spike Protection Notification Action",
         "parameters": [
           {
             "in": "path",
@@ -21357,8 +21366,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Spike Protection Notification Action",
+        "operationId": "updateOrganizationNotificationsAction",
         "description": "Updates a Spike Protection Notification Action.\n\nNotification Actions notify a set of members when an action has been triggered through a notification service such as Slack or Sentry.\nFor example, organization owners and managers can receive an email when a spike occurs.",
+        "summary": "Update a Spike Protection Notification Action",
         "parameters": [
           {
             "in": "path",
@@ -21524,8 +21534,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Spike Protection Notification Action",
+        "operationId": "deleteOrganizationNotificationsAction",
         "description": "Deletes a Spike Protection Notification Action.\n\nNotification Actions notify a set of members when an action has been triggered through a notification service such as Slack or Sentry.\nFor example, organization owners and managers can receive an email when a spike occurs.",
+        "summary": "Delete a Spike Protection Notification Action",
         "parameters": [
           {
             "in": "path",
@@ -21567,8 +21578,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/install-details/": {
       "get": {
-        "operationId": "Retrieve install info for a given artifact",
+        "operationId": "getOrganizationPreprodArtifactInstallDetails",
         "description": "Retrieve install info for a given artifact.\n\nReturns distribution and installation details for a specific preprod artifact,\nincluding whether the artifact is installable, the install URL, download count,\nand iOS-specific code signing information.",
+        "summary": "Retrieve install info for a given artifact",
         "parameters": [
           {
             "in": "path",
@@ -21903,8 +21915,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/size-analysis/": {
       "get": {
-        "operationId": "Retrieve Size Analysis results for a given artifact",
+        "operationId": "getOrganizationPreprodArtifactSizeAnalysis",
         "description": "Retrieve size analysis results for a given artifact.\n\nReturns size metrics including download size, install size, and optional insights.\nWhen a base artifact exists (either from commit comparison or via the `baseArtifactId` parameter),\ncomparison data showing size differences is included.\n\nThe response `state` field indicates the analysis status:\n- `PENDING`: Analysis has not started yet.\n- `PROCESSING`: Analysis is currently running.\n- `FAILED` / `NOT_RAN`: Analysis did not complete; `errorCode` and `errorMessage` are included.\n- `COMPLETED`: Analysis finished successfully with full size data.",
+        "summary": "Retrieve Size Analysis results for a given artifact",
         "parameters": [
           {
             "in": "path",
@@ -22608,8 +22621,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/": {
       "get": {
-        "operationId": "Retrieve Snapshot details",
+        "operationId": "getOrganizationPreprodArtifactSnapshot",
         "description": "Retrieve full details for a snapshot, including categorized image lists\nand comparison status.\n\nWhen a comparison exists, images are categorized into `changed`, `added`,\n`removed`, `renamed`, `unchanged`, `errored`, and `skipped` lists with\ncounts. Without a comparison, only the `images` list is populated.\n\nUse `compact_metadata=1` to strip image objects down to `display_name`,\n`image_file_name`, `group`, and `description` only.\n\nThis endpoint requires a bearer token with `project:read` access.",
+        "summary": "Retrieve Snapshot details",
         "parameters": [
           {
             "in": "path",
@@ -23282,8 +23296,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Snapshot",
+        "operationId": "deleteOrganizationPreprodArtifactSnapshot",
         "description": "Delete a snapshot and all associated data (images, comparisons, metrics).\n\nThis is a permanent, irreversible operation. The snapshot and its images\nwill no longer be accessible after deletion.\n\nThis endpoint requires a bearer token with `project:write` access.",
+        "summary": "Delete a Snapshot",
         "parameters": [
           {
             "in": "path",
@@ -23330,8 +23345,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/images/{image_identifier}/": {
       "get": {
-        "operationId": "Retrieve Snapshot image detail",
+        "operationId": "getOrganizationPreprodArtifactSnapshotImage",
         "description": "Retrieve detailed information for a single image within a snapshot.\n\nThe `image_identifier` can be either the image filename or its content\nhash. The response includes head and base image metadata, comparison\nstatus, diff image URL, diff percentage, and previous filename for\nrenames.\n\nThis endpoint uses a flat response format with nullable fields designed\nfor LLM/MCP consumers.\n\nThis endpoint requires a bearer token with `project:read` access.",
+        "summary": "Retrieve Snapshot image detail",
         "parameters": [
           {
             "in": "path",
@@ -23568,8 +23584,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/latest-base/": {
       "get": {
-        "operationId": "Retrieve latest base Snapshot",
+        "operationId": "getOrganizationPreprodArtifactSnapshotLatestBase",
         "description": "Retrieve the most recent base snapshot for a given app.\n\nA base snapshot is one uploaded without a `base_sha` (i.e., a snapshot\nfrom a base branch like `main`). Use the optional `branch` and `project`\nparameters to narrow the search.\n\nThe response includes the full image list with download URLs. Use\n`compact_metadata=1` to reduce image metadata.\n\nThis endpoint requires a bearer token with `project:read` access.",
+        "summary": "Retrieve latest base Snapshot",
         "parameters": [
           {
             "in": "path",
@@ -32006,8 +32023,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/sentry-apps/": {
       "get": {
-        "operationId": "Retrieve the custom integrations created by an organization",
+        "operationId": "listOrganizationSentryApps",
         "description": "Retrieve the custom integrations for an organization",
+        "summary": "Retrieve the custom integrations created by an organization",
         "parameters": [
           {
             "in": "path",
@@ -46657,8 +46675,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/": {
       "get": {
-        "operationId": "Retrieve a Monitor for a Project",
+        "operationId": "getProjectMonitor",
         "description": "Retrieves details for a monitor.",
+        "summary": "Retrieve a Monitor for a Project",
         "parameters": [
           {
             "in": "path",
@@ -47137,8 +47156,9 @@
         }
       },
       "put": {
-        "operationId": "Update a Monitor for a Project",
+        "operationId": "updateProjectMonitor",
         "description": "Update a monitor.",
+        "summary": "Update a Monitor for a Project",
         "parameters": [
           {
             "in": "path",
@@ -48326,8 +48346,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a Monitor or Monitor Environments for a Project",
+        "operationId": "deleteProjectMonitor",
         "description": "Delete a monitor or monitor environments.",
+        "summary": "Delete a Monitor or Monitor Environments for a Project",
         "parameters": [
           {
             "in": "path",
@@ -48398,8 +48419,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/checkins/": {
       "get": {
-        "operationId": "Retrieve Check-Ins for a Monitor by Project",
+        "operationId": "listProjectMonitorCheckins",
         "description": "Retrieve a list of check-ins for a monitor",
+        "summary": "Retrieve Check-Ins for a Monitor by Project",
         "parameters": [
           {
             "in": "path",
@@ -49030,8 +49052,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/size-analysis/status-check-rules/": {
       "get": {
-        "operationId": "Retrieve Size Analysis status check rules for a project",
+        "operationId": "getProjectPreprodSizeAnalysisStatusCheckRules",
         "description": "Retrieve the current Size Analysis status check rules configured for a project.\n\nUse this endpoint after receiving a `size_analysis.completed` webhook when you\nwant external CI to evaluate the same Size Analysis status check thresholds that\nSentry uses. The endpoint returns the current project configuration, not a\nhistorical snapshot from when the webhook was emitted.\n\nThe response includes whether status check enforcement is enabled and the\nnormalized rule list Sentry uses when evaluating Size Analysis thresholds.\n\nThis endpoint requires a bearer token with `project:read` access. Project\ndistribution tokens are not supported.\n\nResponse notes:\n\n- `enabled: false` means status-check enforcement is disabled for the project.\n- `rules: []` means there are no configured thresholds to evaluate.\n- `value` is returned as a string. For `absolute` and `absolute_diff`\n  measurements it is a byte value; for `relative_diff` it is a percentage.\n- `filterQuery` is the original configured filter string.\n- `filters` is the machine-readable version of `filterQuery`.\n- `filters: []` means the rule has no filters and applies to all builds.\n- `filters: null` means the saved filter query could not be parsed; Sentry's\n  status check trigger treats that rule as non-matching.\n\nRule evaluation semantics:\n\n- Threshold comparisons are strict: a rule triggers only when the computed value\n  is greater than the configured threshold, not greater than or equal to it.\n- `absolute_diff` and `relative_diff` require a matching base metric/build.\n- `relative_diff` does not trigger when the base size is zero.\n- `artifactType` identifies the artifact scope the rule evaluates.\n  `main_artifact`, `watch_artifact`, `android_dynamic_feature_artifact`,\n  and `app_clip_artifact` target their matching artifact metric.\n  `all_artifacts` evaluates all available artifact metrics.\n- Rule filters support the keys `app_id`, `git_head_ref`,\n  `build_configuration_name`, and `platform_name`.\n- Filter objects are combined with AND. Multiple `conditions` inside one\n  filter object are combined with OR.\n- Each condition uses `values`; single-value operators still return a\n  one-item array.\n- Values in `filters` are decoded literal values for exact/simple operators,\n  not query syntax. For example, `app_id:\\*com` in `filterQuery` becomes\n  `values: [\"*com\"]` with `operator: \"equals\"`.\n- The same key can appear in more than one filter object when positive and\n  negative conditions both exist; those filter objects are still combined with\n  AND.\n- Supported filter operators are `equals`, `notEquals`, `in`, `notIn`,\n  `contains`, `notContains`, `startsWith`, `notStartsWith`, `endsWith`,\n  `notEndsWith`, `matches`, and `notMatches`.\n- `matches` and `notMatches` values use Sentry wildcard pattern syntax, not\n  regular expressions. `*` matches zero or more characters, escaped `\\*`\n  matches a literal asterisk, and a pattern without `*` is an exact match.\n- `in` and `notIn` are evaluated as one condition against all values, matching\n  Sentry's status check trigger behavior.\n- A rule applies only when the build metadata matches all filters. If a\n  referenced metadata key is missing, the filter does not match, even for\n  negated operators.",
+        "summary": "Retrieve Size Analysis status check rules for a project",
         "parameters": [
           {
             "in": "path",
@@ -49256,8 +49279,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-check-rules/": {
       "get": {
-        "operationId": "Retrieve Snapshot status check rules for a project",
+        "operationId": "getProjectPreprodSnapshotStatusCheckRules",
         "description": "Retrieve the current Snapshot status check rules configured for a project.\n\nUse this endpoint when external CI needs to evaluate the same Snapshot\nchange-type rules that Sentry uses. The endpoint returns the current\nproject configuration, not a historical snapshot from when a build was\nprocessed.\n\nThe response includes whether status check enforcement is enabled and the\nSnapshot change types that fail the status check.\n\nThis endpoint requires a bearer token with `project:read` access. Project\ndistribution tokens are not supported.\n\nResponse notes:\n\n- `enabled: false` means status-check enforcement is disabled for the project.\n- `rules` contains one boolean per Snapshot change type.\n- `failOnAdded`, `failOnRemoved`, `failOnChanged`, and `failOnRenamed`\n  indicate which unapproved change types fail the status check.",
+        "summary": "Retrieve Snapshot status check rules for a project",
         "parameters": [
           {
             "in": "path",
@@ -49358,8 +49382,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/build-distribution/latest/": {
       "get": {
-        "operationId": "Get the latest installable build for a project",
+        "operationId": "getProjectInstallableBuildLatest",
         "description": "Get the latest installable build for a project.\n\nReturns the latest installable build matching filter criteria.\nWhen buildVersion is provided, also returns the current build and\nwhether an update is available.",
+        "summary": "Get the latest installable build for a project",
         "parameters": [
           {
             "in": "path",
@@ -50042,8 +50067,9 @@
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/": {
       "post": {
-        "operationId": "Upload a Snapshot",
+        "operationId": "uploadProjectPreprodArtifactSnapshot",
         "description": "Upload a new snapshot with image metadata.\n\nThe request body is a JSON object containing `app_id` (required),\n`images` (required, a mapping of filenames to image metadata objects),\nand optional VCS fields (`head_sha`, `base_sha`, `provider`,\n`head_repo_name`, `head_ref`, `base_repo_name`, `base_ref`, `pr_number`).\n\nWhen VCS info with a `base_sha` is provided and a matching base snapshot\nexists, a comparison is automatically triggered.\n\nThis endpoint requires a bearer token with `project:write` access.",
+        "summary": "Upload a Snapshot",
         "parameters": [
           {
             "in": "path",
@@ -55411,8 +55437,9 @@
     },
     "/api/0/sentry-apps/{sentry_app_id_or_slug}/": {
       "get": {
-        "operationId": "Retrieve a custom integration by ID or slug.",
+        "operationId": "getSentryApp",
         "description": "Retrieve a custom integration.",
+        "summary": "Retrieve a custom integration by ID or slug.",
         "parameters": [
           {
             "in": "path",
@@ -55644,8 +55671,9 @@
         }
       },
       "put": {
-        "operationId": "Update an existing custom integration.",
+        "operationId": "updateSentryApp",
         "description": "Update an existing custom integration.",
+        "summary": "Update an existing custom integration.",
         "parameters": [
           {
             "in": "path",
@@ -55964,8 +55992,9 @@
         }
       },
       "delete": {
-        "operationId": "Delete a custom integration.",
+        "operationId": "deleteSentryApp",
         "description": "Delete a custom integration.",
+        "summary": "Delete a custom integration.",
         "parameters": [
           {
             "in": "path",
@@ -64588,8 +64617,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/autofix/": {
       "get": {
-        "operationId": "Retrieve Seer Issue Fix State",
+        "operationId": "getOrganizationIssueAutofixState",
         "description": "Retrieve the current detailed state of an issue fix process for a specific issue including:\n\n- Current status\n- Steps performed and their outcomes\n- Repository information and permissions\n- Root Cause Analysis\n- Proposed Solution\n- Generated code changes\n\nThis endpoint although documented is still experimental and the payload may change in the future.",
+        "summary": "Retrieve Seer Issue Fix State",
         "parameters": [
           {
             "in": "path",
@@ -64828,8 +64858,9 @@
         }
       },
       "post": {
-        "operationId": "Start Seer Issue Fix",
+        "operationId": "startOrganizationIssueAutofix",
         "description": "Trigger a Seer Issue Fix run for a specific issue.\n\nThe issue fix process can:\n- Identify the root cause of the issue\n- Propose a solution\n- Generate code changes\n- Create a pull request with the fix\n\nThe process runs asynchronously, and you can get the state using the GET endpoint.",
+        "summary": "Start Seer Issue Fix",
         "parameters": [
           {
             "in": "path",
@@ -66362,8 +66393,9 @@
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/external-issues/": {
       "get": {
-        "operationId": "Retrieve custom integration issue links for the given Sentry issue",
+        "operationId": "listOrganizationIssueExternalIssues",
         "description": "Retrieve custom integration issue links for the given Sentry issue",
+        "summary": "Retrieve custom integration issue links for the given Sentry issue",
         "parameters": [
           {
             "in": "path",
