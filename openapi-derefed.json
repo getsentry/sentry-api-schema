@@ -12881,8 +12881,6 @@
                   "integrationIssues",
                   "latestEventHasAttachments",
                   "owners",
-                  "pluginActions",
-                  "pluginIssues",
                   "sentryAppIssues",
                   "sessions"
                 ]
@@ -13464,24 +13462,6 @@
                           "type"
                         ]
                       },
-                      "pluginActions": {
-                        "type": "array",
-                        "items": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
-                          "minLength": 2,
-                          "maxLength": 2
-                        }
-                      },
-                      "pluginIssues": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        }
-                      },
                       "integrationIssues": {
                         "type": "array",
                         "items": {
@@ -13537,8 +13517,6 @@
                       "owners",
                       "permalink",
                       "platform",
-                      "pluginActions",
-                      "pluginIssues",
                       "priority",
                       "priorityLockedAt",
                       "project",
@@ -13726,8 +13704,6 @@
                         "type": "default",
                         "userCount": 0,
                         "integrationIssues": [],
-                        "pluginIssues": [],
-                        "pluginActions": [],
                         "sentryAppIssues": [],
                         "isUnhandled": false,
                         "issueCategory": "performance",
@@ -40158,133 +40134,6 @@
                         "status"
                       ]
                     },
-                    "plugins": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          },
-                          "shortName": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "type": "string"
-                          },
-                          "canDisable": {
-                            "type": "boolean"
-                          },
-                          "isTestable": {
-                            "type": "boolean"
-                          },
-                          "hasConfiguration": {
-                            "type": "boolean"
-                          },
-                          "metadata": {
-                            "type": "object",
-                            "additionalProperties": {}
-                          },
-                          "contexts": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "status": {
-                            "type": "string"
-                          },
-                          "assets": {
-                            "type": "array",
-                            "items": {}
-                          },
-                          "doc": {
-                            "type": "string"
-                          },
-                          "firstPartyAlternative": {},
-                          "deprecationDate": {},
-                          "altIsSentryApp": {},
-                          "enabled": {
-                            "type": "boolean"
-                          },
-                          "version": {
-                            "type": "string"
-                          },
-                          "author": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "string"
-                            }
-                          },
-                          "isDeprecated": {
-                            "type": "boolean"
-                          },
-                          "isHidden": {
-                            "type": "boolean"
-                          },
-                          "description": {
-                            "type": "string"
-                          },
-                          "features": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "featureDescriptions": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "additionalProperties": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "resourceLinks": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "additionalProperties": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        },
-                        "required": [
-                          "altIsSentryApp",
-                          "assets",
-                          "author",
-                          "canDisable",
-                          "contexts",
-                          "deprecationDate",
-                          "description",
-                          "doc",
-                          "enabled",
-                          "featureDescriptions",
-                          "features",
-                          "firstPartyAlternative",
-                          "hasConfiguration",
-                          "id",
-                          "isDeprecated",
-                          "isHidden",
-                          "isTestable",
-                          "metadata",
-                          "name",
-                          "resourceLinks",
-                          "shortName",
-                          "slug",
-                          "status",
-                          "type",
-                          "version"
-                        ]
-                      }
-                    },
                     "platforms": {
                       "type": "array",
                       "items": {
@@ -40407,7 +40256,6 @@
                     "organization",
                     "platform",
                     "platforms",
-                    "plugins",
                     "processingIssues",
                     "relayPiiConfig",
                     "resolveAge",
@@ -40619,58 +40467,6 @@
                         },
                         "hasAuthProvider": true
                       },
-                      "plugins": [
-                        {
-                          "id": "asana",
-                          "name": "Asana",
-                          "slug": "asana",
-                          "shortName": "Asana",
-                          "type": "issue-tracking",
-                          "canDisable": true,
-                          "isTestable": false,
-                          "hasConfiguration": true,
-                          "metadata": {},
-                          "contexts": [],
-                          "status": "unknown",
-                          "assets": [],
-                          "doc": "",
-                          "firstPartyAlternative": null,
-                          "deprecationDate": null,
-                          "altIsSentryApp": null,
-                          "enabled": true,
-                          "version": "23.7.0.dev0",
-                          "author": {
-                            "name": "Sentry Team",
-                            "url": "https://github.com/getsentry/sentry"
-                          },
-                          "isDeprecated": false,
-                          "isHidden": false,
-                          "description": "\nImprove your productivity by creating tasks in Asana directly\nfrom Sentry issues. This integration also allows you to link Sentry\nissues to existing tasks in Asana.\n",
-                          "features": [
-                            "issue-basic"
-                          ],
-                          "featureDescriptions": [
-                            {
-                              "description": "Create and link Sentry issue groups directly to an Asana ticket in any of your\n            projects, providing a quick way to jump from a Sentry bug to tracked ticket.",
-                              "featureGate": "issue-basic"
-                            },
-                            {
-                              "description": "Link Sentry issues to existing Asana tickets.",
-                              "featureGate": "issue-basic"
-                            }
-                          ],
-                          "resourceLinks": [
-                            {
-                              "title": "Report Issue",
-                              "url": "https://github.com/getsentry/sentry/issues"
-                            },
-                            {
-                              "title": "View Source",
-                              "url": "https://github.com/getsentry/sentry/tree/master/src/sentry_plugins"
-                            }
-                          ]
-                        }
-                      ],
                       "platforms": [
                         "native",
                         "other",
@@ -41303,133 +41099,6 @@
                         "status"
                       ]
                     },
-                    "plugins": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          },
-                          "shortName": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "type": "string"
-                          },
-                          "canDisable": {
-                            "type": "boolean"
-                          },
-                          "isTestable": {
-                            "type": "boolean"
-                          },
-                          "hasConfiguration": {
-                            "type": "boolean"
-                          },
-                          "metadata": {
-                            "type": "object",
-                            "additionalProperties": {}
-                          },
-                          "contexts": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "status": {
-                            "type": "string"
-                          },
-                          "assets": {
-                            "type": "array",
-                            "items": {}
-                          },
-                          "doc": {
-                            "type": "string"
-                          },
-                          "firstPartyAlternative": {},
-                          "deprecationDate": {},
-                          "altIsSentryApp": {},
-                          "enabled": {
-                            "type": "boolean"
-                          },
-                          "version": {
-                            "type": "string"
-                          },
-                          "author": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "string"
-                            }
-                          },
-                          "isDeprecated": {
-                            "type": "boolean"
-                          },
-                          "isHidden": {
-                            "type": "boolean"
-                          },
-                          "description": {
-                            "type": "string"
-                          },
-                          "features": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "featureDescriptions": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "additionalProperties": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "resourceLinks": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "additionalProperties": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        },
-                        "required": [
-                          "altIsSentryApp",
-                          "assets",
-                          "author",
-                          "canDisable",
-                          "contexts",
-                          "deprecationDate",
-                          "description",
-                          "doc",
-                          "enabled",
-                          "featureDescriptions",
-                          "features",
-                          "firstPartyAlternative",
-                          "hasConfiguration",
-                          "id",
-                          "isDeprecated",
-                          "isHidden",
-                          "isTestable",
-                          "metadata",
-                          "name",
-                          "resourceLinks",
-                          "shortName",
-                          "slug",
-                          "status",
-                          "type",
-                          "version"
-                        ]
-                      }
-                    },
                     "platforms": {
                       "type": "array",
                       "items": {
@@ -41552,7 +41221,6 @@
                     "organization",
                     "platform",
                     "platforms",
-                    "plugins",
                     "processingIssues",
                     "relayPiiConfig",
                     "resolveAge",
@@ -41764,58 +41432,6 @@
                         },
                         "hasAuthProvider": true
                       },
-                      "plugins": [
-                        {
-                          "id": "asana",
-                          "name": "Asana",
-                          "slug": "asana",
-                          "shortName": "Asana",
-                          "type": "issue-tracking",
-                          "canDisable": true,
-                          "isTestable": false,
-                          "hasConfiguration": true,
-                          "metadata": {},
-                          "contexts": [],
-                          "status": "unknown",
-                          "assets": [],
-                          "doc": "",
-                          "firstPartyAlternative": null,
-                          "deprecationDate": null,
-                          "altIsSentryApp": null,
-                          "enabled": true,
-                          "version": "23.7.0.dev0",
-                          "author": {
-                            "name": "Sentry Team",
-                            "url": "https://github.com/getsentry/sentry"
-                          },
-                          "isDeprecated": false,
-                          "isHidden": false,
-                          "description": "\nImprove your productivity by creating tasks in Asana directly\nfrom Sentry issues. This integration also allows you to link Sentry\nissues to existing tasks in Asana.\n",
-                          "features": [
-                            "issue-basic"
-                          ],
-                          "featureDescriptions": [
-                            {
-                              "description": "Create and link Sentry issue groups directly to an Asana ticket in any of your\n            projects, providing a quick way to jump from a Sentry bug to tracked ticket.",
-                              "featureGate": "issue-basic"
-                            },
-                            {
-                              "description": "Link Sentry issues to existing Asana tickets.",
-                              "featureGate": "issue-basic"
-                            }
-                          ],
-                          "resourceLinks": [
-                            {
-                              "title": "Report Issue",
-                              "url": "https://github.com/getsentry/sentry/issues"
-                            },
-                            {
-                              "title": "View Source",
-                              "url": "https://github.com/getsentry/sentry/tree/master/src/sentry_plugins"
-                            }
-                          ]
-                        }
-                      ],
                       "platforms": [
                         "native",
                         "other",
@@ -63741,24 +63357,6 @@
                         "additionalProperties": {}
                       }
                     },
-                    "pluginActions": {
-                      "type": "array",
-                      "items": {}
-                    },
-                    "pluginIssues": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    },
-                    "pluginContexts": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    },
                     "userReportCount": {
                       "type": "integer"
                     },
@@ -63789,9 +63387,6 @@
                     "participants",
                     "permalink",
                     "platform",
-                    "pluginActions",
-                    "pluginContexts",
-                    "pluginIssues",
                     "priority",
                     "priorityLockedAt",
                     "project",
@@ -63869,9 +63464,6 @@
                         }
                       ],
                       "seenBy": [],
-                      "pluginActions": [],
-                      "pluginIssues": [],
-                      "pluginContexts": [],
                       "userReportCount": 0,
                       "participants": [],
                       "firstRelease": {
@@ -71701,133 +71293,6 @@
               "status"
             ]
           },
-          "plugins": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "shortName": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": "string"
-                },
-                "canDisable": {
-                  "type": "boolean"
-                },
-                "isTestable": {
-                  "type": "boolean"
-                },
-                "hasConfiguration": {
-                  "type": "boolean"
-                },
-                "metadata": {
-                  "type": "object",
-                  "additionalProperties": {}
-                },
-                "contexts": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "status": {
-                  "type": "string"
-                },
-                "assets": {
-                  "type": "array",
-                  "items": {}
-                },
-                "doc": {
-                  "type": "string"
-                },
-                "firstPartyAlternative": {},
-                "deprecationDate": {},
-                "altIsSentryApp": {},
-                "enabled": {
-                  "type": "boolean"
-                },
-                "version": {
-                  "type": "string"
-                },
-                "author": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  }
-                },
-                "isDeprecated": {
-                  "type": "boolean"
-                },
-                "isHidden": {
-                  "type": "boolean"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "features": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "featureDescriptions": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "resourceLinks": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "required": [
-                "altIsSentryApp",
-                "assets",
-                "author",
-                "canDisable",
-                "contexts",
-                "deprecationDate",
-                "description",
-                "doc",
-                "enabled",
-                "featureDescriptions",
-                "features",
-                "firstPartyAlternative",
-                "hasConfiguration",
-                "id",
-                "isDeprecated",
-                "isHidden",
-                "isTestable",
-                "metadata",
-                "name",
-                "resourceLinks",
-                "shortName",
-                "slug",
-                "status",
-                "type",
-                "version"
-              ]
-            }
-          },
           "platforms": {
             "type": "array",
             "items": {
@@ -71950,7 +71415,6 @@
           "organization",
           "platform",
           "platforms",
-          "plugins",
           "processingIssues",
           "relayPiiConfig",
           "resolveAge",
@@ -74266,24 +73730,6 @@
               "additionalProperties": {}
             }
           },
-          "pluginActions": {
-            "type": "array",
-            "items": {}
-          },
-          "pluginIssues": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": {}
-            }
-          },
-          "pluginContexts": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": {}
-            }
-          },
           "userReportCount": {
             "type": "integer"
           },
@@ -74314,9 +73760,6 @@
           "participants",
           "permalink",
           "platform",
-          "pluginActions",
-          "pluginContexts",
-          "pluginIssues",
           "priority",
           "priorityLockedAt",
           "project",
@@ -83629,24 +83072,6 @@
                 "type"
               ]
             },
-            "pluginActions": {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "minLength": 2,
-                "maxLength": 2
-              }
-            },
-            "pluginIssues": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": {}
-              }
-            },
             "integrationIssues": {
               "type": "array",
               "items": {
@@ -83702,8 +83127,6 @@
             "owners",
             "permalink",
             "platform",
-            "pluginActions",
-            "pluginIssues",
             "priority",
             "priorityLockedAt",
             "project",
