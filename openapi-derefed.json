@@ -35361,8 +35361,11 @@
                       },
                       "context": {
                         "type": "object",
-                        "description": "Additional, mostly-static metadata about an attribute.\n\nWhen ``expand=context`` is requested, context is attached to every\nattribute. Today the metadata is sourced from the sentry conventions\n(``sentry_conventions.attributes.ATTRIBUTE_METADATA``), so attributes that\nmap to a known convention carry that metadata (only the fields actually\npresent are included) while custom attributes get an empty context. Serving\ncontext for custom attributes is planned (gated behind the\n``data-browsing-attribute-context`` feature), at which point the empty\ncontexts will start to be populated.",
+                        "description": "Additional, mostly-static metadata about an attribute.\n\nWhen ``expand=context`` is requested, context is attached to every\nattribute. Today the metadata is sourced from the sentry conventions\n(``sentry_conventions.attributes.ATTRIBUTE_METADATA``), matched by attribute\nname (and type when known) regardless of the attribute's source, so any\nattribute that maps to a known convention carries that metadata (only the\nfields actually present are included) while the rest get an empty context.\nServing context for custom attributes is planned (gated behind the\n``data-browsing-attribute-context`` feature), at which point the empty\ncontexts will start to be populated.",
                         "properties": {
+                          "isConvention": {
+                            "type": "boolean"
+                          },
                           "brief": {
                             "type": "string"
                           },
@@ -79759,8 +79762,11 @@
             },
             "context": {
               "type": "object",
-              "description": "Additional, mostly-static metadata about an attribute.\n\nWhen ``expand=context`` is requested, context is attached to every\nattribute. Today the metadata is sourced from the sentry conventions\n(``sentry_conventions.attributes.ATTRIBUTE_METADATA``), so attributes that\nmap to a known convention carry that metadata (only the fields actually\npresent are included) while custom attributes get an empty context. Serving\ncontext for custom attributes is planned (gated behind the\n``data-browsing-attribute-context`` feature), at which point the empty\ncontexts will start to be populated.",
+              "description": "Additional, mostly-static metadata about an attribute.\n\nWhen ``expand=context`` is requested, context is attached to every\nattribute. Today the metadata is sourced from the sentry conventions\n(``sentry_conventions.attributes.ATTRIBUTE_METADATA``), matched by attribute\nname (and type when known) regardless of the attribute's source, so any\nattribute that maps to a known convention carries that metadata (only the\nfields actually present are included) while the rest get an empty context.\nServing context for custom attributes is planned (gated behind the\n``data-browsing-attribute-context`` feature), at which point the empty\ncontexts will start to be populated.",
               "properties": {
+                "isConvention": {
+                  "type": "boolean"
+                },
                 "brief": {
                   "type": "string"
                 },
