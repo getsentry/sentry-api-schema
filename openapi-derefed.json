@@ -32103,6 +32103,12 @@
                       "verifyInstall": {
                         "type": "boolean"
                       },
+                      "webhookHeaders": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
                       "isDisabled": {
                         "type": "boolean"
                       },
@@ -32166,7 +32172,8 @@
                       "slug",
                       "status",
                       "uuid",
-                      "verifyInstall"
+                      "verifyInstall",
+                      "webhookHeaders"
                     ]
                   }
                 },
@@ -32206,6 +32213,9 @@
                         "uuid": "77cebea3-019e-484d-8673-6c3969698827",
                         "verifyInstall": true,
                         "webhookUrl": "https://example.com/webhook",
+                        "webhookHeaders": [
+                          "X-Custom-Header: value"
+                        ],
                         "clientId": "ed06141686bb60102d878c607eff449fa9907fa7a8cb70f0d337a8fb0b6566c3",
                         "clientSecret": "**********",
                         "owner": {
@@ -32239,6 +32249,9 @@
                         "uuid": "77cebea3-019e-484d-8673-123124234",
                         "verifyInstall": true,
                         "webhookUrl": "https://example.com/webhook",
+                        "webhookHeaders": [
+                          "X-Custom-Header: value"
+                        ],
                         "clientId": "2730a92919437a7b052e6827cd2c9f119be37101asdasdad123131231231231",
                         "clientSecret": "**********",
                         "owner": {
@@ -55208,6 +55221,12 @@
                     "verifyInstall": {
                       "type": "boolean"
                     },
+                    "webhookHeaders": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
                     "isDisabled": {
                       "type": "boolean"
                     },
@@ -55271,7 +55290,8 @@
                     "slug",
                     "status",
                     "uuid",
-                    "verifyInstall"
+                    "verifyInstall",
+                    "webhookHeaders"
                   ]
                 },
                 "examples": {
@@ -55309,6 +55329,9 @@
                       "uuid": "77cebea3-019e-484d-8673-6c3969698827",
                       "verifyInstall": true,
                       "webhookUrl": "https://example.com/webhook",
+                      "webhookHeaders": [
+                        "X-Custom-Header: value"
+                      ],
                       "clientId": "ed06141686bb60102d878c607eff449fa9907fa7a8cb70f0d337a8fb0b6566c3",
                       "clientSecret": "**********",
                       "owner": {
@@ -55419,6 +55442,14 @@
                       "maxLength": 255
                     },
                     "description": "The list of allowed origins for CORS."
+                  },
+                  "webhookHeaders": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxLength": 1024
+                    },
+                    "description": "Custom headers sent with every webhook request. Each entry is a single 'Header-Name: value' pair."
                   }
                 },
                 "required": [
@@ -55523,6 +55554,12 @@
                     "verifyInstall": {
                       "type": "boolean"
                     },
+                    "webhookHeaders": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
                     "isDisabled": {
                       "type": "boolean"
                     },
@@ -55586,7 +55623,8 @@
                     "slug",
                     "status",
                     "uuid",
-                    "verifyInstall"
+                    "verifyInstall",
+                    "webhookHeaders"
                   ]
                 },
                 "examples": {
@@ -55624,6 +55662,9 @@
                       "uuid": "77cebea3-019e-484d-8673-6c3969698827",
                       "verifyInstall": true,
                       "webhookUrl": "https://example.com/webhook",
+                      "webhookHeaders": [
+                        "X-Custom-Header: value"
+                      ],
                       "clientId": "ed06141686bb60102d878c607eff449fa9907fa7a8cb70f0d337a8fb0b6566c3",
                       "clientSecret": "**********",
                       "owner": {
@@ -84717,6 +84758,12 @@
             "verifyInstall": {
               "type": "boolean"
             },
+            "webhookHeaders": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "isDisabled": {
               "type": "boolean"
             },
@@ -84780,7 +84827,8 @@
             "slug",
             "status",
             "uuid",
-            "verifyInstall"
+            "verifyInstall",
+            "webhookHeaders"
           ]
         }
       },
@@ -89196,6 +89244,12 @@
           "verifyInstall": {
             "type": "boolean"
           },
+          "webhookHeaders": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "isDisabled": {
             "type": "boolean"
           },
@@ -89259,7 +89313,8 @@
           "slug",
           "status",
           "uuid",
-          "verifyInstall"
+          "verifyInstall",
+          "webhookHeaders"
         ]
       },
       "SentryAppParser": {
@@ -89335,6 +89390,14 @@
               "maxLength": 255
             },
             "description": "The list of allowed origins for CORS."
+          },
+          "webhookHeaders": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 1024
+            },
+            "description": "Custom headers sent with every webhook request. Each entry is a single 'Header-Name: value' pair."
           }
         },
         "required": [
