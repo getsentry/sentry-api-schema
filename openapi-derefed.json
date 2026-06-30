@@ -696,6 +696,11 @@
                     },
                     "description": "A list of local Relays (the name, public key, and description as a JSON) registered for the organization. This feature is only available for organizations on the Business and Enterprise plans. Read more about Relay [here](/product/relay/).\n\n                                          Below is an example of a list containing a single local Relay registered for the organization:\n                                          ```json\n                                          {\n                                            trustedRelays: [\n                                                {\n                                                    name: \"my-relay\",\n                                                    publicKey: \"eiwr9fdruw4erfh892qy4493reyf89ur34wefd90h\",\n                                                    description: \"Configuration for my-relay.\"\n                                                }\n                                            ]\n                                          }\n                                          ```\n                                          "
                   },
+                  "relayDsnEndpoint": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "A Relay base URL to use when displaying Client Key DSNs for this organization."
+                  },
                   "issueAlertsThreadFlag": {
                     "type": "boolean",
                     "description": "Specify `true` to allow the Sentry Slack integration to post replies in threads for an Issue Alert notification. Requires a Slack integration."
@@ -1046,6 +1051,10 @@
                       "type": "boolean"
                     },
                     "relayPiiConfig": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "relayDsnEndpoint": {
                       "type": "string",
                       "nullable": true
                     },
@@ -1853,6 +1862,7 @@
                     "orgRoleList",
                     "pendingAccessRequests",
                     "projects",
+                    "relayDsnEndpoint",
                     "relayPiiConfig",
                     "require2FA",
                     "requiresSso",
@@ -2130,6 +2140,7 @@
                       "scrapeJavaScript": true,
                       "allowJoinRequests": true,
                       "relayPiiConfig": null,
+                      "relayDsnEndpoint": null,
                       "hideAiFeatures": false,
                       "aggregatedDataConsent": false,
                       "defaultAutofixAutomationTuning": "off",
@@ -86779,6 +86790,11 @@
             },
             "description": "A list of local Relays (the name, public key, and description as a JSON) registered for the organization. This feature is only available for organizations on the Business and Enterprise plans. Read more about Relay [here](/product/relay/).\n\n                                          Below is an example of a list containing a single local Relay registered for the organization:\n                                          ```json\n                                          {\n                                            trustedRelays: [\n                                                {\n                                                    name: \"my-relay\",\n                                                    publicKey: \"eiwr9fdruw4erfh892qy4493reyf89ur34wefd90h\",\n                                                    description: \"Configuration for my-relay.\"\n                                                }\n                                            ]\n                                          }\n                                          ```\n                                          "
           },
+          "relayDsnEndpoint": {
+            "type": "string",
+            "nullable": true,
+            "description": "A Relay base URL to use when displaying Client Key DSNs for this organization."
+          },
           "issueAlertsThreadFlag": {
             "type": "boolean",
             "description": "Specify `true` to allow the Sentry Slack integration to post replies in threads for an Issue Alert notification. Requires a Slack integration."
@@ -90408,6 +90424,10 @@
             "type": "string",
             "nullable": true
           },
+          "relayDsnEndpoint": {
+            "type": "string",
+            "nullable": true
+          },
           "trustedRelays": {
             "type": "array",
             "items": {
@@ -91212,6 +91232,7 @@
           "orgRoleList",
           "pendingAccessRequests",
           "projects",
+          "relayDsnEndpoint",
           "relayPiiConfig",
           "require2FA",
           "requiresSso",
