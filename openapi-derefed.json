@@ -69051,6 +69051,570 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/": {
+      "get": {
+        "operationId": "Retrieve an Integration's Issue Config for an Issue",
+        "description": "Retrieve the form fields needed to either link an existing external issue\n(such as a Jira ticket or GitHub issue) to a Sentry issue, or create a new\none. The returned `linkIssueConfig`/`createIssueConfig` describes the fields\nto submit back to this endpoint via `PUT`/`POST` respectively.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "action",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "create",
+                "link"
+              ]
+            },
+            "description": "Whether to fetch the config for linking an existing external issue (`link`) or creating a new one (`create`).",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "domainName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "accountType": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "scopes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "provider": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "canAdd": {
+                          "type": "boolean"
+                        },
+                        "canDisable": {
+                          "type": "boolean"
+                        },
+                        "features": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "aspects": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "required": [
+                        "aspects",
+                        "canAdd",
+                        "canDisable",
+                        "features",
+                        "key",
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "linkIssueConfig": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "createIssueConfig": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    }
+                  },
+                  "required": [
+                    "accountType",
+                    "domainName",
+                    "icon",
+                    "id",
+                    "name",
+                    "provider",
+                    "scopes",
+                    "status"
+                  ]
+                },
+                "examples": {
+                  "ConfigForCreatingANewExternalIssue": {
+                    "value": {
+                      "id": "123456",
+                      "name": "Example Jira",
+                      "icon": "https://example.atlassian.net/icon.png",
+                      "domainName": "example.atlassian.net",
+                      "accountType": null,
+                      "scopes": null,
+                      "status": "active",
+                      "provider": {
+                        "key": "jira",
+                        "slug": "jira",
+                        "name": "Jira",
+                        "canAdd": false,
+                        "canDisable": false,
+                        "features": [
+                          "issue-basic",
+                          "issue-sync",
+                          "ticket-rules"
+                        ],
+                        "aspects": {}
+                      },
+                      "createIssueConfig": [
+                        {
+                          "name": "title",
+                          "label": "Title",
+                          "default": "TypeError: Cannot read property \"foo\" of undefined",
+                          "type": "string",
+                          "required": true
+                        },
+                        {
+                          "name": "description",
+                          "label": "Description",
+                          "default": "Sentry Issue: PROJECT-1\nhttps://example.sentry.io/issues/1/",
+                          "type": "textarea",
+                          "autosize": true,
+                          "maxRows": 10
+                        }
+                      ]
+                    },
+                    "summary": "Config for creating a new external issue"
+                  },
+                  "ConfigForLinkingAnExistingExternalIssue": {
+                    "value": {
+                      "id": "123456",
+                      "name": "Example Jira",
+                      "icon": "https://example.atlassian.net/icon.png",
+                      "domainName": "example.atlassian.net",
+                      "accountType": null,
+                      "scopes": null,
+                      "status": "active",
+                      "provider": {
+                        "key": "jira",
+                        "slug": "jira",
+                        "name": "Jira",
+                        "canAdd": false,
+                        "canDisable": false,
+                        "features": [
+                          "issue-basic",
+                          "issue-sync",
+                          "ticket-rules"
+                        ],
+                        "aspects": {}
+                      },
+                      "linkIssueConfig": [
+                        {
+                          "name": "externalIssue",
+                          "label": "Issue",
+                          "default": "",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "summary": "Config for linking an existing external issue"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "Create an External Issue and Link It to an Issue",
+        "description": "Create a new issue in the external provider (such as a Jira ticket or GitHub\nissue) and link it to the given Sentry issue. The accepted fields are\nintegration-specific; fetch them from the `createIssueConfig` returned by the\n`GET` endpoint with `?action=create`.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the external issue to create."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "The description (body) of the external issue to create."
+                  }
+                },
+                "required": [
+                  "title"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "key": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "integer"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "displayName",
+                    "id",
+                    "integrationId",
+                    "key",
+                    "url"
+                  ]
+                },
+                "examples": {
+                  "CreateOrLinkAnExternalIssue": {
+                    "value": {
+                      "id": 5,
+                      "key": "PROJECT-123",
+                      "url": "https://example.atlassian.net/browse/PROJECT-123",
+                      "integrationId": 123456,
+                      "displayName": "PROJECT-123"
+                    },
+                    "summary": "Create or link an external issue"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "Link an Existing External Issue to an Issue",
+        "description": "Link an issue that already exists in the external provider (such as a Jira\nticket or GitHub issue) to the given Sentry issue. Additional accepted fields\nare integration-specific; fetch them from the `linkIssueConfig` returned by\nthe `GET` endpoint with `?action=link`.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "externalIssue": {
+                    "type": "string",
+                    "description": "The identifier of the existing external issue to link, as understood by the provider (such as a Jira issue key)."
+                  }
+                },
+                "required": [
+                  "externalIssue"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "key": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "integer"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "displayName",
+                    "id",
+                    "integrationId",
+                    "key",
+                    "url"
+                  ]
+                },
+                "examples": {
+                  "CreateOrLinkAnExternalIssue": {
+                    "value": {
+                      "id": 5,
+                      "key": "PROJECT-123",
+                      "url": "https://example.atlassian.net/browse/PROJECT-123",
+                      "integrationId": 123456,
+                      "displayName": "PROJECT-123"
+                    },
+                    "summary": "Create or link an external issue"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Unlink an External Issue from an Issue",
+        "description": "Remove the link between a Sentry issue and an external issue. If no other\nSentry issues reference the external issue, the link record is deleted\nentirely. This does not delete the issue in the external provider.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "externalIssue",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the `ExternalIssue` link to remove.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/": {
       "get": {
         "operationId": "getOrganizationIssueTag",
@@ -70959,6 +71523,22 @@
         },
         "required": [
           "schedule"
+        ]
+      },
+      "CreateExternalIssueRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the external issue to create."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description (body) of the external issue to create."
+          }
+        },
+        "required": [
+          "title"
         ]
       },
       "CreateOrganizationReleaseResponse": {
@@ -75426,6 +76006,33 @@
           "provider"
         ]
       },
+      "ExternalIssueLinkResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "integrationId": {
+            "type": "integer"
+          },
+          "displayName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "displayName",
+          "id",
+          "integrationId",
+          "key",
+          "url"
+        ]
+      },
       "ExternalTeam": {
         "type": "object",
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
@@ -77905,6 +78512,102 @@
           "state"
         ]
       },
+      "IntegrationIssueConfigResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "domainName": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "canAdd": {
+                "type": "boolean"
+              },
+              "canDisable": {
+                "type": "boolean"
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "aspects": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "aspects",
+              "canAdd",
+              "canDisable",
+              "features",
+              "key",
+              "name",
+              "slug"
+            ]
+          },
+          "linkIssueConfig": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "createIssueConfig": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          }
+        },
+        "required": [
+          "accountType",
+          "domainName",
+          "icon",
+          "id",
+          "name",
+          "provider",
+          "scopes",
+          "status"
+        ]
+      },
       "IssueEventDetailsResponse": {
         "type": "object",
         "properties": {
@@ -78797,6 +79500,18 @@
         "required": [
           "casing",
           "type"
+        ]
+      },
+      "LinkExternalIssueRequest": {
+        "type": "object",
+        "properties": {
+          "externalIssue": {
+            "type": "string",
+            "description": "The identifier of the existing external issue to link, as understood by the provider (such as a Jira issue key)."
+          }
+        },
+        "required": [
+          "externalIssue"
         ]
       },
       "LinkedDashboard": {
