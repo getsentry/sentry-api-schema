@@ -46713,7 +46713,7 @@
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/{attachment_id}/": {
       "get": {
         "operationId": "getProjectEventAttachment",
-        "description": "Retrieve metadata for a single attachment on an event.\n\nRequires the `event-attachments` organization feature.",
+        "description": "Retrieve metadata for a single attachment on an event, or download its\ncontents by passing the `download` query parameter.\n\nRequires the `event-attachments` organization feature.",
         "summary": "Retrieve an Event Attachment",
         "parameters": [
           {
@@ -46752,6 +46752,14 @@
             },
             "description": "The numeric ID of the attachment, as returned from the attachments list endpoint.",
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "download",
+            "schema": {
+              "type": "string"
+            },
+            "description": "If this parameter is present, the response will be a binary file download instead of JSON metadata. The value does not matter — any value (including empty) triggers the download."
           }
         ],
         "tags": [
