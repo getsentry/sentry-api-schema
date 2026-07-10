@@ -10,8 +10,18 @@
  * lives in ./browser). Host and routing are options, not separate factories.
  */
 
+import {
+  createDefaultRegionResolver,
+  createRegionRoutingFetch,
+  type ResolveRegionUrl,
+} from './region-routing.ts';
+
+export type {ResolveRegionUrl} from './region-routing.ts';
+
 /** Standard fetch signature, without Bun/Node runtime extensions. */
 export type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+
+const defaultFetch: FetchFn = (input, init) => globalThis.fetch(input, init);
 
 /**
  * The subset of the generated client `Config` these factories populate.
@@ -53,6 +63,13 @@ export type BearerTokenOptions = {
   headers?: Record<string, string>;
   /** When true, SDK calls throw on error instead of returning `{ data, error }`. */
   throwOnError?: boolean;
+  /**
+   * Opt-in direct region routing (lower latency; skips the sentry.io proxy hop).
+   * Pass your own resolver, or `true` to use the built-in one
+   * (`GET /organizations/{slug}/` -> `links.regionUrl`, cached). Omit it (the
+   * default) to stay on `baseUrl` and let the proxy route by the org slug.
+   */
+  resolveRegionUrl?: ResolveRegionUrl | true;
 };
 
 /**
@@ -63,13 +80,20 @@ export type BearerTokenOptions = {
  * client.setConfig(bearerToken({ token: process.env.SENTRY_AUTH_TOKEN }));
  */
 export function bearerToken(opts: BearerTokenOptions): SentryApiConfig {
-  const config: SentryApiConfig = {
-    baseUrl: opts.baseUrl ?? DEFAULT_BASE_URL,
-    headers: { Authorization: `Bearer ${opts.token}`, ...opts.headers },
-  };
-  if (opts.fetch) {
+  const baseUrl = opts.baseUrl ?? DEFAULT_BASE_URL;
+  const headers = { Authorization: `Bearer ${opts.token}`, ...opts.headers };
+  const config: SentryApiConfig = { baseUrl, headers };
+
+  if (opts.resolveRegionUrl) {
+    const resolver =
+      opts.resolveRegionUrl === true
+        ? createDefaultRegionResolver({ baseUrl, fetch: opts.fetch ?? defaultFetch, headers })
+        : opts.resolveRegionUrl;
+    config.fetch = createRegionRoutingFetch({ fetch: opts.fetch, resolveRegionUrl: resolver });
+  } else if (opts.fetch) {
     config.fetch = opts.fetch;
   }
+
   if (opts.throwOnError !== undefined) {
     config.throwOnError = opts.throwOnError;
   }
