@@ -92,6 +92,32 @@ region behavior two ways:
   the base URL. `createRegionRoutingFetch` and `createDefaultRegionResolver` are also exported for
   advanced composition.
 
+## Progressive accuracy (Explore / EAP queries)
+
+Explore endpoints (`listOrganizationEvents`, logs, spans) may answer from a downsampled tier and
+report `meta.dataScanned === 'partial'`; a targeted lookup can then come back empty. `queryWithAccuracy`
+runs the query at normal sampling, and if it scanned only partially re-runs it once at
+`HIGHEST_ACCURACY`. This is the shared version of what the Sentry frontend does in `useProgressiveQuery`.
+
+```ts
+import { queryWithAccuracy, isPartialScan, listOrganizationEvents } from "@sentry/api";
+
+const result = await queryWithAccuracy(
+  (sampling) =>
+    listOrganizationEvents({
+      path: { organization_id_or_slug: "my-org" },
+      // `sampling` is accepted at runtime but not yet in the spec's query types.
+      query: { dataset: "logs", query: `id:${id}`, sampling } as Record<string, unknown>,
+    }),
+  // Default escalates on any partial scan; tighten it for exact-id lookups:
+  { shouldEscalate: (r) => isPartialScan(r) && !r.data?.data?.length },
+);
+```
+
+`queryFn` receives the sampling mode and decides where it goes, so the helper stays independent of
+query shape. `SAMPLING_MODE` and `isPartialScan` are exported. Note: `sampling` is not in the
+OpenAPI types yet (cast for now); a backend `@extend_schema` change will type it.
+
 ## Pagination
 
 Sentry uses cursor-based pagination via `Link` headers. Every operation in the SDK that accepts a `cursor` query parameter has three auto-generated typed wrappers:
