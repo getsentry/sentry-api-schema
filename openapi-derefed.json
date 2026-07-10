@@ -10121,9 +10121,21 @@
                         },
                         "sdk": {
                           "type": "object",
-                          "additionalProperties": {
-                            "type": "string"
-                          }
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "version": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "version"
+                          ],
+                          "nullable": true
                         },
                         "context": {
                           "type": "object",
@@ -10149,10 +10161,32 @@
                           ],
                           "type": "string"
                         },
-                        "metadata": {},
+                        "metadata": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
                         "errors": {
                           "type": "array",
-                          "items": {}
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "message": {
+                                "type": "string"
+                              },
+                              "data": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              }
+                            },
+                            "required": [
+                              "data",
+                              "message",
+                              "type"
+                            ]
+                          }
                         },
                         "occurrence": {
                           "type": "object",
@@ -10289,15 +10323,58 @@
                           ]
                         },
                         "startTimestamp": {
-                          "type": "string",
-                          "format": "date-time"
+                          "type": "number",
+                          "format": "double"
                         },
                         "endTimestamp": {
-                          "type": "string",
-                          "format": "date-time"
+                          "type": "number",
+                          "format": "double"
                         },
-                        "measurements": {},
-                        "breakdowns": {}
+                        "measurements": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "unit": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "unit",
+                              "value"
+                            ]
+                          },
+                          "nullable": true
+                        },
+                        "breakdowns": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "unit": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "unit",
+                                "value"
+                              ]
+                            }
+                          },
+                          "nullable": true
+                        }
                       },
                       "required": [
                         "_meta",
@@ -10425,7 +10502,10 @@
                         },
                         "platform": "python",
                         "projectID": "1",
-                        "sdk": {},
+                        "sdk": {
+                          "name": "sentry.python",
+                          "version": "2.0.0"
+                        },
                         "size": 7055,
                         "tags": [
                           {
@@ -45324,8 +45404,7 @@
                       },
                       "metadata": {
                         "type": "object",
-                        "additionalProperties": {},
-                        "nullable": true
+                        "additionalProperties": {}
                       }
                     },
                     "required": [
@@ -45398,7 +45477,10 @@
                         "location": "example.py:123",
                         "culprit": "/books/new/",
                         "projectID": "49271",
-                        "metadata": null
+                        "metadata": {
+                          "type": "ExampleException",
+                          "value": "This is an example Python exception"
+                        }
                       }
                     ],
                     "summary": "Return a list of error events bound to a project"
@@ -45595,9 +45677,21 @@
                     },
                     "sdk": {
                       "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      }
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "version"
+                      ],
+                      "nullable": true
                     },
                     "context": {
                       "type": "object",
@@ -45623,10 +45717,32 @@
                       ],
                       "type": "string"
                     },
-                    "metadata": {},
+                    "metadata": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
                     "errors": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "data": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "required": [
+                          "data",
+                          "message",
+                          "type"
+                        ]
+                      }
                     },
                     "occurrence": {
                       "type": "object",
@@ -45763,15 +45879,58 @@
                       ]
                     },
                     "startTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
+                      "type": "number",
+                      "format": "double"
                     },
                     "endTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
+                      "type": "number",
+                      "format": "double"
                     },
-                    "measurements": {},
-                    "breakdowns": {},
+                    "measurements": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "unit",
+                          "value"
+                        ]
+                      },
+                      "nullable": true
+                    },
+                    "breakdowns": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "unit",
+                            "value"
+                          ]
+                        }
+                      },
+                      "nullable": true
+                    },
                     "release": {
                       "type": "object",
                       "properties": {
@@ -67640,8 +67799,7 @@
                       },
                       "metadata": {
                         "type": "object",
-                        "additionalProperties": {},
-                        "nullable": true
+                        "additionalProperties": {}
                       }
                     },
                     "required": [
@@ -67714,7 +67872,10 @@
                         "location": "example.py:123",
                         "culprit": "/books/new/",
                         "projectID": "49271",
-                        "metadata": null
+                        "metadata": {
+                          "type": "ExampleException",
+                          "value": "This is an example Python exception"
+                        }
                       }
                     ],
                     "summary": "Return a list of error events bound to an issue"
@@ -67918,9 +68079,21 @@
                     },
                     "sdk": {
                       "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      }
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "version"
+                      ],
+                      "nullable": true
                     },
                     "context": {
                       "type": "object",
@@ -67946,10 +68119,32 @@
                       ],
                       "type": "string"
                     },
-                    "metadata": {},
+                    "metadata": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
                     "errors": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "data": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "required": [
+                          "data",
+                          "message",
+                          "type"
+                        ]
+                      }
                     },
                     "occurrence": {
                       "type": "object",
@@ -68086,15 +68281,58 @@
                       ]
                     },
                     "startTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
+                      "type": "number",
+                      "format": "double"
                     },
                     "endTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
+                      "type": "number",
+                      "format": "double"
                     },
-                    "measurements": {},
-                    "breakdowns": {},
+                    "measurements": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "unit",
+                          "value"
+                        ]
+                      },
+                      "nullable": true
+                    },
+                    "breakdowns": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "unit",
+                            "value"
+                          ]
+                        }
+                      },
+                      "nullable": true
+                    },
                     "release": {
                       "type": "object",
                       "properties": {
@@ -69188,9 +69426,21 @@
                               },
                               "sdk": {
                                 "type": "object",
-                                "additionalProperties": {
-                                  "type": "string"
-                                }
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "version": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "version"
+                                ],
+                                "nullable": true
                               },
                               "context": {
                                 "type": "object",
@@ -69216,10 +69466,32 @@
                                 ],
                                 "type": "string"
                               },
-                              "metadata": {},
+                              "metadata": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              },
                               "errors": {
                                 "type": "array",
-                                "items": {}
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "message": {
+                                      "type": "string"
+                                    },
+                                    "data": {
+                                      "type": "object",
+                                      "additionalProperties": {}
+                                    }
+                                  },
+                                  "required": [
+                                    "data",
+                                    "message",
+                                    "type"
+                                  ]
+                                }
                               },
                               "occurrence": {
                                 "type": "object",
@@ -69356,15 +69628,58 @@
                                 ]
                               },
                               "startTimestamp": {
-                                "type": "string",
-                                "format": "date-time"
+                                "type": "number",
+                                "format": "double"
                               },
                               "endTimestamp": {
-                                "type": "string",
-                                "format": "date-time"
+                                "type": "number",
+                                "format": "double"
                               },
-                              "measurements": {},
-                              "breakdowns": {}
+                              "measurements": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "type": "number",
+                                      "format": "double"
+                                    },
+                                    "unit": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "unit",
+                                    "value"
+                                  ]
+                                },
+                                "nullable": true
+                              },
+                              "breakdowns": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "type": "number",
+                                        "format": "double"
+                                      },
+                                      "unit": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "unit",
+                                      "value"
+                                    ]
+                                  }
+                                },
+                                "nullable": true
+                              }
                             },
                             "required": [
                               "_meta",
@@ -69498,8 +69813,7 @@
                               },
                               "metadata": {
                                 "type": "object",
-                                "additionalProperties": {},
-                                "nullable": true
+                                "additionalProperties": {}
                               }
                             },
                             "required": [
@@ -76576,9 +76890,21 @@
               },
               "sdk": {
                 "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                }
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "version": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "name",
+                  "version"
+                ],
+                "nullable": true
               },
               "context": {
                 "type": "object",
@@ -76604,10 +76930,32 @@
                 ],
                 "type": "string"
               },
-              "metadata": {},
+              "metadata": {
+                "type": "object",
+                "additionalProperties": {}
+              },
               "errors": {
                 "type": "array",
-                "items": {}
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "message",
+                    "type"
+                  ]
+                }
               },
               "occurrence": {
                 "type": "object",
@@ -76744,15 +77092,58 @@
                 ]
               },
               "startTimestamp": {
-                "type": "string",
-                "format": "date-time"
+                "type": "number",
+                "format": "double"
               },
               "endTimestamp": {
-                "type": "string",
-                "format": "date-time"
+                "type": "number",
+                "format": "double"
               },
-              "measurements": {},
-              "breakdowns": {}
+              "measurements": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "unit",
+                    "value"
+                  ]
+                },
+                "nullable": true
+              },
+              "breakdowns": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "unit": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "value"
+                    ]
+                  }
+                },
+                "nullable": true
+              }
             },
             "required": [
               "_meta",
@@ -78186,8 +78577,7 @@
             },
             "metadata": {
               "type": "object",
-              "additionalProperties": {},
-              "nullable": true
+              "additionalProperties": {}
             }
           },
           "required": [
@@ -78362,9 +78752,21 @@
                     },
                     "sdk": {
                       "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      }
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "version": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "version"
+                      ],
+                      "nullable": true
                     },
                     "context": {
                       "type": "object",
@@ -78390,10 +78792,32 @@
                       ],
                       "type": "string"
                     },
-                    "metadata": {},
+                    "metadata": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
                     "errors": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "data": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "required": [
+                          "data",
+                          "message",
+                          "type"
+                        ]
+                      }
                     },
                     "occurrence": {
                       "type": "object",
@@ -78530,15 +78954,58 @@
                       ]
                     },
                     "startTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
+                      "type": "number",
+                      "format": "double"
                     },
                     "endTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
+                      "type": "number",
+                      "format": "double"
                     },
-                    "measurements": {},
-                    "breakdowns": {}
+                    "measurements": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "unit",
+                          "value"
+                        ]
+                      },
+                      "nullable": true
+                    },
+                    "breakdowns": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "unit",
+                            "value"
+                          ]
+                        }
+                      },
+                      "nullable": true
+                    }
                   },
                   "required": [
                     "_meta",
@@ -78672,8 +79139,7 @@
                     },
                     "metadata": {
                       "type": "object",
-                      "additionalProperties": {},
-                      "nullable": true
+                      "additionalProperties": {}
                     }
                   },
                   "required": [
@@ -79768,9 +80234,21 @@
           },
           "sdk": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "properties": {
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "version": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "name",
+              "version"
+            ],
+            "nullable": true
           },
           "context": {
             "type": "object",
@@ -79796,10 +80274,32 @@
             ],
             "type": "string"
           },
-          "metadata": {},
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {}
+          },
           "errors": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "data",
+                "message",
+                "type"
+              ]
+            }
           },
           "occurrence": {
             "type": "object",
@@ -79936,15 +80436,58 @@
             ]
           },
           "startTimestamp": {
-            "type": "string",
-            "format": "date-time"
+            "type": "number",
+            "format": "double"
           },
           "endTimestamp": {
-            "type": "string",
-            "format": "date-time"
+            "type": "number",
+            "format": "double"
           },
-          "measurements": {},
-          "breakdowns": {},
+          "measurements": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "unit": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "unit",
+                "value"
+              ]
+            },
+            "nullable": true
+          },
+          "breakdowns": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "unit",
+                  "value"
+                ]
+              }
+            },
+            "nullable": true
+          },
           "release": {
             "type": "object",
             "properties": {
@@ -93626,9 +94169,21 @@
           },
           "sdk": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "properties": {
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "version": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "name",
+              "version"
+            ],
+            "nullable": true
           },
           "context": {
             "type": "object",
@@ -93654,10 +94209,32 @@
             ],
             "type": "string"
           },
-          "metadata": {},
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {}
+          },
           "errors": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "data",
+                "message",
+                "type"
+              ]
+            }
           },
           "occurrence": {
             "type": "object",
@@ -93794,15 +94371,58 @@
             ]
           },
           "startTimestamp": {
-            "type": "string",
-            "format": "date-time"
+            "type": "number",
+            "format": "double"
           },
           "endTimestamp": {
-            "type": "string",
-            "format": "date-time"
+            "type": "number",
+            "format": "double"
           },
-          "measurements": {},
-          "breakdowns": {},
+          "measurements": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "unit": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "unit",
+                "value"
+              ]
+            },
+            "nullable": true
+          },
+          "breakdowns": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "unit",
+                  "value"
+                ]
+              }
+            },
+            "nullable": true
+          },
           "release": {
             "type": "object",
             "properties": {
@@ -94163,8 +94783,7 @@
             },
             "metadata": {
               "type": "object",
-              "additionalProperties": {},
-              "nullable": true
+              "additionalProperties": {}
             }
           },
           "required": [
