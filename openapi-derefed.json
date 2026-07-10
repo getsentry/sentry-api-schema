@@ -38911,9 +38911,6 @@
                           "event_id": {
                             "type": "string"
                           },
-                          "event_type": {
-                            "type": "string"
-                          },
                           "project_id": {
                             "type": "integer"
                           },
@@ -38923,18 +38920,22 @@
                           "transaction": {
                             "type": "string"
                           },
+                          "event_type": {
+                            "enum": [
+                              "span"
+                            ],
+                            "type": "string"
+                          },
                           "children": {
                             "type": "array",
                             "items": {
                               "type": "object",
+                              "description": "Fields shared by every item in a trace. Entries in `children` are full\nspans at runtime; only the shared fields are documented here.",
                               "properties": {
                                 "description": {
                                   "type": "string"
                                 },
                                 "event_id": {
-                                  "type": "string"
-                                },
-                                "event_type": {
                                   "type": "string"
                                 },
                                 "project_id": {
@@ -38950,7 +38951,6 @@
                               "required": [
                                 "description",
                                 "event_id",
-                                "event_type",
                                 "project_id",
                                 "project_slug",
                                 "transaction"
@@ -38968,9 +38968,6 @@
                                 "event_id": {
                                   "type": "string"
                                 },
-                                "event_type": {
-                                  "type": "string"
-                                },
                                 "project_id": {
                                   "type": "integer"
                                 },
@@ -38978,6 +38975,13 @@
                                   "type": "string"
                                 },
                                 "transaction": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "enum": [
+                                    "error",
+                                    "occurrence"
+                                  ],
                                   "type": "string"
                                 },
                                 "issue_id": {
@@ -39033,9 +39037,6 @@
                                 "event_id": {
                                   "type": "string"
                                 },
-                                "event_type": {
-                                  "type": "string"
-                                },
                                 "project_id": {
                                   "type": "integer"
                                 },
@@ -39043,6 +39044,13 @@
                                   "type": "string"
                                 },
                                 "transaction": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "enum": [
+                                    "error",
+                                    "occurrence"
+                                  ],
                                   "type": "string"
                                 },
                                 "issue_id": {
@@ -39092,20 +39100,29 @@
                             "format": "double"
                           },
                           "end_timestamp": {
-                            "type": "string",
-                            "format": "date-time"
+                            "type": "number",
+                            "format": "double"
                           },
                           "measurements": {
                             "type": "object",
-                            "additionalProperties": {}
+                            "additionalProperties": {
+                              "type": "number",
+                              "format": "double"
+                            }
                           },
                           "browser_web_vital": {
                             "type": "object",
-                            "additionalProperties": {}
+                            "additionalProperties": {
+                              "type": "number",
+                              "format": "double"
+                            }
                           },
                           "mobile_app_vital": {
                             "type": "object",
-                            "additionalProperties": {}
+                            "additionalProperties": {
+                              "type": "number",
+                              "format": "double"
+                            }
                           },
                           "op": {
                             "type": "string"
@@ -39127,8 +39144,8 @@
                             "type": "string"
                           },
                           "start_timestamp": {
-                            "type": "string",
-                            "format": "date-time"
+                            "type": "number",
+                            "format": "double"
                           },
                           "is_transaction": {
                             "type": "boolean"
@@ -39176,9 +39193,6 @@
                           "event_id": {
                             "type": "string"
                           },
-                          "event_type": {
-                            "type": "string"
-                          },
                           "project_id": {
                             "type": "integer"
                           },
@@ -39186,6 +39200,13 @@
                             "type": "string"
                           },
                           "transaction": {
+                            "type": "string"
+                          },
+                          "event_type": {
+                            "enum": [
+                              "error",
+                              "occurrence"
+                            ],
                             "type": "string"
                           },
                           "issue_id": {
@@ -39238,9 +39259,6 @@
                           "event_id": {
                             "type": "string"
                           },
-                          "event_type": {
-                            "type": "string"
-                          },
                           "project_id": {
                             "type": "integer"
                           },
@@ -39250,18 +39268,22 @@
                           "transaction": {
                             "type": "string"
                           },
+                          "event_type": {
+                            "enum": [
+                              "uptime_check"
+                            ],
+                            "type": "string"
+                          },
                           "children": {
                             "type": "array",
                             "items": {
                               "type": "object",
+                              "description": "Fields shared by every item in a trace. Entries in `children` are full\nspans at runtime; only the shared fields are documented here.",
                               "properties": {
                                 "description": {
                                   "type": "string"
                                 },
                                 "event_id": {
-                                  "type": "string"
-                                },
-                                "event_type": {
                                   "type": "string"
                                 },
                                 "project_id": {
@@ -39277,7 +39299,6 @@
                               "required": [
                                 "description",
                                 "event_id",
-                                "event_type",
                                 "project_id",
                                 "project_slug",
                                 "transaction"
@@ -39295,9 +39316,6 @@
                                 "event_id": {
                                   "type": "string"
                                 },
-                                "event_type": {
-                                  "type": "string"
-                                },
                                 "project_id": {
                                   "type": "integer"
                                 },
@@ -39305,6 +39323,13 @@
                                   "type": "string"
                                 },
                                 "transaction": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "enum": [
+                                    "error",
+                                    "occurrence"
+                                  ],
                                   "type": "string"
                                 },
                                 "issue_id": {
@@ -39360,9 +39385,6 @@
                                 "event_id": {
                                   "type": "string"
                                 },
-                                "event_type": {
-                                  "type": "string"
-                                },
                                 "project_id": {
                                   "type": "integer"
                                 },
@@ -39370,6 +39392,13 @@
                                   "type": "string"
                                 },
                                 "transaction": {
+                                  "type": "string"
+                                },
+                                "event_type": {
+                                  "enum": [
+                                    "error",
+                                    "occurrence"
+                                  ],
                                   "type": "string"
                                 },
                                 "issue_id": {
@@ -39484,8 +39513,8 @@
                         "profiler_id": "",
                         "sdk_name": "sentry.python",
                         "is_transaction": true,
-                        "start_timestamp": "2026-04-15T18:22:31.000000Z",
-                        "end_timestamp": "2026-04-15T18:22:31.250000Z",
+                        "start_timestamp": 1776277351,
+                        "end_timestamp": 1776277351.25,
                         "duration": 250,
                         "measurements": {
                           "measurements.frames_slow_rate": 0.02,
@@ -92193,9 +92222,6 @@
                 "event_id": {
                   "type": "string"
                 },
-                "event_type": {
-                  "type": "string"
-                },
                 "project_id": {
                   "type": "integer"
                 },
@@ -92205,18 +92231,22 @@
                 "transaction": {
                   "type": "string"
                 },
+                "event_type": {
+                  "enum": [
+                    "span"
+                  ],
+                  "type": "string"
+                },
                 "children": {
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "description": "Fields shared by every item in a trace. Entries in `children` are full\nspans at runtime; only the shared fields are documented here.",
                     "properties": {
                       "description": {
                         "type": "string"
                       },
                       "event_id": {
-                        "type": "string"
-                      },
-                      "event_type": {
                         "type": "string"
                       },
                       "project_id": {
@@ -92232,7 +92262,6 @@
                     "required": [
                       "description",
                       "event_id",
-                      "event_type",
                       "project_id",
                       "project_slug",
                       "transaction"
@@ -92250,9 +92279,6 @@
                       "event_id": {
                         "type": "string"
                       },
-                      "event_type": {
-                        "type": "string"
-                      },
                       "project_id": {
                         "type": "integer"
                       },
@@ -92260,6 +92286,13 @@
                         "type": "string"
                       },
                       "transaction": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "enum": [
+                          "error",
+                          "occurrence"
+                        ],
                         "type": "string"
                       },
                       "issue_id": {
@@ -92315,9 +92348,6 @@
                       "event_id": {
                         "type": "string"
                       },
-                      "event_type": {
-                        "type": "string"
-                      },
                       "project_id": {
                         "type": "integer"
                       },
@@ -92325,6 +92355,13 @@
                         "type": "string"
                       },
                       "transaction": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "enum": [
+                          "error",
+                          "occurrence"
+                        ],
                         "type": "string"
                       },
                       "issue_id": {
@@ -92374,20 +92411,29 @@
                   "format": "double"
                 },
                 "end_timestamp": {
-                  "type": "string",
-                  "format": "date-time"
+                  "type": "number",
+                  "format": "double"
                 },
                 "measurements": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "additionalProperties": {
+                    "type": "number",
+                    "format": "double"
+                  }
                 },
                 "browser_web_vital": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "additionalProperties": {
+                    "type": "number",
+                    "format": "double"
+                  }
                 },
                 "mobile_app_vital": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "additionalProperties": {
+                    "type": "number",
+                    "format": "double"
+                  }
                 },
                 "op": {
                   "type": "string"
@@ -92409,8 +92455,8 @@
                   "type": "string"
                 },
                 "start_timestamp": {
-                  "type": "string",
-                  "format": "date-time"
+                  "type": "number",
+                  "format": "double"
                 },
                 "is_transaction": {
                   "type": "boolean"
@@ -92458,9 +92504,6 @@
                 "event_id": {
                   "type": "string"
                 },
-                "event_type": {
-                  "type": "string"
-                },
                 "project_id": {
                   "type": "integer"
                 },
@@ -92468,6 +92511,13 @@
                   "type": "string"
                 },
                 "transaction": {
+                  "type": "string"
+                },
+                "event_type": {
+                  "enum": [
+                    "error",
+                    "occurrence"
+                  ],
                   "type": "string"
                 },
                 "issue_id": {
@@ -92520,9 +92570,6 @@
                 "event_id": {
                   "type": "string"
                 },
-                "event_type": {
-                  "type": "string"
-                },
                 "project_id": {
                   "type": "integer"
                 },
@@ -92532,18 +92579,22 @@
                 "transaction": {
                   "type": "string"
                 },
+                "event_type": {
+                  "enum": [
+                    "uptime_check"
+                  ],
+                  "type": "string"
+                },
                 "children": {
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "description": "Fields shared by every item in a trace. Entries in `children` are full\nspans at runtime; only the shared fields are documented here.",
                     "properties": {
                       "description": {
                         "type": "string"
                       },
                       "event_id": {
-                        "type": "string"
-                      },
-                      "event_type": {
                         "type": "string"
                       },
                       "project_id": {
@@ -92559,7 +92610,6 @@
                     "required": [
                       "description",
                       "event_id",
-                      "event_type",
                       "project_id",
                       "project_slug",
                       "transaction"
@@ -92577,9 +92627,6 @@
                       "event_id": {
                         "type": "string"
                       },
-                      "event_type": {
-                        "type": "string"
-                      },
                       "project_id": {
                         "type": "integer"
                       },
@@ -92587,6 +92634,13 @@
                         "type": "string"
                       },
                       "transaction": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "enum": [
+                          "error",
+                          "occurrence"
+                        ],
                         "type": "string"
                       },
                       "issue_id": {
@@ -92642,9 +92696,6 @@
                       "event_id": {
                         "type": "string"
                       },
-                      "event_type": {
-                        "type": "string"
-                      },
                       "project_id": {
                         "type": "integer"
                       },
@@ -92652,6 +92703,13 @@
                         "type": "string"
                       },
                       "transaction": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "enum": [
+                          "error",
+                          "occurrence"
+                        ],
                         "type": "string"
                       },
                       "issue_id": {
