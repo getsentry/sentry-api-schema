@@ -37,6 +37,7 @@ cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
 cpSync("lib/auth-config.ts", "src/auth-config.ts");
 cpSync("lib/region-routing.ts", "src/region-routing.ts");
+cpSync("lib/query-accuracy.ts", "src/query-accuracy.ts");
 
 // 3. Generate per-operation pagination wrappers from the SDK output + spec.
 //    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
@@ -62,6 +63,9 @@ appendFileSync(
     // Region routing (opt-in direct routing; default is the sentry.io proxy).
     "export { createRegionRoutingFetch, createDefaultRegionResolver, extractOrgSlug } from './region-routing.ts';",
     "export type { ResolveRegionUrl } from './region-routing.ts';",
+    // Progressive-accuracy query helper (partial-scan retry at HIGHEST_ACCURACY).
+    "export { queryWithAccuracy, isPartialScan, SAMPLING_MODE } from './query-accuracy.ts';",
+    "export type { SamplingMode, QueryWithAccuracyOptions } from './query-accuracy.ts';",
     // The client itself: the global singleton (client.setConfig) plus factories
     // for isolated instances (createSentryClient is createClient, Sentry-branded).
     "export { client } from './client.gen.ts';",
