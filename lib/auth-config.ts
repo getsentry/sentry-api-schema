@@ -21,8 +21,6 @@ export type {ResolveRegionUrl} from './region-routing.ts';
 /** Standard fetch signature, without Bun/Node runtime extensions. */
 export type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
-const defaultFetch: FetchFn = (input, init) => globalThis.fetch(input, init);
-
 /**
  * The subset of the generated client `Config` these factories populate.
  *
@@ -87,7 +85,7 @@ export function bearerToken(opts: BearerTokenOptions): SentryApiConfig {
   if (opts.resolveRegionUrl) {
     const resolver =
       opts.resolveRegionUrl === true
-        ? createDefaultRegionResolver({ baseUrl, fetch: opts.fetch ?? defaultFetch, headers })
+        ? createDefaultRegionResolver({ baseUrl, fetch: opts.fetch, headers })
         : opts.resolveRegionUrl;
     config.fetch = createRegionRoutingFetch({ fetch: opts.fetch, resolveRegionUrl: resolver });
   } else if (opts.fetch) {

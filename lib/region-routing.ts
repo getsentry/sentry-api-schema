@@ -19,6 +19,9 @@
 /** Standard fetch signature, without Bun/Node runtime extensions. */
 export type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
+/** Fallback when no fetch is supplied. */
+const globalFetch: FetchFn = (input, init) => globalThis.fetch(input, init);
+
 /**
  * Resolves an org slug to its region base URL (e.g. `https://us.sentry.io`).
  * Return `undefined`/`null` to leave the request on the default host (self-hosted,
@@ -72,7 +75,7 @@ export function createRegionRoutingFetch(opts: {
   fetch?: FetchFn;
   resolveRegionUrl: ResolveRegionUrl;
 }): FetchFn {
-  const baseFetch: FetchFn = opts.fetch ?? ((input, init) => globalThis.fetch(input, init));
+  const baseFetch: FetchFn = opts.fetch ?? globalFetch;
 
   return async (input, init) => {
     const url = urlOf(input);
@@ -114,13 +117,14 @@ export function createRegionRoutingFetch(opts: {
  */
 export function createDefaultRegionResolver(opts: {
   baseUrl: string;
-  /** Fetch used for the lookup; should carry auth. */
-  fetch: FetchFn;
+  /** Fetch used for the lookup; should carry auth. Defaults to global fetch. */
+  fetch?: FetchFn;
   /** Auth/other headers to send on the lookup (e.g. Authorization). */
   headers?: Record<string, string>;
 }): ResolveRegionUrl {
   const cache = new Map<string, Promise<string | undefined>>();
   const base = opts.baseUrl.replace(/\/$/, '');
+  const doFetch = opts.fetch ?? globalFetch;
 
   return (orgSlug: string) => {
     const cached = cache.get(orgSlug);
@@ -129,7 +133,7 @@ export function createDefaultRegionResolver(opts: {
     const promise = (async (): Promise<string | undefined> => {
       // Network errors reject here (not caught), so the failure is evicted below
       // and retried on the next call rather than cached as a permanent miss.
-      const res = await opts.fetch(`${base}/api/0/organizations/${orgSlug}/`, {
+      const res = await doFetch(`${base}/api/0/organizations/${orgSlug}/`, {
         method: 'GET',
         headers: opts.headers,
       });
