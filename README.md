@@ -69,6 +69,29 @@ You can always skip the factories and pass a raw config to `client.setConfig(...
 `baseUrl`/`headers` on an individual call to override. Auth tokens and base URLs (including
 self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
 
+### Regions (multi-region cloud)
+
+Sentry's cloud spans regions (US, EU, ...). The SDK's surface is org-scoped, so you get correct
+region behavior two ways:
+
+- **Default (proxy).** Point at `https://sentry.io` (what `bearerToken` does) and every org-scoped
+  request is routed to the right region by the org slug in its path. Zero region code; costs one
+  proxy hop. Best for most consumers.
+- **Opt-in (direct).** Resolve each org's region once and hit it directly, skipping the proxy hop
+  for lower latency. Pass `resolveRegionUrl: true` to use the built-in resolver
+  (`GET /organizations/{slug}/` -> `links.regionUrl`, cached), or pass your own resolver:
+
+  ```ts
+  client.setConfig(bearerToken({ token, resolveRegionUrl: true }));
+  // or inject your own (e.g. a cache you already maintain):
+  client.setConfig(bearerToken({ token, resolveRegionUrl: (orgSlug) => myCache.get(orgSlug) }));
+  ```
+
+  Routing happens per request (the org slug is read from the URL), so concurrent calls to different
+  regions stay correct. Requests with no org slug, or orgs with no region (self-hosted), stay on
+  the base URL. `createRegionRoutingFetch` and `createDefaultRegionResolver` are also exported for
+  advanced composition.
+
 ## Pagination
 
 Sentry uses cursor-based pagination via `Link` headers. Every operation in the SDK that accepts a `cursor` query parameter has three auto-generated typed wrappers:
