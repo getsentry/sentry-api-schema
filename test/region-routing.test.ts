@@ -61,6 +61,37 @@ describe('createRegionRoutingFetch', () => {
     expect(urls[0]).toBe('https://sentry.io/api/0/organizations/my-org/');
   });
 
+  it('falls back to the default host when the resolver throws', async () => {
+    const {fetch, urls} = recordingFetch();
+    const routed = createRegionRoutingFetch({
+      fetch,
+      resolveRegionUrl: () => {
+        throw new Error('boom');
+      },
+    });
+    await routed('https://sentry.io/api/0/organizations/my-org/');
+    expect(urls[0]).toBe('https://sentry.io/api/0/organizations/my-org/');
+  });
+
+  it('falls back when the resolver rejects asynchronously', async () => {
+    const {fetch, urls} = recordingFetch();
+    const routed = createRegionRoutingFetch({
+      fetch,
+      resolveRegionUrl: async () => {
+        throw new Error('boom');
+      },
+    });
+    await routed('https://sentry.io/api/0/organizations/my-org/');
+    expect(urls[0]).toBe('https://sentry.io/api/0/organizations/my-org/');
+  });
+
+  it('falls back when the region URL is malformed', async () => {
+    const {fetch, urls} = recordingFetch();
+    const routed = createRegionRoutingFetch({fetch, resolveRegionUrl: () => 'not a url'});
+    await routed('https://sentry.io/api/0/organizations/my-org/');
+    expect(urls[0]).toBe('https://sentry.io/api/0/organizations/my-org/');
+  });
+
   it('routes concurrent requests to different regions independently', async () => {
     const {fetch, urls} = recordingFetch();
     const routed = createRegionRoutingFetch({
@@ -91,10 +122,28 @@ describe('createDefaultRegionResolver', () => {
     expect(calls).toBe(1);
   });
 
-  it('resolves undefined on a non-OK lookup', async () => {
-    const fetch: FetchFn = async () => new Response('nope', {status: 404});
+  it('resolves undefined (cached) on a 200 without a regionUrl (self-hosted)', async () => {
+    let calls = 0;
+    const fetch: FetchFn = async () => {
+      calls += 1;
+      return new Response(JSON.stringify({links: {}}), {status: 200});
+    };
     const resolve = createDefaultRegionResolver({baseUrl: 'https://sentry.io', fetch});
     expect(await resolve('my-org')).toBeUndefined();
+    expect(await resolve('my-org')).toBeUndefined();
+    expect(calls).toBe(1); // cached, not re-fetched
+  });
+
+  it('rejects and evicts on a non-OK lookup so a later call retries', async () => {
+    let calls = 0;
+    const fetch: FetchFn = async () => {
+      calls += 1;
+      return new Response('nope', {status: 500});
+    };
+    const resolve = createDefaultRegionResolver({baseUrl: 'https://sentry.io', fetch});
+    await expect(resolve('my-org')).rejects.toThrow();
+    await expect(resolve('my-org')).rejects.toThrow();
+    expect(calls).toBe(2); // failure evicted, not cached
   });
 
   it('hits the default host org-metadata path with provided headers', async () => {

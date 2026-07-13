@@ -79,10 +79,17 @@ export function createRegionRoutingFetch(opts: {
     const orgSlug = extractOrgSlug(url);
     if (!orgSlug) return baseFetch(input, init);
 
-    const regionUrl = await opts.resolveRegionUrl(orgSlug);
-    if (!regionUrl) return baseFetch(input, init);
+    // A region lookup (or a malformed region URL) must never fail the request:
+    // fall back to the default host, where the proxy still routes by org slug.
+    let rewritten: string;
+    try {
+      const regionUrl = await opts.resolveRegionUrl(orgSlug);
+      if (!regionUrl) return baseFetch(input, init);
+      rewritten = rewriteOrigin(url, regionUrl);
+    } catch {
+      return baseFetch(input, init);
+    }
 
-    const rewritten = rewriteOrigin(url, regionUrl);
     // Preserve a Request body/headers by reconstructing it; strings/URLs just swap.
     if (input instanceof Request) {
       return baseFetch(new Request(rewritten, input), init);
@@ -94,9 +101,13 @@ export function createRegionRoutingFetch(opts: {
 /**
  * Built-in resolver: look up an org's region via `GET /organizations/{slug}/`
  * and read `links.regionUrl`. Results are cached and in-flight calls deduped,
- * so only one lookup fires per org even under concurrent fan-out. A failed or
- * region-less lookup (self-hosted) resolves to `undefined` and the request
- * stays on the default host.
+ * so only one lookup fires per org even under concurrent fan-out.
+ *
+ * A successful lookup with no region (self-hosted) resolves to `undefined` and
+ * is cached (the request stays on the default host). A failed lookup (network
+ * error or non-OK response) rejects and is evicted, so a later call retries;
+ * `createRegionRoutingFetch` catches that and falls back to the default host,
+ * so a lookup failure degrades to proxy routing rather than failing the request.
  *
  * The lookup itself goes to `baseUrl` (the default/control host), which serves
  * org metadata for every region.
@@ -116,21 +127,24 @@ export function createDefaultRegionResolver(opts: {
     if (cached) return cached;
 
     const promise = (async (): Promise<string | undefined> => {
-      try {
-        const res = await opts.fetch(`${base}/api/0/organizations/${orgSlug}/`, {
-          method: 'GET',
-          headers: opts.headers,
-        });
-        if (!res.ok) return undefined;
-        const body = (await res.json()) as { links?: { regionUrl?: string } };
-        return body?.links?.regionUrl || undefined;
-      } catch {
-        return undefined;
+      // Network errors reject here (not caught), so the failure is evicted below
+      // and retried on the next call rather than cached as a permanent miss.
+      const res = await opts.fetch(`${base}/api/0/organizations/${orgSlug}/`, {
+        method: 'GET',
+        headers: opts.headers,
+      });
+      if (!res.ok) {
+        throw new Error(`region lookup for "${orgSlug}" failed: HTTP ${res.status}`);
       }
+      const body = (await res.json()) as { links?: { regionUrl?: string } };
+      // 200 with no regionUrl means self-hosted / single-region: cache undefined.
+      return body?.links?.regionUrl || undefined;
     })();
 
     cache.set(orgSlug, promise);
-    // Evict failures so a later retry (e.g. after re-auth) can succeed.
+    // Evict failed lookups (network / non-OK) so a later call retries instead of
+    // caching the failure. A resolved value (a region, or undefined for
+    // self-hosted) stays cached.
     promise.catch(() => cache.delete(orgSlug));
     return promise;
   };
