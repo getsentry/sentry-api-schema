@@ -78,3 +78,17 @@ export function createBrowserSdkConfig(opts: BrowserClientOptions = {}) {
     fetch: createBrowserFetch(opts),
   } as const;
 }
+
+/**
+ * Config for using the SDK from the Sentry frontend: same-origin, session
+ * cookies, CSRF. This is the blessed name; `createBrowserSdkConfig` remains as
+ * an alias. Named by auth method, consistent with `bearerToken` in the core entry.
+ *
+ * @example
+ * import { client } from '@sentry/api';
+ * import { browserSession } from '@sentry/api/browser';
+ * client.setConfig(browserSession());
+ */
+export function browserSession(opts: BrowserClientOptions = {}) {
+  return createBrowserSdkConfig(opts);
+}
