@@ -38675,6 +38675,253 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/trace-items/stats/": {
+      "get": {
+        "operationId": "Retrieve Trace Item Statistics",
+        "description": "Compute statistics, such as attribute value distributions, over the trace\nitems (spans or occurrences) matching the given query within the requested\ntime range.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsType",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "attributeDistributions"
+                ]
+              }
+            },
+            "description": "The statistics to compute over the matching trace items.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "description": "The IDs or slugs of projects to filter by. Project slugs are unique within each organization. Omit this parameter to include all accessible projects. `-1` is also accepted to include all accessible projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=android&project=javascript-react`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "itemType",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "occurrences",
+                "spans"
+              ]
+            },
+            "description": "The trace item dataset to compute statistics for. Defaults to `spans`."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Sentry [search syntax](https://docs.sentry.io/concepts/search/) to filter trace items before computing statistics."
+          },
+          {
+            "in": "query",
+            "name": "substringMatch",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Restrict results to attribute names containing this substring (case-sensitive)."
+          },
+          {
+            "in": "query",
+            "name": "traceItemsLimit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Maximum number of trace items to sample when computing statistics. Defaults to `1000`, which is also the maximum."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          }
+        ],
+        "tags": [
+          "Explore"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "attributeDistributions": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "label": {
+                                        "type": "string"
+                                      },
+                                      "value": {
+                                        "type": "number",
+                                        "format": "double"
+                                      }
+                                    },
+                                    "required": [
+                                      "label",
+                                      "value"
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            "required": [
+                              "data"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "attributeDistributions"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "AttributeDistributionsForTheMatchingTraceItems": {
+                    "value": {
+                      "data": [
+                        {
+                          "attributeDistributions": {
+                            "data": {
+                              "sentry.device": [
+                                {
+                                  "label": "mobile",
+                                  "value": 3
+                                },
+                                {
+                                  "label": "desktop",
+                                  "value": 1
+                                }
+                              ],
+                              "browser.name": [
+                                {
+                                  "label": "chrome",
+                                  "value": 3
+                                },
+                                {
+                                  "label": "safari",
+                                  "value": 1
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "summary": "Attribute distributions for the matching trace items"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/trace-meta/{trace_id}/": {
       "get": {
         "operationId": "getOrganizationTraceMeta",
@@ -100200,6 +100447,55 @@
           "id",
           "meta",
           "schemas"
+        ]
+      },
+      "TraceItemStatsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "attributeDistributions": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "label": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "number",
+                              "format": "double"
+                            }
+                          },
+                          "required": [
+                            "label",
+                            "value"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              },
+              "required": [
+                "attributeDistributions"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
         ]
       },
       "UpdateClientKey": {
