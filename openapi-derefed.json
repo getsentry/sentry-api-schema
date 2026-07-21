@@ -26344,7 +26344,7 @@
                         "id": {
                           "type": "string"
                         },
-                        "date": {
+                        "date_added": {
                           "type": "string",
                           "format": "date-time"
                         },
@@ -26361,9 +26361,22 @@
                           "type": "string"
                         },
                         "threshold_type": {
-                          "type": "integer"
+                          "enum": [
+                            "total_error_count",
+                            "new_issue_count",
+                            "unhandled_issue_count",
+                            "regressed_issue_count",
+                            "failure_rate",
+                            "crash_free_session_rate",
+                            "crash_free_user_rate"
+                          ],
+                          "type": "string"
                         },
                         "trigger_type": {
+                          "enum": [
+                            "over",
+                            "under"
+                          ],
                           "type": "string"
                         },
                         "value": {
@@ -26499,7 +26512,7 @@
                             "color": "#3f70bf",
                             "status": "active"
                           },
-                          "threshold_type": 0,
+                          "threshold_type": "total_error_count",
                           "trigger_type": "over",
                           "value": 100,
                           "window_in_seconds": 600,
@@ -97209,7 +97222,7 @@
               "id": {
                 "type": "string"
               },
-              "date": {
+              "date_added": {
                 "type": "string",
                 "format": "date-time"
               },
@@ -97226,9 +97239,22 @@
                 "type": "string"
               },
               "threshold_type": {
-                "type": "integer"
+                "enum": [
+                  "total_error_count",
+                  "new_issue_count",
+                  "unhandled_issue_count",
+                  "regressed_issue_count",
+                  "failure_rate",
+                  "crash_free_session_rate",
+                  "crash_free_user_rate"
+                ],
+                "type": "string"
               },
               "trigger_type": {
+                "enum": [
+                  "over",
+                  "under"
+                ],
                 "type": "string"
               },
               "value": {
