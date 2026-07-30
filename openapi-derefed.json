@@ -52849,6 +52849,102 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/size-analysis/status-checks/skip/": {
+      "post": {
+        "operationId": "createProjectPreprodSizeAnalysisSkippedStatusCheck",
+        "description": "Create a neutral status check for a commit that intentionally skips an artifact upload.\n\nThe repository must be connected to the project's organization through an active repository\nintegration.\nThe same Sentry auth token configured for build uploads can also be used for this endpoint.",
+        "summary": "Create a skipped Size Analysis status check",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Mobile Builds"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sha": {
+                    "type": "string",
+                    "description": "The full 40-character lowercase commit SHA.",
+                    "maxLength": 40,
+                    "pattern": "^[0-9a-f]{40}$"
+                  },
+                  "repository": {
+                    "type": "string",
+                    "description": "The repository name in `owner/name` format.",
+                    "maxLength": 255
+                  },
+                  "provider": {
+                    "enum": [
+                      "github",
+                      "github_enterprise"
+                    ],
+                    "type": "string",
+                    "description": "The repository integration provider.\n\n* `github`\n* `github_enterprise`"
+                  }
+                },
+                "required": [
+                  "provider",
+                  "repository",
+                  "sha"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "502": {
+            "description": "Bad Gateway"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-check-rules/": {
       "get": {
         "operationId": "getProjectPreprodSnapshotStatusCheckRules",
@@ -52948,6 +53044,102 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-checks/skip/": {
+      "post": {
+        "operationId": "createProjectPreprodSnapshotSkippedStatusCheck",
+        "description": "Create a neutral status check for a commit that intentionally skips an artifact upload.\n\nThe repository must be connected to the project's organization through an active repository\nintegration.\nThe same Sentry auth token configured for build uploads can also be used for this endpoint.",
+        "summary": "Create a skipped Snapshot status check",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sha": {
+                    "type": "string",
+                    "description": "The full 40-character lowercase commit SHA.",
+                    "maxLength": 40,
+                    "pattern": "^[0-9a-f]{40}$"
+                  },
+                  "repository": {
+                    "type": "string",
+                    "description": "The repository name in `owner/name` format.",
+                    "maxLength": 255
+                  },
+                  "provider": {
+                    "enum": [
+                      "github",
+                      "github_enterprise"
+                    ],
+                    "type": "string",
+                    "description": "The repository integration provider.\n\n* `github`\n* `github_enterprise`"
+                  }
+                },
+                "required": [
+                  "provider",
+                  "repository",
+                  "sha"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "502": {
+            "description": "Bad Gateway"
           }
         }
       }
@@ -99065,6 +99257,35 @@
           "insights",
           "installSize",
           "state"
+        ]
+      },
+      "SkipStatusCheck": {
+        "type": "object",
+        "properties": {
+          "sha": {
+            "type": "string",
+            "description": "The full 40-character lowercase commit SHA.",
+            "maxLength": 40,
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "repository": {
+            "type": "string",
+            "description": "The repository name in `owner/name` format.",
+            "maxLength": 255
+          },
+          "provider": {
+            "enum": [
+              "github",
+              "github_enterprise"
+            ],
+            "type": "string",
+            "description": "The repository integration provider.\n\n* `github`\n* `github_enterprise`"
+          }
+        },
+        "required": [
+          "provider",
+          "repository",
+          "sha"
         ]
       },
       "SnapshotCreateResponse": {
