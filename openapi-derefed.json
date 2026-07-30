@@ -31560,6 +31560,20 @@
           },
           {
             "in": "query",
+            "name": "data_source",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "events",
+                "search_issues",
+                "spans"
+              ]
+            },
+            "description": "The data source to query replays from.",
+            "required": true
+          },
+          {
+            "in": "query",
             "name": "environment",
             "schema": {
               "type": "array",
@@ -31631,20 +31645,6 @@
               "type": "string"
             },
             "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nExample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
-          },
-          {
-            "in": "query",
-            "name": "data_source",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "discover",
-                "events",
-                "search_issues",
-                "transactions"
-              ]
-            },
-            "description": "The data source to query replays from. Defaults to 'discover'."
           },
           {
             "in": "query",
