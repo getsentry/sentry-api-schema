@@ -57,8 +57,13 @@ export class SentryApiError<TError = unknown> extends Error {
   /** The raw `Response`, for access to headers and the status text. */
   readonly response: Response;
 
-  constructor(status: number, body: TError, response: Response) {
-    super(`Sentry API request failed with status ${status}`);
+  constructor(
+    status: number,
+    body: TError,
+    response: Response,
+    message = `Sentry API request failed with status ${status}`,
+  ) {
+    super(message);
     this.name = "SentryApiError";
     this.status = status;
     this.body = body;
@@ -269,13 +274,12 @@ export const unwrapResult = <TData, TError = unknown>(
   context: string,
 ): UnwrappedResult<TData> => {
   if (result.error !== undefined) {
-    const error = new SentryApiError<TError>(
+    throw new SentryApiError<TError>(
       result.response.status,
       result.error,
       result.response,
+      `${context}: API request failed with status ${result.response.status}: ${JSON.stringify(result.error)}`,
     );
-    error.message = `${context}: ${error.message}`;
-    throw error;
   }
   return { data: result.data as TData, response: result.response };
 };
