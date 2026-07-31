@@ -13,21 +13,61 @@ npm install @sentry/api
 
 ## Usage
 
-Pass `baseUrl` and an auth header to each call:
+Configure the client once, then call any operation without repeating auth or host.
+`bearerToken(...)` is a pure factory that returns a config object; `client.setConfig(...)`
+applies it to the global client.
 
 ```ts
-import { listYourOrganizations } from "@sentry/api";
+import { client, bearerToken, listYourOrganizations } from "@sentry/api";
 
-const { data, error } = await listYourOrganizations({
-  baseUrl: "https://sentry.io",
-  headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
-});
+client.setConfig(bearerToken({ token: process.env.SENTRY_AUTH_TOKEN }));
 
+const { data, error } = await listYourOrganizations();
 if (error) throw error;
 console.log(data);
 ```
 
-Auth tokens and base URLs (including self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
+`bearerToken` defaults `baseUrl` to `https://sentry.io`. For self-hosted, or to pin a single
+region, pass your host:
+
+```ts
+client.setConfig(bearerToken({ token, baseUrl: "https://sentry.my-company.com" }));
+```
+
+### Isolated client (servers, tests)
+
+`client.setConfig(...)` mutates a global singleton, which is convenient for a single-token CLI.
+For a server that handles multiple tokens, or for tests, create an isolated instance with
+`createSentryClient(...)` and pass it per call:
+
+```ts
+import { createSentryClient, bearerToken, listYourOrganizations } from "@sentry/api";
+
+const sentry = createSentryClient(bearerToken({ token }));
+const { data } = await listYourOrganizations({ client: sentry });
+```
+
+### Browser (Sentry frontend)
+
+Use the `./browser` entry, which authenticates with the current session (cookies + CSRF),
+same-origin:
+
+```ts
+import { client } from "@sentry/api";
+import { browserSession } from "@sentry/api/browser";
+
+client.setConfig(browserSession());
+```
+
+### Custom transport
+
+`bearerToken` accepts a `fetch` option for transport policy the SDK does not own (token refresh,
+retries, timeouts, custom CA, tracing). It also accepts `headers` (merged into every request) and
+`throwOnError`.
+
+You can always skip the factories and pass a raw config to `client.setConfig(...)`, or pass
+`baseUrl`/`headers` on an individual call to override. Auth tokens and base URLs (including
+self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
 
 ## Pagination
 
