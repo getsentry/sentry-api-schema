@@ -15,6 +15,8 @@ import {
   fetchPage_listOrganizationIssues,
   fetchPage_listOrganizationProjects,
   fetchPage_listProjectReplayClicks,
+  getProject,
+  narrowError,
   paginateAll_listOrganizationIssues,
   paginateAll_listOrganizationProjects,
   paginateUpTo_listOrganizationIssues,
@@ -169,3 +171,33 @@ void paginateUpToHappyPath;
 void fetchPageCompoundOp;
 void perPageAcceptedEvenWhenSpecOmitsIt;
 void paginateUpToKeepCursorOnOvershoot;
+
+// =====================================================================
+// narrowError — status-discriminated, non-throwing error handling
+// =====================================================================
+
+async function narrowErrorHappyPath() {
+  const res = narrowError(
+    await getProject({
+      ...config,
+      path: { organization_id_or_slug: "my-org", project_id_or_slug: "my-proj" },
+    }),
+  );
+  if (res.ok) {
+    // Success branch exposes the typed 200 body.
+    void res.data;
+    return;
+  }
+  // Failure branch exposes the HTTP status for exhaustive handling, even
+  // though the spec doesn't yet model the error body (so `body` is unknown).
+  const status: number = res.error.status;
+  switch (status) {
+    case 403:
+    case 404:
+      throw res.error; // user-actionable
+    default:
+      return; // transient — degrade gracefully
+  }
+}
+
+void narrowErrorHappyPath;

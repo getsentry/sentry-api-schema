@@ -22,6 +22,58 @@ export type UnwrappedResult<TData> = {
   response: Response;
 };
 
+/**
+ * A typed API failure that preserves the HTTP status alongside the
+ * response body.
+ *
+ * The generated SDK surfaces failures on the non-throwing result path as
+ * `{ data: undefined, error }`, but the `error` body type is flattened
+ * (the SDK collapses its per-status error map through `TError[keyof TError]`),
+ * so `error` alone carries no HTTP status. `SentryApiError` re-attaches the
+ * status from the `Response`, letting consumers discriminate failures the way
+ * they'd expect:
+ *
+ * ```ts
+ * const res = narrowError(await getProject({ ... }));
+ * if (!res.ok) {
+ *   switch (res.error.status) {
+ *     case 401: // auth expired -> re-throw / re-auth
+ *     case 404: // not found -> user-actionable
+ *     default:  // transient (e.g. 500) -> degrade gracefully
+ *   }
+ * }
+ * ```
+ *
+ * `TError` defaults to `unknown` because Sentry's OpenAPI spec does not yet
+ * model error response bodies (that work belongs upstream in
+ * getsentry/sentry). Once the spec grows typed 4xx/5xx schemas, the generated
+ * error type flows through here unchanged and `error.body` becomes typed.
+ */
+export class SentryApiError<TError = unknown> extends Error {
+  /** HTTP status code from the response (e.g. 401, 404, 500). */
+  readonly status: number;
+  /** The parsed error response body, as surfaced by the SDK. */
+  readonly body: TError;
+  /** The raw `Response`, for access to headers and the status text. */
+  readonly response: Response;
+
+  constructor(status: number, body: TError, response: Response) {
+    super(`Sentry API request failed with status ${status}`);
+    this.name = "SentryApiError";
+    this.status = status;
+    this.body = body;
+    this.response = response;
+  }
+}
+
+/**
+ * The non-throwing, discriminated result of an SDK call: either the data or a
+ * typed {@link SentryApiError}. Returned by {@link narrowError}.
+ */
+export type NarrowedResult<TData, TError = unknown> =
+  | { ok: true; data: TData; response: Response }
+  | { ok: false; error: SentryApiError<TError> };
+
 export type PaginatedResponse<T> = {
   data: T;
   /** Cursor for the next page. `undefined` when there are no more pages. */
@@ -170,19 +222,60 @@ export const _withCursor = <TOptions>(
 };
 
 /**
+ * Convert an SDK result into a discriminated, non-throwing union that
+ * preserves the HTTP status.
+ *
+ * This is the recommended way to handle failures when you want to branch on
+ * the status instead of catching. On success it returns `{ ok: true, data }`;
+ * on failure it wraps the error body and the response's status into a
+ * {@link SentryApiError} so `res.error.status` narrows correctly:
+ *
+ * ```ts
+ * const res = narrowError(await getProject({ path: { ... } }));
+ * if (!res.ok) {
+ *   if (res.error.status === 404) return null; // not found
+ *   throw res.error;                            // anything else
+ * }
+ * return res.data;
+ * ```
+ */
+export const narrowError = <TData, TError = unknown>(
+  result: SdkResult<TData, TError>,
+): NarrowedResult<TData, TError> => {
+  if (result.error !== undefined) {
+    return {
+      ok: false,
+      error: new SentryApiError<TError>(
+        result.response.status,
+        result.error,
+        result.response,
+      ),
+    };
+  }
+  return { ok: true, data: result.data as TData, response: result.response };
+};
+
+/**
  * Unwrap an SDK result, throwing on error.
  *
  * Returns `{ data, response }` so callers retain access to the
  * raw Response (and its headers) for pagination or other needs.
+ *
+ * The thrown value is a {@link SentryApiError}, so a `catch` block can still
+ * read `err.status` / `err.body` to decide how to handle the failure.
  */
-export const unwrapResult = <TData>(
-  result: SdkResult<TData>,
+export const unwrapResult = <TData, TError = unknown>(
+  result: SdkResult<TData, TError>,
   context: string,
 ): UnwrappedResult<TData> => {
   if (result.error !== undefined) {
-    throw new Error(
-      `${context}: API request failed: ${JSON.stringify(result.error)}`,
+    const error = new SentryApiError<TError>(
+      result.response.status,
+      result.error,
+      result.response,
     );
+    error.message = `${context}: ${error.message}`;
+    throw error;
   }
   return { data: result.data as TData, response: result.response };
 };

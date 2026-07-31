@@ -15,11 +15,13 @@ import {
   fetchPage,
   fetchPage_listOrganizationIssues,
   fetchPage_listOrganizations,
+  narrowError,
   paginateAll,
   paginateAll_listOrganizations,
   paginateUpTo,
   paginateUpTo_listOrganizations,
   parseSentryLinkHeader,
+  SentryApiError,
   unwrapPaginatedResult,
   unwrapResult,
 } from "../src/index";
@@ -88,11 +90,11 @@ const mkSuccess = <T>(data: T, linkHeader?: string) => ({
   }),
 }) as Parameters<typeof unwrapResult<T>>[0];
 
-const mkFailure = (errorBody: unknown) => ({
+const mkFailure = (errorBody: unknown, status = 500) => ({
   data: undefined,
   error: errorBody,
   request: new Request("https://example.test/"),
-  response: new Response(null, { status: 500 }),
+  response: new Response(null, { status }),
 }) as Parameters<typeof unwrapResult<unknown>>[0];
 
 describe("unwrapResult", () => {
@@ -105,6 +107,61 @@ describe("unwrapResult", () => {
     expect(() => unwrapResult(mkFailure({ detail: "boom" }), "test")).toThrow(
       /test/,
     );
+  });
+
+  test("throws a SentryApiError carrying status and body", () => {
+    try {
+      unwrapResult(mkFailure({ detail: "boom" }, 404), "ctx");
+      throw new Error("expected unwrapResult to throw");
+    } catch (err) {
+      expect(err).toBeInstanceOf(SentryApiError);
+      const apiErr = err as SentryApiError;
+      expect(apiErr.status).toBe(404);
+      expect(apiErr.body).toEqual({ detail: "boom" });
+      expect(apiErr.message).toContain("ctx");
+    }
+  });
+});
+
+// =====================================================================
+// narrowError
+// =====================================================================
+
+describe("narrowError", () => {
+  test("returns ok:true with data on success", () => {
+    const res = narrowError(mkSuccess({ id: 1 }));
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data).toEqual({ id: 1 });
+      expect(res.response).toBeInstanceOf(Response);
+    }
+  });
+
+  test("returns ok:false with a status-discriminated SentryApiError", () => {
+    const res = narrowError(mkFailure({ detail: "nope" }, 403));
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.error).toBeInstanceOf(SentryApiError);
+      expect(res.error.status).toBe(403);
+      expect(res.error.body).toEqual({ detail: "nope" });
+    }
+  });
+
+  test("lets consumers branch on error.status", () => {
+    const classify = (status: number) => {
+      const res = narrowError(mkFailure({}, status));
+      if (res.ok) return "ok";
+      switch (res.error.status) {
+        case 401:
+        case 404:
+          return "user-actionable";
+        default:
+          return "transient";
+      }
+    };
+    expect(classify(401)).toBe("user-actionable");
+    expect(classify(404)).toBe("user-actionable");
+    expect(classify(500)).toBe("transient");
   });
 });
 

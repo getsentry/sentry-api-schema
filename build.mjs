@@ -50,8 +50,8 @@ appendFileSync(
   "src/index.ts",
   [
     "",
-    "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
-    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher, SdkResult } from './sentry-pagination.ts';",
+    "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, narrowError, SentryApiError, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
+    "export type { UnwrappedResult, NarrowedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher, SdkResult } from './sentry-pagination.ts';",
     "export * from './pagination.gen.ts';",
     "",
   ].join("\n"),
