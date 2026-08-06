@@ -6,6 +6,10 @@ const readBundle = (name: string) =>
 
 describe("package entry points", () => {
   test("keeps validator peers optional", () => {
+    expect(packageJson.peerDependencies).toEqual({
+      valibot: "*",
+      zod: "^3.24.0",
+    });
     expect(packageJson.peerDependenciesMeta).toEqual({
       valibot: { optional: true },
       zod: { optional: true },
