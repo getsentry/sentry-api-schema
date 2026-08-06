@@ -11,6 +11,9 @@
  */
 
 import { describe, expect, test } from "bun:test";
+import * as v from "valibot";
+import { vAutofixPostResponse } from "../src/valibot";
+import { zAutofixPostResponse } from "../src/zod";
 import {
   fetchPage,
   fetchPage_listOrganizationIssues,
@@ -76,6 +79,24 @@ describe("parseSentryLinkHeader", () => {
   test("ignores malformed segments without crashing", () => {
     expect(parseSentryLinkHeader("not a link header")).toEqual({});
     expect(parseSentryLinkHeader("<url>; rel=next")).toEqual({}); // unquoted
+  });
+});
+
+describe("runtime validator entry points", () => {
+  const response = { run_id: 42, sentry_run_id: "run-42" };
+
+  test("Valibot parses generated response schemas", () => {
+    expect(v.parse(vAutofixPostResponse, response)).toEqual(response);
+    expect(() =>
+      v.parse(vAutofixPostResponse, { ...response, run_id: "42" }),
+    ).toThrow();
+  });
+
+  test("Zod parses generated response schemas", () => {
+    expect(zAutofixPostResponse.parse(response)).toEqual(response);
+    expect(() =>
+      zAutofixPostResponse.parse({ ...response, run_id: "42" }),
+    ).toThrow();
   });
 });
 

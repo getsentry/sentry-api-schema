@@ -21,6 +21,17 @@ import {
   paginateAll_listOrganizationProjects,
   paginateUpTo_listOrganizationIssues,
 } from "../src/index";
+import type { InferOutput } from "valibot";
+import type { z } from "zod";
+import { vAutofixPostResponse } from "../src/valibot";
+import { zAutofixPostResponse } from "../src/zod";
+
+const valibotResponse: InferOutput<typeof vAutofixPostResponse> = {
+  run_id: 1,
+  sentry_run_id: null,
+};
+const zodResponse: z.infer<typeof zAutofixPostResponse> = valibotResponse;
+void zodResponse;
 
 const config = {
   baseUrl: "https://sentry.io",
