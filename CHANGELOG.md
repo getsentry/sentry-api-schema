@@ -1,3 +1,9 @@
+## 0.254.1
+
+### Bug Fixes
+
+- Serialize release workflows by @BYK in [#89](https://github.com/getsentry/sentry-api-schema/pull/89)
+
 ## 0.254.0
 
 ### Schema Updates
