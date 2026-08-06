@@ -1,3 +1,9 @@
+## 0.256.0
+
+### New Features
+
+- Add Valibot validation schemas by @BYK in [#90](https://github.com/getsentry/sentry-api-schema/pull/90)
+
 ## 0.255.0
 
 ### New Features
