@@ -29,6 +29,37 @@ console.log(data);
 
 Auth tokens and base URLs (including self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
 
+## Runtime validation
+
+The root `@sentry/api` entry has no runtime dependencies. It provides the API client and pure TypeScript types without installing a validation library.
+
+Runtime schemas are available through separate optional entry points:
+
+```bash
+npm install @sentry/api valibot
+```
+
+```ts
+import * as v from "valibot";
+import { vGetProjectResponse } from "@sentry/api/valibot";
+
+const project = v.parse(vGetProjectResponse, input);
+```
+
+Zod 4.4 and later remains supported:
+
+```bash
+npm install @sentry/api zod
+```
+
+```ts
+import { zGetProjectResponse } from "@sentry/api/zod";
+
+const project = zGetProjectResponse.parse(input);
+```
+
+`valibot` and `zod` are optional peer dependencies. Install neither when you only need the generated client and TypeScript types, or install the validator used by your application.
+
 ## Error handling
 
 Every operation with documented error responses has a generated `narrowError_<operation>` wrapper. It returns data or a `SentryApiError` that preserves the operation's status-to-body type map:

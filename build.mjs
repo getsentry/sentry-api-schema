@@ -15,19 +15,21 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 //     those were set intentionally via @extend_schema(operation_id=...).
 normalizeSpec("./openapi-derefed.json", "./openapi-normalized.json");
 
-// 1. Generate TypeScript client from OpenAPI spec (including Zod schemas).
+// 1. Generate TypeScript client from OpenAPI spec, including optional
+//    Valibot and Zod schemas.
 //    When `plugins` is specified, the defaults (TypeScript + SDK + client) are
 //    no longer implicit — list them explicitly so the previous output is
-//    preserved alongside the new Zod schemas.
+//    preserved alongside the validator schemas.
 await createClient({
   input: "./openapi-normalized.json",
   output: "src",
   plugins: [
     "@hey-api/typescript",
     "@hey-api/sdk",
+    "valibot",
     {
       name: "zod",
-      compatibilityVersion: 3,
+      compatibilityVersion: 4,
     },
   ],
 });
@@ -63,16 +65,17 @@ appendFileSync(
 );
 
 // 5. Create standalone entry points.
-//    zod: lets consumers import from "@sentry/api/zod" without pulling zod into
-//    code that only needs the SDK types and functions.
+//    valibot/zod: validator-specific schemas with optional peer dependencies.
 //    browser: CSRF + cookie auth helpers for browser/frontend use.
+writeFileSync("src/valibot.ts", 'export * from "./valibot.gen.ts";\n');
 writeFileSync("src/zod.ts", 'export * from "./zod.gen.ts";\n');
 writeFileSync("src/browser.ts", 'export * from "./browser-client.ts";\n');
 
 // 6. Bundle into JS files and emit type declarations.
 //    The main entry stays self-contained (zero runtime deps).
-//    The Zod entry externalises "zod" — consumers provide it themselves.
+//    Validator entries externalise their peers; the root stays dependency-free.
 execSync("bun build src/index.ts --outdir dist", { stdio: "inherit" });
+execSync('bun build src/valibot.ts --outdir dist --external valibot', { stdio: "inherit" });
 execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
 execSync("bun build src/browser.ts --outdir dist", { stdio: "inherit" });
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });
