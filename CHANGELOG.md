@@ -1,3 +1,9 @@
+## 0.255.0
+
+### New Features
+
+- Expose typed, status-discriminated API errors by @jared-outpost in [#84](https://github.com/getsentry/sentry-api-schema/pull/84)
+
 ## 0.254.1
 
 ### Bug Fixes
