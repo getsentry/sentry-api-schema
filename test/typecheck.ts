@@ -15,6 +15,8 @@ import {
   fetchPage_listOrganizationIssues,
   fetchPage_listOrganizationProjects,
   fetchPage_listProjectReplayClicks,
+  narrowError,
+  narrowError_getProject,
   paginateAll_listOrganizationIssues,
   paginateAll_listOrganizationProjects,
   paginateUpTo_listOrganizationIssues,
@@ -169,3 +171,54 @@ void paginateUpToHappyPath;
 void fetchPageCompoundOp;
 void perPageAcceptedEvenWhenSpecOmitsIt;
 void paginateUpToKeepCursorOnOvershoot;
+
+// =====================================================================
+// narrowError — status-discriminated, non-throwing error handling
+// =====================================================================
+
+async function narrowErrorHappyPath() {
+  const res = await narrowError_getProject({
+    ...config,
+    path: {
+      organization_id_or_slug: "my-org",
+      project_id_or_slug: "my-proj",
+    },
+  });
+  if (res.ok) {
+    // Success branch exposes the typed 200 body.
+    void res.data;
+    return;
+  }
+  if (!res.error.documented) {
+    // Includes unexpected HTTP statuses and transport failures.
+    return;
+  }
+  switch (res.error.status) {
+    case 403:
+    case 404:
+      throw res.error; // user-actionable
+  }
+}
+
+async function statusNarrowsErrorBody() {
+  type Errors = {
+    400: { kind: "bad-request" };
+    404: { kind: "not-found" };
+  };
+  const sdkResult = null as unknown as Parameters<
+    typeof narrowError<unknown, Errors>
+  >[0];
+  const result = narrowError<unknown, Errors>(sdkResult, [400, 404]);
+  if (result.ok || !result.error.documented) return;
+
+  if (result.error.status === 400) {
+    const kind: "bad-request" = result.error.body.kind;
+    void kind;
+  } else {
+    const kind: "not-found" = result.error.body.kind;
+    void kind;
+  }
+}
+
+void narrowErrorHappyPath;
+void statusNarrowsErrorBody;

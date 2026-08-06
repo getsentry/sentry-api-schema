@@ -15,14 +15,18 @@ import {
   fetchPage,
   fetchPage_listOrganizationIssues,
   fetchPage_listOrganizations,
+  narrowError,
+  narrowError_getProject,
   paginateAll,
   paginateAll_listOrganizations,
   paginateUpTo,
   paginateUpTo_listOrganizations,
   parseSentryLinkHeader,
+  SentryApiError,
   unwrapPaginatedResult,
   unwrapResult,
 } from "../src/index";
+import { createClient } from "../src/client";
 // `_withCursor` is internal — the generated wrappers use it but it's not
 // re-exported from src/index. Import directly to cover the runtime helper.
 import { _withCursor } from "../src/sentry-pagination";
@@ -88,12 +92,22 @@ const mkSuccess = <T>(data: T, linkHeader?: string) => ({
   }),
 }) as Parameters<typeof unwrapResult<T>>[0];
 
-const mkFailure = (errorBody: unknown) => ({
+const mkFailure = <TError>(errorBody: TError, status = 500) => ({
   data: undefined,
   error: errorBody,
   request: new Request("https://example.test/"),
-  response: new Response(null, { status: 500 }),
-}) as Parameters<typeof unwrapResult<unknown>>[0];
+  response: new Response(null, { status }),
+}) as Parameters<typeof unwrapResult<unknown, TError>>[0];
+
+const mkTransportFailure = (error: unknown) => ({
+  data: undefined,
+  error,
+  request: new Request("https://example.test/"),
+  response: undefined,
+});
+
+const asFetch = (implementation: (request: Request) => Promise<Response>) =>
+  implementation as typeof fetch;
 
 describe("unwrapResult", () => {
   test("returns data on success", () => {
@@ -105,6 +119,163 @@ describe("unwrapResult", () => {
     expect(() => unwrapResult(mkFailure({ detail: "boom" }), "test")).toThrow(
       /test/,
     );
+  });
+
+  test("throws a SentryApiError carrying status and body", () => {
+    try {
+      unwrapResult(mkFailure({ detail: "boom" }, 404), "ctx");
+      throw new Error("expected unwrapResult to throw");
+    } catch (err) {
+      expect(err).toBeInstanceOf(SentryApiError);
+      const apiErr = err as SentryApiError;
+      expect(apiErr.status).toBe(404);
+      expect(apiErr.body).toEqual({ detail: "boom" });
+      expect(apiErr.documented).toBe(false);
+      expect(apiErr.message).toContain("ctx");
+    }
+  });
+});
+
+// =====================================================================
+// narrowError
+// =====================================================================
+
+describe("narrowError", () => {
+  test("returns ok:true with data on success", () => {
+    const res = narrowError<{ id: number }, { 403: unknown }>(
+      mkSuccess({ id: 1 }),
+      [403],
+    );
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data).toEqual({ id: 1 });
+      expect(res.response).toBeInstanceOf(Response);
+    }
+  });
+
+  test("marks a declared status as documented", () => {
+    const res = narrowError<unknown, { 403: { detail: string } }>(
+      mkFailure({ detail: "nope" }, 403),
+      [403],
+    );
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.error).toBeInstanceOf(SentryApiError);
+      expect(res.error.status).toBe(403);
+      expect(res.error.body).toEqual({ detail: "nope" });
+      expect(res.error.documented).toBe(true);
+    }
+  });
+
+  test("keeps undocumented statuses separate from the documented union", () => {
+    const res = narrowError<unknown, { 403: unknown; 404: unknown }>(
+      mkFailure({}, 500),
+      [403, 404],
+    );
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.error.status).toBe(500);
+      expect(res.error.documented).toBe(false);
+    }
+  });
+
+  test("represents transport failures without reading a missing response", () => {
+    const cause = new TypeError("fetch failed");
+    const res = narrowError<unknown, { 403: unknown }>(
+      mkTransportFailure(cause),
+      [403],
+    );
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.error.status).toBeUndefined();
+      expect(res.error.body).toBe(cause);
+      expect(res.error.response).toBeUndefined();
+      expect(res.error.documented).toBe(false);
+    }
+  });
+});
+
+describe("generated typed-error wrappers", () => {
+  const projectOptions = {
+    path: {
+      organization_id_or_slug: "my-org",
+      project_id_or_slug: "my-project",
+    },
+  };
+
+  test("overrides client defaults and returns a documented HTTP error", async () => {
+    const client = createClient({
+      baseUrl: "https://example.test",
+      responseStyle: "data",
+      throwOnError: true,
+      fetch: asFetch(() =>
+        Promise.resolve(
+          Response.json({ detail: "missing" }, { status: 404 }),
+        ),
+      ),
+    });
+
+    const result = await narrowError_getProject({ ...projectOptions, client });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.documented).toBe(true);
+      expect(result.error.status).toBe(404);
+      expect(result.error.body).toEqual({ detail: "missing" });
+    }
+  });
+
+  test("returns an undocumented HTTP error", async () => {
+    const result = await narrowError_getProject({
+      ...projectOptions,
+      baseUrl: "https://example.test",
+      fetch: asFetch(() => Promise.resolve(Response.json({}, { status: 500 }))),
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.documented).toBe(false);
+      expect(result.error.status).toBe(500);
+    }
+  });
+
+  test("returns a transport error when fetch rejects", async () => {
+    const cause = new TypeError("fetch failed");
+    const result = await narrowError_getProject({
+      ...projectOptions,
+      baseUrl: "https://example.test",
+      fetch: asFetch(() => Promise.reject(cause)),
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.documented).toBe(false);
+      expect(result.error.status).toBeUndefined();
+      expect(result.error.body).toBe(cause);
+    }
+  });
+
+  test("returns a transport error when reading the response body rejects", async () => {
+    const cause = new TypeError("stream failed");
+    const result = await narrowError_getProject({
+      ...projectOptions,
+      baseUrl: "https://example.test",
+      fetch: asFetch(() =>
+        Promise.resolve(
+          new Response(
+            new ReadableStream({
+              start(controller) {
+                controller.error(cause);
+              },
+            }),
+            { status: 500 },
+          ),
+        ),
+      ),
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.documented).toBe(false);
+      expect(result.error.status).toBeUndefined();
+      expect(result.error.body).toBe(cause);
+    }
   });
 });
 
