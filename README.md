@@ -33,7 +33,7 @@ Auth tokens and base URLs (including self-hosted and region URLs) are documented
 
 The root `@sentry/api` entry has no runtime dependencies. It provides the API client and pure TypeScript types without installing a validation library.
 
-Runtime schemas are available through separate optional entry points:
+Valibot 1 runtime schemas are available through a separate optional entry point:
 
 ```bash
 npm install @sentry/api valibot
@@ -46,7 +46,7 @@ import { vGetProjectResponse } from "@sentry/api/valibot";
 const project = v.parse(vGetProjectResponse, input);
 ```
 
-Zod 4.4 and later remains supported:
+The existing Zod 3 entry remains supported:
 
 ```bash
 npm install @sentry/api zod
@@ -58,7 +58,7 @@ import { zGetProjectResponse } from "@sentry/api/zod";
 const project = zGetProjectResponse.parse(input);
 ```
 
-`valibot` and `zod` are optional peer dependencies. Install neither when you only need the generated client and TypeScript types, or install the validator used by your application.
+`valibot` and `zod` are optional peer dependencies. Install neither when you only need the generated client and TypeScript types, or install the validator used by your application. The `@sentry/api/valibot` entry requires Valibot 1; its optional peer uses a wildcard because npm applies peer constraints to the whole package, including consumers that never import this entry.
 
 ## Error handling
 

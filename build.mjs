@@ -29,7 +29,7 @@ await createClient({
     "valibot",
     {
       name: "zod",
-      compatibilityVersion: 4,
+      compatibilityVersion: 3,
     },
   ],
 });

@@ -92,7 +92,7 @@ describe("runtime validator entry points", () => {
     ).toThrow();
   });
 
-  test("Zod 4 parses generated response schemas", () => {
+  test("Zod parses generated response schemas", () => {
     expect(zAutofixPostResponse.parse(response)).toEqual(response);
     expect(() =>
       zAutofixPostResponse.parse({ ...response, run_id: "42" }),
