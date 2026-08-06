@@ -34,6 +34,7 @@ await createClient({
 
 // 2. Copy hand-written utilities into the generated src/ directory
 cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
+cpSync("lib/sentry-errors.ts", "src/sentry-errors.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
 
 // 3. Generate per-operation pagination wrappers from the SDK output + spec.
@@ -43,6 +44,7 @@ cpSync("lib/browser-client.ts", "src/browser-client.ts");
 //    Done as a post-processor (not a Hey API plugin) because the plugin API
 //    is documented as in-development and unstable.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.mjs"))}`, { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-results.mjs"))}`, { stdio: "inherit" });
 
 // 4. Append re-exports to the generated index.ts so the pagination
 //    utilities and the per-operation wrappers are part of the public API.
@@ -50,8 +52,11 @@ appendFileSync(
   "src/index.ts",
   [
     "",
-    "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, narrowError, SentryApiError, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
-    "export type { UnwrappedResult, NarrowedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher, SdkResult } from './sentry-pagination.ts';",
+    "export { callWithTypedErrors, narrowError, SentryApiError } from './sentry-errors.ts';",
+    "export type { DocumentedSentryApiError, NarrowedResult, SentryApiResultError, SentryApiTransportError, SdkResult, UndocumentedSentryApiError } from './sentry-errors.ts';",
+    "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
+    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher } from './sentry-pagination.ts';",
+    "export * from './error-results.gen.ts';",
     "export * from './pagination.gen.ts';",
     "",
   ].join("\n"),

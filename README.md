@@ -29,6 +29,38 @@ console.log(data);
 
 Auth tokens and base URLs (including self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
 
+## Error handling
+
+Every operation with documented error responses has a generated `narrowError_<operation>` wrapper. It returns data or a `SentryApiError` that preserves the operation's status-to-body type map:
+
+```ts
+import { narrowError_getProject } from "@sentry/api";
+
+const result = await narrowError_getProject({
+  baseUrl: "https://sentry.io",
+  headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
+  path: {
+    organization_id_or_slug: "my-org",
+    project_id_or_slug: "my-project",
+  },
+});
+
+if (!result.ok) {
+  if (!result.error.documented) {
+    // Unexpected HTTP status or a transport failure.
+    throw result.error;
+  }
+
+  switch (result.error.status) {
+    case 403:
+    case 404:
+      throw result.error;
+  }
+}
+```
+
+Checking `documented` first separates the operation's finite error union from unexpected statuses and transport failures. Within the documented branch, checking `status` narrows `body` to that response's schema. Error bodies remain `unknown` where the source OpenAPI response has no schema.
+
 ## Pagination
 
 Sentry uses cursor-based pagination via `Link` headers. Every operation in the SDK that accepts a `cursor` query parameter has three auto-generated typed wrappers:
