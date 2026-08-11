@@ -68019,6 +68019,18 @@
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "llmFormat",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "markdown",
+                "xml"
+              ]
+            },
+            "description": "If set, adds a `formatted` field to the response with the autofix rendered as the requested format for LLM consumption."
           }
         ],
         "tags": [
@@ -68041,6 +68053,26 @@
                   "type": "object",
                   "description": "Response type for the GET endpoint",
                   "properties": {
+                    "formatted": {
+                      "type": "object",
+                      "description": "The ``formatted`` field the mixin adds to a response when ``?llmFormat`` is requested.",
+                      "properties": {
+                        "format": {
+                          "enum": [
+                            "markdown",
+                            "xml"
+                          ],
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "content",
+                        "format"
+                      ]
+                    },
                     "autofix": {
                       "type": "object",
                       "additionalProperties": {},
@@ -68775,6 +68807,18 @@
               }
             },
             "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "llmFormat",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "markdown",
+                "xml"
+              ]
+            },
+            "description": "If set, adds a `formatted` field to the response with the event rendered as the requested format for LLM consumption."
           }
         ],
         "tags": [
@@ -69378,6 +69422,26 @@
                     "previousEventID": {
                       "type": "string",
                       "nullable": true
+                    },
+                    "formatted": {
+                      "type": "object",
+                      "description": "The ``formatted`` field the mixin adds to a response when ``?llmFormat`` is requested.",
+                      "properties": {
+                        "format": {
+                          "enum": [
+                            "markdown",
+                            "xml"
+                          ],
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "content",
+                        "format"
+                      ]
                     }
                   },
                   "required": [
@@ -71711,6 +71775,26 @@
         "type": "object",
         "description": "Response type for the GET endpoint",
         "properties": {
+          "formatted": {
+            "type": "object",
+            "description": "The ``formatted`` field the mixin adds to a response when ``?llmFormat`` is requested.",
+            "properties": {
+              "format": {
+                "enum": [
+                  "markdown",
+                  "xml"
+                ],
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "content",
+              "format"
+            ]
+          },
           "autofix": {
             "type": "object",
             "additionalProperties": {},
@@ -81691,6 +81775,26 @@
           "previousEventID": {
             "type": "string",
             "nullable": true
+          },
+          "formatted": {
+            "type": "object",
+            "description": "The ``formatted`` field the mixin adds to a response when ``?llmFormat`` is requested.",
+            "properties": {
+              "format": {
+                "enum": [
+                  "markdown",
+                  "xml"
+                ],
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "content",
+              "format"
+            ]
           }
         },
         "required": [
