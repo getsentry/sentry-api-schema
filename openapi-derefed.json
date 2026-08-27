@@ -3639,7 +3639,7 @@
                           "allOf": [
                             {
                               "type": "object",
-                              "description": "Widget grid layout position and dimensions.\n\nThe dashboard uses a 6-column grid. Required keys: x, y, w, h, minH.\nConstraints: x (0-5), y (>= 0), w (1-6), h (>= 1), minH (>= 1), and x + w <= 6.",
+                              "description": "Widget grid layout position and dimensions for dashboard creation.\n\nThe dashboard uses a 6-column grid. Required keys: x, y, w, h.\nConstraints: x (0-5), y (>= 0), w (1-6), h (>= 1), and x + w <= 6.",
                               "properties": {
                                 "x": {
                                   "type": "integer",
@@ -3662,16 +3662,10 @@
                                   "type": "integer",
                                   "minimum": 1,
                                   "description": "Height in grid rows."
-                                },
-                                "min_h": {
-                                  "type": "integer",
-                                  "minimum": 1,
-                                  "description": "Minimum height in grid rows."
                                 }
                               },
                               "required": [
                                 "h",
-                                "min_h",
                                 "w",
                                 "x",
                                 "y"
@@ -74284,7 +74278,7 @@
                   "allOf": [
                     {
                       "type": "object",
-                      "description": "Widget grid layout position and dimensions.\n\nThe dashboard uses a 6-column grid. Required keys: x, y, w, h, minH.\nConstraints: x (0-5), y (>= 0), w (1-6), h (>= 1), minH (>= 1), and x + w <= 6.",
+                      "description": "Widget grid layout position and dimensions for dashboard creation.\n\nThe dashboard uses a 6-column grid. Required keys: x, y, w, h.\nConstraints: x (0-5), y (>= 0), w (1-6), h (>= 1), and x + w <= 6.",
                       "properties": {
                         "x": {
                           "type": "integer",
@@ -74307,16 +74301,10 @@
                           "type": "integer",
                           "minimum": 1,
                           "description": "Height in grid rows."
-                        },
-                        "min_h": {
-                          "type": "integer",
-                          "minimum": 1,
-                          "description": "Minimum height in grid rows."
                         }
                       },
                       "required": [
                         "h",
-                        "min_h",
                         "w",
                         "x",
                         "y"
@@ -74424,6 +74412,256 @@
         },
         "required": [
           "title"
+        ]
+      },
+      "DashboardCreateWidget": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "thresholds": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "display_type": {
+            "enum": [
+              "line",
+              "area",
+              "bar",
+              "table",
+              "big_number",
+              "details",
+              "categorical_bar",
+              "wheel",
+              "rage_and_dead_clicks",
+              "server_tree",
+              "text",
+              "agents_traces_table",
+              "heatmap"
+            ],
+            "type": "string",
+            "description": "* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
+          },
+          "interval": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "queries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "aggregates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "columns": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "field_aliases": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "conditions": {
+                  "type": "string"
+                },
+                "orderby": {
+                  "type": "string"
+                },
+                "is_hidden": {
+                  "type": "boolean"
+                },
+                "on_demand_extraction": {
+                  "type": "object",
+                  "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                  "properties": {
+                    "extraction_state": {
+                      "type": "string"
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "on_demand_extraction_disabled": {
+                  "type": "boolean"
+                },
+                "selected_aggregate": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "linked_dashboards": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                    "properties": {
+                      "field": {
+                        "type": "string"
+                      },
+                      "dashboard_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "dashboard_id",
+                      "field"
+                    ]
+                  },
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "widget_type": {
+            "enum": [
+              "discover",
+              "issue",
+              "metrics",
+              "error-events",
+              "transaction-like",
+              "spans",
+              "logs",
+              "tracemetrics",
+              "preprod-app-size",
+              null
+            ],
+            "type": "string",
+            "description": "* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`",
+            "nullable": true
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "nullable": true
+          },
+          "layout": {
+            "allOf": [
+              {
+                "type": "object",
+                "description": "Widget grid layout position and dimensions for dashboard creation.\n\nThe dashboard uses a 6-column grid. Required keys: x, y, w, h.\nConstraints: x (0-5), y (>= 0), w (1-6), h (>= 1), and x + w <= 6.",
+                "properties": {
+                  "x": {
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 0,
+                    "description": "Column position (0-indexed)."
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Row position (0-indexed)."
+                  },
+                  "w": {
+                    "type": "integer",
+                    "maximum": 6,
+                    "minimum": 1,
+                    "description": "Width in grid columns (1-6)."
+                  },
+                  "h": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Height in grid rows."
+                  }
+                },
+                "required": [
+                  "h",
+                  "w",
+                  "x",
+                  "y"
+                ]
+              }
+            ],
+            "nullable": true
+          },
+          "axis_range": {
+            "enum": [
+              "auto",
+              "dataMin",
+              null
+            ],
+            "type": "string",
+            "description": "* `auto`\n* `dataMin`",
+            "nullable": true
+          },
+          "legend_type": {
+            "enum": [
+              "default",
+              "breakdown",
+              null
+            ],
+            "type": "string",
+            "description": "* `default`\n* `breakdown`",
+            "nullable": true
+          }
+        }
+      },
+      "DashboardCreateWidgetLayout": {
+        "type": "object",
+        "description": "Widget grid layout position and dimensions for dashboard creation.\n\nThe dashboard uses a 6-column grid. Required keys: x, y, w, h.\nConstraints: x (0-5), y (>= 0), w (1-6), h (>= 1), and x + w <= 6.",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "maximum": 5,
+            "minimum": 0,
+            "description": "Column position (0-indexed)."
+          },
+          "y": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Row position (0-indexed)."
+          },
+          "w": {
+            "type": "integer",
+            "maximum": 6,
+            "minimum": 1,
+            "description": "Width in grid columns (1-6)."
+          },
+          "h": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Height in grid rows."
+          }
+        },
+        "required": [
+          "h",
+          "w",
+          "x",
+          "y"
         ]
       },
       "DashboardDetails": {
