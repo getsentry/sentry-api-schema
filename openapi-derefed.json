@@ -2986,53 +2986,6 @@
           },
           {
             "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "excludeFavorites",
-                  "excludePrebuilt",
-                  "onlyFavorites",
-                  "onlyPrebuilt",
-                  "owned",
-                  "shared",
-                  "showHidden"
-                ]
-              }
-            },
-            "description": "Filter the dashboards returned. Repeat this parameter to apply multiple filters."
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter dashboards by title."
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string"
-            },
-            "description": "The property to sort results by. Prefix the value with `-` to sort in descending order.\n\nAvailable fields are:\n- `title`\n- `dateCreated`\n- `mostPopular`\n- `recentlyViewed`\n- `mydashboards`\n- `myDashboardsAndRecentlyViewed`\n"
-          },
-          {
-            "in": "query",
-            "name": "pin",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "favorites"
-              ]
-            },
-            "description": "Pin favorited dashboards to the top of the results."
-          },
-          {
-            "in": "query",
             "name": "per_page",
             "schema": {
               "type": "integer"
@@ -6401,24 +6354,6 @@
               }
             },
             "description": "The ID of the monitor you'd like to query."
-          },
-          {
-            "in": "query",
-            "name": "per_page",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
-            "x-learn-more": "https://docs.sentry.io/api/pagination/"
           }
         ],
         "tags": [
@@ -10691,14 +10626,6 @@
               }
             },
             "description": "The name of environments to filter by."
-          },
-          {
-            "in": "query",
-            "name": "referrer",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Internal referrer identifier used for query tracing. Most clients can omit this."
           },
           {
             "in": "query",
@@ -32172,12 +32099,10 @@
             "in": "query",
             "name": "environment",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "type": "string",
+              "minLength": 1
             },
-            "description": "The environments to filter by."
+            "description": "The environment to filter by."
           },
           {
             "in": "query",
@@ -32214,15 +32139,6 @@
               "minLength": 1
             },
             "description": "A structured query string to filter the output by."
-          },
-          {
-            "in": "query",
-            "name": "queryReferrer",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "Internal referrer identifier used for query tracing."
           },
           {
             "in": "query",
@@ -32739,12 +32655,10 @@
             "in": "query",
             "name": "environment",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "type": "string",
+              "minLength": 1
             },
-            "description": "The environments to filter by."
+            "description": "The environment to filter by."
           },
           {
             "in": "query",
@@ -32781,15 +32695,6 @@
               "minLength": 1
             },
             "description": "A structured query string to filter the output by."
-          },
-          {
-            "in": "query",
-            "name": "queryReferrer",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "Internal referrer identifier used for query tracing."
           },
           {
             "in": "query",
@@ -38727,35 +38632,6 @@
           },
           {
             "in": "query",
-            "name": "environment",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "The name of environments to filter by."
-          },
-          {
-            "in": "query",
-            "name": "project",
-            "schema": {
-              "type": "array",
-              "items": {
-                "anyOf": [
-                  {
-                    "type": "integer"
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
-              }
-            },
-            "description": "The IDs or slugs of projects to filter by. Project slugs are unique within each organization. Omit this parameter to include all accessible projects. `-1` is also accepted to include all accessible projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=android&project=javascript-react`\n- `/?project=-1`\n"
-          },
-          {
-            "in": "query",
             "name": "dataset",
             "schema": {
               "type": "string",
@@ -40848,17 +40724,6 @@
           },
           {
             "in": "query",
-            "name": "detector",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer"
-              }
-            },
-            "description": "The IDs of monitors connected to the alerts you'd like to query."
-          },
-          {
-            "in": "query",
             "name": "project",
             "schema": {
               "type": "array",
@@ -40874,24 +40739,6 @@
               }
             },
             "description": "The IDs or slugs of projects to filter by. Project slugs are unique within each organization. Omit this parameter to include all accessible projects. `-1` is also accepted to include all accessible projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=android&project=javascript-react`\n- `/?project=-1`\n"
-          },
-          {
-            "in": "query",
-            "name": "per_page",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
-            "x-learn-more": "https://docs.sentry.io/api/pagination/"
           }
         ],
         "tags": [
