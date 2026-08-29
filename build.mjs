@@ -38,6 +38,7 @@ await createClient({
 cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 cpSync("lib/sentry-errors.ts", "src/sentry-errors.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
+cpSync("lib/auth-config.ts", "src/auth-config.ts");
 
 // 3. Generate per-operation pagination wrappers from the SDK output + spec.
 //    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
@@ -48,8 +49,9 @@ cpSync("lib/browser-client.ts", "src/browser-client.ts");
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-results.mjs"))}`, { stdio: "inherit" });
 
-// 4. Append re-exports to the generated index.ts so the pagination
-//    utilities and the per-operation wrappers are part of the public API.
+// 4. Append re-exports to the generated index.ts so the pagination utilities,
+//    the per-operation wrappers, the auth factories, and the client itself are
+//    all part of the public API surface.
 appendFileSync(
   "src/index.ts",
   [
@@ -60,6 +62,15 @@ appendFileSync(
     "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher } from './sentry-pagination.ts';",
     "export * from './error-results.gen.ts';",
     "export * from './pagination.gen.ts';",
+    // Auth/config factories (see lib/auth-config.ts). browserSession lives in ./browser.
+    "export { bearerToken, DEFAULT_BASE_URL } from './auth-config.ts';",
+    "export type { BearerTokenOptions, SentryApiConfig, FetchFn } from './auth-config.ts';",
+    // The client itself: the global singleton (client.setConfig) plus factories
+    // for isolated instances (createSentryClient is createClient, Sentry-branded).
+    "export { client } from './client.gen.ts';",
+    "export { createClient, createClient as createSentryClient, createConfig } from './client/index.ts';",
+    // Config only: `ClientOptions` is already re-exported from types.gen above.
+    "export type { Config } from './client/index.ts';",
     "",
   ].join("\n"),
 );
