@@ -12598,6 +12598,801 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/group-search-views/": {
+      "get": {
+        "operationId": "listOrganizationIssueViews",
+        "description": "List the current organization member's custom views\n`````````````````````````````````````````\n\nRetrieve a list of custom views for the current organization member.",
+        "summary": "List Issue Views",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "createdBy",
+            "schema": {
+              "enum": [
+                "me",
+                "others"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Whether to return issue views created by the current user or other members.\n\n* `me`\n* `others`"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "popularity",
+                  "-popularity",
+                  "visited",
+                  "-visited",
+                  "name",
+                  "-name",
+                  "created",
+                  "-created"
+                ],
+                "type": "string",
+                "description": "* `popularity`\n* `-popularity`\n* `visited`\n* `-visited`\n* `name`\n* `-name`\n* `created`\n* `-created`"
+              },
+              "default": [
+                "-visited"
+              ]
+            },
+            "description": "The fields used to sort issue views, in order of precedence."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A case-insensitive search against issue view names and queries."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "member:read",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "createdBy": {
+                        "type": "object",
+                        "properties": {
+                          "identities": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "organization": {
+                                  "type": "object",
+                                  "properties": {
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "slug"
+                                  ]
+                                },
+                                "provider": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name"
+                                  ]
+                                },
+                                "dateVerified": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "dateSynced": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "dateSynced",
+                                "dateVerified",
+                                "id",
+                                "name",
+                                "organization",
+                                "provider"
+                              ]
+                            }
+                          },
+                          "avatar": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "avatarUrl": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "authenticators": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "canReset2fa": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "isSuspended": {
+                            "type": "boolean"
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "dateJoined": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "lastLogin": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "experiments": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "is_verified": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "id",
+                                "is_verified"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "dateJoined",
+                          "email",
+                          "emails",
+                          "experiments",
+                          "has2fa",
+                          "hasPasswordAuth",
+                          "id",
+                          "isActive",
+                          "isManaged",
+                          "isStaff",
+                          "isSuperuser",
+                          "isSuspended",
+                          "lastActive",
+                          "lastLogin",
+                          "name",
+                          "username"
+                        ],
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "query": {
+                        "type": "string"
+                      },
+                      "querySort": {
+                        "enum": [
+                          "date",
+                          "new",
+                          "trends",
+                          "freq",
+                          "user",
+                          "inbox",
+                          "recommended"
+                        ],
+                        "type": "string"
+                      },
+                      "projects": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer"
+                        }
+                      },
+                      "environments": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "timeFilters": {
+                        "type": "object",
+                        "properties": {
+                          "start": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "end": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "period": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "utc": {
+                            "type": "boolean",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "lastVisited": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "dateCreated": {
+                        "type": "string"
+                      },
+                      "dateUpdated": {
+                        "type": "string"
+                      },
+                      "starred": {
+                        "type": "boolean"
+                      },
+                      "stars": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "createdBy",
+                      "dateCreated",
+                      "dateUpdated",
+                      "environments",
+                      "id",
+                      "lastVisited",
+                      "name",
+                      "projects",
+                      "query",
+                      "querySort",
+                      "starred",
+                      "stars",
+                      "timeFilters"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createOrganizationIssueView",
+        "description": "Create a new custom view for the current organization member.",
+        "summary": "Create an Issue View",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Events"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the issue view."
+                  },
+                  "query": {
+                    "type": "string",
+                    "description": "The issue search query."
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "The project IDs included in the view. Use `-1` to include all projects."
+                  },
+                  "environments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The environment names included in the view. An empty list includes all environments."
+                  },
+                  "timeFilters": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "start": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The start of the time range in ISO-8601 format."
+                          },
+                          "end": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The end of the time range in ISO-8601 format."
+                          },
+                          "period": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The relative time period, such as `14d`."
+                          },
+                          "utc": {
+                            "type": "boolean",
+                            "nullable": true,
+                            "description": "Whether to interpret the time range as UTC."
+                          }
+                        }
+                      }
+                    ],
+                    "description": "The time range for the view."
+                  },
+                  "querySort": {
+                    "enum": [
+                      "date",
+                      "new",
+                      "trends",
+                      "freq",
+                      "user",
+                      "inbox",
+                      "recommended"
+                    ],
+                    "type": "string",
+                    "default": "date",
+                    "description": "How to sort issues in the view.\n\n* `date` - Last Seen\n* `new` - First Seen\n* `trends` - Trends\n* `freq` - Events\n* `user` - Users\n* `inbox` - Date Added\n* `recommended` - Recommended"
+                  },
+                  "starred": {
+                    "type": "boolean",
+                    "description": "Whether to star the issue view for the current user."
+                  }
+                },
+                "required": [
+                  "environments",
+                  "name",
+                  "projects",
+                  "query",
+                  "timeFilters"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "member:read",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ]
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          }
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "type": "string"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "canReset2fa": {
+                          "type": "boolean"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "isSuspended": {
+                          "type": "boolean"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean"
+                        },
+                        "isManaged": {
+                          "type": "boolean"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "has2fa": {
+                          "type": "boolean"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        },
+                        "isSuperuser": {
+                          "type": "boolean"
+                        },
+                        "isStaff": {
+                          "type": "boolean"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "isSuspended",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ],
+                      "nullable": true
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "querySort": {
+                      "enum": [
+                        "date",
+                        "new",
+                        "trends",
+                        "freq",
+                        "user",
+                        "inbox",
+                        "recommended"
+                      ],
+                      "type": "string"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "environments": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "timeFilters": {
+                      "type": "object",
+                      "properties": {
+                        "start": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "end": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "period": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "utc": {
+                          "type": "boolean",
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "lastVisited": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "dateCreated": {
+                      "type": "string"
+                    },
+                    "dateUpdated": {
+                      "type": "string"
+                    },
+                    "starred": {
+                      "type": "boolean"
+                    },
+                    "stars": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "createdBy",
+                    "dateCreated",
+                    "dateUpdated",
+                    "environments",
+                    "id",
+                    "lastVisited",
+                    "name",
+                    "projects",
+                    "query",
+                    "querySort",
+                    "starred",
+                    "stars",
+                    "timeFilters"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/integrations/": {
       "get": {
         "operationId": "listOrganizationIntegrations",
@@ -80698,6 +81493,113 @@
           ]
         }
       },
+      "GroupSearchViewPostValidator": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the issue view."
+          },
+          "query": {
+            "type": "string",
+            "description": "The issue search query."
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "The project IDs included in the view. Use `-1` to include all projects."
+          },
+          "environments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The environment names included in the view. An empty list includes all environments."
+          },
+          "timeFilters": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The start of the time range in ISO-8601 format."
+                  },
+                  "end": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The end of the time range in ISO-8601 format."
+                  },
+                  "period": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The relative time period, such as `14d`."
+                  },
+                  "utc": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Whether to interpret the time range as UTC."
+                  }
+                }
+              }
+            ],
+            "description": "The time range for the view."
+          },
+          "querySort": {
+            "enum": [
+              "date",
+              "new",
+              "trends",
+              "freq",
+              "user",
+              "inbox",
+              "recommended"
+            ],
+            "type": "string",
+            "default": "date",
+            "description": "How to sort issues in the view.\n\n* `date` - Last Seen\n* `new` - First Seen\n* `trends` - Trends\n* `freq` - Events\n* `user` - Users\n* `inbox` - Date Added\n* `recommended` - Recommended"
+          },
+          "starred": {
+            "type": "boolean",
+            "description": "Whether to star the issue view for the current user."
+          }
+        },
+        "required": [
+          "environments",
+          "name",
+          "projects",
+          "query",
+          "timeFilters"
+        ]
+      },
+      "GroupSearchViewTimeFilters": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "nullable": true,
+            "description": "The start of the time range in ISO-8601 format."
+          },
+          "end": {
+            "type": "string",
+            "nullable": true,
+            "description": "The end of the time range in ISO-8601 format."
+          },
+          "period": {
+            "type": "string",
+            "nullable": true,
+            "description": "The relative time period, such as `14d`."
+          },
+          "utc": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Whether to interpret the time range as UTC."
+          }
+        }
+      },
       "GroupUpdateResponse": {
         "type": "object",
         "properties": {
@@ -92172,6 +93074,557 @@
           "scopes",
           "status"
         ]
+      },
+      "OrganizationIssueView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "object",
+            "properties": {
+              "identities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "organization": {
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "slug"
+                      ]
+                    },
+                    "provider": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    },
+                    "dateVerified": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dateSynced": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "dateSynced",
+                    "dateVerified",
+                    "id",
+                    "name",
+                    "organization",
+                    "provider"
+                  ]
+                }
+              },
+              "avatar": {
+                "type": "object",
+                "properties": {
+                  "avatarType": {
+                    "type": "string"
+                  },
+                  "avatarUuid": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              },
+              "authenticators": {
+                "type": "array",
+                "items": {}
+              },
+              "canReset2fa": {
+                "type": "boolean"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "avatarUrl": {
+                "type": "string"
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "isSuspended": {
+                "type": "boolean"
+              },
+              "hasPasswordAuth": {
+                "type": "boolean"
+              },
+              "isManaged": {
+                "type": "boolean"
+              },
+              "dateJoined": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastLogin": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "has2fa": {
+                "type": "boolean"
+              },
+              "lastActive": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "isSuperuser": {
+                "type": "boolean"
+              },
+              "isStaff": {
+                "type": "boolean"
+              },
+              "experiments": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "emails": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "is_verified": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "email",
+                    "id",
+                    "is_verified"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "avatarUrl",
+              "dateJoined",
+              "email",
+              "emails",
+              "experiments",
+              "has2fa",
+              "hasPasswordAuth",
+              "id",
+              "isActive",
+              "isManaged",
+              "isStaff",
+              "isSuperuser",
+              "isSuspended",
+              "lastActive",
+              "lastLogin",
+              "name",
+              "username"
+            ],
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "querySort": {
+            "enum": [
+              "date",
+              "new",
+              "trends",
+              "freq",
+              "user",
+              "inbox",
+              "recommended"
+            ],
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "environments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timeFilters": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "string",
+                "nullable": true
+              },
+              "end": {
+                "type": "string",
+                "nullable": true
+              },
+              "period": {
+                "type": "string",
+                "nullable": true
+              },
+              "utc": {
+                "type": "boolean",
+                "nullable": true
+              }
+            }
+          },
+          "lastVisited": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "dateUpdated": {
+            "type": "string"
+          },
+          "starred": {
+            "type": "boolean"
+          },
+          "stars": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "createdBy",
+          "dateCreated",
+          "dateUpdated",
+          "environments",
+          "id",
+          "lastVisited",
+          "name",
+          "projects",
+          "query",
+          "querySort",
+          "starred",
+          "stars",
+          "timeFilters"
+        ]
+      },
+      "OrganizationIssueViewList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "createdBy": {
+              "type": "object",
+              "properties": {
+                "identities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "organization": {
+                        "type": "object",
+                        "properties": {
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "slug"
+                        ]
+                      },
+                      "provider": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      },
+                      "dateVerified": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "dateSynced": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "dateSynced",
+                      "dateVerified",
+                      "id",
+                      "name",
+                      "organization",
+                      "provider"
+                    ]
+                  }
+                },
+                "avatar": {
+                  "type": "object",
+                  "properties": {
+                    "avatarType": {
+                      "type": "string"
+                    },
+                    "avatarUuid": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "avatarUrl": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "authenticators": {
+                  "type": "array",
+                  "items": {}
+                },
+                "canReset2fa": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
+                },
+                "isSuspended": {
+                  "type": "boolean"
+                },
+                "hasPasswordAuth": {
+                  "type": "boolean"
+                },
+                "isManaged": {
+                  "type": "boolean"
+                },
+                "dateJoined": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "lastLogin": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "has2fa": {
+                  "type": "boolean"
+                },
+                "lastActive": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "isSuperuser": {
+                  "type": "boolean"
+                },
+                "isStaff": {
+                  "type": "boolean"
+                },
+                "experiments": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "emails": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "is_verified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "id",
+                      "is_verified"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "avatarUrl",
+                "dateJoined",
+                "email",
+                "emails",
+                "experiments",
+                "has2fa",
+                "hasPasswordAuth",
+                "id",
+                "isActive",
+                "isManaged",
+                "isStaff",
+                "isSuperuser",
+                "isSuspended",
+                "lastActive",
+                "lastLogin",
+                "name",
+                "username"
+              ],
+              "nullable": true
+            },
+            "name": {
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "querySort": {
+              "enum": [
+                "date",
+                "new",
+                "trends",
+                "freq",
+                "user",
+                "inbox",
+                "recommended"
+              ],
+              "type": "string"
+            },
+            "projects": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "environments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "timeFilters": {
+              "type": "object",
+              "properties": {
+                "start": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "end": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "period": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "utc": {
+                  "type": "boolean",
+                  "nullable": true
+                }
+              }
+            },
+            "lastVisited": {
+              "type": "string",
+              "nullable": true
+            },
+            "dateCreated": {
+              "type": "string"
+            },
+            "dateUpdated": {
+              "type": "string"
+            },
+            "starred": {
+              "type": "boolean"
+            },
+            "stars": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "createdBy",
+            "dateCreated",
+            "dateUpdated",
+            "environments",
+            "id",
+            "lastVisited",
+            "name",
+            "projects",
+            "query",
+            "querySort",
+            "starred",
+            "stars",
+            "timeFilters"
+          ]
+        }
       },
       "OrganizationMember": {
         "type": "object",
