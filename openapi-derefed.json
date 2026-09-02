@@ -22908,6 +22908,15 @@
                       "type": "string"
                     },
                     "description": "List of project IDs or slugs that the Notification Action is created for."
+                  },
+                  "sentry_app_id": {
+                    "type": "integer",
+                    "description": "ID of the custom integration to notify, when the target is a Sentry app."
+                  },
+                  "target_type": {
+                    "type": "string",
+                    "default": "specific",
+                    "description": "How the notification target is addressed."
                   }
                 },
                 "required": [
@@ -23202,6 +23211,15 @@
                       "type": "string"
                     },
                     "description": "List of project IDs or slugs that the Notification Action is created for."
+                  },
+                  "sentry_app_id": {
+                    "type": "integer",
+                    "description": "ID of the custom integration to notify, when the target is a Sentry app."
+                  },
+                  "target_type": {
+                    "type": "string",
+                    "default": "specific",
+                    "description": "How the notification target is addressed."
                   }
                 },
                 "required": [
@@ -30526,6 +30544,36 @@
                       ]
                     },
                     "description": "An optional list of commit data to be associated."
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The status of the release. Can be `open` or `archived`."
+                  },
+                  "headCommits": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "currentId": {
+                          "type": "string",
+                          "maxLength": 64
+                        },
+                        "repository": {
+                          "type": "string",
+                          "maxLength": 64
+                        },
+                        "previousId": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 64
+                        }
+                      },
+                      "required": [
+                        "currentId",
+                        "repository"
+                      ]
+                    },
+                    "description": "Deprecated, use `commits`. Head commits to associate with the release."
                   },
                   "refs": {
                     "type": "array",
@@ -64028,6 +64076,10 @@
                 "type": "object",
                 "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                 "properties": {
+                  "team_id": {
+                    "type": "integer",
+                    "description": "ID of the Sentry team to link to the external team."
+                  },
                   "external_name": {
                     "type": "string",
                     "description": "The associated name for the provider."
@@ -64060,7 +64112,8 @@
                 "required": [
                   "external_name",
                   "integration_id",
-                  "provider"
+                  "provider",
+                  "team_id"
                 ]
               }
             }
@@ -64233,6 +64286,10 @@
                 "type": "object",
                 "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                 "properties": {
+                  "team_id": {
+                    "type": "integer",
+                    "description": "ID of the Sentry team to link to the external team."
+                  },
                   "external_name": {
                     "type": "string",
                     "description": "The associated name for the provider."
@@ -64265,7 +64322,8 @@
                 "required": [
                   "external_name",
                   "integration_id",
-                  "provider"
+                  "provider",
+                  "team_id"
                 ]
               }
             }
@@ -80235,6 +80293,10 @@
         "type": "object",
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
         "properties": {
+          "team_id": {
+            "type": "integer",
+            "description": "ID of the Sentry team to link to the external team."
+          },
           "external_name": {
             "type": "string",
             "description": "The associated name for the provider."
@@ -80267,7 +80329,8 @@
         "required": [
           "external_name",
           "integration_id",
-          "provider"
+          "provider",
+          "team_id"
         ]
       },
       "ExternalUser": {
@@ -92052,6 +92115,15 @@
               "type": "string"
             },
             "description": "List of project IDs or slugs that the Notification Action is created for."
+          },
+          "sentry_app_id": {
+            "type": "integer",
+            "description": "ID of the custom integration to notify, when the target is a Sentry app."
+          },
+          "target_type": {
+            "type": "string",
+            "default": "specific",
+            "description": "How the notification target is addressed."
           }
         },
         "required": [
@@ -95752,6 +95824,36 @@
               ]
             },
             "description": "An optional list of commit data to be associated."
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the release. Can be `open` or `archived`."
+          },
+          "headCommits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currentId": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "repository": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "previousId": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 64
+                }
+              },
+              "required": [
+                "currentId",
+                "repository"
+              ]
+            },
+            "description": "Deprecated, use `commits`. Head commits to associate with the release."
           },
           "refs": {
             "type": "array",
