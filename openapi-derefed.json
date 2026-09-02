@@ -45986,9 +45986,137 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "digestsMinDelay": {
+                    "type": "integer",
+                    "maximum": 3600,
+                    "minimum": 60,
+                    "description": "Minimum time in seconds to wait before sending an issue digest email."
+                  },
+                  "digestsMaxDelay": {
+                    "type": "integer",
+                    "maximum": 3600,
+                    "minimum": 60,
+                    "description": "Maximum time in seconds to wait before sending an issue digest email."
+                  },
+                  "securityToken": {
+                    "type": "string",
+                    "description": "Token sent with security reports (CSP, Expect-CT, HPKP) so Sentry can verify their origin.",
+                    "maxLength": 255,
+                    "pattern": "^[-a-zA-Z0-9+/=\\s]+$"
+                  },
+                  "securityTokenHeader": {
+                    "type": "string",
+                    "description": "Name of the header carrying the security token on inbound security reports.",
+                    "maxLength": 64,
+                    "pattern": "^[a-zA-Z0-9_\\-]+$"
+                  },
                   "isBookmarked": {
                     "type": "boolean",
                     "description": "Enables starring the project within the projects tab. Can be updated with **`project:read`** permission."
+                  },
+                  "autofixAutomationTuning": {
+                    "enum": [
+                      "off",
+                      "super_low",
+                      "low",
+                      "medium",
+                      "high",
+                      "always"
+                    ],
+                    "type": "string",
+                    "description": "How aggressively Seer runs Autofix on new issues. Can be updated with **`project:read`** permission.\n\n* `off`\n* `super_low`\n* `low`\n* `medium`\n* `high`\n* `always`"
+                  },
+                  "seerScannerAutomation": {
+                    "type": "boolean",
+                    "description": "Let Seer scan new issues automatically. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodSizeStatusChecksEnabled": {
+                    "type": "boolean",
+                    "description": "Enable preprod size status checks. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodSizeStatusChecksRules": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "Rules controlling when preprod size status checks fail. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodSizePrCommentsEnabled": {
+                    "type": "boolean",
+                    "description": "Enable preprod size PR comments. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodSizePrCommentsRules": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "Rules controlling which preprod size changes are posted as PR comments. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodSnapshotStatusChecksEnabled": {
+                    "type": "boolean",
+                    "description": "Enable preprod snapshot status checks."
+                  },
+                  "preprodSnapshotStatusChecksFailOnAdded": {
+                    "type": "boolean",
+                    "description": "Fail the preprod snapshot status check when snapshots are added."
+                  },
+                  "preprodSnapshotStatusChecksFailOnRemoved": {
+                    "type": "boolean",
+                    "description": "Fail the preprod snapshot status check when snapshots are removed."
+                  },
+                  "preprodSnapshotStatusChecksFailOnChanged": {
+                    "type": "boolean",
+                    "description": "Fail the preprod snapshot status check when snapshots change."
+                  },
+                  "preprodSnapshotStatusChecksFailOnRenamed": {
+                    "type": "boolean",
+                    "description": "Fail the preprod snapshot status check when snapshots are renamed."
+                  },
+                  "preprodSizeEnabledByCustomer": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Enable preprod size analysis. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodDistributionEnabledByCustomer": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Enable preprod build distribution. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodDistributionPrCommentsEnabledByCustomer": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Post preprod distribution updates as PR comments. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodSnapshotPrCommentsEnabled": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Post preprod snapshot changes as PR comments."
+                  },
+                  "preprodSnapshotPrCommentsPostOnAdded": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Include added snapshots in preprod snapshot PR comments."
+                  },
+                  "preprodSnapshotPrCommentsPostOnRemoved": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Include removed snapshots in preprod snapshot PR comments."
+                  },
+                  "preprodSnapshotPrCommentsPostOnChanged": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Include changed snapshots in preprod snapshot PR comments."
+                  },
+                  "preprodSnapshotPrCommentsPostOnRenamed": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Include renamed snapshots in preprod snapshot PR comments."
+                  },
+                  "preprodSizeEnabledQuery": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Query selecting which preprod builds are size-analyzed. Can be updated with **`project:read`** permission."
+                  },
+                  "preprodDistributionEnabledQuery": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Query selecting which preprod builds are distributed. Can be updated with **`project:read`** permission."
                   },
                   "name": {
                     "type": "string",
@@ -46033,18 +46161,178 @@
                     },
                     "description": "A list of strings with tag keys to highlight on this project's issues.\nE.g. `['release', 'environment']`"
                   },
+                  "verifySSL": {
+                    "type": "boolean",
+                    "description": "Verify SSL certificates when delivering outbound webhooks and service hooks."
+                  },
+                  "defaultEnvironment": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Environment selected by default when viewing this project."
+                  },
+                  "dataScrubber": {
+                    "type": "boolean",
+                    "description": "Remove known sensitive values from events before storing them."
+                  },
+                  "dataScrubberDefaults": {
+                    "type": "boolean",
+                    "description": "Also scrub Sentry's built-in list of sensitive field names."
+                  },
+                  "sensitiveFields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Additional field names to scrub from events, beyond the defaults."
+                  },
+                  "safeFields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Field names to exempt from scrubbing, including the built-in defaults."
+                  },
+                  "storeCrashReports": {
+                    "type": "integer",
+                    "maximum": 100,
+                    "minimum": -1,
+                    "nullable": true,
+                    "description": "Number of native crash report files to store per issue. Use `-1` for unlimited or `0` to store none."
+                  },
+                  "relayPiiConfig": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Advanced data scrubbing rules, as a JSON string, applied before events are stored."
+                  },
+                  "builtinSymbolSources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Identifiers of Sentry-hosted symbol sources to use when symbolicating events."
+                  },
+                  "symbolSources": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Custom symbol sources, as a JSON string, to use when symbolicating events."
+                  },
+                  "scrubIPAddresses": {
+                    "type": "boolean",
+                    "description": "Discard client IP addresses rather than storing them on events."
+                  },
+                  "groupingConfig": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Identifier of the grouping algorithm used to assign events to issues."
+                  },
+                  "groupingEnhancements": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Grouping enhancement rules, as a newline-delimited config string, adjusting which stack frames contribute to an issue."
+                  },
+                  "fingerprintingRules": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Fingerprinting rules, as a newline-delimited config string, controlling how events are grouped into issues."
+                  },
+                  "secondaryGroupingConfig": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Grouping algorithm run alongside the primary one during a grouping migration."
+                  },
+                  "secondaryGroupingExpiry": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "nullable": true,
+                    "description": "Unix timestamp after which the secondary grouping algorithm stops running."
+                  },
+                  "scrapeJavaScript": {
+                    "type": "boolean",
+                    "description": "Allow Sentry to fetch source files and source maps from your servers."
+                  },
                   "enableAutoReleaseCreation": {
                     "type": "boolean",
                     "description": "Automatically create releases from ingested events. When disabled, releases must be created manually (e.g. via the Sentry CLI)."
                   },
+                  "allowedDomains": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Origins permitted to send events to this project. Use `*` to allow any."
+                  },
+                  "copy_from_project": {
+                    "type": "integer",
+                    "description": "ID of a project whose settings, teams, and keys should be copied into this one."
+                  },
+                  "targetSampleRate": {
+                    "type": "number",
+                    "format": "double",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "description": "Target proportion of transactions to retain, from `0` to `1`. Requires manual dynamic sampling mode."
+                  },
+                  "dynamicSamplingBiases": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "enum": [
+                            "boostEnvironments",
+                            "boostKeyTransactions",
+                            "boostLatestRelease",
+                            "boostLowVolumeTransactions",
+                            "boostReplayId",
+                            "ignoreHealthChecks",
+                            "minimumSampleRate",
+                            "recalibrationRule"
+                          ],
+                          "type": "string",
+                          "description": "* `boostEnvironments`\n* `boostKeyTransactions`\n* `boostLatestRelease`\n* `boostLowVolumeTransactions`\n* `boostReplayId`\n* `ignoreHealthChecks`\n* `minimumSampleRate`\n* `recalibrationRule`"
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "default": false
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ]
+                    },
+                    "description": "Per-bias toggles adjusting which transactions dynamic sampling favors retaining."
+                  },
+                  "tempestFetchScreenshots": {
+                    "type": "boolean",
+                    "description": "Fetch screenshots attached to console crash reports. Requires the Tempest feature."
+                  },
                   "scmSourceContextEnabled": {
                     "type": "boolean",
                     "description": "Enable on-demand source context fetching from SCM integrations for stack traces."
+                  },
+                  "debugFilesRole": {
+                    "enum": [
+                      "member",
+                      "admin",
+                      "manager",
+                      "owner",
+                      null
+                    ],
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The role required to download debug information files, ProGuard mappings and source maps. If not set, inherits from organization setting.\n\n* `member` - Member\n* `admin` - Admin\n* `manager` - Manager\n* `owner` - Owner"
                   }
-                }
+                },
+                "required": [
+                  "digestsMaxDelay",
+                  "digestsMinDelay",
+                  "securityToken",
+                  "securityTokenHeader"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "security": [
           {
@@ -79764,6 +80052,32 @@
           "version"
         ]
       },
+      "DynamicSamplingBias": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "enum": [
+              "boostEnvironments",
+              "boostKeyTransactions",
+              "boostLatestRelease",
+              "boostLowVolumeTransactions",
+              "boostReplayId",
+              "ignoreHealthChecks",
+              "minimumSampleRate",
+              "recalibrationRule"
+            ],
+            "type": "string",
+            "description": "* `boostEnvironments`\n* `boostKeyTransactions`\n* `boostLatestRelease`\n* `boostLowVolumeTransactions`\n* `boostReplayId`\n* `ignoreHealthChecks`\n* `minimumSampleRate`\n* `recalibrationRule`"
+          },
+          "active": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
       "DynamicSdkLoaderOption": {
         "type": "object",
         "description": "Configures multiple options for the Javascript Loader Script.\n- `Performance Monitoring`\n- `Debug Bundles & Logging`\n- `Session Replay` - Note that the loader will load the ES6 bundle instead of the ES5 bundle.\n- `User Feedback` - Note that the loader will load the ES6 bundle instead of the ES5 bundle.\n- `Logs and Metrics` - Note that the loader will load the ES6 bundle instead of the ES5 bundle. Requires SDK >= 10.0.0.\n```json\n{\n    \"dynamicSdkLoaderOptions\": {\n        \"hasReplay\": true,\n        \"hasPerformance\": true,\n        \"hasDebug\": true,\n        \"hasFeedback\": true,\n        \"hasLogsAndMetrics\": true\n    }\n}\n```",
@@ -98351,9 +98665,137 @@
       "ProjectAdmin": {
         "type": "object",
         "properties": {
+          "digestsMinDelay": {
+            "type": "integer",
+            "maximum": 3600,
+            "minimum": 60,
+            "description": "Minimum time in seconds to wait before sending an issue digest email."
+          },
+          "digestsMaxDelay": {
+            "type": "integer",
+            "maximum": 3600,
+            "minimum": 60,
+            "description": "Maximum time in seconds to wait before sending an issue digest email."
+          },
+          "securityToken": {
+            "type": "string",
+            "description": "Token sent with security reports (CSP, Expect-CT, HPKP) so Sentry can verify their origin.",
+            "maxLength": 255,
+            "pattern": "^[-a-zA-Z0-9+/=\\s]+$"
+          },
+          "securityTokenHeader": {
+            "type": "string",
+            "description": "Name of the header carrying the security token on inbound security reports.",
+            "maxLength": 64,
+            "pattern": "^[a-zA-Z0-9_\\-]+$"
+          },
           "isBookmarked": {
             "type": "boolean",
             "description": "Enables starring the project within the projects tab. Can be updated with **`project:read`** permission."
+          },
+          "autofixAutomationTuning": {
+            "enum": [
+              "off",
+              "super_low",
+              "low",
+              "medium",
+              "high",
+              "always"
+            ],
+            "type": "string",
+            "description": "How aggressively Seer runs Autofix on new issues. Can be updated with **`project:read`** permission.\n\n* `off`\n* `super_low`\n* `low`\n* `medium`\n* `high`\n* `always`"
+          },
+          "seerScannerAutomation": {
+            "type": "boolean",
+            "description": "Let Seer scan new issues automatically. Can be updated with **`project:read`** permission."
+          },
+          "preprodSizeStatusChecksEnabled": {
+            "type": "boolean",
+            "description": "Enable preprod size status checks. Can be updated with **`project:read`** permission."
+          },
+          "preprodSizeStatusChecksRules": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Rules controlling when preprod size status checks fail. Can be updated with **`project:read`** permission."
+          },
+          "preprodSizePrCommentsEnabled": {
+            "type": "boolean",
+            "description": "Enable preprod size PR comments. Can be updated with **`project:read`** permission."
+          },
+          "preprodSizePrCommentsRules": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Rules controlling which preprod size changes are posted as PR comments. Can be updated with **`project:read`** permission."
+          },
+          "preprodSnapshotStatusChecksEnabled": {
+            "type": "boolean",
+            "description": "Enable preprod snapshot status checks."
+          },
+          "preprodSnapshotStatusChecksFailOnAdded": {
+            "type": "boolean",
+            "description": "Fail the preprod snapshot status check when snapshots are added."
+          },
+          "preprodSnapshotStatusChecksFailOnRemoved": {
+            "type": "boolean",
+            "description": "Fail the preprod snapshot status check when snapshots are removed."
+          },
+          "preprodSnapshotStatusChecksFailOnChanged": {
+            "type": "boolean",
+            "description": "Fail the preprod snapshot status check when snapshots change."
+          },
+          "preprodSnapshotStatusChecksFailOnRenamed": {
+            "type": "boolean",
+            "description": "Fail the preprod snapshot status check when snapshots are renamed."
+          },
+          "preprodSizeEnabledByCustomer": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Enable preprod size analysis. Can be updated with **`project:read`** permission."
+          },
+          "preprodDistributionEnabledByCustomer": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Enable preprod build distribution. Can be updated with **`project:read`** permission."
+          },
+          "preprodDistributionPrCommentsEnabledByCustomer": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Post preprod distribution updates as PR comments. Can be updated with **`project:read`** permission."
+          },
+          "preprodSnapshotPrCommentsEnabled": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Post preprod snapshot changes as PR comments."
+          },
+          "preprodSnapshotPrCommentsPostOnAdded": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Include added snapshots in preprod snapshot PR comments."
+          },
+          "preprodSnapshotPrCommentsPostOnRemoved": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Include removed snapshots in preprod snapshot PR comments."
+          },
+          "preprodSnapshotPrCommentsPostOnChanged": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Include changed snapshots in preprod snapshot PR comments."
+          },
+          "preprodSnapshotPrCommentsPostOnRenamed": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Include renamed snapshots in preprod snapshot PR comments."
+          },
+          "preprodSizeEnabledQuery": {
+            "type": "string",
+            "nullable": true,
+            "description": "Query selecting which preprod builds are size-analyzed. Can be updated with **`project:read`** permission."
+          },
+          "preprodDistributionEnabledQuery": {
+            "type": "string",
+            "nullable": true,
+            "description": "Query selecting which preprod builds are distributed. Can be updated with **`project:read`** permission."
           },
           "name": {
             "type": "string",
@@ -98398,15 +98840,174 @@
             },
             "description": "A list of strings with tag keys to highlight on this project's issues.\nE.g. `['release', 'environment']`"
           },
+          "verifySSL": {
+            "type": "boolean",
+            "description": "Verify SSL certificates when delivering outbound webhooks and service hooks."
+          },
+          "defaultEnvironment": {
+            "type": "string",
+            "nullable": true,
+            "description": "Environment selected by default when viewing this project."
+          },
+          "dataScrubber": {
+            "type": "boolean",
+            "description": "Remove known sensitive values from events before storing them."
+          },
+          "dataScrubberDefaults": {
+            "type": "boolean",
+            "description": "Also scrub Sentry's built-in list of sensitive field names."
+          },
+          "sensitiveFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Additional field names to scrub from events, beyond the defaults."
+          },
+          "safeFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Field names to exempt from scrubbing, including the built-in defaults."
+          },
+          "storeCrashReports": {
+            "type": "integer",
+            "maximum": 100,
+            "minimum": -1,
+            "nullable": true,
+            "description": "Number of native crash report files to store per issue. Use `-1` for unlimited or `0` to store none."
+          },
+          "relayPiiConfig": {
+            "type": "string",
+            "nullable": true,
+            "description": "Advanced data scrubbing rules, as a JSON string, applied before events are stored."
+          },
+          "builtinSymbolSources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Identifiers of Sentry-hosted symbol sources to use when symbolicating events."
+          },
+          "symbolSources": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom symbol sources, as a JSON string, to use when symbolicating events."
+          },
+          "scrubIPAddresses": {
+            "type": "boolean",
+            "description": "Discard client IP addresses rather than storing them on events."
+          },
+          "groupingConfig": {
+            "type": "string",
+            "nullable": true,
+            "description": "Identifier of the grouping algorithm used to assign events to issues."
+          },
+          "groupingEnhancements": {
+            "type": "string",
+            "nullable": true,
+            "description": "Grouping enhancement rules, as a newline-delimited config string, adjusting which stack frames contribute to an issue."
+          },
+          "fingerprintingRules": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fingerprinting rules, as a newline-delimited config string, controlling how events are grouped into issues."
+          },
+          "secondaryGroupingConfig": {
+            "type": "string",
+            "nullable": true,
+            "description": "Grouping algorithm run alongside the primary one during a grouping migration."
+          },
+          "secondaryGroupingExpiry": {
+            "type": "integer",
+            "minimum": 1,
+            "nullable": true,
+            "description": "Unix timestamp after which the secondary grouping algorithm stops running."
+          },
+          "scrapeJavaScript": {
+            "type": "boolean",
+            "description": "Allow Sentry to fetch source files and source maps from your servers."
+          },
           "enableAutoReleaseCreation": {
             "type": "boolean",
             "description": "Automatically create releases from ingested events. When disabled, releases must be created manually (e.g. via the Sentry CLI)."
           },
+          "allowedDomains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Origins permitted to send events to this project. Use `*` to allow any."
+          },
+          "copy_from_project": {
+            "type": "integer",
+            "description": "ID of a project whose settings, teams, and keys should be copied into this one."
+          },
+          "targetSampleRate": {
+            "type": "number",
+            "format": "double",
+            "maximum": 1,
+            "minimum": 0,
+            "description": "Target proportion of transactions to retain, from `0` to `1`. Requires manual dynamic sampling mode."
+          },
+          "dynamicSamplingBiases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "enum": [
+                    "boostEnvironments",
+                    "boostKeyTransactions",
+                    "boostLatestRelease",
+                    "boostLowVolumeTransactions",
+                    "boostReplayId",
+                    "ignoreHealthChecks",
+                    "minimumSampleRate",
+                    "recalibrationRule"
+                  ],
+                  "type": "string",
+                  "description": "* `boostEnvironments`\n* `boostKeyTransactions`\n* `boostLatestRelease`\n* `boostLowVolumeTransactions`\n* `boostReplayId`\n* `ignoreHealthChecks`\n* `minimumSampleRate`\n* `recalibrationRule`"
+                },
+                "active": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "description": "Per-bias toggles adjusting which transactions dynamic sampling favors retaining."
+          },
+          "tempestFetchScreenshots": {
+            "type": "boolean",
+            "description": "Fetch screenshots attached to console crash reports. Requires the Tempest feature."
+          },
           "scmSourceContextEnabled": {
             "type": "boolean",
             "description": "Enable on-demand source context fetching from SCM integrations for stack traces."
+          },
+          "debugFilesRole": {
+            "enum": [
+              "member",
+              "admin",
+              "manager",
+              "owner",
+              null
+            ],
+            "type": "string",
+            "nullable": true,
+            "description": "The role required to download debug information files, ProGuard mappings and source maps. If not set, inherits from organization setting.\n\n* `member` - Member\n* `admin` - Admin\n* `manager` - Manager\n* `owner` - Owner"
           }
-        }
+        },
+        "required": [
+          "digestsMaxDelay",
+          "digestsMinDelay",
+          "securityToken",
+          "securityTokenHeader"
+        ]
       },
       "ProjectEventDetailsResponse": {
         "type": "object",
