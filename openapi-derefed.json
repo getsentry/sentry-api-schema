@@ -712,6 +712,10 @@
                   "cancelDeletion": {
                     "type": "boolean",
                     "description": "Specify `true` to restore an organization that is pending deletion."
+                  },
+                  "apdexThreshold": {
+                    "type": "integer",
+                    "description": "Deprecated. Response-time threshold in milliseconds previously used to compute Apdex."
                   }
                 }
               }
@@ -16596,6 +16600,18 @@
                     "description": "The email address to send the invitation to.",
                     "maxLength": 75
                   },
+                  "role": {
+                    "enum": [
+                      "member",
+                      "admin",
+                      "manager",
+                      "owner"
+                    ],
+                    "type": "string",
+                    "default": "member",
+                    "description": "Deprecated, use `orgRole`. The organization-level role to assign.\n\n* `member` - Member\n* `admin` - Admin\n* `manager` - Manager\n* `owner` - Owner",
+                    "deprecated": true
+                  },
                   "orgRole": {
                     "enum": [
                       "billing",
@@ -16607,6 +16623,12 @@
                     "type": "string",
                     "default": "member",
                     "description": "The organization-level role of the new member. Roles include:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
+                  },
+                  "teams": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Deprecated, use `teamRoles`. Slugs of teams to add the member to.",
+                    "deprecated": true
                   },
                   "teamRoles": {
                     "type": "array",
@@ -16626,6 +16648,10 @@
                   "reinvite": {
                     "type": "boolean",
                     "description": "Whether or not to re-invite a user who has already been invited to the organization. Defaults to True."
+                  },
+                  "regenerate": {
+                    "type": "boolean",
+                    "description": "Reissue the invite token, invalidating any previously sent invite link."
                   }
                 },
                 "required": [
@@ -36056,6 +36082,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "schemas": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "SCIM schema URIs identifying the request format. Must be the PatchOp schema."
+                  },
                   "Operations": {
                     "type": "array",
                     "items": {
@@ -36080,7 +36113,8 @@
                   }
                 },
                 "required": [
-                  "Operations"
+                  "Operations",
+                  "schemas"
                 ]
               }
             }
@@ -36799,6 +36833,13 @@
                     },
                     "description": "A list of operations to perform. Currently, the only valid operation is setting\na member's `active` attribute to false, after which the member will be permanently deleted.\n```json\n{\n    \"Operations\": [{\n        \"op\": \"replace\",\n        \"path\": \"active\",\n        \"value\": False\n    }]\n}\n```\n",
                     "maxItems": 100
+                  },
+                  "schemas": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "SCIM schema URIs identifying the request format. Must be the PatchOp schema."
                   }
                 },
                 "required": [
@@ -93382,6 +93423,10 @@
           "cancelDeletion": {
             "type": "boolean",
             "description": "Specify `true` to restore an organization that is pending deletion."
+          },
+          "apdexThreshold": {
+            "type": "integer",
+            "description": "Deprecated. Response-time threshold in milliseconds previously used to compute Apdex."
           }
         }
       },
@@ -95392,6 +95437,18 @@
             "description": "The email address to send the invitation to.",
             "maxLength": 75
           },
+          "role": {
+            "enum": [
+              "member",
+              "admin",
+              "manager",
+              "owner"
+            ],
+            "type": "string",
+            "default": "member",
+            "description": "Deprecated, use `orgRole`. The organization-level role to assign.\n\n* `member` - Member\n* `admin` - Admin\n* `manager` - Manager\n* `owner` - Owner",
+            "deprecated": true
+          },
           "orgRole": {
             "enum": [
               "billing",
@@ -95403,6 +95460,12 @@
             "type": "string",
             "default": "member",
             "description": "The organization-level role of the new member. Roles include:\n\n* `billing` - Can manage payment and compliance details.\n* `member` - Can view and act on events, as well as view most other data within the organization.\n* `manager` - Has full management access to all teams and projects. Can also manage\n        the organization's membership.\n* `owner` - Has unrestricted access to the organization, its data, and its\n        settings. Can add, modify, and delete projects and members, as well as\n        make billing and plan changes.\n* `admin` - Can edit global integrations, manage projects, and add/remove teams.\n        They automatically assume the Team Admin role for teams they join.\n        Note: This role can no longer be assigned in Business and Enterprise plans. Use `TeamRoles` instead.\n        "
+          },
+          "teams": {
+            "type": "array",
+            "items": {},
+            "description": "Deprecated, use `teamRoles`. Slugs of teams to add the member to.",
+            "deprecated": true
           },
           "teamRoles": {
             "type": "array",
@@ -95422,6 +95485,10 @@
           "reinvite": {
             "type": "boolean",
             "description": "Whether or not to re-invite a user who has already been invited to the organization. Defaults to True."
+          },
+          "regenerate": {
+            "type": "boolean",
+            "description": "Reissue the invite token, invalidating any previously sent invite link."
           }
         },
         "required": [
@@ -101644,6 +101711,13 @@
             },
             "description": "A list of operations to perform. Currently, the only valid operation is setting\na member's `active` attribute to false, after which the member will be permanently deleted.\n```json\n{\n    \"Operations\": [{\n        \"op\": \"replace\",\n        \"path\": \"active\",\n        \"value\": False\n    }]\n}\n```\n",
             "maxItems": 100
+          },
+          "schemas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "SCIM schema URIs identifying the request format. Must be the PatchOp schema."
           }
         },
         "required": [
@@ -101671,6 +101745,13 @@
       "SCIMTeamPatchRequest": {
         "type": "object",
         "properties": {
+          "schemas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "SCIM schema URIs identifying the request format. Must be the PatchOp schema."
+          },
           "Operations": {
             "type": "array",
             "items": {
@@ -101695,7 +101776,8 @@
           }
         },
         "required": [
-          "Operations"
+          "Operations",
+          "schemas"
         ]
       },
       "SCIMTeamRequestBody": {
