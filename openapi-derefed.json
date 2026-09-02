@@ -8938,6 +8938,51 @@
                     "nullable": true,
                     "description": "How to order the query results. Must be something in the `field` list, excluding equations."
                   },
+                  "rollup": {
+                    "type": "integer",
+                    "nullable": true,
+                    "description": "Time-bucket granularity in seconds for the saved query."
+                  },
+                  "aggregations": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "nullable": true,
+                    "description": "Aggregate functions to apply, each as a `[function, column, alias]` triple."
+                  },
+                  "groupby": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "Columns to group results by."
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "nullable": true,
+                    "description": "Filter conditions, each as a `[column, operator, value]` triple."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "maximum": 1000,
+                    "minimum": 0,
+                    "nullable": true,
+                    "description": "Maximum number of rows to return, from `0` to `1000`."
+                  },
+                  "version": {
+                    "type": "integer",
+                    "maximum": 2,
+                    "minimum": 1,
+                    "nullable": true,
+                    "description": "Saved query schema version. `1` for the legacy shape, `2` for the current one."
+                  },
                   "environment": {
                     "type": "array",
                     "items": {
@@ -8950,6 +8995,14 @@
                     "type": "string",
                     "nullable": true,
                     "description": "Filters results by using [query syntax](/product/sentry-basics/search/)."
+                  },
+                  "widths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "Rendered column widths, in the same order as the query's fields."
                   },
                   "yAxis": {
                     "type": "array",
@@ -9878,6 +9931,51 @@
                     "nullable": true,
                     "description": "How to order the query results. Must be something in the `field` list, excluding equations."
                   },
+                  "rollup": {
+                    "type": "integer",
+                    "nullable": true,
+                    "description": "Time-bucket granularity in seconds for the saved query."
+                  },
+                  "aggregations": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "nullable": true,
+                    "description": "Aggregate functions to apply, each as a `[function, column, alias]` triple."
+                  },
+                  "groupby": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "Columns to group results by."
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "nullable": true,
+                    "description": "Filter conditions, each as a `[column, operator, value]` triple."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "maximum": 1000,
+                    "minimum": 0,
+                    "nullable": true,
+                    "description": "Maximum number of rows to return, from `0` to `1000`."
+                  },
+                  "version": {
+                    "type": "integer",
+                    "maximum": 2,
+                    "minimum": 1,
+                    "nullable": true,
+                    "description": "Saved query schema version. `1` for the legacy shape, `2` for the current one."
+                  },
                   "environment": {
                     "type": "array",
                     "items": {
@@ -9890,6 +9988,14 @@
                     "type": "string",
                     "nullable": true,
                     "description": "Filters results by using [query syntax](/product/sentry-basics/search/)."
+                  },
+                  "widths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "nullable": true,
+                    "description": "Rendered column widths, in the same order as the query's fields."
                   },
                   "yAxis": {
                     "type": "array",
@@ -78701,6 +78807,51 @@
             "nullable": true,
             "description": "How to order the query results. Must be something in the `field` list, excluding equations."
           },
+          "rollup": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Time-bucket granularity in seconds for the saved query."
+          },
+          "aggregations": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {}
+            },
+            "nullable": true,
+            "description": "Aggregate functions to apply, each as a `[function, column, alias]` triple."
+          },
+          "groupby": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "Columns to group results by."
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {}
+            },
+            "nullable": true,
+            "description": "Filter conditions, each as a `[column, operator, value]` triple."
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 1000,
+            "minimum": 0,
+            "nullable": true,
+            "description": "Maximum number of rows to return, from `0` to `1000`."
+          },
+          "version": {
+            "type": "integer",
+            "maximum": 2,
+            "minimum": 1,
+            "nullable": true,
+            "description": "Saved query schema version. `1` for the legacy shape, `2` for the current one."
+          },
           "environment": {
             "type": "array",
             "items": {
@@ -78713,6 +78864,14 @@
             "type": "string",
             "nullable": true,
             "description": "Filters results by using [query syntax](/product/sentry-basics/search/)."
+          },
+          "widths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "Rendered column widths, in the same order as the query's fields."
           },
           "yAxis": {
             "type": "array",
