@@ -20318,6 +20318,46 @@
                   "is_muted": {
                     "type": "boolean",
                     "description": "Disable creation of monitor incidents"
+                  },
+                  "alert_rule": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "environment": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Name of the environment",
+                            "maxLength": 64
+                          },
+                          "targets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "target_identifier": {
+                                  "type": "integer",
+                                  "description": "ID of target object"
+                                },
+                                "target_type": {
+                                  "type": "string",
+                                  "description": "One of [Member, Team]"
+                                }
+                              },
+                              "required": [
+                                "target_identifier",
+                                "target_type"
+                              ]
+                            },
+                            "description": "Array of dictionaries with information of the user or team to be notified"
+                          }
+                        },
+                        "required": [
+                          "targets"
+                        ]
+                      }
+                    ],
+                    "description": "Alert rule configuration created alongside the monitor."
                   }
                 },
                 "required": [
@@ -21985,6 +22025,46 @@
                   "is_muted": {
                     "type": "boolean",
                     "description": "Disable creation of monitor incidents"
+                  },
+                  "alert_rule": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "environment": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Name of the environment",
+                            "maxLength": 64
+                          },
+                          "targets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "target_identifier": {
+                                  "type": "integer",
+                                  "description": "ID of target object"
+                                },
+                                "target_type": {
+                                  "type": "string",
+                                  "description": "One of [Member, Team]"
+                                }
+                              },
+                              "required": [
+                                "target_identifier",
+                                "target_type"
+                              ]
+                            },
+                            "description": "Array of dictionaries with information of the user or team to be notified"
+                          }
+                        },
+                        "required": [
+                          "targets"
+                        ]
+                      }
+                    ],
+                    "description": "Alert rule configuration created alongside the monitor."
                   }
                 },
                 "required": [
@@ -53096,6 +53176,46 @@
                   "is_muted": {
                     "type": "boolean",
                     "description": "Disable creation of monitor incidents"
+                  },
+                  "alert_rule": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "environment": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Name of the environment",
+                            "maxLength": 64
+                          },
+                          "targets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "target_identifier": {
+                                  "type": "integer",
+                                  "description": "ID of target object"
+                                },
+                                "target_type": {
+                                  "type": "string",
+                                  "description": "One of [Member, Team]"
+                                }
+                              },
+                              "required": [
+                                "target_identifier",
+                                "target_type"
+                              ]
+                            },
+                            "description": "Array of dictionaries with information of the user or team to be notified"
+                          }
+                        },
+                        "required": [
+                          "targets"
+                        ]
+                      }
+                    ],
+                    "description": "Alert rule configuration created alongside the monitor."
                   }
                 },
                 "required": [
@@ -90968,6 +91088,58 @@
           "status"
         ]
       },
+      "MonitorAlertRuleTargetValidator": {
+        "type": "object",
+        "properties": {
+          "target_identifier": {
+            "type": "integer",
+            "description": "ID of target object"
+          },
+          "target_type": {
+            "type": "string",
+            "description": "One of [Member, Team]"
+          }
+        },
+        "required": [
+          "target_identifier",
+          "target_type"
+        ]
+      },
+      "MonitorAlertRuleValidator": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the environment",
+            "maxLength": 64
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "target_identifier": {
+                  "type": "integer",
+                  "description": "ID of target object"
+                },
+                "target_type": {
+                  "type": "string",
+                  "description": "One of [Member, Team]"
+                }
+              },
+              "required": [
+                "target_identifier",
+                "target_type"
+              ]
+            },
+            "description": "Array of dictionaries with information of the user or team to be notified"
+          }
+        },
+        "required": [
+          "targets"
+        ]
+      },
       "MonitorList": {
         "type": "array",
         "items": {
@@ -92079,6 +92251,46 @@
           "is_muted": {
             "type": "boolean",
             "description": "Disable creation of monitor incidents"
+          },
+          "alert_rule": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "environment": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Name of the environment",
+                    "maxLength": 64
+                  },
+                  "targets": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "target_identifier": {
+                          "type": "integer",
+                          "description": "ID of target object"
+                        },
+                        "target_type": {
+                          "type": "string",
+                          "description": "One of [Member, Team]"
+                        }
+                      },
+                      "required": [
+                        "target_identifier",
+                        "target_type"
+                      ]
+                    },
+                    "description": "Array of dictionaries with information of the user or team to be notified"
+                  }
+                },
+                "required": [
+                  "targets"
+                ]
+              }
+            ],
+            "description": "Alert rule configuration created alongside the monitor."
           }
         },
         "required": [
