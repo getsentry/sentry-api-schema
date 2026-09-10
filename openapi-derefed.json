@@ -34971,6 +34971,14 @@
             },
             "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
             "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The maximum number of repositories to return per page (1–100)."
           }
         ],
         "tags": [
@@ -72438,6 +72446,16 @@
             },
             "description": "The ID of the issue you'd like to query.",
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
           }
         ],
         "tags": [
@@ -73806,6 +73824,14 @@
                   "externalIssue": {
                     "type": "string",
                     "description": "The identifier of the existing external issue to link, as understood by the provider (such as a Jira issue key)."
+                  },
+                  "repo": {
+                    "type": "string",
+                    "description": "The repository containing the external issue, in owner/name format. Required by GitHub, GitHub Enterprise, and Bitbucket integrations."
+                  },
+                  "comment": {
+                    "type": "string",
+                    "description": "An optional comment to post to the external issue when linking, if supported by the integration."
                   }
                 },
                 "required": [
@@ -85213,6 +85239,14 @@
           "externalIssue": {
             "type": "string",
             "description": "The identifier of the existing external issue to link, as understood by the provider (such as a Jira issue key)."
+          },
+          "repo": {
+            "type": "string",
+            "description": "The repository containing the external issue, in owner/name format. Required by GitHub, GitHub Enterprise, and Bitbucket integrations."
+          },
+          "comment": {
+            "type": "string",
+            "description": "An optional comment to post to the external issue when linking, if supported by the integration."
           }
         },
         "required": [
