@@ -40740,6 +40740,243 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/trace-items/metrics/": {
+      "get": {
+        "operationId": "listOrganizationTraceMetrics",
+        "description": "**Experimental:** This API is under active development and may change.\n\nList trace metrics (name, type, unit, count, last seen) with optional context.",
+        "summary": "List an Organization's Trace Metrics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "description": "The IDs or slugs of projects to filter by. Project slugs are unique within each organization. Omit this parameter to include all accessible projects. `-1` is also accepted to include all accessible projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=android&project=javascript-react`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search query to filter metrics, using the same syntax as the metrics dataset."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "-count",
+                "-lastSeen",
+                "-name",
+                "-type",
+                "-unit",
+                "count",
+                "lastSeen",
+                "name",
+                "type",
+                "unit"
+              ]
+            },
+            "description": "Response field to sort by, prefixed with `-` for descending. Defaults to metric name ascending."
+          },
+          {
+            "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "context"
+                ]
+              }
+            },
+            "description": "Optional fields to expand. Pass `context` to include each metric's authored context (brief and details), which describes what the metric measures. Requires the `data-browsing-attribute-context` feature; without it the `context` field is omitted."
+          },
+          {
+            "in": "query",
+            "name": "contextOnly",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Return only metrics that have authored context, and include that context in the response. Use this to discover the metrics that are described well enough to query confidently. Requires the `data-browsing-attribute-context` feature; without it this is a no-op."
+          }
+        ],
+        "tags": [
+          "Explore"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "enum": [
+                          "counter",
+                          "gauge",
+                          "distribution"
+                        ],
+                        "type": "string"
+                      },
+                      "unit": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "count": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "lastSeen": {
+                        "type": "number",
+                        "format": "double",
+                        "nullable": true
+                      },
+                      "context": {
+                        "type": "object",
+                        "properties": {
+                          "brief": {
+                            "type": "string"
+                          },
+                          "details": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "count",
+                      "lastSeen",
+                      "name",
+                      "type",
+                      "unit"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListTheTraceMetricsForAnOrganization": {
+                    "value": [
+                      {
+                        "name": "checkout.latency",
+                        "type": "distribution",
+                        "unit": "millisecond",
+                        "count": 1432,
+                        "lastSeen": 1735689600,
+                        "context": {
+                          "brief": "End-to-end latency of the checkout flow.",
+                          "details": [
+                            "Recorded once per completed checkout, from cart submit to receipt."
+                          ]
+                        }
+                      },
+                      {
+                        "name": "cart.items",
+                        "type": "gauge",
+                        "unit": null,
+                        "count": 87,
+                        "lastSeen": 1735686000
+                      }
+                    ],
+                    "summary": "List the trace metrics for an organization"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/trace-items/stats/": {
       "get": {
         "operationId": "Retrieve Trace Item Statistics",
@@ -88875,6 +89112,59 @@
           "required": [
             "key",
             "name"
+          ]
+        }
+      },
+      "ListOrganizationTraceMetricsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "counter",
+                "gauge",
+                "distribution"
+              ],
+              "type": "string"
+            },
+            "unit": {
+              "type": "string",
+              "nullable": true
+            },
+            "count": {
+              "type": "number",
+              "format": "double"
+            },
+            "lastSeen": {
+              "type": "number",
+              "format": "double",
+              "nullable": true
+            },
+            "context": {
+              "type": "object",
+              "properties": {
+                "brief": {
+                  "type": "string"
+                },
+                "details": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "count",
+            "lastSeen",
+            "name",
+            "type",
+            "unit"
           ]
         }
       },
