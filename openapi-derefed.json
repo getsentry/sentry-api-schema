@@ -2306,7 +2306,7 @@
     "/api/0/organizations/{organization_id_or_slug}/agents/conversations/": {
       "get": {
         "operationId": "listOrganizationAIConversations",
-        "description": "Return AI conversations ordered by latest span time.\n\n**Experimental:** This API is under active development and may change.\n\n`query` uses Sentry search syntax against spans. A conversation matches when\nany span matches. Summary values then include all conversation spans inside\nselected project, environment, and time filters.",
+        "description": "**Experimental:** This API is under active development and may change.\n\nReturn AI conversations ordered by latest span time.\n\n`query` uses Sentry search syntax against spans. A conversation matches when\nany span matches. Summary values then include all conversation spans inside\nselected project, environment, and time filters.",
         "summary": "List an Organization's AI Conversations",
         "parameters": [
           {
@@ -2642,13 +2642,14 @@
           "404": {
             "description": "Not Found"
           }
-        }
+        },
+        "x-sentry-experimental": true
       }
     },
     "/api/0/organizations/{organization_id_or_slug}/agents/conversations/{conversation_id}/": {
       "get": {
         "operationId": "retrieveOrganizationAIConversation",
-        "description": "Return spans recorded for one AI conversation in start-time order.\n\n**Experimental:** This API is under active development and may change.\n\nMessage, tool, and response attributes contain their recorded string values.\nWithout an explicit range, Sentry widens the search across available retention.\nA missing conversation returns an empty `spans` list.",
+        "description": "**Experimental:** This API is under active development and may change.\n\nReturn spans recorded for one AI conversation in start-time order.\n\nMessage, tool, and response attributes contain their recorded string values.\nWithout an explicit range, Sentry widens the search across available retention.\nA missing conversation returns an empty `spans` list.",
         "summary": "Retrieve an Organization's AI Conversation",
         "parameters": [
           {
@@ -2873,7 +2874,8 @@
           "404": {
             "description": "Not Found"
           }
-        }
+        },
+        "x-sentry-experimental": true
       }
     },
     "/api/0/organizations/{organization_id_or_slug}/config/integrations/": {
@@ -28063,7 +28065,7 @@
     "/api/0/organizations/{organization_id_or_slug}/release-threshold-statuses/": {
       "get": {
         "operationId": "listOrganizationReleaseThresholdStatuses",
-        "description": "**`[WARNING]`**: This API is an experimental Alpha feature and is subject to change!\n\nList all derived statuses of releases that fall within the provided start/end datetimes.\n\nConstructs a response key'd off \\{`release_version`\\}-\\{`project_slug`\\} that lists thresholds with their status for *specified* projects.\nEach returned enriched threshold will contain the full serialized `release_threshold` instance as well as it's derived health statuses.",
+        "description": "**Experimental:** This API is under active development and may change.\n\nList all derived statuses of releases that fall within the provided start/end datetimes.\n\nConstructs a response key'd off \\{`release_version`\\}-\\{`project_slug`\\} that lists thresholds with their status for *specified* projects.\nEach returned enriched threshold will contain the full serialized `release_threshold` instance as well as it's derived health statuses.",
         "summary": "Retrieve Statuses of Release Thresholds (Alpha)",
         "parameters": [
           {
@@ -28365,7 +28367,8 @@
           "400": {
             "description": "Bad Request"
           }
-        }
+        },
+        "x-sentry-experimental": true
       }
     },
     "/api/0/organizations/{organization_id_or_slug}/releases/": {
@@ -70660,7 +70663,7 @@
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/autofix/": {
       "get": {
         "operationId": "getOrganizationIssueAutofixState",
-        "description": "Retrieve the current detailed state of an issue fix process for a specific issue including:\n\n- Current status\n- Steps performed and their outcomes\n- Repository information and permissions\n- Root Cause Analysis\n- Proposed Solution\n- Generated code changes\n\nThis endpoint although documented is still experimental and the payload may change in the future.",
+        "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve the current detailed state of an issue fix process for a specific issue including:\n\n- Current status\n- Steps performed and their outcomes\n- Repository information and permissions\n- Root Cause Analysis\n- Proposed Solution\n- Generated code changes",
         "summary": "Retrieve Seer Issue Fix State",
         "parameters": [
           {
@@ -70931,7 +70934,8 @@
           "404": {
             "description": "Not Found"
           }
-        }
+        },
+        "x-sentry-experimental": true
       },
       "post": {
         "operationId": "startOrganizationIssueAutofix",
