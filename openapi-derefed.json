@@ -33567,16 +33567,27 @@
           },
           {
             "in": "query",
-            "name": "data_source",
+            "name": "query",
             "schema": {
               "type": "string",
+              "minLength": 1
+            },
+            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nExample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "data_source",
+            "schema": {
               "enum": [
                 "events",
                 "search_issues",
                 "spans"
-              ]
+              ],
+              "type": "string",
+              "minLength": 1
             },
-            "description": "The data source to query replays from.",
+            "description": "The data source to query replays from.\n\n* `events`\n* `search_issues`\n* `spans`",
             "required": true
           },
           {
@@ -33647,17 +33658,10 @@
           },
           {
             "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filters results by using [query syntax](/product/sentry-basics/search/).\n\nExample: `query=(transaction:foo AND release:abc) OR (transaction:[bar,baz] AND release:def)`\n"
-          },
-          {
-            "in": "query",
             "name": "returnIds",
             "schema": {
-              "type": "boolean"
+              "type": "boolean",
+              "default": false
             },
             "description": "If true, return issue IDs rather than counts."
           }
