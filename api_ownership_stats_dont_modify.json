@@ -223,7 +223,6 @@
             "OrganizationGroupSearchViewVisitEndpoint::POST",
             "OrganizationIncidentDetailsEndpoint::GET",
             "OrganizationIncidentIndexEndpoint::GET",
-            "OrganizationIntegrationReposEndpoint::GET",
             "OrganizationIssuesCountEndpoint::GET",
             "OrganizationIssuesResolvedInReleaseEndpoint::GET",
             "OrganizationOpenPeriodsEndpoint::GET",
@@ -292,15 +291,16 @@
             "ProjectRuleStatsIndexEndpoint::GET",
             "RelatedIssuesEndpoint::GET"
         ],
-        "public_experimental": []
+        "public_experimental": [
+            "OrganizationIntegrationReposEndpoint::GET"
+        ]
     },
     "project-management-integrations": {
-        "block_start": 297,
+        "block_start": 298,
         "public": [
             "GroupExternalIssuesEndpoint::GET"
         ],
         "private": [
-            "GroupExternalIssueDetailsEndpoint::DELETE",
             "JiraDescriptorEndpoint::GET",
             "JiraIssueUpdatedWebhook::POST",
             "JiraSearchEndpoint::GET",
@@ -310,10 +310,12 @@
             "JiraServerSearchEndpoint::GET"
         ],
         "experimental": [],
-        "public_experimental": []
+        "public_experimental": [
+            "GroupExternalIssueDetailsEndpoint::DELETE"
+        ]
     },
     "integration-platform": {
-        "block_start": 315,
+        "block_start": 317,
         "public": [
             "DataForwardingDetailsEndpoint::DELETE",
             "DataForwardingDetailsEndpoint::PUT",
@@ -347,7 +349,6 @@
             "DocIntegrationsEndpoint::GET",
             "DocIntegrationsEndpoint::POST",
             "GitHubIntegrationsInstallationEndpoint::GET",
-            "GroupIntegrationsEndpoint::GET",
             "IntegrationFeaturesEndpoint::GET",
             "OrganizationIntegrationDetailsEndpoint::POST",
             "OrganizationIntegrationDirectEnableEndpoint::POST",
@@ -357,7 +358,6 @@
             "OrganizationIntegrationServerlessFunctionsEndpoint::POST",
             "OrganizationLegacyWebhooksEndpoint::GET",
             "OrganizationRepositoryPlatformsEndpoint::GET",
-            "OrganizationSentryAppComponentsEndpoint::GET",
             "ProjectLegacyWebhooksEndpoint::DELETE",
             "ProjectLegacyWebhooksEndpoint::GET",
             "ProjectLegacyWebhooksEndpoint::POST",
@@ -375,10 +375,8 @@
             "SentryAppInstallationDetailsEndpoint::DELETE",
             "SentryAppInstallationDetailsEndpoint::GET",
             "SentryAppInstallationDetailsEndpoint::PUT",
-            "SentryAppInstallationExternalIssueActionsEndpoint::POST",
             "SentryAppInstallationExternalIssueDetailsEndpoint::DELETE",
             "SentryAppInstallationExternalIssuesEndpoint::POST",
-            "SentryAppInstallationExternalRequestsEndpoint::GET",
             "SentryAppInstallationServiceHookProjectsEndpoint::DELETE",
             "SentryAppInstallationServiceHookProjectsEndpoint::GET",
             "SentryAppInstallationServiceHookProjectsEndpoint::POST",
@@ -400,10 +398,15 @@
         "experimental": [
             "SentryAppWebhookRequestsEndpoint::GET"
         ],
-        "public_experimental": []
+        "public_experimental": [
+            "GroupIntegrationsEndpoint::GET",
+            "OrganizationSentryAppComponentsEndpoint::GET",
+            "SentryAppInstallationExternalIssueActionsEndpoint::POST",
+            "SentryAppInstallationExternalRequestsEndpoint::GET"
+        ]
     },
     "app-backend": {
-        "block_start": 405,
+        "block_start": 408,
         "public": [
             "OrganizationReleaseCommitsEndpoint::GET",
             "OrganizationReleaseDetailsEndpoint::DELETE",
@@ -450,7 +453,7 @@
         "public_experimental": []
     },
     "machine-learning-ai": {
-        "block_start": 452,
+        "block_start": 455,
         "public": [
             "GroupAutofixEndpoint::POST",
             "SeerModelsEndpoint::GET"
@@ -521,7 +524,7 @@
         ]
     },
     "telemetry-experience": {
-        "block_start": 523,
+        "block_start": 526,
         "public": [
             "OrganizationProjectKeysEndpoint::GET",
             "OrganizationSessionsEndpoint::GET",
@@ -557,7 +560,7 @@
         ]
     },
     "data-browsing": {
-        "block_start": 559,
+        "block_start": 562,
         "public": [
             "DiscoverSavedQueriesEndpoint::GET",
             "DiscoverSavedQueriesEndpoint::POST",
@@ -655,7 +658,7 @@
         ]
     },
     "foundations": {
-        "block_start": 657,
+        "block_start": 660,
         "public": [
             "OrganizationMemberDetailsEndpoint::DELETE",
             "OrganizationMemberDetailsEndpoint::GET",
@@ -758,7 +761,7 @@
         "public_experimental": []
     },
     "explore": {
-        "block_start": 760,
+        "block_start": 763,
         "public": [
             "OrganizationTraceEndpoint::GET",
             "OrganizationTraceMetaEndpoint::GET"
@@ -782,7 +785,7 @@
         "public_experimental": []
     },
     "dashboards": {
-        "block_start": 784,
+        "block_start": 787,
         "public": [
             "OrganizationDashboardDetailsEndpoint::DELETE",
             "OrganizationDashboardDetailsEndpoint::GET",
@@ -808,7 +811,7 @@
         "public_experimental": []
     },
     "profiling": {
-        "block_start": 810,
+        "block_start": 813,
         "public": [
             "OrganizationProfilingChunksEndpoint::GET",
             "OrganizationProfilingFlamegraphEndpoint::GET",
@@ -828,7 +831,7 @@
         "public_experimental": []
     },
     "alerts-monitors": {
-        "block_start": 830,
+        "block_start": 833,
         "public": [
             "OrganizationDetectorDetailsEndpoint::DELETE",
             "OrganizationDetectorDetailsEndpoint::GET",
@@ -848,7 +851,7 @@
         "public_experimental": []
     },
     "issue-detection-backend": {
-        "block_start": 850,
+        "block_start": 853,
         "public": [
             "ProjectEnvironmentsEndpoint::GET",
             "ProjectEnvironmentsEndpoint::PUT"
@@ -868,7 +871,7 @@
         "public_experimental": []
     },
     "agent-interfaces-sentry-backend": {
-        "block_start": 870,
+        "block_start": 873,
         "public": [
             "OrganizationRepositoriesEndpoint::GET",
             "OrganizationRepositoryCommitsEndpoint::GET"
@@ -911,7 +914,7 @@
         "public_experimental": []
     },
     "notifications": {
-        "block_start": 913,
+        "block_start": 916,
         "public": [
             "NotificationActionsDetailsEndpoint::DELETE",
             "NotificationActionsDetailsEndpoint::GET",
@@ -938,7 +941,7 @@
         "public_experimental": []
     },
     "crons": {
-        "block_start": 940,
+        "block_start": 943,
         "public": [
             "OrganizationMonitorCheckInIndexEndpoint::GET",
             "OrganizationMonitorDetailsEndpoint::DELETE",
@@ -990,7 +993,7 @@
         "public_experimental": []
     },
     "value-discovery": {
-        "block_start": 992,
+        "block_start": 995,
         "public": [],
         "private": [
             "OrganizationAgenticOnboardingRunDetailsEndpoint::DELETE",
@@ -1006,7 +1009,7 @@
         "public_experimental": []
     },
     "replay-backend": {
-        "block_start": 1008,
+        "block_start": 1011,
         "public": [],
         "private": [
             "OrganizationFlagLogDetailsEndpoint::GET",
@@ -1029,7 +1032,7 @@
         ]
     },
     "feedback-backend": {
-        "block_start": 1031,
+        "block_start": 1034,
         "public": [],
         "private": [
             "OrganizationUserReportsEndpoint::GET",
@@ -1043,7 +1046,7 @@
         "public_experimental": []
     },
     "hybrid-cloud": {
-        "block_start": 1045,
+        "block_start": 1048,
         "public": [],
         "private": [
             "FrontendVersionEndpoint::GET",
@@ -1083,7 +1086,7 @@
         "public_experimental": []
     },
     "sre-infrastructure-engineering": {
-        "block_start": 1085,
+        "block_start": 1088,
         "public": [],
         "private": [
             "OrgCellMappingsEndpoint::GET",
@@ -1094,7 +1097,7 @@
         "public_experimental": []
     },
     "foundational-storage": {
-        "block_start": 1096,
+        "block_start": 1099,
         "public": [
             "EventAttachmentDetailsEndpoint::GET",
             "EventAttachmentsEndpoint::GET"
@@ -1111,7 +1114,7 @@
         "public_experimental": []
     },
     "emerge-tools": {
-        "block_start": 1113,
+        "block_start": 1116,
         "public": [
             "OrganizationPreprodArtifactPublicInstallDetailsEndpoint::GET",
             "OrganizationPreprodLatestBaseSnapshotEndpoint::GET",
@@ -1166,7 +1169,7 @@
         "public_experimental": []
     },
     "team-javascript-sdks": {
-        "block_start": 1168,
+        "block_start": 1171,
         "public": [
             "SourceMapDebugEndpoint::GET"
         ],
@@ -1178,7 +1181,7 @@
         "public_experimental": []
     },
     "gdx": {
-        "block_start": 1180,
+        "block_start": 1183,
         "public": [],
         "private": [
             "TempestCredentialsDetailsEndpoint::DELETE",
@@ -1190,7 +1193,7 @@
         "public_experimental": []
     },
     "security": {
-        "block_start": 1192,
+        "block_start": 1195,
         "public": [],
         "private": [
             "ApiTokenDetailsEndpoint::DELETE",
@@ -1207,7 +1210,7 @@
         "public_experimental": []
     },
     "messaging-integrations": {
-        "block_start": 1209,
+        "block_start": 1212,
         "public": [],
         "private": [
             "DiscordInteractionsEndpoint::POST",

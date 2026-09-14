@@ -14602,6 +14602,136 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/repos/": {
+      "get": {
+        "operationId": "listOrganizationIntegrationRepositories",
+        "description": "**Experimental:** This API is under active development and may change.\n\nGet the list of repositories available in an integration\n````````````````````````````````````````````````````````\n\nGets all repositories that an integration makes available,\nand indicates whether or not you can search repositories\nby name.\n\n:qparam string search: Name fragment to search repositories by.\n:qparam bool installableOnly: If true, return only repositories that can be installed.\n                              If false or not provided, return all repositories.\n:qparam bool accessibleOnly: If true, only return repositories that the integration\n                             installation has access to, filtering locally instead of\n                             using the provider's search API which may return results\n                             beyond the installation's scope.",
+        "summary": "List Repositories Available to an Integration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Repository name to search for."
+          },
+          {
+            "in": "query",
+            "name": "installableOnly",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Only return repositories that are not already installed in Sentry."
+          },
+          {
+            "in": "query",
+            "name": "accessibleOnly",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Only search repositories accessible to the integration installation."
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "repos": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "identifier": {
+                            "type": "string"
+                          },
+                          "isInstalled": {
+                            "type": "boolean"
+                          },
+                          "defaultBranch": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "externalId": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "defaultBranch",
+                          "externalId",
+                          "identifier",
+                          "isInstalled",
+                          "name",
+                          "url"
+                        ]
+                      }
+                    },
+                    "searchable": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "repos"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/issues/": {
       "get": {
         "operationId": "listOrganizationIssues",
@@ -37175,6 +37305,167 @@
             "description": "Not Found"
           }
         }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/sentry-app-components/": {
+      "get": {
+        "operationId": "listOrganizationSentryAppComponents",
+        "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve prepared UI components for installed custom integrations, including issue-link forms.",
+        "summary": "List an Organization's Installed Sentry App Components",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter components by type, such as `issue-link`."
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "uuid": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "schema": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "error": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "detail": {
+                                "type": "string"
+                              },
+                              "context": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "sentryApp": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "avatars": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "avatarType": {
+                                  "type": "string"
+                                },
+                                "avatarUuid": {
+                                  "type": "string"
+                                },
+                                "avatarUrl": {
+                                  "type": "string"
+                                },
+                                "color": {
+                                  "type": "boolean"
+                                },
+                                "photoType": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "avatarType",
+                                "avatarUrl",
+                                "avatarUuid",
+                                "color",
+                                "photoType"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "avatars",
+                          "name",
+                          "slug",
+                          "uuid"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "error",
+                      "schema",
+                      "sentryApp",
+                      "type",
+                      "uuid"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
       }
     },
     "/api/0/organizations/{organization_id_or_slug}/sentry-apps/": {
@@ -63148,6 +63439,227 @@
         ]
       }
     },
+    "/api/0/sentry-app-installations/{uuid}/external-issue-actions/": {
+      "post": {
+        "operationId": "executeSentryAppInstallationExternalIssueAction",
+        "description": "**Experimental:** This API is under active development and may change.\n\nInvoke the installed app's issue-link callback and store the returned association.\nSubmit the app-specific form fields alongside `groupId`, `action`, and `uri`.",
+        "summary": "Create or Link an External Issue Through a Sentry App",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The UUID of the Sentry App installation.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "groupId": {
+                    "type": "string",
+                    "description": "The numeric Sentry issue ID."
+                  },
+                  "action": {
+                    "type": "string",
+                    "description": "The action to perform: `link` or `create`.",
+                    "enum": [
+                      "link",
+                      "create"
+                    ]
+                  },
+                  "uri": {
+                    "type": "string",
+                    "description": "The relative callback URI from the app's issue-link form."
+                  }
+                },
+                "required": [
+                  "action",
+                  "groupId",
+                  "uri"
+                ],
+                "additionalProperties": true
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "issueId": {
+                      "type": "string"
+                    },
+                    "serviceType": {
+                      "type": "string"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    },
+                    "webUrl": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "displayName",
+                    "id",
+                    "issueId",
+                    "serviceType",
+                    "webUrl"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
+    "/api/0/sentry-app-installations/{uuid}/external-requests/": {
+      "get": {
+        "operationId": "getSentryAppInstallationExternalRequestOptions",
+        "description": "**Experimental:** This API is under active development and may change.\n\nRequest select options from the installed app. Each choice contains its value followed by its label.",
+        "summary": "Retrieve a Sentry App's Select Field Options",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The UUID of the Sentry App installation.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "uri",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The relative URI of the select field's options callback.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "projectId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The Sentry project ID to include in the options request."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "The search text for select options."
+          },
+          {
+            "in": "query",
+            "name": "dependentData",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A JSON-encoded object containing the values of fields this select depends on."
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "choices": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "defaultValue": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "choices"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/sentry-apps/{sentry_app_id_or_slug}/": {
       "get": {
         "operationId": "getSentryApp",
@@ -72817,6 +73329,68 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/external-issues/{external_issue_id}/": {
+      "delete": {
+        "operationId": "deleteOrganizationIssueExternalIssue",
+        "description": "**Experimental:** This API is under active development and may change.\n\nRemove a custom integration's association with a Sentry issue. The external issue is not deleted.",
+        "summary": "Unlink a Custom Integration's External Issue",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "external_issue_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the custom integration issue link to remove.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/": {
       "get": {
         "operationId": "listOrganizationIssueHashes",
@@ -73686,6 +74260,200 @@
             "description": "Not Found"
           }
         }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/": {
+      "get": {
+        "operationId": "listOrganizationIssueIntegrations",
+        "description": "**Experimental:** This API is under active development and may change.\n\nList the organization's issue-tracker integrations and the external issues\nlinked to this Sentry issue through each integration. The external issue's\n`id` is the Sentry link identifier used by the unlink endpoint.",
+        "summary": "List an Issue's Tracker Integrations and Links",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "issue_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the issue you'd like to query.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The maximum number of integrations to return per page (1–100)."
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "event:admin",
+              "event:read",
+              "event:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "icon": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "domainName": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "accountType": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "outOfDate": {
+                        "type": "boolean",
+                        "nullable": true
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "provider": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "canAdd": {
+                            "type": "boolean"
+                          },
+                          "canDisable": {
+                            "type": "boolean"
+                          },
+                          "features": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "aspects": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "required": [
+                          "aspects",
+                          "canAdd",
+                          "canDisable",
+                          "features",
+                          "key",
+                          "name",
+                          "slug"
+                        ]
+                      },
+                      "externalIssues": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "key": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "description": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "displayName": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "description",
+                            "displayName",
+                            "id",
+                            "key",
+                            "title",
+                            "url"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "accountType",
+                      "domainName",
+                      "externalIssues",
+                      "icon",
+                      "id",
+                      "name",
+                      "outOfDate",
+                      "provider",
+                      "scopes",
+                      "status"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "x-sentry-experimental": true
       }
     },
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/": {
@@ -84416,6 +85184,53 @@
           "status"
         ]
       },
+      "IntegrationRepositoriesResponse": {
+        "type": "object",
+        "properties": {
+          "repos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "identifier": {
+                  "type": "string"
+                },
+                "isInstalled": {
+                  "type": "boolean"
+                },
+                "defaultBranch": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "externalId": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "defaultBranch",
+                "externalId",
+                "identifier",
+                "isInstalled",
+                "name",
+                "url"
+              ]
+            }
+          },
+          "searchable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "repos"
+        ]
+      },
       "IssueEventDetailsResponse": {
         "type": "object",
         "properties": {
@@ -85055,6 +85870,133 @@
           "user",
           "userReport"
         ]
+      },
+      "IssueIntegrationsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "icon": {
+              "type": "string",
+              "nullable": true
+            },
+            "domainName": {
+              "type": "string",
+              "nullable": true
+            },
+            "accountType": {
+              "type": "string",
+              "nullable": true
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            },
+            "outOfDate": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "status": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "canAdd": {
+                  "type": "boolean"
+                },
+                "canDisable": {
+                  "type": "boolean"
+                },
+                "features": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "aspects": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "aspects",
+                "canAdd",
+                "canDisable",
+                "features",
+                "key",
+                "name",
+                "slug"
+              ]
+            },
+            "externalIssues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "description": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "displayName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "description",
+                  "displayName",
+                  "id",
+                  "key",
+                  "title",
+                  "url"
+                ]
+              }
+            }
+          },
+          "required": [
+            "accountType",
+            "domainName",
+            "externalIssues",
+            "icon",
+            "id",
+            "name",
+            "outOfDate",
+            "provider",
+            "scopes",
+            "status"
+          ]
+        }
       },
       "LatestBaseSnapshotResponse": {
         "type": "object",
@@ -99413,6 +100355,33 @@
           "triggerType"
         ]
       },
+      "PlatformExternalIssueResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "issueId": {
+            "type": "string"
+          },
+          "serviceType": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "webUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "displayName",
+          "id",
+          "issueId",
+          "serviceType",
+          "webUrl"
+        ]
+      },
       "ProjectAdmin": {
         "type": "object",
         "properties": {
@@ -102518,6 +103487,100 @@
           "models"
         ]
       },
+      "SentryAppComponentsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "uuid": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "schema": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "context": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  }
+                }
+              ]
+            },
+            "sentryApp": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "avatars": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "avatarType": {
+                        "type": "string"
+                      },
+                      "avatarUuid": {
+                        "type": "string"
+                      },
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "color": {
+                        "type": "boolean"
+                      },
+                      "photoType": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "avatarType",
+                      "avatarUrl",
+                      "avatarUuid",
+                      "color",
+                      "photoType"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "avatars",
+                "name",
+                "slug",
+                "uuid"
+              ]
+            }
+          },
+          "required": [
+            "error",
+            "schema",
+            "sentryApp",
+            "type",
+            "uuid"
+          ]
+        }
+      },
       "SentryAppDetailsResponse": {
         "type": "object",
         "properties": {
@@ -102678,6 +103741,53 @@
           "webhookEvents",
           "webhookHeaders"
         ]
+      },
+      "SentryAppExternalRequestOptionsResponse": {
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "defaultValue": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "choices"
+        ]
+      },
+      "SentryAppInstallationExternalIssueActions": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string",
+            "description": "The numeric Sentry issue ID."
+          },
+          "action": {
+            "type": "string",
+            "description": "The action to perform: `link` or `create`.",
+            "enum": [
+              "link",
+              "create"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "description": "The relative callback URI from the app's issue-link form."
+          }
+        },
+        "required": [
+          "action",
+          "groupId",
+          "uri"
+        ],
+        "additionalProperties": true
       },
       "SentryAppParser": {
         "type": "object",
