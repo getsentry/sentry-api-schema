@@ -11871,11 +11871,11 @@
                           "type": "number",
                           "format": "double"
                         },
-                        "annotations": {
+                        "droppedAnnotations": {
                           "type": "array",
                           "items": {
                             "type": "object",
-                            "description": "A system annotation explaining that data over a time range was affected by\nan external factor.",
+                            "description": "One time bucket's volume for a system data-fidelity annotation.",
                             "properties": {
                               "type": {
                                 "enum": [
@@ -11884,6 +11884,9 @@
                                 "type": "string"
                               },
                               "category": {
+                                "type": "string"
+                              },
+                              "outcome": {
                                 "type": "string"
                               },
                               "reason": {
@@ -11897,19 +11900,69 @@
                                 "type": "number",
                                 "format": "double"
                               },
-                              "droppedCount": {
+                              "eventCount": {
                                 "type": "number",
                                 "format": "double"
                               },
-                              "label": {
-                                "type": "string"
+                              "byteSize": {
+                                "type": "number",
+                                "format": "double"
                               }
                             },
                             "required": [
                               "category",
-                              "droppedCount",
                               "end",
-                              "label",
+                              "eventCount",
+                              "outcome",
+                              "reason",
+                              "start",
+                              "type"
+                            ]
+                          }
+                        },
+                        "acceptedAnnotations": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "description": "One time bucket's volume for a system data-fidelity annotation.",
+                            "properties": {
+                              "type": {
+                                "enum": [
+                                  "system"
+                                ],
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "outcome": {
+                                "type": "string"
+                              },
+                              "reason": {
+                                "type": "string"
+                              },
+                              "start": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "end": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "eventCount": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "byteSize": {
+                                "type": "number",
+                                "format": "double"
+                              }
+                            },
+                            "required": [
+                              "category",
+                              "end",
+                              "eventCount",
+                              "outcome",
                               "reason",
                               "start",
                               "type"
@@ -95116,11 +95169,11 @@
                 "type": "number",
                 "format": "double"
               },
-              "annotations": {
+              "droppedAnnotations": {
                 "type": "array",
                 "items": {
                   "type": "object",
-                  "description": "A system annotation explaining that data over a time range was affected by\nan external factor.",
+                  "description": "One time bucket's volume for a system data-fidelity annotation.",
                   "properties": {
                     "type": {
                       "enum": [
@@ -95129,6 +95182,9 @@
                       "type": "string"
                     },
                     "category": {
+                      "type": "string"
+                    },
+                    "outcome": {
                       "type": "string"
                     },
                     "reason": {
@@ -95142,19 +95198,69 @@
                       "type": "number",
                       "format": "double"
                     },
-                    "droppedCount": {
+                    "eventCount": {
                       "type": "number",
                       "format": "double"
                     },
-                    "label": {
-                      "type": "string"
+                    "byteSize": {
+                      "type": "number",
+                      "format": "double"
                     }
                   },
                   "required": [
                     "category",
-                    "droppedCount",
                     "end",
-                    "label",
+                    "eventCount",
+                    "outcome",
+                    "reason",
+                    "start",
+                    "type"
+                  ]
+                }
+              },
+              "acceptedAnnotations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "One time bucket's volume for a system data-fidelity annotation.",
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "system"
+                      ],
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "outcome": {
+                      "type": "string"
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "start": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "end": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "eventCount": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "byteSize": {
+                      "type": "number",
+                      "format": "double"
+                    }
+                  },
+                  "required": [
+                    "category",
+                    "end",
+                    "eventCount",
+                    "outcome",
                     "reason",
                     "start",
                     "type"
