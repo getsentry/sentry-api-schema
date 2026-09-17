@@ -11387,7 +11387,7 @@
     "/api/0/organizations/{organization_id_or_slug}/events/": {
       "get": {
         "operationId": "listOrganizationEvents",
-        "description": "Retrieves explore data for a given organization.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested",
+        "description": "Retrieves explore data for a given organization.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested\n- EAP table results may include `meta.routingHint`. Pass this opaque value unchanged as\n  `routing_hint` when fetching item details for a row in this response. It identifies how\n  the table query was routed and is omitted when no hint is available.",
         "summary": "Query Explore Events in Table Format",
         "parameters": [
           {
@@ -11601,6 +11601,9 @@
                         },
                         "bytesScanned": {
                           "type": "integer"
+                        },
+                        "routingHint": {
+                          "type": "string"
                         },
                         "debug_info": {}
                       }
@@ -95094,6 +95097,9 @@
               },
               "bytesScanned": {
                 "type": "integer"
+              },
+              "routingHint": {
+                "type": "string"
               },
               "debug_info": {}
             }
