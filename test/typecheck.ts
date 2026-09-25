@@ -25,6 +25,32 @@ import type { InferOutput } from "valibot";
 import type { z } from "zod";
 import { vAutofixPostResponse } from "../src/valibot";
 import { zAutofixPostResponse } from "../src/zod";
+import {
+  bearerToken,
+  client,
+  createClient,
+  createSentryClient,
+  listOrganizations,
+  type Config,
+} from "@sentry/api";
+import { browserSession } from "@sentry/api/browser";
+
+async function publicClientConfiguration() {
+  const options = bearerToken({ token: "test", baseUrl: "https://tenant.my.sentry.io" });
+  const typedConfig: Config = options;
+  client.setConfig(typedConfig);
+  await listOrganizations();
+  await listOrganizations({ client: createClient(options) });
+  await listOrganizations({ client: createSentryClient(options) });
+  await listOrganizations({ client: createSentryClient(browserSession()) });
+
+  // Ungenerated operations require the caller to validate their response.
+  const result = await createSentryClient(options).get({ url: "/api/0/auth/" });
+  // @ts-expect-error — an untyped operation must not claim a response contract.
+  result.data.user;
+}
+
+void publicClientConfiguration;
 
 const valibotResponse: InferOutput<typeof vAutofixPostResponse> = {
   run_id: 1,

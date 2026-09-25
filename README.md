@@ -13,21 +13,82 @@ npm install @sentry/api
 
 ## Usage
 
-Pass `baseUrl` and an auth header to each call:
+Configure the client once, then call any operation without repeating auth or host.
+`bearerToken(...)` is a pure factory that returns a config object; `client.setConfig(...)`
+applies it to the global client.
 
 ```ts
-import { listYourOrganizations } from "@sentry/api";
+import { client, bearerToken, listOrganizations } from "@sentry/api";
 
-const { data, error } = await listYourOrganizations({
-  baseUrl: "https://sentry.io",
-  headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
-});
+const token = process.env.SENTRY_AUTH_TOKEN;
+if (!token) throw new Error("Set SENTRY_AUTH_TOKEN");
+client.setConfig(bearerToken({ token }));
 
+const { data, error } = await listOrganizations();
 if (error) throw error;
 console.log(data);
 ```
 
-Auth tokens and base URLs (including self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
+`bearerToken` defaults `baseUrl` to `https://sentry.io`. For Enterprise or self-hosted
+deployments, pass their API origin:
+
+```ts
+client.setConfig(bearerToken({ token, baseUrl: "https://tenant.my.sentry.io" }));
+```
+
+Explicit hosts are preserved. These factories do not discover regions, cache metadata,
+or change the destination of a request. A regional `baseUrl` pins requests to that
+region; use the deployment's control API origin for control operations.
+
+### Isolated client (servers, tests)
+
+`client.setConfig(...)` mutates a global singleton, which is convenient for a single-token CLI.
+For a server that handles multiple tokens, or for tests, create an isolated instance with
+`createSentryClient(...)` and pass it per call:
+
+```ts
+import { createSentryClient, bearerToken, listOrganizations } from "@sentry/api";
+
+const sentry = createSentryClient(bearerToken({ token, baseUrl }));
+const { data } = await listOrganizations({ client: sentry });
+```
+
+Keep each instance within one deployment and authentication context. `createClient`
+is also exported as the underlying factory.
+
+### Browser (Sentry frontend)
+
+Use the `./browser` entry, which authenticates with the current session (cookies + CSRF),
+same-origin:
+
+```ts
+import { client } from "@sentry/api";
+import { browserSession } from "@sentry/api/browser";
+
+client.setConfig(browserSession());
+```
+
+`createBrowserSdkConfig` remains supported and behaves the same way. Both accept
+`csrfCookieName`, `getCsrfToken`, and `baseUrl`. Browser session configuration does
+not resolve regional hosts.
+
+### Custom transport
+
+`bearerToken` accepts a `fetch` option for transport policy the SDK does not own (token refresh,
+retries, timeouts, custom CA, tracing). It also accepts `headers` (merged into every request) and
+`throwOnError`.
+
+You can always skip the factories and pass a raw config to `client.setConfig(...)`, or pass
+`baseUrl`/`headers` on an individual call to override. Auth tokens and base URLs (including
+self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
+
+For an endpoint without a generated operation, the isolated client also exposes
+methods such as `sentry.get({ url: "/api/0/.../" })`. The caller is responsible for
+its endpoint contract, response validation, and access requirements.
+
+The [client design](docs/client-design.md) records the shared-client direction,
+region/cache ownership, and follow-up work. Planned routing helpers are separate
+from the configuration factories described above.
 
 ## Runtime validation
 

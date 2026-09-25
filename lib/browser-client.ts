@@ -78,3 +78,16 @@ export function createBrowserSdkConfig(opts: BrowserClientOptions = {}) {
     fetch: createBrowserFetch(opts),
   } as const;
 }
+
+/**
+ * Config for using the SDK from the Sentry frontend: same-origin, session
+ * cookies, CSRF. Equivalent to `createBrowserSdkConfig`, which remains supported.
+ *
+ * @example
+ * import { client } from '@sentry/api';
+ * import { browserSession } from '@sentry/api/browser';
+ * client.setConfig(browserSession());
+ */
+export function browserSession(opts: BrowserClientOptions = {}) {
+  return createBrowserSdkConfig(opts);
+}
