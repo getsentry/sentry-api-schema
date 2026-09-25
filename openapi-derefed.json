@@ -66111,7 +66111,7 @@
     "/api/0/sentry-app-installations/{uuid}/external-issue-actions/": {
       "post": {
         "operationId": "executeSentryAppInstallationExternalIssueAction",
-        "description": "**Experimental:** This API is under active development and may change.\n\nInvoke the installed app's issue-link callback and store the returned association.\nSubmit the app-specific form fields alongside `groupId`, `action`, and `uri`.",
+        "description": "**Experimental:** This API is under active development and may change.\n\nInvoke the installed app's issue-link callback and store the returned association.\nSubmit the app-specific form fields alongside `groupId`, `action`, and `uri`.\n\nFor `action=link`, the optional `expectedExternalIssueUrl` query parameter\nrequires an exact canonical `webUrl` match. An existing matching link is\nreturned with HTTP 200 without calling the App; a different link\nreturns 409. The callback must also return this URL before a new link is\nsaved. Callback effects cannot be rolled back if its response conflicts.\nA new association returns HTTP 201. Omitting the parameter preserves the\nApp's existing replacement behavior and HTTP 200 response.",
         "summary": "Create or Link an External Issue Through a Sentry App",
         "parameters": [
           {
@@ -66122,6 +66122,16 @@
             },
             "description": "The UUID of the Sentry App installation.",
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "expectedExternalIssueUrl",
+            "schema": {
+              "type": "string",
+              "format": "uri",
+              "minLength": 1
+            },
+            "description": "The exact canonical webUrl of the external issue to link. Only supported for action=link. An existing matching association is a no-op; a different association or callback URL returns 409 without replacing the link."
           }
         ],
         "tags": [
@@ -66204,6 +66214,40 @@
             },
             "description": ""
           },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "issueId": {
+                      "type": "string"
+                    },
+                    "serviceType": {
+                      "type": "string"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    },
+                    "webUrl": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "displayName",
+                    "id",
+                    "issueId",
+                    "serviceType",
+                    "webUrl"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
           "400": {
             "description": "Bad Request"
           },
@@ -66215,6 +66259,9 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "x-sentry-experimental": true
@@ -71903,6 +71950,9 @@
           },
           "404": {
             "description": "External issue not found"
+          },
+          "409": {
+            "description": "This issue link is being updated. Try again."
           }
         },
         "security": [
@@ -76057,6 +76107,9 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "x-sentry-experimental": true
@@ -77557,7 +77610,7 @@
       },
       "put": {
         "operationId": "Link an Existing External Issue to an Issue",
-        "description": "Link an issue that already exists in the external provider (such as a Jira\nticket or GitHub issue) to the given Sentry issue. Additional accepted fields\nare integration-specific; fetch them from the `linkIssueConfig` returned by\nthe `GET` endpoint with `?action=link`.",
+        "description": "Link an issue that already exists in the external provider (such as a Jira\nticket or GitHub issue) to the given Sentry issue. Additional accepted fields\nare integration-specific; fetch them from the `linkIssueConfig` returned by\nthe `GET` endpoint with `?action=link`. Linking the same issue again returns\nthe existing link with HTTP 200, without repeating provider comments. A new\nlink returns HTTP 201.",
         "parameters": [
           {
             "in": "path",
@@ -77626,6 +77679,40 @@
           }
         ],
         "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "key": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "integer"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "displayName",
+                    "id",
+                    "integrationId",
+                    "key",
+                    "url"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
           "201": {
             "content": {
               "application/json": {
@@ -77680,12 +77767,31 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "DRF's standard error-body shape: `{\"detail\": str}`.\n\nUse in `Response[T] | Response[DetailResponse]` annotations on endpoints\nwhose inline error returns are exactly `Response({\"detail\": \"...\"}, status=4xx)`.\nEndpoints whose error bodies have richer or different shapes should\ndeclare their own local TypedDicts instead.",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "detail"
+                  ]
+                }
+              }
+            },
+            "description": ""
           }
         }
       },
       "delete": {
         "operationId": "Unlink an External Issue from an Issue",
-        "description": "Remove the link between a Sentry issue and an external issue. If no other\nSentry issues reference the external issue, the link record is deleted\nentirely. This does not delete the issue in the external provider.",
+        "description": "Remove the link between a Sentry issue and an external issue. If no other\nSentry issues reference the external issue, the link record is deleted\nentirely. An absent link also returns 204. This does not delete the issue\nin the external provider.",
         "parameters": [
           {
             "in": "path",
@@ -77747,6 +77853,25 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "DRF's standard error-body shape: `{\"detail\": str}`.\n\nUse in `Response[T] | Response[DetailResponse]` annotations on endpoints\nwhose inline error returns are exactly `Response({\"detail\": \"...\"}, status=4xx)`.\nEndpoints whose error bodies have richer or different shapes should\ndeclare their own local TypedDicts instead.",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "detail"
+                  ]
+                }
+              }
+            },
+            "description": ""
           }
         }
       }
@@ -88869,6 +88994,18 @@
             "status"
           ]
         }
+      },
+      "IssueLinkConflict": {
+        "type": "object",
+        "description": "DRF's standard error-body shape: `{\"detail\": str}`.\n\nUse in `Response[T] | Response[DetailResponse]` annotations on endpoints\nwhose inline error returns are exactly `Response({\"detail\": \"...\"}, status=4xx)`.\nEndpoints whose error bodies have richer or different shapes should\ndeclare their own local TypedDicts instead.",
+        "properties": {
+          "detail": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail"
+        ]
       },
       "LatestBaseSnapshotResponse": {
         "type": "object",
