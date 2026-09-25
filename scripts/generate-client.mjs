@@ -1,6 +1,6 @@
 /**
- * Bind the generated operations to one transport without duplicating request
- * logic. Keep each operation's generics, required arguments, and documentation.
+ * Bind generated operations and pagination helpers to one transport without
+ * duplicating request logic. Preserve their arguments and documentation.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -8,56 +8,73 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const sdkPath = join(root, "src", "sdk.gen.ts");
-const source = ts.createSourceFile(
-  sdkPath,
-  readFileSync(sdkPath, "utf8"),
-  ts.ScriptTarget.Latest,
-  true,
-);
-
+const paginationKinds = ["fetchPage", "paginateAll", "paginateUpTo"];
+const reservedNames = new Set(["client", ...paginationKinds]);
 const methods = [];
-for (const statement of source.statements) {
-  if (
-    !ts.isVariableStatement(statement) ||
-    !statement.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)
-  ) continue;
+const paginationMethods = Object.fromEntries(paginationKinds.map(kind => [kind, []]));
 
-  for (const declaration of statement.declarationList.declarations) {
-    const fn = declaration.initializer;
+for (const module of ["sdk", "pagination"]) {
+  const path = join(root, "src", `${module}.gen.ts`);
+  const source = ts.createSourceFile(path, readFileSync(path, "utf8"), ts.ScriptTarget.Latest, true);
+  for (const statement of source.statements) {
     if (
-      !ts.isIdentifier(declaration.name) ||
-      !fn || !ts.isArrowFunction(fn) ||
-      fn.parameters.length !== 1 ||
-      fn.parameters[0].dotDotDotToken ||
-      fn.parameters[0].initializer
-    ) {
-      throw new Error(`Unsupported SDK operation: ${declaration.name.getText(source)}`);
-    }
+      !ts.isVariableStatement(statement) ||
+      !statement.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)
+    ) continue;
 
-    const name = declaration.name.text;
-    if (name === "client") throw new Error("SDK operation conflicts with the client property");
+    for (const declaration of statement.declarationList.declarations) {
+      const fn = declaration.initializer;
+      if (
+        !ts.isIdentifier(declaration.name) ||
+        !fn || !ts.isArrowFunction(fn) ||
+        fn.parameters.length === 0 ||
+        fn.parameters.some(parameter =>
+          !ts.isIdentifier(parameter.name) || parameter.dotDotDotToken || parameter.initializer)
+      ) {
+        throw new Error(`Unsupported ${module} function: ${declaration.name.getText(source)}`);
+      }
 
-    const generics = fn.typeParameters?.length
-      ? `<${fn.typeParameters.map((parameter) => parameter.getText(source)).join(", ")}>`
-      : "";
-    const typeArguments = fn.typeParameters?.length
-      ? `<${fn.typeParameters.map((parameter) => parameter.name.text).join(", ")}>`
-      : "";
-    const operation = `sdk.${name}${typeArguments}`;
-    const optional = fn.parameters[0].questionToken ? "?" : "";
-    for (const doc of statement.jsDoc ?? []) {
-      methods.push(...doc.getText(source).split("\n").map((line) => `    ${line}`));
+      const name = declaration.name.text;
+      let methodName = name;
+      let destination = methods;
+      let indent = "    ";
+      if (module === "pagination") {
+        const kind = paginationKinds.find(kind => name.startsWith(`${kind}_`));
+        if (!kind) throw new Error(`Unsupported pagination helper: ${name}`);
+        methodName = name.slice(kind.length + 1);
+        destination = paginationMethods[kind];
+        indent += "  ";
+      } else if (reservedNames.has(name)) {
+        throw new Error(`SDK operation conflicts with the ${name} property`);
+      }
+
+      const generics = fn.typeParameters?.length
+        ? `<${fn.typeParameters.map((parameter) => parameter.getText(source)).join(", ")}>`
+        : "";
+      const typeArguments = fn.typeParameters?.length
+        ? `<${fn.typeParameters.map((parameter) => parameter.name.text).join(", ")}>`
+        : "";
+      const operation = `${module}.${name}${typeArguments}`;
+      const optional = fn.parameters[0].questionToken ? "?" : "";
+      for (const doc of statement.jsDoc ?? []) {
+        destination.push(...doc.getText(source).split("\n").map((line) => `${indent}${line}`));
+      }
+      const remainingParameters = fn.parameters.slice(1);
+      destination.push(
+        `${indent}${methodName}: ${generics}(`,
+        `${indent}  options${optional}: Omit<NonNullable<Parameters<typeof ${operation}>[0]>, 'client'>,`,
+        ...remainingParameters.map((parameter, index) =>
+          `${indent}  ${parameter.name.text}${parameter.questionToken ? "?" : ""}: Parameters<typeof ${operation}>[${index + 1}],`),
+        `${indent}) => ${operation}({ ...options, client }${remainingParameters.map(parameter => `, ${parameter.name.text}`).join("")}),`,
+      );
     }
-    methods.push(
-      `    ${name}: ${generics}(`,
-      `      options${optional}: Omit<NonNullable<Parameters<typeof ${operation}>[0]>, 'client'>,`,
-      `    ) => ${operation}({ ...options, client }),`,
-    );
   }
 }
 
 if (methods.length === 0) throw new Error("No SDK operations found");
+for (const kind of paginationKinds) {
+  if (paginationMethods[kind].length === 0) throw new Error(`No ${kind} helpers found`);
+}
 
 writeFileSync(join(root, "src", "sentry-client.gen.ts"), [
   "// This file is auto-generated by scripts/generate-client.mjs",
@@ -65,6 +82,7 @@ writeFileSync(join(root, "src", "sentry-client.gen.ts"), [
   "",
   "import { createClient, type Config } from './client';",
   "import * as sdk from './sdk.gen';",
+  "import * as pagination from './pagination.gen';",
   "",
   "/**",
   " * Create an isolated Sentry client with bound, typed API operations.",
@@ -76,6 +94,11 @@ writeFileSync(join(root, "src", "sentry-client.gen.ts"), [
   "  return {",
   "    client,",
   ...methods,
+  ...paginationKinds.flatMap(kind => [
+    `    ${kind}: {`,
+    ...paginationMethods[kind],
+    "    },",
+  ]),
   "  } as const;",
   "}",
   "",
