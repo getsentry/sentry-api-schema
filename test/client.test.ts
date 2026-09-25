@@ -18,7 +18,7 @@ const asFetch = (implementation: (request: Request) => Promise<Response>) =>
 describe("configured operation methods", () => {
   test("exposes every generated operation through the public package", () => {
     const sentry = createSentryClient();
-    const { client, ...methods } = sentry;
+    const { client, fetchPage, paginateAll, paginateUpTo, ...methods } = sentry;
 
     expect(Object.keys(methods).sort()).toEqual(Object.keys(operations).sort());
     expect(Object.values(methods).every(method => typeof method === "function")).toBe(true);
