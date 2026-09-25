@@ -39,7 +39,7 @@ cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 cpSync("lib/sentry-errors.ts", "src/sentry-errors.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
 
-// 3. Generate per-operation pagination wrappers from the SDK output + spec.
+// 3. Generate operation helpers and the bound client from the SDK output.
 //    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
 //    detects every operation that accepts a `cursor` query parameter, and
 //    emits typed fetchPage / paginateAll / paginateUpTo wrappers for each.
@@ -47,6 +47,7 @@ cpSync("lib/browser-client.ts", "src/browser-client.ts");
 //    is documented as in-development and unstable.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-results.mjs"))}`, { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
 
 // 4. Append re-exports to the generated index.ts so the pagination
 //    utilities and the per-operation wrappers are part of the public API.
@@ -60,6 +61,9 @@ appendFileSync(
     "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher } from './sentry-pagination.ts';",
     "export * from './error-results.gen.ts';",
     "export * from './pagination.gen.ts';",
+    "export { createSentryClient } from './sentry-client.gen.ts';",
+    "export type { SentryClient } from './sentry-client.gen.ts';",
+    "export type { Config } from './client/index.ts';",
     "",
   ].join("\n"),
 );

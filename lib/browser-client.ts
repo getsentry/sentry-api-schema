@@ -64,13 +64,16 @@ export function createBrowserFetch(opts: BrowserClientOptions = {}): FetchFn {
 }
 
 /**
- * Returns options to spread into any @sentry/api SDK call from a browser context.
- * Configures relative base URL and cookie+CSRF auth automatically.
+ * Returns configuration for a browser SDK instance with cookie-based session
+ * auth and CSRF token injection. The base URL defaults to same-origin relative URLs.
  *
  * @example
- * import {client} from '@sentry/api';
+ * import {createSentryClient} from '@sentry/api';
  * import {createBrowserSdkConfig} from '@sentry/api/browser';
- * client.setConfig(createBrowserSdkConfig());
+ * const sentry = createSentryClient(
+ *   createBrowserSdkConfig({baseUrl: 'https://sentry.example.com'}),
+ * );
+ * const {data, error} = await sentry.listOrganizations();
  */
 export function createBrowserSdkConfig(opts: BrowserClientOptions = {}) {
   return {

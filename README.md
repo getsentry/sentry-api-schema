@@ -13,21 +13,74 @@ npm install @sentry/api
 
 ## Usage
 
-Pass `baseUrl` and an auth header to each call:
+Configure a client once, then call its typed operation methods:
 
 ```ts
-import { listYourOrganizations } from "@sentry/api";
+import { createSentryClient } from "@sentry/api";
 
-const { data, error } = await listYourOrganizations({
+const sentry = createSentryClient({
   baseUrl: "https://sentry.io",
   headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
 });
 
-if (error) throw error;
+const { data, error } = await sentry.listOrganizations();
+
+if (error !== undefined) throw error;
 console.log(data);
 ```
 
-Auth tokens and base URLs (including self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
+Operation methods retain the generated documentation, typed arguments, and response types. Per-call options include `path`, `query`, `headers`, `signal`, and `throwOnError`. Results preserve the underlying `request` and `response`, including response headers:
+
+```ts
+const controller = new AbortController();
+
+const { data: project, request, response } = await sentry.getProject({
+  path: {
+    organization_id_or_slug: "my-org",
+    project_id_or_slug: "my-project",
+  },
+  signal: controller.signal,
+  throwOnError: true,
+});
+
+console.log(project, request.url, response.headers.get("content-type"));
+```
+
+By default, operations return a `data`/`error` result. Set `throwOnError: true` to reject on errors, as above. Methods are bound to their instance and can be safely destructured, such as `const { getProject } = sentry`.
+
+Each `createSentryClient` call creates an independent transport configuration. The root entry also exports the `SentryClient` and `Config` types; `Config` is the underlying transport's configuration type. Access that transport as `sentry.client` for interceptors, configuration updates, or low-level requests.
+
+Supply the base URL and authentication appropriate for your deployment. See Sentry's [API authentication documentation](https://docs.sentry.io/api/auth/).
+
+### Standalone operations
+
+Individual operation functions remain available as a modular alternative and accept transport configuration directly:
+
+```ts
+import { listOrganizations } from "@sentry/api";
+
+const { data, error } = await listOrganizations({
+  baseUrl: "https://sentry.io",
+  headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
+});
+```
+
+They can also reuse an existing instance's configuration: `listOrganizations({ client: sentry.client })`.
+
+### Browser sessions
+
+The browser helper configures session cookies and CSRF token injection:
+
+```ts
+import { createSentryClient } from "@sentry/api";
+import { createBrowserSdkConfig } from "@sentry/api/browser";
+
+const sentry = createSentryClient(
+  createBrowserSdkConfig({ baseUrl: "https://sentry.example.com" }),
+);
+
+const { data, error } = await sentry.listOrganizations();
+```
 
 ## Runtime validation
 
@@ -62,14 +115,13 @@ const project = zGetProjectResponse.parse(input);
 
 ## Error handling
 
-Every operation with documented error responses has a generated `narrowError_<operation>` wrapper. It returns data or a `SentryApiError` that preserves the operation's status-to-body type map:
+Every operation with documented error responses has a generated `narrowError_<operation>` wrapper. It returns data or a `SentryApiError` that preserves the operation's status-to-body type map. These wrappers remain standalone functions; pass `sentry.client` to reuse the client configured above:
 
 ```ts
 import { narrowError_getProject } from "@sentry/api";
 
 const result = await narrowError_getProject({
-  baseUrl: "https://sentry.io",
-  headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
+  client: sentry.client,
   path: {
     organization_id_or_slug: "my-org",
     project_id_or_slug: "my-project",
@@ -102,14 +154,15 @@ Sentry uses cursor-based pagination via `Link` headers. Every operation in the S
 
 The wrappers manage `cursor` for you — passing one in `query` is a type error. Every wrapper's `query` is also widened with an optional `per_page?: number` field, since Sentry's pagination framework accepts `per_page` on every cursor-paginated route at runtime even when the spec omits it.
 
+Pagination wrappers remain standalone functions and reuse the configured transport through `client: sentry.client`.
+
 ### Single page
 
 ```ts
-import { fetchPage_listAnOrganization_sIssues } from "@sentry/api";
+import { fetchPage_listOrganizationIssues } from "@sentry/api";
 
-const { data, nextCursor } = await fetchPage_listAnOrganization_sIssues({
-  baseUrl: "https://sentry.io",
-  headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
+const { data, nextCursor } = await fetchPage_listOrganizationIssues({
+  client: sentry.client,
   path: { organization_id_or_slug: "my-org" },
   query: { collapse: ["stats"], limit: 25 },
 });
@@ -118,11 +171,10 @@ const { data, nextCursor } = await fetchPage_listAnOrganization_sIssues({
 ### All pages
 
 ```ts
-import { paginateAll_listAnOrganization_sProjects } from "@sentry/api";
+import { paginateAll_listOrganizationProjects } from "@sentry/api";
 
-const projects = await paginateAll_listAnOrganization_sProjects({
-  baseUrl: "https://sentry.io",
-  headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
+const projects = await paginateAll_listOrganizationProjects({
+  client: sentry.client,
   path: { organization_id_or_slug: "my-org" },
 });
 ```
@@ -130,12 +182,11 @@ const projects = await paginateAll_listAnOrganization_sProjects({
 ### Bounded pagination
 
 ```ts
-import { paginateUpTo_listAnOrganization_sIssues } from "@sentry/api";
+import { paginateUpTo_listOrganizationIssues } from "@sentry/api";
 
-const { data, nextCursor } = await paginateUpTo_listAnOrganization_sIssues(
+const { data, nextCursor } = await paginateUpTo_listOrganizationIssues(
   {
-    baseUrl: "https://sentry.io",
-    headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
+    client: sentry.client,
     path: { organization_id_or_slug: "my-org" },
     query: { limit: 100 },
   },
