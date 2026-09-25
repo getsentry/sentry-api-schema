@@ -62594,6 +62594,98 @@
       }
     },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/repo/": {
+      "get": {
+        "operationId": "listProjectRepositories",
+        "description": "List all repositories linked to a project.\n\nPass `?includeMappingCount=1` to include the number of code path mappings\nper repository. Omitting it keeps the query cheaper for callers that\nonly need the list of connections.",
+        "summary": "List Repositories Linked to a Project",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "includeMappingCount",
+            "schema": {
+              "type": "string"
+            },
+            "description": "When set to `1`, each row includes a `mappingCount` field with the number of code path mappings for that repository. Omitted by default to keep the response lightweight."
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "projectId": {
+                        "type": "string"
+                      },
+                      "repositoryId": {
+                        "type": "string"
+                      },
+                      "repoName": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      },
+                      "providerKey": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "mappingCount": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "projectId",
+                      "providerKey",
+                      "repoName",
+                      "repositoryId",
+                      "source"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "post": {
         "operationId": "linkProjectRepository",
         "description": "Link a repository to a project. The repository must already exist\nin the organization (connected via a VCS integration). Idempotent:\nreturns 200 if the link already exists, 201 if created.",
@@ -105328,6 +105420,44 @@
           "repositoryId",
           "source"
         ]
+      },
+      "ProjectRepoListResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "projectId": {
+              "type": "string"
+            },
+            "repositoryId": {
+              "type": "string"
+            },
+            "repoName": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "providerKey": {
+              "type": "string",
+              "nullable": true
+            },
+            "mappingCount": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "id",
+            "projectId",
+            "providerKey",
+            "repoName",
+            "repositoryId",
+            "source"
+          ]
+        }
       },
       "ProjectSizeStatusCheckRulesResponse": {
         "type": "object",
