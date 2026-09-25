@@ -1,17 +1,12 @@
 /**
  * Auth + client configuration factories for @sentry/api.
  *
- * These are small, pure builders: they return a plain, typed config object that
- * you hand to the SDK client, either globally via `client.setConfig(...)` or to
- * an isolated instance via `createSentryClient(...)`. No side effects, no hidden
- * lifecycle, no `mode` enum. If you prefer, pass the raw object yourself.
- *
- * Factories are named by authentication method (`bearerToken`; `browserSession`
- * lives in ./browser). Host and routing are options, not separate factories.
+ * Configure a client once, or create an isolated client for each deployment
+ * and authentication context. Browser session configuration lives in ./browser.
  */
 
 /** Standard fetch signature, without Bun/Node runtime extensions. */
-export type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+export type FetchFn = (input: string | Request | URL, init?: RequestInit) => Promise<Response>;
 
 /**
  * The subset of the generated client `Config` these factories populate.
@@ -29,9 +24,7 @@ export type SentryApiConfig = {
 };
 
 /**
- * Default host for Sentry's multi-region cloud. Its proxy routes org-scoped
- * requests (the SDK's surface is org-scoped) to the correct region using the
- * org slug in the path, so most consumers never need to think about regions.
+ * Default API origin for Sentry's public cloud.
  */
 export const DEFAULT_BASE_URL = 'https://sentry.io';
 
@@ -39,8 +32,8 @@ export type BearerTokenOptions = {
   /** Auth token, sent as `Authorization: Bearer <token>`. */
   token: string;
   /**
-   * Base URL. Defaults to https://sentry.io (cloud), where the proxy routes by
-   * org slug. Set it for self-hosted or to pin a single region.
+   * API origin, defaulting to https://sentry.io. Explicit Enterprise,
+   * self-hosted, and regional hosts are preserved without region discovery.
    */
   baseUrl?: string;
   /**
@@ -56,11 +49,11 @@ export type BearerTokenOptions = {
 };
 
 /**
- * Config for token auth against Sentry (cloud or self-hosted).
+ * Config for Bearer authentication against the selected Sentry deployment.
  *
  * @example
  * import { client, bearerToken } from '@sentry/api';
- * client.setConfig(bearerToken({ token: process.env.SENTRY_AUTH_TOKEN }));
+ * client.setConfig(bearerToken({ token: 'your-auth-token' }));
  */
 export function bearerToken(opts: BearerTokenOptions): SentryApiConfig {
   const config: SentryApiConfig = {

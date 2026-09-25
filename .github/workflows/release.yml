@@ -23,6 +23,11 @@ permissions:
   contents: write
   pull-requests: write
 
+# A newer commit always supersedes a release that has not finished.
+concurrency:
+  group: release
+  cancel-in-progress: true
+
 jobs:
   release:
     runs-on: ubuntu-latest

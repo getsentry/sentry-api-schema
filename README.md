@@ -18,21 +18,27 @@ Configure the client once, then call any operation without repeating auth or hos
 applies it to the global client.
 
 ```ts
-import { client, bearerToken, listYourOrganizations } from "@sentry/api";
+import { client, bearerToken, listOrganizations } from "@sentry/api";
 
-client.setConfig(bearerToken({ token: process.env.SENTRY_AUTH_TOKEN }));
+const token = process.env.SENTRY_AUTH_TOKEN;
+if (!token) throw new Error("Set SENTRY_AUTH_TOKEN");
+client.setConfig(bearerToken({ token }));
 
-const { data, error } = await listYourOrganizations();
+const { data, error } = await listOrganizations();
 if (error) throw error;
 console.log(data);
 ```
 
-`bearerToken` defaults `baseUrl` to `https://sentry.io`. For self-hosted, or to pin a single
-region, pass your host:
+`bearerToken` defaults `baseUrl` to `https://sentry.io`. For Enterprise or self-hosted
+deployments, pass their API origin:
 
 ```ts
-client.setConfig(bearerToken({ token, baseUrl: "https://sentry.my-company.com" }));
+client.setConfig(bearerToken({ token, baseUrl: "https://tenant.my.sentry.io" }));
 ```
+
+Explicit hosts are preserved. These factories do not discover regions, cache metadata,
+or change the destination of a request. A regional `baseUrl` pins requests to that
+region; use the deployment's control API origin for control operations.
 
 ### Isolated client (servers, tests)
 
@@ -41,11 +47,14 @@ For a server that handles multiple tokens, or for tests, create an isolated inst
 `createSentryClient(...)` and pass it per call:
 
 ```ts
-import { createSentryClient, bearerToken, listYourOrganizations } from "@sentry/api";
+import { createSentryClient, bearerToken, listOrganizations } from "@sentry/api";
 
-const sentry = createSentryClient(bearerToken({ token }));
-const { data } = await listYourOrganizations({ client: sentry });
+const sentry = createSentryClient(bearerToken({ token, baseUrl }));
+const { data } = await listOrganizations({ client: sentry });
 ```
+
+Keep each instance within one deployment and authentication context. `createClient`
+is also exported as the underlying factory.
 
 ### Browser (Sentry frontend)
 
@@ -59,6 +68,10 @@ import { browserSession } from "@sentry/api/browser";
 client.setConfig(browserSession());
 ```
 
+`createBrowserSdkConfig` remains supported and behaves the same way. Both accept
+`csrfCookieName`, `getCsrfToken`, and `baseUrl`. Browser session configuration does
+not resolve regional hosts.
+
 ### Custom transport
 
 `bearerToken` accepts a `fetch` option for transport policy the SDK does not own (token refresh,
@@ -68,6 +81,77 @@ retries, timeouts, custom CA, tracing). It also accepts `headers` (merged into e
 You can always skip the factories and pass a raw config to `client.setConfig(...)`, or pass
 `baseUrl`/`headers` on an individual call to override. Auth tokens and base URLs (including
 self-hosted and region URLs) are documented at https://docs.sentry.io/api/auth/.
+
+For an endpoint without a generated operation, the isolated client also exposes
+methods such as `sentry.get({ url: "/api/0/.../" })`. The caller is responsible for
+its endpoint contract, response validation, and access requirements.
+
+The [client design](docs/client-design.md) records the shared-client direction,
+region/cache ownership, and follow-up work. Planned routing helpers are separate
+from the configuration factories described above.
+
+## Runtime validation
+
+The root `@sentry/api` entry has no runtime dependencies. It provides the API client and pure TypeScript types without installing a validation library.
+
+Valibot 1 runtime schemas are available through a separate optional entry point:
+
+```bash
+npm install @sentry/api valibot
+```
+
+```ts
+import * as v from "valibot";
+import { vGetProjectResponse } from "@sentry/api/valibot";
+
+const project = v.parse(vGetProjectResponse, input);
+```
+
+The existing Zod 3 entry remains supported:
+
+```bash
+npm install @sentry/api zod
+```
+
+```ts
+import { zGetProjectResponse } from "@sentry/api/zod";
+
+const project = zGetProjectResponse.parse(input);
+```
+
+`valibot` and `zod` are optional peer dependencies. Install neither when you only need the generated client and TypeScript types, or install the validator used by your application. The `@sentry/api/valibot` entry requires Valibot 1; its optional peer uses a wildcard because npm applies peer constraints to the whole package, including consumers that never import this entry.
+
+## Error handling
+
+Every operation with documented error responses has a generated `narrowError_<operation>` wrapper. It returns data or a `SentryApiError` that preserves the operation's status-to-body type map:
+
+```ts
+import { narrowError_getProject } from "@sentry/api";
+
+const result = await narrowError_getProject({
+  baseUrl: "https://sentry.io",
+  headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
+  path: {
+    organization_id_or_slug: "my-org",
+    project_id_or_slug: "my-project",
+  },
+});
+
+if (!result.ok) {
+  if (!result.error.documented) {
+    // Unexpected HTTP status or a transport failure.
+    throw result.error;
+  }
+
+  switch (result.error.status) {
+    case 403:
+    case 404:
+      throw result.error;
+  }
+}
+```
+
+Checking `documented` first separates the operation's finite error union from unexpected statuses and transport failures. Within the documented branch, checking `status` narrows `body` to that response's schema. Error bodies remain `unknown` where the source OpenAPI response has no schema.
 
 ## Pagination
 

@@ -1,5 +1,5 @@
 import { createClient } from "@hey-api/openapi-ts";
-import { cpSync, appendFileSync, writeFileSync } from "node:fs";
+import { cpSync, appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -15,16 +15,18 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 //     those were set intentionally via @extend_schema(operation_id=...).
 normalizeSpec("./openapi-derefed.json", "./openapi-normalized.json");
 
-// 1. Generate TypeScript client from OpenAPI spec (including Zod schemas).
+// 1. Generate TypeScript client from OpenAPI spec, including optional
+//    Valibot and Zod schemas.
 //    When `plugins` is specified, the defaults (TypeScript + SDK + client) are
 //    no longer implicit — list them explicitly so the previous output is
-//    preserved alongside the new Zod schemas.
+//    preserved alongside the validator schemas.
 await createClient({
   input: "./openapi-normalized.json",
   output: "src",
   plugins: [
     "@hey-api/typescript",
     "@hey-api/sdk",
+    "valibot",
     {
       name: "zod",
       compatibilityVersion: 3,
@@ -34,8 +36,20 @@ await createClient({
 
 // 2. Copy hand-written utilities into the generated src/ directory
 cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
+cpSync("lib/sentry-errors.ts", "src/sentry-errors.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
 cpSync("lib/auth-config.ts", "src/auth-config.ts");
+
+// The generated `typeof fetch` also requires runtime-specific properties such
+// as Bun's fetch.preconnect. Both transports only need the standard callable.
+for (const path of ["src/client/types.gen.ts", "src/core/serverSentEvents.gen.ts"]) {
+  const source = readFileSync(path, "utf8");
+  const signature = "fetch?: typeof fetch;";
+  if (source.split(signature).length !== 2) {
+    throw new Error(`Expected one fetch configuration type in ${path}`);
+  }
+  writeFileSync(path, source.replace(signature, "fetch?: import('../auth-config').FetchFn;"));
+}
 
 // 3. Generate per-operation pagination wrappers from the SDK output + spec.
 //    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
@@ -44,6 +58,7 @@ cpSync("lib/auth-config.ts", "src/auth-config.ts");
 //    Done as a post-processor (not a Hey API plugin) because the plugin API
 //    is documented as in-development and unstable.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.mjs"))}`, { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-results.mjs"))}`, { stdio: "inherit" });
 
 // 4. Append re-exports to the generated index.ts so the pagination utilities,
 //    the per-operation wrappers, the auth factories, and the client itself are
@@ -52,8 +67,11 @@ appendFileSync(
   "src/index.ts",
   [
     "",
+    "export { callWithTypedErrors, narrowError, SentryApiError } from './sentry-errors.ts';",
+    "export type { DocumentedSentryApiError, NarrowedResult, SentryApiResultError, SentryApiTransportError, SdkResult, UndocumentedSentryApiError } from './sentry-errors.ts';",
     "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
-    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher, SdkResult } from './sentry-pagination.ts';",
+    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher } from './sentry-pagination.ts';",
+    "export * from './error-results.gen.ts';",
     "export * from './pagination.gen.ts';",
     // Auth/config factories (see lib/auth-config.ts). browserSession lives in ./browser.
     "export { bearerToken, DEFAULT_BASE_URL } from './auth-config.ts';",
@@ -69,16 +87,17 @@ appendFileSync(
 );
 
 // 5. Create standalone entry points.
-//    zod: lets consumers import from "@sentry/api/zod" without pulling zod into
-//    code that only needs the SDK types and functions.
+//    valibot/zod: validator-specific schemas with optional peer dependencies.
 //    browser: CSRF + cookie auth helpers for browser/frontend use.
+writeFileSync("src/valibot.ts", 'export * from "./valibot.gen.ts";\n');
 writeFileSync("src/zod.ts", 'export * from "./zod.gen.ts";\n');
 writeFileSync("src/browser.ts", 'export * from "./browser-client.ts";\n');
 
 // 6. Bundle into JS files and emit type declarations.
 //    The main entry stays self-contained (zero runtime deps).
-//    The Zod entry externalises "zod" — consumers provide it themselves.
+//    Validator entries externalise their peers; the root stays dependency-free.
 execSync("bun build src/index.ts --outdir dist", { stdio: "inherit" });
+execSync('bun build src/valibot.ts --outdir dist --external valibot', { stdio: "inherit" });
 execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
 execSync("bun build src/browser.ts --outdir dist", { stdio: "inherit" });
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });
