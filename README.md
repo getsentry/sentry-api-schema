@@ -146,60 +146,87 @@ Checking `documented` first separates the operation's finite error union from un
 
 ## Pagination
 
-Sentry uses cursor-based pagination via `Link` headers. Every operation in the SDK that accepts a `cursor` query parameter has three auto-generated typed wrappers:
+Sentry uses cursor-based pagination via `Link` headers. Choose one of three helpers on your configured client:
 
-- `fetchPage_<operation>(options, cursor?)` — fetch a single page; returns `{ data, nextCursor?, prevCursor? }`.
-- `paginateAll_<operation>(options, paginateOptions?)` — eagerly fetch all pages, returning the concatenated array. Bounded by `maxPages` (default 50) for safety. Available only for endpoints whose 200 response is `Array<...>`.
-- `paginateUpTo_<operation>(options, paginateOptions)` — fetch up to a hard `limit` of items; suppresses `nextCursor` when the last page is trimmed (so callers resuming pagination won't skip records). Available only for endpoints whose 200 response is `Array<...>`.
+| Task | Method | Result |
+| --- | --- | --- |
+| Display one page, with previous/next navigation | `sentry.fetchPage.<operation>(options, cursor?)` | `{ data, response, nextCursor?, prevCursor? }` |
+| Collect up to an item limit | `sentry.paginateUpTo.<operation>(options, { limit, ... })` | `{ data, nextCursor? }` |
+| Explicitly collect pages eagerly | `sentry.paginateAll.<operation>(options, { maxPages? }?)` | Concatenated array; stops at `maxPages` (default 50) |
 
-The wrappers manage `cursor` for you — passing one in `query` is a type error. Every wrapper's `query` is also widened with an optional `per_page?: number` field, since Sentry's pagination framework accepts `per_page` on every cursor-paginated route at runtime even when the spec omits it.
+`fetchPage` is available for operations whose schema declares a `cursor` query parameter. Collection helpers are available only when the operation's 200 response is an array. Compound response bodies remain intact. Ordinary operation methods such as `sentry.listOrganizations()` still make just one request.
 
-Pagination wrappers remain standalone functions and reuse the configured transport through `client: sentry.client`.
+All helpers reuse the instance's configuration and interceptors and can be destructured. They manage `cursor` separately from `query`, retaining your path, filters, and `signal` while invoking the configured operation. The SDK does not own page history or a response cache: the consumer keeps cursors in its URL, query cache, or persistent storage.
+
+Pagination needs the transport's default `responseStyle: "fields"` to read HTTP headers; `responseStyle: "data"` is not supported. Helpers reject on failure: under the default error policy, they throw `SentryApiError`; if the transport is configured with `throwOnError: true`, its thrown error propagates directly.
 
 ### Single page
 
 ```ts
-import { fetchPage_listOrganizationIssues } from "@sentry/api";
-
-const { data, nextCursor } = await fetchPage_listOrganizationIssues({
-  client: sentry.client,
+const options = {
   path: { organization_id_or_slug: "my-org" },
-  query: { collapse: ["stats"], limit: 25 },
-});
+  query: { query: "is:unresolved", limit: 25 },
+};
+
+const page = await sentry.fetchPage.listOrganizationIssues(options);
+console.log(page.data, page.response.headers.get("X-Hits"));
+
+if (page.nextCursor !== undefined) {
+  const nextPage = await sentry.fetchPage.listOrganizationIssues(options, page.nextCursor);
+  // Keep nextPage.prevCursor to navigate back when the user requests it.
+}
 ```
 
-### All pages
+Each page preserves its own raw `Response`, including status and headers. The transport has already read the body; use `page.data` for the parsed result. Code that constructs a `PaginatedResponse<T>` manually, such as test fixtures, must now supply its `response` field.
+
+### Bounded collection
 
 ```ts
-import { paginateAll_listOrganizationProjects } from "@sentry/api";
-
-const projects = await paginateAll_listOrganizationProjects({
-  client: sentry.client,
-  path: { organization_id_or_slug: "my-org" },
-});
-```
-
-### Bounded pagination
-
-```ts
-import { paginateUpTo_listOrganizationIssues } from "@sentry/api";
-
-const { data, nextCursor } = await paginateUpTo_listOrganizationIssues(
+const batch = await sentry.paginateUpTo.listOrganizationProjects(
   {
-    client: sentry.client,
     path: { organization_id_or_slug: "my-org" },
-    query: { limit: 100 },
+    query: { per_page: 50 },
   },
-  {
-    limit: 250,
-    onPage: (fetched, target) => console.log(`fetched ${fetched}/${target}`),
-  },
+  { limit: 250 },
+);
+
+console.log(batch.data, batch.nextCursor);
+```
+
+The total item limit and the HTTP page size are separate. Currently the helper uses the same requested page size for each request. If the last page overshoots the item limit, it trims the data and suppresses `nextCursor` by default to avoid skipping the discarded rows. The example uses 50-item HTTP pages for a 250-item budget.
+
+### Eager collection
+
+```ts
+const projects = await sentry.paginateAll.listOrganizationProjects(
+  { path: { organization_id_or_slug: "my-org" } },
+  { maxPages: 50 },
 );
 ```
 
-By default, `paginateUpTo` drops `nextCursor` if the last fetched page had to be trimmed to fit `limit` — returning a cursor that points past the trimmed items would cause callers resuming pagination to skip records. For endpoints with no server-side `per_page` control (e.g. `/issues/{id}/events/`), pass `keepCursorOnOvershoot: true` to preserve the cursor; the trimmed-tail items remain reachable via the same cursor on the next call.
+Collection results do not expose a single `response`: their data can come from several HTTP requests. Use `fetchPage` when you need each page's headers or incremental loading.
 
-`nextCursor` is also dropped if `paginateUpTo` reaches `maxPages` (default 50) before fulfilling `limit` — raise `maxPages` to continue paginating.
+### Current collection limits
+
+The bound methods preserve the existing helpers' behavior. `paginateAll` can return an incomplete array when it reaches `maxPages`, without identifying that condition. `paginateUpTo` also drops `nextCursor` when that cap is reached, so its absence does not prove the collection is exhausted. Use explicit page traversal when you need reliable exhaustion detection today.
+
+Operation-aware page sizing and explicit completion/continuation metadata are tracked in [#99](https://github.com/getsentry/sentry-api-schema/issues/99). Frontend query adapters and CLI navigation integration are also follow-up work. The existing `keepCursorOnOvershoot` escape hatch remains available for compatibility; its safety depends on the endpoint's cursor semantics.
+
+### Standalone pagination
+
+All existing imports remain available and share the same implementation and result types:
+
+```ts
+import { fetchPage_listOrganizationProjects } from "@sentry/api";
+
+const page = await fetchPage_listOrganizationProjects({
+  client: sentry.client,
+  path: { organization_id_or_slug: "my-org" },
+});
+console.log(page.response.headers.get("Link"));
+```
+
+The corresponding `paginateUpTo_<operation>` and `paginateAll_<operation>` imports remain supported. Existing helpers accept `per_page` in their query options even where the schema omits it; choose page-size parameters supported by your endpoint.
 
 ### Generic pagination helpers
 

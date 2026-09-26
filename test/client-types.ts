@@ -9,7 +9,7 @@ import {
 import type * as operations from "../src/sdk.gen";
 
 type OperationNames = keyof typeof operations;
-type BoundOperationNames = Exclude<keyof SentryClient, "client">;
+type BoundOperationNames = Exclude<keyof SentryClient, "client" | "fetchPage" | "paginateAll" | "paginateUpTo">;
 // Both directions catch missing operations and accidental additional exports.
 const completeSurface: [OperationNames] extends [BoundOperationNames] ? true : false = true;
 const exactSurface: [BoundOperationNames] extends [OperationNames] ? true : false = true;
