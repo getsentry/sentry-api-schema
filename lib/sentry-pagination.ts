@@ -15,6 +15,8 @@ export type UnwrappedResult<TData> = {
 
 export type PaginatedResponse<T> = {
   data: T;
+  /** The HTTP response for this page, including headers. Its body is already read. */
+  response: Response;
   /** Cursor for the next page. `undefined` when there are no more pages. */
   nextCursor?: string;
   /** Cursor for the previous page. `undefined` on the first page. */
@@ -195,7 +197,7 @@ export const unwrapResult = <TData, TError = unknown>(
  * Unwrap an SDK result and extract pagination cursors from the
  * Link header. Throws on error.
  *
- * Returns `{ data, nextCursor?, prevCursor? }`. Each cursor is
+ * Returns `{ data, response, nextCursor?, prevCursor? }`. Each cursor is
  * `undefined` when the corresponding rel does not exist or has
  * `results="false"`.
  */
@@ -206,7 +208,7 @@ export const unwrapPaginatedResult = <TData>(
   const { data, response } = unwrapResult(result, context);
   const linkHeader = response.headers.get("link");
   const { nextCursor, prevCursor } = parseSentryLinkHeader(linkHeader);
-  const out: PaginatedResponse<TData> = { data };
+  const out: PaginatedResponse<TData> = { data, response };
   if (nextCursor !== undefined) out.nextCursor = nextCursor;
   if (prevCursor !== undefined) out.prevCursor = prevCursor;
   return out;
