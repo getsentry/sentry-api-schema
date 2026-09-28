@@ -1,3 +1,9 @@
+## 0.339.0
+
+### New Features
+
+- Bind pagination helpers to configured clients by @betegon in [#100](https://github.com/getsentry/sentry-api-schema/pull/100)
+
 ## 0.338.0
 
 ### Schema Updates
