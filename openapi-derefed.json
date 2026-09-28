@@ -63580,6 +63580,142 @@
                           "type": {
                             "type": "string",
                             "enum": [
+                              "azure"
+                            ]
+                          },
+                          "account": {
+                            "type": "string",
+                            "pattern": "^[a-z0-9]{3,24}$"
+                          },
+                          "container": {
+                            "type": "string"
+                          },
+                          "tenant_id": {
+                            "type": "string"
+                          },
+                          "client_id": {
+                            "type": "string"
+                          },
+                          "client_secret": {
+                            "type": "object",
+                            "properties": {
+                              "hidden-secret": {
+                                "type": "boolean",
+                                "enum": [
+                                  true
+                                ]
+                              }
+                            }
+                          },
+                          "prefix": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "layout": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "native",
+                                  "symstore",
+                                  "symstore_index2",
+                                  "ssqp",
+                                  "unified",
+                                  "debuginfod",
+                                  "slashsymbols"
+                                ]
+                              },
+                              "casing": {
+                                "type": "string",
+                                "enum": [
+                                  "lowercase",
+                                  "uppercase",
+                                  "default"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "filters": {
+                            "type": "object",
+                            "properties": {
+                              "filetypes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "pe",
+                                    "pdb",
+                                    "portablepdb",
+                                    "mach_debug",
+                                    "mach_code",
+                                    "elf_debug",
+                                    "elf_code",
+                                    "wasm_debug",
+                                    "wasm_code",
+                                    "breakpad",
+                                    "sourcebundle",
+                                    "uuidmap",
+                                    "bcsymbolmap",
+                                    "il2cpp",
+                                    "proguard",
+                                    "dartsymbolmap"
+                                  ]
+                                }
+                              },
+                              "path_patterns": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "requires_checksum": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "is_public": {
+                            "type": "boolean"
+                          },
+                          "has_index": {
+                            "type": "boolean"
+                          },
+                          "platforms": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "id",
+                          "account",
+                          "container",
+                          "tenant_id",
+                          "client_id",
+                          "client_secret",
+                          "layout"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
                               "appStoreConnect"
                             ]
                           },
@@ -63715,10 +63851,11 @@
                     "enum": [
                       "http",
                       "gcs",
-                      "s3"
+                      "s3",
+                      "azure"
                     ],
                     "type": "string",
-                    "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+                    "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3\n* `azure` - Azure Blob Storage"
                   },
                   "name": {
                     "type": "string",
@@ -63856,7 +63993,7 @@
                   },
                   "prefix": {
                     "type": "string",
-                    "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP."
+                    "description": "The GCS, Azure or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS, Azure and S3 sources, invalid for HTTP."
                   },
                   "client_email": {
                     "type": "string",
@@ -63865,6 +64002,26 @@
                   "private_key": {
                     "type": "string",
                     "description": "The GCS private key. Required for GCS sources if not using impersonated tokens. Invalid for all others."
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "The Azure storage account name. Required for Azure sources, invalid for all others."
+                  },
+                  "container": {
+                    "type": "string",
+                    "description": "The Azure blob container name. Required for Azure sources, invalid for all others."
+                  },
+                  "tenant_id": {
+                    "type": "string",
+                    "description": "The Microsoft Entra tenant ID. Required for Azure sources, invalid for all others."
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "description": "The Microsoft Entra application (client) ID. Required for Azure sources, invalid for all others."
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "description": "The Microsoft Entra client secret. Required for Azure sources, invalid for all others."
                   }
                 },
                 "required": [
@@ -64276,6 +64433,142 @@
                         "type": {
                           "type": "string",
                           "enum": [
+                            "azure"
+                          ]
+                        },
+                        "account": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9]{3,24}$"
+                        },
+                        "container": {
+                          "type": "string"
+                        },
+                        "tenant_id": {
+                          "type": "string"
+                        },
+                        "client_id": {
+                          "type": "string"
+                        },
+                        "client_secret": {
+                          "type": "object",
+                          "properties": {
+                            "hidden-secret": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            }
+                          }
+                        },
+                        "prefix": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "layout": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "native",
+                                "symstore",
+                                "symstore_index2",
+                                "ssqp",
+                                "unified",
+                                "debuginfod",
+                                "slashsymbols"
+                              ]
+                            },
+                            "casing": {
+                              "type": "string",
+                              "enum": [
+                                "lowercase",
+                                "uppercase",
+                                "default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "filters": {
+                          "type": "object",
+                          "properties": {
+                            "filetypes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "pe",
+                                  "pdb",
+                                  "portablepdb",
+                                  "mach_debug",
+                                  "mach_code",
+                                  "elf_debug",
+                                  "elf_code",
+                                  "wasm_debug",
+                                  "wasm_code",
+                                  "breakpad",
+                                  "sourcebundle",
+                                  "uuidmap",
+                                  "bcsymbolmap",
+                                  "il2cpp",
+                                  "proguard",
+                                  "dartsymbolmap"
+                                ]
+                              }
+                            },
+                            "path_patterns": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "requires_checksum": {
+                              "type": "boolean"
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "is_public": {
+                          "type": "boolean"
+                        },
+                        "has_index": {
+                          "type": "boolean"
+                        },
+                        "platforms": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "account",
+                        "container",
+                        "tenant_id",
+                        "client_id",
+                        "client_secret",
+                        "layout"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
                             "appStoreConnect"
                           ]
                         },
@@ -64404,10 +64697,11 @@
                     "enum": [
                       "http",
                       "gcs",
-                      "s3"
+                      "s3",
+                      "azure"
                     ],
                     "type": "string",
-                    "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+                    "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3\n* `azure` - Azure Blob Storage"
                   },
                   "name": {
                     "type": "string",
@@ -64545,7 +64839,7 @@
                   },
                   "prefix": {
                     "type": "string",
-                    "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP."
+                    "description": "The GCS, Azure or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS, Azure and S3 sources, invalid for HTTP."
                   },
                   "client_email": {
                     "type": "string",
@@ -64554,6 +64848,26 @@
                   "private_key": {
                     "type": "string",
                     "description": "The GCS private key. Required for GCS sources if not using impersonated tokens. Invalid for all others."
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "The Azure storage account name. Required for Azure sources, invalid for all others."
+                  },
+                  "container": {
+                    "type": "string",
+                    "description": "The Azure blob container name. Required for Azure sources, invalid for all others."
+                  },
+                  "tenant_id": {
+                    "type": "string",
+                    "description": "The Microsoft Entra tenant ID. Required for Azure sources, invalid for all others."
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "description": "The Microsoft Entra application (client) ID. Required for Azure sources, invalid for all others."
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "description": "The Microsoft Entra client secret. Required for Azure sources, invalid for all others."
                   }
                 },
                 "required": [
@@ -64955,6 +65269,142 @@
                         "bucket",
                         "client_email",
                         "private_key",
+                        "layout"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "azure"
+                          ]
+                        },
+                        "account": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9]{3,24}$"
+                        },
+                        "container": {
+                          "type": "string"
+                        },
+                        "tenant_id": {
+                          "type": "string"
+                        },
+                        "client_id": {
+                          "type": "string"
+                        },
+                        "client_secret": {
+                          "type": "object",
+                          "properties": {
+                            "hidden-secret": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            }
+                          }
+                        },
+                        "prefix": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "layout": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "native",
+                                "symstore",
+                                "symstore_index2",
+                                "ssqp",
+                                "unified",
+                                "debuginfod",
+                                "slashsymbols"
+                              ]
+                            },
+                            "casing": {
+                              "type": "string",
+                              "enum": [
+                                "lowercase",
+                                "uppercase",
+                                "default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "filters": {
+                          "type": "object",
+                          "properties": {
+                            "filetypes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "pe",
+                                  "pdb",
+                                  "portablepdb",
+                                  "mach_debug",
+                                  "mach_code",
+                                  "elf_debug",
+                                  "elf_code",
+                                  "wasm_debug",
+                                  "wasm_code",
+                                  "breakpad",
+                                  "sourcebundle",
+                                  "uuidmap",
+                                  "bcsymbolmap",
+                                  "il2cpp",
+                                  "proguard",
+                                  "dartsymbolmap"
+                                ]
+                              }
+                            },
+                            "path_patterns": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "requires_checksum": {
+                              "type": "boolean"
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "is_public": {
+                          "type": "boolean"
+                        },
+                        "has_index": {
+                          "type": "boolean"
+                        },
+                        "platforms": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id",
+                        "account",
+                        "container",
+                        "tenant_id",
+                        "client_id",
+                        "client_secret",
                         "layout"
                       ],
                       "additionalProperties": false
@@ -109726,10 +110176,11 @@
             "enum": [
               "http",
               "gcs",
-              "s3"
+              "s3",
+              "azure"
             ],
             "type": "string",
-            "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3"
+            "description": "The type of the source.\n\n* `http` - SymbolServer (HTTP)\n* `gcs` - Google Cloud Storage\n* `s3` - Amazon S3\n* `azure` - Azure Blob Storage"
           },
           "name": {
             "type": "string",
@@ -109867,7 +110318,7 @@
           },
           "prefix": {
             "type": "string",
-            "description": "The GCS or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS and S3 sourcse, invalid for HTTP."
+            "description": "The GCS, Azure or [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html) prefix. Optional for GCS, Azure and S3 sources, invalid for HTTP."
           },
           "client_email": {
             "type": "string",
@@ -109876,6 +110327,26 @@
           "private_key": {
             "type": "string",
             "description": "The GCS private key. Required for GCS sources if not using impersonated tokens. Invalid for all others."
+          },
+          "account": {
+            "type": "string",
+            "description": "The Azure storage account name. Required for Azure sources, invalid for all others."
+          },
+          "container": {
+            "type": "string",
+            "description": "The Azure blob container name. Required for Azure sources, invalid for all others."
+          },
+          "tenant_id": {
+            "type": "string",
+            "description": "The Microsoft Entra tenant ID. Required for Azure sources, invalid for all others."
+          },
+          "client_id": {
+            "type": "string",
+            "description": "The Microsoft Entra application (client) ID. Required for Azure sources, invalid for all others."
+          },
+          "client_secret": {
+            "type": "string",
+            "description": "The Microsoft Entra client secret. Required for Azure sources, invalid for all others."
           }
         },
         "required": [
