@@ -395,7 +395,7 @@ describe("paginateAll", () => {
       },
       "test",
     );
-    expect(items).toEqual([1, 2, 3, 4, 5]);
+    expect(items).toEqual({ data: [1, 2, 3, 4, 5], stopReason: "exhausted" });
   });
 
   test("stops at maxPages safety cap", async () => {
@@ -412,7 +412,7 @@ describe("paginateAll", () => {
       { maxPages: 3 },
     );
     expect(calls).toBe(3);
-    expect(items).toEqual([1, 2, 3]);
+    expect(items).toEqual({ data: [1, 2, 3], stopReason: "maxPages", nextCursor: "x" });
   });
 });
 
@@ -436,6 +436,7 @@ describe("paginateUpTo", () => {
     expect(result.data).toEqual([1, 2, 3, 4]);
     // Limit reached exactly: still has more pages, so nextCursor is preserved
     expect(result.nextCursor).toBe("next");
+    expect(result.stopReason).toBe("limit");
   });
 
   test("suppresses nextCursor when overshooting limit (correctness)", async () => {
@@ -456,35 +457,13 @@ describe("paginateUpTo", () => {
     expect(result.nextCursor).toBeUndefined();
   });
 
-  test("preserves nextCursor on overshoot when keepCursorOnOvershoot:true", async () => {
-    // For endpoints with no per_page control (e.g. /issues/{id}/events/),
-    // the trimmed-tail items are still reachable via the same cursor on
-    // the next call. keepCursorOnOvershoot:true preserves access to them.
+  test("reports a partial result when the final server page overshoots", async () => {
     const result = await paginateUpTo<number>(
-      () =>
-        Promise.resolve(
-          mkSuccess(
-            [1, 2, 3, 4, 5],
-            '<u>; rel="next"; results="true"; cursor="reachable"',
-          ),
-        ),
-      { limit: 3, keepCursorOnOvershoot: true },
+      () => Promise.resolve(mkSuccess([1, 2, 3, 4, 5])),
+      { limit: 3 },
       "test",
     );
-    expect(result.data).toEqual([1, 2, 3]);
-    expect(result.nextCursor).toBe("reachable");
-  });
-
-  test("keepCursorOnOvershoot is a no-op when there's no nextCursor to preserve", async () => {
-    // Last page, overshoot, no next cursor in the API response — there's
-    // nothing to preserve, so the result is identical to the default path.
-    const result = await paginateUpTo<number>(
-      () => Promise.resolve(mkSuccess([1, 2, 3, 4, 5])), // no link header
-      { limit: 3, keepCursorOnOvershoot: true },
-      "test",
-    );
-    expect(result.data).toEqual([1, 2, 3]);
-    expect(result.nextCursor).toBeUndefined();
+    expect(result).toEqual({ data: [1, 2, 3], stopReason: "limit" });
   });
 
   test("invokes onPage callback after each page", async () => {
@@ -534,7 +513,7 @@ describe("paginateUpTo", () => {
     expect(cursorsSeen).toEqual(["resume-here", "server-side"]);
   });
 
-  test("drops nextCursor when maxPages cap fires before limit is reached", async () => {
+  test("keeps a safe nextCursor when maxPages cap fires before limit is reached", async () => {
     let calls = 0;
     const result = await paginateUpTo<number>(
       () => {
@@ -547,8 +526,7 @@ describe("paginateUpTo", () => {
       "test",
     );
     expect(calls).toBe(2);
-    expect(result.data).toEqual([1, 2]);
-    expect(result.nextCursor).toBeUndefined();
+    expect(result).toEqual({ data: [1, 2], stopReason: "maxPages", nextCursor: "more" });
   });
 
   test("rejects limit < 1", async () => {
@@ -559,6 +537,50 @@ describe("paginateUpTo", () => {
         "test",
       ),
     ).rejects.toThrow(/limit/);
+  });
+});
+
+describe("collection budgets", () => {
+  test.each([
+    { items: [1, 2], next: undefined, limit: 3, reason: "exhausted", cursor: undefined },
+    { items: [1, 2], next: undefined, limit: 2, reason: "exhausted", cursor: undefined },
+    { items: [1, 2], next: "next", limit: 2, reason: "limit", cursor: "next" },
+    { items: [1, 2], next: "next", limit: 3, reason: "maxPages", cursor: "next" },
+    { items: [1, 2, 3], next: undefined, limit: 2, reason: "limit", cursor: undefined },
+  ])("reports $reason at an item/request boundary ($items, $next, $limit)", async ({ items, next, limit, reason, cursor }) => {
+    const result = await paginateUpTo(
+      () => Promise.resolve(mkSuccess([...items], next ? `<u>; rel="next"; results="true"; cursor="${next}"` : undefined)),
+      { limit, maxPages: 1 },
+      "test",
+    );
+    expect(result.data).toEqual(items.slice(0, limit));
+    expect(result.stopReason).toBe(reason);
+    expect(result.nextCursor).toBe(cursor);
+  });
+
+  test("passes the remaining budget and continues after an empty page with a next cursor", async () => {
+    const seen: Array<[string | undefined, number]> = [];
+    const result = await paginateUpTo<number>(
+      (cursor, remaining) => {
+        seen.push([cursor, remaining]);
+        const items = cursor === "empty" ? [] : cursor === "last" ? [3] : [1, 2];
+        const next = cursor === "last" ? undefined : cursor === "empty" ? "last" : "empty";
+        return Promise.resolve(mkSuccess([...items], next ? `<u>; rel="next"; results="true"; cursor="${next}"` : undefined));
+      },
+      { limit: 3 },
+      "test",
+    );
+    expect(seen).toEqual([[undefined, 3], ["empty", 1], ["last", 1]]);
+    expect(result).toEqual({ data: [1, 2, 3], stopReason: "exhausted" });
+  });
+
+  test.each([0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1])("rejects invalid budget %s before fetching", async value => {
+    let fetched = false;
+    const fetcher = async () => { fetched = true; return mkSuccess([]); };
+    await expect(paginateUpTo(fetcher, { limit: value }, "test")).rejects.toThrow(/limit/);
+    await expect(paginateUpTo(fetcher, { limit: 1, maxPages: value }, "test")).rejects.toThrow(/maxPages/);
+    await expect(paginateAll(fetcher, "test", { maxPages: value })).rejects.toThrow(/maxPages/);
+    expect(fetched).toBe(false);
   });
 });
 

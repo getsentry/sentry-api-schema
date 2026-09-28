@@ -107,7 +107,7 @@ describe("configured pagination methods", () => {
     ]);
     const standalone = await fetchPage_listOrganizations({ client: first.client });
 
-    expect(items.map(item => item.slug)).toEqual(["first", "second"]);
+    expect(items.data.map(item => item.slug)).toEqual(["first", "second"]);
     expect(batch.data.map(item => item.slug)).toEqual(["second"]);
     expect(batch.nextCursor).toBeUndefined();
     expect(standalone.data.map(item => item.slug)).toEqual(["first"]);

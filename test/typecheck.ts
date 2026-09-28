@@ -90,8 +90,8 @@ async function paginateAllHappyPath() {
     path: { organization_id_or_slug: "my-org" },
     query: { limit: 100 },
   });
-  // Return type is the array directly, not a wrapper
-  items.length;
+  items.data.length;
+  items.stopReason;
 }
 
 async function paginateUpToHappyPath() {
@@ -151,27 +151,18 @@ async function perPageAcceptedEvenWhenSpecOmitsIt() {
 }
 
 // =====================================================================
-// keepCursorOnOvershoot — opt-in option for endpoints with no per_page
+// Removed unsafe cursor override
 // =====================================================================
 
-async function paginateUpToKeepCursorOnOvershoot() {
-  // For /issues/{id}/events/ (and any endpoint with no server-side
-  // per_page), passing keepCursorOnOvershoot:true preserves access to
-  // trimmed-tail items via the same cursor on the next call.
-  const result = await paginateUpTo_listOrganizationIssues(
-    {
-      ...config,
-      path: { organization_id_or_slug: "my-org" },
-    },
+async function rejectsUnsafeCursorOverride() {
+  await paginateUpTo_listOrganizationIssues(
+    { ...config, path: { organization_id_or_slug: "my-org" } },
     {
       limit: 250,
+      // @ts-expect-error A cursor must not skip discarded rows.
       keepCursorOnOvershoot: true,
     },
   );
-  void result.data;
-  if (result.nextCursor) {
-    const _: string = result.nextCursor;
-  }
 }
 
 void fetchPageHappyPath;
@@ -181,7 +172,7 @@ void paginateAllHappyPath;
 void paginateUpToHappyPath;
 void fetchPageCompoundOp;
 void perPageAcceptedEvenWhenSpecOmitsIt;
-void paginateUpToKeepCursorOnOvershoot;
+void rejectsUnsafeCursorOverride;
 
 // =====================================================================
 // narrowError — status-discriminated, non-throwing error handling
