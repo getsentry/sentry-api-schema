@@ -1,5 +1,5 @@
 /** Public-package pagination type contracts; never executed. */
-import { type SentryClient } from "@sentry/api";
+import { type PaginatedCollection, type SentryClient } from "@sentry/api";
 import type * as pagination from "../src/pagination.gen";
 
 type Kind = "fetchPage" | "paginateAll" | "paginateUpTo";
@@ -55,9 +55,13 @@ async function collectionTypes(sentry: SentryClient) {
     limit: 250,
     startCursor: "opaque:0:0",
   });
-  const slug: string | undefined = all[0]?.slug;
+  const slug: string | undefined = all.data[0]?.slug;
   const batchSlug: string | undefined = batch.data[0]?.slug;
-  void [slug, batchSlug];
+  const reason: "exhausted" | "limit" | "maxPages" = batch.stopReason;
+  const typed: PaginatedCollection<{ slug: string }> = all;
+  void [slug, batchSlug, reason, typed];
+  // @ts-expect-error Collections now expose their items through data.
+  all.map(item => item.slug);
 
   // @ts-expect-error Bounded collection requires a budget.
   await sentry.paginateUpTo.listOrganizationProjects(options);

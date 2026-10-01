@@ -23,9 +23,19 @@ export type PaginatedResponse<T> = {
   prevCursor?: string;
 };
 
+/** Aggregate data has no single HTTP response. Only `exhausted` means complete. */
+export type PaginatedCollection<TItem> = {
+  data: Array<TItem>;
+  stopReason: "exhausted" | "limit" | "maxPages";
+  /** Omitted when exhausted or when trimming a page makes continuation unsafe. */
+  nextCursor?: string;
+};
+
 export type PaginateAllOptions = {
   /** Hard cap on the number of pages fetched. Default: 50. */
   maxPages?: number;
+  /** Resume from a previous nextCursor, keeping the same filters and page size. */
+  startCursor?: string;
 };
 
 export type PaginateUpToOptions = {
@@ -33,30 +43,27 @@ export type PaginateUpToOptions = {
   limit: number;
   /** Safety cap on the number of pages fetched. Default: 50. */
   maxPages?: number;
-  /** Resume pagination from this cursor instead of starting from the beginning. */
+  /** Resume forward traversal from a previous nextCursor, keeping the same query. */
   startCursor?: string;
   /** Called after each page is fetched. Useful for progress indicators. */
   onPage?: (fetched: number, limit: number) => void;
-  /**
-   * When true, preserve `nextCursor` even when the last page was trimmed
-   * to fit `limit`. Default: false (the safe default — see body comment).
-   *
-   * Use this only for endpoints that have **no** server-side per-page
-   * control (so the trimmed tail items remain reachable via the same
-   * cursor on the next call). Sentry's `/issues/{id}/events/` is one
-   * such endpoint: it has no `per_page` param, so dropping the cursor
-   * on overshoot would orphan the items the helper trimmed.
-   *
-   * For endpoints that DO support `per_page` / `limit`, leave this
-   * `false` — returning a cursor that points past trimmed items would
-   * cause callers resuming pagination to skip records.
-   */
-  keepCursorOnOvershoot?: boolean;
 };
 
 export type PageFetcher<TData, TError> = (
   cursor: string | undefined,
 ) => Promise<SdkResult<TData, TError>>;
+
+/** The remaining item budget lets a custom fetcher reduce its HTTP page size. */
+export type BudgetedPageFetcher<TData, TError> = (
+  cursor: string | undefined,
+  remaining: number,
+) => Promise<SdkResult<TData, TError>>;
+
+function assertPositiveInteger(value: unknown, name: string): asserts value is number {
+  if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 1) {
+    throw new Error(`${name} must be a positive safe integer, got ${value}`);
+  }
+}
 
 /**
  * Parse Sentry's Link header to extract pagination cursors.
@@ -127,7 +134,7 @@ export const parseSentryLinkHeader = (
 };
 
 /**
- * Internal: merge a managed `cursor` into an SDK call's `options.query`
+ * Internal: merge a managed cursor and verified page-size budget into `options.query`
  * and re-shape the result back to the SDK's `Options<TData>` type.
  *
  * Used exclusively by the auto-generated wrappers in `pagination.gen.ts`
@@ -149,15 +156,24 @@ export const parseSentryLinkHeader = (
 export const _withCursor = <TOptions>(
   options: { query?: unknown; [k: string]: unknown },
   cursor: string | undefined,
+  pageSize?: { parameter: "per_page" | "limit"; max: number; remaining: number },
 ): TOptions => {
-  if (options.query === undefined && cursor === undefined) {
+  const query = options.query as Record<string, unknown> | undefined;
+  let size: number | undefined;
+  if (pageSize !== undefined) {
+    const requested = query?.[pageSize.parameter] ?? pageSize.max;
+    assertPositiveInteger(requested, `pagination: ${pageSize.parameter}`);
+    size = Math.min(requested, pageSize.max, pageSize.remaining);
+  }
+  if (query === undefined && cursor === undefined && pageSize === undefined) {
     return options as unknown as TOptions;
   }
   return {
     ...options,
     query: {
-      ...(options.query as Record<string, unknown> | undefined),
+      ...query,
       ...(cursor !== undefined ? { cursor } : undefined),
+      ...(pageSize !== undefined ? { [pageSize.parameter]: size } : undefined),
     },
   } as unknown as TOptions;
 };
@@ -245,117 +261,70 @@ export const fetchPage = async <TData, TError = unknown>(
 };
 
 /**
- * Automatically paginate through all pages of a Sentry list endpoint.
- *
- * Fetches pages sequentially until there is no next cursor or
- * `maxPages` is reached (default: 50). Returns all items concatenated.
- *
- * @example
- * ```ts
- * const allRepos = await paginateAll(
- *   (cursor) => listAnOrganization_sRepositories({
- *     path: { organization_id_or_slug: 'my-org' },
- *     query: { cursor },
- *   }),
- *   'listRepos',
- * );
- * ```
+ * Collect pages until the collection is exhausted or `maxPages` is reached.
+ * A request cap returns `stopReason: "maxPages"` and a safe resume cursor.
  */
 export const paginateAll = async <TItem, TError = unknown>(
   fetcher: PageFetcher<Array<TItem>, TError>,
   context: string,
   options?: PaginateAllOptions,
-): Promise<Array<TItem>> => {
+): Promise<PaginatedCollection<TItem>> => {
   const maxPages = options?.maxPages ?? 50;
+  assertPositiveInteger(maxPages, "paginateAll: maxPages");
   const allItems: Array<TItem> = [];
-  let cursor: string | undefined;
+  let cursor = options?.startCursor;
 
   for (let page = 0; page < maxPages; page++) {
     const result = await fetcher(cursor);
     const { data, nextCursor } = unwrapPaginatedResult(result, context);
     allItems.push(...data);
 
-    if (!nextCursor) {
-      break;
+    if (nextCursor === undefined) {
+      return { data: allItems, stopReason: "exhausted" };
     }
     cursor = nextCursor;
   }
 
-  return allItems;
+  return { data: allItems, stopReason: "maxPages", nextCursor: cursor };
 };
 
 /**
- * Paginate up to a hard limit of items, suppressing the next-cursor
- * if the last fetched page had to be trimmed to fit.
+ * Collect up to `limit` items, passing the remaining budget to the fetcher.
+ * Generated wrappers use it to reduce supported HTTP page sizes.
  *
- * The trim-and-suppress behavior is intentional: returning a cursor
- * that points past the trimmed items would cause callers resuming
- * pagination to skip records. When the requested limit is reached
- * mid-page, no `nextCursor` is returned and the caller should treat
- * the result as the final page they're going to fetch.
- *
- * @example
- * ```ts
- * // Fetch up to 250 issues, in pages of 100 (Sentry's API max)
- * const { data, nextCursor } = await paginateUpTo(
- *   (cursor) => listAnOrganization_sIssues({
- *     path: { organization_id_or_slug: 'my-org' },
- *     query: { cursor, limit: 100 },
- *   }),
- *   { limit: 250 },
- *   'listIssues',
- * );
- * ```
+ * If a server still returns more items than fit, trim the page and omit its
+ * cursor: resuming past discarded items would skip records. Such a result
+ * has `stopReason: "limit"`, even if the server has no further pages.
  */
 export const paginateUpTo = async <TItem, TError = unknown>(
-  fetcher: PageFetcher<Array<TItem>, TError>,
+  fetcher: BudgetedPageFetcher<Array<TItem>, TError>,
   options: PaginateUpToOptions,
   context: string,
-): Promise<{ data: Array<TItem>; nextCursor?: string }> => {
-  if (options.limit < 1) {
-    throw new Error(
-      `paginateUpTo: limit must be at least 1, got ${options.limit}`,
-    );
-  }
-
+): Promise<PaginatedCollection<TItem>> => {
+  assertPositiveInteger(options.limit, "paginateUpTo: limit");
   const maxPages = options.maxPages ?? 50;
+  assertPositiveInteger(maxPages, "paginateUpTo: maxPages");
   const allItems: Array<TItem> = [];
-  let cursor: string | undefined = options.startCursor;
+  let cursor = options.startCursor;
 
   for (let page = 0; page < maxPages; page++) {
-    const result = await fetcher(cursor);
+    const remaining = options.limit - allItems.length;
+    const result = await fetcher(cursor, remaining);
     const { data, nextCursor } = unwrapPaginatedResult(result, context);
-    allItems.push(...data);
+    allItems.push(...data.slice(0, remaining));
+    options.onPage?.(allItems.length, options.limit);
 
-    options.onPage?.(Math.min(allItems.length, options.limit), options.limit);
-
-    if (allItems.length >= options.limit || !nextCursor) {
-      // If we overshot the limit, trim. The cursor handling depends on
-      // `keepCursorOnOvershoot`:
-      //   - default (`false`): drop the cursor — returning one that points
-      //     past the trimmed items causes callers resuming pagination to
-      //     skip records. Safe for endpoints with `per_page` / `limit`
-      //     control where the caller can avoid overshoot in the first place.
-      //   - `true`: preserve the cursor — required for endpoints with no
-      //     server-side page-size control, where the trimmed tail items
-      //     are still reachable via the same cursor on the next call
-      //     (e.g. Sentry's `/issues/{id}/events/`).
-      if (allItems.length > options.limit) {
-        const trimmed = allItems.slice(0, options.limit);
-        if (options.keepCursorOnOvershoot && nextCursor !== undefined) {
-          return { data: trimmed, nextCursor };
-        }
-        return { data: trimmed };
-      }
-      const out: { data: Array<TItem>; nextCursor?: string } = { data: allItems };
-      if (nextCursor !== undefined) out.nextCursor = nextCursor;
-      return out;
+    if (data.length > remaining) {
+      return { data: allItems, stopReason: "limit" };
     }
-
+    if (nextCursor === undefined) {
+      return { data: allItems, stopReason: "exhausted" };
+    }
+    if (allItems.length === options.limit) {
+      return { data: allItems, stopReason: "limit", nextCursor };
+    }
     cursor = nextCursor;
   }
 
-  // Safety cap reached — return what we have, no nextCursor (resuming
-  // would re-fetch already-returned pages, which is worse than stopping).
-  return { data: allItems.slice(0, options.limit) };
+  return { data: allItems, stopReason: "maxPages", nextCursor: cursor };
 };

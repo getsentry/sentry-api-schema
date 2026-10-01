@@ -211,11 +211,31 @@ const isArrayResponse = (typeBase) => {
 // 4. Cross-reference SDK ops with paginated routes
 // =====================================================================
 
+// Page-size parameters alone do not prove that resizing is safe. OffsetPaginator
+// encodes the old page size in its cursor; changing it can skip rows. Keep this
+// allow-list limited to audited operations using size-independent cursors.
+// Audited at getsentry/sentry@75213f15f7b3604333a5aee469578afad4cb7630.
+// Backend: sentry/api/helpers/group_index/index.py (limit parsing),
+// sentry/search/snuba/executors.py (issue cursors), and
+// sentry/issues/endpoints/group_events.py (GenericOffsetPaginator, full cap).
+const resizablePages = new Map([
+  ["GET /api/0/organizations/{organization_id_or_slug}/issues/", { parameter: "limit", max: 100 }],
+  ["GET /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/", { parameter: "limit", max: 100 }],
+  ["GET /api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/", { parameter: "per_page", max: 100, fullMax: 10 }],
+]);
+
+for (const [route, sizing] of resizablePages) {
+  const operation = paginatedRoutes.get(route);
+  if (!operation?.parameters?.some(p => p.in === "query" && p.name === sizing.parameter && p.schema?.type === "integer")) {
+    throw new Error(`Pagination sizing metadata no longer matches the schema: ${route}`);
+  }
+}
+
 const targets = sdkOps
   .filter((op) =>
     paginatedRoutes.has(`${op.method.toUpperCase()} ${op.url}`),
   )
-  .map((op) => ({ ...op, isArray: isArrayResponse(op.typeBase) }))
+  .map((op) => ({ ...op, isArray: isArrayResponse(op.typeBase), sizing: resizablePages.get(`${op.method.toUpperCase()} ${op.url}`) }))
   .sort((a, b) => a.fn.localeCompare(b.fn));
 
 if (targets.length === 0) {
@@ -238,8 +258,8 @@ if (targets.length === 0) {
  *
  * Type-system contract:
  *   - User-facing query type strips `cursor` (helper-managed) and widens
- *     with `per_page?: number` (runtime-supported on every paginated route,
- *     even when the spec omits it).
+ *     with the legacy `per_page?: number` escape hatch. Accepting this field
+ *     does not imply that every endpoint honors it or supports resizing.
  *   - SDK call uses the `_withCursor` runtime helper to merge in the
  *     managed cursor and reshape back to `Options<TData>`. The cast chain
  *     lives once in `_withCursor`, not per-wrapper.
@@ -252,10 +272,8 @@ if (targets.length === 0) {
  * shadow the helper-managed value. Surfacing a clear "use the helper's
  * cursor argument" type error is far safer.
  *
- * Why widen with `per_page`? Sentry's pagination framework accepts it on
- * every cursor-paginated route at runtime, but the OpenAPI spec only
- * declares it on a few. Optional widening lets callers pass it without an
- * `as` cast while keeping documented params strongly typed.
+ * `per_page` widening remains for compatibility; only audited operations
+ * receive automatic sizing. Undocumented parameters remain caller-owned.
  */
 
 const userOptionsType = (op) =>
@@ -272,8 +290,12 @@ const item200 = (op) => `${op.typeBase}Responses[200]`;
  * `SdkResult<…>` discriminated union — must stay per-wrapper because the
  * `data` and `Promise` types are operation-specific.
  */
-const sdkCallExpr = (op, cursorIdent) =>
-  `${op.fn}(_withCursor<Options<${op.typeBase}Data>>(options, ${cursorIdent})) as unknown as Promise<{ data: ${item200(op)}; error: undefined; request: Request; response: Response }>`;
+const sdkCallExpr = (op, cursorIdent, remaining) => {
+  const sizing = remaining && op.sizing;
+  const max = sizing?.fullMax ? `(options.query?.full ? ${sizing.fullMax} : ${sizing.max})` : sizing?.max;
+  const budget = sizing ? `, { parameter: '${sizing.parameter}', max: ${max}, remaining: ${remaining} }` : "";
+  return `${op.fn}(_withCursor<Options<${op.typeBase}Data>>(options, ${cursorIdent}${budget})) as unknown as Promise<{ data: ${item200(op)}; error: undefined; request: Request; response: Response }>`;
+};
 
 const emitFetchPage = (op) => [
   `/** Fetch a single page of \`${op.fn}\` with cursors from the Link header. */`,
@@ -294,12 +316,12 @@ const emitPaginateAll = (op) => [
   `export const paginateAll_${op.fn} = (`,
   `    options: ${userOptionsType(op)},`,
   `    paginateOptions?: PaginateAllOptions,`,
-  `): Promise<${item200(op)}> =>`,
+  `): Promise<PaginatedCollection<${item200(op)}[number]>> =>`,
   `    paginateAll<${item200(op)}[number]>(`,
   `        (c) => ${sdkCallExpr(op, "c")},`,
   `        '${op.fn}',`,
   `        paginateOptions,`,
-  `    ) as Promise<${item200(op)}>;`,
+  `    );`,
   ``,
 ];
 
@@ -308,12 +330,12 @@ const emitPaginateUpTo = (op) => [
   `export const paginateUpTo_${op.fn} = (`,
   `    options: ${userOptionsType(op)},`,
   `    paginateOptions: PaginateUpToOptions,`,
-  `): Promise<{ data: ${item200(op)}; nextCursor?: string }> =>`,
+  `): Promise<PaginatedCollection<${item200(op)}[number]>> =>`,
   `    paginateUpTo<${item200(op)}[number]>(`,
-  `        (c) => ${sdkCallExpr(op, "c")},`,
+  `        (${op.sizing ? "c, remaining" : "c"}) => ${sdkCallExpr(op, "c", "remaining")},`,
   `        paginateOptions,`,
   `        '${op.fn}',`,
-  `    ) as Promise<{ data: ${item200(op)}; nextCursor?: string }>;`,
+  `    );`,
   ``,
 ];
 
@@ -347,18 +369,15 @@ const lines = [
   `    type PaginateAllOptions,`,
   `    type PaginateUpToOptions,`,
   `    type PaginatedResponse,`,
+  `    type PaginatedCollection,`,
   `} from './sentry-pagination';`,
   ``,
   `/**`,
   ` * Strip \`cursor\` from a query type (the wrapper manages the cursor)`,
-  ` * and widen with \`per_page\`, which Sentry's API accepts on every`,
-  ` * cursor-paginated route at runtime even when the OpenAPI spec`,
-  ` * omits it. The widening is opt-in (the field is optional), so`,
-  ` * documented query params remain strongly typed and undocumented`,
-  ` * \`per_page\` becomes addressable without forcing every caller into`,
-  ` * an \`as\` cast.`,
+  ` * and retain the legacy optional \`per_page\` escape hatch.`,
+  ` * Only audited operations receive automatic remaining-budget sizing.`,
   ` */`,
-  `type PaginationQuery<TQuery> = TQuery extends undefined`,
+  `type PaginationQuery<TQuery> = [TQuery] extends [undefined]`,
   `    ? { per_page?: number }`,
   `    : Omit<NonNullable<TQuery>, 'cursor'> & { per_page?: number };`,
   ``,

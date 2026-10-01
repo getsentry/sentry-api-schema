@@ -86,7 +86,7 @@ async function standaloneInteroperability(sentry: SentryClient) {
   const named = await listOrganizations({ client: sentry.client, throwOnError: true });
   const paginated = await paginateAll_listOrganizations({ client: sentry.client });
   const first: string | undefined = named.data[0]?.slug;
-  const second: string | undefined = paginated[0]?.slug;
+  const second: string | undefined = paginated.data[0]?.slug;
   void [first, second];
 }
 

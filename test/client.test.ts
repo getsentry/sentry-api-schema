@@ -215,7 +215,7 @@ describe("configured operation methods", () => {
     });
 
     expect(named.data?.map(organization => organization.slug)).toEqual(["first"]);
-    expect(all.map(organization => organization.slug)).toEqual(["first", "second"]);
+    expect(all.data.map(organization => organization.slug)).toEqual(["first", "second"]);
     expect(narrowed.ok).toBe(false);
     if (!narrowed.ok) {
       expect(narrowed.error).toBeInstanceOf(SentryApiError);

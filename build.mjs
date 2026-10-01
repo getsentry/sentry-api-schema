@@ -58,7 +58,7 @@ appendFileSync(
     "export { callWithTypedErrors, narrowError, SentryApiError } from './sentry-errors.ts';",
     "export type { DocumentedSentryApiError, NarrowedResult, SentryApiResultError, SentryApiTransportError, SdkResult, UndocumentedSentryApiError } from './sentry-errors.ts';",
     "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
-    "export type { UnwrappedResult, PaginatedResponse, PaginateAllOptions, PaginateUpToOptions, PageFetcher } from './sentry-pagination.ts';",
+    "export type { UnwrappedResult, PaginatedResponse, PaginatedCollection, PaginateAllOptions, PaginateUpToOptions, PageFetcher, BudgetedPageFetcher } from './sentry-pagination.ts';",
     "export * from './error-results.gen.ts';",
     "export * from './pagination.gen.ts';",
     "export { createSentryClient } from './sentry-client.gen.ts';",

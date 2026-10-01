@@ -151,8 +151,8 @@ Sentry uses cursor-based pagination via `Link` headers. Choose one of three help
 | Task | Method | Result |
 | --- | --- | --- |
 | Display one page, with previous/next navigation | `sentry.fetchPage.<operation>(options, cursor?)` | `{ data, response, nextCursor?, prevCursor? }` |
-| Collect up to an item limit | `sentry.paginateUpTo.<operation>(options, { limit, ... })` | `{ data, nextCursor? }` |
-| Explicitly collect pages eagerly | `sentry.paginateAll.<operation>(options, { maxPages? }?)` | Concatenated array; stops at `maxPages` (default 50) |
+| Collect up to an item limit | `sentry.paginateUpTo.<operation>(options, { limit, ... })` | `{ data, stopReason, nextCursor? }` |
+| Explicitly collect pages eagerly | `sentry.paginateAll.<operation>(options, { maxPages?, startCursor? }?)` | `{ data, stopReason, nextCursor? }` |
 
 `fetchPage` is available for operations whose schema declares a `cursor` query parameter. Collection helpers are available only when the operation's 200 response is an array. Compound response bodies remain intact. Ordinary operation methods such as `sentry.listOrganizations()` still make just one request.
 
@@ -182,35 +182,67 @@ Each page preserves its own raw `Response`, including status and headers. The tr
 ### Bounded collection
 
 ```ts
-const batch = await sentry.paginateUpTo.listOrganizationProjects(
-  {
-    path: { organization_id_or_slug: "my-org" },
-    query: { per_page: 50 },
-  },
-  { limit: 250 },
-);
+const options = { path: { organization_id_or_slug: "my-org" } };
+const batch = await sentry.paginateUpTo.listOrganizationIssues(options, {
+  limit: 250,
+  maxPages: 5,
+});
+// Requests 100 + 100 + 50 when the server returns full pages.
+console.log(batch.data, batch.stopReason);
 
-console.log(batch.data, batch.nextCursor);
+if (batch.nextCursor !== undefined) {
+  const next = await sentry.paginateUpTo.listOrganizationIssues(options, {
+    limit: 250,
+    startCursor: batch.nextCursor,
+  });
+}
 ```
 
-The total item limit and the HTTP page size are separate. Currently the helper uses the same requested page size for each request. If the last page overshoots the item limit, it trims the data and suppresses `nextCursor` by default to avoid skipping the discarded rows. The example uses 50-item HTTP pages for a 250-item budget.
+Automatic sizing is deliberately limited to operations whose forward cursors have been verified to support changing page size:
 
-### Eager collection
+| Operation | HTTP size parameter | Maximum per request |
+| --- | --- | --- |
+| `listOrganizationIssues`, `listProjectIssues` | `limit` | 100 |
+| `listOrganizationIssueEvents` | `per_page` | 100; 10 with `full: true` |
+
+Each request uses the smallest of the remaining item budget, the caller's requested page size (if supplied), and the verified maximum. Other operations retain their query options unchanged. In particular, **projects do not use 100 + 100 + 50**: their backend `OffsetPaginator` includes the page size in its cursor, and resizing mid-traversal can skip rows. Declaring `per_page` in the schema is not enough to enable resizing.
+
+If a server ignores the size or an operation cannot be resized, the helper trims any excess rows and omits the unsafe cursor. It reports `stopReason: "limit"`, even if that was the server's last page. Use `fetchPage` when every row and each page's headers must be retained.
+
+### Eager collection and completion
 
 ```ts
 const projects = await sentry.paginateAll.listOrganizationProjects(
   { path: { organization_id_or_slug: "my-org" } },
   { maxPages: 50 },
 );
+console.log(projects.data, projects.stopReason);
+// If stopReason is "maxPages", projects.nextCursor resumes traversal.
 ```
 
-Collection results do not expose a single `response`: their data can come from several HTTP requests. Use `fetchPage` when you need each page's headers or incremental loading.
+Both collection helpers return `PaginatedCollection<TItem>`:
 
-### Current collection limits
+| `stopReason` | Meaning | `nextCursor` |
+| --- | --- | --- |
+| `"exhausted"` | All fetched rows were returned and the server advertises no next page | Absent |
+| `"limit"` | The item budget stopped collection | Present only when no rows were discarded |
+| `"maxPages"` | The request cap stopped collection while more pages exist | Present |
 
-The bound methods preserve the existing helpers' behavior. `paginateAll` can return an incomplete array when it reaches `maxPages`, without identifying that condition. `paginateUpTo` also drops `nextCursor` when that cap is reached, so its absence does not prove the collection is exhausted. Use explicit page traversal when you need reliable exhaustion detection today.
+Only `stopReason === "exhausted"` means complete. If the final server page exactly fills the item budget, exhaustion takes precedence. A missing cursor alone does not mean complete.
 
-Operation-aware page sizing and explicit completion/continuation metadata are tracked in [#99](https://github.com/getsentry/sentry-api-schema/issues/99). Frontend query adapters and CLI navigation integration are also follow-up work. The existing `keepCursorOnOvershoot` escape hatch remains available for compatibility; its safety depends on the endpoint's cursor semantics.
+`maxPages` defaults to 50 for both helpers. `limit` and `maxPages` must be positive safe integers. Resume forward from a returned `nextCursor`, keeping the same operation, filters, and page-size options; cursors stay opaque. SDK calls do not retain a history or snapshot the collection against concurrent server changes. Errors and cancellation reject the collection call, including after earlier pages succeeded.
+
+Collection results have no single `response`: their data may come from several HTTP requests. Frontend tables and infinite queries can keep using `fetchPage` with their own URL/cache state. CLI history, MCP output budgets, and TanStack adapters remain consumer integrations tracked in [#99](https://github.com/getsentry/sentry-api-schema/issues/99).
+
+### Migration from earlier 0.x helpers
+
+```ts
+// Before: const projects = await sentry.paginateAll.listOrganizationProjects(options);
+const { data: projects, stopReason, nextCursor } =
+  await sentry.paginateAll.listOrganizationProjects(options);
+```
+
+`paginateAll` now returns a collection object instead of an array, for bound, standalone, and generic helpers. `paginateUpTo` adds `stopReason` and preserves safe continuation at `maxPages`. The unsafe `keepCursorOnOvershoot` option has been removed; no cursor may skip discarded rows. Invalid item/request budgets now reject before fetching.
 
 ### Standalone pagination
 
@@ -236,6 +268,8 @@ The same low-level helpers used by the generated wrappers are also exported for 
 - `unwrapResult(sdkResult, context)` — throw-on-error data unwrap
 - `unwrapPaginatedResult(sdkResult, context)` — same but with cursors
 - `fetchPage`, `paginateAll`, `paginateUpTo` — generic versions taking a fetcher thunk
+
+A generic `paginateUpTo` fetcher receives `(cursor, remaining)`. Existing cursor-only fetchers still work; use `remaining` only when your endpoint's cursor supports resizing. The generated wrappers apply the verified rules above for you.
 
 ## Schema source
 
