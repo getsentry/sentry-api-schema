@@ -11828,6 +11828,276 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/events-dropped/": {
+      "get": {
+        "operationId": "listOrganizationEventsDropped",
+        "description": "**Experimental:** This API is under active development and may change.\n\nReturn the events Sentry received but dropped (rate limited, filtered,\ninvalid, abuse, client discarded, cardinality limited) bucketed over the\nrequested interval, alongside the accepted volume per bucket so a caller\ncan compute the dropped share.\n\nSelect the dropped-data type with ``dataset`` and the bucket size with\n``interval``. Optionally scope the dropped side to one classification with\n``outcome`` (top-level) and/or ``reason`` (sub-classification within an\noutcome); the accepted volume is always returned in full.",
+        "summary": "Query Dropped Events",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "dataset",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "errors",
+                "logs",
+                "profile_functions",
+                "spans",
+                "tracemetrics",
+                "uptime_results"
+              ]
+            },
+            "description": "Which dataset to query. The chosen dataset determines which fields are queryable.\n- `errors` - Error events.\n- `logs` - Structured log events.\n- `profile_functions` - Function-level Profiling data.\n- `spans` - Distributed tracing span events.\n- `tracemetrics` - Application Metrics.\n- `uptime_results` - Uptime monitoring check results.\n",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of environments to filter by."
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "description": "The IDs or slugs of projects to filter by. Project slugs are unique within each organization. Omit this parameter to include all accessible projects. `-1` is also accepted to include all accessible projects.\nFor example, the following are valid parameters:\n- `/?project=1234&project=56789`\n- `/?project=android&project=javascript-react`\n- `/?project=-1`\n"
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The size of the bucket for the timeseries to have, must be a value smaller than the window being\nqueried. If the interval is invalid a default interval will be selected instead"
+          },
+          {
+            "in": "query",
+            "name": "outcome",
+            "schema": {
+              "enum": [
+                "filtered",
+                "rate_limited",
+                "invalid",
+                "abuse",
+                "client_discard",
+                "cardinality_limited"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Narrow the dropped events (only) to a single top-level drop classification (e.g. `rate_limited`, `filtered`).\n\n* `filtered`\n* `rate_limited`\n* `invalid`\n* `abuse`\n* `client_discard`\n* `cardinality_limited`"
+          },
+          {
+            "in": "query",
+            "name": "reason",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Narrow the dropped events to a single reason, the sub-classification within an outcome (e.g. `spike_protection` within `rate_limited`). Should be combined with `outcome`."
+          }
+        ],
+        "tags": [
+          "Explore"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "dataset": {
+                          "type": "string"
+                        },
+                        "start": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "end": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "interval": {
+                          "type": "number",
+                          "format": "double"
+                        }
+                      },
+                      "required": [
+                        "dataset",
+                        "end",
+                        "interval",
+                        "start"
+                      ]
+                    },
+                    "droppedEvents": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "category": {
+                            "type": "string"
+                          },
+                          "outcome": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          },
+                          "start": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "end": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "count": {
+                            "type": "number",
+                            "format": "double"
+                          }
+                        },
+                        "required": [
+                          "category",
+                          "count",
+                          "end",
+                          "outcome",
+                          "reason",
+                          "start",
+                          "type"
+                        ]
+                      }
+                    },
+                    "acceptedEvents": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "category": {
+                            "type": "string"
+                          },
+                          "outcome": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          },
+                          "start": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "end": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "count": {
+                            "type": "number",
+                            "format": "double"
+                          }
+                        },
+                        "required": [
+                          "category",
+                          "count",
+                          "end",
+                          "outcome",
+                          "reason",
+                          "start",
+                          "type"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "acceptedEvents",
+                    "droppedEvents",
+                    "meta"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Invalid Query"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/events-timeseries/": {
       "get": {
         "operationId": "listOrganizationEventsTimeseries",
@@ -99461,6 +99731,124 @@
             "name"
           ]
         }
+      },
+      "OrganizationEventsDroppedResponse": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "dataset": {
+                "type": "string"
+              },
+              "start": {
+                "type": "number",
+                "format": "double"
+              },
+              "end": {
+                "type": "number",
+                "format": "double"
+              },
+              "interval": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "required": [
+              "dataset",
+              "end",
+              "interval",
+              "start"
+            ]
+          },
+          "droppedEvents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "outcome": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "start": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "end": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "count": {
+                  "type": "number",
+                  "format": "double"
+                }
+              },
+              "required": [
+                "category",
+                "count",
+                "end",
+                "outcome",
+                "reason",
+                "start",
+                "type"
+              ]
+            }
+          },
+          "acceptedEvents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "outcome": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "start": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "end": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "count": {
+                  "type": "number",
+                  "format": "double"
+                }
+              },
+              "required": [
+                "category",
+                "count",
+                "end",
+                "outcome",
+                "reason",
+                "start",
+                "type"
+              ]
+            }
+          }
+        },
+        "required": [
+          "acceptedEvents",
+          "droppedEvents",
+          "meta"
+        ]
       },
       "OrganizationEventsResponseDict": {
         "type": "object",
