@@ -39897,6 +39897,141 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/starred-service-spans/": {
+      "post": {
+        "operationId": "starOrganizationServiceSpan",
+        "description": "**Experimental:** This API is under active development and may change.\n\nStar a service span for the requesting user. Span queries expose this as the\n`is_starred_transaction` field. Returns `403` if the user has already starred\nthe service span.",
+        "summary": "Star a Service Span",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Explore"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "service_span": {
+                    "type": "string",
+                    "description": "The name of the service span to star or unstar."
+                  },
+                  "project_id": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "The ID of the project the service span belongs to."
+                  }
+                },
+                "required": [
+                  "project_id",
+                  "service_span"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "member:read",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      },
+      "delete": {
+        "operationId": "unstarOrganizationServiceSpan",
+        "description": "**Experimental:** This API is under active development and may change.\n\nUnstar a service span for the requesting user. Succeeds even if the\nservice span was not starred.",
+        "summary": "Unstar a Service Span",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "service_span",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the service span to unstar.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the project the service span belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Explore"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "member:read",
+              "member:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/stats-summary/": {
       "get": {
         "operationId": "getOrganizationStatsSummary",
@@ -111821,6 +111956,24 @@
           "release_has_some_artifact",
           "sdk_debug_id_support",
           "sdk_version"
+        ]
+      },
+      "StarSegment": {
+        "type": "object",
+        "properties": {
+          "service_span": {
+            "type": "string",
+            "description": "The name of the service span to star or unstar."
+          },
+          "project_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The ID of the project the service span belongs to."
+          }
+        },
+        "required": [
+          "project_id",
+          "service_span"
         ]
       },
       "StatusDetailsValidator": {
