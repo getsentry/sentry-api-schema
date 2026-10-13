@@ -13022,6 +13022,378 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/flags/logs/": {
+      "get": {
+        "operationId": "listOrganizationFlagLogs",
+        "description": "Return a paginated list of feature flag changes (creations, updates and deletions)\nrecorded for an organization within the requested time range.",
+        "summary": "List an Organization's Flag Logs",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "flag",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The name of a feature flag to filter by. Repeat the parameter to match multiple flags."
+          },
+          {
+            "in": "query",
+            "name": "provider",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "flagpole",
+                  "generic",
+                  "launchdarkly",
+                  "statsig",
+                  "unknown",
+                  "unleash"
+                ]
+              }
+            },
+            "description": "The flag provider to filter by. Use `unknown` to match logs without a provider. Repeat the parameter to match multiple providers."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The field to sort results by.\n\nAvailable fields are:\n- `action`\n- `createdAt`\n- `createdBy`\n- `createdByType`\n- `flag`\n- `provider`\n\nPrefix with `-` to sort in descending order.\n"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          }
+        ],
+        "tags": [
+          "Flags"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "action": {
+                            "enum": [
+                              "created",
+                              "deleted",
+                              "updated"
+                            ],
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "createdByType": {
+                            "enum": [
+                              "email",
+                              "id",
+                              "name",
+                              null
+                            ],
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "flag": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "enum": [
+                              "generic",
+                              "flagpole",
+                              "launchdarkly",
+                              "unleash",
+                              "statsig",
+                              null
+                            ],
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "tags": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "required": [
+                          "action",
+                          "createdAt",
+                          "createdBy",
+                          "createdByType",
+                          "flag",
+                          "id",
+                          "provider",
+                          "tags"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "ListAnOrganization'sFlagLogs": {
+                    "value": {
+                      "data": [
+                        {
+                          "id": 1,
+                          "action": "updated",
+                          "createdAt": "2024-01-01T05:12:33.000000+00:00",
+                          "createdBy": "jane.doe@example.com",
+                          "createdByType": "email",
+                          "flag": "new-checkout-flow",
+                          "provider": "launchdarkly",
+                          "tags": {
+                            "environment": "production"
+                          }
+                        }
+                      ]
+                    },
+                    "summary": "List an organization's flag logs"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/flags/logs/{flag_log_id}/": {
+      "get": {
+        "operationId": "retrieveOrganizationFlagLog",
+        "description": "Return a single feature flag change recorded for an organization.",
+        "summary": "Retrieve an Organization's Flag Log",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "flag_log_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the flag log entry you'd like to retrieve.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Flags"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "action": {
+                          "enum": [
+                            "created",
+                            "deleted",
+                            "updated"
+                          ],
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "createdBy": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "createdByType": {
+                          "enum": [
+                            "email",
+                            "id",
+                            "name",
+                            null
+                          ],
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "flag": {
+                          "type": "string"
+                        },
+                        "provider": {
+                          "enum": [
+                            "generic",
+                            "flagpole",
+                            "launchdarkly",
+                            "unleash",
+                            "statsig",
+                            null
+                          ],
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "tags": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "required": [
+                        "action",
+                        "createdAt",
+                        "createdBy",
+                        "createdByType",
+                        "flag",
+                        "id",
+                        "provider",
+                        "tags"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "RetrieveAFlagLog": {
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "action": "updated",
+                        "createdAt": "2024-01-01T05:12:33.000000+00:00",
+                        "createdBy": "jane.doe@example.com",
+                        "createdByType": "email",
+                        "flag": "new-checkout-flow",
+                        "provider": "launchdarkly",
+                        "tags": {
+                          "environment": "production"
+                        }
+                      }
+                    },
+                    "summary": "Retrieve a flag log"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/forwarding/": {
       "get": {
         "operationId": "listOrganizationForwarding",
@@ -86625,6 +86997,77 @@
           }
         }
       },
+      "GetFlagLogResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "action": {
+                "enum": [
+                  "created",
+                  "deleted",
+                  "updated"
+                ],
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "createdBy": {
+                "type": "string",
+                "nullable": true
+              },
+              "createdByType": {
+                "enum": [
+                  "email",
+                  "id",
+                  "name",
+                  null
+                ],
+                "type": "string",
+                "nullable": true
+              },
+              "flag": {
+                "type": "string"
+              },
+              "provider": {
+                "enum": [
+                  "generic",
+                  "flagpole",
+                  "launchdarkly",
+                  "unleash",
+                  "statsig",
+                  null
+                ],
+                "type": "string",
+                "nullable": true
+              },
+              "tags": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "action",
+              "createdAt",
+              "createdBy",
+              "createdByType",
+              "flag",
+              "id",
+              "provider",
+              "tags"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
       "GetReplay": {
         "type": "object",
         "properties": {
@@ -91458,6 +91901,80 @@
             "type"
           ]
         }
+      },
+      "ListFlagLogsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "action": {
+                  "enum": [
+                    "created",
+                    "deleted",
+                    "updated"
+                  ],
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "createdBy": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "createdByType": {
+                  "enum": [
+                    "email",
+                    "id",
+                    "name",
+                    null
+                  ],
+                  "type": "string",
+                  "nullable": true
+                },
+                "flag": {
+                  "type": "string"
+                },
+                "provider": {
+                  "enum": [
+                    "generic",
+                    "flagpole",
+                    "launchdarkly",
+                    "unleash",
+                    "statsig",
+                    null
+                  ],
+                  "type": "string",
+                  "nullable": true
+                },
+                "tags": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "action",
+                "createdAt",
+                "createdBy",
+                "createdByType",
+                "flag",
+                "id",
+                "provider",
+                "tags"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
       },
       "ListMemberOnTeamResponse": {
         "type": "array",
@@ -113348,6 +113865,15 @@
       "externalDocs": {
         "description": "Found an error? Let us know.",
         "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/profiling/&template=api_error_template.md"
+      }
+    },
+    {
+      "name": "Flags",
+      "description": "Endpoints for retrieving feature flag change logs",
+      "x-display-description": false,
+      "externalDocs": {
+        "description": "Found an error? Let us know.",
+        "url": "https://github.com/getsentry/sentry-docs/issues/new/?title=API%20Documentation%20Error:%20/api/flags/&template=api_error_template.md"
       }
     }
   ]
