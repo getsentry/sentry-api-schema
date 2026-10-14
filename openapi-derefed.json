@@ -2655,7 +2655,7 @@
     "/api/0/organizations/{organization_id_or_slug}/agents/conversations/{conversation_id}/": {
       "get": {
         "operationId": "retrieveOrganizationAIConversation",
-        "description": "**Experimental:** This API is under active development and may change.\n\nReturn spans recorded for one AI conversation in start-time order.\n\nMessage, tool, and response attributes contain their recorded string values.\n`stats.errors` counts spans whose status is not `ok`, `cancelled`, or `unknown`.\n`stats.errorToolNames` lists tools used by those spans.\n`stats.inputTokens` includes cache-read and cache-write tokens.\nWithout an explicit range, Sentry widens the search across available retention.\nA missing conversation returns an empty `spans` list.",
+        "description": "**Experimental:** This API is under active development and may change.\n\nReturn spans recorded for one AI conversation in start-time order.\n\nMessage, tool, and response attributes contain their recorded string values.\n`stats.errors` counts spans whose status is not `ok`, `cancelled`, or `unknown`.\n`stats.errorToolNames` lists tools used by those spans.\n`stats.inputTokens` includes cache-read and cache-write tokens. Stats are returned\non the first page only. Without an explicit range, Sentry widens the search across\navailable retention. A missing conversation returns an empty `spans` list.",
         "summary": "Retrieve an Organization's AI Conversation",
         "parameters": [
           {
@@ -2945,7 +2945,8 @@
                         "totalCost",
                         "totalTokens",
                         "usageByModel"
-                      ]
+                      ],
+                      "nullable": true
                     }
                   },
                   "required": [
@@ -108831,7 +108832,8 @@
               "totalCost",
               "totalTokens",
               "usageByModel"
-            ]
+            ],
+            "nullable": true
           }
         },
         "required": [
