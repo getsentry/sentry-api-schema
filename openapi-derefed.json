@@ -42342,7 +42342,7 @@
     "/api/0/organizations/{organization_id_or_slug}/trace-items/attributes/": {
       "get": {
         "operationId": "listOrganizationTraceItemAttributes",
-        "description": "List the attribute keys available on a given trace item dataset (spans, logs,\ntrace metrics, etc.), with optional substring and structured filtering.",
+        "description": "List the attribute keys available on a given trace item dataset (spans, logs,\ntrace metrics, etc.), with optional substring and structured filtering.\n\nPass `expand=context` (experimental) to include each attribute's metadata:\na brief description, examples, and deprecation details.",
         "summary": "List Trace Item Attributes",
         "parameters": [
           {
@@ -42475,6 +42475,21 @@
           },
           {
             "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "context"
+                ]
+              }
+            },
+            "description": "**Experimental:** This parameter is under active development and may change.\n\nOptional fields to expand. Pass `context` to include attribute metadata (brief, examples, deprecation, etc.).",
+            "x-sentry-experimental": true
+          },
+          {
+            "in": "query",
             "name": "cursor",
             "schema": {
               "type": "string",
@@ -42543,6 +42558,53 @@
                           "array"
                         ],
                         "type": "string"
+                      },
+                      "context": {
+                        "type": "object",
+                        "description": "Additional, mostly-static metadata about an attribute.\n\nWhen ``expand=context`` is requested, context is attached to every attribute.\nMetadata comes from the sentry conventions, Sentry's own column definitions,\nor user-authored context (gated behind ``data-browsing-attribute-context``),\nin that precedence order. Only the fields available are included, so an\nattribute with no metadata gets an empty context.",
+                        "properties": {
+                          "isConvention": {
+                            "type": "boolean"
+                          },
+                          "isCustom": {
+                            "type": "boolean"
+                          },
+                          "brief": {
+                            "type": "string"
+                          },
+                          "isDeprecated": {
+                            "type": "boolean"
+                          },
+                          "details": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "examples": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                {
+                                  "type": "boolean"
+                                }
+                              ]
+                            }
+                          },
+                          "replacementAttribute": {
+                            "type": "string"
+                          }
+                        }
                       }
                     },
                     "required": [
@@ -97337,6 +97399,53 @@
                 "array"
               ],
               "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "description": "Additional, mostly-static metadata about an attribute.\n\nWhen ``expand=context`` is requested, context is attached to every attribute.\nMetadata comes from the sentry conventions, Sentry's own column definitions,\nor user-authored context (gated behind ``data-browsing-attribute-context``),\nin that precedence order. Only the fields available are included, so an\nattribute with no metadata gets an empty context.",
+              "properties": {
+                "isConvention": {
+                  "type": "boolean"
+                },
+                "isCustom": {
+                  "type": "boolean"
+                },
+                "brief": {
+                  "type": "string"
+                },
+                "isDeprecated": {
+                  "type": "boolean"
+                },
+                "details": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "examples": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      {
+                        "type": "boolean"
+                      }
+                    ]
+                  }
+                },
+                "replacementAttribute": {
+                  "type": "string"
+                }
+              }
             }
           },
           "required": [
