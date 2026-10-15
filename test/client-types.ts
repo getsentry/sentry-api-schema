@@ -4,6 +4,8 @@ import {
   listOrganizations,
   paginateAll_listOrganizations,
   type Config,
+  type ListOrganizationsData,
+  type Options,
   type SentryClient,
 } from "@sentry/api";
 import type * as operations from "../src/sdk.gen";
@@ -90,7 +92,116 @@ async function standaloneInteroperability(sentry: SentryClient) {
   void [first, second];
 }
 
+async function explicitThrowRequiresRuntimeOption(sentry: SentryClient, throwOnError: boolean) {
+  const path = { organization_id_or_slug: "example" };
+  const bound = await sentry.listOrganizations<true>({ throwOnError: true });
+  const standalone = await listOrganizations<true>({ client: sentry.client, throwOnError: true });
+  const slug: string | undefined = bound.data[0]?.slug;
+  const standaloneSlug: string | undefined = standalone.data[0]?.slug;
+
+  // @ts-expect-error A type argument cannot turn on throwing at runtime.
+  await sentry.listOrganizations<true>();
+  // @ts-expect-error Explicit true also requires the corresponding runtime flag.
+  await sentry.listOrganizations<true>({});
+  // @ts-expect-error A false flag cannot support a success-only result.
+  await sentry.listOrganizations<true>({ throwOnError: false });
+  // @ts-expect-error Required endpoint options still need the runtime flag.
+  await sentry.getOrganization<true>({ path });
+  // @ts-expect-error Standalone operations have the same guarantee as bound ones.
+  await listOrganizations<true>();
+  // @ts-expect-error Supplying a configured client does not prove it throws.
+  await listOrganizations<true>({ client: sentry.client });
+
+  const conditionalBound = await sentry.listOrganizations({ throwOnError });
+  const conditionalStandalone = await listOrganizations({ client: sentry.client, throwOnError });
+  // @ts-expect-error A boolean flag preserves the possible failure branch.
+  conditionalBound.data[0];
+  // @ts-expect-error The same is true for standalone operations.
+  conditionalStandalone.data[0];
+  void [slug, standaloneSlug];
+}
+
+async function rawTransportThrowTypes(sentry: SentryClient) {
+  const url = "/api/0/organizations/";
+  // @ts-expect-error Raw methods cannot promise success from only a type argument.
+  await sentry.client.get<string, unknown, true>({ url });
+  // @ts-expect-error Raw requests need the runtime guarantee as well.
+  await sentry.client.request<string, unknown, true>({ url, method: "GET" });
+  const method = await sentry.client.get<string, unknown, true>({ url, throwOnError: true });
+  const request = await sentry.client.request<string, unknown, true>({ url, method: "GET", throwOnError: true });
+  const methodData: string = method.data;
+  const requestData: string = request.data;
+  void [methodData, requestData];
+}
+
+function forwardOptionalOperation<ThrowOnError extends boolean>(
+  sentry: SentryClient,
+  options: Omit<Options<ListOrganizationsData, ThrowOnError>, "client">,
+) {
+  return sentry.listOrganizations<ThrowOnError>(options);
+}
+
+function forwardOptionalArguments<ThrowOnError extends boolean>(
+  sentry: SentryClient,
+  ...args: Parameters<typeof listOrganizations<ThrowOnError>>
+) {
+  return sentry.listOrganizations<ThrowOnError>(...args);
+}
+
+async function genericForwardingTypes(sentry: SentryClient, throwOnError: boolean) {
+  const throwing = await forwardOptionalOperation<true>(sentry, { throwOnError: true });
+  const slug: string | undefined = throwing.data[0]?.slug;
+  const conditional = await forwardOptionalArguments<boolean>(sentry, { throwOnError });
+  // @ts-expect-error Forwarding a boolean flag retains the possible failure branch.
+  conditional.data[0];
+  void slug;
+}
+
+async function mutableClientConfiguration() {
+  const sentry = createSentryClient({ throwOnError: true });
+  sentry.client.setConfig({ throwOnError: false });
+  const result = await sentry.listOrganizations();
+  // @ts-expect-error Mutable client configuration cannot promise success-only results.
+  result.data[0];
+}
+
+async function fieldsContract(sentry: SentryClient) {
+  // @ts-expect-error Data-only responses are not part of the SDK contract.
+  createSentryClient({ responseStyle: "data" });
+  // @ts-expect-error Mutable configuration has the same restriction.
+  sentry.client.setConfig({ responseStyle: "data" });
+  // @ts-expect-error Bound operations cannot override the fields contract.
+  await sentry.listOrganizations({ responseStyle: "data" });
+  // @ts-expect-error Standalone/injected operations use the same contract.
+  await listOrganizations({ client: sentry.client, responseStyle: "data" });
+
+  const result = await sentry.listOrganizations();
+  // @ts-expect-error A fetch rejection need not have an HTTP response.
+  const alwaysResponse: Response = result.response;
+  if (!("error" in result)) {
+    const response: Response = result.response;
+    const slug: string | undefined = result.data[0]?.slug;
+    void [response, slug];
+  } else {
+    const response: Response | undefined = result.response;
+    // @ts-expect-error Arbitrary fetch/interceptor errors require narrowing.
+    result.error.status;
+    void response;
+  }
+  sentry.client.interceptors.error.use((error, response) => {
+    // @ts-expect-error Fetch rejection hooks have no response.
+    response.headers.get("retry-after");
+    return error;
+  });
+  void alwaysResponse;
+}
+
 void publicFactory;
 void operationArguments;
 void responseAndThrowingTypes;
 void standaloneInteroperability;
+void explicitThrowRequiresRuntimeOption;
+void rawTransportThrowTypes;
+void genericForwardingTypes;
+void mutableClientConfiguration;
+void fieldsContract;

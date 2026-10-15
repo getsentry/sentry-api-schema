@@ -175,7 +175,7 @@ void perPageAcceptedEvenWhenSpecOmitsIt;
 void rejectsUnsafeCursorOverride;
 
 // =====================================================================
-// narrowError — status-discriminated, non-throwing error handling
+// narrowError — status-discriminated HTTP error handling
 // =====================================================================
 
 async function narrowErrorHappyPath() {
@@ -192,7 +192,7 @@ async function narrowErrorHappyPath() {
     return;
   }
   if (!res.error.documented) {
-    // Includes unexpected HTTP statuses and transport failures.
+    // Includes unexpected HTTP statuses. Other exceptions reject unchanged.
     return;
   }
   switch (res.error.status) {

@@ -166,7 +166,7 @@ describe("configured operation methods", () => {
 
     expect(interceptedMetadata).toBe(meta);
     expect(requests[0]!.signal.aborted).toBe(true);
-    expect(result.response.headers.get("X-Sentry-Direct-Hit")).toBe("1");
+    expect(result.response?.headers.get("X-Sentry-Direct-Hit")).toBe("1");
   });
 
   test("preserves returning and throwing error policies", async () => {
@@ -177,13 +177,19 @@ describe("configured operation methods", () => {
     });
 
     const result = await sentry.listOrganizations();
-    expect(result.error).toEqual(error);
-    expect(result.response.status).toBe(401);
-    await expect(sentry.listOrganizations({ throwOnError: true })).rejects.toEqual(error);
+    expect(result.error).toBeInstanceOf(SentryApiError);
+    if (!(result.error instanceof SentryApiError)) throw result.error;
+    expect(result.error.body).toEqual(error);
+    expect(result.response?.status).toBe(401);
+    await expect(sentry.listOrganizations({ throwOnError: true })).rejects.toMatchObject({
+      name: "SentryApiError", status: 401, body: error,
+    });
 
     sentry.client.setConfig({ throwOnError: true });
     const returning = await sentry.listOrganizations({ throwOnError: false });
-    expect(returning.error).toEqual(error);
+    expect(returning.error).toBeInstanceOf(SentryApiError);
+    if (!(returning.error instanceof SentryApiError)) throw returning.error;
+    expect(returning.error.body).toEqual(error);
   });
 
   test("shares its raw client with existing named operations and helpers", async () => {
