@@ -165,7 +165,7 @@ describe("configured pagination methods", () => {
     });
   });
 
-  test("forwards cancellation through a collection and stops on the aborted request", async () => {
+  test("stops the next collection dispatch after cancellation", async () => {
     const controller = new AbortController();
     const requests: Request[] = [];
     const sentry = createSentryClient({
@@ -183,7 +183,28 @@ describe("configured pagination methods", () => {
 
     expect(error).toBe(controller.signal.reason);
     expect(error.name).toBe("AbortError");
-    expect(requests).toHaveLength(2);
+    expect(requests).toHaveLength(1);
     expect(requests.every(request => request.signal.aborted)).toBe(true);
+  });
+
+  test("stops bounded pagination when the progress callback cancels", async () => {
+    const controller = new AbortController();
+    const reason = new Error("Stopped after the first page");
+    const requests: Request[] = [];
+    const sentry = createSentryClient({
+      baseUrl: "https://example.test",
+      fetch: asFetch(async request => {
+        requests.push(request);
+        return Response.json([{ slug: "first" }], { headers: { Link: link("next", "next") } });
+      }),
+    });
+
+    const error = await sentry.paginateUpTo.listOrganizations(
+      { signal: controller.signal },
+      { limit: 2, onPage: () => controller.abort(reason) },
+    ).catch(error => error);
+
+    expect(error).toBe(reason);
+    expect(requests).toHaveLength(1);
   });
 });

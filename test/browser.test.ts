@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'bun:test';
+import {createSentryClient} from '@sentry/api';
 import {createBrowserFetch, createBrowserSdkConfig, type FetchFn} from '../lib/browser-client.ts';
 
 // Helper to capture headers/init from a fetch call
@@ -164,6 +165,106 @@ describe('createBrowserFetch', () => {
     await withMockFetch(mock, () => browserFetch('/api/0/projects/', {method: 'GET', credentials: 'omit'}));
     expect(captured.init?.credentials).toBe('include');
   });
+
+  it('preserves the effective Request body, method, headers and cancellation', async () => {
+    const controller = new AbortController();
+    const reason = new Error('Request no longer needed');
+    const request = new Request('https://example.test/api/0/projects/', {
+      method: 'POST',
+      body: JSON.stringify({name: 'example'}),
+      headers: {'Content-Type': 'application/json', 'X-Context': 'request'},
+      signal: controller.signal,
+    });
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'csrf-token'});
+
+    await withMockFetch(async (input, init) => {
+      // Resolve Request + RequestInit as the underlying Fetch implementation does.
+      const effective = new Request(input, init);
+      expect(effective.method).toBe('POST');
+      expect(await effective.json()).toEqual({name: 'example'});
+      expect(effective.headers.get('Content-Type')).toBe('application/json');
+      expect(effective.headers.get('X-Context')).toBe('request');
+      expect(effective.headers.get('X-CSRFToken')).toBe('csrf-token');
+      expect(effective.credentials).toBe('include');
+      expect(effective.signal.aborted).toBe(false);
+      controller.abort(reason);
+      expect(effective.signal.aborted).toBe(true);
+      expect(effective.signal.reason).toBe(reason);
+      throw effective.signal.reason;
+    }, async () => {
+      await expect(browserFetch(request)).rejects.toBe(reason);
+    });
+  });
+
+  it('preserves URL + init and an already-aborted custom reason', async () => {
+    const reason = 'Caller cancelled';
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'csrf-token'});
+
+    await withMockFetch(async (input, init) => {
+      const effective = new Request(input, init);
+      expect(effective.url).toBe('https://example.test/api/0/projects/');
+      expect(effective.method).toBe('PUT');
+      expect(await effective.text()).toBe('updated project');
+      expect(effective.headers.get('Content-Type')).toBe('text/plain');
+      expect(effective.headers.get('X-Context')).toBe('init');
+      expect(effective.headers.get('X-CSRFToken')).toBe('csrf-token');
+      expect(effective.signal.aborted).toBe(true);
+      expect(effective.signal.reason).toBe(reason);
+      throw effective.signal.reason;
+    }, async () => {
+      await expect(browserFetch(new URL('https://example.test/api/0/projects/'), {
+        method: 'PUT',
+        body: 'updated project',
+        headers: {'Content-Type': 'text/plain', 'X-Context': 'init'},
+        signal: AbortSignal.abort(reason),
+      })).rejects.toBe(reason);
+    });
+  });
+
+  it('uses explicit init overrides for the Request body, method, headers and signal', async () => {
+    const original = new AbortController();
+    const replacement = new AbortController();
+    const reason = new Error('Replacement request cancelled');
+    const request = new Request('https://example.test/api/0/projects/', {
+      method: 'POST', body: 'original', headers: {'X-Original': 'true'}, signal: original.signal,
+    });
+    const browserFetch = createBrowserFetch({getCsrfToken: () => 'csrf-token'});
+
+    await withMockFetch(async (input, init) => {
+      const effective = new Request(input, init);
+      expect(effective.method).toBe('PATCH');
+      expect(await effective.text()).toBe('replacement');
+      expect(effective.headers.has('X-Original')).toBe(false);
+      expect(effective.headers.get('X-Replacement')).toBe('true');
+      expect(effective.headers.get('X-CSRFToken')).toBe('csrf-token');
+      original.abort(new Error('Original cancelled'));
+      expect(effective.signal.aborted).toBe(false);
+      replacement.abort(reason);
+      expect(effective.signal.reason).toBe(reason);
+      throw effective.signal.reason;
+    }, async () => {
+      await expect(browserFetch(request, {
+        method: 'PATCH', body: 'replacement', headers: {'X-Replacement': 'true'},
+        signal: replacement.signal,
+      })).rejects.toBe(reason);
+    });
+  });
+
+  it('allows signal: null to clear an already-aborted Request signal', async () => {
+    const request = new Request('https://example.test/api/0/projects/', {
+      signal: AbortSignal.abort(new Error('Original cancelled')),
+    });
+    const browserFetch = createBrowserFetch();
+
+    await withMockFetch(async (input, init) => {
+      const effective = new Request(input, init);
+      expect(effective.signal.aborted).toBe(false);
+      return Response.json([]);
+    }, async () => {
+      const response = await browserFetch(request, {signal: null});
+      expect(await response.json()).toEqual([]);
+    });
+  });
 });
 
 describe('createBrowserSdkConfig', () => {
@@ -180,5 +281,33 @@ describe('createBrowserSdkConfig', () => {
   it('returns a fetch function', () => {
     const config = createBrowserSdkConfig();
     expect(typeof config.fetch).toBe('function');
+  });
+
+  it('propagates in-flight cancellation through a configured SDK operation', async () => {
+    const controller = new AbortController();
+    const reason = new Error('Query cancelled');
+    let started!: () => void;
+    const requestStarted = new Promise<void>(resolve => { started = resolve; });
+    const config = createBrowserSdkConfig({baseUrl: 'https://example.test'});
+    const sentry = createSentryClient({
+      ...config,
+      // The Bun test environment requires its native fetch extension in Config.
+      fetch: Object.assign(config.fetch, {preconnect: globalThis.fetch.preconnect}),
+    });
+
+    await withMockFetch((input, init) => {
+      const effective = new Request(input, init);
+      expect(effective.method).toBe('GET');
+      expect(effective.credentials).toBe('include');
+      return new Promise<Response>((_resolve, reject) => {
+        effective.signal.addEventListener('abort', () => reject(effective.signal.reason), {once: true});
+        started();
+      });
+    }, async () => {
+      const result = sentry.listOrganizations({signal: controller.signal, throwOnError: true});
+      await Promise.race([requestStarted, result]);
+      controller.abort(reason);
+      await expect(result).rejects.toBe(reason);
+    });
   });
 });
