@@ -84,6 +84,37 @@ const sentry = createSentryClient(
 const { data, error } = await sentry.listOrganizations();
 ```
 
+### Cancellation and custom fetch
+
+Reuse the client and supply an `AbortSignal` for each operation. The caller owns the signal, whether it comes from a command, an MCP tool call, or a query library:
+
+```ts
+const controller = new AbortController();
+const pending = sentry.listOrganizations({
+  signal: controller.signal,
+  throwOnError: true,
+});
+
+// When this operation is no longer needed:
+controller.abort();
+await pending; // Rejects with the cancellation reason by default.
+```
+
+Cancellation does not affect other calls sharing the client. Immediately before invoking `fetch`, the SDK checks the final request's signal, including changes made by request interceptors. An already-aborted signal prevents dispatch; authentication, validation, and request interceptors may still run before that check.
+
+A configured `fetch` receives a native `Request`; its method, body, headers, and signal need not appear in a separate `init` argument. Forward the request intact and preserve native `RequestInit` override semantics when wrapping another transport:
+
+```ts
+const sentry = createSentryClient({
+  baseUrl: "https://sentry.io",
+  fetch: (input, init) => fetch(input, init),
+});
+```
+
+Your transport must honor the signal while a request is in flight. The SDK cannot force an arbitrary custom fetch or asynchronous hook to stop, and cancellation does not undo a server mutation that has already completed.
+
+Cancellation follows the [error handling contract](#error-handling): before dispatch the SDK uses `signal.reason`; during fetch it preserves the transport's rejection, which may differ by runtime. By default this is returned as `{ error, request, response: undefined }`, or thrown with `throwOnError: true`. Error interceptors can intentionally map it. Cancellation during response body reading rejects unchanged, even in fields mode. There is no SDK-specific cancellation error class.
+
 ## Runtime validation
 
 The root `@sentry/api` entry has no runtime dependencies. It provides the API client and pure TypeScript types without installing a validation library.
@@ -208,6 +239,8 @@ All helpers reuse the instance's configuration and interceptors and can be destr
 
 Pagination reads HTTP headers from the same fields contract. Helpers always reject on failure, preserving the exact error: `SentryApiError` for default HTTP failures, or the original custom error/cancellation. This is consistent whether `throwOnError` is enabled or disabled.
 
+Generated collection helpers pass the same signal to every page operation. If it aborts between pages, the next page is not dispatched and the collection rejects; no partial collection is returned.
+
 ### Single page
 
 ```ts
@@ -318,6 +351,8 @@ The same low-level helpers used by the generated wrappers are also exported for 
 - `fetchPage`, `paginateAll`, `paginateUpTo` — generic versions taking a fetcher thunk
 
 A generic `paginateUpTo` fetcher receives `(cursor, remaining)`. Existing cursor-only fetchers still work; use `remaining` only when your endpoint's cursor supports resizing. The generated wrappers apply the verified rules above for you.
+
+Generic helpers delegate cancellation to your fetcher. Pass its signal through to the operation or transport it invokes; the helper cannot cancel an arbitrary callback.
 
 ## Schema source
 

@@ -34,6 +34,9 @@ export const createClient = (config: Config = {}): Client => {
   source = replaceOnce(source, "  const setConfig = (config: Config): Config => {", "  const setConfig = (config: Config): Config => {\n    assertFields(config);");
   source = replaceOnce(source, "  const beforeRequest = async (options: RequestOptions) => {", "  const beforeRequest = async (options: RequestOptions) => {\n    assertFields(options);");
   source = replaceOnce(source, "  const request: Client['request'] = async (options) => {\n    // @ts-expect-error", "  // The public Client signature applies operation-specific data and throw types.\n  const request = async (options: RequestOptions) => {");
+  source = replaceOnce(source, "      response = await _fetch(request);", `      // Check the final intercepted Request, preserving the fetch-error contract.
+      request.signal.throwIfAborted();
+      response = await _fetch(request);`);
   source = replaceOnce(source, "finalError = (await fn(error, undefined as any, request, opts)) as unknown;", "finalError = await fn(finalError, undefined, request, opts);");
   source = replaceOnce(source, "      finalError = finalError || ({} as unknown);\n\n", "");
   source = replaceOnce(source, `      // Return error response
