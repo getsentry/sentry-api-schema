@@ -38907,7 +38907,7 @@
     "/api/0/organizations/{organization_id_or_slug}/sentry-app-components/": {
       "get": {
         "operationId": "listOrganizationSentryAppComponents",
-        "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve prepared UI components for installed custom integrations, including issue-link forms.",
+        "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve prepared UI components for installed custom integrations, including issue-link forms.\n\nAPI clients can use `filter=issue-link` to create or link an external issue through\nan app such as Linear. The `uri` values in `schema` are paths on the app's own server.\nClients never call them directly; Sentry calls the app on their behalf:\n\n- To load a select field's choices, pass the field's `uri` to\n  `GET /sentry-app-installations/{installationUuid}/external-requests/`.\n- To create or link the issue, send the form values with the `uri` from\n  `schema.create` or `schema.link` to\n  `POST /sentry-app-installations/{installationUuid}/external-issue-actions/`.",
         "summary": "List an Organization's Installed Sentry App Components",
         "parameters": [
           {
@@ -39037,10 +39037,14 @@
                           "slug",
                           "uuid"
                         ]
+                      },
+                      "installationUuid": {
+                        "type": "string"
                       }
                     },
                     "required": [
                       "error",
+                      "installationUuid",
                       "schema",
                       "sentryApp",
                       "type",
@@ -68175,7 +68179,7 @@
     "/api/0/sentry-app-installations/{uuid}/external-issue-actions/": {
       "post": {
         "operationId": "executeSentryAppInstallationExternalIssueAction",
-        "description": "**Experimental:** This API is under active development and may change.\n\nInvoke the installed app's issue-link callback and store the returned association.\nSubmit the app-specific form fields alongside `groupId`, `action`, and `uri`.\n\nFor `action=link`, the optional `expectedExternalIssueUrl` query parameter\nrequires an exact canonical `webUrl` match. An existing matching link is\nreturned with HTTP 200 without calling the App; a different link\nreturns 409. The callback must also return this URL before a new link is\nsaved. Callback effects cannot be rolled back if its response conflicts.\nA new association returns HTTP 201. Omitting the parameter preserves the\nApp's existing replacement behavior and HTTP 200 response.",
+        "description": "**Experimental:** This API is under active development and may change.\n\nInvoke the installed app's issue-link callback and store the returned association.\nSubmit the app-specific form fields alongside `groupId`, `action`, and `uri`.\nThe installation UUID, form fields, and `uri` come from the organization's\n`issue-link` Sentry App components.\n\nFor `action=link`, the optional `expectedExternalIssueUrl` query parameter\nrequires an exact canonical `webUrl` match. An existing matching link is\nreturned with HTTP 200 without calling the App; a different link\nreturns 409. The callback must also return this URL before a new link is\nsaved. Callback effects cannot be rolled back if its response conflicts.\nA new association returns HTTP 201. Omitting the parameter preserves the\nApp's existing replacement behavior and HTTP 200 response.",
         "summary": "Create or Link an External Issue Through a Sentry App",
         "parameters": [
           {
@@ -109946,10 +109950,14 @@
                 "slug",
                 "uuid"
               ]
+            },
+            "installationUuid": {
+              "type": "string"
             }
           },
           "required": [
             "error",
+            "installationUuid",
             "schema",
             "sentryApp",
             "type",
