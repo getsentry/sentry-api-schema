@@ -106,22 +106,19 @@ describe("runtime validator entry points", () => {
 
 const mkSuccess = <T>(data: T, linkHeader?: string) => ({
   data,
-  error: undefined,
   request: new Request("https://example.test/"),
   response: new Response(null, {
     headers: linkHeader ? { link: linkHeader } : {},
   }),
-}) as Parameters<typeof unwrapResult<T>>[0];
+}) satisfies Parameters<typeof unwrapResult<T>>[0];
 
 const mkFailure = <TError>(errorBody: TError, status = 500) => ({
-  data: undefined,
   error: errorBody,
   request: new Request("https://example.test/"),
   response: new Response(null, { status }),
-}) as Parameters<typeof unwrapResult<unknown, TError>>[0];
+}) satisfies Parameters<typeof unwrapResult<unknown, TError>>[0];
 
 const mkTransportFailure = (error: unknown) => ({
-  data: undefined,
   error,
   request: new Request("https://example.test/"),
   response: undefined,
@@ -130,29 +127,59 @@ const mkTransportFailure = (error: unknown) => ({
 const asFetch = (implementation: (request: Request) => Promise<Response>) =>
   implementation as typeof fetch;
 
+const mkHttpFailure = (body: unknown, status: number) => {
+  const result = mkFailure(body, status);
+  return {
+    ...result,
+    error: new SentryApiError(status, body, result.response, false),
+  };
+};
+
+const thrownBy = (call: () => unknown): unknown => {
+  try {
+    call();
+  } catch (error) {
+    return error;
+  }
+  throw new Error("Expected the call to throw");
+};
+
 describe("unwrapResult", () => {
   test("returns data on success", () => {
     const out = unwrapResult(mkSuccess({ ok: 1 }), "test");
     expect(out.data).toEqual({ ok: 1 });
   });
 
-  test("throws on error", () => {
-    expect(() => unwrapResult(mkFailure({ detail: "boom" }), "test")).toThrow(
-      /test/,
-    );
+  test("throws the exact consumer error without adding a wrapper", () => {
+    const error = new Error("Consumer failure");
+    expect(thrownBy(() => unwrapResult(mkFailure(error), "test"))).toBe(error);
   });
 
-  test("throws a SentryApiError carrying status and body", () => {
+  test("preserves an existing SentryApiError and its metadata", () => {
+    const result = mkHttpFailure({ detail: "boom" }, 404);
     try {
-      unwrapResult(mkFailure({ detail: "boom" }, 404), "ctx");
+      unwrapResult(result, "ctx");
       throw new Error("expected unwrapResult to throw");
     } catch (err) {
       expect(err).toBeInstanceOf(SentryApiError);
+      expect(err).toBe(result.error);
       const apiErr = err as SentryApiError;
       expect(apiErr.status).toBe(404);
       expect(apiErr.body).toEqual({ detail: "boom" });
       expect(apiErr.documented).toBe(false);
-      expect(apiErr.message).toContain("ctx");
+    }
+  });
+
+  test("uses the error property rather than its truthiness", () => {
+    for (const error of [undefined, null, false, 0, ""]) {
+      let caught = false;
+      try {
+        unwrapResult(mkTransportFailure(error), "test");
+      } catch (thrown) {
+        caught = true;
+        expect(thrown).toBe(error);
+      }
+      expect(caught).toBe(true);
     }
   });
 });
@@ -175,8 +202,13 @@ describe("narrowError", () => {
   });
 
   test("marks a declared status as documented", () => {
+    const original = mkHttpFailure({ detail: "nope" }, 403);
+    const cause = new Error("Original cause");
+    original.error = new SentryApiError(403, original.error.body, original.response, false, undefined, {
+      request: original.request, rawBody: '{ "detail": "nope" }\n', cause,
+    });
     const res = narrowError<unknown, { 403: { detail: string } }>(
-      mkFailure({ detail: "nope" }, 403),
+      original,
       [403],
     );
     expect(res.ok).toBe(false);
@@ -185,12 +217,16 @@ describe("narrowError", () => {
       expect(res.error.status).toBe(403);
       expect(res.error.body).toEqual({ detail: "nope" });
       expect(res.error.documented).toBe(true);
+      expect(res.error.request).toBe(original.request);
+      expect(res.error.response).toBe(original.response);
+      expect(res.error.rawBody).toBe('{ "detail": "nope" }\n');
+      expect(res.error.cause).toBe(cause);
     }
   });
 
   test("keeps undocumented statuses separate from the documented union", () => {
     const res = narrowError<unknown, { 403: unknown; 404: unknown }>(
-      mkFailure({}, 500),
+      mkHttpFailure({}, 500),
       [403, 404],
     );
     expect(res.ok).toBe(false);
@@ -200,19 +236,18 @@ describe("narrowError", () => {
     }
   });
 
-  test("represents transport failures without reading a missing response", () => {
+  test("does not disguise a transport exception as a documented API result", () => {
     const cause = new TypeError("fetch failed");
-    const res = narrowError<unknown, { 403: unknown }>(
-      mkTransportFailure(cause),
-      [403],
-    );
-    expect(res.ok).toBe(false);
-    if (!res.ok) {
-      expect(res.error.status).toBeUndefined();
-      expect(res.error.body).toBe(cause);
-      expect(res.error.response).toBeUndefined();
-      expect(res.error.documented).toBe(false);
-    }
+    expect(thrownBy(() => narrowError<unknown, { 403: unknown }>(
+      mkTransportFailure(cause), [403],
+    ))).toBe(cause);
+  });
+
+  test("preserves custom errors even when an HTTP response exists", () => {
+    const error = new Error("Consumer interpretation of a 403");
+    expect(thrownBy(() => narrowError<unknown, { 403: unknown }>(
+      mkFailure(error, 403), [403],
+    ))).toBe(error);
   });
 });
 
@@ -227,7 +262,6 @@ describe("generated typed-error wrappers", () => {
   test("overrides client defaults and returns a documented HTTP error", async () => {
     const client = createClient({
       baseUrl: "https://example.test",
-      responseStyle: "data",
       throwOnError: true,
       fetch: asFetch(() =>
         Promise.resolve(
@@ -258,24 +292,18 @@ describe("generated typed-error wrappers", () => {
     }
   });
 
-  test("returns a transport error when fetch rejects", async () => {
+  test("rejects with the original error when fetch rejects", async () => {
     const cause = new TypeError("fetch failed");
-    const result = await narrowError_getProject({
+    await expect(narrowError_getProject({
       ...projectOptions,
       baseUrl: "https://example.test",
       fetch: asFetch(() => Promise.reject(cause)),
-    });
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error.documented).toBe(false);
-      expect(result.error.status).toBeUndefined();
-      expect(result.error.body).toBe(cause);
-    }
+    })).rejects.toBe(cause);
   });
 
-  test("returns a transport error when reading the response body rejects", async () => {
+  test("does not relabel a received response's body failure as a network error", async () => {
     const cause = new TypeError("stream failed");
-    const result = await narrowError_getProject({
+    await expect(narrowError_getProject({
       ...projectOptions,
       baseUrl: "https://example.test",
       fetch: asFetch(() =>
@@ -290,13 +318,7 @@ describe("generated typed-error wrappers", () => {
           ),
         ),
       ),
-    });
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error.documented).toBe(false);
-      expect(result.error.status).toBeUndefined();
-      expect(result.error.body).toBe(cause);
-    }
+    })).rejects.toBe(cause);
   });
 });
 

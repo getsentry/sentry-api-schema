@@ -24,12 +24,18 @@ for (const module of ["sdk", "pagination"]) {
 
     for (const declaration of statement.declarationList.declarations) {
       const fn = declaration.initializer;
+      const tupleOptions = fn && ts.isArrowFunction(fn) && module === "sdk" &&
+        fn.parameters.length === 1 && fn.parameters[0].dotDotDotToken &&
+        ts.isArrayBindingPattern(fn.parameters[0].name) &&
+        fn.parameters[0].name.elements.length === 1 &&
+        fn.parameters[0].name.elements[0].name?.getText(source) === "options";
       if (
         !ts.isIdentifier(declaration.name) ||
         !fn || !ts.isArrowFunction(fn) ||
         fn.parameters.length === 0 ||
-        fn.parameters.some(parameter =>
+        (!tupleOptions && fn.parameters.some(parameter =>
           !ts.isIdentifier(parameter.name) || parameter.dotDotDotToken || parameter.initializer)
+        )
       ) {
         throw new Error(`Unsupported ${module} function: ${declaration.name.getText(source)}`);
       }
@@ -59,6 +65,33 @@ for (const module of ["sdk", "pagination"]) {
       for (const doc of statement.jsDoc ?? []) {
         destination.push(...doc.getText(source).split("\n").map((line) => `${indent}${line}`));
       }
+      if (module === "sdk") {
+        if (fn.parameters.length !== 1) throw new Error(`Unsupported SDK arguments: ${name}`);
+        let argsType = `BoundOperationArgs<Parameters<typeof ${operation}>>`;
+        if (tupleOptions) {
+          const parameterType = fn.parameters[0].type;
+          const tupleType = parameterType && ts.isIntersectionTypeNode(parameterType) && parameterType.types[0];
+          const member = tupleType && ts.isTupleTypeNode(tupleType) && tupleType.elements[0];
+          const optionsType = member && ts.isNamedTupleMember(member) && member.type;
+          if (!optionsType || !ts.isTypeReferenceNode(optionsType) ||
+              optionsType.typeName.getText(source) !== "Options" || optionsType.typeArguments?.length !== 2 ||
+              !ts.isTypeReferenceNode(optionsType.typeArguments[0]) ||
+              !ts.isIdentifier(optionsType.typeArguments[0].typeName) ||
+              optionsType.typeArguments[1].getText(source) !== "ThrowOnError") {
+            throw new Error(`Unsupported optional SDK arguments: ${name}`);
+          }
+          // Refer to Options directly: mapping Parameters of a conditional tuple
+          // prevents generic consumer wrappers from forwarding their options.
+          const boundOptions = `Omit<sdk.Options<types.${optionsType.typeArguments[0].getText(source)}, ThrowOnError>, 'client'>`;
+          argsType = `[options?: ${boundOptions}] & ([ThrowOnError] extends [true] ? [options: ${boundOptions}] : unknown)`;
+        }
+        destination.push(
+          `${indent}${methodName}: ${generics}(`,
+          `${indent}  ...args: ${argsType}`,
+          `${indent}) => ${operation}(...([{ ...args[0], client }] as Parameters<typeof ${operation}>)),`,
+        );
+        continue;
+      }
       const remainingParameters = fn.parameters.slice(1);
       destination.push(
         `${indent}${methodName}: ${generics}(`,
@@ -83,6 +116,12 @@ writeFileSync(join(root, "src", "sentry-client.gen.ts"), [
   "import { createClient, type Config } from './client';",
   "import * as sdk from './sdk.gen';",
   "import * as pagination from './pagination.gen';",
+  "import type * as types from './types.gen';",
+  "",
+  "// Preserve conditional argument requirements while binding the transport.",
+  "type BoundOperationArgs<Args extends readonly unknown[]> = {",
+  "  [Key in keyof Args]: Key extends '0' ? Omit<NonNullable<Args[Key]>, 'client'> : Args[Key];",
+  "};",
   "",
   "/**",
   " * Create an isolated Sentry client with bound, typed API operations.",

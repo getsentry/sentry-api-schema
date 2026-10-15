@@ -39,6 +39,9 @@ cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 cpSync("lib/sentry-errors.ts", "src/sentry-errors.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
 
+// Keep the pinned Fetch generator's runtime and types aligned with our contract.
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-response-contract.mjs"))}`, { stdio: "inherit" });
+
 // 3. Generate operation helpers and the bound client from the SDK output.
 //    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
 //    detects every operation that accepts a `cursor` query parameter, and
@@ -47,6 +50,7 @@ cpSync("lib/browser-client.ts", "src/browser-client.ts");
 //    is documented as in-development and unstable.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-results.mjs"))}`, { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "constrain-throw-options.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
 
 // 4. Append re-exports to the generated index.ts so the pagination

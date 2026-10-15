@@ -6,7 +6,7 @@
  * returned by the generated SDK functions.
  */
 
-import { SentryApiError, type SdkResult } from "./sentry-errors";
+import type { SdkResult } from "./sentry-errors";
 
 export type UnwrappedResult<TData> = {
   data: TData;
@@ -184,28 +184,23 @@ export const _withCursor = <TOptions>(
  * Returns `{ data, response }` so callers retain access to the
  * raw Response (and its headers) for pagination or other needs.
  *
- * The thrown value is a {@link SentryApiError}, so a `catch` block can still
- * read `err.status` / `err.body` to decide how to handle the failure.
+ * Throws the exact error supplied by the operation, including custom mapped
+ * errors and failures without an HTTP response. The SDK normalizes default
+ * HTTP errors before this helper runs.
+ *
+ * The context argument remains accepted for compatibility. It no longer
+ * changes error messages or wraps errors.
  */
 export const unwrapResult = <TData, TError = unknown>(
   result: SdkResult<TData, TError>,
-  context: string,
+  _context: string,
 ): UnwrappedResult<TData> => {
-  if (result.error !== undefined) {
-    const status = result.response?.status;
-    throw new SentryApiError(
-      status,
-      result.error,
-      result.response,
-      false,
-      status === undefined
-        ? `${context}: API request failed before receiving a response: ${String(result.error)}`
-        : `${context}: API request failed with status ${status}: ${JSON.stringify(result.error)}`,
-    );
+  if ("error" in result) {
+    throw result.error;
   }
   return {
-    data: result.data as TData,
-    response: result.response as Response,
+    data: result.data,
+    response: result.response,
   };
 };
 

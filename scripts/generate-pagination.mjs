@@ -263,10 +263,8 @@ if (targets.length === 0) {
  *   - SDK call uses the `_withCursor` runtime helper to merge in the
  *     managed cursor and reshape back to `Options<TData>`. The cast chain
  *     lives once in `_withCursor`, not per-wrapper.
- *   - Return type cast `as unknown as Promise<{...success}>` aligns the
- *     SDK's distributed `RequestResult<…>` discriminated union with our
- *     local `SdkResult<TData, TError>` shape. Runtime is correct because
- *     `unwrapResult` checks `error !== undefined`.
+ *   - The SDK and runtime helpers share the fields result contract.
+ *     `unwrapResult` propagates failures without changing their error values.
  *
  * Why `Omit<…, 'cursor'>`? Accepting a cursor in `query` would silently
  * shadow the helper-managed value. Surfacing a clear "use the helper's
@@ -284,17 +282,14 @@ const item200 = (op) => `${op.typeBase}Responses[200]`;
 /**
  * Emit the SDK call expression used by all three wrapper kinds.
  *
- * The cursor-merge cast is hoisted into the `_withCursor` runtime helper
- * (see lib/sentry-pagination.ts). The remaining `as unknown as Promise<…>`
- * cast aligns the SDK's distributed `RequestResult<…>` with our local
- * `SdkResult<…>` discriminated union — must stay per-wrapper because the
- * `data` and `Promise` types are operation-specific.
+ * The cursor-merge cast lives in `_withCursor`; response types are checked
+ * directly against the runtime helper's fields result contract.
  */
 const sdkCallExpr = (op, cursorIdent, remaining) => {
   const sizing = remaining && op.sizing;
   const max = sizing?.fullMax ? `(options.query?.full ? ${sizing.fullMax} : ${sizing.max})` : sizing?.max;
   const budget = sizing ? `, { parameter: '${sizing.parameter}', max: ${max}, remaining: ${remaining} }` : "";
-  return `${op.fn}(_withCursor<Options<${op.typeBase}Data>>(options, ${cursorIdent}${budget})) as unknown as Promise<{ data: ${item200(op)}; error: undefined; request: Request; response: Response }>`;
+  return `${op.fn}(_withCursor<Options<${op.typeBase}Data>>(options, ${cursorIdent}${budget}))`;
 };
 
 const emitFetchPage = (op) => [

@@ -142,7 +142,7 @@ describe("configured pagination methods", () => {
     expect("listProjectReplayClicks" in sentry.paginateUpTo).toBe(false);
   });
 
-  test("retains existing error policies for page and collection helpers", async () => {
+  test("preserves normalized HTTP errors for page and collection helpers", async () => {
     const body = { detail: "Forbidden" };
     const sentry = createSentryClient({
       baseUrl: "https://example.test",
@@ -160,7 +160,9 @@ describe("configured pagination methods", () => {
       expect(error.response.status).toBe(403);
     }
     sentry.client.setConfig({ throwOnError: true });
-    await expect(sentry.fetchPage.listOrganizations({})).rejects.toEqual(body);
+    await expect(sentry.fetchPage.listOrganizations({})).rejects.toMatchObject({
+      name: "SentryApiError", status: 403, body,
+    });
   });
 
   test("forwards cancellation through a collection and stops on the aborted request", async () => {
@@ -179,8 +181,8 @@ describe("configured pagination methods", () => {
     const error = await sentry.paginateAll.listOrganizations({ signal: controller.signal })
       .catch(error => error);
 
-    expect(error).toBeInstanceOf(SentryApiError);
-    expect(error.body.name).toBe("AbortError");
+    expect(error).toBe(controller.signal.reason);
+    expect(error.name).toBe("AbortError");
     expect(requests).toHaveLength(2);
     expect(requests.every(request => request.signal.aborted)).toBe(true);
   });

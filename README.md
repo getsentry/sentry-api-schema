@@ -23,10 +23,10 @@ const sentry = createSentryClient({
   headers: { Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}` },
 });
 
-const { data, error } = await sentry.listOrganizations();
+const result = await sentry.listOrganizations();
 
-if (error !== undefined) throw error;
-console.log(data);
+if ("error" in result) throw result.error;
+console.log(result.data);
 ```
 
 Operation methods retain the generated documentation, typed arguments, and response types. Per-call options include `path`, `query`, `headers`, `signal`, and `throwOnError`. Results preserve the underlying `request` and `response`, including response headers:
@@ -46,7 +46,9 @@ const { data: project, request, response } = await sentry.getProject({
 console.log(project, request.url, response.headers.get("content-type"));
 ```
 
-By default, operations return a `data`/`error` result. Set `throwOnError: true` to reject on errors, as above. Methods are bound to their instance and can be safely destructured, such as `const { getProject } = sentry`.
+Operations always return `fields`: `{ data, request, response }` on success, or `{ error, request, response }` on failure. A failure without an HTTP response has `response: undefined`. Check `"error" in result`, since a custom error can itself be `undefined`. Received headers are in `response.headers`; outgoing headers are in `request.headers`.
+
+Set `throwOnError: true` to reject on failures while keeping the same success fields. Methods are bound to their instance and can be safely destructured, such as `const { getProject } = sentry`. Types narrow to success when `true` is supplied **per call**; calls that inherit mutable client configuration conservatively retain the result union.
 
 Each `createSentryClient` call creates an independent transport configuration. The root entry also exports the `SentryClient` and `Config` types; `Config` is the underlying transport's configuration type. Access that transport as `sentry.client` for interceptors, configuration updates, or low-level requests.
 
@@ -115,7 +117,43 @@ const project = zGetProjectResponse.parse(input);
 
 ## Error handling
 
-Every operation with documented error responses has a generated `narrowError_<operation>` wrapper. It returns data or a `SentryApiError` that preserves the operation's status-to-body type map. These wrappers remain standalone functions; pass `sentry.client` to reuse the client configured above:
+HTTP failures use `SentryApiError`, whether returned in `result.error` or thrown with `throwOnError: true`. It preserves the status, parsed `body`, exact `rawBody` text, `request`, and `response` (including headers). The transport reads the error body once; consumers do not need to clone or reread the response. Error bodies without valid JSON remain strings.
+
+```ts
+import { SentryApiError } from "@sentry/api";
+
+const result = await sentry.listOrganizations();
+if ("error" in result) {
+  if (result.error instanceof SentryApiError) {
+    console.log(result.error.status, result.error.body, result.error.rawBody);
+    console.log(result.error.response?.headers.get("retry-after"));
+  }
+  throw result.error;
+}
+```
+
+`error` is typed as `unknown`: a custom `fetch` or error interceptor can supply its own error. Fetch rejections, including cancellation, keep their original identity and have no HTTP response. They are returned or thrown according to `throwOnError`. Exceptions from serialization, validation, interceptors, or response body reading/decoding reject unchanged, even with `throwOnError: false`; that setting does not make a request exception-free.
+
+### Custom errors
+
+HTTP errors are normalized **before** error interceptors run. Interceptors run in registration order, each receiving the preceding interceptor's result. Their returned or thrown value is preserved by operations and pagination; there is no second normalization pass.
+
+```ts
+sentry.client.interceptors.error.use((error, response, request) => {
+  if (error instanceof SentryApiError) {
+    // Return your application's existing error type here, if needed.
+    return new Error(`API ${error.status}: ${request.method} ${request.url}`, {
+      cause: error,
+    });
+  }
+  // No HTTP response for a rejected fetch. Preserve cancellation/custom errors.
+  return error;
+});
+```
+
+### Opt-in status narrowing
+
+Every operation with documented error responses has a generated `narrowError_<operation>` wrapper. It narrows the default HTTP `SentryApiError` to the operation's status-to-body type map, preserving its metadata. These wrappers remain standalone functions; pass `sentry.client` to reuse the client configured above:
 
 ```ts
 import { narrowError_getProject } from "@sentry/api";
@@ -130,7 +168,7 @@ const result = await narrowError_getProject({
 
 if (!result.ok) {
   if (!result.error.documented) {
-    // Unexpected HTTP status or a transport failure.
+    // Unexpected HTTP status.
     throw result.error;
   }
 
@@ -142,7 +180,17 @@ if (!result.ok) {
 }
 ```
 
-Checking `documented` first separates the operation's finite error union from unexpected statuses and transport failures. Within the documented branch, checking `status` narrows `body` to that response's schema. Error bodies remain `unknown` where the source OpenAPI response has no schema.
+Checking `documented` first separates the operation's finite HTTP error union from unexpected statuses. Within the documented branch, checking `status` narrows `body` to that response's schema. This is a schema-based type assertion, **not runtime payload validation**. Error bodies remain `unknown` where the source OpenAPI response has no schema. Ordinary operations set `documented: false`; only these opt-in helpers know the operation's status map.
+
+These helpers reclassify base `SentryApiError` instances belonging to the operation's response, including ones returned by an interceptor. Other errors—including custom classes/subclasses, fetch failures, cancellation, and decoding/validation exceptions—reject unchanged. They are not used implicitly by operations or pagination. Consumers that own their error model should use ordinary operations instead.
+
+### Migrating the 0.x response contract
+
+- `responseStyle: "data"` is no longer accepted, including at initialization, `setConfig`, and per call. JavaScript callers receive a `TypeError` before a request is sent. Read `result.data` from the stable fields result instead.
+- HTTP errors previously exposed a raw body; now read `error.body` after narrowing to `SentryApiError`. `error.rawBody` retains the original text.
+- Successful results omit `error`; failed results include it even when the error value is falsy. Manual result fixtures must follow that shape. Use `"error" in result` rather than a truthiness check.
+- Error interceptors receive normalized HTTP errors and chain their returned values. Pagination and `unwrapResult` no longer create another error or prepend a helper-specific message; their legacy `context` argument remains accepted.
+- `narrowError_*` and `callWithTypedErrors` now narrow HTTP failures only. Other failures reject unchanged instead of becoming a synthetic transport `SentryApiError`. `SentryApiTransportError` remains a deprecated type alias, but is no longer part of `NarrowedResult`.
 
 ## Pagination
 
@@ -158,7 +206,7 @@ Sentry uses cursor-based pagination via `Link` headers. Choose one of three help
 
 All helpers reuse the instance's configuration and interceptors and can be destructured. They manage `cursor` separately from `query`, retaining your path, filters, and `signal` while invoking the configured operation. The SDK does not own page history or a response cache: the consumer keeps cursors in its URL, query cache, or persistent storage.
 
-Pagination needs the transport's default `responseStyle: "fields"` to read HTTP headers; `responseStyle: "data"` is not supported. Helpers reject on failure: under the default error policy, they throw `SentryApiError`; if the transport is configured with `throwOnError: true`, its thrown error propagates directly.
+Pagination reads HTTP headers from the same fields contract. Helpers always reject on failure, preserving the exact error: `SentryApiError` for default HTTP failures, or the original custom error/cancellation. This is consistent whether `throwOnError` is enabled or disabled.
 
 ### Single page
 

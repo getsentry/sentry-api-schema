@@ -1,6 +1,6 @@
 /**
- * Generate one status-discriminated result wrapper for every SDK operation
- * that declares an error response in OpenAPI.
+ * Generate one status-discriminated HTTP result wrapper for every SDK operation
+ * that declares an error response in OpenAPI. Custom and non-HTTP errors reject.
  */
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -78,7 +78,7 @@ for (const { fn, optional, statuses, typeBase } of operations) {
   const data = `${typeBase}Responses[keyof ${typeBase}Responses]`;
   const errors = `${typeBase}Errors`;
   lines.push(
-    `/** Call \`${fn}\` and preserve its documented status-to-body error map. */`,
+    `/** Narrow default HTTP errors from \`${fn}\` by status. Custom and non-HTTP errors reject unchanged. */`,
     `export const narrowError_${fn} = async (`,
     `    options${optional ? "?" : ""}: Options<${typeBase}Data, false>,`,
     `): Promise<NarrowedResult<${data}, ${errors}>> =>`,
