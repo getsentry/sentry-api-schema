@@ -15493,6 +15493,184 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/channel-validate/": {
+      "get": {
+        "operationId": "validateOrganizationIntegrationChannel",
+        "description": "**Experimental:** This API is under active development and may change.\n\nValidate whether a channel exists for the given integration.",
+        "summary": "Validate a Messaging Channel for an Integration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "channel",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "valid": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "valid"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/channels/": {
+      "get": {
+        "operationId": "listOrganizationIntegrationChannels",
+        "description": "**Experimental:** This API is under active development and may change.\n\nList all messaging channels for an integration.",
+        "summary": "List Messaging Channels for an Integration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "integration_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the integration installed on the organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integration"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "warning": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "display",
+                          "id",
+                          "name",
+                          "type"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "results"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/repos/": {
       "get": {
         "operationId": "listOrganizationIntegrationRepositories",
@@ -89995,6 +90173,57 @@
           "projectSlug",
           "releaseNotes",
           "state"
+        ]
+      },
+      "IntegrationChannelValidationResponse": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string"
+          },
+          "valid": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "valid"
+        ]
+      },
+      "IntegrationChannelsResponse": {
+        "type": "object",
+        "properties": {
+          "warning": {
+            "type": "string"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "display": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "display",
+                "id",
+                "name",
+                "type"
+              ]
+            }
+          }
+        },
+        "required": [
+          "results"
         ]
       },
       "IntegrationIssueConfigResponse": {
