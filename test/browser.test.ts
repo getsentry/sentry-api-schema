@@ -250,15 +250,15 @@ describe('createBrowserFetch', () => {
     });
   });
 
-  it('allows signal: null to clear an already-aborted Request signal', async () => {
+  it('forwards explicit signal: null alongside an already-aborted Request', async () => {
     const request = new Request('https://example.test/api/0/projects/', {
       signal: AbortSignal.abort(new Error('Original cancelled')),
     });
     const browserFetch = createBrowserFetch();
 
     await withMockFetch(async (input, init) => {
-      const effective = new Request(input, init);
-      expect(effective.signal.aborted).toBe(false);
+      expect(input).toBe(request);
+      expect(init?.signal).toBeNull();
       return Response.json([]);
     }, async () => {
       const response = await browserFetch(request, {signal: null});

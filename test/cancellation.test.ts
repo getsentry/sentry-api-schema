@@ -130,9 +130,10 @@ describe("operation cancellation", () => {
       new Request(request, { signal: controller.signal }));
     expect((await cancelled.listOrganizations()).error).toBe(reason);
 
-    const cleared = createSentryClient({ baseUrl: "https://example.test", fetch });
-    cleared.client.interceptors.request.use(request => new Request(request, { signal: null }));
-    expect((await cleared.listOrganizations({ signal: controller.signal })).data).toEqual([]);
+    const replacement = new AbortController();
+    const replaced = createSentryClient({ baseUrl: "https://example.test", fetch });
+    replaced.client.interceptors.request.use(request => new Request(request, { signal: replacement.signal }));
+    expect((await replaced.listOrganizations({ signal: controller.signal })).data).toEqual([]);
     expect(requests).toBe(1);
   });
 
