@@ -1,3 +1,9 @@
+## 0.360.2
+
+### Bug Fixes
+
+- (release) Default merge target to main by @MathurAditya724 in [#106](https://github.com/getsentry/sentry-api-schema/pull/106)
+
 ## 0.360.1
 
 ### Internal Changes
