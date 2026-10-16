@@ -17,6 +17,7 @@ on:
         type: boolean
       merge_target:
         description: Merge target branch
+        default: main
         required: false
 
 permissions:
@@ -60,4 +61,4 @@ jobs:
         with:
           version: ${{ inputs.version }}
           force: ${{ inputs.force }}
-          merge_target: ${{ inputs.merge_target }}
+          merge_target: ${{ inputs.merge_target || 'main' }}
