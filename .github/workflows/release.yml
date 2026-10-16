@@ -24,18 +24,22 @@ permissions:
   contents: write
   pull-requests: write
 
-# A newer commit always supersedes a release that has not finished.
-concurrency:
-  group: release
-  cancel-in-progress: true
-
 jobs:
   release:
     runs-on: ubuntu-latest
     name: Release a new version
+    # Craft merges release branches by SHA, producing "Merge commit '...'".
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      !startsWith(github.event.head_commit.message, 'Merge branch ''release/')
+      (
+        !startsWith(github.event.head_commit.message, 'Merge branch ''release/') &&
+        !(github.actor == 'sentry-release-bot[bot]' &&
+          startsWith(github.event.head_commit.message, 'Merge commit '))
+      )
+    # Apply concurrency after the guard so skipped merges cannot cancel a release.
+    concurrency:
+      group: release
+      cancel-in-progress: true
     steps:
       - name: Get auth token
         id: token
