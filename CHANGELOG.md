@@ -1,3 +1,9 @@
+## 0.360.3
+
+### Internal Changes
+
+- (release) Skip release bot merge commits by @MathurAditya724 in [#107](https://github.com/getsentry/sentry-api-schema/pull/107)
+
 ## 0.360.2
 
 ### Bug Fixes
