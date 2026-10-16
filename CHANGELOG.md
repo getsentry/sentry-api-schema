@@ -1,3 +1,9 @@
+## 0.360.1
+
+### Internal Changes
+
+- Add CODEOWNERS for repo ownership by @sentry-junior in [#88](https://github.com/getsentry/sentry-api-schema/pull/88)
+
 ## 0.360.0
 
 ### Schema Updates
