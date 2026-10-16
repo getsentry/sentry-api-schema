@@ -33,9 +33,14 @@ jobs:
   release:
     runs-on: ubuntu-latest
     name: Release a new version
+    # Craft merges release branches by SHA, producing "Merge commit '...'".
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      !startsWith(github.event.head_commit.message, 'Merge branch ''release/')
+      (
+        !startsWith(github.event.head_commit.message, 'Merge branch ''release/') &&
+        !(github.actor == 'sentry-release-bot[bot]' &&
+          startsWith(github.event.head_commit.message, 'Merge commit '))
+      )
     steps:
       - name: Get auth token
         id: token
