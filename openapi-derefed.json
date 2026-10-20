@@ -64440,6 +64440,372 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stacktrace-link/": {
+      "get": {
+        "operationId": "getProjectStacktraceLink",
+        "description": "Resolve a stack trace filename to its linked source file using the project's code mappings and connected source code integrations.",
+        "summary": "Get a Source Code Link for a Stack Trace Frame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "file",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The file path from the stack trace frame.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The platform associated with the frame."
+          },
+          {
+            "in": "query",
+            "name": "absPath",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The absolute path of the stack frame, if known."
+          },
+          {
+            "in": "query",
+            "name": "commitId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The commit ID associated with the event."
+          },
+          {
+            "in": "query",
+            "name": "sdkName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The SDK name associated with the event."
+          },
+          {
+            "in": "query",
+            "name": "module",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The module name, if known."
+          },
+          {
+            "in": "query",
+            "name": "package",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The package name, if known."
+          },
+          {
+            "in": "query",
+            "name": "lineNo",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The source line number, if known."
+          },
+          {
+            "in": "query",
+            "name": "groupId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The issue ID, if known."
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sourcePath": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "attemptedUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "config": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "projectId": {
+                          "type": "string"
+                        },
+                        "projectSlug": {
+                          "type": "string"
+                        },
+                        "repoId": {
+                          "type": "string"
+                        },
+                        "repoName": {
+                          "type": "string"
+                        },
+                        "integrationId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "provider": {
+                          "type": "object",
+                          "properties": {
+                            "key": {
+                              "type": "string"
+                            },
+                            "slug": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "canAdd": {
+                              "type": "boolean"
+                            },
+                            "canDisable": {
+                              "type": "boolean"
+                            },
+                            "features": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "aspects": {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          },
+                          "required": [
+                            "aspects",
+                            "canAdd",
+                            "canDisable",
+                            "features",
+                            "key",
+                            "name",
+                            "slug"
+                          ],
+                          "nullable": true
+                        },
+                        "stackRoot": {
+                          "type": "string"
+                        },
+                        "sourceRoot": {
+                          "type": "string"
+                        },
+                        "defaultBranch": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "automaticallyGenerated": {
+                          "type": "boolean"
+                        },
+                        "hasCodeOwner": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "automaticallyGenerated",
+                        "defaultBranch",
+                        "hasCodeOwner",
+                        "id",
+                        "integrationId",
+                        "projectId",
+                        "projectSlug",
+                        "provider",
+                        "repoId",
+                        "repoName",
+                        "sourceRoot",
+                        "stackRoot"
+                      ],
+                      "nullable": true
+                    },
+                    "sourceUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "integrations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "icon": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "domainName": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "accountType": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
+                          },
+                          "outOfDate": {
+                            "type": "boolean",
+                            "nullable": true
+                          },
+                          "missingFeatures": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "description": "A feature the installation can no longer support, named by the permission\ntier it falls short of, so the update-permissions modal can list them.",
+                              "properties": {
+                                "key": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "description",
+                                "key"
+                              ]
+                            },
+                            "nullable": true
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "canAdd": {
+                                "type": "boolean"
+                              },
+                              "canDisable": {
+                                "type": "boolean"
+                              },
+                              "features": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "aspects": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              }
+                            },
+                            "required": [
+                              "aspects",
+                              "canAdd",
+                              "canDisable",
+                              "features",
+                              "key",
+                              "name",
+                              "slug"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "accountType",
+                          "domainName",
+                          "icon",
+                          "id",
+                          "missingFeatures",
+                          "name",
+                          "outOfDate",
+                          "provider",
+                          "scopes",
+                          "status"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "config",
+                    "error",
+                    "integrations",
+                    "sourceUrl"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stats/": {
       "get": {
         "operationId": "listProjectStats",
@@ -112762,6 +113128,239 @@
           "release_has_some_artifact",
           "sdk_debug_id_support",
           "sdk_version"
+        ]
+      },
+      "StacktraceLinkResponse": {
+        "type": "object",
+        "properties": {
+          "sourcePath": {
+            "type": "string",
+            "nullable": true
+          },
+          "attemptedUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "projectId": {
+                "type": "string"
+              },
+              "projectSlug": {
+                "type": "string"
+              },
+              "repoId": {
+                "type": "string"
+              },
+              "repoName": {
+                "type": "string"
+              },
+              "integrationId": {
+                "type": "string",
+                "nullable": true
+              },
+              "provider": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "canAdd": {
+                    "type": "boolean"
+                  },
+                  "canDisable": {
+                    "type": "boolean"
+                  },
+                  "features": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "aspects": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "required": [
+                  "aspects",
+                  "canAdd",
+                  "canDisable",
+                  "features",
+                  "key",
+                  "name",
+                  "slug"
+                ],
+                "nullable": true
+              },
+              "stackRoot": {
+                "type": "string"
+              },
+              "sourceRoot": {
+                "type": "string"
+              },
+              "defaultBranch": {
+                "type": "string",
+                "nullable": true
+              },
+              "automaticallyGenerated": {
+                "type": "boolean"
+              },
+              "hasCodeOwner": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "automaticallyGenerated",
+              "defaultBranch",
+              "hasCodeOwner",
+              "id",
+              "integrationId",
+              "projectId",
+              "projectSlug",
+              "provider",
+              "repoId",
+              "repoName",
+              "sourceRoot",
+              "stackRoot"
+            ],
+            "nullable": true
+          },
+          "sourceUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "integrations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "icon": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "domainName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "accountType": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "scopes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "outOfDate": {
+                  "type": "boolean",
+                  "nullable": true
+                },
+                "missingFeatures": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "A feature the installation can no longer support, named by the permission\ntier it falls short of, so the update-permissions modal can list them.",
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "description",
+                      "key"
+                    ]
+                  },
+                  "nullable": true
+                },
+                "status": {
+                  "type": "string"
+                },
+                "provider": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "canAdd": {
+                      "type": "boolean"
+                    },
+                    "canDisable": {
+                      "type": "boolean"
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "aspects": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "aspects",
+                    "canAdd",
+                    "canDisable",
+                    "features",
+                    "key",
+                    "name",
+                    "slug"
+                  ]
+                }
+              },
+              "required": [
+                "accountType",
+                "domainName",
+                "icon",
+                "id",
+                "missingFeatures",
+                "name",
+                "outOfDate",
+                "provider",
+                "scopes",
+                "status"
+              ]
+            }
+          }
+        },
+        "required": [
+          "config",
+          "error",
+          "integrations",
+          "sourceUrl"
         ]
       },
       "StarSegment": {
