@@ -3468,6 +3468,135 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/codeowners-associations/": {
+      "get": {
+        "operationId": "listOrganizationCodeownersAssociations",
+        "description": "Return CODEOWNERS associations for projects the authenticated user is a member of. Specify `project` to filter the results.",
+        "summary": "List Code Owner Associations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "project",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Filter by project ID or slug. Specify multiple values to include multiple projects. Use `-1` to include all accessible projects."
+          },
+          {
+            "in": "query",
+            "name": "provider",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter associations by integration provider."
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:ci",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "associations": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "errors": {
+                        "type": "object",
+                        "properties": {
+                          "missing_user_emails": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "missing_external_users": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "missing_external_teams": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "teams_without_access": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "users_without_access": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "missing_external_teams",
+                          "missing_external_users",
+                          "missing_user_emails",
+                          "teams_without_access",
+                          "users_without_access"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "associations",
+                      "errors"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/config/integrations/": {
       "get": {
         "operationId": "getOrganizationConfigIntegrations",
@@ -37320,6 +37449,163 @@
                       }
                     ],
                     "summary": "Repository Commits"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/repos/settings/": {
+      "put": {
+        "operationId": "updateOrganizationRepositorySettings",
+        "description": "Update code review settings for one or more repositories in the organization. Provide at least one of `enabledCodeReview` or `codeReviewTriggers`.",
+        "summary": "Update Settings for Organization Repositories",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "repositoryIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "List of repository IDs to update settings for. Maximum 1000 repositories.",
+                    "maxItems": 1000
+                  },
+                  "enabledCodeReview": {
+                    "type": "boolean",
+                    "description": "Whether code review is enabled for these repositories"
+                  },
+                  "codeReviewTriggers": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "on_new_commit",
+                        "on_ready_for_review"
+                      ],
+                      "type": "string",
+                      "description": "A code review trigger to enable.\n\n* `on_new_commit`\n* `on_ready_for_review`"
+                    },
+                    "description": "List of triggers for code review"
+                  }
+                },
+                "required": [
+                  "repositoryIds"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "provider": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "integrationId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "externalSlug": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "externalId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "settings": {
+                        "type": "object",
+                        "properties": {
+                          "enabledCodeReview": {
+                            "type": "boolean"
+                          },
+                          "codeReviewTriggers": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "codeReviewTriggers",
+                          "enabledCodeReview"
+                        ],
+                        "nullable": true
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "dateCreated",
+                      "id",
+                      "name"
+                    ]
                   }
                 }
               }
@@ -101119,6 +101405,66 @@
           "stackRoot"
         ]
       },
+      "OrganizationCodeOwnersAssociationsResponse": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "associations": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "errors": {
+              "type": "object",
+              "properties": {
+                "missing_user_emails": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "missing_external_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "missing_external_teams": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "teams_without_access": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "users_without_access": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "missing_external_teams",
+                "missing_external_users",
+                "missing_user_emails",
+                "teams_without_access",
+                "users_without_access"
+              ]
+            }
+          },
+          "required": [
+            "associations",
+            "errors"
+          ]
+        }
+      },
       "OrganizationConfigIntegrationsEndpointResponse": {
         "type": "object",
         "properties": {
@@ -104603,6 +104949,73 @@
             },
             "description": "An optional way to indicate the start and end commits for each repository included in a release. Head commits must include parameters ``repository`` and ``commit`` (the HEAD SHA). For GitLab repositories, please use the Group name instead of the slug. They can optionally include ``previousCommit`` (the SHA of the HEAD of the previous release), which should be specified if this is the first time you've sent commit data."
           }
+        }
+      },
+      "OrganizationRepositorySettingsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "nullable": true
+            },
+            "provider": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "integrationId": {
+              "type": "string",
+              "nullable": true
+            },
+            "externalSlug": {
+              "type": "string",
+              "nullable": true
+            },
+            "externalId": {
+              "type": "string",
+              "nullable": true
+            },
+            "settings": {
+              "type": "object",
+              "properties": {
+                "enabledCodeReview": {
+                  "type": "boolean"
+                },
+                "codeReviewTriggers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "codeReviewTriggers",
+                "enabledCodeReview"
+              ],
+              "nullable": true
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "dateCreated",
+            "id",
+            "name"
+          ]
         }
       },
       "OrganizationSentryAppDetailsResponse": {
@@ -110165,6 +110578,38 @@
           "query",
           "rangeEnd",
           "rangeStart"
+        ]
+      },
+      "RepositorySettings": {
+        "type": "object",
+        "properties": {
+          "repositoryIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "List of repository IDs to update settings for. Maximum 1000 repositories.",
+            "maxItems": 1000
+          },
+          "enabledCodeReview": {
+            "type": "boolean",
+            "description": "Whether code review is enabled for these repositories"
+          },
+          "codeReviewTriggers": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "on_new_commit",
+                "on_ready_for_review"
+              ],
+              "type": "string",
+              "description": "A code review trigger to enable.\n\n* `on_new_commit`\n* `on_ready_for_review`"
+            },
+            "description": "List of triggers for code review"
+          }
+        },
+        "required": [
+          "repositoryIds"
         ]
       },
       "RetrieveOrganizationAIConversationResponse": {
