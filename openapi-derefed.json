@@ -3468,6 +3468,235 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/code-mappings/bulk/": {
+      "post": {
+        "operationId": "bulkUpsertOrganizationCodeMappings",
+        "description": "Create or update multiple repository path mappings for a project. Mappings with matching project, stack root, and source root are updated.",
+        "summary": "Create or Update Organization Code Mappings in Bulk",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "project": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "The ID or slug of the project to configure."
+                  },
+                  "repository": {
+                    "type": "string",
+                    "description": "The repository name as it appears in Sentry."
+                  },
+                  "mappings": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "stack_root": {
+                          "type": "string",
+                          "description": "The path prefix to strip from matching stack frame filenames before adding sourceRoot.",
+                          "pattern": "^[^\\s'\\\"]+$"
+                        },
+                        "source_root": {
+                          "type": "string",
+                          "description": "The repository path prefix that replaces stackRoot. For example, /app/pkg/file.py with stackRoot=/app/ and sourceRoot=src/ resolves to src/pkg/file.py.",
+                          "pattern": "^[^\\s'\\\"]+$"
+                        }
+                      },
+                      "required": [
+                        "source_root",
+                        "stack_root"
+                      ]
+                    },
+                    "description": "One or more stack-root and source-root mappings (maximum 300)."
+                  },
+                  "provider": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Optional repository provider used to disambiguate or find the repository. If no matching Sentry repository exists, the repository is created after the provider confirms it exists."
+                  },
+                  "default_branch": {
+                    "type": "string",
+                    "description": "The repository branch to use; inferred from the integration when omitted.",
+                    "pattern": "^(^(?![\\/]))([\\w\\.\\/-]+)(?<![\\/])$"
+                  }
+                },
+                "required": [
+                  "mappings",
+                  "project",
+                  "repository"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:ci",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "created": {
+                      "type": "integer"
+                    },
+                    "updated": {
+                      "type": "integer"
+                    },
+                    "errors": {
+                      "type": "integer"
+                    },
+                    "mappings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "stackRoot": {
+                            "type": "string"
+                          },
+                          "sourceRoot": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "enum": [
+                              "created",
+                              "updated",
+                              "error"
+                            ],
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceRoot",
+                          "stackRoot",
+                          "status"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "created",
+                    "errors",
+                    "mappings",
+                    "updated"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "207": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "created": {
+                      "type": "integer"
+                    },
+                    "updated": {
+                      "type": "integer"
+                    },
+                    "errors": {
+                      "type": "integer"
+                    },
+                    "mappings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "stackRoot": {
+                            "type": "string"
+                          },
+                          "sourceRoot": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "enum": [
+                              "created",
+                              "updated",
+                              "error"
+                            ],
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceRoot",
+                          "stackRoot",
+                          "status"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "created",
+                    "errors",
+                    "mappings",
+                    "updated"
+                  ]
+                }
+              }
+            },
+            "description": "One or more mappings could not be saved."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/codeowners-associations/": {
       "get": {
         "operationId": "listOrganizationCodeownersAssociations",
@@ -81565,6 +81794,165 @@
           "teamRole"
         ]
       },
+      "BulkCodeMappingsPartialResponse": {
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "integer"
+          },
+          "updated": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          },
+          "mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stackRoot": {
+                  "type": "string"
+                },
+                "sourceRoot": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "created",
+                    "updated",
+                    "error"
+                  ],
+                  "type": "string"
+                },
+                "detail": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "sourceRoot",
+                "stackRoot",
+                "status"
+              ]
+            }
+          }
+        },
+        "required": [
+          "created",
+          "errors",
+          "mappings",
+          "updated"
+        ]
+      },
+      "BulkCodeMappingsRequest": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "project": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "The ID or slug of the project to configure."
+          },
+          "repository": {
+            "type": "string",
+            "description": "The repository name as it appears in Sentry."
+          },
+          "mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stack_root": {
+                  "type": "string",
+                  "description": "The path prefix to strip from matching stack frame filenames before adding sourceRoot.",
+                  "pattern": "^[^\\s'\\\"]+$"
+                },
+                "source_root": {
+                  "type": "string",
+                  "description": "The repository path prefix that replaces stackRoot. For example, /app/pkg/file.py with stackRoot=/app/ and sourceRoot=src/ resolves to src/pkg/file.py.",
+                  "pattern": "^[^\\s'\\\"]+$"
+                }
+              },
+              "required": [
+                "source_root",
+                "stack_root"
+              ]
+            },
+            "description": "One or more stack-root and source-root mappings (maximum 300)."
+          },
+          "provider": {
+            "type": "string",
+            "nullable": true,
+            "description": "Optional repository provider used to disambiguate or find the repository. If no matching Sentry repository exists, the repository is created after the provider confirms it exists."
+          },
+          "default_branch": {
+            "type": "string",
+            "description": "The repository branch to use; inferred from the integration when omitted.",
+            "pattern": "^(^(?![\\/]))([\\w\\.\\/-]+)(?<![\\/])$"
+          }
+        },
+        "required": [
+          "mappings",
+          "project",
+          "repository"
+        ]
+      },
+      "BulkCodeMappingsResponse": {
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "integer"
+          },
+          "updated": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          },
+          "mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stackRoot": {
+                  "type": "string"
+                },
+                "sourceRoot": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "created",
+                    "updated",
+                    "error"
+                  ],
+                  "type": "string"
+                },
+                "detail": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "sourceRoot",
+                "stackRoot",
+                "status"
+              ]
+            }
+          }
+        },
+        "required": [
+          "created",
+          "errors",
+          "mappings",
+          "updated"
+        ]
+      },
       "BulkEnvironment": {
         "type": "object",
         "properties": {
@@ -99289,6 +99677,25 @@
             "triggers"
           ]
         }
+      },
+      "MappingItem": {
+        "type": "object",
+        "properties": {
+          "stack_root": {
+            "type": "string",
+            "description": "The path prefix to strip from matching stack frame filenames before adding sourceRoot.",
+            "pattern": "^[^\\s'\\\"]+$"
+          },
+          "source_root": {
+            "type": "string",
+            "description": "The repository path prefix that replaces stackRoot. For example, /app/pkg/file.py with stackRoot=/app/ and sourceRoot=src/ resolves to src/pkg/file.py.",
+            "pattern": "^[^\\s'\\\"]+$"
+          }
+        },
+        "required": [
+          "source_root",
+          "stack_root"
+        ]
       },
       "Monitor": {
         "type": "object",
