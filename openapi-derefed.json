@@ -3495,6 +3495,264 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/code-mappings/{config_id}/": {
+      "put": {
+        "operationId": "updateOrganizationCodeMapping",
+        "description": "Update the repository, project, or path settings for a code mapping.",
+        "summary": "Update an Organization Code Mapping",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "config_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the code mapping to update.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "repository_id": {
+                    "type": "integer",
+                    "description": "The ID of a repository belonging to the installed integration."
+                  },
+                  "project_id": {
+                    "type": "integer",
+                    "description": "The ID of the project to associate with the code mapping."
+                  },
+                  "stack_root": {
+                    "type": "string",
+                    "description": "The path prefix to replace in stack trace filenames.",
+                    "pattern": "^[^\\s'\\\"]+$"
+                  },
+                  "source_root": {
+                    "type": "string",
+                    "description": "The repository path prefix to substitute for the stack trace prefix.",
+                    "pattern": "^[^\\s'\\\"]+$"
+                  },
+                  "default_branch": {
+                    "type": "string",
+                    "description": "The default branch to use when resolving source files. May be empty for Perforce.",
+                    "pattern": "^(^(?![\\/]))([\\w\\.\\/-]+)(?<![\\/])$"
+                  }
+                },
+                "required": [
+                  "project_id",
+                  "repository_id",
+                  "source_root",
+                  "stack_root"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "projectSlug": {
+                      "type": "string"
+                    },
+                    "repoId": {
+                      "type": "string"
+                    },
+                    "repoName": {
+                      "type": "string"
+                    },
+                    "integrationId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "provider": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "canAdd": {
+                          "type": "boolean"
+                        },
+                        "canDisable": {
+                          "type": "boolean"
+                        },
+                        "features": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "aspects": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "required": [
+                        "aspects",
+                        "canAdd",
+                        "canDisable",
+                        "features",
+                        "key",
+                        "name",
+                        "slug"
+                      ],
+                      "nullable": true
+                    },
+                    "stackRoot": {
+                      "type": "string"
+                    },
+                    "sourceRoot": {
+                      "type": "string"
+                    },
+                    "defaultBranch": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "automaticallyGenerated": {
+                      "type": "boolean"
+                    },
+                    "hasCodeOwner": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "automaticallyGenerated",
+                    "defaultBranch",
+                    "hasCodeOwner",
+                    "id",
+                    "integrationId",
+                    "projectId",
+                    "projectSlug",
+                    "provider",
+                    "repoId",
+                    "repoName",
+                    "sourceRoot",
+                    "stackRoot"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        }
+      },
+      "delete": {
+        "operationId": "deleteOrganizationCodeMapping",
+        "description": "Delete a repository project path config\n\n:auth: required",
+        "summary": "Delete an Organization Code Mapping",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "config_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the code mapping to delete.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:integrations"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/code-mappings/bulk/": {
       "post": {
         "operationId": "bulkUpsertOrganizationCodeMappings",
@@ -112315,6 +112573,41 @@
           "query",
           "rangeEnd",
           "rangeStart"
+        ]
+      },
+      "RepositoryProjectPathConfig": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "repository_id": {
+            "type": "integer",
+            "description": "The ID of a repository belonging to the installed integration."
+          },
+          "project_id": {
+            "type": "integer",
+            "description": "The ID of the project to associate with the code mapping."
+          },
+          "stack_root": {
+            "type": "string",
+            "description": "The path prefix to replace in stack trace filenames.",
+            "pattern": "^[^\\s'\\\"]+$"
+          },
+          "source_root": {
+            "type": "string",
+            "description": "The repository path prefix to substitute for the stack trace prefix.",
+            "pattern": "^[^\\s'\\\"]+$"
+          },
+          "default_branch": {
+            "type": "string",
+            "description": "The default branch to use when resolving source files. May be empty for Perforce.",
+            "pattern": "^(^(?![\\/]))([\\w\\.\\/-]+)(?<![\\/])$"
+          }
+        },
+        "required": [
+          "project_id",
+          "repository_id",
+          "source_root",
+          "stack_root"
         ]
       },
       "RepositorySettings": {
