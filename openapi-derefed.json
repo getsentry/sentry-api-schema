@@ -51410,6 +51410,93 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/code-mapping-prefixes/stack/": {
+      "get": {
+        "operationId": "listStackCodeMappingPrefixes",
+        "description": "Return ranked directory prefixes from stack traces and existing mappings to help configure a code mapping.",
+        "summary": "List Stack Trace Directory Prefixes for Code Mapping Autocomplete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prefixes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "fileCount": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "fileCount",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "prefixes"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/codeowners/": {
       "get": {
         "operationId": "listProjectCodeOwners",
@@ -115961,6 +116048,32 @@
           "release_has_some_artifact",
           "sdk_debug_id_support",
           "sdk_version"
+        ]
+      },
+      "StackPrefixesResponse": {
+        "type": "object",
+        "properties": {
+          "prefixes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "fileCount": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "fileCount",
+                "path"
+              ]
+            }
+          }
+        },
+        "required": [
+          "prefixes"
         ]
       },
       "StacktraceLinkResponse": {
