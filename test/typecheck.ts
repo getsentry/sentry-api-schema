@@ -21,6 +21,10 @@ import {
   paginateAll_listOrganizationProjects,
   paginateUpTo_listOrganizationIssues,
 } from "../src/index";
+import type {
+  ListOrganizationTraceItemAttributesQueryAttributeType,
+  ListOrganizationTraceItemAttributesQueryDataset,
+} from "../src/index";
 import type { InferOutput } from "valibot";
 import type { z } from "zod";
 import { vAutofixPostResponse } from "../src/valibot";
@@ -224,3 +228,12 @@ async function statusNarrowsErrorBody() {
 
 void narrowErrorHappyPath;
 void statusNarrowsErrorBody;
+
+// Enum query parameters are named, and array parameters name their element.
+const attributeDataset: ListOrganizationTraceItemAttributesQueryDataset = "tracemetrics";
+// @ts-expect-error "errors" is not a trace item dataset.
+const invalidAttributeDataset: ListOrganizationTraceItemAttributesQueryDataset = "errors";
+const attributeType: ListOrganizationTraceItemAttributesQueryAttributeType = "number";
+// @ts-expect-error The alias is the element type, not the array.
+const attributeTypeList: ListOrganizationTraceItemAttributesQueryAttributeType = ["number"];
+void [attributeDataset, invalidAttributeDataset, attributeType, attributeTypeList];

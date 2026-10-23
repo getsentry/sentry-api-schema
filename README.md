@@ -69,6 +69,20 @@ const { data, error } = await listOrganizations({
 
 They can also reuse an existing instance's configuration: `listOrganizations({ client: sentry.client })`.
 
+### Query parameter types
+
+Each operation's `<Operation>Data` type describes its `path`, `query`, and `body`. Enum-valued query parameters also get a named type for one value, `<Operation>Query<Parameter>`. For array parameters, that is the element type:
+
+```ts
+import type {
+  ListOrganizationTraceItemAttributesQueryAttributeType,
+  ListOrganizationTraceItemAttributesQueryDataset,
+} from "@sentry/api";
+
+const dataset: ListOrganizationTraceItemAttributesQueryDataset = "spans";
+const types: ListOrganizationTraceItemAttributesQueryAttributeType[] = ["string", "number"];
+```
+
 ### Browser sessions
 
 The browser helper configures session cookies and CSRF token injection:
