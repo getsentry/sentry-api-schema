@@ -50,6 +50,7 @@ execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-response-co
 //    is documented as in-development and unstable.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-results.mjs"))}`, { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-query-enum-types.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "constrain-throw-options.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
 
@@ -64,6 +65,7 @@ appendFileSync(
     "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, fetchPage, paginateAll, paginateUpTo } from './sentry-pagination.ts';",
     "export type { UnwrappedResult, PaginatedResponse, PaginatedCollection, PaginateAllOptions, PaginateUpToOptions, PageFetcher, BudgetedPageFetcher } from './sentry-pagination.ts';",
     "export * from './error-results.gen.ts';",
+    "export type * from './query-enums.gen.ts';",
     "export * from './pagination.gen.ts';",
     "export { createSentryClient } from './sentry-client.gen.ts';",
     "export type { SentryClient } from './sentry-client.gen.ts';",
