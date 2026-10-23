@@ -1,3 +1,9 @@
+## 0.399.0
+
+### New Features
+
+- Name enum query parameter types by @sentry-junior in [#108](https://github.com/getsentry/sentry-api-schema/pull/108)
+
 ## 0.398.0
 
 ### Schema Updates
