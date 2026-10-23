@@ -2763,6 +2763,18 @@
               "type": "integer"
             },
             "description": "Number of spans to return per page. Defaults to 100; maximum is 1,000."
+          },
+          {
+            "in": "query",
+            "name": "view",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "timeline",
+                "transcript"
+              ]
+            },
+            "description": "Defaults to timeline (paginated raw spans). Transcript returns paginated normalized messages; requires feature access. Transcript timestamps and durations are seconds."
           }
         ],
         "tags": [
@@ -2782,225 +2794,555 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "description": "Span page plus conversation-level metadata.",
-                  "properties": {
-                    "conversationId": {
-                      "type": "string"
-                    },
-                    "title": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "projects": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "integer"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "slug"
-                        ]
-                      }
-                    },
-                    "webUrl": {
-                      "type": "string"
-                    },
-                    "spans": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    },
-                    "stats": {
+                  "anyOf": [
+                    {
                       "type": "object",
+                      "description": "Span page plus conversation-level metadata.",
                       "properties": {
-                        "endTimestamp": {
-                          "type": "integer"
+                        "conversationId": {
+                          "type": "string"
                         },
-                        "errors": {
-                          "type": "integer"
+                        "title": {
+                          "type": "string",
+                          "nullable": true
                         },
-                        "generationDuration": {
-                          "type": "number",
-                          "format": "double"
-                        },
-                        "inputTokens": {
-                          "type": "integer"
-                        },
-                        "llmCalls": {
-                          "type": "integer"
-                        },
-                        "outputTokens": {
-                          "type": "integer"
-                        },
-                        "startTimestamp": {
-                          "type": "integer"
-                        },
-                        "toolCalls": {
-                          "type": "integer"
-                        },
-                        "toolErrors": {
-                          "type": "integer"
-                        },
-                        "toolNames": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        },
-                        "totalCost": {
-                          "type": "number",
-                          "format": "double"
-                        },
-                        "totalTokens": {
-                          "type": "integer"
-                        },
-                        "cacheReadTokens": {
-                          "type": "integer"
-                        },
-                        "cacheWriteTokens": {
-                          "type": "integer"
-                        },
-                        "errorToolNames": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        },
-                        "reasoningTokens": {
-                          "type": "integer"
-                        },
-                        "cacheReadCost": {
-                          "type": "number",
-                          "format": "double"
-                        },
-                        "cacheWriteCost": {
-                          "type": "number",
-                          "format": "double"
-                        },
-                        "reasoningCost": {
-                          "type": "number",
-                          "format": "double"
-                        },
-                        "usageByModel": {
+                        "projects": {
                           "type": "array",
                           "items": {
                             "type": "object",
                             "properties": {
-                              "model": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "llmCalls": {
+                              "id": {
                                 "type": "integer"
                               },
-                              "inputTokens": {
-                                "type": "integer"
+                              "name": {
+                                "type": "string"
                               },
-                              "outputTokens": {
-                                "type": "integer"
-                              },
-                              "totalTokens": {
-                                "type": "integer"
-                              },
-                              "cacheReadTokens": {
-                                "type": "integer"
-                              },
-                              "cacheWriteTokens": {
-                                "type": "integer"
-                              },
-                              "reasoningTokens": {
-                                "type": "integer"
-                              },
-                              "inputCost": {
-                                "type": "number",
-                                "format": "double"
-                              },
-                              "outputCost": {
-                                "type": "number",
-                                "format": "double"
-                              },
-                              "cacheReadCost": {
-                                "type": "number",
-                                "format": "double"
-                              },
-                              "cacheWriteCost": {
-                                "type": "number",
-                                "format": "double"
-                              },
-                              "reasoningCost": {
-                                "type": "number",
-                                "format": "double"
-                              },
-                              "totalCost": {
-                                "type": "number",
-                                "format": "double"
+                              "slug": {
+                                "type": "string"
                               }
                             },
                             "required": [
-                              "cacheReadCost",
-                              "cacheReadTokens",
-                              "cacheWriteCost",
-                              "cacheWriteTokens",
-                              "inputCost",
-                              "inputTokens",
-                              "llmCalls",
-                              "model",
-                              "outputCost",
-                              "outputTokens",
-                              "reasoningCost",
-                              "reasoningTokens",
-                              "totalCost",
-                              "totalTokens"
+                              "id",
+                              "name",
+                              "slug"
                             ]
                           }
+                        },
+                        "webUrl": {
+                          "type": "string"
+                        },
+                        "spans": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          }
+                        },
+                        "stats": {
+                          "type": "object",
+                          "properties": {
+                            "endTimestamp": {
+                              "type": "integer"
+                            },
+                            "errors": {
+                              "type": "integer"
+                            },
+                            "generationDuration": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "inputTokens": {
+                              "type": "integer"
+                            },
+                            "llmCalls": {
+                              "type": "integer"
+                            },
+                            "outputTokens": {
+                              "type": "integer"
+                            },
+                            "startTimestamp": {
+                              "type": "integer"
+                            },
+                            "toolCalls": {
+                              "type": "integer"
+                            },
+                            "toolErrors": {
+                              "type": "integer"
+                            },
+                            "toolNames": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "totalCost": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "totalTokens": {
+                              "type": "integer"
+                            },
+                            "cacheReadTokens": {
+                              "type": "integer"
+                            },
+                            "cacheWriteTokens": {
+                              "type": "integer"
+                            },
+                            "errorToolNames": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "reasoningTokens": {
+                              "type": "integer"
+                            },
+                            "cacheReadCost": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "cacheWriteCost": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "reasoningCost": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "usageByModel": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "model": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "llmCalls": {
+                                    "type": "integer"
+                                  },
+                                  "inputTokens": {
+                                    "type": "integer"
+                                  },
+                                  "outputTokens": {
+                                    "type": "integer"
+                                  },
+                                  "totalTokens": {
+                                    "type": "integer"
+                                  },
+                                  "cacheReadTokens": {
+                                    "type": "integer"
+                                  },
+                                  "cacheWriteTokens": {
+                                    "type": "integer"
+                                  },
+                                  "reasoningTokens": {
+                                    "type": "integer"
+                                  },
+                                  "inputCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "outputCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "cacheReadCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "cacheWriteCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "reasoningCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "totalCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  }
+                                },
+                                "required": [
+                                  "cacheReadCost",
+                                  "cacheReadTokens",
+                                  "cacheWriteCost",
+                                  "cacheWriteTokens",
+                                  "inputCost",
+                                  "inputTokens",
+                                  "llmCalls",
+                                  "model",
+                                  "outputCost",
+                                  "outputTokens",
+                                  "reasoningCost",
+                                  "reasoningTokens",
+                                  "totalCost",
+                                  "totalTokens"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "cacheReadCost",
+                            "cacheReadTokens",
+                            "cacheWriteCost",
+                            "cacheWriteTokens",
+                            "endTimestamp",
+                            "errorToolNames",
+                            "errors",
+                            "generationDuration",
+                            "inputTokens",
+                            "llmCalls",
+                            "outputTokens",
+                            "reasoningCost",
+                            "reasoningTokens",
+                            "startTimestamp",
+                            "toolCalls",
+                            "toolErrors",
+                            "toolNames",
+                            "totalCost",
+                            "totalTokens",
+                            "usageByModel"
+                          ],
+                          "nullable": true
                         }
                       },
                       "required": [
-                        "cacheReadCost",
-                        "cacheReadTokens",
-                        "cacheWriteCost",
-                        "cacheWriteTokens",
-                        "endTimestamp",
-                        "errorToolNames",
-                        "errors",
-                        "generationDuration",
-                        "inputTokens",
-                        "llmCalls",
-                        "outputTokens",
-                        "reasoningCost",
-                        "reasoningTokens",
-                        "startTimestamp",
-                        "toolCalls",
-                        "toolErrors",
-                        "toolNames",
-                        "totalCost",
-                        "totalTokens",
-                        "usageByModel"
-                      ],
-                      "nullable": true
+                        "conversationId",
+                        "projects",
+                        "spans",
+                        "stats",
+                        "title",
+                        "webUrl"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "conversationId": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "projects": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "slug"
+                            ]
+                          }
+                        },
+                        "webUrl": {
+                          "type": "string"
+                        },
+                        "stats": {
+                          "type": "object",
+                          "properties": {
+                            "endTimestamp": {
+                              "type": "integer"
+                            },
+                            "errors": {
+                              "type": "integer"
+                            },
+                            "generationDuration": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "inputTokens": {
+                              "type": "integer"
+                            },
+                            "llmCalls": {
+                              "type": "integer"
+                            },
+                            "outputTokens": {
+                              "type": "integer"
+                            },
+                            "startTimestamp": {
+                              "type": "integer"
+                            },
+                            "toolCalls": {
+                              "type": "integer"
+                            },
+                            "toolErrors": {
+                              "type": "integer"
+                            },
+                            "toolNames": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "totalCost": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "totalTokens": {
+                              "type": "integer"
+                            },
+                            "cacheReadTokens": {
+                              "type": "integer"
+                            },
+                            "cacheWriteTokens": {
+                              "type": "integer"
+                            },
+                            "errorToolNames": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "reasoningTokens": {
+                              "type": "integer"
+                            },
+                            "cacheReadCost": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "cacheWriteCost": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "reasoningCost": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "usageByModel": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "model": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "llmCalls": {
+                                    "type": "integer"
+                                  },
+                                  "inputTokens": {
+                                    "type": "integer"
+                                  },
+                                  "outputTokens": {
+                                    "type": "integer"
+                                  },
+                                  "totalTokens": {
+                                    "type": "integer"
+                                  },
+                                  "cacheReadTokens": {
+                                    "type": "integer"
+                                  },
+                                  "cacheWriteTokens": {
+                                    "type": "integer"
+                                  },
+                                  "reasoningTokens": {
+                                    "type": "integer"
+                                  },
+                                  "inputCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "outputCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "cacheReadCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "cacheWriteCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "reasoningCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "totalCost": {
+                                    "type": "number",
+                                    "format": "double"
+                                  }
+                                },
+                                "required": [
+                                  "cacheReadCost",
+                                  "cacheReadTokens",
+                                  "cacheWriteCost",
+                                  "cacheWriteTokens",
+                                  "inputCost",
+                                  "inputTokens",
+                                  "llmCalls",
+                                  "model",
+                                  "outputCost",
+                                  "outputTokens",
+                                  "reasoningCost",
+                                  "reasoningTokens",
+                                  "totalCost",
+                                  "totalTokens"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "cacheReadCost",
+                            "cacheReadTokens",
+                            "cacheWriteCost",
+                            "cacheWriteTokens",
+                            "endTimestamp",
+                            "errorToolNames",
+                            "errors",
+                            "generationDuration",
+                            "inputTokens",
+                            "llmCalls",
+                            "outputTokens",
+                            "reasoningCost",
+                            "reasoningTokens",
+                            "startTimestamp",
+                            "toolCalls",
+                            "toolErrors",
+                            "toolNames",
+                            "totalCost",
+                            "totalTokens",
+                            "usageByModel"
+                          ],
+                          "nullable": true
+                        },
+                        "transcript": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "role": {
+                                "enum": [
+                                  "user",
+                                  "assistant",
+                                  "embedding",
+                                  "evaluation",
+                                  "memory"
+                                ],
+                                "type": "string"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "timestamp": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "nodeId": {
+                                "type": "string"
+                              },
+                              "traceId": {
+                                "type": "string"
+                              },
+                              "projectId": {
+                                "type": "string"
+                              },
+                              "userEmail": {
+                                "type": "string"
+                              },
+                              "reasoning": {
+                                "type": "string"
+                              },
+                              "agentName": {
+                                "type": "string"
+                              },
+                              "modelName": {
+                                "type": "string"
+                              },
+                              "duration": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "toolCalls": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "nodeId": {
+                                      "type": "string"
+                                    },
+                                    "hasError": {
+                                      "type": "boolean"
+                                    },
+                                    "duration": {
+                                      "type": "number",
+                                      "format": "double"
+                                    }
+                                  },
+                                  "required": [
+                                    "hasError",
+                                    "name",
+                                    "nodeId"
+                                  ]
+                                }
+                              },
+                              "embeddingInput": {
+                                "type": "string"
+                              },
+                              "embeddingTokens": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "embeddingHasError": {
+                                "type": "boolean"
+                              },
+                              "evaluation": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              },
+                              "memory": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              }
+                            },
+                            "required": [
+                              "content",
+                              "id",
+                              "nodeId",
+                              "role",
+                              "timestamp"
+                            ]
+                          }
+                        },
+                        "complete": {
+                          "type": "boolean"
+                        },
+                        "sourceSpanCount": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "complete",
+                        "conversationId",
+                        "projects",
+                        "sourceSpanCount",
+                        "stats",
+                        "title",
+                        "transcript",
+                        "webUrl"
+                      ]
                     }
-                  },
-                  "required": [
-                    "conversationId",
-                    "projects",
-                    "spans",
-                    "stats",
-                    "title",
-                    "webUrl"
                   ]
                 },
                 "examples": {
@@ -3086,6 +3428,43 @@
                       ]
                     },
                     "summary": "Return an AI conversation"
+                  },
+                  "ReturnANormalizedAIConversationTranscript": {
+                    "value": {
+                      "conversationId": "conversation-1",
+                      "title": "Greeting",
+                      "projects": [
+                        {
+                          "id": 1,
+                          "name": "Example Agent",
+                          "slug": "example-agent"
+                        }
+                      ],
+                      "webUrl": "https://sentry.io/organizations/org-slug/explore/agents/conversations/conversation-1/?project=1",
+                      "stats": null,
+                      "complete": true,
+                      "sourceSpanCount": 1,
+                      "transcript": [
+                        {
+                          "id": "user-a1b2c3d4e5f67890",
+                          "role": "user",
+                          "content": "Hello",
+                          "timestamp": 1743465600,
+                          "nodeId": "a1b2c3d4e5f67890",
+                          "userEmail": ""
+                        },
+                        {
+                          "id": "assistant-a1b2c3d4e5f67890",
+                          "role": "assistant",
+                          "content": "Hi",
+                          "timestamp": 1743465601.25,
+                          "nodeId": "a1b2c3d4e5f67890",
+                          "duration": 1.25
+                        }
+                      ]
+                    },
+                    "summary": "Return a normalized AI conversation transcript",
+                    "description": "Request view=transcript with feature access. Raw spans remain available through view=timeline."
                   }
                 }
               }
@@ -112696,225 +113075,555 @@
         ]
       },
       "RetrieveOrganizationAIConversationResponse": {
-        "type": "object",
-        "description": "Span page plus conversation-level metadata.",
-        "properties": {
-          "conversationId": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "projects": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id",
-                "name",
-                "slug"
-              ]
-            }
-          },
-          "webUrl": {
-            "type": "string"
-          },
-          "spans": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": {}
-            }
-          },
-          "stats": {
+        "anyOf": [
+          {
             "type": "object",
+            "description": "Span page plus conversation-level metadata.",
             "properties": {
-              "endTimestamp": {
-                "type": "integer"
+              "conversationId": {
+                "type": "string"
               },
-              "errors": {
-                "type": "integer"
+              "title": {
+                "type": "string",
+                "nullable": true
               },
-              "generationDuration": {
-                "type": "number",
-                "format": "double"
-              },
-              "inputTokens": {
-                "type": "integer"
-              },
-              "llmCalls": {
-                "type": "integer"
-              },
-              "outputTokens": {
-                "type": "integer"
-              },
-              "startTimestamp": {
-                "type": "integer"
-              },
-              "toolCalls": {
-                "type": "integer"
-              },
-              "toolErrors": {
-                "type": "integer"
-              },
-              "toolNames": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "totalCost": {
-                "type": "number",
-                "format": "double"
-              },
-              "totalTokens": {
-                "type": "integer"
-              },
-              "cacheReadTokens": {
-                "type": "integer"
-              },
-              "cacheWriteTokens": {
-                "type": "integer"
-              },
-              "errorToolNames": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "reasoningTokens": {
-                "type": "integer"
-              },
-              "cacheReadCost": {
-                "type": "number",
-                "format": "double"
-              },
-              "cacheWriteCost": {
-                "type": "number",
-                "format": "double"
-              },
-              "reasoningCost": {
-                "type": "number",
-                "format": "double"
-              },
-              "usageByModel": {
+              "projects": {
                 "type": "array",
                 "items": {
                   "type": "object",
                   "properties": {
-                    "model": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "llmCalls": {
+                    "id": {
                       "type": "integer"
                     },
-                    "inputTokens": {
-                      "type": "integer"
+                    "name": {
+                      "type": "string"
                     },
-                    "outputTokens": {
-                      "type": "integer"
-                    },
-                    "totalTokens": {
-                      "type": "integer"
-                    },
-                    "cacheReadTokens": {
-                      "type": "integer"
-                    },
-                    "cacheWriteTokens": {
-                      "type": "integer"
-                    },
-                    "reasoningTokens": {
-                      "type": "integer"
-                    },
-                    "inputCost": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "outputCost": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "cacheReadCost": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "cacheWriteCost": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "reasoningCost": {
-                      "type": "number",
-                      "format": "double"
-                    },
-                    "totalCost": {
-                      "type": "number",
-                      "format": "double"
+                    "slug": {
+                      "type": "string"
                     }
                   },
                   "required": [
-                    "cacheReadCost",
-                    "cacheReadTokens",
-                    "cacheWriteCost",
-                    "cacheWriteTokens",
-                    "inputCost",
-                    "inputTokens",
-                    "llmCalls",
-                    "model",
-                    "outputCost",
-                    "outputTokens",
-                    "reasoningCost",
-                    "reasoningTokens",
-                    "totalCost",
-                    "totalTokens"
+                    "id",
+                    "name",
+                    "slug"
                   ]
                 }
+              },
+              "webUrl": {
+                "type": "string"
+              },
+              "spans": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "stats": {
+                "type": "object",
+                "properties": {
+                  "endTimestamp": {
+                    "type": "integer"
+                  },
+                  "errors": {
+                    "type": "integer"
+                  },
+                  "generationDuration": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "inputTokens": {
+                    "type": "integer"
+                  },
+                  "llmCalls": {
+                    "type": "integer"
+                  },
+                  "outputTokens": {
+                    "type": "integer"
+                  },
+                  "startTimestamp": {
+                    "type": "integer"
+                  },
+                  "toolCalls": {
+                    "type": "integer"
+                  },
+                  "toolErrors": {
+                    "type": "integer"
+                  },
+                  "toolNames": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "totalCost": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "totalTokens": {
+                    "type": "integer"
+                  },
+                  "cacheReadTokens": {
+                    "type": "integer"
+                  },
+                  "cacheWriteTokens": {
+                    "type": "integer"
+                  },
+                  "errorToolNames": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "reasoningTokens": {
+                    "type": "integer"
+                  },
+                  "cacheReadCost": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "cacheWriteCost": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "reasoningCost": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "usageByModel": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "model": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "llmCalls": {
+                          "type": "integer"
+                        },
+                        "inputTokens": {
+                          "type": "integer"
+                        },
+                        "outputTokens": {
+                          "type": "integer"
+                        },
+                        "totalTokens": {
+                          "type": "integer"
+                        },
+                        "cacheReadTokens": {
+                          "type": "integer"
+                        },
+                        "cacheWriteTokens": {
+                          "type": "integer"
+                        },
+                        "reasoningTokens": {
+                          "type": "integer"
+                        },
+                        "inputCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "outputCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "cacheReadCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "cacheWriteCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "reasoningCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "totalCost": {
+                          "type": "number",
+                          "format": "double"
+                        }
+                      },
+                      "required": [
+                        "cacheReadCost",
+                        "cacheReadTokens",
+                        "cacheWriteCost",
+                        "cacheWriteTokens",
+                        "inputCost",
+                        "inputTokens",
+                        "llmCalls",
+                        "model",
+                        "outputCost",
+                        "outputTokens",
+                        "reasoningCost",
+                        "reasoningTokens",
+                        "totalCost",
+                        "totalTokens"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "cacheReadCost",
+                  "cacheReadTokens",
+                  "cacheWriteCost",
+                  "cacheWriteTokens",
+                  "endTimestamp",
+                  "errorToolNames",
+                  "errors",
+                  "generationDuration",
+                  "inputTokens",
+                  "llmCalls",
+                  "outputTokens",
+                  "reasoningCost",
+                  "reasoningTokens",
+                  "startTimestamp",
+                  "toolCalls",
+                  "toolErrors",
+                  "toolNames",
+                  "totalCost",
+                  "totalTokens",
+                  "usageByModel"
+                ],
+                "nullable": true
               }
             },
             "required": [
-              "cacheReadCost",
-              "cacheReadTokens",
-              "cacheWriteCost",
-              "cacheWriteTokens",
-              "endTimestamp",
-              "errorToolNames",
-              "errors",
-              "generationDuration",
-              "inputTokens",
-              "llmCalls",
-              "outputTokens",
-              "reasoningCost",
-              "reasoningTokens",
-              "startTimestamp",
-              "toolCalls",
-              "toolErrors",
-              "toolNames",
-              "totalCost",
-              "totalTokens",
-              "usageByModel"
-            ],
-            "nullable": true
+              "conversationId",
+              "projects",
+              "spans",
+              "stats",
+              "title",
+              "webUrl"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "conversationId": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string",
+                "nullable": true
+              },
+              "projects": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "slug"
+                  ]
+                }
+              },
+              "webUrl": {
+                "type": "string"
+              },
+              "stats": {
+                "type": "object",
+                "properties": {
+                  "endTimestamp": {
+                    "type": "integer"
+                  },
+                  "errors": {
+                    "type": "integer"
+                  },
+                  "generationDuration": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "inputTokens": {
+                    "type": "integer"
+                  },
+                  "llmCalls": {
+                    "type": "integer"
+                  },
+                  "outputTokens": {
+                    "type": "integer"
+                  },
+                  "startTimestamp": {
+                    "type": "integer"
+                  },
+                  "toolCalls": {
+                    "type": "integer"
+                  },
+                  "toolErrors": {
+                    "type": "integer"
+                  },
+                  "toolNames": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "totalCost": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "totalTokens": {
+                    "type": "integer"
+                  },
+                  "cacheReadTokens": {
+                    "type": "integer"
+                  },
+                  "cacheWriteTokens": {
+                    "type": "integer"
+                  },
+                  "errorToolNames": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "reasoningTokens": {
+                    "type": "integer"
+                  },
+                  "cacheReadCost": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "cacheWriteCost": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "reasoningCost": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "usageByModel": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "model": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "llmCalls": {
+                          "type": "integer"
+                        },
+                        "inputTokens": {
+                          "type": "integer"
+                        },
+                        "outputTokens": {
+                          "type": "integer"
+                        },
+                        "totalTokens": {
+                          "type": "integer"
+                        },
+                        "cacheReadTokens": {
+                          "type": "integer"
+                        },
+                        "cacheWriteTokens": {
+                          "type": "integer"
+                        },
+                        "reasoningTokens": {
+                          "type": "integer"
+                        },
+                        "inputCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "outputCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "cacheReadCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "cacheWriteCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "reasoningCost": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "totalCost": {
+                          "type": "number",
+                          "format": "double"
+                        }
+                      },
+                      "required": [
+                        "cacheReadCost",
+                        "cacheReadTokens",
+                        "cacheWriteCost",
+                        "cacheWriteTokens",
+                        "inputCost",
+                        "inputTokens",
+                        "llmCalls",
+                        "model",
+                        "outputCost",
+                        "outputTokens",
+                        "reasoningCost",
+                        "reasoningTokens",
+                        "totalCost",
+                        "totalTokens"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "cacheReadCost",
+                  "cacheReadTokens",
+                  "cacheWriteCost",
+                  "cacheWriteTokens",
+                  "endTimestamp",
+                  "errorToolNames",
+                  "errors",
+                  "generationDuration",
+                  "inputTokens",
+                  "llmCalls",
+                  "outputTokens",
+                  "reasoningCost",
+                  "reasoningTokens",
+                  "startTimestamp",
+                  "toolCalls",
+                  "toolErrors",
+                  "toolNames",
+                  "totalCost",
+                  "totalTokens",
+                  "usageByModel"
+                ],
+                "nullable": true
+              },
+              "transcript": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "enum": [
+                        "user",
+                        "assistant",
+                        "embedding",
+                        "evaluation",
+                        "memory"
+                      ],
+                      "type": "string"
+                    },
+                    "content": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "nodeId": {
+                      "type": "string"
+                    },
+                    "traceId": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "userEmail": {
+                      "type": "string"
+                    },
+                    "reasoning": {
+                      "type": "string"
+                    },
+                    "agentName": {
+                      "type": "string"
+                    },
+                    "modelName": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "toolCalls": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "nodeId": {
+                            "type": "string"
+                          },
+                          "hasError": {
+                            "type": "boolean"
+                          },
+                          "duration": {
+                            "type": "number",
+                            "format": "double"
+                          }
+                        },
+                        "required": [
+                          "hasError",
+                          "name",
+                          "nodeId"
+                        ]
+                      }
+                    },
+                    "embeddingInput": {
+                      "type": "string"
+                    },
+                    "embeddingTokens": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "embeddingHasError": {
+                      "type": "boolean"
+                    },
+                    "evaluation": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    },
+                    "memory": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "content",
+                    "id",
+                    "nodeId",
+                    "role",
+                    "timestamp"
+                  ]
+                }
+              },
+              "complete": {
+                "type": "boolean"
+              },
+              "sourceSpanCount": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "complete",
+              "conversationId",
+              "projects",
+              "sourceSpanCount",
+              "stats",
+              "title",
+              "transcript",
+              "webUrl"
+            ]
           }
-        },
-        "required": [
-          "conversationId",
-          "projects",
-          "spans",
-          "stats",
-          "title",
-          "webUrl"
         ]
       },
       "SCIMListResourceTypesResponse": {
