@@ -13542,13 +13542,45 @@
                         "interval": {
                           "type": "number",
                           "format": "double"
+                        },
+                        "suppressedDrops": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "description": "Drop volume withheld from the dropped annotations as a known misreport.",
+                            "properties": {
+                              "cause": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "outcome": {
+                                "type": "string"
+                              },
+                              "reason": {
+                                "type": "string"
+                              },
+                              "count": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "category",
+                              "cause",
+                              "count",
+                              "outcome",
+                              "reason"
+                            ]
+                          }
                         }
                       },
                       "required": [
                         "dataset",
                         "end",
                         "interval",
-                        "start"
+                        "start",
+                        "suppressedDrops"
                       ]
                     },
                     "droppedEvents": {
@@ -104157,13 +104189,45 @@
               "interval": {
                 "type": "number",
                 "format": "double"
+              },
+              "suppressedDrops": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Drop volume withheld from the dropped annotations as a known misreport.",
+                  "properties": {
+                    "cause": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "outcome": {
+                      "type": "string"
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "category",
+                    "cause",
+                    "count",
+                    "outcome",
+                    "reason"
+                  ]
+                }
               }
             },
             "required": [
               "dataset",
               "end",
               "interval",
-              "start"
+              "start",
+              "suppressedDrops"
             ]
           },
           "droppedEvents": {
