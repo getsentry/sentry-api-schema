@@ -83,6 +83,25 @@ const dataset: ListOrganizationTraceItemAttributesQueryDataset = "spans";
 const types: ListOrganizationTraceItemAttributesQueryAttributeType[] = ["string", "number"];
 ```
 
+### Operation discovery
+
+`@sentry/api/operations` exports a readonly catalog for offline discovery, without importing the client, validators, or transport:
+
+```ts
+import { operations } from "@sentry/api/operations";
+
+const logOperations = operations.filter(operation =>
+  operation.queryParameters.some(parameter =>
+    parameter.name === "dataset" && parameter.enum?.includes("logs"),
+  ),
+);
+console.log(logOperations.map(({ functionName, method, path }) => ({ functionName, method, path })));
+```
+
+Each `ApiOperation` records the actual exported `functionName`, original OpenAPI `operationId`, method, path, summary, description, tags, path parameter names, query metadata, and explicit deprecation flag. `ApiQueryParameter` includes the name, required flag, description, type, and declared enum values (item values for arrays). Operation parameters override inherited path parameters.
+
+The catalog is generated from the same schema and SDK output as each release. Consumers own search, grouping, ranking, and command aliases; the catalog does not fetch a live schema or infer undocumented API behavior.
+
 ### Browser sessions
 
 The browser helper configures session cookies and CSRF token injection:

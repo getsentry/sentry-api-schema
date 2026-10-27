@@ -53,6 +53,7 @@ execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-resul
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-query-enum-types.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "constrain-throw-options.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-operations.mjs"))}`, { stdio: "inherit" });
 
 // 4. Append re-exports to the generated index.ts so the pagination
 //    utilities and the per-operation wrappers are part of the public API.
@@ -88,4 +89,5 @@ execSync("bun build src/index.ts --outdir dist", { stdio: "inherit" });
 execSync('bun build src/valibot.ts --outdir dist --external valibot', { stdio: "inherit" });
 execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
 execSync("bun build src/browser.ts --outdir dist", { stdio: "inherit" });
+execSync("bun build src/operations.ts --outdir dist", { stdio: "inherit" });
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });
