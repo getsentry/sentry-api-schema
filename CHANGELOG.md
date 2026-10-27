@@ -1,3 +1,9 @@
+## 0.412.0
+
+### New Features
+
+- Export a generated operation catalog by @betegon in [#110](https://github.com/getsentry/sentry-api-schema/pull/110)
+
 ## 0.411.0
 
 ### Schema Updates
