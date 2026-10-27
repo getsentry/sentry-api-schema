@@ -10,6 +10,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
+import { parseSdkOperations } from "../lib/sdk-operations.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const normalizedSpec = join(root, "openapi-normalized.json");
@@ -22,7 +23,6 @@ const parse = (name) => {
   const path = join(root, "src", name);
   return ts.createSourceFile(path, readFileSync(path, "utf8"), ts.ScriptTarget.Latest, true);
 };
-const sdk = parse("sdk.gen.ts");
 const types = parse("types.gen.ts");
 
 /** Top-level type declarations in types.gen.ts, by name. */
@@ -51,48 +51,7 @@ const queryProperties = (dataType) => {
   );
 };
 
-/**
- * The `Options<…>` reference in an operation's parameter type. It is the type
- * itself for `(options: Options<…>)`, or nested in a tuple for operations whose
- * options are optional: `(...[options]: [options?: Options<…>] & …)`.
- */
-const findOptions = (node) => {
-  if (ts.isTypeReferenceNode(node) && node.typeName.getText(sdk) === "Options") return node;
-  return ts.forEachChild(node, findOptions);
-};
-
-/**
- * Each SDK operation's name, `<Operation>Data` type, HTTP method and URL, read
- * from `export const op = (options: Options<OpData, …>) => (…).get<…>({ url: '…', … })`.
- */
-const operations = [];
-for (const statement of sdk.statements) {
-  if (!ts.isVariableStatement(statement)) continue;
-  for (const declaration of statement.declarationList.declarations) {
-    const fn = declaration.initializer;
-    if (!ts.isIdentifier(declaration.name) || !fn || !ts.isArrowFunction(fn)) continue;
-
-    const optionsType = fn.parameters[0]?.type && findOptions(fn.parameters[0].type);
-    const dataType = optionsType?.typeArguments?.[0];
-    const call = ts.isCallExpression(fn.body) && fn.body;
-    const callee = call && call.expression;
-    const request = call && call.arguments[0];
-    const url = request && ts.isObjectLiteralExpression(request) && request.properties.find((property) =>
-      ts.isPropertyAssignment(property) && propertyName(property, sdk) === "url");
-    if (
-      !dataType || !ts.isTypeReferenceNode(dataType) || !ts.isIdentifier(dataType.typeName) ||
-      !callee || !ts.isPropertyAccessExpression(callee) ||
-      !url || !ts.isStringLiteralLike(url.initializer)
-    ) {
-      throw new Error(`generate-query-enum-types: unsupported SDK operation ${declaration.name.text}`);
-    }
-    operations.push({
-      fn: declaration.name.text,
-      dataType: dataType.typeName.text,
-      route: `${callee.name.text.toUpperCase()} ${url.initializer.text}`,
-    });
-  }
-}
+const operations = parseSdkOperations(readFileSync(join(root, "src", "sdk.gen.ts"), "utf8"));
 
 /** `attributeType`, `data_source`, `stats-period` → `AttributeType`, `DataSource`, `StatsPeriod` */
 const pascal = (name) =>
@@ -125,8 +84,8 @@ for (const [path, methods] of Object.entries(spec.paths ?? {})) {
 
 const aliases = [];
 const seen = new Set();
-for (const { fn, dataType, route } of operations) {
-  const params = enumParams.get(route);
+for (const { functionName: fn, dataType, method, path } of operations) {
+  const params = enumParams.get(`${method} ${path}`);
   if (!params) continue;
 
   const typeBase = dataType.replace(/Data$/, "");
