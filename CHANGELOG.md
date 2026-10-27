@@ -1,3 +1,9 @@
+## 0.414.0
+
+### New Features
+
+- (operations) Expose idempotent flag in the operation catalog by @BYK with @sentry-junior in [#111](https://github.com/getsentry/sentry-api-schema/pull/111)
+
 ## 0.413.0
 
 ### Schema Updates
