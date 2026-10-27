@@ -70,6 +70,7 @@ describe("operation discovery", () => {
         { name: "field", required: false, type: "array", enum: ["id", "timestamp"] },
       ],
       deprecated: false,
+      idempotent: true,
     }]);
 
     const next = fixture(["logs", "spans", "new_dataset"]);
@@ -86,6 +87,7 @@ describe("operation discovery", () => {
     expect(grown.catalog).toHaveLength(2);
     expect(grown.catalog.find(operation => operation.path === newPath)).toMatchObject({
       functionName: "queryNewCapability", operationId: "queryNewCapability", method: "POST", deprecated: true,
+      idempotent: false,
     });
     expect(grown.catalog.find(operation => operation.path === eventsPath)?.queryParameters[0]?.enum)
       .toEqual(["logs", "spans", "new_dataset"]);
@@ -96,6 +98,24 @@ describe("operation discovery", () => {
       .toThrow("Missing SDK operation for GET /missing/");
     expect(() => extractOperations(next, initial.source + initial.source.replaceAll("listOrganizationEvents", "otherName")))
       .toThrow(`Multiple SDK operations for GET ${eventsPath}`);
+  });
+
+  test("marks non-safe methods idempotent only when Sentry declares it", async () => {
+    const response = { responses: { "200": { description: "OK" } } };
+    const { catalog } = await generate({
+      ...fixture(),
+      paths: {
+        "/api/0/assemble/": { post: { operationId: "assemble", ...response, "x-sentry-idempotent": true } },
+        "/api/0/things/": {
+          post: { operationId: "createThing", ...response },
+          put: { operationId: "updateThing", ...response },
+          delete: { operationId: "deleteThing", ...response },
+        },
+      },
+    });
+    expect(Object.fromEntries(catalog.map(operation => [operation.functionName, operation.idempotent]))).toEqual({
+      assemble: true, createThing: false, updateThing: false, deleteThing: false,
+    });
   });
 
   test("ships one catalog entry for every actual standalone SDK export", () => {

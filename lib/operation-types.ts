@@ -34,4 +34,10 @@ export type ApiOperation = {
   readonly queryParameters: readonly ApiQueryParameter[];
   /** Whether OpenAPI explicitly marks the operation deprecated. */
   readonly deprecated: boolean;
+  /**
+   * Whether resending an identical request after a timeout or 5xx cannot change the outcome.
+   * Always true for GET, HEAD, OPTIONS, and TRACE; other methods only when Sentry marks them
+   * with `x-sentry-idempotent`. False means "not known to be idempotent".
+   */
+  readonly idempotent: boolean;
 };

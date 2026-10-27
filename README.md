@@ -98,7 +98,9 @@ const logOperations = operations.filter(operation =>
 console.log(logOperations.map(({ functionName, method, path }) => ({ functionName, method, path })));
 ```
 
-Each `ApiOperation` records the actual exported `functionName`, original OpenAPI `operationId`, method, path, summary, description, tags, path parameter names, query metadata, and explicit deprecation flag. `ApiQueryParameter` includes the name, required flag, description, type, and declared enum values (item values for arrays). Operation parameters override inherited path parameters.
+Each `ApiOperation` records the actual exported `functionName`, original OpenAPI `operationId`, method, path, summary, description, tags, path parameter names, query metadata, explicit deprecation flag, and `idempotent` flag. `ApiQueryParameter` includes the name, required flag, description, type, and declared enum values (item values for arrays). Operation parameters override inherited path parameters.
+
+`idempotent` tells retrying clients whether resending an identical request after a timeout or 5xx response is safe. It is always `true` for `GET`, `HEAD`, `OPTIONS`, and `TRACE`. Other methods are `true` only when Sentry marks the operation with the `x-sentry-idempotent` OpenAPI extension; `false` means not known to be idempotent, not known to be unsafe.
 
 The catalog is generated from the same schema and SDK output as each release. Consumers own search, grouping, ranking, and command aliases; the catalog does not fetch a live schema or infer undocumented API behavior.
 
