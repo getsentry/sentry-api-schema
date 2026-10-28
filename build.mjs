@@ -52,6 +52,9 @@ execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-results.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-query-enum-types.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "constrain-throw-options.mjs"))}`, { stdio: "inherit" });
+// Client-side query defaults (lib/query-defaults.mjs) go into the operations
+// themselves, so bound methods and generated wrappers inherit them.
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "apply-query-defaults.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-operations.mjs"))}`, { stdio: "inherit" });
 

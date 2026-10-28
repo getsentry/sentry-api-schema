@@ -83,6 +83,25 @@ const dataset: ListOrganizationTraceItemAttributesQueryDataset = "spans";
 const types: ListOrganizationTraceItemAttributesQueryAttributeType[] = ["string", "number"];
 ```
 
+### Query defaults
+
+A few operations send a query parameter by default to skip expensive work most callers don't need. The operation's documentation states the default.
+
+| Operation | Default | Effect |
+| --- | --- | --- |
+| `getOrganizationIssueEvent` | `collapse: ["adjacentEvents"]` | Skips the next/previous event lookups; `nextEventID` and `previousEventID` are `null` |
+
+The default applies only when the parameter is omitted or `undefined`. Any value you pass replaces it, and an empty list sends nothing:
+
+```ts
+const path = { organization_id_or_slug: "my-org", issue_id: "123", event_id: "latest" } as const;
+
+await sentry.getOrganizationIssueEvent({ path }); // ?collapse=adjacentEvents
+await sentry.getOrganizationIssueEvent({ path, query: { collapse: [] } }); // includes nextEventID/previousEventID
+```
+
+Standalone operations, bound methods, and `narrowError_*` wrappers behave the same way. The operation catalog describes the API itself, so it does not list these defaults.
+
 ### Operation discovery
 
 `@sentry/api/operations` exports a readonly catalog for offline discovery, without importing the client, validators, or transport:

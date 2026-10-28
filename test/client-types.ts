@@ -52,6 +52,14 @@ async function operationArguments(sentry: SentryClient) {
   await sentry.listOrganizations({ query: { owner: "yes" } });
   // @ts-expect-error The bound context cannot be replaced through operation options.
   await sentry.listOrganizations({ client: sentry.client });
+
+  // Client-side query defaults keep the generated parameter types, so the
+  // empty-list opt-out needs no cast and unknown values are still rejected.
+  const event = { path: { organization_id_or_slug: "example", issue_id: "1", event_id: "latest" as const } };
+  await sentry.getOrganizationIssueEvent(event);
+  await sentry.getOrganizationIssueEvent({ ...event, query: { collapse: [] } });
+  // @ts-expect-error Query defaults do not widen the documented enum.
+  await sentry.getOrganizationIssueEvent({ ...event, query: { collapse: ["everything"] } });
 }
 
 async function responseAndThrowingTypes(sentry: SentryClient, throwOnError: boolean) {
