@@ -1,3 +1,9 @@
+## 0.420.0
+
+### New Features
+
+- (client) Skip adjacent-event lookups by default in getOrganizationIssueEvent by @BYK with @sentry-junior in [#112](https://github.com/getsentry/sentry-api-schema/pull/112)
+
 ## 0.419.0
 
 ### Schema Updates
