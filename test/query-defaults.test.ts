@@ -2,7 +2,9 @@ import { describe, expect, test } from "bun:test";
 import {
   createSentryClient,
   getOrganizationIssueEvent,
+  getProjectEvent,
   narrowError_getOrganizationIssueEvent,
+  narrowError_getProjectEvent,
   type Config,
   type GetOrganizationIssueEventQueryCollapse,
 } from "@sentry/api";
@@ -22,6 +24,9 @@ function recordingClient() {
 }
 
 const event = { path: { organization_id_or_slug: "org", issue_id: "1", event_id: "latest" as const } };
+const projectEvent = {
+  path: { organization_id_or_slug: "org", project_id_or_slug: "project", event_id: "a".repeat(32) },
+};
 // The server also honors values the schema does not document yet, such as
 // fullRelease. JavaScript callers can pass them; TypeScript callers need a cast.
 const fullRelease = "fullRelease" as GetOrganizationIssueEventQueryCollapse;
@@ -47,6 +52,24 @@ describe("client-side query defaults", () => {
     ]);
   });
 
+  test("skips adjacent-event lookups on project events unless the caller sets collapse", async () => {
+    const { queries, fetch, sentry } = recordingClient();
+
+    await sentry.getProjectEvent(projectEvent);
+    await sentry.getProjectEvent({ ...projectEvent, query: { environment: ["prod"] } });
+    await getProjectEvent({ ...projectEvent, baseUrl: "https://example.test", fetch });
+    await narrowError_getProjectEvent({ ...projectEvent, client: sentry.client });
+    await sentry.getProjectEvent({ ...projectEvent, query: { collapse: [] } });
+
+    expect(queries).toEqual([
+      "?collapse=adjacentEvents",
+      "?environment=prod&collapse=adjacentEvents",
+      "?collapse=adjacentEvents",
+      "?collapse=adjacentEvents",
+      "",
+    ]);
+  });
+
   test("lets callers replace, combine, or opt out of the default", async () => {
     const { queries, sentry } = recordingClient();
     const query = { collapse: [] as GetOrganizationIssueEventQueryCollapse[], environment: ["prod"] };
@@ -67,13 +90,10 @@ describe("client-side query defaults", () => {
   test("leaves other operations unchanged", async () => {
     const { queries, sentry } = recordingClient();
 
-    await sentry.getProjectEvent({
-      path: { organization_id_or_slug: "org", project_id_or_slug: "project", event_id: "a".repeat(32) },
-    });
     await sentry.listOrganizationIssueEvents({ path: { organization_id_or_slug: "org", issue_id: "1" } });
     await sentry.listOrganizations({ query: { owner: true } });
 
-    expect(queries).toEqual(["", "", "?owner=true"]);
+    expect(queries).toEqual(["", "?owner=true"]);
   });
 });
 
