@@ -60,6 +60,13 @@ async function operationArguments(sentry: SentryClient) {
   await sentry.getOrganizationIssueEvent({ ...event, query: { collapse: [] } });
   // @ts-expect-error Query defaults do not widen the documented enum.
   await sentry.getOrganizationIssueEvent({ ...event, query: { collapse: ["everything"] } });
+  const projectEvent = {
+    path: { organization_id_or_slug: "example", project_id_or_slug: "example", event_id: "a".repeat(32) },
+  };
+  await sentry.getProjectEvent(projectEvent);
+  await sentry.getProjectEvent({ ...projectEvent, query: { collapse: [] } });
+  // @ts-expect-error Query defaults do not widen the documented enum.
+  await sentry.getProjectEvent({ ...projectEvent, query: { collapse: ["everything"] } });
 }
 
 async function responseAndThrowingTypes(sentry: SentryClient, throwOnError: boolean) {

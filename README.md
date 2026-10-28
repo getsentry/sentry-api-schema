@@ -90,6 +90,7 @@ A few operations send a query parameter by default to skip expensive work most c
 | Operation | Default | Effect |
 | --- | --- | --- |
 | `getOrganizationIssueEvent` | `collapse: ["adjacentEvents"]` | Skips the next/previous event lookups; `nextEventID` and `previousEventID` are `null` |
+| `getProjectEvent` | `collapse: ["adjacentEvents"]` | Skips the next/previous event lookups; `nextEventID` and `previousEventID` are `null` |
 
 The default applies only when the parameter is omitted or `undefined`. Any value you pass replaces it, and an empty list sends nothing:
 
