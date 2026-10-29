@@ -67776,6 +67776,449 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/seer/repos/": {
+      "get": {
+        "operationId": "listProjectSeerRepositories",
+        "description": "**Experimental:** This API is under active development and may change.\n\nList repositories connected to Seer for the project.",
+        "summary": "List Repositories Configured for Seer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter repositories using Sentry search syntax. `name` supports substring matching and is also the free-text key. `provider` supports `=`, `!=`, `IN`, and `NOT IN` operators, and matches with or without the `integrations:` prefix."
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "-name",
+                "-provider",
+                "name",
+                "provider"
+              ]
+            },
+            "description": "Sort by repository name or provider. Defaults to `name`."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The maximum number of results per page."
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "repositoryId": {
+                        "type": "string"
+                      },
+                      "organizationId": {
+                        "type": "string"
+                      },
+                      "provider": {
+                        "type": "string"
+                      },
+                      "owner": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "externalId": {
+                        "type": "string"
+                      },
+                      "integrationId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "branchName": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "branchOverrides": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "tagName": {
+                              "type": "string"
+                            },
+                            "tagValue": {
+                              "type": "string"
+                            },
+                            "branchName": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "branchName",
+                            "id",
+                            "tagName",
+                            "tagValue"
+                          ]
+                        }
+                      },
+                      "instructions": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "branchName",
+                      "branchOverrides",
+                      "externalId",
+                      "id",
+                      "instructions",
+                      "integrationId",
+                      "name",
+                      "organizationId",
+                      "owner",
+                      "provider",
+                      "repositoryId"
+                    ]
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        },
+        "x-sentry-experimental": true
+      },
+      "post": {
+        "operationId": "addProjectSeerRepositories",
+        "description": "**Experimental:** This API is under active development and may change.\n\nAdd the specified repositories to Seer without removing other repositories. At least one repository is required. Re-submitting a repository replaces its branchName, instructions, and branchOverrides; omitted values are cleared.",
+        "summary": "Add Repositories to Seer for a Project",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "repos": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                      "properties": {
+                        "repository_id": {
+                          "type": "integer",
+                          "description": "The ID of an active, supported repository in the organization."
+                        },
+                        "branch_name": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "The branch Seer works from in this repository. Leave empty to use the repository's default branch."
+                        },
+                        "instructions": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Extra context Seer should use when working with this repository."
+                        },
+                        "branch_overrides": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                            "properties": {
+                              "tag_name": {
+                                "type": "string",
+                                "description": "Event tag key to match."
+                              },
+                              "tag_value": {
+                                "type": "string",
+                                "description": "Event tag value to match."
+                              },
+                              "branch_name": {
+                                "type": "string",
+                                "description": "The repository branch Seer uses for issues whose events have this tag value."
+                              }
+                            },
+                            "required": [
+                              "branch_name",
+                              "tag_name",
+                              "tag_value"
+                            ]
+                          },
+                          "description": "Deprecated. Branch overrides selected by matching tags.",
+                          "deprecated": true
+                        }
+                      },
+                      "required": [
+                        "repository_id"
+                      ]
+                    },
+                    "description": "Repositories to link and configure for Seer in this project."
+                  }
+                },
+                "required": [
+                  "repos"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        },
+        "x-sentry-experimental": true
+      },
+      "put": {
+        "operationId": "replaceProjectSeerRepositories",
+        "description": "**Experimental:** This API is under active development and may change.\n\nReplace the project's active Seer repository configurations with the submitted repositories. An empty `repos` list removes all active Seer repository configurations. Inactive repository configurations are retained and become available again if the repositories are reactivated.",
+        "summary": "Replace Repositories Configured for Seer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                "properties": {
+                  "repos": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                      "properties": {
+                        "repository_id": {
+                          "type": "integer",
+                          "description": "The ID of an active, supported repository in the organization."
+                        },
+                        "branch_name": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "The branch Seer works from in this repository. Leave empty to use the repository's default branch."
+                        },
+                        "instructions": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Extra context Seer should use when working with this repository."
+                        },
+                        "branch_overrides": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                            "properties": {
+                              "tag_name": {
+                                "type": "string",
+                                "description": "Event tag key to match."
+                              },
+                              "tag_value": {
+                                "type": "string",
+                                "description": "Event tag value to match."
+                              },
+                              "branch_name": {
+                                "type": "string",
+                                "description": "The repository branch Seer uses for issues whose events have this tag value."
+                              }
+                            },
+                            "required": [
+                              "branch_name",
+                              "tag_name",
+                              "tag_value"
+                            ]
+                          },
+                          "description": "Deprecated. Branch overrides selected by matching tags.",
+                          "deprecated": true
+                        }
+                      },
+                      "required": [
+                        "repository_id"
+                      ]
+                    },
+                    "description": "Repositories to link and configure for Seer in this project."
+                  }
+                },
+                "required": [
+                  "repos"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stacktrace-link/": {
       "get": {
         "operationId": "getProjectStacktraceLink",
@@ -84491,6 +84934,29 @@
           "name",
           "slug",
           "teamRole"
+        ]
+      },
+      "BranchOverride": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "tag_name": {
+            "type": "string",
+            "description": "Event tag key to match."
+          },
+          "tag_value": {
+            "type": "string",
+            "description": "Event tag value to match."
+          },
+          "branch_name": {
+            "type": "string",
+            "description": "The repository branch Seer uses for issues whose events have this tag value."
+          }
+        },
+        "required": [
+          "branch_name",
+          "tag_name",
+          "tag_value"
         ]
       },
       "BulkCodeMappingsPartialResponse": {
@@ -112721,6 +113187,86 @@
           ]
         }
       },
+      "ProjectSeerRepositoriesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "repositoryId": {
+              "type": "string"
+            },
+            "organizationId": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "externalId": {
+              "type": "string"
+            },
+            "integrationId": {
+              "type": "string",
+              "nullable": true
+            },
+            "branchName": {
+              "type": "string",
+              "nullable": true
+            },
+            "branchOverrides": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "tagName": {
+                    "type": "string"
+                  },
+                  "tagValue": {
+                    "type": "string"
+                  },
+                  "branchName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "branchName",
+                  "id",
+                  "tagName",
+                  "tagValue"
+                ]
+              }
+            },
+            "instructions": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "required": [
+            "branchName",
+            "branchOverrides",
+            "externalId",
+            "id",
+            "instructions",
+            "integrationId",
+            "name",
+            "organizationId",
+            "owner",
+            "provider",
+            "repositoryId"
+          ]
+        }
+      },
       "ProjectSizeStatusCheckRulesResponse": {
         "type": "object",
         "properties": {
@@ -115192,6 +115738,121 @@
         },
         "required": [
           "models"
+        ]
+      },
+      "SeerProjectRepoCreate": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "repository_id": {
+            "type": "integer",
+            "description": "The ID of an active, supported repository in the organization."
+          },
+          "branch_name": {
+            "type": "string",
+            "nullable": true,
+            "description": "The branch Seer works from in this repository. Leave empty to use the repository's default branch."
+          },
+          "instructions": {
+            "type": "string",
+            "nullable": true,
+            "description": "Extra context Seer should use when working with this repository."
+          },
+          "branch_overrides": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+              "properties": {
+                "tag_name": {
+                  "type": "string",
+                  "description": "Event tag key to match."
+                },
+                "tag_value": {
+                  "type": "string",
+                  "description": "Event tag value to match."
+                },
+                "branch_name": {
+                  "type": "string",
+                  "description": "The repository branch Seer uses for issues whose events have this tag value."
+                }
+              },
+              "required": [
+                "branch_name",
+                "tag_name",
+                "tag_value"
+              ]
+            },
+            "description": "Deprecated. Branch overrides selected by matching tags.",
+            "deprecated": true
+          }
+        },
+        "required": [
+          "repository_id"
+        ]
+      },
+      "SeerProjectReposBulk": {
+        "type": "object",
+        "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+        "properties": {
+          "repos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+              "properties": {
+                "repository_id": {
+                  "type": "integer",
+                  "description": "The ID of an active, supported repository in the organization."
+                },
+                "branch_name": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "The branch Seer works from in this repository. Leave empty to use the repository's default branch."
+                },
+                "instructions": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "Extra context Seer should use when working with this repository."
+                },
+                "branch_overrides": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
+                    "properties": {
+                      "tag_name": {
+                        "type": "string",
+                        "description": "Event tag key to match."
+                      },
+                      "tag_value": {
+                        "type": "string",
+                        "description": "Event tag value to match."
+                      },
+                      "branch_name": {
+                        "type": "string",
+                        "description": "The repository branch Seer uses for issues whose events have this tag value."
+                      }
+                    },
+                    "required": [
+                      "branch_name",
+                      "tag_name",
+                      "tag_value"
+                    ]
+                  },
+                  "description": "Deprecated. Branch overrides selected by matching tags.",
+                  "deprecated": true
+                }
+              },
+              "required": [
+                "repository_id"
+              ]
+            },
+            "description": "Repositories to link and configure for Seer in this project."
+          }
+        },
+        "required": [
+          "repos"
         ]
       },
       "SentryAppComponentsResponse": {
