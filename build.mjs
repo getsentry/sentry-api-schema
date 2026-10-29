@@ -38,6 +38,7 @@ await createClient({
 cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 cpSync("lib/sentry-errors.ts", "src/sentry-errors.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
+cpSync("lib/source-analysis.ts", "src/source-analysis.ts");
 
 // Keep the pinned Fetch generator's runtime and types aligned with our contract.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-response-contract.mjs"))}`, { stdio: "inherit" });
@@ -93,4 +94,5 @@ execSync('bun build src/valibot.ts --outdir dist --external valibot', { stdio: "
 execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
 execSync("bun build src/browser.ts --outdir dist", { stdio: "inherit" });
 execSync("bun build src/operations.ts --outdir dist", { stdio: "inherit" });
+execSync("bun build src/source-analysis.ts --outdir dist --external typescript", { stdio: "inherit" });
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });
