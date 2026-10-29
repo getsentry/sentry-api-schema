@@ -140,7 +140,10 @@ const sources = new Map([
   ["features/logs.ts", `
     import { listOrganizationEvents } from "@sentry/api";
     export const readLogs = () =>
-      listOrganizationEvents({ query: { dataset: "logs" } });
+      listOrganizationEvents({
+        path: { organization_id_or_slug: "example-org" },
+        query: { dataset: "logs", field: ["message"] },
+      });
   `],
 ]);
 const analysis = analyzeSourceApiUsage(sources, operations, {
@@ -154,7 +157,7 @@ The analyzer parses source without executing it, following local imports, re-exp
 
 Consumers configure their own `boundaries` (factory names whose arguments are inspected without following the factory implementation), `requests` (raw-request wrapper argument positions), `queryParameters` (query values to retain), and `declarationFlags` (boolean markers). These options default to empty lists. Returned `boundaries` identify factory-created exports and their markers; `methods` records reachable HTTP methods, including known methods on unresolved raw requests. CLI routing, aliases, presentation, and destructive-command policy remain with the consumer.
 
-This is static discovery, not proof of runtime execution or safety. Dynamic and ambiguous raw requests produce diagnostics; unknown query values are omitted, and a related operation does not describe every request a workflow makes. The entry imports TypeScript separately and is not loaded by the root client, browser helpers, or operation catalog.
+This is static discovery, not proof of runtime execution or safety. Dynamic and ambiguous raw requests produce diagnostics; unknown query values are omitted, and a related operation does not describe every request a workflow makes. Mutable `let` and `var` bindings are left unknown. The entry imports TypeScript separately and is not loaded by the root client, browser helpers, or operation catalog.
 
 ### Browser sessions
 

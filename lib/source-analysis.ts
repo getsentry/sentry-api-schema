@@ -101,6 +101,68 @@ function unwrap(node: ts.Node): ts.Node {
     : node;
 }
 
+function bindsName(binding: ts.BindingName, name: string): boolean {
+  return ts.isIdentifier(binding)
+    ? binding.text === name
+    : binding.elements.some(
+        (element) => ts.isBindingElement(element) && bindsName(element.name, name),
+      );
+}
+
+/** Find lexical bindings before consulting module imports or declarations. */
+function lexicalDeclaration(
+  node: ts.Identifier,
+  includeSource = false,
+): ts.Declaration | undefined {
+  for (
+    let parent = node.parent;
+    parent && (includeSource || !ts.isSourceFile(parent));
+    parent = parent.parent
+  ) {
+    if (ts.isFunctionLike(parent)) {
+      const parameter = parent.parameters.find((parameter) =>
+        bindsName(parameter.name, node.text),
+      );
+      if (parameter) return parameter;
+    }
+    if (
+      (ts.isFunctionExpression(parent) || ts.isClassExpression(parent)) &&
+      parent.name?.text === node.text
+    )
+      return parent;
+    if (
+      ts.isCatchClause(parent) && parent.variableDeclaration &&
+      bindsName(parent.variableDeclaration.name, node.text)
+    )
+      return parent.variableDeclaration;
+    if (
+      (ts.isForStatement(parent) || ts.isForOfStatement(parent) || ts.isForInStatement(parent)) &&
+      parent.initializer && ts.isVariableDeclarationList(parent.initializer)
+    ) {
+      const declaration = parent.initializer.declarations.find((declaration) =>
+        bindsName(declaration.name, node.text),
+      );
+      if (declaration) return declaration;
+    }
+    if (ts.isBlock(parent) || ts.isSourceFile(parent)) {
+      for (const statement of parent.statements) {
+        if (ts.isVariableStatement(statement)) {
+          const declaration = statement.declarationList.declarations.find((declaration) =>
+            bindsName(declaration.name, node.text),
+          );
+          if (declaration) return declaration;
+        }
+        if (
+          (ts.isFunctionDeclaration(statement) || ts.isClassDeclaration(statement)) &&
+          statement.name?.text === node.text
+        )
+          return statement;
+      }
+    }
+  }
+  return;
+}
+
 function sourceModule(
   file: string,
   specifier: string,
@@ -240,19 +302,24 @@ export function analyzeSourceApiUsage(
 
   function resolve(
     binding: Binding,
+    exported = false,
     seen = new Set<string>(),
   ): Binding | undefined {
     if (binding.file === SDK) return binding;
-    const key = `${binding.file}#${binding.name}`;
+    const key = `${binding.file}#${binding.name}#${exported}`;
     if (seen.has(key)) return;
     seen.add(key);
     const mod = modules.get(binding.file);
     if (!mod) return;
-    if (mod.declarations.has(binding.name)) return binding;
-    const next = mod.exports.get(binding.name) ?? mod.imports.get(binding.name);
-    if (next) return resolve(next, seen);
+    if (!exported) {
+      if (mod.declarations.has(binding.name)) return binding;
+      const imported = mod.imports.get(binding.name);
+      return imported ? resolve(imported, true, seen) : undefined;
+    }
+    const next = mod.exports.get(binding.name);
+    if (next) return resolve(next, next.file !== binding.file, seen);
     for (const target of mod.stars) {
-      const found = resolve({ file: target, name: binding.name }, seen);
+      const found = resolve({ file: target, name: binding.name }, true, seen);
       if (found) return found;
     }
     return;
@@ -261,79 +328,38 @@ export function analyzeSourceApiUsage(
   function bindingFor(file: string, node: ts.Node): Binding | undefined {
     const mod = modules.get(file)!;
     if (ts.isIdentifier(node)) {
-      for (
-        let parent = node.parent;
-        parent && !ts.isSourceFile(parent);
-        parent = parent.parent
-      ) {
-        if (
-          ts.isFunctionLike(parent) &&
-          parent.parameters.some(
-            (parameter) => parameter.name.getText() === node.text,
-          )
-        )
-          return;
-        if (
-          ts.isBlock(parent) &&
-          parent.statements.some(
-            (statement) =>
-              ts.isVariableStatement(statement) &&
-              statement.declarationList.declarations.some(
-                (declaration) => declaration.name.getText() === node.text,
-              ),
-          )
-        )
-          return;
-      }
+      if (lexicalDeclaration(node)) return;
       const imported = mod.imports.get(node.text);
-      return resolve(imported ?? { file, name: node.text }) ?? imported;
+      return imported
+        ? resolve(imported, true) ?? (!modules.has(imported.file) ? imported : undefined)
+        : resolve({ file, name: node.text });
     }
     if (
       ts.isPropertyAccessExpression(node) &&
-      ts.isIdentifier(node.expression)
+      ts.isIdentifier(node.expression) &&
+      !lexicalDeclaration(node.expression)
     ) {
       const namespace = mod.imports.get(node.expression.text);
       if (namespace?.name === "*")
-        return resolve({ file: namespace.file, name: node.name.text });
+        return resolve({ file: namespace.file, name: node.name.text }, true);
     }
     return;
   }
 
-  function initializer(file: string, node: ts.Node): ts.Node | undefined {
+  function initializer(node: ts.Node): ts.Node | undefined {
     if (!ts.isIdentifier(node)) return;
-    // Only lexical declarations and module constants are evaluated; function
-    // parameters stay unknown even if they shadow an imported operation.
-    for (
-      let parent: ts.Node | undefined = node.parent;
-      parent;
-      parent = parent.parent
-    ) {
-      if (
-        ts.isFunctionLike(parent) &&
-        parent.parameters.some((p) => p.name.getText() === node.text)
-      )
-        return;
-      if (ts.isBlock(parent) || ts.isSourceFile(parent)) {
-        for (const statement of parent.statements) {
-          if (!ts.isVariableStatement(statement)) continue;
-          for (const declaration of statement.declarationList.declarations) {
-            if (
-              ts.isIdentifier(declaration.name) &&
-              declaration.name.text === node.text
-            )
-              return declaration.initializer;
-          }
-        }
-      }
-    }
-    const binding = bindingFor(file, node);
-    return binding?.file === file
-      ? modules.get(file)?.declarations.get(binding.name)?.node
+    // Parameters, destructuring and mutable bindings remain unknown: evaluating
+    // their initial value would require tracking assignments and control flow.
+    const declaration = lexicalDeclaration(node, true);
+    return declaration && ts.isVariableDeclaration(declaration) &&
+      ts.isIdentifier(declaration.name) &&
+      ts.isVariableDeclarationList(declaration.parent) &&
+      (declaration.parent.flags & ts.NodeFlags.Const)
+      ? declaration.initializer
       : undefined;
   }
 
   function value(
-    file: string,
     node: ts.Node | null | undefined,
     template = false,
     seen = new Set<ts.Node>(),
@@ -346,11 +372,11 @@ export function analyzeSourceApiUsage(
     if (node.kind === ts.SyntaxKind.TrueKeyword) return "true";
     if (node.kind === ts.SyntaxKind.FalseKeyword) return "false";
     if (ts.isIdentifier(node))
-      return value(file, initializer(file, node), template, seen);
+      return value(initializer(node), template, seen);
     if (ts.isTemplateExpression(node)) {
       let result = node.head.text;
       for (const span of node.templateSpans) {
-        const part = value(file, span.expression, false, new Set(seen));
+        const part = value(span.expression, false, new Set(seen));
         if (part === undefined && !template) return;
         result += (part ?? "{}") + span.literal.text;
       }
@@ -361,57 +387,58 @@ export function analyzeSourceApiUsage(
 
   /** Undefined means absent; null means an unknown object/spread can supply it. */
   function property(
-    file: string,
     node: ts.Node | null | undefined,
     name: string,
     seen = new Set<ts.Node>(),
   ): ts.Node | null | undefined {
-    if (!node || seen.has(node)) return;
+    if (node == null) return node;
+    if (seen.has(node)) return null;
     seen.add(node);
     node = unwrap(node);
     if (ts.isIdentifier(node)) {
-      const initial = initializer(file, node);
-      return initial ? property(file, initial, name, seen) : null;
+      const initial = initializer(node);
+      return initial ? property(initial, name, seen) : null;
     }
     if (!ts.isObjectLiteralExpression(node)) return null;
     for (const member of [...node.properties].reverse()) {
-      if (
-        ts.isPropertyAssignment(member) &&
-        member.name.getText().replace(/["']/g, "") === name
-      )
-        return member.initializer;
-      if (ts.isShorthandPropertyAssignment(member) && member.name.text === name)
-        return initializer(file, member.name);
       if (ts.isSpreadAssignment(member)) {
-        const found = property(file, member.expression, name, seen);
+        const found = property(member.expression, name, new Set(seen));
         if (found !== undefined) return found;
+        continue;
       }
+      const key = ts.isComputedPropertyName(member.name)
+        ? value(member.name.expression)
+        : member.name.text;
+      if (key === undefined) return null;
+      if (key !== name) continue;
+      if (ts.isPropertyAssignment(member)) return member.initializer;
+      if (ts.isShorthandPropertyAssignment(member)) return member.name;
+      return null;
     }
     return;
   }
 
   function queryTerms(
-    file: string,
     node: ts.Node | null | undefined,
     seen = new Set<ts.Node>(),
   ): string | undefined {
     if (!node || seen.has(node)) return;
-    const exact = value(file, node);
+    const exact = value(node);
     if (exact !== undefined) return exact;
     seen.add(node);
     node = unwrap(node);
     if (ts.isIdentifier(node))
-      return queryTerms(file, initializer(file, node), seen);
+      return queryTerms(initializer(node), seen);
     if (
       ts.isBinaryExpression(node) &&
       node.operatorToken.kind === ts.SyntaxKind.BarBarToken
     )
-      return queryTerms(file, node.left, seen);
+      return queryTerms(node.left, seen);
     if (
       !ts.isCallExpression(node) ||
       !ts.isPropertyAccessExpression(node.expression) ||
       node.expression.name.text !== "join" ||
-      value(file, node.arguments[0]) !== " "
+      value(node.arguments[0]) !== " "
     )
       return;
     let array: ts.Node = node.expression.expression;
@@ -424,25 +451,24 @@ export function analyzeSourceApiUsage(
       array = array.expression.expression;
     if (!ts.isArrayLiteralExpression(array)) return;
     const terms = array.elements
-      .map((item) => value(file, item))
+      .map((item) => value(item))
       .filter((term): term is string => !!term);
     return terms.length ? terms.join(" ") : undefined;
   }
 
   function queryContext(
-    file: string,
     requestOptions: ts.Node | undefined,
     key: string,
   ): Record<string, string> | undefined {
-    const query = property(file, requestOptions, key);
+    const query = property(requestOptions, key);
     const result: Record<string, string> = {};
     // Only caller-selected keys are retained, rather than arbitrary options.
     for (const name of options.queryParameters ?? []) {
-      const expression = property(file, query, name);
+      const expression = property(query, name);
       const text =
         name === "query"
-          ? queryTerms(file, expression)
-          : value(file, expression);
+          ? queryTerms(expression)
+          : value(expression);
       if (text) result[name] = text;
     }
     return Object.keys(result).length ? result : undefined;
@@ -455,14 +481,15 @@ export function analyzeSourceApiUsage(
         if (
           ts.isPropertyAssignment(node) &&
           declarationFlags.has(node.name.getText()) &&
-          node.initializer.kind === ts.SyntaxKind.TrueKeyword
+          node.initializer.kind === ts.SyntaxKind.TrueKeyword &&
+          property(node.parent, node.name.getText()) === node.initializer
         )
           declaration.flags.add(node.name.getText());
         if (
           ts.isPropertyAssignment(node) &&
           node.name.getText() === "method"
         ) {
-          const method = value(file, node.initializer);
+          const method = value(node.initializer);
           if (method) declaration.usage.methods.push(method.toUpperCase());
         }
         if (ts.isCallExpression(node)) {
@@ -470,7 +497,8 @@ export function analyzeSourceApiUsage(
           if (binding) declaration.calls.add(`${binding.file}#${binding.name}`);
           const name =
             binding?.name ??
-            (ts.isIdentifier(node.expression) ? node.expression.text : "");
+            (ts.isIdentifier(node.expression) && !lexicalDeclaration(node.expression)
+              ? node.expression.text : "");
           if (boundaries.has(name)) {
             declaration.boundary = true;
             declaration.factories.add(name);
@@ -481,7 +509,7 @@ export function analyzeSourceApiUsage(
           if (operation) {
             declaration.usage.operations.push({
               ...operation,
-              query: queryContext(file, node.arguments[0], "query"),
+              query: queryContext(node.arguments[0], "query"),
             });
             declaration.usage.methods.push(operation.method);
             for (const argument of node.arguments) visit(argument);
@@ -490,12 +518,12 @@ export function analyzeSourceApiUsage(
           const request = requests.get(name);
           if (request) {
             const requestOptions = node.arguments[request.optionsArgument];
-            const methodExpression = property(file, requestOptions, "method");
+            const methodExpression = property(requestOptions, "method");
             const method =
               methodExpression === undefined
                 ? (request.defaultMethod ?? "GET").toUpperCase()
-                : value(file, methodExpression)?.toUpperCase();
-            const path = value(file, node.arguments[request.pathArgument], true);
+                : value(methodExpression)?.toUpperCase();
+            const path = value(node.arguments[request.pathArgument], true);
             const matches =
               method && path
                 ? (identities.get(`${method}:${pathKey(path)}`) ?? [])
@@ -504,7 +532,7 @@ export function analyzeSourceApiUsage(
             if (matches.length === 1)
               declaration.usage.operations.push({
                 ...matches[0]!,
-                query: queryContext(file, requestOptions, request.queryProperty ?? "query"),
+                query: queryContext(requestOptions, request.queryProperty ?? "query"),
               });
             else
               declaration.usage.unresolvedRequests.push({
@@ -639,11 +667,10 @@ export function analyzeSourceApiUsage(
         ]
       : [];
   }
-  for (const [file, mod] of modules) {
+  for (const file of modules.keys()) {
     const exported = new Map<string, SourceApiUsage>();
     for (const name of new Set(exportNames(file))) {
-      const target = mod.exports.get(name) ?? { file, name };
-      const binding = resolve(target);
+      const binding = resolve({ file, name }, true);
       const declaration =
         binding && declarations.get(`${binding.file}#${binding.name}`);
       if (!declaration) continue;
