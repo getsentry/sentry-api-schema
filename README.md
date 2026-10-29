@@ -176,6 +176,52 @@ const sentry = createSentryClient(
 const { data, error } = await sentry.listOrganizations();
 ```
 
+### Preparing a raw request
+
+Use `sentry.client.prepareRequest` when a consumer needs to inspect a request
+or send it through its own raw transport. It shares the preparation used by
+ordinary SDK requests: instance and per-call configuration, authentication,
+validation, body serialization, and request interceptors.
+
+```ts
+const sentry = createSentryClient({ baseUrl: "https://example.test/sentry" });
+const request = await sentry.client.prepareRequest({
+  method: "GET",
+  url: "/api/0/organizations/example/events/?field=id&field=title&cursor=old#view",
+  query: { cursor: "opaque-next", per_page: 50 },
+});
+// Both field values remain; the old cursor is replaced and the fragment removed.
+const response = await fetch(request);
+// The consumer owns status handling and reading the raw body.
+```
+
+Preparation does not call the configured `fetch` or parse a response. Auth
+providers, validators and request interceptors still run and can have side
+effects; their errors reject unchanged. The returned native `Request` snapshots
+the resolved options; its signal remains linked to the caller's signal. Send it
+directly with the chosen transport; calling `client.request` again would repeat preparation. Reading
+`request.clone()` leaves its body available for dispatch. A custom fetch or
+browser adapter can still add credentials, CSRF headers or routing at dispatch.
+
+For endpoints with an existing query, explicitly serialized query keys replace
+all existing occurrences of those keys. Unrelated repeated parameters and their
+encoding are retained, as is custom query-serializer output. With the default
+serializer, `null` removes a parameter and `undefined` leaves it unchanged.
+Literal URL fragments are removed; encoded `%23` values are retained. These
+rules also apply to ordinary requests through the same URL builder.
+
+Use `bodySerializer: null` for an already serialized string, `FormData`, or
+another native body. For `FormData`, also clear the default JSON content type
+with `headers: { "Content-Type": null }` so `Request` supplies its boundary.
+Otherwise the configured serializer still applies. Native
+`Request` construction can add a content type for strings or form data; prepared
+headers describe that request, not a consumer's earlier input or redacted preview.
+
+Pass decoded server cursors and explicit page sizes as query parameters. The SDK
+does not interpret bookmark formats, select navigation directions or store
+history. Existing custom transports accepted by generated operations do not
+have to implement `prepareRequest`; the factory's concrete transport adds it.
+
 ### Cancellation and custom fetch
 
 Reuse the client and supply an `AbortSignal` for each operation. The caller owns the signal, whether it comes from a command, an MCP tool call, or a query library:

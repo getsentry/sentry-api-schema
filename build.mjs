@@ -42,6 +42,7 @@ cpSync("lib/source-analysis.ts", "src/source-analysis.ts");
 
 // Keep the pinned Fetch generator's runtime and types aligned with our contract.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-response-contract.mjs"))}`, { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-request-preparation.mjs"))}`, { stdio: "inherit" });
 
 // 3. Generate operation helpers and the bound client from the SDK output.
 //    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,

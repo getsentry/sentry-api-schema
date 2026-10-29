@@ -63,6 +63,18 @@ describe("package entry points", () => {
         assert.equal(typeof client.createSentryClient, "function");
         assert.equal(typeof browser.createBrowserFetch, "function");
         assert.equal("analyzeSourceApiUsage" in client, false);
+        const sentry = client.createSentryClient({baseUrl: "https://example.test/prefix"});
+        const request = await sentry.client.prepareRequest({
+          method: "POST", url: "/api/0/custom/?field=id&field=name&cursor=old#view",
+          query: {cursor: "opaque:next"}, body: {message: "example"},
+        });
+        assert.equal(request.url, "https://example.test/prefix/api/0/custom/?field=id&field=name&cursor=opaque%3Anext");
+        assert.equal(request.headers.get("content-type"), "application/json");
+        assert.deepEqual(await request.clone().json(), {message: "example"});
+        const transport = async request => new Response(await request.text(), {status: 422});
+        const response = await transport(request);
+        assert.equal(response.status, 422);
+        assert.deepEqual(await response.json(), {message: "example"});
       `);
       execFileSync("node", ["client.mjs"], { cwd: directory });
       writeFileSync(join(directory, "smoke.mjs"), `
@@ -109,6 +121,7 @@ describe("package entry points", () => {
       writeFileSync(join(directory, "types.ts"), `
         import { consumePage, type PaginationContinuation, type PagePosition, type SentryClient } from "@sentry/api";
         declare const sentry: SentryClient;
+        const prepared: Promise<Request> = sentry.client.prepareRequest({method: "GET", url: "/api/0/custom/"});
         const position: PagePosition = {cursor: "opaque", offset: 2};
         const resume: PaginationContinuation = {...position, requestBudget: 10};
         const rows: string[] = consumePage({data: ["one"]}, position).data;
