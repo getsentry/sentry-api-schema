@@ -88,10 +88,10 @@ describe("package entry points", () => {
         import assert from "node:assert/strict";
         import { operations } from "@sentry/api/operations";
         import { analyzeSourceApiUsage } from "@sentry/api/source-analysis";
-        const source = 'import { listOrganizationEvents } from "@sentry/api"; export default () => listOrganizationEvents({ path: { organization_id_or_slug: "example-org" }, query: { dataset: "logs", field: ["message"] } });';
+        const source = 'import { listOrganizationEvents } from "@sentry/api"; export default listOrganizationEvents;';
         const result = analyzeSourceApiUsage(new Map([
           ["logs/index.ts", source],
-          ["feature.ts", 'import read from "./logs"; export const readLogs = () => read();'],
+          ["feature.ts", 'import read from "./logs"; export const readLogs = () => read({ path: { organization_id_or_slug: "example-org" }, query: { dataset: "logs", field: ["message"] } });'],
         ]), operations, {
           queryParameters: ["dataset"],
         });
@@ -100,6 +100,7 @@ describe("package entry points", () => {
         assert.deepEqual(usage.operations[0].query, { dataset: "logs" });
         assert.deepEqual(usage.methods, ["GET"]);
         assert.deepEqual(usage.unresolvedRequests, []);
+        assert.equal(result.exports.get("logs/index.ts").get("default").operations[0].functionName, "listOrganizationEvents");
       `);
       execFileSync("node", ["analysis.mjs"], { cwd: directory });
     } finally {

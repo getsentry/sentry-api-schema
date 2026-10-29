@@ -162,4 +162,98 @@ describe("source analysis modules", () => {
       expect(analysis.exports.get("src/main.ts")?.get(name)?.operations).toEqual([]);
     }
   });
+
+  test("stops at a cycle of default identifier exports", () => {
+    const sources = new Map([
+      ["src/a.ts", `import reference from "./b.js"; export default reference;`],
+      ["src/b.ts", `import reference from "./a.js"; export default reference;`],
+      ["src/main.ts", `import reference from "./a.js"; export const run = () => reference();`],
+    ]);
+
+    expect(analyzeSourceApiUsage(sources, operations).exports.get("src/main.ts")?.get("run"))
+      .toEqual({ operations: [], unresolvedRequests: [], methods: [] });
+  });
+});
+
+describe.each(["identifier expression", "export alias"] as const)("default callable identity through %s", form => {
+  const exportDefault = (name: string) => form === "identifier expression"
+    ? `export default ${name};`
+    : `export { ${name} as default };`;
+
+  test("retains configured request identity and reads arguments at each callsite", () => {
+    const sources = new Map([
+      ["src/request.ts", `
+        function apiRequest(path, options) { return transport(path, options); }
+        ${exportDefault("apiRequest")}
+      `],
+      ["src/main.ts", `
+        import request from "./request.js";
+        export const list = () => request("/organizations/", { method: "GET", query: { cursor: "page-2" } });
+        export const dynamic = (path) => request(path, { method: "DELETE" });
+      `],
+    ]);
+    const result = analyzeSourceApiUsage(sources, operations, {
+      requests: [{ functionName: "apiRequest", pathArgument: 0, optionsArgument: 1 }],
+      queryParameters: ["cursor"],
+    }).exports.get("src/main.ts")!;
+
+    expect(result.get("list")).toEqual({
+      operations: [{ ...operations[1], query: { cursor: "page-2" } }],
+      unresolvedRequests: [], methods: ["GET"],
+    });
+    expect(result.get("dynamic")).toMatchObject({
+      operations: [], methods: ["DELETE"],
+      unresolvedRequests: [{ method: "DELETE", reason: "Dynamic request identity" }],
+    });
+  });
+
+  test("recognizes a configured factory without leaking callbacks into data consumers", () => {
+    const sources = new Map([
+      ["src/factory.ts", `
+        function defineTool(config) { return config; }
+        ${exportDefault("defineTool")}
+      `],
+      ["src/main.ts", `
+        import create from "./factory.js";
+        import { deleteProject } from "@sentry/api";
+        export const remove = create({ approved: true, run: () => deleteProject({}) });
+        export const tools = { remove };
+        export const help = create({ run: () => inspect(tools) });
+      `],
+    ]);
+    const analysis = analyzeSourceApiUsage(sources, operations, {
+      boundaries: ["defineTool"], declarationFlags: ["approved"],
+    });
+
+    expect(analysis.exports.get("src/main.ts")?.get("remove")?.operations).toEqual([operations[0]]);
+    expect(analysis.boundaries).toContainEqual({
+      file: "src/main.ts", name: "remove", factories: ["defineTool"], flags: ["approved"],
+    });
+    for (const name of ["tools", "help"]) {
+      expect(analysis.exports.get("src/main.ts")?.get(name)?.operations).toEqual([]);
+    }
+  });
+
+  test("retains SDK query context through a forwarded default import", () => {
+    const sources = new Map([
+      ["src/operation.ts", `
+        import { listOrganizations as request } from "@sentry/api";
+        ${exportDefault("request")}
+      `],
+      ["src/forward.ts", `export { default } from "./operation.js";`],
+      ["src/main.ts", `
+        import request from "./forward.js";
+        export const list = () => request({ query: { cursor: "page-2" } });
+      `],
+    ]);
+    const analysis = analyzeSourceApiUsage(sources, operations, { queryParameters: ["cursor"] });
+
+    expect(analysis.exports.get("src/main.ts")?.get("list")?.operations)
+      .toEqual([{ ...operations[1], query: { cursor: "page-2" } }]);
+    if (form === "identifier expression") {
+      for (const file of ["src/operation.ts", "src/forward.ts"]) {
+        expect(analysis.exports.get(file)?.get("default")?.operations).toEqual([operations[1]]);
+      }
+    }
+  });
 });

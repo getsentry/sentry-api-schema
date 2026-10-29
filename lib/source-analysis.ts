@@ -355,6 +355,24 @@ export function analyzeSourceApiUsage(
     return;
   }
 
+  /** Keep export summaries separate from the callable identity behind a default alias. */
+  function callableBinding(binding: Binding | undefined): Binding | undefined {
+    const seen = new Set<string>();
+    while (binding?.name === "default") {
+      const key = `${binding.file}#${binding.name}`;
+      if (seen.has(key)) break;
+      seen.add(key);
+      const declaration = modules.get(binding.file)?.declarations.get(binding.name);
+      if (!declaration) break;
+      const node = unwrap(declaration.node);
+      if (!ts.isIdentifier(node)) break;
+      const target = bindingFor(binding.file, node);
+      if (!target) break;
+      binding = target;
+    }
+    return binding;
+  }
+
   function initializer(node: ts.Node): ts.Node | undefined {
     if (!ts.isIdentifier(node)) return;
     // Parameters, destructuring and mutable bindings remain unknown: evaluating
@@ -502,8 +520,9 @@ export function analyzeSourceApiUsage(
           if (method) declaration.usage.methods.push(method.toUpperCase());
         }
         if (ts.isCallExpression(node)) {
-          const binding = bindingFor(file, node.expression);
-          if (binding) declaration.calls.add(`${binding.file}#${binding.name}`);
+          const reference = bindingFor(file, node.expression);
+          if (reference) declaration.calls.add(`${reference.file}#${reference.name}`);
+          const binding = callableBinding(reference);
           const name =
             binding?.name ??
             (ts.isIdentifier(node.expression) && !lexicalDeclaration(node.expression)
