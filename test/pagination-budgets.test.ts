@@ -142,11 +142,13 @@ describe("collection HTTP budgets", () => {
     expect(batch.nextCursor).toBeUndefined();
   });
 
-  test("does not expose an unsafe cursor when a server ignores its supported page size", async () => {
+  test("replays the original generated page size when a server ignores it", async () => {
+    const sizes: string[] = [];
     const sentry = createSentryClient({
       baseUrl: "https://example.test",
       fetch: asFetch(async request => {
-        expect(new URL(request.url).searchParams.get("limit")).toBe("2");
+        const size = new URL(request.url).searchParams.get("limit")!;
+        sizes.push(size);
         return Response.json(rows(0, 3), { headers: { Link: link("past-discarded") } });
       }),
     });
@@ -154,6 +156,12 @@ describe("collection HTTP budgets", () => {
     expect(batch.data.map(item => item.id)).toEqual(["0", "1"]);
     expect(batch.stopReason).toBe("limit");
     expect(batch.nextCursor).toBeUndefined();
+    const resumed = await sentry.paginateUpTo.listOrganizationIssues(
+      { path }, { limit: 1, resume: batch.continuation },
+    );
+    expect(resumed.data.map(item => item.id)).toEqual(["2"]);
+    expect(resumed.nextCursor).toBe("past-discarded");
+    expect(sizes).toEqual(["2", "2"]);
   });
 
   test.each(["paginateAll", "paginateUpTo"] as const)("%s resumes after maxPages and rejects a later HTTP failure", async kind => {

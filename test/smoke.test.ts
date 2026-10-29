@@ -485,7 +485,10 @@ describe("paginateUpTo", () => {
       { limit: 3 },
       "test",
     );
-    expect(result).toEqual({ data: [1, 2, 3], stopReason: "limit" });
+    expect(result).toEqual({
+      data: [1, 2, 3], stopReason: "limit",
+      continuation: { cursor: undefined, offset: 3, requestBudget: 3 },
+    });
   });
 
   test("invokes onPage callback after each page", async () => {
@@ -548,7 +551,10 @@ describe("paginateUpTo", () => {
       "test",
     );
     expect(calls).toBe(2);
-    expect(result).toEqual({ data: [1, 2], stopReason: "maxPages", nextCursor: "more" });
+    expect(result).toEqual({
+      data: [1, 2], stopReason: "maxPages", nextCursor: "more",
+      continuation: { cursor: "more", offset: 0 },
+    });
   });
 
   test("rejects limit < 1", async () => {

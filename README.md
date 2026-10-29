@@ -322,7 +322,7 @@ Sentry uses cursor-based pagination via `Link` headers. Choose one of three help
 | Task | Method | Result |
 | --- | --- | --- |
 | Display one page, with previous/next navigation | `sentry.fetchPage.<operation>(options, cursor?)` | `{ data, response, nextCursor?, prevCursor? }` |
-| Collect up to an item limit | `sentry.paginateUpTo.<operation>(options, { limit, ... })` | `{ data, stopReason, nextCursor? }` |
+| Collect up to an item limit | `sentry.paginateUpTo.<operation>(options, { limit, ... })` | `{ data, stopReason, nextCursor?, continuation? }` |
 | Explicitly collect pages eagerly | `sentry.paginateAll.<operation>(options, { maxPages?, startCursor? }?)` | `{ data, stopReason, nextCursor? }` |
 
 `fetchPage` is available for operations whose schema declares a `cursor` query parameter. Collection helpers are available only when the operation's 200 response is an array. Compound response bodies remain intact. Ordinary operation methods such as `sentry.listOrganizations()` still make just one request.
@@ -380,7 +380,59 @@ Automatic sizing is deliberately limited to operations whose forward cursors hav
 
 Each request uses the smallest of the remaining item budget, the caller's requested page size (if supplied), and the verified maximum. Other operations retain their query options unchanged. In particular, **projects do not use 100 + 100 + 50**: their backend `OffsetPaginator` includes the page size in its cursor, and resizing mid-traversal can skip rows. Declaring `per_page` in the schema is not enough to enable resizing.
 
-If a server ignores the size or an operation cannot be resized, the helper trims any excess rows and omits the unsafe cursor. It reports `stopReason: "limit"`, even if that was the server's last page. Use `fetchPage` when every row and each page's headers must be retained.
+If a server ignores the size or an operation cannot be resized, the helper trims any excess rows and omits the unsafe server `nextCursor`. It reports `stopReason: "limit"`, even if that was the server's last page. The separate `continuation` retains a position before the pending rows.
+
+### Resume a partially consumed page
+
+```ts
+const options = {
+  path: { organization_id_or_slug: "my-org" },
+  query: { per_page: 100 },
+};
+const batch = await sentry.paginateUpTo.listOrganizationProjects(options, { limit: 250 });
+// Requests three pages of 100 and returns 250 rows.
+// nextCursor is absent: the next server page would skip the remaining 50.
+if (batch.continuation) {
+  const next = await sentry.paginateUpTo.listOrganizationProjects(options, {
+    limit: 25,
+    resume: batch.continuation,
+  });
+  // Refetches the third page unchanged and returns its next 25 rows.
+}
+```
+
+`paginateUpTo` returns a `continuation` whenever more rows remain, including on the last server page. Pass it back as `resume`; do not combine it with `startCursor`. At a page boundary it contains the next opaque server `cursor` and `offset: 0`. Within a page it contains the cursor used to fetch that page (absent for the first page), the consumed `offset`, and the original `requestBudget`. It can round-trip through JSON. Keep the same operation, filters, page-size options and fetcher configuration. The SDK does not store credentials, requests or history in it.
+
+For standalone `paginateUpTo(fetcher, options, context)`, the callback's second argument is a request budget. It normally equals the remaining item limit. On a partial replay it repeats the original budget so a custom fetcher reconstructs the same request, even when the new batch limit is smaller. After that page, the callback receives the new remaining budget. A callback must retain its own operation-specific sizing rules; the SDK never derives them from the cursor's contents.
+
+The standalone collector also accepts a callback returning a normalized `{ data: T[], nextCursor? }` page, including the result of `fetchPage`. Such a callback owns response/error handling and rejects on failure; `request` and `error` are reserved for SDK operation envelopes. Its explicit `nextCursor` is authoritative; the collector does not reinterpret an attached `Response`. SDK operation results retain their existing unwrapping and error behavior. The exported `BudgetedPageFetcher` type is unchanged; `CollectionPageFetcher` describes this additional composition path.
+
+```ts
+import { paginateUpTo } from "@sentry/api";
+
+const batch = await paginateUpTo(
+  cursor => sentry.fetchPage.listOrganizationProjects(options, cursor),
+  { limit: 250 },
+  "listOrganizationProjects",
+);
+```
+
+`nextCursor` keeps its existing meaning and can still be sent directly to the API. A `continuation` is SDK state, not a server cursor. Existing single-page, custom-bookmark and infinite-query consumers can continue using ordinary operations or `fetchPage`; neither API changes.
+
+### Consume an already fetched page
+
+For a consumer that owns fetching, `consumePage` shares the row-consumption logic without performing I/O or requiring a `Response`:
+
+```ts
+import { consumePage } from "@sentry/api";
+
+const page = await sentry.fetchPage.listOrganizationProjects(options, cursor);
+const consumed = consumePage(page, { cursor, offset: 0 }, 25);
+// Keep page.response and any consumer metadata separately.
+// consumed.position identifies where to continue; absence means exhausted.
+```
+
+To resume a position, fetch its cursor with the same page options and pass that position to `consumePage`. A manual `PagePosition` describes row consumption; `paginateUpTo` additionally records the request budget in its `PaginationContinuation`. The caller owns serialization, custom filtering/bookmarks and navigation history. Neither helper snapshots data against concurrent server changes.
 
 ### Eager collection and completion
 
@@ -393,7 +445,7 @@ console.log(projects.data, projects.stopReason);
 // If stopReason is "maxPages", projects.nextCursor resumes traversal.
 ```
 
-Both collection helpers return `PaginatedCollection<TItem>`:
+Both collection helpers return `PaginatedCollection<TItem>`. Only `paginateUpTo` supplies the additional `continuation` described above:
 
 | `stopReason` | Meaning | `nextCursor` |
 | --- | --- | --- |

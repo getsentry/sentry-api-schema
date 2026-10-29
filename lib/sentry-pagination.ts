@@ -23,12 +23,32 @@ export type PaginatedResponse<T> = {
   prevCursor?: string;
 };
 
+/** A position within a page fetched with an opaque server cursor. */
+export type PagePosition = {
+  readonly cursor?: string;
+  /** Rows already consumed, before applying the next item budget. */
+  readonly offset: number;
+};
+
+/**
+ * Serializable continuation returned by `paginateUpTo`.
+ * Keep the same operation, query and fetcher configuration when resuming.
+ * Partial pages retain the fetcher's original request budget for exact replay;
+ * page boundaries use the next call's budget instead.
+ */
+export type PaginationContinuation = PagePosition & (
+  | { readonly offset: 0; readonly requestBudget?: never }
+  | { readonly requestBudget: number }
+);
+
 /** Aggregate data has no single HTTP response. Only `exhausted` means complete. */
 export type PaginatedCollection<TItem> = {
   data: Array<TItem>;
   stopReason: "exhausted" | "limit" | "maxPages";
   /** Omitted when exhausted or when trimming a page makes continuation unsafe. */
   nextCursor?: string;
+  /** `paginateUpTo` can resume here, including within a partially consumed page. */
+  continuation?: PaginationContinuation;
 };
 
 export type PaginateAllOptions = {
@@ -45,6 +65,8 @@ export type PaginateUpToOptions = {
   maxPages?: number;
   /** Resume forward traversal from a previous nextCursor, keeping the same query. */
   startCursor?: string;
+  /** Resume a batch, including pending rows in its last page. Cannot combine with startCursor. */
+  resume?: PaginationContinuation;
   /** Called after each page is fetched. Useful for progress indicators. */
   onPage?: (fetched: number, limit: number) => void;
 };
@@ -53,16 +75,77 @@ export type PageFetcher<TData, TError> = (
   cursor: string | undefined,
 ) => Promise<SdkResult<TData, TError>>;
 
-/** The remaining item budget lets a custom fetcher reduce its HTTP page size. */
+/**
+ * The request budget lets a custom fetcher reduce its HTTP page size.
+ * Normally the remaining item budget; replaying a partial page repeats the
+ * original value even when the new batch has a different limit.
+ */
 export type BudgetedPageFetcher<TData, TError> = (
   cursor: string | undefined,
-  remaining: number,
+  requestBudget: number,
 ) => Promise<SdkResult<TData, TError>>;
+
+/** A page whose consumer already handled the HTTP response and any errors. */
+export type CollectionPage<TItem> = {
+  data: Array<TItem>;
+  nextCursor?: string;
+  /** Reserved for SDK operation envelopes; normalized fetchers reject on failure. */
+  request?: never;
+  error?: never;
+};
+
+/** Compose an existing page fetcher with bounded collection, without HTTP objects. */
+export type CollectionPageFetcher<TItem> = (
+  cursor: string | undefined,
+  requestBudget: number,
+) => Promise<CollectionPage<TItem>>;
 
 function assertPositiveInteger(value: unknown, name: string): asserts value is number {
   if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 1) {
     throw new Error(`${name} must be a positive safe integer, got ${value}`);
   }
+}
+
+function assertPagePosition(position: PagePosition): void {
+  if (!Number.isSafeInteger(position.offset) || position.offset < 0) {
+    throw new Error(`pagination: offset must be a non-negative safe integer, got ${position.offset}`);
+  }
+  if (position.cursor !== undefined && typeof position.cursor !== "string") {
+    throw new Error("pagination: cursor must be a string");
+  }
+}
+
+/**
+ * Consume rows from an already fetched page without fetching or interpreting cursors.
+ * Returns a position for the next consumption, or none when the page is fully
+ * consumed and the server advertises no next page. The caller retains the
+ * original response, headers and envelope; neither input is mutated.
+ *
+ * A position inside the current page requires fetching that page again with
+ * the same request options. An offset beyond a short page carries forward to
+ * its successor. Like server pagination, this does not snapshot changing data.
+ */
+export function consumePage<T>(
+  page: Pick<PaginatedResponse<Array<T>>, "data" | "nextCursor">,
+  position: PagePosition,
+  limit = Number.POSITIVE_INFINITY,
+): { data: Array<T>; position?: PagePosition } {
+  assertPagePosition(position);
+  if (limit !== Number.POSITIVE_INFINITY && (!Number.isSafeInteger(limit) || limit < 0)) {
+    throw new Error(`consumePage: limit must be a non-negative safe integer, got ${limit}`);
+  }
+  const end = Math.min(page.data.length, position.offset + limit);
+  const data = page.data.slice(position.offset, end);
+  if (end < page.data.length) {
+    return { data, position: { ...position, offset: end } };
+  }
+  if (page.nextCursor !== undefined) {
+    return {
+      data,
+      position: { cursor: page.nextCursor, offset: Math.max(0, position.offset - page.data.length) },
+    };
+  }
+  return { data };
 }
 
 /**
@@ -284,42 +367,70 @@ export const paginateAll = async <TItem, TError = unknown>(
 };
 
 /**
- * Collect up to `limit` items, passing the remaining budget to the fetcher.
- * Generated wrappers use it to reduce supported HTTP page sizes.
+ * Collect up to `limit` items, passing a request budget to the fetcher.
+ * Generated wrappers use it to reduce supported HTTP page sizes. A partial
+ * continuation replays the original request budget before skipping consumed rows.
  *
  * If a server still returns more items than fit, trim the page and omit its
- * cursor: resuming past discarded items would skip records. Such a result
- * has `stopReason: "limit"`, even if the server has no further pages.
+ * server cursor: resuming past discarded items would skip records. The separate
+ * continuation preserves the pending rows, even if the server has no further pages.
  */
 export const paginateUpTo = async <TItem, TError = unknown>(
-  fetcher: BudgetedPageFetcher<Array<TItem>, TError>,
+  fetcher: BudgetedPageFetcher<Array<TItem>, TError> | CollectionPageFetcher<TItem>,
   options: PaginateUpToOptions,
   context: string,
 ): Promise<PaginatedCollection<TItem>> => {
   assertPositiveInteger(options.limit, "paginateUpTo: limit");
   const maxPages = options.maxPages ?? 50;
   assertPositiveInteger(maxPages, "paginateUpTo: maxPages");
+  if (options.resume !== undefined && options.startCursor !== undefined) {
+    throw new Error("paginateUpTo: use either resume or startCursor, not both");
+  }
+  if (options.resume !== undefined) {
+    assertPagePosition(options.resume);
+    if (options.resume.offset > 0 || options.resume.requestBudget !== undefined) {
+      assertPositiveInteger(options.resume.requestBudget, "paginateUpTo: resume.requestBudget");
+    }
+  }
   const allItems: Array<TItem> = [];
-  let cursor = options.startCursor;
+  let position: PagePosition = options.resume ?? { cursor: options.startCursor, offset: 0 };
+  let replayBudget = options.resume?.offset ? options.resume.requestBudget : undefined;
+  let continuation: PaginationContinuation | undefined;
 
   for (let page = 0; page < maxPages; page++) {
     const remaining = options.limit - allItems.length;
-    const result = await fetcher(cursor, remaining);
-    const { data, nextCursor } = unwrapPaginatedResult(result, context);
-    allItems.push(...data.slice(0, remaining));
+    const requestBudget = replayBudget ?? remaining;
+    const result = await fetcher(position.cursor, requestBudget);
+    // SDK results carry a Request; normalized pages already own their metadata.
+    const { data, nextCursor } = result.request !== undefined
+      ? unwrapPaginatedResult(result, context)
+      : result;
+    const consumed = consumePage({ data, nextCursor }, position, remaining);
+    allItems.push(...consumed.data);
     options.onPage?.(allItems.length, options.limit);
 
-    if (data.length > remaining) {
-      return { data: allItems, stopReason: "limit" };
-    }
-    if (nextCursor === undefined) {
+    if (consumed.position === undefined) {
       return { data: allItems, stopReason: "exhausted" };
     }
+    position = consumed.position;
+    continuation = position.offset === 0
+      ? { ...position, offset: 0 }
+      : { ...position, requestBudget };
     if (allItems.length === options.limit) {
-      return { data: allItems, stopReason: "limit", nextCursor };
+      return {
+        data: allItems,
+        stopReason: "limit",
+        ...(position.offset === 0 && position.cursor !== undefined ? { nextCursor: position.cursor } : {}),
+        continuation,
+      };
     }
-    cursor = nextCursor;
+    replayBudget = position.offset > 0 ? requestBudget : undefined;
   }
 
-  return { data: allItems, stopReason: "maxPages", nextCursor: cursor };
+  return {
+    data: allItems,
+    stopReason: "maxPages",
+    ...(position.offset === 0 && position.cursor !== undefined ? { nextCursor: position.cursor } : {}),
+    continuation,
+  };
 };
