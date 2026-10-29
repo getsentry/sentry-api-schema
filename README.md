@@ -197,16 +197,19 @@ const response = await fetch(request);
 
 Preparation does not call the configured `fetch` or parse a response. Auth
 providers, validators and request interceptors still run and can have side
-effects; their errors reject unchanged. The returned native `Request` snapshots
-the resolved options; its signal remains linked to the caller's signal. Send it
-directly with the chosen transport; calling `client.request` again would repeat preparation. Reading
-`request.clone()` leaves its body available for dispatch. A custom fetch or
+effects; their errors reject unchanged. The returned native `Request` includes
+the resolved options and request-interceptor changes. Its signal remains linked
+to the caller's unless an interceptor replaces or clears it. Send it directly
+with the chosen transport; calling `client.request` again would repeat preparation.
+Reading `request.clone()` leaves its body available for dispatch. A custom fetch or
 browser adapter can still add credentials, CSRF headers or routing at dispatch.
 
-For endpoints with an existing query, explicitly serialized query keys replace
-all existing occurrences of those keys. Unrelated repeated parameters and their
-encoding are retained, as is custom query-serializer output. With the default
-serializer, `null` removes a parameter and `undefined` leaves it unchanged.
+For endpoints with an existing query, serialized query keys replace all existing
+occurrences of those keys. Explicit `null` input keys also remove existing values,
+even with custom serializers; the serialized output can then add them back.
+Unrelated repeated parameters and their encoding are retained, as is custom
+query-serializer output. The default serializer omits `null` and `undefined`:
+`null` clears the original value, while `undefined` leaves it unchanged.
 Literal URL fragments are removed; encoded `%23` values are retained. These
 rules also apply to ordinary requests through the same URL builder.
 
