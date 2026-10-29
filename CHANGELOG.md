@@ -1,3 +1,9 @@
+## 0.425.0
+
+### New Features
+
+- (pagination) Resume partially consumed pages by @betegon in [#116](https://github.com/getsentry/sentry-api-schema/pull/116)
+
 ## 0.424.0
 
 ### New Features
