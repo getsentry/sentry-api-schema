@@ -124,6 +124,43 @@ Each `ApiOperation` records the actual exported `functionName`, original OpenAPI
 
 The catalog is generated from the same schema and SDK output as each release. Consumers own search, grouping, ranking, and command aliases; the catalog does not fetch a live schema or infer undocumented API behavior.
 
+### Build-time source analysis
+
+`@sentry/api/source-analysis` follows references in supplied TypeScript source to discover calls to catalog operations. Install TypeScript only when using this optional build tool; the analyzer is tested with TypeScript 5.9. Its optional peer uses a wildcard so it does not constrain the compiler used by applications that only import the client.
+
+```bash
+npm install --save-dev @sentry/api typescript@^5.9
+```
+
+```ts
+import { operations } from "@sentry/api/operations";
+import { analyzeSourceApiUsage } from "@sentry/api/source-analysis";
+
+const sources = new Map([
+  ["features/logs.ts", `
+    import { listOrganizationEvents } from "@sentry/api";
+    export const readLogs = () =>
+      listOrganizationEvents({
+        path: { organization_id_or_slug: "example-org" },
+        query: { dataset: "logs", field: ["message"] },
+      });
+  `],
+]);
+const analysis = analyzeSourceApiUsage(sources, operations, {
+  queryParameters: ["dataset"],
+});
+console.log(analysis.exports.get("features/logs.ts")?.get("readLogs")?.operations);
+// Includes listOrganizationEvents with known query context { dataset: "logs" }.
+```
+
+The analyzer parses source without executing it, following local imports, re-exports, aliases, and references. Supply sources together with the operation catalog from the installed SDK version. Run it during the consumer's build: command-to-operation relationships depend on consumer code and cannot be precomputed during SDK packaging.
+
+Named, namespace, and default imports are supported, along with top-level functions, variable initializers, and default function/expression exports. Relative imports resolve only against the supplied sources. Extensionless paths try the exact file, `.ts`, `.tsx`, `index.ts`, then `index.tsx`; `.js` specifiers try `.ts` and `.tsx` before the exact `.js` file. Explicit `.ts`/`.tsx` specifiers use the exact file. Named re-exports can forward a default; `export *` forwards only named exports.
+
+Consumers configure their own `boundaries` (factory names whose arguments are inspected without following the factory implementation), `requests` (raw-request wrapper argument positions), `queryParameters` (query values to retain), and `declarationFlags` (boolean markers). These options default to empty lists. Returned `boundaries` identify factory-created exports and their markers; `methods` records reachable HTTP methods, including known methods on unresolved raw requests. CLI routing, aliases, presentation, and destructive-command policy remain with the consumer.
+
+This is static discovery, not proof of runtime execution or safety. Class/member dispatch, dynamic imports, CommonJS, and `tsconfig` path aliases are outside its scope. Missing sources and unsupported constructs can omit calls, so an empty result does not prove that no API calls exist. `unresolvedRequests` contains diagnostics for raw requests that cannot be resolved against the public catalog, not source-coverage diagnostics. Unknown query values are omitted, mutable `let` and `var` bindings are left unknown, and a related operation does not describe every request a workflow makes. The entry imports TypeScript separately and is not loaded by the root client, browser helpers, or operation catalog.
+
 ### Browser sessions
 
 The browser helper configures session cookies and CSRF token injection:
