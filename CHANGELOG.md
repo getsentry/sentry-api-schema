@@ -1,3 +1,9 @@
+## 0.424.0
+
+### New Features
+
+- Export build-time API source analysis by @betegon in [#115](https://github.com/getsentry/sentry-api-schema/pull/115)
+
 ## 0.423.0
 
 ### New Features
