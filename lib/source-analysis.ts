@@ -54,7 +54,7 @@ export type UnresolvedApiRequest = {
 
 /** Source-derived relationships; no command is executed to obtain them. */
 export type SourceApiUsage = {
-  /** All statically reachable API operations, preserving distinct contexts. */
+  /** Discovered API operations, preserving distinct contexts. */
   operations: SourceOperationUsage[];
   /** Reachable raw requests that need explicit discovery diagnostics. */
   unresolvedRequests: UnresolvedApiRequest[];
@@ -169,12 +169,14 @@ function sourceModule(
   sources: ReadonlyMap<string, string>,
 ): string {
   if (!specifier.startsWith(".")) return specifier;
-  const target = posix.normalize(
-    posix.join(dirname(file), specifier.replace(/\.js$/, ".ts")),
-  );
-  return !sources.has(target) && sources.has(`${target}x`)
-    ? `${target}x`
-    : target;
+  const target = posix.normalize(posix.join(dirname(file), specifier));
+  const extension = posix.extname(target);
+  const candidates = extension === ".js"
+    ? [target.replace(/\.js$/, ".ts"), target.replace(/\.js$/, ".tsx"), target]
+    : extension
+      ? [target]
+      : [target, `${target}.ts`, `${target}.tsx`, posix.join(target, "index.ts"), posix.join(target, "index.tsx")];
+  return candidates.find(candidate => sources.has(candidate)) ?? target;
 }
 
 function parseModule(
@@ -201,6 +203,9 @@ function parseModule(
         statement.moduleSpecifier.text,
         sources,
       );
+      const defaultImport = statement.importClause?.name;
+      if (defaultImport)
+        mod.imports.set(defaultImport.text, { file: target, name: "default" });
       const bindings = statement.importClause?.namedBindings;
       if (bindings && ts.isNamedImports(bindings)) {
         for (const binding of bindings.elements) {
@@ -233,9 +238,14 @@ function parseModule(
       }
       continue;
     }
+    const modifiers = ts.canHaveModifiers(statement) ? ts.getModifiers(statement) : undefined;
+    const isDefault = modifiers?.some(modifier => modifier.kind === ts.SyntaxKind.DefaultKeyword) ||
+      (ts.isExportAssignment(statement) && !statement.isExportEquals);
     const nodes: [string, ts.Node][] = [];
-    if (ts.isFunctionDeclaration(statement) && statement.name && statement.body)
-      nodes.push([statement.name.text, statement]);
+    if (ts.isFunctionDeclaration(statement) && statement.body && (statement.name || isDefault))
+      nodes.push([statement.name?.text ?? "default", statement]);
+    if (ts.isExportAssignment(statement) && !statement.isExportEquals)
+      nodes.push(["default", statement.expression]);
     if (ts.isVariableStatement(statement)) {
       for (const declaration of statement.declarationList.declarations) {
         if (ts.isIdentifier(declaration.name) && declaration.initializer)
@@ -252,12 +262,9 @@ function parseModule(
         factories: new Set(),
         flags: new Set(),
       });
-      if (
-        ts.canHaveModifiers(statement) &&
-        ts
-          .getModifiers(statement)
-          ?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)
-      )
+      if (isDefault)
+        mod.exports.set("default", { file, name });
+      else if (modifiers?.some(modifier => modifier.kind === ts.SyntaxKind.ExportKeyword))
         mod.exports.set(name, { file, name });
     }
   }
@@ -318,6 +325,8 @@ export function analyzeSourceApiUsage(
     }
     const next = mod.exports.get(binding.name);
     if (next) return resolve(next, next.file !== binding.file, seen);
+    // A star re-export forwards named exports only, never the default export.
+    if (binding.name === "default") return;
     for (const target of mod.stars) {
       const found = resolve({ file: target, name: binding.name }, true, seen);
       if (found) return found;
@@ -663,7 +672,7 @@ export function analyzeSourceApiUsage(
     return mod
       ? [
           ...mod.exports.keys(),
-          ...mod.stars.flatMap((target) => exportNames(target, seen)),
+          ...mod.stars.flatMap((target) => exportNames(target, seen).filter(name => name !== "default")),
         ]
       : [];
   }

@@ -88,8 +88,11 @@ describe("package entry points", () => {
         import assert from "node:assert/strict";
         import { operations } from "@sentry/api/operations";
         import { analyzeSourceApiUsage } from "@sentry/api/source-analysis";
-        const source = 'import { listOrganizationEvents } from "@sentry/api"; export const readLogs = () => listOrganizationEvents({ path: { organization_id_or_slug: "example-org" }, query: { dataset: "logs", field: ["message"] } });';
-        const result = analyzeSourceApiUsage(new Map([["feature.ts", source]]), operations, {
+        const source = 'import { listOrganizationEvents } from "@sentry/api"; export default () => listOrganizationEvents({ path: { organization_id_or_slug: "example-org" }, query: { dataset: "logs", field: ["message"] } });';
+        const result = analyzeSourceApiUsage(new Map([
+          ["logs/index.ts", source],
+          ["feature.ts", 'import read from "./logs"; export const readLogs = () => read();'],
+        ]), operations, {
           queryParameters: ["dataset"],
         });
         const usage = result.exports.get("feature.ts").get("readLogs");
