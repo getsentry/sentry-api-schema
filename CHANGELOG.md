@@ -1,3 +1,9 @@
+## 0.428.0
+
+### New Features
+
+- (client) Expose shared request preparation by @betegon in [#117](https://github.com/getsentry/sentry-api-schema/pull/117)
+
 ## 0.427.0
 
 ### Schema Updates
