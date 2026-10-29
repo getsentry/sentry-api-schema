@@ -1,3 +1,9 @@
+## 0.423.0
+
+### New Features
+
+- (sdk) Default collapse=adjacentEvents on getProjectEvent by @BYK with @sentry-junior in [#113](https://github.com/getsentry/sentry-api-schema/pull/113)
+
 ## 0.422.0
 
 ### Schema Updates
