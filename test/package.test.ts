@@ -44,7 +44,7 @@ describe("package entry points", () => {
     expect(analysis).not.toMatch(/from ["'](?:valibot|zod)["']/);
   });
 
-  test("packs isolated runtime entries and build-time analysis with NodeNext types", () => {
+  test("packs isolated runtime entries, pagination and build-time analysis", () => {
     const root = dirname(fileURLToPath(new URL("../package.json", import.meta.url)));
     const directory = mkdtempSync(join(tmpdir(), "api-package-"));
     try {
@@ -75,11 +75,53 @@ describe("package entry points", () => {
       `);
       execFileSync("node", ["smoke.mjs"], { cwd: directory });
 
+      writeFileSync(join(directory, "pagination.mjs"), `
+        import assert from "node:assert/strict";
+        import { consumePage, createSentryClient } from "@sentry/api";
+        const requests = [];
+        const sentry = createSentryClient({
+          baseUrl: "https://example.test",
+          fetch: async request => {
+            requests.push(new URL(request.url).searchParams.get("per_page"));
+            return Response.json([{slug:"one"}, {slug:"two"}, {slug:"three"}]);
+          },
+        });
+        const options = {path: {organization_id_or_slug: "example"}, query: {per_page: 3}};
+        const first = await sentry.paginateUpTo.listOrganizationProjects(options, {limit: 2});
+        const resume = JSON.parse(JSON.stringify(first.continuation));
+        const last = await sentry.paginateUpTo.listOrganizationProjects(options, {limit: 1, resume});
+        assert.deepEqual([...first.data, ...last.data].map(row => row.slug), ["one", "two", "three"]);
+        assert.equal(first.nextCursor, undefined);
+        assert.equal(last.stopReason, "exhausted");
+        assert.deepEqual(requests, ["3", "3"]);
+        assert.deepEqual(consumePage({data: last.data}, {offset: 0}).data, last.data);
+      `);
+      execFileSync("node", ["pagination.mjs"], { cwd: directory });
+
       writeFileSync(join(directory, "types.ts"), readFileSync(new URL("./operation-types.ts", import.meta.url)));
       writeFileSync(join(directory, "analysis-types.ts"), readFileSync(new URL("./source-analysis-types.ts", import.meta.url)));
       writeFileSync(join(directory, "tsconfig.json"), JSON.stringify({
         compilerOptions: { module: "NodeNext", strict: true, noEmit: true, types: [], lib: ["ES2022"] },
         files: ["types.ts", "analysis-types.ts"],
+      }));
+      execFileSync("node", [join(root, "node_modules", "typescript", "bin", "tsc"), "-p", directory]);
+
+      writeFileSync(join(directory, "types.ts"), `
+        import { consumePage, type PaginationContinuation, type PagePosition, type SentryClient } from "@sentry/api";
+        declare const sentry: SentryClient;
+        const position: PagePosition = {cursor: "opaque", offset: 2};
+        const resume: PaginationContinuation = {...position, requestBudget: 10};
+        const rows: string[] = consumePage({data: ["one"]}, position).data;
+        sentry.paginateUpTo.listOrganizationProjects(
+          {path: {organization_id_or_slug: "example"}}, {limit: 5, resume},
+        );
+      `);
+      writeFileSync(join(directory, "tsconfig.json"), JSON.stringify({
+        compilerOptions: {
+          module: "ESNext", moduleResolution: "bundler", strict: true,
+          noEmit: true, types: [], lib: ["ES2022", "DOM"],
+        },
+        files: ["types.ts"],
       }));
       execFileSync("node", [join(root, "node_modules", "typescript", "bin", "tsc"), "-p", directory]);
 

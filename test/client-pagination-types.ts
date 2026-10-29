@@ -1,5 +1,5 @@
 /** Public-package pagination type contracts; never executed. */
-import { type PaginatedCollection, type SentryClient } from "@sentry/api";
+import { consumePage, paginateUpTo, type BudgetedPageFetcher, type CollectionPage, type CollectionPageFetcher, type PaginatedCollection, type PaginationContinuation, type SentryClient } from "@sentry/api";
 import type * as pagination from "../src/pagination.gen";
 
 type Kind = "fetchPage" | "paginateAll" | "paginateUpTo";
@@ -59,7 +59,35 @@ async function collectionTypes(sentry: SentryClient) {
   const batchSlug: string | undefined = batch.data[0]?.slug;
   const reason: "exhausted" | "limit" | "maxPages" = batch.stopReason;
   const typed: PaginatedCollection<{ slug: string }> = all;
+  const fromPage = await paginateUpTo(
+    cursor => sentry.fetchPage.listOrganizationProjects(options, cursor),
+    { limit: 10 }, "projects",
+  );
+  const pageSlug: string | undefined = fromPage.data[0]?.slug;
+  const normalized: CollectionPageFetcher<string> = async () => ({ data: ["one"] });
+  // @ts-expect-error Request belongs to the SDK result envelope, not normalized metadata.
+  const mixedPage: CollectionPage<string> = { data: ["one"], request: new Request("https://example.test") };
+  // @ts-expect-error Normalized fetchers reject; they cannot carry an ignored error.
+  const mixedError: CollectionPage<string> = { data: ["one"], error: new Error("failed") };
+  const strings = await paginateUpTo(normalized, { limit: 1 }, "custom");
+  const value: string | undefined = strings.data[0];
+  const sdkFetcher: BudgetedPageFetcher<string[], unknown> = async () => ({
+    data: ["one"], request: new Request("https://example.test"), response: new Response(),
+  });
+  const sdkResponse: Response | undefined = (await sdkFetcher(undefined, 1)).response;
+  void [pageSlug, value, sdkResponse];
   void [slug, batchSlug, reason, typed];
+  if (batch.continuation) {
+    const continuation: PaginationContinuation = batch.continuation;
+    await sentry.paginateUpTo.listOrganizationProjects(options, { limit: 10, resume: continuation });
+    const consumed = consumePage({ data: batch.data }, { offset: 0 }, 5);
+    const consumedSlug: string | undefined = consumed.data[0]?.slug;
+    void consumedSlug;
+  }
+  // @ts-expect-error Partial replay must preserve its original request budget.
+  const missingBudget: PaginationContinuation = { cursor: "opaque", offset: 5 };
+  // @ts-expect-error Pagination must not mutate a caller's continuation.
+  if (batch.continuation) batch.continuation.offset = 1;
   // @ts-expect-error Collections now expose their items through data.
   all.map(item => item.slug);
 
