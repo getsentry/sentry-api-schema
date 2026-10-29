@@ -31,6 +31,18 @@ function publicFactory() {
   return configured;
 }
 
+async function preparedRequests(sentry: SentryClient) {
+  const request: Request = await sentry.client.prepareRequest({
+    method: "GET", url: "/api/0/custom/", query: { cursor: "opaque" },
+  });
+  // @ts-expect-error Generic preparation requires an explicit method.
+  await sentry.client.prepareRequest({ url: "/api/0/custom/" });
+  // Custom clients accepted by standalone operations need no new capability.
+  const { prepareRequest, ...legacyClient } = sentry.client;
+  await listOrganizations({ client: legacyClient });
+  void [request, prepareRequest];
+}
+
 async function operationArguments(sentry: SentryClient) {
   await sentry.listOrganizations();
   await sentry.listOrganizations({ query: { owner: true }, signal: new AbortController().signal });
