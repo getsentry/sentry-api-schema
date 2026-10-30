@@ -1,7 +1,9 @@
 /** Build-time analysis of API usage in consumer-supplied TypeScript source. */
 
 import { dirname, posix } from "node:path";
-import ts from "typescript";
+// TypeScript 7 no longer ships the JavaScript compiler API, so load the
+// TypeScript 6 one under its own name instead of the consumer's `typescript`.
+import ts from "@typescript/typescript6";
 import type { ApiOperation } from "./operation-types.js";
 
 /** Identity supplied by the generated SDK operation catalog. */

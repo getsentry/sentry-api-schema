@@ -12,12 +12,12 @@ const readBundle = (name: string) =>
 describe("package entry points", () => {
   test("keeps validator and source-analysis peers optional", () => {
     expect(packageJson.peerDependencies).toEqual({
-      typescript: "*",
+      "@typescript/typescript6": "^6.0.2",
       valibot: "*",
       zod: "^3.24.0",
     });
     expect(packageJson.peerDependenciesMeta).toEqual({
-      typescript: { optional: true },
+      "@typescript/typescript6": { optional: true },
       valibot: { optional: true },
       zod: { optional: true },
     });
@@ -25,7 +25,7 @@ describe("package entry points", () => {
 
   test("keeps the root bundle independent from optional tools and validators", async () => {
     const root = await readBundle("index");
-    expect(root).not.toMatch(/from ["']typescript["']/);
+    expect(root).not.toMatch(/from ["'](?:typescript|@typescript\/typescript6)["']/);
     expect(root).not.toMatch(/from ["']valibot["']/);
     expect(root).not.toMatch(/from ["']zod["']/);
   });
@@ -40,8 +40,8 @@ describe("package entry points", () => {
     expect(valibot).not.toMatch(/from ["']zod["']/);
     expect(zod).toMatch(/from ["']zod["']/);
     expect(zod).not.toMatch(/from ["']valibot["']/);
-    expect(analysis).toMatch(/from ["']typescript["']/);
-    expect(analysis).not.toMatch(/from ["'](?:valibot|zod)["']/);
+    expect(analysis).toMatch(/from ["']@typescript\/typescript6["']/);
+    expect(analysis).not.toMatch(/from ["'](?:typescript|valibot|zod)["']/);
   });
 
   test("packs isolated runtime entries, pagination and build-time analysis", () => {
@@ -138,7 +138,12 @@ describe("package entry points", () => {
       }));
       execFileSync("node", [join(root, "node_modules", "typescript", "bin", "tsc"), "-p", directory]);
 
-      symlinkSync(join(root, "node_modules", "typescript"), join(directory, "node_modules", "typescript"), "dir");
+      mkdirSync(join(directory, "node_modules", "@typescript"), { recursive: true });
+      symlinkSync(
+        join(root, "node_modules", "@typescript", "typescript6"),
+        join(directory, "node_modules", "@typescript", "typescript6"),
+        "dir",
+      );
       writeFileSync(join(directory, "analysis.mjs"), `
         import assert from "node:assert/strict";
         import { operations } from "@sentry/api/operations";

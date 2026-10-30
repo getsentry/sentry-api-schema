@@ -126,10 +126,10 @@ The catalog is generated from the same schema and SDK output as each release. Co
 
 ### Build-time source analysis
 
-`@sentry/api/source-analysis` follows references in supplied TypeScript source to discover calls to catalog operations. Install TypeScript only when using this optional build tool; the analyzer is tested with TypeScript 5.9. Its optional peer uses a wildcard so it does not constrain the compiler used by applications that only import the client.
+`@sentry/api/source-analysis` follows references in supplied TypeScript source to discover calls to catalog operations. It parses with TypeScript 6's compiler API through `@typescript/typescript6`, since TypeScript 7 no longer ships that API. Install it only when using this optional build tool; the separate package name means it works alongside whichever TypeScript version the project compiles with, including 7. With npm or Bun, its aliased TypeScript 6 dependency is hoisted and its `tsc` bin can replace the project's own in `node_modules/.bin`, so run the project's compiler by path there; pnpm keeps it nested.
 
 ```bash
-npm install --save-dev @sentry/api typescript@^5.9
+npm install --save-dev @sentry/api @typescript/typescript6
 ```
 
 ```ts

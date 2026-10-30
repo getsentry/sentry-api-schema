@@ -95,5 +95,7 @@ execSync('bun build src/valibot.ts --outdir dist --external valibot', { stdio: "
 execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
 execSync("bun build src/browser.ts --outdir dist", { stdio: "inherit" });
 execSync("bun build src/operations.ts --outdir dist", { stdio: "inherit" });
-execSync("bun build src/source-analysis.ts --outdir dist --external typescript", { stdio: "inherit" });
-execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });
+execSync("bun build src/source-analysis.ts --outdir dist --external @typescript/typescript6", { stdio: "inherit" });
+// @typescript/typescript6 depends on TypeScript 6 under an alias that also
+// installs a `tsc` bin, so run this repo's own compiler by path.
+execSync("node node_modules/typescript/bin/tsc --emitDeclarationOnly", { stdio: "inherit" });
