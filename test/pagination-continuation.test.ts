@@ -230,6 +230,31 @@ describe("pagination continuation", () => {
     expect(page.nextCursor).toBe("opaque-next");
   });
 
+  test("carries an offset through shorter and empty pages with opaque cursors", async () => {
+    const pages = [
+      { data: [1, 2], nextCursor: "opaque/A" },
+      { data: [], nextCursor: "opaque/B" },
+      { data: [3, 4, 5, 6] },
+    ];
+    const resume = { offset: 5, requestBudget: 7 };
+    const first = consumePage(pages[0]!, resume);
+    const empty = consumePage(pages[1]!, first.position!);
+    const last = consumePage(pages[2]!, empty.position!);
+
+    expect(first).toEqual({ data: [], position: { cursor: "opaque/A", offset: 3 } });
+    expect(empty).toEqual({ data: [], position: { cursor: "opaque/B", offset: 3 } });
+    expect(last).toEqual({ data: [6] });
+
+    const cursors: Array<string | undefined> = [];
+    const result = await paginateUpTo(async cursor => {
+      cursors.push(cursor);
+      return pages[cursor === "opaque/A" ? 1 : cursor === "opaque/B" ? 2 : 0]!;
+    }, { limit: 2, resume }, "short-pages");
+
+    expect(cursors).toEqual([undefined, "opaque/A", "opaque/B"]);
+    expect(result).toEqual({ data: [6], stopReason: "exhausted" });
+  });
+
   test("counts a replayed partial page toward the request cap and resumes at its boundary", async () => {
     const calls: Array<string | undefined> = [];
     const fetcher = async (cursor: string | undefined) => {
