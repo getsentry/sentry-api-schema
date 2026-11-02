@@ -1,3 +1,9 @@
+## 0.435.0
+
+### New Features
+
+- (build) Make validator schemas and the default client tree-shakeable by @BYK with @sentry-junior in [#120](https://github.com/getsentry/sentry-api-schema/pull/120)
+
 ## 0.434.0
 
 ### Schema Updates
