@@ -10208,8 +10208,306 @@
                   },
                   "data_sources": {
                     "type": "array",
-                    "items": {},
-                    "description": "\n            The data sources for the metric monitor to use based on what you want to measure.\n\n            `timeWindow` is measured in seconds. Cron Monitors use schedules instead of this field.\n            Legacy metric alert rules expressed this value in minutes, so multiply a legacy value\n            by 60 when migrating it to a monitor. For example, a legacy 5-minute window becomes\n            `\"timeWindow\": 300`.\n\n            **Number of Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are `avg(measurements.lcp)`, `p50(measurements.lcp)`, `p75(measurements.lcp)`, `p95(measurements.lcp)`, `p99(measurements.lcp)`, `p100(measurements.lcp)`, and `percentile(measurements.lcp,x)`, where `x` is your custom percentile.\n\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"is_transaction:true\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Custom Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are:\n            `avg(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p50(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p75(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p95(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p99(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p100(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `percentile(x,y)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`, and `y` is the custom percentile.\n            `failure_rate()`\n            `apdex(x)`, where `x` is the value of the Apdex score.\n            `count()`\n\n            ```json\n            [\n                {\n                    \"aggregate\": \"p75(measurements.ttfb)\",\n                    \"dataset\": \"events_analytics_platform\",\n                    \"environment\": \"prod\",\n                    \"queryType\": 1,\n                    \"eventTypes\": [\"trace_item_span\"],\n                    \"query\": \"is_transaction:true\",\n                    \"timeWindow\": 3600,\n                    \"extrapolationMode\": \"unknown\"\n                }\n            ]\n            ```\n"
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "title": "Errors",
+                          "description": "Counts error events or the users they affect.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                0
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "events"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "enum": [
+                                "count()",
+                                "count_unique(user)",
+                                "count_unique(dist)",
+                                "count_unique(release)",
+                                "count_unique(tags[sentry:user])",
+                                "count_unique(tags[sentry:dist])",
+                                "count_unique(tags[sentry:release])"
+                              ]
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "error",
+                                  "default"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 2
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "title": "Spans",
+                          "description": "Aggregates span attributes, such as `p95(span.duration)`. To query transaction spans, add `is_transaction:true` to `query`.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                1
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "events_analytics_platform"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "pattern": "^(?:count|count_unique|avg|p50|p75|p90|p95|p99|p100|max|min|sum|epm|failure_count|failure_rate|eps|apdex|user_misery|performance_score|opportunity_score)\\(.*\\)$"
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "trace_item_span"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 1
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "title": "Logs",
+                          "description": "Aggregates log attributes, such as `count(message)`.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                1
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "events_analytics_platform"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "pattern": "^(?:count|count_unique|avg|p50|p75|p90|p95|p99|max|min|sum)\\(.*\\)$"
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "trace_item_log"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 1
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "title": "Application Metrics",
+                          "description": "Aggregates an application metric. The function arguments name the metric, its type, and its unit, such as `per_second(value,metric_name,counter,-)`. An `equation|` prefix combines several aggregates.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                1
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "events_analytics_platform"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "pattern": "^(?:(?:avg|avg_if|count|count_if|count_unique|count_unique_if|max|max_if|min|min_if|p50|p50_if|p75|p75_if|p90|p90_if|p95|p95_if|p99|p99_if|per_minute|per_minute_if|per_second|per_second_if|sum|sum_if)\\(.*\\)|equation\\|.+)$"
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "trace_item_metric"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 1
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "title": "Crash Rate",
+                          "description": "Measures the percentage of crashed sessions or users, such as `percentage(sessions_crashed, sessions) AS _crash_rate_alert_aggregate`.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                2
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "metrics"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "pattern": "^percentage\\([ ]*(sessions_crashed|users_crashed)[ ]*,[ ]*(sessions|users)[ ]*\\)"
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "Ignored for this dataset. Send an empty list."
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        }
+                      ]
+                    },
+                    "description": "\n            The data sources for the metric monitor to use based on what you want to measure.\n\n            The schema of each data source lists the `aggregate` values that its `dataset` and\n            `eventTypes` accept.\n\n            `timeWindow` is measured in seconds. Cron Monitors use schedules instead of this field.\n            Legacy metric alert rules expressed this value in minutes, so multiply a legacy value\n            by 60 when migrating it to a monitor. For example, a legacy 5-minute window becomes\n            `\"timeWindow\": 300`.\n\n            **Number of Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are `avg(measurements.lcp)`, `p50(measurements.lcp)`, `p75(measurements.lcp)`, `p95(measurements.lcp)`, `p99(measurements.lcp)`, and `p100(measurements.lcp)`.\n\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"is_transaction:true\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Custom Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are:\n            `avg(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p50(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p75(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p95(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p99(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p100(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `failure_rate()`\n            `apdex(x)`, where `x` is the value of the Apdex score.\n            `count()`\n\n            ```json\n            [\n                {\n                    \"aggregate\": \"p75(measurements.ttfb)\",\n                    \"dataset\": \"events_analytics_platform\",\n                    \"environment\": \"prod\",\n                    \"queryType\": 1,\n                    \"eventTypes\": [\"trace_item_span\"],\n                    \"query\": \"is_transaction:true\",\n                    \"timeWindow\": 3600,\n                    \"extrapolationMode\": \"unknown\"\n                }\n            ]\n            ```\n"
                   },
                   "config": {
                     "type": "object",
@@ -30931,8 +31229,306 @@
                   },
                   "data_sources": {
                     "type": "array",
-                    "items": {},
-                    "description": "\n            The data sources for the metric monitor to use based on what you want to measure.\n\n            `timeWindow` is measured in seconds. Cron Monitors use schedules instead of this field.\n            Legacy metric alert rules expressed this value in minutes, so multiply a legacy value\n            by 60 when migrating it to a monitor. For example, a legacy 5-minute window becomes\n            `\"timeWindow\": 300`.\n\n            **Number of Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are `avg(measurements.lcp)`, `p50(measurements.lcp)`, `p75(measurements.lcp)`, `p95(measurements.lcp)`, `p99(measurements.lcp)`, `p100(measurements.lcp)`, and `percentile(measurements.lcp,x)`, where `x` is your custom percentile.\n\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"is_transaction:true\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Custom Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are:\n            `avg(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p50(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p75(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p95(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p99(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p100(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `percentile(x,y)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`, and `y` is the custom percentile.\n            `failure_rate()`\n            `apdex(x)`, where `x` is the value of the Apdex score.\n            `count()`\n\n            ```json\n            [\n                {\n                    \"aggregate\": \"p75(measurements.ttfb)\",\n                    \"dataset\": \"events_analytics_platform\",\n                    \"environment\": \"prod\",\n                    \"queryType\": 1,\n                    \"eventTypes\": [\"trace_item_span\"],\n                    \"query\": \"is_transaction:true\",\n                    \"timeWindow\": 3600,\n                    \"extrapolationMode\": \"unknown\"\n                }\n            ]\n            ```\n"
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "title": "Errors",
+                          "description": "Counts error events or the users they affect.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                0
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "events"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "enum": [
+                                "count()",
+                                "count_unique(user)",
+                                "count_unique(dist)",
+                                "count_unique(release)",
+                                "count_unique(tags[sentry:user])",
+                                "count_unique(tags[sentry:dist])",
+                                "count_unique(tags[sentry:release])"
+                              ]
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "error",
+                                  "default"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 2
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "title": "Spans",
+                          "description": "Aggregates span attributes, such as `p95(span.duration)`. To query transaction spans, add `is_transaction:true` to `query`.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                1
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "events_analytics_platform"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "pattern": "^(?:count|count_unique|avg|p50|p75|p90|p95|p99|p100|max|min|sum|epm|failure_count|failure_rate|eps|apdex|user_misery|performance_score|opportunity_score)\\(.*\\)$"
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "trace_item_span"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 1
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "title": "Logs",
+                          "description": "Aggregates log attributes, such as `count(message)`.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                1
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "events_analytics_platform"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "pattern": "^(?:count|count_unique|avg|p50|p75|p90|p95|p99|max|min|sum)\\(.*\\)$"
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "trace_item_log"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 1
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "title": "Application Metrics",
+                          "description": "Aggregates an application metric. The function arguments name the metric, its type, and its unit, such as `per_second(value,metric_name,counter,-)`. An `equation|` prefix combines several aggregates.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                1
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "events_analytics_platform"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "pattern": "^(?:(?:avg|avg_if|count|count_if|count_unique|count_unique_if|max|max_if|min|min_if|p50|p50_if|p75|p75_if|p90|p90_if|p95|p95_if|p99|p99_if|per_minute|per_minute_if|per_second|per_second_if|sum|sum_if)\\(.*\\)|equation\\|.+)$"
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "trace_item_metric"
+                                ]
+                              },
+                              "minItems": 1,
+                              "maxItems": 1
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "title": "Crash Rate",
+                          "description": "Measures the percentage of crashed sessions or users, such as `percentage(sessions_crashed, sessions) AS _crash_rate_alert_aggregate`.",
+                          "properties": {
+                            "query_type": {
+                              "type": "integer",
+                              "enum": [
+                                2
+                              ]
+                            },
+                            "dataset": {
+                              "type": "string",
+                              "enum": [
+                                "metrics"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "description": "A search query to filter the events, such as `is:unresolved`."
+                            },
+                            "aggregate": {
+                              "type": "string",
+                              "pattern": "^percentage\\([ ]*(sessions_crashed|users_crashed)[ ]*,[ ]*(sessions|users)[ ]*\\)"
+                            },
+                            "time_window": {
+                              "type": "integer",
+                              "description": "The time window to aggregate over, in seconds."
+                            },
+                            "environment": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "event_types": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "Ignored for this dataset. Send an empty list."
+                            },
+                            "extrapolation_mode": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "dataset",
+                            "query",
+                            "aggregate",
+                            "time_window",
+                            "environment",
+                            "event_types"
+                          ]
+                        }
+                      ]
+                    },
+                    "description": "\n            The data sources for the metric monitor to use based on what you want to measure.\n\n            The schema of each data source lists the `aggregate` values that its `dataset` and\n            `eventTypes` accept.\n\n            `timeWindow` is measured in seconds. Cron Monitors use schedules instead of this field.\n            Legacy metric alert rules expressed this value in minutes, so multiply a legacy value\n            by 60 when migrating it to a monitor. For example, a legacy 5-minute window becomes\n            `\"timeWindow\": 300`.\n\n            **Number of Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are `avg(measurements.lcp)`, `p50(measurements.lcp)`, `p75(measurements.lcp)`, `p95(measurements.lcp)`, `p99(measurements.lcp)`, and `p100(measurements.lcp)`.\n\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"is_transaction:true\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Custom Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are:\n            `avg(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p50(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p75(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p95(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p99(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p100(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `failure_rate()`\n            `apdex(x)`, where `x` is the value of the Apdex score.\n            `count()`\n\n            ```json\n            [\n                {\n                    \"aggregate\": \"p75(measurements.ttfb)\",\n                    \"dataset\": \"events_analytics_platform\",\n                    \"environment\": \"prod\",\n                    \"queryType\": 1,\n                    \"eventTypes\": [\"trace_item_span\"],\n                    \"query\": \"is_transaction:true\",\n                    \"timeWindow\": 3600,\n                    \"extrapolationMode\": \"unknown\"\n                }\n            ]\n            ```\n"
                   },
                   "config": {
                     "type": "object",
@@ -84950,8 +85546,306 @@
           },
           "data_sources": {
             "type": "array",
-            "items": {},
-            "description": "\n            The data sources for the metric monitor to use based on what you want to measure.\n\n            `timeWindow` is measured in seconds. Cron Monitors use schedules instead of this field.\n            Legacy metric alert rules expressed this value in minutes, so multiply a legacy value\n            by 60 when migrating it to a monitor. For example, a legacy 5-minute window becomes\n            `\"timeWindow\": 300`.\n\n            **Number of Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are `avg(measurements.lcp)`, `p50(measurements.lcp)`, `p75(measurements.lcp)`, `p95(measurements.lcp)`, `p99(measurements.lcp)`, `p100(measurements.lcp)`, and `percentile(measurements.lcp,x)`, where `x` is your custom percentile.\n\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"is_transaction:true\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Custom Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are:\n            `avg(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p50(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p75(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p95(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p99(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p100(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `percentile(x,y)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`, and `y` is the custom percentile.\n            `failure_rate()`\n            `apdex(x)`, where `x` is the value of the Apdex score.\n            `count()`\n\n            ```json\n            [\n                {\n                    \"aggregate\": \"p75(measurements.ttfb)\",\n                    \"dataset\": \"events_analytics_platform\",\n                    \"environment\": \"prod\",\n                    \"queryType\": 1,\n                    \"eventTypes\": [\"trace_item_span\"],\n                    \"query\": \"is_transaction:true\",\n                    \"timeWindow\": 3600,\n                    \"extrapolationMode\": \"unknown\"\n                }\n            ]\n            ```\n"
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "title": "Errors",
+                  "description": "Counts error events or the users they affect.",
+                  "properties": {
+                    "query_type": {
+                      "type": "integer",
+                      "enum": [
+                        0
+                      ]
+                    },
+                    "dataset": {
+                      "type": "string",
+                      "enum": [
+                        "events"
+                      ]
+                    },
+                    "query": {
+                      "type": "string",
+                      "description": "A search query to filter the events, such as `is:unresolved`."
+                    },
+                    "aggregate": {
+                      "type": "string",
+                      "enum": [
+                        "count()",
+                        "count_unique(user)",
+                        "count_unique(dist)",
+                        "count_unique(release)",
+                        "count_unique(tags[sentry:user])",
+                        "count_unique(tags[sentry:dist])",
+                        "count_unique(tags[sentry:release])"
+                      ]
+                    },
+                    "time_window": {
+                      "type": "integer",
+                      "description": "The time window to aggregate over, in seconds."
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "event_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "error",
+                          "default"
+                        ]
+                      },
+                      "minItems": 1,
+                      "maxItems": 2
+                    },
+                    "extrapolation_mode": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "dataset",
+                    "query",
+                    "aggregate",
+                    "time_window",
+                    "environment",
+                    "event_types"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "title": "Spans",
+                  "description": "Aggregates span attributes, such as `p95(span.duration)`. To query transaction spans, add `is_transaction:true` to `query`.",
+                  "properties": {
+                    "query_type": {
+                      "type": "integer",
+                      "enum": [
+                        1
+                      ]
+                    },
+                    "dataset": {
+                      "type": "string",
+                      "enum": [
+                        "events_analytics_platform"
+                      ]
+                    },
+                    "query": {
+                      "type": "string",
+                      "description": "A search query to filter the events, such as `is:unresolved`."
+                    },
+                    "aggregate": {
+                      "type": "string",
+                      "pattern": "^(?:count|count_unique|avg|p50|p75|p90|p95|p99|p100|max|min|sum|epm|failure_count|failure_rate|eps|apdex|user_misery|performance_score|opportunity_score)\\(.*\\)$"
+                    },
+                    "time_window": {
+                      "type": "integer",
+                      "description": "The time window to aggregate over, in seconds."
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "event_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "trace_item_span"
+                        ]
+                      },
+                      "minItems": 1,
+                      "maxItems": 1
+                    },
+                    "extrapolation_mode": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "dataset",
+                    "query",
+                    "aggregate",
+                    "time_window",
+                    "environment",
+                    "event_types"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "title": "Logs",
+                  "description": "Aggregates log attributes, such as `count(message)`.",
+                  "properties": {
+                    "query_type": {
+                      "type": "integer",
+                      "enum": [
+                        1
+                      ]
+                    },
+                    "dataset": {
+                      "type": "string",
+                      "enum": [
+                        "events_analytics_platform"
+                      ]
+                    },
+                    "query": {
+                      "type": "string",
+                      "description": "A search query to filter the events, such as `is:unresolved`."
+                    },
+                    "aggregate": {
+                      "type": "string",
+                      "pattern": "^(?:count|count_unique|avg|p50|p75|p90|p95|p99|max|min|sum)\\(.*\\)$"
+                    },
+                    "time_window": {
+                      "type": "integer",
+                      "description": "The time window to aggregate over, in seconds."
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "event_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "trace_item_log"
+                        ]
+                      },
+                      "minItems": 1,
+                      "maxItems": 1
+                    },
+                    "extrapolation_mode": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "dataset",
+                    "query",
+                    "aggregate",
+                    "time_window",
+                    "environment",
+                    "event_types"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "title": "Application Metrics",
+                  "description": "Aggregates an application metric. The function arguments name the metric, its type, and its unit, such as `per_second(value,metric_name,counter,-)`. An `equation|` prefix combines several aggregates.",
+                  "properties": {
+                    "query_type": {
+                      "type": "integer",
+                      "enum": [
+                        1
+                      ]
+                    },
+                    "dataset": {
+                      "type": "string",
+                      "enum": [
+                        "events_analytics_platform"
+                      ]
+                    },
+                    "query": {
+                      "type": "string",
+                      "description": "A search query to filter the events, such as `is:unresolved`."
+                    },
+                    "aggregate": {
+                      "type": "string",
+                      "pattern": "^(?:(?:avg|avg_if|count|count_if|count_unique|count_unique_if|max|max_if|min|min_if|p50|p50_if|p75|p75_if|p90|p90_if|p95|p95_if|p99|p99_if|per_minute|per_minute_if|per_second|per_second_if|sum|sum_if)\\(.*\\)|equation\\|.+)$"
+                    },
+                    "time_window": {
+                      "type": "integer",
+                      "description": "The time window to aggregate over, in seconds."
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "event_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "trace_item_metric"
+                        ]
+                      },
+                      "minItems": 1,
+                      "maxItems": 1
+                    },
+                    "extrapolation_mode": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "dataset",
+                    "query",
+                    "aggregate",
+                    "time_window",
+                    "environment",
+                    "event_types"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "title": "Crash Rate",
+                  "description": "Measures the percentage of crashed sessions or users, such as `percentage(sessions_crashed, sessions) AS _crash_rate_alert_aggregate`.",
+                  "properties": {
+                    "query_type": {
+                      "type": "integer",
+                      "enum": [
+                        2
+                      ]
+                    },
+                    "dataset": {
+                      "type": "string",
+                      "enum": [
+                        "metrics"
+                      ]
+                    },
+                    "query": {
+                      "type": "string",
+                      "description": "A search query to filter the events, such as `is:unresolved`."
+                    },
+                    "aggregate": {
+                      "type": "string",
+                      "pattern": "^percentage\\([ ]*(sessions_crashed|users_crashed)[ ]*,[ ]*(sessions|users)[ ]*\\)"
+                    },
+                    "time_window": {
+                      "type": "integer",
+                      "description": "The time window to aggregate over, in seconds."
+                    },
+                    "environment": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "event_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Ignored for this dataset. Send an empty list."
+                    },
+                    "extrapolation_mode": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "dataset",
+                    "query",
+                    "aggregate",
+                    "time_window",
+                    "environment",
+                    "event_types"
+                  ]
+                }
+              ]
+            },
+            "description": "\n            The data sources for the metric monitor to use based on what you want to measure.\n\n            The schema of each data source lists the `aggregate` values that its `dataset` and\n            `eventTypes` accept.\n\n            `timeWindow` is measured in seconds. Cron Monitors use schedules instead of this field.\n            Legacy metric alert rules expressed this value in minutes, so multiply a legacy value\n            by 60 when migrating it to a monitor. For example, a legacy 5-minute window becomes\n            `\"timeWindow\": 300`.\n\n            **Number of Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count()\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n            **Users Experiencing Errors Metric Monitor**\n            - `eventTypes`: Any of `error` or `default`.\n            ```json\n                [\n                    {\n                        \"aggregate\": \"count_unique(tags[sentry:user])\",\n                        \"dataset\" : \"events\",\n                        \"environment\": \"prod\",\n                        \"eventTypes\": [\"default\", \"error\"],\n                        \"query\": \"is:unresolved\",\n                        \"queryType\": 0,\n                        \"timeWindow\": 3600\n                    }\n                ]\n            ```\n\n\n            **Throughput Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"count(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Duration Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(span.duration)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Failure Rate Metric Monitor**\n            ```json\n                [\n                    {\n                        \"aggregate\":\"failure_rate()\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Largest Contentful Paint Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are `avg(measurements.lcp)`, `p50(measurements.lcp)`, `p75(measurements.lcp)`, `p95(measurements.lcp)`, `p99(measurements.lcp)`, and `p100(measurements.lcp)`.\n\n            ```json\n                [\n                    {\n                        \"aggregate\":\"p95(measurements.lcp)\",\n                        \"dataset\":\"events_analytics_platform\",\n                        \"environment\":\"prod\",\n                        \"eventTypes\":[\"trace_item_span\"],\n                        \"query\":\"is_transaction:true\",\n                        \"queryType\":1,\n                        \"timeWindow\":3600,\n                        \"extrapolationMode\":\"unknown\"\n                    }\n                ]\n            ```\n\n            **Custom Metric Monitor**\n            - `dataset`: Use `events_analytics_platform`. To query transaction spans, add `is_transaction:true` to `query`.\n            - `aggregate`: Valid values are:\n            `avg(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p50(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p75(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p95(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p99(x)`, where x is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `p100(x)`, where `x` is `transaction.duration`, `measurements.cls`, `measurements.fcp`, `measurements.fid`, `measurements.fp`, `measurements.lcp`, `measurements.ttfb`, or `measurements.ttfb.requesttime`.\n            `failure_rate()`\n            `apdex(x)`, where `x` is the value of the Apdex score.\n            `count()`\n\n            ```json\n            [\n                {\n                    \"aggregate\": \"p75(measurements.ttfb)\",\n                    \"dataset\": \"events_analytics_platform\",\n                    \"environment\": \"prod\",\n                    \"queryType\": 1,\n                    \"eventTypes\": [\"trace_item_span\"],\n                    \"query\": \"is_transaction:true\",\n                    \"timeWindow\": 3600,\n                    \"extrapolationMode\": \"unknown\"\n                }\n            ]\n            ```\n"
           },
           "config": {
             "type": "object",
