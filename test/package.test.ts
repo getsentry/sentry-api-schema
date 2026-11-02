@@ -44,6 +44,30 @@ describe("package entry points", () => {
     expect(analysis).not.toMatch(/from ["'](?:valibot|zod)["']/);
   });
 
+  test("lets bundlers drop unused schemas and the unused default client", async () => {
+    const directory = mkdtempSync(join(tmpdir(), "api-tree-shaking-"));
+    try {
+      const entry = join(directory, "entry.ts");
+      const dist = fileURLToPath(new URL("../dist/", import.meta.url));
+      writeFileSync(entry, `
+        import { vGetOrganizationResponse } from ${JSON.stringify(join(dist, "valibot.js"))};
+        import { zGetOrganizationResponse } from ${JSON.stringify(join(dist, "zod.js"))};
+        import { SentryApiError } from ${JSON.stringify(join(dist, "index.js"))};
+        console.log(vGetOrganizationResponse, zGetOrganizationResponse, SentryApiError);
+      `);
+      const result = await Bun.build({ entrypoints: [entry], external: ["valibot", "zod"], target: "node" });
+      expect(result.success).toBe(true);
+      const output = await result.outputs[0]!.text();
+      const kept = (name: string) => output.includes(name);
+      expect(["vGetOrganizationResponse", "zGetOrganizationResponse", "SentryApiError"].filter(kept))
+        .toEqual(["vGetOrganizationResponse", "zGetOrganizationResponse", "SentryApiError"]);
+      expect(["vListOrganizationsResponse", "zListOrganizationsResponse", "defaultClient", "new Proxy"].filter(kept))
+        .toEqual([]);
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  });
+
   test("packs isolated runtime entries, pagination and build-time analysis", () => {
     const root = dirname(fileURLToPath(new URL("../package.json", import.meta.url)));
     const directory = mkdtempSync(join(tmpdir(), "api-package-"));
@@ -84,6 +108,9 @@ describe("package entry points", () => {
         }
         const { operations } = await import("@sentry/api/operations");
         assert(operations.some(operation => operation.functionName === "listOrganizations"));
+        // The root entry creates its default client on first use, not at import.
+        const root = await import("@sentry/api");
+        assert.equal(typeof root.getOrganization, "function");
       `);
       execFileSync("node", ["smoke.mjs"], { cwd: directory });
 
