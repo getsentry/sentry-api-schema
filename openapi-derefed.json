@@ -13356,101 +13356,412 @@
                           }
                         },
                         "occurrence": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "projectId": {
-                              "type": "integer"
-                            },
-                            "eventId": {
-                              "type": "string"
-                            },
-                            "fingerprint": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            "issueTitle": {
-                              "type": "string"
-                            },
-                            "subtitle": {
-                              "type": "string"
-                            },
-                            "resourceId": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "evidenceData": {
+                          "anyOf": [
+                            {
                               "type": "object",
-                              "additionalProperties": {}
-                            },
-                            "evidenceDisplay": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "name": {
+                              "description": "A metric issue occurrence. `evidenceData` describes the detector and query that fired.",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "projectId": {
+                                  "type": "integer"
+                                },
+                                "eventId": {
+                                  "type": "string"
+                                },
+                                "fingerprint": {
+                                  "type": "array",
+                                  "items": {
                                     "type": "string"
-                                  },
-                                  "value": {
-                                    "type": "string"
-                                  },
-                                  "important": {
-                                    "type": "boolean"
                                   }
                                 },
-                                "required": [
-                                  "important",
-                                  "name",
-                                  "value"
-                                ]
-                              }
+                                "issueTitle": {
+                                  "type": "string"
+                                },
+                                "subtitle": {
+                                  "type": "string"
+                                },
+                                "resourceId": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "evidenceDisplay": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "value": {
+                                        "type": "string"
+                                      },
+                                      "important": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "required": [
+                                      "important",
+                                      "name",
+                                      "value"
+                                    ]
+                                  }
+                                },
+                                "detectionTime": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "level": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "culprit": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "assignee": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "priority": {
+                                  "type": "integer",
+                                  "nullable": true
+                                },
+                                "type": {
+                                  "enum": [
+                                    8001
+                                  ],
+                                  "type": "integer"
+                                },
+                                "evidenceData": {
+                                  "type": "object",
+                                  "properties": {
+                                    "detectorId": {
+                                      "type": "integer"
+                                    },
+                                    "alertId": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    },
+                                    "value": {
+                                      "anyOf": [
+                                        {
+                                          "type": "number",
+                                          "format": "double"
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "value": {
+                                              "type": "number",
+                                              "format": "double"
+                                            },
+                                            "sourceId": {
+                                              "type": "string"
+                                            },
+                                            "subscriptionId": {
+                                              "type": "string"
+                                            },
+                                            "timestamp": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "sourceId",
+                                            "subscriptionId",
+                                            "timestamp",
+                                            "value"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "nullable": true
+                                        }
+                                      ]
+                                    },
+                                    "dataPacketSourceId": {
+                                      "type": "string"
+                                    },
+                                    "conditions": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "integer"
+                                          },
+                                          "type": {
+                                            "type": "string"
+                                          },
+                                          "comparison": {
+                                            "anyOf": [
+                                              {
+                                                "type": "number",
+                                                "format": "double"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": {}
+                                              }
+                                            ]
+                                          },
+                                          "conditionResult": {
+                                            "type": "integer"
+                                          }
+                                        },
+                                        "required": [
+                                          "comparison",
+                                          "conditionResult",
+                                          "id",
+                                          "type"
+                                        ]
+                                      }
+                                    },
+                                    "config": {
+                                      "type": "object",
+                                      "properties": {
+                                        "detectionType": {
+                                          "enum": [
+                                            "static",
+                                            "percent",
+                                            "dynamic"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "comparisonDelta": {
+                                          "type": "integer",
+                                          "nullable": true
+                                        }
+                                      },
+                                      "required": [
+                                        "detectionType"
+                                      ]
+                                    },
+                                    "dataSources": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "organizationId": {
+                                            "type": "string"
+                                          },
+                                          "type": {
+                                            "type": "string"
+                                          },
+                                          "sourceId": {
+                                            "type": "string"
+                                          },
+                                          "queryObj": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "string"
+                                              },
+                                              "status": {
+                                                "type": "integer"
+                                              },
+                                              "subscription": {
+                                                "type": "string",
+                                                "nullable": true
+                                              },
+                                              "snubaQuery": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "id": {
+                                                    "type": "string"
+                                                  },
+                                                  "dataset": {
+                                                    "type": "string"
+                                                  },
+                                                  "query": {
+                                                    "type": "string"
+                                                  },
+                                                  "aggregate": {
+                                                    "type": "string"
+                                                  },
+                                                  "timeWindow": {
+                                                    "type": "integer"
+                                                  },
+                                                  "environment": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  },
+                                                  "eventTypes": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "extrapolationMode": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                  }
+                                                },
+                                                "required": [
+                                                  "aggregate",
+                                                  "dataset",
+                                                  "environment",
+                                                  "eventTypes",
+                                                  "extrapolationMode",
+                                                  "id",
+                                                  "query",
+                                                  "timeWindow"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "id",
+                                              "snubaQuery",
+                                              "status",
+                                              "subscription"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "organizationId",
+                                          "queryObj",
+                                          "sourceId",
+                                          "type"
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "alertId",
+                                    "conditions",
+                                    "config",
+                                    "dataPacketSourceId",
+                                    "dataSources",
+                                    "detectorId",
+                                    "value"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "assignee",
+                                "culprit",
+                                "detectionTime",
+                                "eventId",
+                                "evidenceData",
+                                "evidenceDisplay",
+                                "fingerprint",
+                                "id",
+                                "issueTitle",
+                                "level",
+                                "priority",
+                                "projectId",
+                                "resourceId",
+                                "subtitle",
+                                "type"
+                              ]
                             },
-                            "type": {
-                              "type": "integer"
+                            {
+                              "type": "object",
+                              "description": "An issue occurrence of any type. `evidenceData` keys are camelCase.",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "projectId": {
+                                  "type": "integer"
+                                },
+                                "eventId": {
+                                  "type": "string"
+                                },
+                                "fingerprint": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "issueTitle": {
+                                  "type": "string"
+                                },
+                                "subtitle": {
+                                  "type": "string"
+                                },
+                                "resourceId": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "evidenceDisplay": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "value": {
+                                        "type": "string"
+                                      },
+                                      "important": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "required": [
+                                      "important",
+                                      "name",
+                                      "value"
+                                    ]
+                                  }
+                                },
+                                "detectionTime": {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                "level": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "culprit": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "assignee": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "priority": {
+                                  "type": "integer",
+                                  "nullable": true
+                                },
+                                "type": {
+                                  "type": "integer"
+                                },
+                                "evidenceData": {
+                                  "type": "object",
+                                  "additionalProperties": {}
+                                }
+                              },
+                              "required": [
+                                "assignee",
+                                "culprit",
+                                "detectionTime",
+                                "eventId",
+                                "evidenceData",
+                                "evidenceDisplay",
+                                "fingerprint",
+                                "id",
+                                "issueTitle",
+                                "level",
+                                "priority",
+                                "projectId",
+                                "resourceId",
+                                "subtitle",
+                                "type"
+                              ]
                             },
-                            "detectionTime": {
-                              "type": "number",
-                              "format": "double"
-                            },
-                            "level": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "culprit": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "assignee": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "priority": {
-                              "type": "integer",
+                            {
+                              "type": "object",
                               "nullable": true
                             }
-                          },
-                          "required": [
-                            "assignee",
-                            "culprit",
-                            "detectionTime",
-                            "eventId",
-                            "evidenceData",
-                            "evidenceDisplay",
-                            "fingerprint",
-                            "id",
-                            "issueTitle",
-                            "level",
-                            "priority",
-                            "projectId",
-                            "resourceId",
-                            "subtitle",
-                            "type"
-                          ],
-                          "nullable": true
+                          ]
                         },
                         "_meta": {
                           "type": "object",
@@ -56958,101 +57269,412 @@
                       }
                     },
                     "occurrence": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "projectId": {
-                          "type": "integer"
-                        },
-                        "eventId": {
-                          "type": "string"
-                        },
-                        "fingerprint": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        },
-                        "issueTitle": {
-                          "type": "string"
-                        },
-                        "subtitle": {
-                          "type": "string"
-                        },
-                        "resourceId": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "evidenceData": {
+                      "anyOf": [
+                        {
                           "type": "object",
-                          "additionalProperties": {}
-                        },
-                        "evidenceDisplay": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
+                          "description": "A metric issue occurrence. `evidenceData` describes the detector and query that fired.",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "projectId": {
+                              "type": "integer"
+                            },
+                            "eventId": {
+                              "type": "string"
+                            },
+                            "fingerprint": {
+                              "type": "array",
+                              "items": {
                                 "type": "string"
-                              },
-                              "value": {
-                                "type": "string"
-                              },
-                              "important": {
-                                "type": "boolean"
                               }
                             },
-                            "required": [
-                              "important",
-                              "name",
-                              "value"
-                            ]
-                          }
+                            "issueTitle": {
+                              "type": "string"
+                            },
+                            "subtitle": {
+                              "type": "string"
+                            },
+                            "resourceId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "evidenceDisplay": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "string"
+                                  },
+                                  "important": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "important",
+                                  "name",
+                                  "value"
+                                ]
+                              }
+                            },
+                            "detectionTime": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "level": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "culprit": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "assignee": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "priority": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "type": {
+                              "enum": [
+                                8001
+                              ],
+                              "type": "integer"
+                            },
+                            "evidenceData": {
+                              "type": "object",
+                              "properties": {
+                                "detectorId": {
+                                  "type": "integer"
+                                },
+                                "alertId": {
+                                  "type": "integer",
+                                  "nullable": true
+                                },
+                                "value": {
+                                  "anyOf": [
+                                    {
+                                      "type": "number",
+                                      "format": "double"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "type": "number",
+                                          "format": "double"
+                                        },
+                                        "sourceId": {
+                                          "type": "string"
+                                        },
+                                        "subscriptionId": {
+                                          "type": "string"
+                                        },
+                                        "timestamp": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "sourceId",
+                                        "subscriptionId",
+                                        "timestamp",
+                                        "value"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "nullable": true
+                                    }
+                                  ]
+                                },
+                                "dataPacketSourceId": {
+                                  "type": "string"
+                                },
+                                "conditions": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "comparison": {
+                                        "anyOf": [
+                                          {
+                                            "type": "number",
+                                            "format": "double"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "additionalProperties": {}
+                                          }
+                                        ]
+                                      },
+                                      "conditionResult": {
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "required": [
+                                      "comparison",
+                                      "conditionResult",
+                                      "id",
+                                      "type"
+                                    ]
+                                  }
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "detectionType": {
+                                      "enum": [
+                                        "static",
+                                        "percent",
+                                        "dynamic"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "comparisonDelta": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "detectionType"
+                                  ]
+                                },
+                                "dataSources": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "organizationId": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "sourceId": {
+                                        "type": "string"
+                                      },
+                                      "queryObj": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "status": {
+                                            "type": "integer"
+                                          },
+                                          "subscription": {
+                                            "type": "string",
+                                            "nullable": true
+                                          },
+                                          "snubaQuery": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "string"
+                                              },
+                                              "dataset": {
+                                                "type": "string"
+                                              },
+                                              "query": {
+                                                "type": "string"
+                                              },
+                                              "aggregate": {
+                                                "type": "string"
+                                              },
+                                              "timeWindow": {
+                                                "type": "integer"
+                                              },
+                                              "environment": {
+                                                "type": "string",
+                                                "nullable": true
+                                              },
+                                              "eventTypes": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "extrapolationMode": {
+                                                "type": "string",
+                                                "nullable": true
+                                              }
+                                            },
+                                            "required": [
+                                              "aggregate",
+                                              "dataset",
+                                              "environment",
+                                              "eventTypes",
+                                              "extrapolationMode",
+                                              "id",
+                                              "query",
+                                              "timeWindow"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "snubaQuery",
+                                          "status",
+                                          "subscription"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "organizationId",
+                                      "queryObj",
+                                      "sourceId",
+                                      "type"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "alertId",
+                                "conditions",
+                                "config",
+                                "dataPacketSourceId",
+                                "dataSources",
+                                "detectorId",
+                                "value"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "assignee",
+                            "culprit",
+                            "detectionTime",
+                            "eventId",
+                            "evidenceData",
+                            "evidenceDisplay",
+                            "fingerprint",
+                            "id",
+                            "issueTitle",
+                            "level",
+                            "priority",
+                            "projectId",
+                            "resourceId",
+                            "subtitle",
+                            "type"
+                          ]
                         },
-                        "type": {
-                          "type": "integer"
+                        {
+                          "type": "object",
+                          "description": "An issue occurrence of any type. `evidenceData` keys are camelCase.",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "projectId": {
+                              "type": "integer"
+                            },
+                            "eventId": {
+                              "type": "string"
+                            },
+                            "fingerprint": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "issueTitle": {
+                              "type": "string"
+                            },
+                            "subtitle": {
+                              "type": "string"
+                            },
+                            "resourceId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "evidenceDisplay": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "string"
+                                  },
+                                  "important": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "important",
+                                  "name",
+                                  "value"
+                                ]
+                              }
+                            },
+                            "detectionTime": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "level": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "culprit": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "assignee": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "priority": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "type": {
+                              "type": "integer"
+                            },
+                            "evidenceData": {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          },
+                          "required": [
+                            "assignee",
+                            "culprit",
+                            "detectionTime",
+                            "eventId",
+                            "evidenceData",
+                            "evidenceDisplay",
+                            "fingerprint",
+                            "id",
+                            "issueTitle",
+                            "level",
+                            "priority",
+                            "projectId",
+                            "resourceId",
+                            "subtitle",
+                            "type"
+                          ]
                         },
-                        "detectionTime": {
-                          "type": "number",
-                          "format": "double"
-                        },
-                        "level": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "culprit": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "assignee": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "priority": {
-                          "type": "integer",
+                        {
+                          "type": "object",
                           "nullable": true
                         }
-                      },
-                      "required": [
-                        "assignee",
-                        "culprit",
-                        "detectionTime",
-                        "eventId",
-                        "evidenceData",
-                        "evidenceDisplay",
-                        "fingerprint",
-                        "id",
-                        "issueTitle",
-                        "level",
-                        "priority",
-                        "projectId",
-                        "resourceId",
-                        "subtitle",
-                        "type"
-                      ],
-                      "nullable": true
+                      ]
                     },
                     "_meta": {
                       "type": "object",
@@ -82133,101 +82755,412 @@
                       }
                     },
                     "occurrence": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "projectId": {
-                          "type": "integer"
-                        },
-                        "eventId": {
-                          "type": "string"
-                        },
-                        "fingerprint": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        },
-                        "issueTitle": {
-                          "type": "string"
-                        },
-                        "subtitle": {
-                          "type": "string"
-                        },
-                        "resourceId": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "evidenceData": {
+                      "anyOf": [
+                        {
                           "type": "object",
-                          "additionalProperties": {}
-                        },
-                        "evidenceDisplay": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
+                          "description": "A metric issue occurrence. `evidenceData` describes the detector and query that fired.",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "projectId": {
+                              "type": "integer"
+                            },
+                            "eventId": {
+                              "type": "string"
+                            },
+                            "fingerprint": {
+                              "type": "array",
+                              "items": {
                                 "type": "string"
-                              },
-                              "value": {
-                                "type": "string"
-                              },
-                              "important": {
-                                "type": "boolean"
                               }
                             },
-                            "required": [
-                              "important",
-                              "name",
-                              "value"
-                            ]
-                          }
+                            "issueTitle": {
+                              "type": "string"
+                            },
+                            "subtitle": {
+                              "type": "string"
+                            },
+                            "resourceId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "evidenceDisplay": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "string"
+                                  },
+                                  "important": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "important",
+                                  "name",
+                                  "value"
+                                ]
+                              }
+                            },
+                            "detectionTime": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "level": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "culprit": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "assignee": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "priority": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "type": {
+                              "enum": [
+                                8001
+                              ],
+                              "type": "integer"
+                            },
+                            "evidenceData": {
+                              "type": "object",
+                              "properties": {
+                                "detectorId": {
+                                  "type": "integer"
+                                },
+                                "alertId": {
+                                  "type": "integer",
+                                  "nullable": true
+                                },
+                                "value": {
+                                  "anyOf": [
+                                    {
+                                      "type": "number",
+                                      "format": "double"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "type": "number",
+                                          "format": "double"
+                                        },
+                                        "sourceId": {
+                                          "type": "string"
+                                        },
+                                        "subscriptionId": {
+                                          "type": "string"
+                                        },
+                                        "timestamp": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "sourceId",
+                                        "subscriptionId",
+                                        "timestamp",
+                                        "value"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "nullable": true
+                                    }
+                                  ]
+                                },
+                                "dataPacketSourceId": {
+                                  "type": "string"
+                                },
+                                "conditions": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "comparison": {
+                                        "anyOf": [
+                                          {
+                                            "type": "number",
+                                            "format": "double"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "additionalProperties": {}
+                                          }
+                                        ]
+                                      },
+                                      "conditionResult": {
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "required": [
+                                      "comparison",
+                                      "conditionResult",
+                                      "id",
+                                      "type"
+                                    ]
+                                  }
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "detectionType": {
+                                      "enum": [
+                                        "static",
+                                        "percent",
+                                        "dynamic"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "comparisonDelta": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "detectionType"
+                                  ]
+                                },
+                                "dataSources": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "organizationId": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "sourceId": {
+                                        "type": "string"
+                                      },
+                                      "queryObj": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "status": {
+                                            "type": "integer"
+                                          },
+                                          "subscription": {
+                                            "type": "string",
+                                            "nullable": true
+                                          },
+                                          "snubaQuery": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "string"
+                                              },
+                                              "dataset": {
+                                                "type": "string"
+                                              },
+                                              "query": {
+                                                "type": "string"
+                                              },
+                                              "aggregate": {
+                                                "type": "string"
+                                              },
+                                              "timeWindow": {
+                                                "type": "integer"
+                                              },
+                                              "environment": {
+                                                "type": "string",
+                                                "nullable": true
+                                              },
+                                              "eventTypes": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "extrapolationMode": {
+                                                "type": "string",
+                                                "nullable": true
+                                              }
+                                            },
+                                            "required": [
+                                              "aggregate",
+                                              "dataset",
+                                              "environment",
+                                              "eventTypes",
+                                              "extrapolationMode",
+                                              "id",
+                                              "query",
+                                              "timeWindow"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "snubaQuery",
+                                          "status",
+                                          "subscription"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "organizationId",
+                                      "queryObj",
+                                      "sourceId",
+                                      "type"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "alertId",
+                                "conditions",
+                                "config",
+                                "dataPacketSourceId",
+                                "dataSources",
+                                "detectorId",
+                                "value"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "assignee",
+                            "culprit",
+                            "detectionTime",
+                            "eventId",
+                            "evidenceData",
+                            "evidenceDisplay",
+                            "fingerprint",
+                            "id",
+                            "issueTitle",
+                            "level",
+                            "priority",
+                            "projectId",
+                            "resourceId",
+                            "subtitle",
+                            "type"
+                          ]
                         },
-                        "type": {
-                          "type": "integer"
+                        {
+                          "type": "object",
+                          "description": "An issue occurrence of any type. `evidenceData` keys are camelCase.",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "projectId": {
+                              "type": "integer"
+                            },
+                            "eventId": {
+                              "type": "string"
+                            },
+                            "fingerprint": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "issueTitle": {
+                              "type": "string"
+                            },
+                            "subtitle": {
+                              "type": "string"
+                            },
+                            "resourceId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "evidenceDisplay": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "string"
+                                  },
+                                  "important": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "important",
+                                  "name",
+                                  "value"
+                                ]
+                              }
+                            },
+                            "detectionTime": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "level": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "culprit": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "assignee": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "priority": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "type": {
+                              "type": "integer"
+                            },
+                            "evidenceData": {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          },
+                          "required": [
+                            "assignee",
+                            "culprit",
+                            "detectionTime",
+                            "eventId",
+                            "evidenceData",
+                            "evidenceDisplay",
+                            "fingerprint",
+                            "id",
+                            "issueTitle",
+                            "level",
+                            "priority",
+                            "projectId",
+                            "resourceId",
+                            "subtitle",
+                            "type"
+                          ]
                         },
-                        "detectionTime": {
-                          "type": "number",
-                          "format": "double"
-                        },
-                        "level": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "culprit": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "assignee": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "priority": {
-                          "type": "integer",
+                        {
+                          "type": "object",
                           "nullable": true
                         }
-                      },
-                      "required": [
-                        "assignee",
-                        "culprit",
-                        "detectionTime",
-                        "eventId",
-                        "evidenceData",
-                        "evidenceDisplay",
-                        "fingerprint",
-                        "id",
-                        "issueTitle",
-                        "level",
-                        "priority",
-                        "projectId",
-                        "resourceId",
-                        "subtitle",
-                        "type"
-                      ],
-                      "nullable": true
+                      ]
                     },
                     "_meta": {
                       "type": "object",
@@ -83588,101 +84521,412 @@
                                 }
                               },
                               "occurrence": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "projectId": {
-                                    "type": "integer"
-                                  },
-                                  "eventId": {
-                                    "type": "string"
-                                  },
-                                  "fingerprint": {
-                                    "type": "array",
-                                    "items": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "issueTitle": {
-                                    "type": "string"
-                                  },
-                                  "subtitle": {
-                                    "type": "string"
-                                  },
-                                  "resourceId": {
-                                    "type": "string",
-                                    "nullable": true
-                                  },
-                                  "evidenceData": {
+                                "anyOf": [
+                                  {
                                     "type": "object",
-                                    "additionalProperties": {}
-                                  },
-                                  "evidenceDisplay": {
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "name": {
+                                    "description": "A metric issue occurrence. `evidenceData` describes the detector and query that fired.",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "projectId": {
+                                        "type": "integer"
+                                      },
+                                      "eventId": {
+                                        "type": "string"
+                                      },
+                                      "fingerprint": {
+                                        "type": "array",
+                                        "items": {
                                           "type": "string"
-                                        },
-                                        "value": {
-                                          "type": "string"
-                                        },
-                                        "important": {
-                                          "type": "boolean"
                                         }
                                       },
-                                      "required": [
-                                        "important",
-                                        "name",
-                                        "value"
-                                      ]
-                                    }
+                                      "issueTitle": {
+                                        "type": "string"
+                                      },
+                                      "subtitle": {
+                                        "type": "string"
+                                      },
+                                      "resourceId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "evidenceDisplay": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "type": "string"
+                                            },
+                                            "important": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "important",
+                                            "name",
+                                            "value"
+                                          ]
+                                        }
+                                      },
+                                      "detectionTime": {
+                                        "type": "number",
+                                        "format": "double"
+                                      },
+                                      "level": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "culprit": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "assignee": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "priority": {
+                                        "type": "integer",
+                                        "nullable": true
+                                      },
+                                      "type": {
+                                        "enum": [
+                                          8001
+                                        ],
+                                        "type": "integer"
+                                      },
+                                      "evidenceData": {
+                                        "type": "object",
+                                        "properties": {
+                                          "detectorId": {
+                                            "type": "integer"
+                                          },
+                                          "alertId": {
+                                            "type": "integer",
+                                            "nullable": true
+                                          },
+                                          "value": {
+                                            "anyOf": [
+                                              {
+                                                "type": "number",
+                                                "format": "double"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "value": {
+                                                    "type": "number",
+                                                    "format": "double"
+                                                  },
+                                                  "sourceId": {
+                                                    "type": "string"
+                                                  },
+                                                  "subscriptionId": {
+                                                    "type": "string"
+                                                  },
+                                                  "timestamp": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "sourceId",
+                                                  "subscriptionId",
+                                                  "timestamp",
+                                                  "value"
+                                                ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "nullable": true
+                                              }
+                                            ]
+                                          },
+                                          "dataPacketSourceId": {
+                                            "type": "string"
+                                          },
+                                          "conditions": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "id": {
+                                                  "type": "integer"
+                                                },
+                                                "type": {
+                                                  "type": "string"
+                                                },
+                                                "comparison": {
+                                                  "anyOf": [
+                                                    {
+                                                      "type": "number",
+                                                      "format": "double"
+                                                    },
+                                                    {
+                                                      "type": "object",
+                                                      "additionalProperties": {}
+                                                    }
+                                                  ]
+                                                },
+                                                "conditionResult": {
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [
+                                                "comparison",
+                                                "conditionResult",
+                                                "id",
+                                                "type"
+                                              ]
+                                            }
+                                          },
+                                          "config": {
+                                            "type": "object",
+                                            "properties": {
+                                              "detectionType": {
+                                                "enum": [
+                                                  "static",
+                                                  "percent",
+                                                  "dynamic"
+                                                ],
+                                                "type": "string"
+                                              },
+                                              "comparisonDelta": {
+                                                "type": "integer",
+                                                "nullable": true
+                                              }
+                                            },
+                                            "required": [
+                                              "detectionType"
+                                            ]
+                                          },
+                                          "dataSources": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "id": {
+                                                  "type": "string"
+                                                },
+                                                "organizationId": {
+                                                  "type": "string"
+                                                },
+                                                "type": {
+                                                  "type": "string"
+                                                },
+                                                "sourceId": {
+                                                  "type": "string"
+                                                },
+                                                "queryObj": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "id": {
+                                                      "type": "string"
+                                                    },
+                                                    "status": {
+                                                      "type": "integer"
+                                                    },
+                                                    "subscription": {
+                                                      "type": "string",
+                                                      "nullable": true
+                                                    },
+                                                    "snubaQuery": {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "id": {
+                                                          "type": "string"
+                                                        },
+                                                        "dataset": {
+                                                          "type": "string"
+                                                        },
+                                                        "query": {
+                                                          "type": "string"
+                                                        },
+                                                        "aggregate": {
+                                                          "type": "string"
+                                                        },
+                                                        "timeWindow": {
+                                                          "type": "integer"
+                                                        },
+                                                        "environment": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        },
+                                                        "eventTypes": {
+                                                          "type": "array",
+                                                          "items": {
+                                                            "type": "string"
+                                                          }
+                                                        },
+                                                        "extrapolationMode": {
+                                                          "type": "string",
+                                                          "nullable": true
+                                                        }
+                                                      },
+                                                      "required": [
+                                                        "aggregate",
+                                                        "dataset",
+                                                        "environment",
+                                                        "eventTypes",
+                                                        "extrapolationMode",
+                                                        "id",
+                                                        "query",
+                                                        "timeWindow"
+                                                      ]
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "id",
+                                                    "snubaQuery",
+                                                    "status",
+                                                    "subscription"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "id",
+                                                "organizationId",
+                                                "queryObj",
+                                                "sourceId",
+                                                "type"
+                                              ]
+                                            }
+                                          }
+                                        },
+                                        "required": [
+                                          "alertId",
+                                          "conditions",
+                                          "config",
+                                          "dataPacketSourceId",
+                                          "dataSources",
+                                          "detectorId",
+                                          "value"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "assignee",
+                                      "culprit",
+                                      "detectionTime",
+                                      "eventId",
+                                      "evidenceData",
+                                      "evidenceDisplay",
+                                      "fingerprint",
+                                      "id",
+                                      "issueTitle",
+                                      "level",
+                                      "priority",
+                                      "projectId",
+                                      "resourceId",
+                                      "subtitle",
+                                      "type"
+                                    ]
                                   },
-                                  "type": {
-                                    "type": "integer"
+                                  {
+                                    "type": "object",
+                                    "description": "An issue occurrence of any type. `evidenceData` keys are camelCase.",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "projectId": {
+                                        "type": "integer"
+                                      },
+                                      "eventId": {
+                                        "type": "string"
+                                      },
+                                      "fingerprint": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "issueTitle": {
+                                        "type": "string"
+                                      },
+                                      "subtitle": {
+                                        "type": "string"
+                                      },
+                                      "resourceId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "evidenceDisplay": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "type": "string"
+                                            },
+                                            "important": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "important",
+                                            "name",
+                                            "value"
+                                          ]
+                                        }
+                                      },
+                                      "detectionTime": {
+                                        "type": "number",
+                                        "format": "double"
+                                      },
+                                      "level": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "culprit": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "assignee": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "priority": {
+                                        "type": "integer",
+                                        "nullable": true
+                                      },
+                                      "type": {
+                                        "type": "integer"
+                                      },
+                                      "evidenceData": {
+                                        "type": "object",
+                                        "additionalProperties": {}
+                                      }
+                                    },
+                                    "required": [
+                                      "assignee",
+                                      "culprit",
+                                      "detectionTime",
+                                      "eventId",
+                                      "evidenceData",
+                                      "evidenceDisplay",
+                                      "fingerprint",
+                                      "id",
+                                      "issueTitle",
+                                      "level",
+                                      "priority",
+                                      "projectId",
+                                      "resourceId",
+                                      "subtitle",
+                                      "type"
+                                    ]
                                   },
-                                  "detectionTime": {
-                                    "type": "number",
-                                    "format": "double"
-                                  },
-                                  "level": {
-                                    "type": "string",
-                                    "nullable": true
-                                  },
-                                  "culprit": {
-                                    "type": "string",
-                                    "nullable": true
-                                  },
-                                  "assignee": {
-                                    "type": "string",
-                                    "nullable": true
-                                  },
-                                  "priority": {
-                                    "type": "integer",
+                                  {
+                                    "type": "object",
                                     "nullable": true
                                   }
-                                },
-                                "required": [
-                                  "assignee",
-                                  "culprit",
-                                  "detectionTime",
-                                  "eventId",
-                                  "evidenceData",
-                                  "evidenceDisplay",
-                                  "fingerprint",
-                                  "id",
-                                  "issueTitle",
-                                  "level",
-                                  "priority",
-                                  "projectId",
-                                  "resourceId",
-                                  "subtitle",
-                                  "type"
-                                ],
-                                "nullable": true
+                                ]
                               },
                               "_meta": {
                                 "type": "object",
@@ -92735,101 +93979,412 @@
                 }
               },
               "occurrence": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string"
-                  },
-                  "projectId": {
-                    "type": "integer"
-                  },
-                  "eventId": {
-                    "type": "string"
-                  },
-                  "fingerprint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "issueTitle": {
-                    "type": "string"
-                  },
-                  "subtitle": {
-                    "type": "string"
-                  },
-                  "resourceId": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "evidenceData": {
+                "anyOf": [
+                  {
                     "type": "object",
-                    "additionalProperties": {}
-                  },
-                  "evidenceDisplay": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
+                    "description": "A metric issue occurrence. `evidenceData` describes the detector and query that fired.",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "projectId": {
+                        "type": "integer"
+                      },
+                      "eventId": {
+                        "type": "string"
+                      },
+                      "fingerprint": {
+                        "type": "array",
+                        "items": {
                           "type": "string"
-                        },
-                        "value": {
-                          "type": "string"
-                        },
-                        "important": {
-                          "type": "boolean"
                         }
                       },
-                      "required": [
-                        "important",
-                        "name",
-                        "value"
-                      ]
-                    }
+                      "issueTitle": {
+                        "type": "string"
+                      },
+                      "subtitle": {
+                        "type": "string"
+                      },
+                      "resourceId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "evidenceDisplay": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            },
+                            "important": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "important",
+                            "name",
+                            "value"
+                          ]
+                        }
+                      },
+                      "detectionTime": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "level": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "culprit": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "assignee": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "priority": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "type": {
+                        "enum": [
+                          8001
+                        ],
+                        "type": "integer"
+                      },
+                      "evidenceData": {
+                        "type": "object",
+                        "properties": {
+                          "detectorId": {
+                            "type": "integer"
+                          },
+                          "alertId": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "value": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "type": "number",
+                                    "format": "double"
+                                  },
+                                  "sourceId": {
+                                    "type": "string"
+                                  },
+                                  "subscriptionId": {
+                                    "type": "string"
+                                  },
+                                  "timestamp": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "sourceId",
+                                  "subscriptionId",
+                                  "timestamp",
+                                  "value"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "nullable": true
+                              }
+                            ]
+                          },
+                          "dataPacketSourceId": {
+                            "type": "string"
+                          },
+                          "conditions": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "comparison": {
+                                  "anyOf": [
+                                    {
+                                      "type": "number",
+                                      "format": "double"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {}
+                                    }
+                                  ]
+                                },
+                                "conditionResult": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "comparison",
+                                "conditionResult",
+                                "id",
+                                "type"
+                              ]
+                            }
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "detectionType": {
+                                "enum": [
+                                  "static",
+                                  "percent",
+                                  "dynamic"
+                                ],
+                                "type": "string"
+                              },
+                              "comparisonDelta": {
+                                "type": "integer",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "detectionType"
+                            ]
+                          },
+                          "dataSources": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "organizationId": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "sourceId": {
+                                  "type": "string"
+                                },
+                                "queryObj": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "status": {
+                                      "type": "integer"
+                                    },
+                                    "subscription": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "snubaQuery": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "dataset": {
+                                          "type": "string"
+                                        },
+                                        "query": {
+                                          "type": "string"
+                                        },
+                                        "aggregate": {
+                                          "type": "string"
+                                        },
+                                        "timeWindow": {
+                                          "type": "integer"
+                                        },
+                                        "environment": {
+                                          "type": "string",
+                                          "nullable": true
+                                        },
+                                        "eventTypes": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "extrapolationMode": {
+                                          "type": "string",
+                                          "nullable": true
+                                        }
+                                      },
+                                      "required": [
+                                        "aggregate",
+                                        "dataset",
+                                        "environment",
+                                        "eventTypes",
+                                        "extrapolationMode",
+                                        "id",
+                                        "query",
+                                        "timeWindow"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "snubaQuery",
+                                    "status",
+                                    "subscription"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "organizationId",
+                                "queryObj",
+                                "sourceId",
+                                "type"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "alertId",
+                          "conditions",
+                          "config",
+                          "dataPacketSourceId",
+                          "dataSources",
+                          "detectorId",
+                          "value"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "assignee",
+                      "culprit",
+                      "detectionTime",
+                      "eventId",
+                      "evidenceData",
+                      "evidenceDisplay",
+                      "fingerprint",
+                      "id",
+                      "issueTitle",
+                      "level",
+                      "priority",
+                      "projectId",
+                      "resourceId",
+                      "subtitle",
+                      "type"
+                    ]
                   },
-                  "type": {
-                    "type": "integer"
+                  {
+                    "type": "object",
+                    "description": "An issue occurrence of any type. `evidenceData` keys are camelCase.",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "projectId": {
+                        "type": "integer"
+                      },
+                      "eventId": {
+                        "type": "string"
+                      },
+                      "fingerprint": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "issueTitle": {
+                        "type": "string"
+                      },
+                      "subtitle": {
+                        "type": "string"
+                      },
+                      "resourceId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "evidenceDisplay": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            },
+                            "important": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "important",
+                            "name",
+                            "value"
+                          ]
+                        }
+                      },
+                      "detectionTime": {
+                        "type": "number",
+                        "format": "double"
+                      },
+                      "level": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "culprit": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "assignee": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "priority": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "type": {
+                        "type": "integer"
+                      },
+                      "evidenceData": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "assignee",
+                      "culprit",
+                      "detectionTime",
+                      "eventId",
+                      "evidenceData",
+                      "evidenceDisplay",
+                      "fingerprint",
+                      "id",
+                      "issueTitle",
+                      "level",
+                      "priority",
+                      "projectId",
+                      "resourceId",
+                      "subtitle",
+                      "type"
+                    ]
                   },
-                  "detectionTime": {
-                    "type": "number",
-                    "format": "double"
-                  },
-                  "level": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "culprit": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "assignee": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "priority": {
-                    "type": "integer",
+                  {
+                    "type": "object",
                     "nullable": true
                   }
-                },
-                "required": [
-                  "assignee",
-                  "culprit",
-                  "detectionTime",
-                  "eventId",
-                  "evidenceData",
-                  "evidenceDisplay",
-                  "fingerprint",
-                  "id",
-                  "issueTitle",
-                  "level",
-                  "priority",
-                  "projectId",
-                  "resourceId",
-                  "subtitle",
-                  "type"
-                ],
-                "nullable": true
+                ]
               },
               "_meta": {
                 "type": "object",
@@ -94748,101 +96303,412 @@
                       }
                     },
                     "occurrence": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "projectId": {
-                          "type": "integer"
-                        },
-                        "eventId": {
-                          "type": "string"
-                        },
-                        "fingerprint": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        },
-                        "issueTitle": {
-                          "type": "string"
-                        },
-                        "subtitle": {
-                          "type": "string"
-                        },
-                        "resourceId": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "evidenceData": {
+                      "anyOf": [
+                        {
                           "type": "object",
-                          "additionalProperties": {}
-                        },
-                        "evidenceDisplay": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
+                          "description": "A metric issue occurrence. `evidenceData` describes the detector and query that fired.",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "projectId": {
+                              "type": "integer"
+                            },
+                            "eventId": {
+                              "type": "string"
+                            },
+                            "fingerprint": {
+                              "type": "array",
+                              "items": {
                                 "type": "string"
-                              },
-                              "value": {
-                                "type": "string"
-                              },
-                              "important": {
-                                "type": "boolean"
                               }
                             },
-                            "required": [
-                              "important",
-                              "name",
-                              "value"
-                            ]
-                          }
+                            "issueTitle": {
+                              "type": "string"
+                            },
+                            "subtitle": {
+                              "type": "string"
+                            },
+                            "resourceId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "evidenceDisplay": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "string"
+                                  },
+                                  "important": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "important",
+                                  "name",
+                                  "value"
+                                ]
+                              }
+                            },
+                            "detectionTime": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "level": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "culprit": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "assignee": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "priority": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "type": {
+                              "enum": [
+                                8001
+                              ],
+                              "type": "integer"
+                            },
+                            "evidenceData": {
+                              "type": "object",
+                              "properties": {
+                                "detectorId": {
+                                  "type": "integer"
+                                },
+                                "alertId": {
+                                  "type": "integer",
+                                  "nullable": true
+                                },
+                                "value": {
+                                  "anyOf": [
+                                    {
+                                      "type": "number",
+                                      "format": "double"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "type": "number",
+                                          "format": "double"
+                                        },
+                                        "sourceId": {
+                                          "type": "string"
+                                        },
+                                        "subscriptionId": {
+                                          "type": "string"
+                                        },
+                                        "timestamp": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "sourceId",
+                                        "subscriptionId",
+                                        "timestamp",
+                                        "value"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "nullable": true
+                                    }
+                                  ]
+                                },
+                                "dataPacketSourceId": {
+                                  "type": "string"
+                                },
+                                "conditions": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "comparison": {
+                                        "anyOf": [
+                                          {
+                                            "type": "number",
+                                            "format": "double"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "additionalProperties": {}
+                                          }
+                                        ]
+                                      },
+                                      "conditionResult": {
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "required": [
+                                      "comparison",
+                                      "conditionResult",
+                                      "id",
+                                      "type"
+                                    ]
+                                  }
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "detectionType": {
+                                      "enum": [
+                                        "static",
+                                        "percent",
+                                        "dynamic"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "comparisonDelta": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "detectionType"
+                                  ]
+                                },
+                                "dataSources": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "organizationId": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "sourceId": {
+                                        "type": "string"
+                                      },
+                                      "queryObj": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "status": {
+                                            "type": "integer"
+                                          },
+                                          "subscription": {
+                                            "type": "string",
+                                            "nullable": true
+                                          },
+                                          "snubaQuery": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "string"
+                                              },
+                                              "dataset": {
+                                                "type": "string"
+                                              },
+                                              "query": {
+                                                "type": "string"
+                                              },
+                                              "aggregate": {
+                                                "type": "string"
+                                              },
+                                              "timeWindow": {
+                                                "type": "integer"
+                                              },
+                                              "environment": {
+                                                "type": "string",
+                                                "nullable": true
+                                              },
+                                              "eventTypes": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "extrapolationMode": {
+                                                "type": "string",
+                                                "nullable": true
+                                              }
+                                            },
+                                            "required": [
+                                              "aggregate",
+                                              "dataset",
+                                              "environment",
+                                              "eventTypes",
+                                              "extrapolationMode",
+                                              "id",
+                                              "query",
+                                              "timeWindow"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "snubaQuery",
+                                          "status",
+                                          "subscription"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "organizationId",
+                                      "queryObj",
+                                      "sourceId",
+                                      "type"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "alertId",
+                                "conditions",
+                                "config",
+                                "dataPacketSourceId",
+                                "dataSources",
+                                "detectorId",
+                                "value"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "assignee",
+                            "culprit",
+                            "detectionTime",
+                            "eventId",
+                            "evidenceData",
+                            "evidenceDisplay",
+                            "fingerprint",
+                            "id",
+                            "issueTitle",
+                            "level",
+                            "priority",
+                            "projectId",
+                            "resourceId",
+                            "subtitle",
+                            "type"
+                          ]
                         },
-                        "type": {
-                          "type": "integer"
+                        {
+                          "type": "object",
+                          "description": "An issue occurrence of any type. `evidenceData` keys are camelCase.",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "projectId": {
+                              "type": "integer"
+                            },
+                            "eventId": {
+                              "type": "string"
+                            },
+                            "fingerprint": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "issueTitle": {
+                              "type": "string"
+                            },
+                            "subtitle": {
+                              "type": "string"
+                            },
+                            "resourceId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "evidenceDisplay": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "string"
+                                  },
+                                  "important": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "important",
+                                  "name",
+                                  "value"
+                                ]
+                              }
+                            },
+                            "detectionTime": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "level": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "culprit": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "assignee": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "priority": {
+                              "type": "integer",
+                              "nullable": true
+                            },
+                            "type": {
+                              "type": "integer"
+                            },
+                            "evidenceData": {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          },
+                          "required": [
+                            "assignee",
+                            "culprit",
+                            "detectionTime",
+                            "eventId",
+                            "evidenceData",
+                            "evidenceDisplay",
+                            "fingerprint",
+                            "id",
+                            "issueTitle",
+                            "level",
+                            "priority",
+                            "projectId",
+                            "resourceId",
+                            "subtitle",
+                            "type"
+                          ]
                         },
-                        "detectionTime": {
-                          "type": "number",
-                          "format": "double"
-                        },
-                        "level": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "culprit": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "assignee": {
-                          "type": "string",
-                          "nullable": true
-                        },
-                        "priority": {
-                          "type": "integer",
+                        {
+                          "type": "object",
                           "nullable": true
                         }
-                      },
-                      "required": [
-                        "assignee",
-                        "culprit",
-                        "detectionTime",
-                        "eventId",
-                        "evidenceData",
-                        "evidenceDisplay",
-                        "fingerprint",
-                        "id",
-                        "issueTitle",
-                        "level",
-                        "priority",
-                        "projectId",
-                        "resourceId",
-                        "subtitle",
-                        "type"
-                      ],
-                      "nullable": true
+                      ]
                     },
                     "_meta": {
                       "type": "object",
@@ -96561,101 +98427,412 @@
             }
           },
           "occurrence": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "projectId": {
-                "type": "integer"
-              },
-              "eventId": {
-                "type": "string"
-              },
-              "fingerprint": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "issueTitle": {
-                "type": "string"
-              },
-              "subtitle": {
-                "type": "string"
-              },
-              "resourceId": {
-                "type": "string",
-                "nullable": true
-              },
-              "evidenceData": {
+            "anyOf": [
+              {
                 "type": "object",
-                "additionalProperties": {}
-              },
-              "evidenceDisplay": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
+                "description": "A metric issue occurrence. `evidenceData` describes the detector and query that fired.",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "projectId": {
+                    "type": "integer"
+                  },
+                  "eventId": {
+                    "type": "string"
+                  },
+                  "fingerprint": {
+                    "type": "array",
+                    "items": {
                       "type": "string"
-                    },
-                    "value": {
-                      "type": "string"
-                    },
-                    "important": {
-                      "type": "boolean"
                     }
                   },
-                  "required": [
-                    "important",
-                    "name",
-                    "value"
-                  ]
-                }
+                  "issueTitle": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "resourceId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "evidenceDisplay": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        },
+                        "important": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "important",
+                        "name",
+                        "value"
+                      ]
+                    }
+                  },
+                  "detectionTime": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "level": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "culprit": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "assignee": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "type": {
+                    "enum": [
+                      8001
+                    ],
+                    "type": "integer"
+                  },
+                  "evidenceData": {
+                    "type": "object",
+                    "properties": {
+                      "detectorId": {
+                        "type": "integer"
+                      },
+                      "alertId": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "sourceId": {
+                                "type": "string"
+                              },
+                              "subscriptionId": {
+                                "type": "string"
+                              },
+                              "timestamp": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "sourceId",
+                              "subscriptionId",
+                              "timestamp",
+                              "value"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "nullable": true
+                          }
+                        ]
+                      },
+                      "dataPacketSourceId": {
+                        "type": "string"
+                      },
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "comparison": {
+                              "anyOf": [
+                                {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": {}
+                                }
+                              ]
+                            },
+                            "conditionResult": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "comparison",
+                            "conditionResult",
+                            "id",
+                            "type"
+                          ]
+                        }
+                      },
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "detectionType": {
+                            "enum": [
+                              "static",
+                              "percent",
+                              "dynamic"
+                            ],
+                            "type": "string"
+                          },
+                          "comparisonDelta": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "detectionType"
+                        ]
+                      },
+                      "dataSources": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "organizationId": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "sourceId": {
+                              "type": "string"
+                            },
+                            "queryObj": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "type": "integer"
+                                },
+                                "subscription": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "snubaQuery": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "dataset": {
+                                      "type": "string"
+                                    },
+                                    "query": {
+                                      "type": "string"
+                                    },
+                                    "aggregate": {
+                                      "type": "string"
+                                    },
+                                    "timeWindow": {
+                                      "type": "integer"
+                                    },
+                                    "environment": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "eventTypes": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "extrapolationMode": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "aggregate",
+                                    "dataset",
+                                    "environment",
+                                    "eventTypes",
+                                    "extrapolationMode",
+                                    "id",
+                                    "query",
+                                    "timeWindow"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "snubaQuery",
+                                "status",
+                                "subscription"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "organizationId",
+                            "queryObj",
+                            "sourceId",
+                            "type"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "alertId",
+                      "conditions",
+                      "config",
+                      "dataPacketSourceId",
+                      "dataSources",
+                      "detectorId",
+                      "value"
+                    ]
+                  }
+                },
+                "required": [
+                  "assignee",
+                  "culprit",
+                  "detectionTime",
+                  "eventId",
+                  "evidenceData",
+                  "evidenceDisplay",
+                  "fingerprint",
+                  "id",
+                  "issueTitle",
+                  "level",
+                  "priority",
+                  "projectId",
+                  "resourceId",
+                  "subtitle",
+                  "type"
+                ]
               },
-              "type": {
-                "type": "integer"
+              {
+                "type": "object",
+                "description": "An issue occurrence of any type. `evidenceData` keys are camelCase.",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "projectId": {
+                    "type": "integer"
+                  },
+                  "eventId": {
+                    "type": "string"
+                  },
+                  "fingerprint": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "issueTitle": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "resourceId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "evidenceDisplay": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        },
+                        "important": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "important",
+                        "name",
+                        "value"
+                      ]
+                    }
+                  },
+                  "detectionTime": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "level": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "culprit": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "assignee": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "type": {
+                    "type": "integer"
+                  },
+                  "evidenceData": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "required": [
+                  "assignee",
+                  "culprit",
+                  "detectionTime",
+                  "eventId",
+                  "evidenceData",
+                  "evidenceDisplay",
+                  "fingerprint",
+                  "id",
+                  "issueTitle",
+                  "level",
+                  "priority",
+                  "projectId",
+                  "resourceId",
+                  "subtitle",
+                  "type"
+                ]
               },
-              "detectionTime": {
-                "type": "number",
-                "format": "double"
-              },
-              "level": {
-                "type": "string",
-                "nullable": true
-              },
-              "culprit": {
-                "type": "string",
-                "nullable": true
-              },
-              "assignee": {
-                "type": "string",
-                "nullable": true
-              },
-              "priority": {
-                "type": "integer",
+              {
+                "type": "object",
                 "nullable": true
               }
-            },
-            "required": [
-              "assignee",
-              "culprit",
-              "detectionTime",
-              "eventId",
-              "evidenceData",
-              "evidenceDisplay",
-              "fingerprint",
-              "id",
-              "issueTitle",
-              "level",
-              "priority",
-              "projectId",
-              "resourceId",
-              "subtitle",
-              "type"
-            ],
-            "nullable": true
+            ]
           },
           "_meta": {
             "type": "object",
@@ -113179,101 +115356,412 @@
             }
           },
           "occurrence": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "projectId": {
-                "type": "integer"
-              },
-              "eventId": {
-                "type": "string"
-              },
-              "fingerprint": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "issueTitle": {
-                "type": "string"
-              },
-              "subtitle": {
-                "type": "string"
-              },
-              "resourceId": {
-                "type": "string",
-                "nullable": true
-              },
-              "evidenceData": {
+            "anyOf": [
+              {
                 "type": "object",
-                "additionalProperties": {}
-              },
-              "evidenceDisplay": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
+                "description": "A metric issue occurrence. `evidenceData` describes the detector and query that fired.",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "projectId": {
+                    "type": "integer"
+                  },
+                  "eventId": {
+                    "type": "string"
+                  },
+                  "fingerprint": {
+                    "type": "array",
+                    "items": {
                       "type": "string"
-                    },
-                    "value": {
-                      "type": "string"
-                    },
-                    "important": {
-                      "type": "boolean"
                     }
                   },
-                  "required": [
-                    "important",
-                    "name",
-                    "value"
-                  ]
-                }
+                  "issueTitle": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "resourceId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "evidenceDisplay": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        },
+                        "important": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "important",
+                        "name",
+                        "value"
+                      ]
+                    }
+                  },
+                  "detectionTime": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "level": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "culprit": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "assignee": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "type": {
+                    "enum": [
+                      8001
+                    ],
+                    "type": "integer"
+                  },
+                  "evidenceData": {
+                    "type": "object",
+                    "properties": {
+                      "detectorId": {
+                        "type": "integer"
+                      },
+                      "alertId": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "sourceId": {
+                                "type": "string"
+                              },
+                              "subscriptionId": {
+                                "type": "string"
+                              },
+                              "timestamp": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "sourceId",
+                              "subscriptionId",
+                              "timestamp",
+                              "value"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "nullable": true
+                          }
+                        ]
+                      },
+                      "dataPacketSourceId": {
+                        "type": "string"
+                      },
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "comparison": {
+                              "anyOf": [
+                                {
+                                  "type": "number",
+                                  "format": "double"
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": {}
+                                }
+                              ]
+                            },
+                            "conditionResult": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "comparison",
+                            "conditionResult",
+                            "id",
+                            "type"
+                          ]
+                        }
+                      },
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "detectionType": {
+                            "enum": [
+                              "static",
+                              "percent",
+                              "dynamic"
+                            ],
+                            "type": "string"
+                          },
+                          "comparisonDelta": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "detectionType"
+                        ]
+                      },
+                      "dataSources": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "organizationId": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "sourceId": {
+                              "type": "string"
+                            },
+                            "queryObj": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "type": "integer"
+                                },
+                                "subscription": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "snubaQuery": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "dataset": {
+                                      "type": "string"
+                                    },
+                                    "query": {
+                                      "type": "string"
+                                    },
+                                    "aggregate": {
+                                      "type": "string"
+                                    },
+                                    "timeWindow": {
+                                      "type": "integer"
+                                    },
+                                    "environment": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "eventTypes": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "extrapolationMode": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "aggregate",
+                                    "dataset",
+                                    "environment",
+                                    "eventTypes",
+                                    "extrapolationMode",
+                                    "id",
+                                    "query",
+                                    "timeWindow"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "snubaQuery",
+                                "status",
+                                "subscription"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "organizationId",
+                            "queryObj",
+                            "sourceId",
+                            "type"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "alertId",
+                      "conditions",
+                      "config",
+                      "dataPacketSourceId",
+                      "dataSources",
+                      "detectorId",
+                      "value"
+                    ]
+                  }
+                },
+                "required": [
+                  "assignee",
+                  "culprit",
+                  "detectionTime",
+                  "eventId",
+                  "evidenceData",
+                  "evidenceDisplay",
+                  "fingerprint",
+                  "id",
+                  "issueTitle",
+                  "level",
+                  "priority",
+                  "projectId",
+                  "resourceId",
+                  "subtitle",
+                  "type"
+                ]
               },
-              "type": {
-                "type": "integer"
+              {
+                "type": "object",
+                "description": "An issue occurrence of any type. `evidenceData` keys are camelCase.",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "projectId": {
+                    "type": "integer"
+                  },
+                  "eventId": {
+                    "type": "string"
+                  },
+                  "fingerprint": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "issueTitle": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "resourceId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "evidenceDisplay": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        },
+                        "important": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "important",
+                        "name",
+                        "value"
+                      ]
+                    }
+                  },
+                  "detectionTime": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "level": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "culprit": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "assignee": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "type": {
+                    "type": "integer"
+                  },
+                  "evidenceData": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "required": [
+                  "assignee",
+                  "culprit",
+                  "detectionTime",
+                  "eventId",
+                  "evidenceData",
+                  "evidenceDisplay",
+                  "fingerprint",
+                  "id",
+                  "issueTitle",
+                  "level",
+                  "priority",
+                  "projectId",
+                  "resourceId",
+                  "subtitle",
+                  "type"
+                ]
               },
-              "detectionTime": {
-                "type": "number",
-                "format": "double"
-              },
-              "level": {
-                "type": "string",
-                "nullable": true
-              },
-              "culprit": {
-                "type": "string",
-                "nullable": true
-              },
-              "assignee": {
-                "type": "string",
-                "nullable": true
-              },
-              "priority": {
-                "type": "integer",
+              {
+                "type": "object",
                 "nullable": true
               }
-            },
-            "required": [
-              "assignee",
-              "culprit",
-              "detectionTime",
-              "eventId",
-              "evidenceData",
-              "evidenceDisplay",
-              "fingerprint",
-              "id",
-              "issueTitle",
-              "level",
-              "priority",
-              "projectId",
-              "resourceId",
-              "subtitle",
-              "type"
-            ],
-            "nullable": true
+            ]
           },
           "_meta": {
             "type": "object",
