@@ -59,6 +59,9 @@ execSync(`node ${JSON.stringify(join(__dirname, "scripts", "constrain-throw-opti
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "apply-query-defaults.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-operations.mjs"))}`, { stdio: "inherit" });
+// Annotate schema constructors as pure and defer the default client so bundlers
+// can drop unused exports and importing the package does no eager work.
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "make-tree-shakeable.mjs"))}`, { stdio: "inherit" });
 
 // 4. Append re-exports to the generated index.ts so the pagination
 //    utilities and the per-operation wrappers are part of the public API.
