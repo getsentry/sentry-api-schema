@@ -253,6 +253,45 @@ describe("credential refresh", () => {
     expect(sent).toHaveLength(2);
   });
 
+  it("refreshes after a 401 with no retry budget", async () => {
+    const { fetch, sent } = scriptedFetch([
+      new Response("", { status: 401 }),
+      Response.json({ ok: true }),
+    ]);
+    const refresh = vi.fn(async (current: TransportCredential) => ({
+      ...current,
+      token: "token-b",
+    }));
+
+    const response = await transport(fetch, {
+      credentials: { current: () => credential, refresh },
+      retry: { ...policy, maxRetries: 0 },
+    }).request(ISSUES_URL);
+
+    expect(response.status).toBe(200);
+    expect(sent).toHaveLength(2);
+  });
+
+  it("does not spend a retry on the refresh replay", async () => {
+    const { fetch, sent } = scriptedFetch([
+      new Response("", { status: 401 }),
+      new Response("", { status: 503 }),
+      Response.json({ ok: true }),
+    ]);
+    const refresh = vi.fn(async (current: TransportCredential) => ({
+      ...current,
+      token: "token-b",
+    }));
+
+    const response = await transport(fetch, {
+      credentials: { current: () => credential, refresh },
+      retry: { ...policy, maxRetries: 1 },
+    }).request(ISSUES_URL);
+
+    expect(response.status).toBe(200);
+    expect(sent).toHaveLength(3);
+  });
+
   it("refreshes ahead of expiry before the first attempt", async () => {
     const { fetch, sent } = scriptedFetch([Response.json({})]);
 
@@ -383,6 +422,30 @@ describe("timeouts and fetch errors", () => {
     expect(result).toEqual(new Error("host timeout"));
     expect(timeout).toHaveBeenCalledWith({ timeoutMs: 5, idempotent: true });
     expect(fetch).toHaveBeenCalledTimes(policy.maxRetries + 1);
+  });
+
+  it("times out a buffered body that stalls after the headers", async () => {
+    // Unlike fetch, this body ignores the attempt's signal once headers arrive.
+    const stalled = () =>
+      new Response(
+        new ReadableStream({
+          start(controller) {
+            controller.enqueue(new TextEncoder().encode("{"));
+          },
+        }),
+        { headers: { "content-type": "application/json" } },
+      );
+    const fetch = vi.fn(async () => stalled());
+
+    const result = await Promise.race([
+      transport(fetch, { timeoutMs: 5 })
+        .request(ISSUES_URL, { method: "POST" }, { responseBody: "buffer" })
+        .catch((error: unknown) => error),
+      new Promise((resolve) => setTimeout(() => resolve("stalled"), 1000)),
+    ]);
+
+    expect(result).toBeInstanceOf(ApiTimeoutError);
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
   it("throws a fatal fetch error at once", async () => {
@@ -565,6 +628,37 @@ describe("cache", () => {
         await cache.lookup({
           url: ISSUES_URL,
           requestHeaders: { authorization: "Bearer token-a" },
+          identity: "id-a",
+        }),
+      ).toBeDefined(),
+    );
+    const cached = await api.request(ISSUES_URL);
+
+    expect(await cached.json()).toEqual([{ id: "1" }]);
+    expect(sent).toHaveLength(1);
+  });
+
+  it("matches Vary: Authorization with the host's Authorization", async () => {
+    const cache = memoryCache();
+    const { fetch, sent } = scriptedFetch([
+      Response.json([{ id: "1" }], {
+        headers: { "cache-control": "private, max-age=60", vary: "Authorization" },
+      }),
+    ]);
+    const api = transport(fetch, {
+      cache,
+      credentials: {
+        current: () => credential,
+        authorization: ({ token }) => `Token ${token}`,
+      },
+    });
+
+    await (await api.request(ISSUES_URL)).json();
+    await waitFor(async () =>
+      expect(
+        await cache.lookup({
+          url: ISSUES_URL,
+          requestHeaders: { authorization: "Token token-a" },
           identity: "id-a",
         }),
       ).toBeDefined(),

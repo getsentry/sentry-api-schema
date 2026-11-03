@@ -17,7 +17,7 @@ import {
   type RetryPolicy,
   sleep,
 } from "./retry.js";
-import { sentryBearerHeader, trimAuthToken } from "./auth-token.js";
+import { sentryBearerHeader } from "./auth-token.js";
 import type { CacheLookup } from "./response-cache/policy.js";
 
 type FetchInput = Request | string | URL;
@@ -218,6 +218,8 @@ type Outcome =
 type AttemptResult =
   | { action: "done"; response: Response }
   | { action: "retry"; delayMs: number }
+  /** Send again at once, outside the retry budget: a credential refresh. */
+  | { action: "replay" }
   | { action: "throw"; error: unknown };
 
 type Send<C> = {
@@ -254,6 +256,20 @@ export function createApiTransport<C extends TransportCredential>(
       throw new Error("Malformed authentication token");
     }
     return header;
+  }
+
+  /**
+   * The Authorization a cache lookup varies on: the value a send would set,
+   * so a `Vary: Authorization` entry matches. None when the credential
+   * cannot produce one yet; `prepare` may still replace it.
+   */
+  function lookupHeaders(credential: C): Record<string, string> {
+    try {
+      const value = authorization(credential);
+      return value ? { authorization: value } : {};
+    } catch {
+      return {};
+    }
   }
 
   function timeoutFor(url: string): number | undefined {
@@ -331,7 +347,7 @@ export function createApiTransport<C extends TransportCredential>(
         signal: controller.signal,
       });
       if (shouldBuffer(response, mode)) {
-        await response.clone().body?.pipeTo(new WritableStream());
+        await drainBody(response.clone(), controller.signal);
       }
       return { response };
     } catch (error) {
@@ -499,7 +515,7 @@ export function createApiTransport<C extends TransportCredential>(
       response: Response,
       attempt: number,
     ): Promise<AttemptResult> {
-      if (response.status === 401 && attempt < retry.maxRetries) {
+      if (response.status === 401) {
         const next =
           refreshed || !credentials?.refresh
             ? undefined
@@ -514,7 +530,7 @@ export function createApiTransport<C extends TransportCredential>(
           headers.set(config.refreshedRequestHeader, "1");
         }
         cancelBody(response);
-        return { action: "retry", delayMs: 0 };
+        return { action: "replay" };
       }
 
       const serverDelayMs = parseRetryDelayMs(
@@ -571,7 +587,7 @@ export function createApiTransport<C extends TransportCredential>(
       };
     }
 
-    for (let attempt = 0; ; attempt++) {
+    for (let attempt = 0; ; ) {
       const { input: attemptInput, init: attemptInit } = nextInput();
       let outcome: Outcome;
       try {
@@ -619,11 +635,16 @@ export function createApiTransport<C extends TransportCredential>(
       if (result.action === "throw") {
         throw result.error;
       }
+      if (result.action === "replay") {
+        logger?.debug(`${method} ${path} → replay with a refreshed credential`);
+        continue;
+      }
       logger?.debug(
         `${method} ${path} → retry ${attempt + 1}/${retry.maxRetries} after ${Math.round(result.delayMs)}ms`,
       );
       await sleep(result.delayMs, signal);
       waitedMs += result.delayMs;
+      attempt++;
     }
   }
 
@@ -697,10 +718,7 @@ export function createApiTransport<C extends TransportCredential>(
         !config.fresh?.()
           ? await cache.lookup({
               url,
-              // Before a refresh picks the token, so validate nothing yet.
-              requestHeaders: credential.token
-                ? { authorization: `Bearer ${trimAuthToken(credential.token)}` }
-                : {},
+              requestHeaders: lookupHeaders(credential),
               identity: credential.identity,
             })
           : undefined;
@@ -735,6 +753,39 @@ export function createApiTransport<C extends TransportCredential>(
   }
 
   return { request };
+}
+
+/**
+ * Read a body to the end, or reject once `signal` aborts. A fetch whose body
+ * ignores the signal after the headers, such as a mock, would otherwise stall
+ * past the attempt's timeout. The abandoned read is left alone: cancelling
+ * one branch of a tee waits for the other.
+ */
+async function drainBody(
+  response: Response,
+  signal: AbortSignal,
+): Promise<void> {
+  const drained = response.body?.pipeTo(new WritableStream());
+  if (!drained) {
+    return;
+  }
+  let onAbort: (() => void) | undefined;
+  const aborted = new Promise<never>((_, reject) => {
+    onAbort = () => reject(signal.reason);
+    if (signal.aborted) {
+      onAbort();
+    } else {
+      signal.addEventListener("abort", onAbort, { once: true });
+    }
+  });
+  try {
+    await Promise.race([drained, aborted]);
+  } finally {
+    if (onAbort) {
+      signal.removeEventListener("abort", onAbort);
+    }
+    drained.catch(() => {});
+  }
 }
 
 /** Whether `error` is the caller's abort, with the default or its own reason. */
