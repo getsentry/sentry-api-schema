@@ -47158,10 +47158,11 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "string",
                 "enum": [
                   "attributeDistributions"
-                ]
+                ],
+                "type": "string",
+                "description": "* `attributeDistributions`"
               }
             },
             "description": "The statistics to compute over the matching trace items.",
@@ -47224,21 +47225,10 @@
           },
           {
             "in": "query",
-            "name": "itemType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "occurrences",
-                "spans"
-              ]
-            },
-            "description": "The trace item dataset to compute statistics for. Defaults to `spans`."
-          },
-          {
-            "in": "query",
             "name": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "description": "Sentry [search syntax](https://docs.sentry.io/concepts/search/) to filter trace items before computing statistics."
           },
@@ -47246,7 +47236,8 @@
             "in": "query",
             "name": "substringMatch",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "description": "Restrict results to attribute names containing this substring (case-sensitive)."
           },
@@ -47254,9 +47245,25 @@
             "in": "query",
             "name": "traceItemsLimit",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "maximum": 1000,
+              "default": 1000
             },
             "description": "Maximum number of trace items to sample when computing statistics. Defaults to `1000`, which is also the maximum."
+          },
+          {
+            "in": "query",
+            "name": "itemType",
+            "schema": {
+              "enum": [
+                "spans",
+                "occurrences"
+              ],
+              "type": "string",
+              "default": "spans",
+              "minLength": 1
+            },
+            "description": "The trace item dataset to compute statistics for. Defaults to `spans`.\n\n* `spans`\n* `occurrences`"
           },
           {
             "in": "query",
