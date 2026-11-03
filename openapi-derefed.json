@@ -65684,7 +65684,8 @@
             "in": "query",
             "name": "appId",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "description": "App identifier (exact match).",
             "required": true
@@ -65693,16 +65694,22 @@
             "in": "query",
             "name": "platform",
             "schema": {
-              "type": "string"
+              "enum": [
+                "apple",
+                "android"
+              ],
+              "type": "string",
+              "minLength": 1
             },
-            "description": "Platform: \"apple\" or \"android\".",
+            "description": "Platform: \"apple\" or \"android\".\n\n* `apple` - Apple\n* `android` - Android",
             "required": true
           },
           {
             "in": "query",
             "name": "buildVersion",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "description": "Current build version. When provided, enables check-for-updates mode."
           },
@@ -65725,7 +65732,8 @@
             "in": "query",
             "name": "mainBinaryIdentifier",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "description": "UUID of the main binary (e.g. Mach-O UUID for Apple builds). Either this or buildNumber must be provided when buildVersion is set."
           },
@@ -65733,7 +65741,8 @@
             "in": "query",
             "name": "buildConfiguration",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "description": "Filter by build configuration name (exact match)."
           },
@@ -65741,7 +65750,8 @@
             "in": "query",
             "name": "codesigningType",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "description": "Filter by code signing type."
           },
