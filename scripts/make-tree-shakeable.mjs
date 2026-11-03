@@ -35,6 +35,13 @@ function rootIdentifier(expression) {
   return ts.isIdentifier(expression) ? expression.text : undefined;
 }
 
+function isBigIntLiteralCall(node) {
+  return ts.isIdentifier(node.expression)
+    && node.expression.text === "BigInt"
+    && node.arguments.length === 1
+    && (ts.isNumericLiteral(node.arguments[0]) || ts.isStringLiteral(node.arguments[0]));
+}
+
 function annotateSchemaCalls(namespace) {
   return (source, name) => {
     const file = ts.createSourceFile(name, source, ts.ScriptTarget.Latest, true);
@@ -47,6 +54,8 @@ function annotateSchemaCalls(namespace) {
         throw new Error(`${name}: unexpected top-level \`new\` expression: ${node.getText(file).slice(0, 80)}`);
       }
       if (ts.isCallExpression(node)) {
+        // `BigInt(<literal>)` bounds on int64 schemas are pure and need no annotation.
+        if (isBigIntLiteralCall(node)) return;
         if (rootIdentifier(node.expression) !== namespace) {
           throw new Error(`${name}: unexpected top-level call outside \`${namespace}.*\`: ${node.getText(file).slice(0, 80)}`);
         }
