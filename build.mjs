@@ -39,6 +39,7 @@ cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 cpSync("lib/sentry-errors.ts", "src/sentry-errors.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
 cpSync("lib/source-analysis.ts", "src/source-analysis.ts");
+cpSync("lib/api-client", "src/api-client", { recursive: true });
 
 // Keep the pinned Fetch generator's runtime and types aligned with our contract.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-response-contract.mjs"))}`, { stdio: "inherit" });
@@ -86,6 +87,8 @@ appendFileSync(
 // 5. Create standalone entry points.
 //    valibot/zod: validator-specific schemas with optional peer dependencies.
 //    browser: CSRF + cookie auth helpers for browser/frontend use.
+//    client, client/endpoints: the shared request layer, whose index files
+//    are copied from lib/api-client/ in step 2.
 writeFileSync("src/valibot.ts", 'export * from "./valibot.gen.ts";\n');
 writeFileSync("src/zod.ts", 'export * from "./zod.gen.ts";\n');
 writeFileSync("src/browser.ts", 'export * from "./browser-client.ts";\n');
@@ -97,6 +100,11 @@ execSync("bun build src/index.ts --outdir dist", { stdio: "inherit" });
 execSync('bun build src/valibot.ts --outdir dist --external valibot', { stdio: "inherit" });
 execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
 execSync("bun build src/browser.ts --outdir dist", { stdio: "inherit" });
+// The client entries import the root entry and each other by package name, so
+// a consumer loads one copy of the shared error classes and `instanceof` holds
+// across entry points.
+execSync("bun build src/api-client/index.ts --outdir dist/api-client --external @sentry/api --external http-cache-semantics", { stdio: "inherit" });
+execSync("bun build src/api-client/endpoints/index.ts --outdir dist/api-client/endpoints --external @sentry/api --external @sentry/api/client", { stdio: "inherit" });
 execSync("bun build src/operations.ts --outdir dist", { stdio: "inherit" });
 execSync("bun build src/source-analysis.ts --outdir dist --external typescript", { stdio: "inherit" });
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });

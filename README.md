@@ -547,6 +547,34 @@ A generic `paginateUpTo` fetcher receives `(cursor, remaining)`. Existing cursor
 
 Generic helpers delegate cancellation to your fetcher. Pass its signal through to the operation or transport it invokes; the helper cannot cancel an arbitrary callback.
 
+## Shared client
+
+`@sentry/api/client` is the request layer the Sentry CLI and MCP servers share, built on the generated operations. It uses only web-standard APIs (`fetch`, `Request`, `Headers`, `URL`, `AbortSignal`, `crypto.subtle`), so it runs in Node, Cloudflare Workers, and browsers. Hosts inject what differs between them:
+
+- **Transport.** `createApiTransport` sets `Authorization` from a `CredentialProvider`, refreshes the credential once after a 401, times out each attempt, retries through the shared retry policy (429 for any method; 500, 502, 503, 504, timeouts, and network errors only for GET, HEAD, OPTIONS, or writes marked idempotent), follows redirects only to trusted origins, and serves and invalidates cached GETs. The host passes credentials, a `TransportCache`, the request-scoped `fresh` hook, a logger, a span hook, and its error classes.
+- **Request core.** `createApiClientCore` sends `<origin>/api/0<path>` through the transport and throws the status's `ApiError` subclass for an error response. `sdkClient` gives a generated operation a client that sends through the same path.
+- **Response cache.** The cache policy (`lookupResponse`, `storeResponse`, tiers, identity-scoped keys, invalidation) works on any `CacheStore` and `BodyCodec`. `createMemoryStore` is a byte-budgeted in-memory store. Compressing codecs need host APIs such as `node:zlib`, so hosts supply them.
+- **Validation.** Endpoint wrappers validate responses with any [Standard Schema](https://standardschema.dev) validator the host passes in, such as the `@sentry/api/zod` or `@sentry/api/valibot` schemas. The client depends on neither.
+- **Pagination.** `paginate` and `fetchAllPages` walk list endpoints on top of `paginateUpTo` and `consumePage`. Their cursors are Sentry cursors that also record rows already returned from a page, so a resumed walk neither repeats nor skips rows.
+
+`@sentry/api/client/endpoints` holds endpoint wrappers by domain. Each takes an `ApiTarget` (a core and an origin) and a response schema.
+
+Every API error the core throws (`ApiError`, `ApiNotFoundError`, `ApiRateLimitError`, and the rest) extends `SentryApiError`, so `instanceof SentryApiError` matches failures from both the generated operations and the core.
+
+In a browser, put the session fetch under the transport to keep cookie auth and CSRF injection:
+
+```ts
+import { createBrowserFetch } from "@sentry/api/browser";
+import { createApiClientCore, createApiTransport } from "@sentry/api/client";
+
+const transport = createApiTransport({
+  fetch: createBrowserFetch(),
+  retry: { maxRetries: 2, baseDelayMs: 500, maxDelayMs: 5000, maxTotalDelayMs: 10000 },
+});
+const core = createApiClientCore({ transport, headers: () => ({}), logger: console });
+const projects = await core.requestJson("https://sentry.example.com", "/organizations/acme/projects/");
+```
+
 ## Schema source
 
 The OpenAPI schema is synced from [`getsentry/sentry`](https://github.com/getsentry/sentry/tree/master/api-docs). Schema fixes belong there; build/tooling changes belong here.
