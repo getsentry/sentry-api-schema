@@ -141,6 +141,33 @@ describe("storeResponse", () => {
     });
   });
 
+  it("never persists the authorization token, and still varies on it", async () => {
+    const cache = createMemoryStore();
+    const token = "Bearer sntrys_secret-token";
+    const withToken = (authorization: string) => ({
+      store: cache,
+      codec,
+      key: KEY,
+      url: STABLE_URL,
+      requestHeaders: { authorization },
+    });
+    await storeResponse({
+      ...withToken(token),
+      identity: IDENTITY,
+      response: json(BODY, {
+        "cache-control": "private, max-age=60",
+        vary: "Authorization",
+      }),
+    });
+
+    const entry = (await cache.get(KEY)) as CacheEntry;
+    expect(JSON.stringify(entry.policy)).not.toContain("secret-token");
+    expect((await lookupResponse(withToken(token)))?.kind).toBe("hit");
+    expect(
+      await lookupResponse(withToken("Bearer sntrys_other-token")),
+    ).toBeUndefined();
+  });
+
   it.each([
     ["Cache-Control: no-store", json(BODY, { "cache-control": "no-store" })],
     ["a non-2xx status", json({ detail: "Not found" }, {}, 404)],

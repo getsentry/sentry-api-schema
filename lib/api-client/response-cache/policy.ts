@@ -103,6 +103,33 @@ function pickHeaders(headers: Headers): Record<string, string> {
   return result;
 }
 
+/**
+ * Request headers as the policy records them, with `authorization` replaced
+ * by its SHA-256 digest. `CachePolicy#toObject()` keeps request headers when
+ * the response has `Vary`, and a store must never hold the token. Lookup and
+ * store derive the value the same way, so `Vary: Authorization` still tells
+ * tokens apart.
+ */
+async function policyRequestHeaders(
+  headers: Record<string, string>,
+): Promise<Record<string, string>> {
+  const result: Record<string, string> = {};
+  for (const [name, value] of Object.entries(headers)) {
+    result[name] =
+      name.toLowerCase() === "authorization" && value
+        ? await sha256Hex(value)
+        : value;
+  }
+  return result;
+}
+
+async function sha256Hex(value: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", encoder.encode(value));
+  return Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+}
+
 function headersToObject(headers: Headers): Record<string, string> {
   return Object.fromEntries(headers.entries());
 }
@@ -251,7 +278,11 @@ export async function lookupResponse(
   const policy = CachePolicy.fromObject(
     entry.policy as CachePolicy.CachePolicyObject,
   );
-  const request: GetRequest = { url, method: "GET", headers: requestHeaders };
+  const request: GetRequest = {
+    url,
+    method: "GET",
+    headers: await policyRequestHeaders(requestHeaders),
+  };
   if (!isEntryFresh(policy, entry, request)) {
     return staleLookup(options, entry, policy, request);
   }
@@ -288,7 +319,11 @@ export async function storeResponse(options: StoreOptions): Promise<number> {
   }
 
   const policy = new CachePolicy(
-    { url, method: "GET", headers: requestHeaders },
+    {
+      url,
+      method: "GET",
+      headers: await policyRequestHeaders(requestHeaders),
+    },
     { status: response.status, headers: headersToObject(response.headers) },
     POLICY_OPTIONS,
   );
