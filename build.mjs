@@ -27,10 +27,9 @@ await createClient({
     "@hey-api/typescript",
     "@hey-api/sdk",
     "valibot",
-    {
-      name: "zod",
-      compatibilityVersion: 3,
-    },
+    // Hey API infers Zod 3 output from the `zod` peer range. Pinning
+    // `compatibilityVersion: 3` would warn because it expects zod >=3.25.
+    "zod",
   ],
 });
 
