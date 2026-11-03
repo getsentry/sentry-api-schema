@@ -30142,31 +30142,36 @@
           },
           {
             "in": "query",
-            "name": "dataSource",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "functions",
-                "profiles",
-                "spans",
-                "transactions"
-              ]
-            },
-            "description": "Source dataset to build the flamegraph from. Defaults to `functions` when `fingerprint` is set and `transactions` otherwise."
-          },
-          {
-            "in": "query",
             "name": "fingerprint",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "maximum": 4294967295,
+              "minimum": 0,
+              "format": "int64"
             },
             "description": "A UInt32 function fingerprint. Only valid when `dataSource=functions`."
           },
           {
             "in": "query",
+            "name": "dataSource",
+            "schema": {
+              "enum": [
+                "transactions",
+                "profiles",
+                "functions",
+                "spans"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Source dataset to build the flamegraph from. Defaults to `functions` when `fingerprint` is set and `transactions` otherwise.\n\n* `transactions`\n* `profiles`\n* `functions`\n* `spans`"
+          },
+          {
+            "in": "query",
             "name": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "description": "Sentry [search syntax](https://docs.sentry.io/concepts/search/) to filter the candidate profiles."
           },
@@ -30176,10 +30181,11 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "string",
                 "enum": [
                   "metrics"
-                ]
+                ],
+                "type": "string",
+                "description": "* `metrics`"
               }
             },
             "description": "Optional expansions. Pass `metrics` to include flamegraph metric aggregates in the response."
