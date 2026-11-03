@@ -423,3 +423,23 @@ describe("normalizeSpec collision detection", () => {
     unlinkSync(output);
   });
 });
+
+describe("normalizeSpec int64 formats", () => {
+  it("drops int64 only from integers bounded within the safe integer range", () => {
+    const schemas = {
+      uint32: { type: "integer", format: "int64", minimum: 0, maximum: 4294967295 },
+      unbounded: { type: "integer", format: "int64" },
+      tooLarge: { type: "integer", format: "int64", minimum: 0, maximum: 9223372036854775807 },
+    };
+    const input = join(tmpdir(), `test-spec-${Date.now()}.json`);
+    writeFileSync(input, JSON.stringify({ paths: {}, components: { schemas } }));
+    const output = join(tmpdir(), `out-${Date.now()}.json`);
+    normalizeSpec(input, output);
+    const result = JSON.parse(readFileSync(output, "utf8")).components.schemas;
+    expect(result.uint32).not.toHaveProperty("format");
+    expect(result.unbounded.format).toBe("int64");
+    expect(result.tooLarge.format).toBe("int64");
+    unlinkSync(input);
+    unlinkSync(output);
+  });
+});
