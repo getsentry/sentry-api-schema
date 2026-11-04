@@ -1,3 +1,9 @@
+## 1.0.1
+
+### Internal Changes
+
+- Move the build and tests from Bun to pnpm and Node.js by @BYK, @MathurAditya724 and @codex with @sentry-junior in [#126](https://github.com/getsentry/sentry-api-schema/pull/126)
+
 ## 1.0.0
 
 ### Breaking Changes
