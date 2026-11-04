@@ -287,6 +287,8 @@ const project = zGetProjectResponse.parse(input);
 
 `valibot` and `zod` are optional peer dependencies. Install neither when you only need the generated client and TypeScript types, or install the validator used by your application. The `@sentry/api/valibot` entry requires Valibot 1; its optional peer uses a wildcard because npm applies peer constraints to the whole package, including consumers that never import this entry. The `@sentry/api/zod` entry requires Zod 4.6.6 or later.
 
+Schemas nested in a top-level schema, such as object fields, carry their OpenAPI description: read it with `v.getDescription(vDeployResponse.entries.id)` or `zDeployResponse.shape.id.description`. Top-level Valibot schemas have no description pipe, so `v.pick`, `v.omit`, `v.partial` and `v.required` accept them; their description is in their JSDoc comment.
+
 ## Error handling
 
 HTTP failures use `SentryApiError`, whether returned in `result.error` or thrown with `throwOnError: true`. It preserves the status, parsed `body`, exact `rawBody` text, `request`, and `response` (including headers). The transport reads the error body once; consumers do not need to clone or reread the response. Error bodies without valid JSON remain strings.

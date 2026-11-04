@@ -42,9 +42,11 @@ await createClient({
   plugins: [
     "@hey-api/typescript",
     "@hey-api/sdk",
-    { name: "valibot", ...compositeRequests },
+    // `metadata: true` attaches each OpenAPI description to its schema, so
+    // consumers can read field descriptions at runtime.
+    { name: "valibot", metadata: true, ...compositeRequests },
     // Hey API infers Zod 4 output from the `zod` peer range.
-    { name: "zod", ...compositeRequests },
+    { name: "zod", metadata: true, ...compositeRequests },
   ],
 });
 
@@ -74,6 +76,8 @@ execSync(`node ${JSON.stringify(join(__dirname, "scripts", "constrain-throw-opti
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "apply-query-defaults.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-operations.mjs"))}`, { stdio: "inherit" });
+// Use Valibot's description action for the descriptions, which getDescription reads.
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "describe-valibot-schemas.mjs"))}`, { stdio: "inherit" });
 // Annotate schema constructors as pure and defer the default client so bundlers
 // can drop unused exports and importing the package does no eager work.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "make-tree-shakeable.mjs"))}`, { stdio: "inherit" });
