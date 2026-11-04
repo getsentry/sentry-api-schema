@@ -15,7 +15,7 @@ describe("package entry points", () => {
     expect(packageJson.peerDependencies).toEqual({
       typescript: "*",
       valibot: "*",
-      zod: "^3.24.0",
+      zod: "^4.6.6",
     });
     expect(packageJson.peerDependenciesMeta).toEqual({
       typescript: { optional: true },
