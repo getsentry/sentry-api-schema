@@ -7,10 +7,10 @@
  *   3. The generated wrappers (pagination.gen.ts) export the expected names
  *      and have the correct type shape (compile-time check via `as`).
  *
- * Run with `bun test`.
+ * Run with `pnpm test`.
  */
 
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import * as v from "valibot";
 import { vAutofixPostResponse, vGetProjectData } from "../src/valibot";
 import { zAutofixPostResponse, zGetProjectData } from "../src/zod";
@@ -637,14 +637,14 @@ describe("generated wrappers (pagination.gen.ts)", () => {
     expect(typeof paginateUpTo_listOrganizations).toBe("function");
   });
 
-  test("only fetchPage_ is generated for compound-shaped ops", () => {
+  test("only fetchPage_ is generated for compound-shaped ops", async () => {
     // listOrganizationIssues is array-shaped, so all three exist.
     expect(typeof fetchPage_listOrganizationIssues).toBe("function");
     // For a compound op like listProjectReplayClicks (200: { ... } not Array<>),
     // paginateAll/paginateUpTo are intentionally not generated — items
     // can't be flattened across pages without knowing which field holds
     // the array, and that's spec-specific.
-    const indexModule = require("../src/index") as Record<string, unknown>;
+    const indexModule: Record<string, unknown> = await import("../src/index");
     const keys = Object.keys(indexModule);
     expect(keys).toContain("fetchPage_listProjectReplayClicks");
     expect(keys).not.toContain("paginateAll_listProjectReplayClicks");

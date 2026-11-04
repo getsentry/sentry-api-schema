@@ -1,5 +1,6 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test, vi } from "vitest";
 import { createSentryClient, listOrganizations, type Config } from "@sentry/api";
+import { createBrowserFetch } from "@sentry/api/browser";
 
 const asFetch = (implementation: (request: Request) => Promise<Response>) =>
   ((input: RequestInfo | URL, init?: RequestInit) =>
@@ -230,5 +231,42 @@ describe("operation cancellation", () => {
       await expect(pending).rejects.toBe(reason);
       expect(mapped).toEqual([]);
     }
+  });
+
+  test("browser fetch detaches an aborted Request with an explicit null signal", async () => {
+    const request = new Request("https://example.test/api/0/organizations/", {
+      signal: AbortSignal.abort(new Error("Original cancelled")),
+    });
+    const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+      expect(new Request(input, init).signal.aborted).toBe(false);
+      return Response.json([]);
+    });
+    try {
+      const response = await createBrowserFetch()(request, { signal: null });
+      expect(await response.json()).toEqual([]);
+      expect(request.signal.aborted).toBe(true);
+    } finally {
+      fetch.mockRestore();
+    }
+  });
+
+  test("respects an interceptor clearing the caller's aborted signal", async () => {
+    let dispatched = 0;
+    const sentry = createSentryClient({
+      baseUrl: "https://example.test",
+      fetch: asFetch(async request => {
+        expect(request.signal.aborted).toBe(false);
+        dispatched++;
+        return Response.json([]);
+      }),
+    });
+    sentry.client.interceptors.request.use(request => new Request(request, { signal: null }));
+
+    const result = await sentry.listOrganizations({
+      signal: AbortSignal.abort(new Error("Caller cancelled")),
+      throwOnError: true,
+    });
+    expect(result.data).toEqual([]);
+    expect(dispatched).toBe(1);
   });
 });

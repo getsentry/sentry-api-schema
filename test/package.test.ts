@@ -1,13 +1,15 @@
-import { describe, expect, test } from "bun:test";
+import { build } from "esbuild";
+import { describe, expect, test } from "vitest";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import packageJson from "../package.json";
 
 const readBundle = (name: string) =>
-  Bun.file(new URL(`../dist/${name}.js`, import.meta.url)).text();
+  readFile(new URL(`../dist/${name}.js`, import.meta.url), "utf8");
 
 describe("package entry points", () => {
   test("keeps validator and source-analysis peers optional", () => {
@@ -55,9 +57,12 @@ describe("package entry points", () => {
         import { SentryApiError } from ${JSON.stringify(join(dist, "index.js"))};
         console.log(vGetOrganizationResponse, zGetOrganizationResponse, SentryApiError);
       `);
-      const result = await Bun.build({ entrypoints: [entry], external: ["valibot", "zod"], target: "node" });
-      expect(result.success).toBe(true);
-      const output = await result.outputs[0]!.text();
+      const result = await build({
+        entryPoints: [entry], bundle: true, format: "esm", platform: "node",
+        external: ["valibot", "zod"], write: false, logLevel: "silent",
+      });
+      expect(result.errors).toEqual([]);
+      const output = result.outputFiles[0]!.text;
       const kept = (name: string) => output.includes(name);
       expect(["vGetOrganizationResponse", "zGetOrganizationResponse", "SentryApiError"].filter(kept))
         .toEqual(["vGetOrganizationResponse", "zGetOrganizationResponse", "SentryApiError"]);
@@ -68,7 +73,7 @@ describe("package entry points", () => {
     }
   });
 
-  test("packs isolated runtime entries, pagination and build-time analysis", () => {
+  test("packs isolated runtime entries, pagination and build-time analysis", { timeout: 60_000 }, () => {
     const root = dirname(fileURLToPath(new URL("../package.json", import.meta.url)));
     const directory = mkdtempSync(join(tmpdir(), "api-package-"));
     try {

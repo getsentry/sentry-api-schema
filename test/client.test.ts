@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import {
   createSentryClient,
   listOrganizations,
@@ -9,8 +9,7 @@ import {
 } from "@sentry/api";
 import * as operations from "../src/sdk.gen";
 
-// Bun adds properties such as preconnect to typeof fetch. The generated
-// transport only calls the function, so keep that adaptation at this boundary.
+// Test handlers take a Request; adapt them to the fetch signature in Config.
 const asFetch = (implementation: (request: Request) => Promise<Response>) =>
   ((input: RequestInfo | URL, init?: RequestInit) =>
     implementation(new Request(input, init))) as NonNullable<Config["fetch"]>;
