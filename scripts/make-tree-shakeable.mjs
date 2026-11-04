@@ -39,6 +39,11 @@ function annotateSchemaCalls(namespace) {
   return (source, name) => {
     const file = ts.createSourceFile(name, source, ts.ScriptTarget.Latest, true);
     const positions = new Set();
+    const schemas = new Set(file.statements.flatMap(statement =>
+      ts.isVariableStatement(statement)
+        ? statement.declarationList.declarations.flatMap(declaration =>
+            ts.isIdentifier(declaration.name) ? [declaration.name.text] : [])
+        : []));
 
     const visit = node => {
       // Calls inside callbacks do not run at import time; leave them alone.
@@ -47,7 +52,13 @@ function annotateSchemaCalls(namespace) {
         throw new Error(`${name}: unexpected top-level \`new\` expression: ${node.getText(file).slice(0, 80)}`);
       }
       if (ts.isCallExpression(node)) {
-        if (rootIdentifier(node.expression) !== namespace) {
+        const root = rootIdentifier(node.expression);
+        // Composite Zod request schemas reference extracted layers with
+        // zOperationPath.optional() instead of repeating z.object(...).
+        const optionalSchema = root && schemas.has(root)
+          && ts.isPropertyAccessExpression(node.expression)
+          && node.expression.name.text === "optional";
+        if (root !== namespace && !optionalSchema) {
           throw new Error(`${name}: unexpected top-level call outside \`${namespace}.*\`: ${node.getText(file).slice(0, 80)}`);
         }
         positions.add(node.getStart(file));
@@ -82,11 +93,11 @@ update("zod.gen.ts", annotateSchemaCalls("z"));
 update("client.gen.ts", source => {
   const replacements = [
     [
-      "import { type ClientOptions, type Config, createClient, createConfig } from './client';",
+      "import { type Client, type ClientOptions, type Config, createClient, createConfig } from './client';",
       "import { type ClientOptions, type Config, createClient, createConfig, type PreparedClient } from './client';",
     ],
     [
-      "export const client = createClient(createConfig<ClientOptions2>());",
+      "export const client: Client = createClient(createConfig<ClientOptions2>());",
       `let defaultClient: PreparedClient | undefined;
 
 /**

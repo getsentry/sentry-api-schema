@@ -7,6 +7,21 @@ import { normalizeSpec } from "./lib/normalize-spec.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// Since 0.95, validators only compose request schemas when another plugin asks
+// for them. Keep our public *Data exports without enabling SDK validation.
+const compositeRequests = {
+  requests: { shouldExtract: true },
+  "~hooks": {
+    events: {
+      "plugin:handler:after": ({ plugin }) => {
+        plugin.forEach("operation", ({ operation }) => {
+          plugin.api.createRequestSchema({ operation, plugin });
+        });
+      },
+    },
+  },
+};
+
 // 0.5 Normalize verbose English sentence operationIds to short REST-conventional
 //     identifiers (e.g. "List Your Organizations" → "listOrganizations").
 //     Writes a temporary openapi-normalized.json that the generator reads instead
@@ -26,10 +41,10 @@ await createClient({
   plugins: [
     "@hey-api/typescript",
     "@hey-api/sdk",
-    "valibot",
+    { name: "valibot", ...compositeRequests },
     // Hey API infers Zod 3 output from the `zod` peer range. Pinning
     // `compatibilityVersion: 3` would warn because it expects zod >=3.25.
-    "zod",
+    { name: "zod", ...compositeRequests },
   ],
 });
 
