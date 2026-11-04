@@ -1,3 +1,9 @@
+## 1.0.0
+
+### Breaking Changes
+
+- (zod) Generate Zod 4 schemas by @BYK with @sentry-junior in [#127](https://github.com/getsentry/sentry-api-schema/pull/127)
+
 ## 0.446.0
 
 ### New Features
