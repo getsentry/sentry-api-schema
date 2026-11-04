@@ -8,12 +8,37 @@ import { normalizeSpec } from "./lib/normalize-spec.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Hey API attaches descriptions only to typed schemas, not to unions, so an
+ * OpenAPI 3.0 `nullable` field (a union with `null` in its IR) loses its
+ * description. Give the field's one non-null branch the description instead.
+ */
+function describeNullableValues(ir) {
+  const seen = new WeakSet();
+  const visit = node => {
+    if (!node || typeof node !== "object" || seen.has(node)) return;
+    seen.add(node);
+    if (node.logicalOperator === "or" && node.description && Array.isArray(node.items)) {
+      const values = node.items.filter(item => item.type !== "null");
+      if (values.length === 1 && values.length < node.items.length) {
+        values[0].description ??= node.description;
+      }
+    }
+    Object.values(node).forEach(visit);
+  };
+  visit(ir);
+}
+
+// `metadata: true` attaches each OpenAPI description to its schema, so
+// consumers can read field descriptions at runtime.
 // Since 0.95, validators only compose request schemas when another plugin asks
 // for them. Keep our public *Data exports without enabling SDK validation.
-const compositeRequests = {
+const validatorOptions = {
+  metadata: true,
   requests: { shouldExtract: true },
   "~hooks": {
     events: {
+      "plugin:handler:before": ({ plugin }) => describeNullableValues(plugin.context.ir),
       "plugin:handler:after": ({ plugin }) => {
         plugin.forEach("operation", ({ operation }) => {
           plugin.api.createRequestSchema({ operation, plugin });
@@ -42,9 +67,9 @@ await createClient({
   plugins: [
     "@hey-api/typescript",
     "@hey-api/sdk",
-    { name: "valibot", ...compositeRequests },
+    { name: "valibot", ...validatorOptions },
     // Hey API infers Zod 4 output from the `zod` peer range.
-    { name: "zod", ...compositeRequests },
+    { name: "zod", ...validatorOptions },
   ],
 });
 
@@ -74,6 +99,8 @@ execSync(`node ${JSON.stringify(join(__dirname, "scripts", "constrain-throw-opti
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "apply-query-defaults.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-operations.mjs"))}`, { stdio: "inherit" });
+// Use Valibot's description action for the descriptions, which getDescription reads.
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "describe-valibot-schemas.mjs"))}`, { stdio: "inherit" });
 // Annotate schema constructors as pure and defer the default client so bundlers
 // can drop unused exports and importing the package does no eager work.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "make-tree-shakeable.mjs"))}`, { stdio: "inherit" });
