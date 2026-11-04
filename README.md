@@ -273,7 +273,7 @@ import { vGetProjectResponse } from "@sentry/api/valibot";
 const project = v.parse(vGetProjectResponse, input);
 ```
 
-The existing Zod 3 entry remains supported:
+Zod 4 runtime schemas are available through another optional entry point:
 
 ```bash
 npm install @sentry/api zod
@@ -285,7 +285,7 @@ import { zGetProjectResponse } from "@sentry/api/zod";
 const project = zGetProjectResponse.parse(input);
 ```
 
-`valibot` and `zod` are optional peer dependencies. Install neither when you only need the generated client and TypeScript types, or install the validator used by your application. The `@sentry/api/valibot` entry requires Valibot 1; its optional peer uses a wildcard because npm applies peer constraints to the whole package, including consumers that never import this entry.
+`valibot` and `zod` are optional peer dependencies. Install neither when you only need the generated client and TypeScript types, or install the validator used by your application. The `@sentry/api/valibot` entry requires Valibot 1; its optional peer uses a wildcard because npm applies peer constraints to the whole package, including consumers that never import this entry. The `@sentry/api/zod` entry requires Zod 4.6.6 or later.
 
 ## Error handling
 
