@@ -16,6 +16,39 @@ const asFetch = (implementation: (request: Request) => Promise<Response>) =>
     implementation(new Request(input, init))) as NonNullable<Config["fetch"]>;
 
 describe("configured operation methods", () => {
+  test("streams typed events through the published transport with auth and request interceptors", async () => {
+    const requests: Request[] = [];
+    const callbacks: string[] = [];
+    const sentry = createSentryClient({
+      baseUrl: "https://example.test/prefix",
+      auth: () => "stream-token",
+      fetch: asFetch(async request => {
+        requests.push(request);
+        return new Response('data: "first"\n\ndata: "second"\n\n', {
+          headers: { "Content-Type": "text/event-stream" },
+        });
+      }),
+    });
+    sentry.client.interceptors.request.use(request => {
+      request.headers.set("X-Context", "stream");
+      return request;
+    });
+    const { stream } = await sentry.client.sse.get<string>({
+      url: "/api/0/events/",
+      security: [{ type: "http", scheme: "bearer" }],
+      onSseEvent: event => { callbacks.push(event.data.toUpperCase()); },
+    });
+    const values: string[] = [];
+    for await (const value of stream) values.push(value);
+
+    expect(values).toEqual(["first", "second"]);
+    expect(callbacks).toEqual(["FIRST", "SECOND"]);
+    expect(requests).toHaveLength(1);
+    expect(requests[0]!.url).toBe("https://example.test/prefix/api/0/events/");
+    expect(requests[0]!.headers.get("Authorization")).toBe("Bearer stream-token");
+    expect(requests[0]!.headers.get("X-Context")).toBe("stream");
+  });
+
   test("exposes every generated operation through the public package", () => {
     const sentry = createSentryClient();
     const { client, fetchPage, paginateAll, paginateUpTo, ...methods } = sentry;
