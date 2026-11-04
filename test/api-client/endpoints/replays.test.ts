@@ -103,4 +103,21 @@ describe("visitReplayRecordingSegments", () => {
     expect(onSegment).toHaveBeenCalledTimes(2);
     expect(request).toHaveBeenCalledTimes(1);
   });
+
+  it("stops at an empty page that still has a cursor", async () => {
+    const { apiTarget, request } = scriptedTarget(
+      jsonResponse([], nextLink(segmentsPath, "0:100:0")),
+      jsonResponse([], nextLink(segmentsPath, "0:200:0")),
+    );
+
+    const result = await visitReplayRecordingSegments(
+      apiTarget,
+      { ...segments, maxSegments: 10 },
+      SegmentPage,
+      vi.fn(),
+    );
+
+    expect(result).toEqual({ segmentsRead: 0, truncated: true });
+    expect(request).toHaveBeenCalledTimes(1);
+  });
 });

@@ -8,6 +8,8 @@
 import {
   apiPath,
   type ApiTarget,
+  fetchAllPages,
+  MAX_LIST_PAGES,
   nextPageCursor,
   readJsonResponse,
   type ResponseSchema,
@@ -20,32 +22,49 @@ export type ListRepositoriesParams = {
   query?: string;
 };
 
-/** Every repository connected to the organization, across all pages. */
+/**
+ * Every repository connected to the organization, across all pages.
+ *
+ * @throws {Error} When a cursor repeats or the walk passes
+ *   {@link MAX_LIST_PAGES}
+ */
 export async function listRepositories<T>(
   { core, origin }: ApiTarget,
   { organizationSlug, query }: ListRepositoriesParams,
   schema: ResponseSchema<T[]>,
 ): Promise<T[]> {
-  const repos: T[] = [];
-  let cursor: string | null = null;
-  do {
-    const params = new URLSearchParams();
-    params.set("per_page", "100");
-    if (query) {
-      params.set("query", query);
-    }
-    if (cursor) {
-      params.set("cursor", cursor);
-    }
-    const response = await core.request(
-      origin,
-      `${apiPath`/organizations/${organizationSlug}/repos/`}?${params.toString()}`,
-      { method: "GET" },
+  const result = await fetchAllPages(
+    async (cursor) => {
+      const params = new URLSearchParams();
+      params.set("per_page", "100");
+      if (query) {
+        params.set("query", query);
+      }
+      if (cursor) {
+        params.set("cursor", cursor);
+      }
+      const response = await core.request(
+        origin,
+        `${apiPath`/organizations/${organizationSlug}/repos/`}?${params.toString()}`,
+        { method: "GET" },
+      );
+      return {
+        data: await readJsonResponse(response),
+        nextCursor: nextPageCursor(response) ?? undefined,
+      };
+    },
+    (data) => validateResponse(schema, data),
+    MAX_LIST_PAGES,
+  );
+  if (!result.ok) {
+    // `parse` throws for an invalid page, so only the cursor checks remain.
+    throw new Error(
+      result.reason === "page-cap"
+        ? "API pagination exceeded its page limit"
+        : "API returned a repeated pagination cursor",
     );
-    repos.push(...validateResponse(schema, await readJsonResponse(response)));
-    cursor = nextPageCursor(response);
-  } while (cursor);
-  return repos;
+  }
+  return result.items;
 }
 
 export type LinkProjectRepositoryParams = {

@@ -8,8 +8,10 @@ import { listOrganizationProjects } from "@sentry/api";
 import {
   apiPath,
   type ApiTarget,
+  fetchAllPages,
   type ListPage,
   listPage,
+  MAX_LIST_PAGES,
   nextPageCursor,
   readJsonResponse,
   type ResponseSchema,
@@ -139,28 +141,45 @@ export type ProjectTeamParams = {
   projectSlug: string;
 };
 
-/** Every team assigned to a project, across all pages. */
+/**
+ * Every team assigned to a project, across all pages.
+ *
+ * @throws {Error} When a cursor repeats or the walk passes
+ *   {@link MAX_LIST_PAGES}
+ */
 export async function listProjectTeams<T>(
   { core, origin }: ApiTarget,
   { organizationSlug, projectSlug }: ProjectTeamParams,
   schema: ResponseSchema<T[]>,
 ): Promise<T[]> {
-  const teams: T[] = [];
-  let cursor: string | null = null;
-  do {
-    const query = new URLSearchParams();
-    query.set("per_page", "100");
-    if (cursor) {
-      query.set("cursor", cursor);
-    }
-    const response = await core.request(
-      origin,
-      `${apiPath`/projects/${organizationSlug}/${projectSlug}/teams/`}?${query.toString()}`,
+  const result = await fetchAllPages(
+    async (cursor) => {
+      const query = new URLSearchParams();
+      query.set("per_page", "100");
+      if (cursor) {
+        query.set("cursor", cursor);
+      }
+      const response = await core.request(
+        origin,
+        `${apiPath`/projects/${organizationSlug}/${projectSlug}/teams/`}?${query.toString()}`,
+      );
+      return {
+        data: await readJsonResponse(response),
+        nextCursor: nextPageCursor(response) ?? undefined,
+      };
+    },
+    (data) => validateResponse(schema, data),
+    MAX_LIST_PAGES,
+  );
+  if (!result.ok) {
+    // `parse` throws for an invalid page, so only the cursor checks remain.
+    throw new Error(
+      result.reason === "page-cap"
+        ? "API pagination exceeded its page limit"
+        : "API returned a repeated pagination cursor",
     );
-    teams.push(...validateResponse(schema, await readJsonResponse(response)));
-    cursor = nextPageCursor(response);
-  } while (cursor);
-  return teams;
+  }
+  return result.items;
 }
 
 /** Assign a team to a project. */

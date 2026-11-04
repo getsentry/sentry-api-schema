@@ -30,6 +30,25 @@ describe("listRepositories", () => {
   });
 });
 
+describe("listRepositories cursors", () => {
+  it("fails on a repeated cursor instead of looping", async () => {
+    const path = "/organizations/acme/repos/";
+    const { apiTarget, request } = scriptedTarget(
+      jsonResponse([{ name: "a" }], nextLink(path, "0:100:0")),
+      jsonResponse([{ name: "b" }], nextLink(path, "0:100:0")),
+    );
+
+    await expect(
+      listRepositories(
+        apiTarget,
+        { organizationSlug: "acme" },
+        z.array(z.object({ name: z.string() })),
+      ),
+    ).rejects.toThrow("API returned a repeated pagination cursor");
+    expect(request).toHaveBeenCalledTimes(2);
+  });
+});
+
 describe("linkProjectRepository", () => {
   it("posts one root code mapping for the project", async () => {
     const { apiTarget, request } = scriptedTarget(jsonResponse({ ok: true }));

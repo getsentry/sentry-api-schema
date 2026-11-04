@@ -175,7 +175,9 @@ export async function visitReplayRecordingSegments<T>(
       segmentsRead += 1;
     }
     cursor = nextPageCursor(response);
-    if (cursor && segmentsRead >= maxSegments) {
+    // Only rows count toward `maxSegments`, so an empty page ends the walk
+    // too; following its cursor could otherwise never stop.
+    if (cursor && (segmentsRead >= maxSegments || page.length === 0)) {
       return { segmentsRead, truncated: true };
     }
   } while (cursor);

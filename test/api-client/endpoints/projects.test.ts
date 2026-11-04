@@ -133,6 +133,25 @@ describe("listProjectTeams", () => {
   });
 });
 
+describe("listProjectTeams cursors", () => {
+  it("fails on a repeated cursor instead of looping", async () => {
+    const path = "/projects/acme/web/teams/";
+    const { apiTarget, request } = scriptedTarget(
+      jsonResponse([{ slug: "a" }], nextLink(path, "0:100:0")),
+      jsonResponse([{ slug: "b" }], nextLink(path, "0:100:0")),
+    );
+
+    await expect(
+      listProjectTeams(
+        apiTarget,
+        { organizationSlug: "acme", projectSlug: "web" },
+        z.array(z.object({ slug: z.string() })),
+      ),
+    ).rejects.toThrow("API returned a repeated pagination cursor");
+    expect(request).toHaveBeenCalledTimes(2);
+  });
+});
+
 describe("project team assignment", () => {
   const params = {
     organizationSlug: "acme",
