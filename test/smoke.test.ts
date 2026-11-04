@@ -12,8 +12,8 @@
 
 import { describe, expect, test } from "bun:test";
 import * as v from "valibot";
-import { vAutofixPostResponse } from "../src/valibot";
-import { zAutofixPostResponse } from "../src/zod";
+import { vAutofixPostResponse, vGetProjectData } from "../src/valibot";
+import { zAutofixPostResponse, zGetProjectData } from "../src/zod";
 import {
   fetchPage,
   fetchPage_listOrganizationIssues,
@@ -84,6 +84,14 @@ describe("parseSentryLinkHeader", () => {
 
 describe("runtime validator entry points", () => {
   const response = { run_id: 42, sentry_run_id: "run-42" };
+
+  test("preserves composite request schemas across generator upgrades", () => {
+    const request = { path: { organization_id_or_slug: "example", project_id_or_slug: "project" } };
+    expect(v.parse(vGetProjectData, request)).toEqual(request);
+    expect(zGetProjectData.parse(request)).toEqual(request);
+    expect(v.safeParse(vGetProjectData, { path: {} }).success).toBe(false);
+    expect(zGetProjectData.safeParse({ path: {} }).success).toBe(false);
+  });
 
   test("Valibot parses generated response schemas", () => {
     expect(v.parse(vAutofixPostResponse, response)).toEqual(response);
