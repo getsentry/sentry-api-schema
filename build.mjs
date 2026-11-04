@@ -54,6 +54,7 @@ cpSync("lib/sentry-pagination.ts", "src/sentry-pagination.ts");
 cpSync("lib/sentry-errors.ts", "src/sentry-errors.ts");
 cpSync("lib/browser-client.ts", "src/browser-client.ts");
 cpSync("lib/source-analysis.ts", "src/source-analysis.ts");
+cpSync("lib/api-client", "src/api-client", { recursive: true });
 
 // Keep the pinned Fetch generator's runtime and types aligned with our contract.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-response-contract.mjs"))}`, { stdio: "inherit" });
@@ -101,6 +102,8 @@ appendFileSync(
 // 5. Create standalone entry points.
 //    valibot/zod: validator-specific schemas with optional peer dependencies.
 //    browser: CSRF + cookie auth helpers for browser/frontend use.
+//    client, client/endpoints: the shared request layer, whose index files
+//    are copied from lib/api-client/ in step 2.
 writeFileSync("src/valibot.ts", 'export * from "./valibot.gen.ts";\n');
 writeFileSync("src/zod.ts", 'export * from "./zod.gen.ts";\n');
 writeFileSync("src/browser.ts", 'export * from "./browser-client.ts";\n');
@@ -114,6 +117,7 @@ const bundle = (entry, { external = [], platform = "browser" } = {}) =>
   build({
     entryPoints: [`src/${entry}.ts`],
     outdir: "dist",
+    outbase: "src",
     bundle: true,
     format: "esm",
     platform,
@@ -125,6 +129,9 @@ await Promise.all([
   bundle("valibot", { external: ["valibot"] }),
   bundle("zod", { external: ["zod"] }),
   bundle("browser"),
+  // Keep the package entries external so consumers share the root error classes.
+  bundle("api-client/index", { external: ["@sentry/api", "http-cache-semantics"] }),
+  bundle("api-client/endpoints/index", { external: ["@sentry/api", "@sentry/api/client"] }),
   bundle("operations"),
   bundle("source-analysis", { external: ["typescript"], platform: "node" }),
 ]);

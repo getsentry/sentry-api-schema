@@ -1,6 +1,6 @@
 {
   "name": "@sentry/api",
-  "version": "0.445.0",
+  "version": "0.446.0",
   "description": "Official auto-generated TypeScript client for the Sentry public REST API",
   "keywords": [
     "sentry",
@@ -20,7 +20,7 @@
   "scripts": {
     "build": "node build.mjs",
     "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.test.json"
+    "typecheck": "tsc -p tsconfig.test.json && tsc -p tsconfig.browser.json"
   },
   "exports": {
     ".": {
@@ -38,6 +38,14 @@
     "./browser": {
       "import": "./dist/browser.js",
       "types": "./dist/browser.d.ts"
+    },
+    "./client": {
+      "types": "./dist/api-client/index.d.ts",
+      "import": "./dist/api-client/index.js"
+    },
+    "./client/endpoints": {
+      "types": "./dist/api-client/endpoints/index.d.ts",
+      "import": "./dist/api-client/endpoints/index.js"
     },
     "./operations": {
       "types": "./dist/operations.d.ts",
@@ -59,6 +67,9 @@
   "bugs": {
     "url": "https://github.com/getsentry/sentry-api-schema/issues"
   },
+  "dependencies": {
+    "http-cache-semantics": "^4.2.0"
+  },
   "peerDependencies": {
     "typescript": "*",
     "valibot": "*",
@@ -77,8 +88,10 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "0.98.0",
+    "@types/http-cache-semantics": "^4.2.0",
     "@types/node": "^22",
     "esbuild": "^0.28.2",
+    "fast-check": "^4.8.0",
     "typescript": "^5.9.3",
     "valibot": "^1.4.2",
     "vitest": "^5.1.0",
