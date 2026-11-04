@@ -1,10 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import packageJson from "../package.json";
+import { installPackedPackage, packageRoot } from "./packed-package.ts";
 
 const readBundle = (name: string) =>
   Bun.file(new URL(`../dist/${name}.js`, import.meta.url)).text();
@@ -69,17 +70,9 @@ describe("package entry points", () => {
   });
 
   test("packs isolated runtime entries, pagination and build-time analysis", () => {
-    const root = dirname(fileURLToPath(new URL("../package.json", import.meta.url)));
-    const directory = mkdtempSync(join(tmpdir(), "api-package-"));
+    const root = packageRoot;
+    const directory = installPackedPackage("api-package-");
     try {
-      const packed = JSON.parse(execFileSync("npm", ["pack", "--json", "--pack-destination", directory], {
-        cwd: root,
-        encoding: "utf8",
-      })) as { filename: string }[];
-      const installed = join(directory, "node_modules", "@sentry", "api");
-      mkdirSync(installed, { recursive: true });
-      execFileSync("tar", ["-xzf", join(directory, packed[0]!.filename), "-C", installed, "--strip-components=1"]);
-      writeFileSync(join(directory, "package.json"), JSON.stringify({ type: "module" }));
       writeFileSync(join(directory, "client.mjs"), `
         import assert from "node:assert/strict";
         const client = await import("@sentry/api");
@@ -188,5 +181,5 @@ describe("package entry points", () => {
     } finally {
       rmSync(directory, { recursive: true, force: true });
     }
-  });
+  }, 30_000);
 });

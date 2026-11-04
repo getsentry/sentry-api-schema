@@ -21,7 +21,7 @@
     "build": "node build.mjs",
     "test": "bun test",
     "test:node": "node --test test/node-cancellation.mjs",
-    "typecheck": "tsc -p tsconfig.test.json"
+    "typecheck": "tsc -p tsconfig.test.json && tsc -p tsconfig.browser.json"
   },
   "exports": {
     ".": {
@@ -39,6 +39,14 @@
     "./browser": {
       "import": "./dist/browser.js",
       "types": "./dist/browser.d.ts"
+    },
+    "./client": {
+      "types": "./dist/api-client/index.d.ts",
+      "import": "./dist/api-client/index.js"
+    },
+    "./client/endpoints": {
+      "types": "./dist/api-client/endpoints/index.d.ts",
+      "import": "./dist/api-client/endpoints/index.js"
     },
     "./operations": {
       "types": "./dist/operations.d.ts",
@@ -60,6 +68,9 @@
   "bugs": {
     "url": "https://github.com/getsentry/sentry-api-schema/issues"
   },
+  "dependencies": {
+    "http-cache-semantics": "^4.2.0"
+  },
   "peerDependencies": {
     "typescript": "*",
     "valibot": "*",
@@ -79,7 +90,9 @@
   "devDependencies": {
     "@hey-api/openapi-ts": "0.98.0",
     "@types/bun": "^1.3.13",
+    "@types/http-cache-semantics": "^4.2.0",
     "@types/node": "^22",
+    "fast-check": "^4.8.0",
     "typescript": "^5.9.3",
     "valibot": "^1.4.2",
     "zod": "^3.24.0"
