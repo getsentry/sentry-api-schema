@@ -43,6 +43,23 @@ async function preparedRequests(sentry: SentryClient) {
   void [request, prepareRequest];
 }
 
+async function streamingCallbacks(sentry: SentryClient) {
+  const { stream } = await sentry.client.sse.get<string>({
+    url: "/api/0/events/",
+    onSseEvent: event => {
+      const value: string = event.data.toUpperCase();
+      // @ts-expect-error SSE callback data retains the requested type.
+      const wrong: number = event.data;
+      void [value, wrong];
+    },
+  });
+  const next = await stream.next();
+  if (!next.done) {
+    const value: string = next.value;
+    void value;
+  }
+}
+
 async function operationArguments(sentry: SentryClient) {
   await sentry.listOrganizations();
   await sentry.listOrganizations({ query: { owner: true }, signal: new AbortController().signal });

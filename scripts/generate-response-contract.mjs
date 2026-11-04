@@ -108,6 +108,11 @@ update("types", source => {
   source = replaceOnce(source, "import type { Auth }", "import type { SdkResult } from '../sentry-errors';\n\nimport type { Auth }");
   source = replaceOnce(source, "export type ResponseStyle = 'data' | 'fields';", "export type ResponseStyle = 'fields';");
   source = replaceOnce(source, "Should we return only data or multiple fields (data, error, response, etc.)?", "Responses always include fields (data or error, request, response).");
+  // The stream and its onSseEvent callback must share the caller's data type.
+  source = replaceOnce(source,
+    "options: Omit<RequestOptions<never, TResponseStyle, ThrowOnError>, 'method'>,",
+    "options: Omit<RequestOptions<TData, TResponseStyle, ThrowOnError>, 'method'>,",
+  );
   return replaceOnce(source, /export type RequestResult<[\s\S]*?(?=\nexport interface ClientOptions)/, `export type RequestResult<
   TData = unknown,
   TError = unknown,
