@@ -1,3 +1,9 @@
+## 0.446.0
+
+### New Features
+
+- (client) Move the shared API client from toolkit into @sentry/api by @BYK with @sentry-junior in [#122](https://github.com/getsentry/sentry-api-schema/pull/122)
+
 ## 0.445.0
 
 ### Bug Fixes
