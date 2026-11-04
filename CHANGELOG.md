@@ -1,3 +1,9 @@
+## 1.19.0
+
+### New Features
+
+- (validators) Attach OpenAPI descriptions to Valibot and Zod schemas by @BYK with @sentry-junior in [#128](https://github.com/getsentry/sentry-api-schema/pull/128)
+
 ## 1.18.0
 
 ### Schema Updates
