@@ -4,9 +4,8 @@ import {
   describe,
   expect,
   it,
-  setSystemTime,
   vi,
-} from "bun:test";
+} from "vitest";
 import { createBodyCodec, waitFor } from "../support.ts";
 import { createMemoryStore } from "../../../src/api-client/response-cache/memory-store.ts";
 import {
@@ -107,11 +106,11 @@ function expectStale(
 }
 
 beforeEach(() => {
-  setSystemTime(new Date("2026-01-01T00:00:00Z"));
+  vi.setSystemTime(new Date("2026-01-01T00:00:00Z"));
 });
 
 afterEach(() => {
-  setSystemTime();
+  vi.useRealTimers();
 });
 
 describe("storeResponse", () => {
@@ -225,10 +224,10 @@ describe("lookupResponse freshness", () => {
     const cache = createMemoryStore();
     await store(longLived(cache), json(BODY), VOLATILE_URL);
 
-    setSystemTime(Date.now() + FALLBACK_TTL_MS.volatile);
+    vi.setSystemTime(Date.now() + FALLBACK_TTL_MS.volatile);
     expect((await lookup(cache, VOLATILE_URL))?.kind).toBe("hit");
 
-    setSystemTime(Date.now() + 1);
+    vi.setSystemTime(Date.now() + 1);
     expect(await lookup(cache, VOLATILE_URL)).toBeUndefined();
   });
 
@@ -239,7 +238,7 @@ describe("lookupResponse freshness", () => {
       json(BODY, { "cache-control": "private, max-age=600" }),
       VOLATILE_URL,
     );
-    setSystemTime(Date.now() + 5 * MINUTE);
+    vi.setSystemTime(Date.now() + 5 * MINUTE);
     expect((await lookup(cache, VOLATILE_URL))?.kind).toBe("hit");
   });
 
@@ -276,13 +275,13 @@ describe("lookupResponse freshness", () => {
 describe("lookupResponse revalidation", () => {
   async function staleEntry(cache: CacheStore): Promise<void> {
     await store(cache, json(BODY, { etag: '"v1"' }));
-    setSystemTime(Date.now() + FALLBACK_TTL_MS.stable + MINUTE);
+    vi.setSystemTime(Date.now() + FALLBACK_TTL_MS.stable + MINUTE);
   }
 
   it("misses for a stale entry without an ETag", async () => {
     const cache = createMemoryStore();
     await store(longLived(cache), json(BODY));
-    setSystemTime(Date.now() + FALLBACK_TTL_MS.stable + MINUTE);
+    vi.setSystemTime(Date.now() + FALLBACK_TTL_MS.stable + MINUTE);
     expect(await lookup(cache)).toBeUndefined();
   });
 

@@ -4,7 +4,7 @@
  * needs `node:zlib`, so hosts keep it; the cache only needs a round trip.
  */
 
-import { vi } from "bun:test";
+import { vi } from "vitest";
 import { type ApiTarget, createApiClientCore } from "../../src/api-client/core.ts";
 import type {
   BodyCodec,

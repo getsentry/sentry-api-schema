@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import { build } from "esbuild";
+import { describe, expect, test } from "vitest";
 import { rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { installPackedPackage } from "./packed-package.ts";
@@ -49,18 +50,21 @@ const SCENARIO = `
 `;
 
 describe("@sentry/api/client package entry", () => {
-  test("bundles for the browser and makes a request against a mocked fetch", async () => {
+  test("bundles for the browser and makes a request against a mocked fetch", { timeout: 60_000 }, async () => {
     const directory = installPackedPackage("api-client-package-");
     try {
       const entry = join(directory, "scenario.js");
       writeFileSync(entry, SCENARIO);
-      const result = await Bun.build({ entrypoints: [entry], target: "browser" });
-      expect(result.logs).toEqual([]);
-      expect(result.success).toBe(true);
-      const bundle = await result.outputs[0]!.text();
+      const result = await build({
+        entryPoints: [entry], bundle: true, format: "esm", platform: "browser",
+        write: false, logLevel: "silent",
+      });
+      expect(result.warnings).toEqual([]);
+      expect(result.errors).toEqual([]);
+      const bundle = result.outputFiles[0]!.text;
       expect(bundle).not.toMatch(/["']node:/);
       // Each entry imports the others by name, so the bundle has one copy of each class.
-      expect(bundle.match(/class SentryApiError\b/g)).toHaveLength(1);
+      expect(bundle.match(/\bSentryApiError = class\b/g)).toHaveLength(1);
 
       const bundled = join(directory, "bundled.js");
       writeFileSync(bundled, bundle);
@@ -87,5 +91,5 @@ describe("@sentry/api/client package entry", () => {
     } finally {
       rmSync(directory, { recursive: true, force: true });
     }
-  }, 30_000);
+  });
 });

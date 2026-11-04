@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import * as v from "valibot";
 import { z } from "zod";
 import {
@@ -7,7 +7,7 @@ import {
   ORIGIN,
   scriptedTarget,
 } from "../support.ts";
-import { ApiResponseValidationError } from "../../../src/api-client/validate.ts";
+import { ApiResponseValidationError } from "@sentry/api/client";
 import { createTeam, listTeams } from "../../../src/api-client/endpoints/teams.ts";
 
 const TeamZod = z.object({ slug: z.string() });

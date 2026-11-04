@@ -1,4 +1,4 @@
-import {describe, expect, it} from 'bun:test';
+import {describe, expect, it} from 'vitest';
 import {createSentryClient} from '@sentry/api';
 import {createBrowserFetch, createBrowserSdkConfig, type FetchFn} from '../lib/browser-client.ts';
 
@@ -76,7 +76,7 @@ describe('createBrowserFetch', () => {
   it('injects X-CSRFToken when input is a Request object with POST method', async () => {
     const {mock, captured} = captureFetch();
     const browserFetch = createBrowserFetch({getCsrfToken: () => 'token'});
-    // Must use a full URL — relative paths are invalid in the Request constructor in Node/Bun.
+    // Must use a full URL — relative paths are invalid in the Request constructor in Node.
     const request = new Request('https://sentry.io/api/0/projects/', {method: 'POST'});
     await withMockFetch(mock, () => browserFetch(request));
     expect(captured.headers?.get('X-CSRFToken')).toBe('token');
@@ -289,11 +289,7 @@ describe('createBrowserSdkConfig', () => {
     let started!: () => void;
     const requestStarted = new Promise<void>(resolve => { started = resolve; });
     const config = createBrowserSdkConfig({baseUrl: 'https://example.test'});
-    const sentry = createSentryClient({
-      ...config,
-      // The Bun test environment requires its native fetch extension in Config.
-      fetch: Object.assign(config.fetch, {preconnect: globalThis.fetch.preconnect}),
-    });
+    const sentry = createSentryClient(config);
 
     await withMockFetch((input, init) => {
       const effective = new Request(input, init);

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { createSentryClient, type Config } from "@sentry/api";
 import { createBrowserSdkConfig } from "@sentry/api/browser";
 

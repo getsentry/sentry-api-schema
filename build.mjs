@@ -1,4 +1,5 @@
 import { createClient } from "@hey-api/openapi-ts";
+import { build } from "esbuild";
 import { cpSync, appendFileSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -109,15 +110,28 @@ writeFileSync("src/browser.ts", 'export * from "./browser-client.ts";\n');
 // 6. Bundle into JS files and emit type declarations.
 //    The main entry stays self-contained (zero runtime deps).
 //    Validator entries externalise their peers; the root stays dependency-free.
-execSync("bun build src/index.ts --outdir dist", { stdio: "inherit" });
-execSync('bun build src/valibot.ts --outdir dist --external valibot', { stdio: "inherit" });
-execSync('bun build src/zod.ts --outdir dist --external zod', { stdio: "inherit" });
-execSync("bun build src/browser.ts --outdir dist", { stdio: "inherit" });
-// The client entries import the root entry and each other by package name, so
-// a consumer loads one copy of the shared error classes and `instanceof` holds
-// across entry points.
-execSync("bun build src/api-client/index.ts --outdir dist/api-client --external @sentry/api --external http-cache-semantics", { stdio: "inherit" });
-execSync("bun build src/api-client/endpoints/index.ts --outdir dist/api-client/endpoints --external @sentry/api --external @sentry/api/client", { stdio: "inherit" });
-execSync("bun build src/operations.ts --outdir dist", { stdio: "inherit" });
-execSync("bun build src/source-analysis.ts --outdir dist --external typescript", { stdio: "inherit" });
+//    Runtime entries target the browser platform, so a Node built-in import
+//    fails the build. source-analysis is a Node build tool and keeps node:path.
+const bundle = (entry, { external = [], platform = "browser" } = {}) =>
+  build({
+    entryPoints: [`src/${entry}.ts`],
+    outdir: "dist",
+    outbase: "src",
+    bundle: true,
+    format: "esm",
+    platform,
+    external,
+    logLevel: "info",
+  });
+await Promise.all([
+  bundle("index"),
+  bundle("valibot", { external: ["valibot"] }),
+  bundle("zod", { external: ["zod"] }),
+  bundle("browser"),
+  // Keep the package entries external so consumers share the root error classes.
+  bundle("api-client/index", { external: ["@sentry/api", "http-cache-semantics"] }),
+  bundle("api-client/endpoints/index", { external: ["@sentry/api", "@sentry/api/client"] }),
+  bundle("operations"),
+  bundle("source-analysis", { external: ["typescript"], platform: "node" }),
+]);
 execSync("tsc --emitDeclarationOnly", { stdio: "inherit" });

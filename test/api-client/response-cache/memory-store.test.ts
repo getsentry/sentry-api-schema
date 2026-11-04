@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, setSystemTime } from "bun:test";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createBodyCodec,
   type EncodedBody,
@@ -55,11 +55,11 @@ function traceBody(targetBytes: number): Uint8Array {
 
 describe("createMemoryStore", () => {
   beforeEach(() => {
-    setSystemTime(Date.now());
+    vi.setSystemTime(Date.now());
   });
 
   afterEach(() => {
-    setSystemTime();
+    vi.useRealTimers();
   });
 
   it("returns a stored entry whose body decodes to the original", async () => {
@@ -80,10 +80,10 @@ describe("createMemoryStore", () => {
     const store = createMemoryStore();
     await store.set("k", entry(`${API}/issues/1/`, bodyOfSize(10)), MINUTE);
 
-    setSystemTime(Date.now() + MINUTE - 1);
+    vi.setSystemTime(Date.now() + MINUTE - 1);
     expect(await store.get("k")).toBeDefined();
 
-    setSystemTime(Date.now() + 1);
+    vi.setSystemTime(Date.now() + 1);
     expect(await store.get("k")).toBeUndefined();
     expect(store.stats()).toEqual({ entries: 0, bytes: 0 });
   });

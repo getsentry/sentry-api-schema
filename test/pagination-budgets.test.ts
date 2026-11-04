@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { createSentryClient, paginateUpTo_listOrganizationIssues, SentryApiError, type Config } from "@sentry/api";
 
 const asFetch = (implementation: (request: Request) => Promise<Response>) =>

@@ -579,6 +579,17 @@ const projects = await core.requestJson("https://sentry.example.com", "/organiza
 
 The OpenAPI schema is synced from [`getsentry/sentry`](https://github.com/getsentry/sentry/tree/master/api-docs). Schema fixes belong there; build/tooling changes belong here.
 
+## Development
+
+The repository uses pnpm on Node.js 22.13 or later. Tests import the generated `src/` and `dist/` output, so build before testing:
+
+```sh
+pnpm install
+pnpm build
+pnpm typecheck
+pnpm test
+```
+
 ## License
 
 FSL-1.1-Apache-2.0. See [LICENSE.md](LICENSE.md).

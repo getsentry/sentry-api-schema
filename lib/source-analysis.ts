@@ -1,6 +1,6 @@
 /** Build-time analysis of API usage in consumer-supplied TypeScript source. */
 
-import { dirname, posix } from "node:path";
+import { posix } from "node:path";
 import ts from "typescript";
 import type { ApiOperation } from "./operation-types.js";
 
@@ -169,7 +169,7 @@ function sourceModule(
   sources: ReadonlyMap<string, string>,
 ): string {
   if (!specifier.startsWith(".")) return specifier;
-  const target = posix.normalize(posix.join(dirname(file), specifier));
+  const target = posix.normalize(posix.join(posix.dirname(file), specifier));
   const extension = posix.extname(target);
   const candidates = extension === ".js"
     ? [target.replace(/\.js$/, ".ts"), target.replace(/\.js$/, ".tsx"), target]

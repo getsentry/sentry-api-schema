@@ -14,7 +14,7 @@ import {
   string,
   tuple,
 } from "fast-check";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { buildCacheKey, normalizeUrl } from "../../../src/api-client/response-cache/keys.ts";
 import { classifyUrl } from "../../../src/api-client/response-cache/tiers.ts";
 

@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it, mock, spyOn, vi } from "bun:test";
+import { setTimeout as delay } from "node:timers/promises";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   isIdempotentRequest,
   nextRetryDelayMs,
@@ -272,7 +273,7 @@ describe("isIdempotentRequest", () => {
 
 describe("sleep", () => {
   afterEach(() => {
-    mock.restore();
+    vi.restoreAllMocks();
   });
 
   it("resolves after the delay", async () => {
@@ -280,7 +281,7 @@ describe("sleep", () => {
     const resolved = vi.fn();
     const promise = sleep(30).then(resolved);
 
-    await Bun.sleep(0);
+    await delay(0);
     expect(resolved).not.toHaveBeenCalled();
     await promise;
     expect(resolved).toHaveBeenCalled();
@@ -289,7 +290,7 @@ describe("sleep", () => {
   });
 
   it("rejects with the abort reason as soon as the signal aborts", async () => {
-    const clear = spyOn(globalThis, "clearTimeout");
+    const clear = vi.spyOn(globalThis, "clearTimeout");
     const controller = new AbortController();
     const promise = sleep(60_000, controller.signal);
     const reason = new Error("cancelled");

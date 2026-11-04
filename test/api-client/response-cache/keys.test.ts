@@ -1,5 +1,5 @@
 import { createHmac } from "node:crypto";
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { buildCacheKey, normalizeUrl } from "../../../src/api-client/response-cache/keys.ts";
 
 const URL_A = "https://us.sentry.io/api/0/organizations/acme/projects/?b=2&a=1";

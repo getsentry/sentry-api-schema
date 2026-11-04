@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { buildClientParams } from "../src/core/params.gen";
 
 describe("generated parameter security (GHSA-hhx9-57xq-r5rw)", () => {

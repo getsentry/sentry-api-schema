@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it, setSystemTime, vi } from "bun:test";
+import { setTimeout as delay } from "node:timers/promises";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { RetryPolicy } from "../../src/api-client/retry.ts";
 import {
   ApiTimeoutError,
@@ -89,7 +90,7 @@ function windowLimited(resetInMs: number, now = Date.now()) {
 }
 
 afterEach(() => {
-  setSystemTime();
+  vi.useRealTimers();
 });
 
 describe("retried statuses", () => {
@@ -309,14 +310,14 @@ describe("credential refresh", () => {
 describe("rate-limit waits", () => {
   it("waits for a reset within the cap", async () => {
     // The reset header has whole-second resolution, so start on a second.
-    setSystemTime(Date.UTC(2026, 0, 1, 12, 0, 0, 0));
+    vi.setSystemTime(Date.UTC(2026, 0, 1, 12, 0, 0, 0));
     const { fetch, sent } = scriptedFetch([
       () => windowLimited(1000),
       Response.json({ ok: true }),
     ]);
 
     const pending = transport(fetch).request(ISSUES_URL);
-    await Bun.sleep(900);
+    await delay(900);
     expect(sent).toHaveLength(1);
 
     expect((await pending).status).toBe(200);

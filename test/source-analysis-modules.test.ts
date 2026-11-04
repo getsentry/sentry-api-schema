@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { analyzeSourceApiUsage, type SourceApiOperation } from "../lib/source-analysis.ts";
 
 const operations = [

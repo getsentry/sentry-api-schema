@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { readErrorResponse, readJsonResponse } from "../../src/api-client/response.ts";
 
 function jsonResponse(

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, setSystemTime } from "bun:test";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { ApiValidationError } from "../../src/api-client/errors.ts";
 import {
   applyStatsMixinTimeParams,
@@ -67,10 +67,10 @@ describe("applyTimeParams", () => {
 });
 
 describe("applyStatsMixinTimeParams", () => {
-  afterEach(() => setSystemTime());
+  afterEach(() => vi.useRealTimers());
 
   it("turns a relative period into seconds before now", () => {
-    setSystemTime(10_000_000);
+    vi.setSystemTime(10_000_000);
 
     expect(
       applied((q) =>

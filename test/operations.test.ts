@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { createClient } from "@hey-api/openapi-ts";
 import { operations } from "@sentry/api/operations";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";

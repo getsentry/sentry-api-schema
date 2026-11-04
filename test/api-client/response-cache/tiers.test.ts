@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { classifyUrl, FALLBACK_TTL_MS, type TtlTier } from "../../../src/api-client/response-cache/tiers.ts";
 
 const API = "https://us.sentry.io/api/0";

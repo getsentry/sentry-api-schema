@@ -4,13 +4,14 @@
  * Node globals; this test catches the imports that typecheck would still
  * resolve: Node built-ins and the validators hosts pass in themselves.
  */
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { readdirSync, readFileSync } from "node:fs";
 import { builtinModules } from "node:module";
 import { join, relative } from "node:path";
 import ts from "typescript";
+import { fileURLToPath } from "node:url";
 
-const LIB = join(import.meta.dir, "..", "..", "lib", "api-client");
+const LIB = fileURLToPath(new URL("../../lib/api-client/", import.meta.url));
 
 const NODE_MODULES = new Set(builtinModules.map((name) => name.split("/")[0]));
 const HOST_VALIDATORS = /^(?:zod|valibot)(?:\/|$)|^@sentry\/api\/(?:zod|valibot)$/;

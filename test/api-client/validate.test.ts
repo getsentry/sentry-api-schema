@@ -1,6 +1,6 @@
 import type { StandardSchemaV1 } from "../../src/api-client/standard-schema.ts";
 import * as v from "valibot";
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { ApiResponseValidationError, validateResponse } from "../../src/api-client/validate.ts";
 
