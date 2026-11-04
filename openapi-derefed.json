@@ -96,13 +96,15 @@
                         "additionalProperties": {
                           "type": "object",
                           "additionalProperties": {}
-                        }
+                        },
+                        "description": "Server-wide options that the Sentry UI reads"
                       },
                       "access": {
                         "type": "array",
                         "items": {
                           "type": "string"
-                        }
+                        },
+                        "description": "Scopes the requesting user has in the organization"
                       },
                       "onboardingTasks": {
                         "type": "array",
@@ -111,21 +113,27 @@
                           "properties": {
                             "task": {
                               "type": "string",
-                              "nullable": true
+                              "nullable": true,
+                              "description": "Onboarding task key, such as create_project"
                             },
                             "status": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Task status: complete or skipped"
                             },
                             "completionSeen": {
                               "type": "string",
                               "format": "date-time",
-                              "nullable": true
+                              "nullable": true,
+                              "description": "When the task's completion was marked as seen, or null"
                             },
                             "dateCompleted": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date-time",
+                              "description": "When the task was completed or skipped"
                             },
-                            "data": {}
+                            "data": {
+                              "description": "Extra data recorded for the task, which depends on the task"
+                            }
                           },
                           "required": [
                             "completionSeen",
@@ -134,22 +142,27 @@
                             "status",
                             "task"
                           ]
-                        }
+                        },
+                        "description": "Onboarding tasks the organization has completed or skipped"
                       },
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Organization ID"
                       },
                       "slug": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Organization slug"
                       },
                       "status": {
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                           },
                           "name": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Status label, such as active or pending deletion"
                           }
                         },
                         "required": [
@@ -159,7 +172,8 @@
                         "description": "Organization status"
                       },
                       "name": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Organization name, or its slug when it has no name"
                       },
                       "dateCreated": {
                         "type": "string",
@@ -195,10 +209,12 @@
                         "type": "object",
                         "properties": {
                           "organizationUrl": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Base URL of the organization"
                           },
                           "regionUrl": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Base URL of the API for the organization's region"
                           }
                         },
                         "required": [
@@ -220,7 +236,8 @@
                         "description": "Whether members can create projects"
                       },
                       "allowSuperuserAccess": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "Whether Sentry superusers can access the organization"
                       }
                     },
                     "required": [
@@ -352,13 +369,15 @@
                       "additionalProperties": {
                         "type": "object",
                         "additionalProperties": {}
-                      }
+                      },
+                      "description": "Server-wide options that the Sentry UI reads"
                     },
                     "access": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Scopes the requesting user has in the organization"
                     },
                     "onboardingTasks": {
                       "type": "array",
@@ -367,21 +386,27 @@
                         "properties": {
                           "task": {
                             "type": "string",
-                            "nullable": true
+                            "nullable": true,
+                            "description": "Onboarding task key, such as create_project"
                           },
                           "status": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Task status: complete or skipped"
                           },
                           "completionSeen": {
                             "type": "string",
                             "format": "date-time",
-                            "nullable": true
+                            "nullable": true,
+                            "description": "When the task's completion was marked as seen, or null"
                           },
                           "dateCompleted": {
                             "type": "string",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "When the task was completed or skipped"
                           },
-                          "data": {}
+                          "data": {
+                            "description": "Extra data recorded for the task, which depends on the task"
+                          }
                         },
                         "required": [
                           "completionSeen",
@@ -390,22 +415,27 @@
                           "status",
                           "task"
                         ]
-                      }
+                      },
+                      "description": "Onboarding tasks the organization has completed or skipped"
                     },
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization ID"
                     },
                     "slug": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization slug"
                     },
                     "status": {
                       "type": "object",
                       "properties": {
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                         },
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Status label, such as active or pending deletion"
                         }
                       },
                       "required": [
@@ -415,7 +445,8 @@
                       "description": "Organization status"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization name, or its slug when it has no name"
                     },
                     "dateCreated": {
                       "type": "string",
@@ -451,10 +482,12 @@
                       "type": "object",
                       "properties": {
                         "organizationUrl": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Base URL of the organization"
                         },
                         "regionUrl": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Base URL of the API for the organization's region"
                         }
                       },
                       "required": [
@@ -476,7 +509,8 @@
                       "description": "Whether members can create projects"
                     },
                     "allowSuperuserAccess": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether Sentry superusers can access the organization"
                     }
                   },
                   "required": [
@@ -776,13 +810,15 @@
                       "additionalProperties": {
                         "type": "object",
                         "additionalProperties": {}
-                      }
+                      },
+                      "description": "Server-wide options that the Sentry UI reads"
                     },
                     "access": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Scopes the requesting user has in the organization"
                     },
                     "onboardingTasks": {
                       "type": "array",
@@ -791,21 +827,27 @@
                         "properties": {
                           "task": {
                             "type": "string",
-                            "nullable": true
+                            "nullable": true,
+                            "description": "Onboarding task key, such as create_project"
                           },
                           "status": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Task status: complete or skipped"
                           },
                           "completionSeen": {
                             "type": "string",
                             "format": "date-time",
-                            "nullable": true
+                            "nullable": true,
+                            "description": "When the task's completion was marked as seen, or null"
                           },
                           "dateCompleted": {
                             "type": "string",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "When the task was completed or skipped"
                           },
-                          "data": {}
+                          "data": {
+                            "description": "Extra data recorded for the task, which depends on the task"
+                          }
                         },
                         "required": [
                           "completionSeen",
@@ -814,22 +856,27 @@
                           "status",
                           "task"
                         ]
-                      }
+                      },
+                      "description": "Onboarding tasks the organization has completed or skipped"
                     },
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization ID"
                     },
                     "slug": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization slug"
                     },
                     "status": {
                       "type": "object",
                       "properties": {
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                         },
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Status label, such as active or pending deletion"
                         }
                       },
                       "required": [
@@ -839,7 +886,8 @@
                       "description": "Organization status"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization name, or its slug when it has no name"
                     },
                     "dateCreated": {
                       "type": "string",
@@ -875,10 +923,12 @@
                       "type": "object",
                       "properties": {
                         "organizationUrl": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Base URL of the organization"
                         },
                         "regionUrl": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Base URL of the API for the organization's region"
                         }
                       },
                       "required": [
@@ -900,18 +950,25 @@
                       "description": "Whether members can create projects"
                     },
                     "allowSuperuserAccess": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether Sentry superusers can access the organization"
                     },
-                    "role": {},
+                    "role": {
+                      "type": "string",
+                      "description": "Deprecated, use orgRole"
+                    },
                     "orgRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "The requesting user's role in the organization"
                     },
                     "targetSampleRate": {
                       "type": "number",
-                      "format": "double"
+                      "format": "double",
+                      "description": "Target sample rate for dynamic sampling, from 0 to 1"
                     },
                     "samplingMode": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Where dynamic sampling target rates are set: organization or project"
                     },
                     "planSampleRate": {
                       "type": "number",
@@ -925,13 +982,16 @@
                       "type": "object",
                       "additionalProperties": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Experiment assignments for the organization, mapping each experiment name to active or control"
                     },
                     "isDefault": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether this is the default organization of a single-organization install"
                     },
                     "defaultRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Role that new members get by default"
                     },
                     "orgRoleList": {
                       "type": "array",
@@ -988,7 +1048,8 @@
                           "name",
                           "scopes"
                         ]
-                      }
+                      },
+                      "description": "Organization roles available in the organization"
                     },
                     "teamRoleList": {
                       "type": "array",
@@ -1038,66 +1099,84 @@
                           "name",
                           "scopes"
                         ]
-                      }
+                      },
+                      "description": "Team roles available in the organization"
                     },
                     "openMembership": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether members can freely join any team"
                     },
                     "allowSharedIssues": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether limited details of issues can be shared with anonymous users"
                     },
                     "enhancedPrivacy": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether enhanced privacy controls limit personally identifiable information (PII) and source code in things like notifications"
                     },
                     "dataScrubber": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether server-side data scrubbing is required for all projects"
                     },
                     "dataScrubberDefaults": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the default scrubbers apply to all projects, to keep things like passwords and credit cards from being stored"
                     },
                     "sensitiveFields": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Additional field names that data scrubbing matches in all projects"
                     },
                     "safeFields": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Field names that data scrubbers ignore in all projects"
                     },
                     "storeCrashReports": {
-                      "type": "integer"
+                      "type": "integer",
+                      "description": "How many native crash reports to store per issue; 0 is disabled and -1 is unlimited"
                     },
                     "attachmentsRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Role required to download event attachments, such as native crash reports or log files"
                     },
                     "debugFilesRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Role required to download debug information files, ProGuard mappings and source maps"
                     },
                     "eventsMemberAdmin": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether members can delete events, through the event:admin scope"
                     },
                     "alertsMemberWrite": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether members can create, edit and delete alert rules, through the alerts:write scope"
                     },
                     "scrubIPAddresses": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether IP addresses are kept from being stored for new events in all projects"
                     },
                     "scrapeJavaScript": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether Sentry scrapes missing JavaScript source context when possible"
                     },
                     "allowJoinRequests": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether users can request to join the organization"
                     },
                     "relayPiiConfig": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Advanced data scrubbing rules of the organization as a JSON string, or null"
                     },
                     "relayDsnEndpoint": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Relay base URL used when displaying Client Key DSNs, or null"
                     },
                     "trustedRelays": {
                       "type": "array",
@@ -1105,76 +1184,97 @@
                         "type": "object",
                         "properties": {
                           "name": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Name of the Relay"
                           },
                           "description": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Description of the Relay"
                           },
                           "publicKey": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Public key of the Relay"
                           },
                           "created": {
                             "type": "string",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "When the Relay was added"
                           },
                           "lastModified": {
                             "type": "string",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "When the Relay was added or its name or description last changed"
                           }
                         }
-                      }
+                      },
+                      "description": "Local Relays registered for the organization"
                     },
                     "pendingAccessRequests": {
-                      "type": "integer"
+                      "type": "integer",
+                      "description": "Number of pending requests to join teams in the organization"
                     },
                     "hideAiFeatures": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether AI features are hidden for the organization"
                     },
                     "aggregatedDataConsent": {
                       "type": "boolean"
                     },
                     "isDynamicallySampled": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether dynamic sampling keeps less than all events, for the organization or any of its projects"
                     },
                     "issueAlertsThreadFlag": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the Slack integration posts replies in threads for issue alert notifications"
                     },
                     "metricAlertsThreadFlag": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the Slack integration posts replies in threads for metric alert notifications"
                     },
                     "requiresSso": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the requesting user must sign in with SSO to access the organization"
                     },
                     "defaultAutofixAutomationTuning": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Default Autofix automation tuning for new projects"
                     },
                     "defaultSeerScannerAutomation": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Default issue scanner automation for new projects; on seat-based Seer plans, new projects always have it on"
                     },
                     "enableSeerCoding": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether Seer coding is enabled for the organization"
                     },
                     "defaultCodingAgent": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Coding agent that automated Autofix runs on new projects hand off to, or seer; applies to seat-based Seer plans"
                     },
                     "defaultCodingAgentIntegrationId": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Integration ID of the default coding agent, or null"
                     },
                     "defaultAutomatedRunStoppingPoint": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Step where automated Autofix runs on new projects stop by default"
                     },
                     "autoEnableCodeReview": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether code review is turned on for GitHub repositories when they're added"
                     },
                     "autoOpenPrs": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether automated Autofix runs on new projects open pull requests by default"
                     },
                     "defaultCodeReviewTriggers": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Code review triggers that GitHub repositories get when they're added"
                     },
                     "teams": {
                       "type": "array",
@@ -1293,13 +1393,15 @@
                                 "additionalProperties": {
                                   "type": "object",
                                   "additionalProperties": {}
-                                }
+                                },
+                                "description": "Server-wide options that the Sentry UI reads"
                               },
                               "access": {
                                 "type": "array",
                                 "items": {
                                   "type": "string"
-                                }
+                                },
+                                "description": "Scopes the requesting user has in the organization"
                               },
                               "onboardingTasks": {
                                 "type": "array",
@@ -1308,21 +1410,27 @@
                                   "properties": {
                                     "task": {
                                       "type": "string",
-                                      "nullable": true
+                                      "nullable": true,
+                                      "description": "Onboarding task key, such as create_project"
                                     },
                                     "status": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "Task status: complete or skipped"
                                     },
                                     "completionSeen": {
                                       "type": "string",
                                       "format": "date-time",
-                                      "nullable": true
+                                      "nullable": true,
+                                      "description": "When the task's completion was marked as seen, or null"
                                     },
                                     "dateCompleted": {
                                       "type": "string",
-                                      "format": "date-time"
+                                      "format": "date-time",
+                                      "description": "When the task was completed or skipped"
                                     },
-                                    "data": {}
+                                    "data": {
+                                      "description": "Extra data recorded for the task, which depends on the task"
+                                    }
                                   },
                                   "required": [
                                     "completionSeen",
@@ -1331,22 +1439,27 @@
                                     "status",
                                     "task"
                                   ]
-                                }
+                                },
+                                "description": "Onboarding tasks the organization has completed or skipped"
                               },
                               "id": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Organization ID"
                               },
                               "slug": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Organization slug"
                               },
                               "status": {
                                 "type": "object",
                                 "properties": {
                                   "id": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                                   },
                                   "name": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Status label, such as active or pending deletion"
                                   }
                                 },
                                 "required": [
@@ -1356,7 +1469,8 @@
                                 "description": "Organization status"
                               },
                               "name": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Organization name, or its slug when it has no name"
                               },
                               "dateCreated": {
                                 "type": "string",
@@ -1392,10 +1506,12 @@
                                 "type": "object",
                                 "properties": {
                                   "organizationUrl": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Base URL of the organization"
                                   },
                                   "regionUrl": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Base URL of the API for the organization's region"
                                   }
                                 },
                                 "required": [
@@ -1417,7 +1533,8 @@
                                 "description": "Whether members can create projects"
                               },
                               "allowSuperuserAccess": {
-                                "type": "boolean"
+                                "type": "boolean",
+                                "description": "Whether Sentry superusers can access the organization"
                               }
                             },
                             "required": [
@@ -1694,7 +1811,8 @@
                           "slug",
                           "teamRole"
                         ]
-                      }
+                      },
+                      "description": "Active teams of the organization"
                     },
                     "projects": {
                       "type": "array",
@@ -1998,7 +2116,8 @@
                           "team",
                           "teams"
                         ]
-                      }
+                      },
+                      "description": "Active projects of the organization"
                     }
                   },
                   "required": [
@@ -48453,13 +48572,15 @@
                             "additionalProperties": {
                               "type": "object",
                               "additionalProperties": {}
-                            }
+                            },
+                            "description": "Server-wide options that the Sentry UI reads"
                           },
                           "access": {
                             "type": "array",
                             "items": {
                               "type": "string"
-                            }
+                            },
+                            "description": "Scopes the requesting user has in the organization"
                           },
                           "onboardingTasks": {
                             "type": "array",
@@ -48468,21 +48589,27 @@
                               "properties": {
                                 "task": {
                                   "type": "string",
-                                  "nullable": true
+                                  "nullable": true,
+                                  "description": "Onboarding task key, such as create_project"
                                 },
                                 "status": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "Task status: complete or skipped"
                                 },
                                 "completionSeen": {
                                   "type": "string",
                                   "format": "date-time",
-                                  "nullable": true
+                                  "nullable": true,
+                                  "description": "When the task's completion was marked as seen, or null"
                                 },
                                 "dateCompleted": {
                                   "type": "string",
-                                  "format": "date-time"
+                                  "format": "date-time",
+                                  "description": "When the task was completed or skipped"
                                 },
-                                "data": {}
+                                "data": {
+                                  "description": "Extra data recorded for the task, which depends on the task"
+                                }
                               },
                               "required": [
                                 "completionSeen",
@@ -48491,22 +48618,27 @@
                                 "status",
                                 "task"
                               ]
-                            }
+                            },
+                            "description": "Onboarding tasks the organization has completed or skipped"
                           },
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Organization ID"
                           },
                           "slug": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Organization slug"
                           },
                           "status": {
                             "type": "object",
                             "properties": {
                               "id": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                               },
                               "name": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Status label, such as active or pending deletion"
                               }
                             },
                             "required": [
@@ -48516,7 +48648,8 @@
                             "description": "Organization status"
                           },
                           "name": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Organization name, or its slug when it has no name"
                           },
                           "dateCreated": {
                             "type": "string",
@@ -48552,10 +48685,12 @@
                             "type": "object",
                             "properties": {
                               "organizationUrl": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Base URL of the organization"
                               },
                               "regionUrl": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Base URL of the API for the organization's region"
                               }
                             },
                             "required": [
@@ -48577,7 +48712,8 @@
                             "description": "Whether members can create projects"
                           },
                           "allowSuperuserAccess": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether Sentry superusers can access the organization"
                           }
                         },
                         "required": [
@@ -49235,13 +49371,15 @@
                           "additionalProperties": {
                             "type": "object",
                             "additionalProperties": {}
-                          }
+                          },
+                          "description": "Server-wide options that the Sentry UI reads"
                         },
                         "access": {
                           "type": "array",
                           "items": {
                             "type": "string"
-                          }
+                          },
+                          "description": "Scopes the requesting user has in the organization"
                         },
                         "onboardingTasks": {
                           "type": "array",
@@ -49250,21 +49388,27 @@
                             "properties": {
                               "task": {
                                 "type": "string",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "Onboarding task key, such as create_project"
                               },
                               "status": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Task status: complete or skipped"
                               },
                               "completionSeen": {
                                 "type": "string",
                                 "format": "date-time",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "When the task's completion was marked as seen, or null"
                               },
                               "dateCompleted": {
                                 "type": "string",
-                                "format": "date-time"
+                                "format": "date-time",
+                                "description": "When the task was completed or skipped"
                               },
-                              "data": {}
+                              "data": {
+                                "description": "Extra data recorded for the task, which depends on the task"
+                              }
                             },
                             "required": [
                               "completionSeen",
@@ -49273,22 +49417,27 @@
                               "status",
                               "task"
                             ]
-                          }
+                          },
+                          "description": "Onboarding tasks the organization has completed or skipped"
                         },
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization ID"
                         },
                         "slug": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization slug"
                         },
                         "status": {
                           "type": "object",
                           "properties": {
                             "id": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status label, such as active or pending deletion"
                             }
                           },
                           "required": [
@@ -49298,7 +49447,8 @@
                           "description": "Organization status"
                         },
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization name, or its slug when it has no name"
                         },
                         "dateCreated": {
                           "type": "string",
@@ -49334,10 +49484,12 @@
                           "type": "object",
                           "properties": {
                             "organizationUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the organization"
                             },
                             "regionUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the API for the organization's region"
                             }
                           },
                           "required": [
@@ -49359,7 +49511,8 @@
                           "description": "Whether members can create projects"
                         },
                         "allowSuperuserAccess": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether Sentry superusers can access the organization"
                         }
                       },
                       "required": [
@@ -51609,13 +51762,15 @@
                             "additionalProperties": {
                               "type": "object",
                               "additionalProperties": {}
-                            }
+                            },
+                            "description": "Server-wide options that the Sentry UI reads"
                           },
                           "access": {
                             "type": "array",
                             "items": {
                               "type": "string"
-                            }
+                            },
+                            "description": "Scopes the requesting user has in the organization"
                           },
                           "onboardingTasks": {
                             "type": "array",
@@ -51624,21 +51779,27 @@
                               "properties": {
                                 "task": {
                                   "type": "string",
-                                  "nullable": true
+                                  "nullable": true,
+                                  "description": "Onboarding task key, such as create_project"
                                 },
                                 "status": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "Task status: complete or skipped"
                                 },
                                 "completionSeen": {
                                   "type": "string",
                                   "format": "date-time",
-                                  "nullable": true
+                                  "nullable": true,
+                                  "description": "When the task's completion was marked as seen, or null"
                                 },
                                 "dateCompleted": {
                                   "type": "string",
-                                  "format": "date-time"
+                                  "format": "date-time",
+                                  "description": "When the task was completed or skipped"
                                 },
-                                "data": {}
+                                "data": {
+                                  "description": "Extra data recorded for the task, which depends on the task"
+                                }
                               },
                               "required": [
                                 "completionSeen",
@@ -51647,22 +51808,27 @@
                                 "status",
                                 "task"
                               ]
-                            }
+                            },
+                            "description": "Onboarding tasks the organization has completed or skipped"
                           },
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Organization ID"
                           },
                           "slug": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Organization slug"
                           },
                           "status": {
                             "type": "object",
                             "properties": {
                               "id": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                               },
                               "name": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Status label, such as active or pending deletion"
                               }
                             },
                             "required": [
@@ -51672,7 +51838,8 @@
                             "description": "Organization status"
                           },
                           "name": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Organization name, or its slug when it has no name"
                           },
                           "dateCreated": {
                             "type": "string",
@@ -51708,10 +51875,12 @@
                             "type": "object",
                             "properties": {
                               "organizationUrl": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Base URL of the organization"
                               },
                               "regionUrl": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Base URL of the API for the organization's region"
                               }
                             },
                             "required": [
@@ -51733,7 +51902,8 @@
                             "description": "Whether members can create projects"
                           },
                           "allowSuperuserAccess": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether Sentry superusers can access the organization"
                           }
                         },
                         "required": [
@@ -62874,13 +63044,15 @@
                           "additionalProperties": {
                             "type": "object",
                             "additionalProperties": {}
-                          }
+                          },
+                          "description": "Server-wide options that the Sentry UI reads"
                         },
                         "access": {
                           "type": "array",
                           "items": {
                             "type": "string"
-                          }
+                          },
+                          "description": "Scopes the requesting user has in the organization"
                         },
                         "onboardingTasks": {
                           "type": "array",
@@ -62889,21 +63061,27 @@
                             "properties": {
                               "task": {
                                 "type": "string",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "Onboarding task key, such as create_project"
                               },
                               "status": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Task status: complete or skipped"
                               },
                               "completionSeen": {
                                 "type": "string",
                                 "format": "date-time",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "When the task's completion was marked as seen, or null"
                               },
                               "dateCompleted": {
                                 "type": "string",
-                                "format": "date-time"
+                                "format": "date-time",
+                                "description": "When the task was completed or skipped"
                               },
-                              "data": {}
+                              "data": {
+                                "description": "Extra data recorded for the task, which depends on the task"
+                              }
                             },
                             "required": [
                               "completionSeen",
@@ -62912,22 +63090,27 @@
                               "status",
                               "task"
                             ]
-                          }
+                          },
+                          "description": "Onboarding tasks the organization has completed or skipped"
                         },
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization ID"
                         },
                         "slug": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization slug"
                         },
                         "status": {
                           "type": "object",
                           "properties": {
                             "id": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status label, such as active or pending deletion"
                             }
                           },
                           "required": [
@@ -62937,7 +63120,8 @@
                           "description": "Organization status"
                         },
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization name, or its slug when it has no name"
                         },
                         "dateCreated": {
                           "type": "string",
@@ -62973,10 +63157,12 @@
                           "type": "object",
                           "properties": {
                             "organizationUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the organization"
                             },
                             "regionUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the API for the organization's region"
                             }
                           },
                           "required": [
@@ -62998,7 +63184,8 @@
                           "description": "Whether members can create projects"
                         },
                         "allowSuperuserAccess": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether Sentry superusers can access the organization"
                         }
                       },
                       "required": [
@@ -64217,13 +64404,15 @@
                           "additionalProperties": {
                             "type": "object",
                             "additionalProperties": {}
-                          }
+                          },
+                          "description": "Server-wide options that the Sentry UI reads"
                         },
                         "access": {
                           "type": "array",
                           "items": {
                             "type": "string"
-                          }
+                          },
+                          "description": "Scopes the requesting user has in the organization"
                         },
                         "onboardingTasks": {
                           "type": "array",
@@ -64232,21 +64421,27 @@
                             "properties": {
                               "task": {
                                 "type": "string",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "Onboarding task key, such as create_project"
                               },
                               "status": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Task status: complete or skipped"
                               },
                               "completionSeen": {
                                 "type": "string",
                                 "format": "date-time",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "When the task's completion was marked as seen, or null"
                               },
                               "dateCompleted": {
                                 "type": "string",
-                                "format": "date-time"
+                                "format": "date-time",
+                                "description": "When the task was completed or skipped"
                               },
-                              "data": {}
+                              "data": {
+                                "description": "Extra data recorded for the task, which depends on the task"
+                              }
                             },
                             "required": [
                               "completionSeen",
@@ -64255,22 +64450,27 @@
                               "status",
                               "task"
                             ]
-                          }
+                          },
+                          "description": "Onboarding tasks the organization has completed or skipped"
                         },
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization ID"
                         },
                         "slug": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization slug"
                         },
                         "status": {
                           "type": "object",
                           "properties": {
                             "id": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status label, such as active or pending deletion"
                             }
                           },
                           "required": [
@@ -64280,7 +64480,8 @@
                           "description": "Organization status"
                         },
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization name, or its slug when it has no name"
                         },
                         "dateCreated": {
                           "type": "string",
@@ -64316,10 +64517,12 @@
                           "type": "object",
                           "properties": {
                             "organizationUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the organization"
                             },
                             "regionUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the API for the organization's region"
                             }
                           },
                           "required": [
@@ -64341,7 +64544,8 @@
                           "description": "Whether members can create projects"
                         },
                         "allowSuperuserAccess": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether Sentry superusers can access the organization"
                         }
                       },
                       "required": [
@@ -86810,13 +87014,15 @@
                           "additionalProperties": {
                             "type": "object",
                             "additionalProperties": {}
-                          }
+                          },
+                          "description": "Server-wide options that the Sentry UI reads"
                         },
                         "access": {
                           "type": "array",
                           "items": {
                             "type": "string"
-                          }
+                          },
+                          "description": "Scopes the requesting user has in the organization"
                         },
                         "onboardingTasks": {
                           "type": "array",
@@ -86825,21 +87031,27 @@
                             "properties": {
                               "task": {
                                 "type": "string",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "Onboarding task key, such as create_project"
                               },
                               "status": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Task status: complete or skipped"
                               },
                               "completionSeen": {
                                 "type": "string",
                                 "format": "date-time",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "When the task's completion was marked as seen, or null"
                               },
                               "dateCompleted": {
                                 "type": "string",
-                                "format": "date-time"
+                                "format": "date-time",
+                                "description": "When the task was completed or skipped"
                               },
-                              "data": {}
+                              "data": {
+                                "description": "Extra data recorded for the task, which depends on the task"
+                              }
                             },
                             "required": [
                               "completionSeen",
@@ -86848,22 +87060,27 @@
                               "status",
                               "task"
                             ]
-                          }
+                          },
+                          "description": "Onboarding tasks the organization has completed or skipped"
                         },
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization ID"
                         },
                         "slug": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization slug"
                         },
                         "status": {
                           "type": "object",
                           "properties": {
                             "id": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status label, such as active or pending deletion"
                             }
                           },
                           "required": [
@@ -86873,7 +87090,8 @@
                           "description": "Organization status"
                         },
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization name, or its slug when it has no name"
                         },
                         "dateCreated": {
                           "type": "string",
@@ -86909,10 +87127,12 @@
                           "type": "object",
                           "properties": {
                             "organizationUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the organization"
                             },
                             "regionUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the API for the organization's region"
                             }
                           },
                           "required": [
@@ -86934,7 +87154,8 @@
                           "description": "Whether members can create projects"
                         },
                         "allowSuperuserAccess": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether Sentry superusers can access the organization"
                         }
                       },
                       "required": [
@@ -87474,13 +87695,15 @@
                           "additionalProperties": {
                             "type": "object",
                             "additionalProperties": {}
-                          }
+                          },
+                          "description": "Server-wide options that the Sentry UI reads"
                         },
                         "access": {
                           "type": "array",
                           "items": {
                             "type": "string"
-                          }
+                          },
+                          "description": "Scopes the requesting user has in the organization"
                         },
                         "onboardingTasks": {
                           "type": "array",
@@ -87489,21 +87712,27 @@
                             "properties": {
                               "task": {
                                 "type": "string",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "Onboarding task key, such as create_project"
                               },
                               "status": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Task status: complete or skipped"
                               },
                               "completionSeen": {
                                 "type": "string",
                                 "format": "date-time",
-                                "nullable": true
+                                "nullable": true,
+                                "description": "When the task's completion was marked as seen, or null"
                               },
                               "dateCompleted": {
                                 "type": "string",
-                                "format": "date-time"
+                                "format": "date-time",
+                                "description": "When the task was completed or skipped"
                               },
-                              "data": {}
+                              "data": {
+                                "description": "Extra data recorded for the task, which depends on the task"
+                              }
                             },
                             "required": [
                               "completionSeen",
@@ -87512,22 +87741,27 @@
                               "status",
                               "task"
                             ]
-                          }
+                          },
+                          "description": "Onboarding tasks the organization has completed or skipped"
                         },
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization ID"
                         },
                         "slug": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization slug"
                         },
                         "status": {
                           "type": "object",
                           "properties": {
                             "id": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Status label, such as active or pending deletion"
                             }
                           },
                           "required": [
@@ -87537,7 +87771,8 @@
                           "description": "Organization status"
                         },
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Organization name, or its slug when it has no name"
                         },
                         "dateCreated": {
                           "type": "string",
@@ -87573,10 +87808,12 @@
                           "type": "object",
                           "properties": {
                             "organizationUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the organization"
                             },
                             "regionUrl": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Base URL of the API for the organization's region"
                             }
                           },
                           "required": [
@@ -87598,7 +87835,8 @@
                           "description": "Whether members can create projects"
                         },
                         "allowSuperuserAccess": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether Sentry superusers can access the organization"
                         }
                       },
                       "required": [
@@ -108074,13 +108312,15 @@
                 "additionalProperties": {
                   "type": "object",
                   "additionalProperties": {}
-                }
+                },
+                "description": "Server-wide options that the Sentry UI reads"
               },
               "access": {
                 "type": "array",
                 "items": {
                   "type": "string"
-                }
+                },
+                "description": "Scopes the requesting user has in the organization"
               },
               "onboardingTasks": {
                 "type": "array",
@@ -108089,21 +108329,27 @@
                   "properties": {
                     "task": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Onboarding task key, such as create_project"
                     },
                     "status": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Task status: complete or skipped"
                     },
                     "completionSeen": {
                       "type": "string",
                       "format": "date-time",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "When the task's completion was marked as seen, or null"
                     },
                     "dateCompleted": {
                       "type": "string",
-                      "format": "date-time"
+                      "format": "date-time",
+                      "description": "When the task was completed or skipped"
                     },
-                    "data": {}
+                    "data": {
+                      "description": "Extra data recorded for the task, which depends on the task"
+                    }
                   },
                   "required": [
                     "completionSeen",
@@ -108112,22 +108358,27 @@
                     "status",
                     "task"
                   ]
-                }
+                },
+                "description": "Onboarding tasks the organization has completed or skipped"
               },
               "id": {
-                "type": "string"
+                "type": "string",
+                "description": "Organization ID"
               },
               "slug": {
-                "type": "string"
+                "type": "string",
+                "description": "Organization slug"
               },
               "status": {
                 "type": "object",
                 "properties": {
                   "id": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                   },
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Status label, such as active or pending deletion"
                   }
                 },
                 "required": [
@@ -108137,7 +108388,8 @@
                 "description": "Organization status"
               },
               "name": {
-                "type": "string"
+                "type": "string",
+                "description": "Organization name, or its slug when it has no name"
               },
               "dateCreated": {
                 "type": "string",
@@ -108173,10 +108425,12 @@
                 "type": "object",
                 "properties": {
                   "organizationUrl": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Base URL of the organization"
                   },
                   "regionUrl": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Base URL of the API for the organization's region"
                   }
                 },
                 "required": [
@@ -108198,7 +108452,8 @@
                 "description": "Whether members can create projects"
               },
               "allowSuperuserAccess": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether Sentry superusers can access the organization"
               }
             },
             "required": [
@@ -120454,13 +120709,15 @@
                   "additionalProperties": {
                     "type": "object",
                     "additionalProperties": {}
-                  }
+                  },
+                  "description": "Server-wide options that the Sentry UI reads"
                 },
                 "access": {
                   "type": "array",
                   "items": {
                     "type": "string"
-                  }
+                  },
+                  "description": "Scopes the requesting user has in the organization"
                 },
                 "onboardingTasks": {
                   "type": "array",
@@ -120469,21 +120726,27 @@
                     "properties": {
                       "task": {
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "Onboarding task key, such as create_project"
                       },
                       "status": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Task status: complete or skipped"
                       },
                       "completionSeen": {
                         "type": "string",
                         "format": "date-time",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "When the task's completion was marked as seen, or null"
                       },
                       "dateCompleted": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "description": "When the task was completed or skipped"
                       },
-                      "data": {}
+                      "data": {
+                        "description": "Extra data recorded for the task, which depends on the task"
+                      }
                     },
                     "required": [
                       "completionSeen",
@@ -120492,22 +120755,27 @@
                       "status",
                       "task"
                     ]
-                  }
+                  },
+                  "description": "Onboarding tasks the organization has completed or skipped"
                 },
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Organization ID"
                 },
                 "slug": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Organization slug"
                 },
                 "status": {
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Status label, such as active or pending deletion"
                     }
                   },
                   "required": [
@@ -120517,7 +120785,8 @@
                   "description": "Organization status"
                 },
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Organization name, or its slug when it has no name"
                 },
                 "dateCreated": {
                   "type": "string",
@@ -120553,10 +120822,12 @@
                   "type": "object",
                   "properties": {
                     "organizationUrl": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Base URL of the organization"
                     },
                     "regionUrl": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Base URL of the API for the organization's region"
                     }
                   },
                   "required": [
@@ -120578,7 +120849,8 @@
                   "description": "Whether members can create projects"
                 },
                 "allowSuperuserAccess": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether Sentry superusers can access the organization"
                 }
               },
               "required": [
@@ -123218,13 +123490,15 @@
               "additionalProperties": {
                 "type": "object",
                 "additionalProperties": {}
-              }
+              },
+              "description": "Server-wide options that the Sentry UI reads"
             },
             "access": {
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "description": "Scopes the requesting user has in the organization"
             },
             "onboardingTasks": {
               "type": "array",
@@ -123233,21 +123507,27 @@
                 "properties": {
                   "task": {
                     "type": "string",
-                    "nullable": true
+                    "nullable": true,
+                    "description": "Onboarding task key, such as create_project"
                   },
                   "status": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Task status: complete or skipped"
                   },
                   "completionSeen": {
                     "type": "string",
                     "format": "date-time",
-                    "nullable": true
+                    "nullable": true,
+                    "description": "When the task's completion was marked as seen, or null"
                   },
                   "dateCompleted": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "When the task was completed or skipped"
                   },
-                  "data": {}
+                  "data": {
+                    "description": "Extra data recorded for the task, which depends on the task"
+                  }
                 },
                 "required": [
                   "completionSeen",
@@ -123256,22 +123536,27 @@
                   "status",
                   "task"
                 ]
-              }
+              },
+              "description": "Onboarding tasks the organization has completed or skipped"
             },
             "id": {
-              "type": "string"
+              "type": "string",
+              "description": "Organization ID"
             },
             "slug": {
-              "type": "string"
+              "type": "string",
+              "description": "Organization slug"
             },
             "status": {
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                 },
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Status label, such as active or pending deletion"
                 }
               },
               "required": [
@@ -123281,7 +123566,8 @@
               "description": "Organization status"
             },
             "name": {
-              "type": "string"
+              "type": "string",
+              "description": "Organization name, or its slug when it has no name"
             },
             "dateCreated": {
               "type": "string",
@@ -123317,10 +123603,12 @@
               "type": "object",
               "properties": {
                 "organizationUrl": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Base URL of the organization"
                 },
                 "regionUrl": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Base URL of the API for the organization's region"
                 }
               },
               "required": [
@@ -123342,7 +123630,8 @@
               "description": "Whether members can create projects"
             },
             "allowSuperuserAccess": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Whether Sentry superusers can access the organization"
             }
           },
           "required": [
@@ -132501,13 +132790,15 @@
             "additionalProperties": {
               "type": "object",
               "additionalProperties": {}
-            }
+            },
+            "description": "Server-wide options that the Sentry UI reads"
           },
           "access": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Scopes the requesting user has in the organization"
           },
           "onboardingTasks": {
             "type": "array",
@@ -132516,21 +132807,27 @@
               "properties": {
                 "task": {
                   "type": "string",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Onboarding task key, such as create_project"
                 },
                 "status": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Task status: complete or skipped"
                 },
                 "completionSeen": {
                   "type": "string",
                   "format": "date-time",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "When the task's completion was marked as seen, or null"
                 },
                 "dateCompleted": {
                   "type": "string",
-                  "format": "date-time"
+                  "format": "date-time",
+                  "description": "When the task was completed or skipped"
                 },
-                "data": {}
+                "data": {
+                  "description": "Extra data recorded for the task, which depends on the task"
+                }
               },
               "required": [
                 "completionSeen",
@@ -132539,22 +132836,27 @@
                 "status",
                 "task"
               ]
-            }
+            },
+            "description": "Onboarding tasks the organization has completed or skipped"
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization ID"
           },
           "slug": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization slug"
           },
           "status": {
             "type": "object",
             "properties": {
               "id": {
-                "type": "string"
+                "type": "string",
+                "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
               },
               "name": {
-                "type": "string"
+                "type": "string",
+                "description": "Status label, such as active or pending deletion"
               }
             },
             "required": [
@@ -132564,7 +132866,8 @@
             "description": "Organization status"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization name, or its slug when it has no name"
           },
           "dateCreated": {
             "type": "string",
@@ -132600,10 +132903,12 @@
             "type": "object",
             "properties": {
               "organizationUrl": {
-                "type": "string"
+                "type": "string",
+                "description": "Base URL of the organization"
               },
               "regionUrl": {
-                "type": "string"
+                "type": "string",
+                "description": "Base URL of the API for the organization's region"
               }
             },
             "required": [
@@ -132625,7 +132930,8 @@
             "description": "Whether members can create projects"
           },
           "allowSuperuserAccess": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether Sentry superusers can access the organization"
           }
         },
         "required": [
@@ -133305,13 +133611,15 @@
             "additionalProperties": {
               "type": "object",
               "additionalProperties": {}
-            }
+            },
+            "description": "Server-wide options that the Sentry UI reads"
           },
           "access": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Scopes the requesting user has in the organization"
           },
           "onboardingTasks": {
             "type": "array",
@@ -133320,21 +133628,27 @@
               "properties": {
                 "task": {
                   "type": "string",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Onboarding task key, such as create_project"
                 },
                 "status": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Task status: complete or skipped"
                 },
                 "completionSeen": {
                   "type": "string",
                   "format": "date-time",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "When the task's completion was marked as seen, or null"
                 },
                 "dateCompleted": {
                   "type": "string",
-                  "format": "date-time"
+                  "format": "date-time",
+                  "description": "When the task was completed or skipped"
                 },
-                "data": {}
+                "data": {
+                  "description": "Extra data recorded for the task, which depends on the task"
+                }
               },
               "required": [
                 "completionSeen",
@@ -133343,22 +133657,27 @@
                 "status",
                 "task"
               ]
-            }
+            },
+            "description": "Onboarding tasks the organization has completed or skipped"
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization ID"
           },
           "slug": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization slug"
           },
           "status": {
             "type": "object",
             "properties": {
               "id": {
-                "type": "string"
+                "type": "string",
+                "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
               },
               "name": {
-                "type": "string"
+                "type": "string",
+                "description": "Status label, such as active or pending deletion"
               }
             },
             "required": [
@@ -133368,7 +133687,8 @@
             "description": "Organization status"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization name, or its slug when it has no name"
           },
           "dateCreated": {
             "type": "string",
@@ -133404,10 +133724,12 @@
             "type": "object",
             "properties": {
               "organizationUrl": {
-                "type": "string"
+                "type": "string",
+                "description": "Base URL of the organization"
               },
               "regionUrl": {
-                "type": "string"
+                "type": "string",
+                "description": "Base URL of the API for the organization's region"
               }
             },
             "required": [
@@ -133429,18 +133751,25 @@
             "description": "Whether members can create projects"
           },
           "allowSuperuserAccess": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether Sentry superusers can access the organization"
           },
-          "role": {},
+          "role": {
+            "type": "string",
+            "description": "Deprecated, use orgRole"
+          },
           "orgRole": {
-            "type": "string"
+            "type": "string",
+            "description": "The requesting user's role in the organization"
           },
           "targetSampleRate": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "description": "Target sample rate for dynamic sampling, from 0 to 1"
           },
           "samplingMode": {
-            "type": "string"
+            "type": "string",
+            "description": "Where dynamic sampling target rates are set: organization or project"
           },
           "planSampleRate": {
             "type": "number",
@@ -133454,13 +133783,16 @@
             "type": "object",
             "additionalProperties": {
               "type": "string"
-            }
+            },
+            "description": "Experiment assignments for the organization, mapping each experiment name to active or control"
           },
           "isDefault": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether this is the default organization of a single-organization install"
           },
           "defaultRole": {
-            "type": "string"
+            "type": "string",
+            "description": "Role that new members get by default"
           },
           "orgRoleList": {
             "type": "array",
@@ -133517,7 +133849,8 @@
                 "name",
                 "scopes"
               ]
-            }
+            },
+            "description": "Organization roles available in the organization"
           },
           "teamRoleList": {
             "type": "array",
@@ -133567,66 +133900,84 @@
                 "name",
                 "scopes"
               ]
-            }
+            },
+            "description": "Team roles available in the organization"
           },
           "openMembership": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether members can freely join any team"
           },
           "allowSharedIssues": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether limited details of issues can be shared with anonymous users"
           },
           "enhancedPrivacy": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether enhanced privacy controls limit personally identifiable information (PII) and source code in things like notifications"
           },
           "dataScrubber": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether server-side data scrubbing is required for all projects"
           },
           "dataScrubberDefaults": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the default scrubbers apply to all projects, to keep things like passwords and credit cards from being stored"
           },
           "sensitiveFields": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Additional field names that data scrubbing matches in all projects"
           },
           "safeFields": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Field names that data scrubbers ignore in all projects"
           },
           "storeCrashReports": {
-            "type": "integer"
+            "type": "integer",
+            "description": "How many native crash reports to store per issue; 0 is disabled and -1 is unlimited"
           },
           "attachmentsRole": {
-            "type": "string"
+            "type": "string",
+            "description": "Role required to download event attachments, such as native crash reports or log files"
           },
           "debugFilesRole": {
-            "type": "string"
+            "type": "string",
+            "description": "Role required to download debug information files, ProGuard mappings and source maps"
           },
           "eventsMemberAdmin": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether members can delete events, through the event:admin scope"
           },
           "alertsMemberWrite": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether members can create, edit and delete alert rules, through the alerts:write scope"
           },
           "scrubIPAddresses": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether IP addresses are kept from being stored for new events in all projects"
           },
           "scrapeJavaScript": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether Sentry scrapes missing JavaScript source context when possible"
           },
           "allowJoinRequests": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether users can request to join the organization"
           },
           "relayPiiConfig": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Advanced data scrubbing rules of the organization as a JSON string, or null"
           },
           "relayDsnEndpoint": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Relay base URL used when displaying Client Key DSNs, or null"
           },
           "trustedRelays": {
             "type": "array",
@@ -133634,76 +133985,97 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Name of the Relay"
                 },
                 "description": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Description of the Relay"
                 },
                 "publicKey": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Public key of the Relay"
                 },
                 "created": {
                   "type": "string",
-                  "format": "date-time"
+                  "format": "date-time",
+                  "description": "When the Relay was added"
                 },
                 "lastModified": {
                   "type": "string",
-                  "format": "date-time"
+                  "format": "date-time",
+                  "description": "When the Relay was added or its name or description last changed"
                 }
               }
-            }
+            },
+            "description": "Local Relays registered for the organization"
           },
           "pendingAccessRequests": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Number of pending requests to join teams in the organization"
           },
           "hideAiFeatures": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether AI features are hidden for the organization"
           },
           "aggregatedDataConsent": {
             "type": "boolean"
           },
           "isDynamicallySampled": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether dynamic sampling keeps less than all events, for the organization or any of its projects"
           },
           "issueAlertsThreadFlag": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the Slack integration posts replies in threads for issue alert notifications"
           },
           "metricAlertsThreadFlag": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the Slack integration posts replies in threads for metric alert notifications"
           },
           "requiresSso": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the requesting user must sign in with SSO to access the organization"
           },
           "defaultAutofixAutomationTuning": {
-            "type": "string"
+            "type": "string",
+            "description": "Default Autofix automation tuning for new projects"
           },
           "defaultSeerScannerAutomation": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Default issue scanner automation for new projects; on seat-based Seer plans, new projects always have it on"
           },
           "enableSeerCoding": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether Seer coding is enabled for the organization"
           },
           "defaultCodingAgent": {
-            "type": "string"
+            "type": "string",
+            "description": "Coding agent that automated Autofix runs on new projects hand off to, or seer; applies to seat-based Seer plans"
           },
           "defaultCodingAgentIntegrationId": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Integration ID of the default coding agent, or null"
           },
           "defaultAutomatedRunStoppingPoint": {
-            "type": "string"
+            "type": "string",
+            "description": "Step where automated Autofix runs on new projects stop by default"
           },
           "autoEnableCodeReview": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether code review is turned on for GitHub repositories when they're added"
           },
           "autoOpenPrs": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether automated Autofix runs on new projects open pull requests by default"
           },
           "defaultCodeReviewTriggers": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Code review triggers that GitHub repositories get when they're added"
           },
           "teams": {
             "type": "array",
@@ -133822,13 +134194,15 @@
                       "additionalProperties": {
                         "type": "object",
                         "additionalProperties": {}
-                      }
+                      },
+                      "description": "Server-wide options that the Sentry UI reads"
                     },
                     "access": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Scopes the requesting user has in the organization"
                     },
                     "onboardingTasks": {
                       "type": "array",
@@ -133837,21 +134211,27 @@
                         "properties": {
                           "task": {
                             "type": "string",
-                            "nullable": true
+                            "nullable": true,
+                            "description": "Onboarding task key, such as create_project"
                           },
                           "status": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Task status: complete or skipped"
                           },
                           "completionSeen": {
                             "type": "string",
                             "format": "date-time",
-                            "nullable": true
+                            "nullable": true,
+                            "description": "When the task's completion was marked as seen, or null"
                           },
                           "dateCompleted": {
                             "type": "string",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "When the task was completed or skipped"
                           },
-                          "data": {}
+                          "data": {
+                            "description": "Extra data recorded for the task, which depends on the task"
+                          }
                         },
                         "required": [
                           "completionSeen",
@@ -133860,22 +134240,27 @@
                           "status",
                           "task"
                         ]
-                      }
+                      },
+                      "description": "Onboarding tasks the organization has completed or skipped"
                     },
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization ID"
                     },
                     "slug": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization slug"
                     },
                     "status": {
                       "type": "object",
                       "properties": {
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                         },
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Status label, such as active or pending deletion"
                         }
                       },
                       "required": [
@@ -133885,7 +134270,8 @@
                       "description": "Organization status"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization name, or its slug when it has no name"
                     },
                     "dateCreated": {
                       "type": "string",
@@ -133921,10 +134307,12 @@
                       "type": "object",
                       "properties": {
                         "organizationUrl": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Base URL of the organization"
                         },
                         "regionUrl": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Base URL of the API for the organization's region"
                         }
                       },
                       "required": [
@@ -133946,7 +134334,8 @@
                       "description": "Whether members can create projects"
                     },
                     "allowSuperuserAccess": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether Sentry superusers can access the organization"
                     }
                   },
                   "required": [
@@ -134223,7 +134612,8 @@
                 "slug",
                 "teamRole"
               ]
-            }
+            },
+            "description": "Active teams of the organization"
           },
           "projects": {
             "type": "array",
@@ -134527,7 +134917,8 @@
                 "team",
                 "teams"
               ]
-            }
+            },
+            "description": "Active projects of the organization"
           }
         },
         "required": [
@@ -143450,13 +143841,15 @@
                 "additionalProperties": {
                   "type": "object",
                   "additionalProperties": {}
-                }
+                },
+                "description": "Server-wide options that the Sentry UI reads"
               },
               "access": {
                 "type": "array",
                 "items": {
                   "type": "string"
-                }
+                },
+                "description": "Scopes the requesting user has in the organization"
               },
               "onboardingTasks": {
                 "type": "array",
@@ -143465,21 +143858,27 @@
                   "properties": {
                     "task": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Onboarding task key, such as create_project"
                     },
                     "status": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Task status: complete or skipped"
                     },
                     "completionSeen": {
                       "type": "string",
                       "format": "date-time",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "When the task's completion was marked as seen, or null"
                     },
                     "dateCompleted": {
                       "type": "string",
-                      "format": "date-time"
+                      "format": "date-time",
+                      "description": "When the task was completed or skipped"
                     },
-                    "data": {}
+                    "data": {
+                      "description": "Extra data recorded for the task, which depends on the task"
+                    }
                   },
                   "required": [
                     "completionSeen",
@@ -143488,22 +143887,27 @@
                     "status",
                     "task"
                   ]
-                }
+                },
+                "description": "Onboarding tasks the organization has completed or skipped"
               },
               "id": {
-                "type": "string"
+                "type": "string",
+                "description": "Organization ID"
               },
               "slug": {
-                "type": "string"
+                "type": "string",
+                "description": "Organization slug"
               },
               "status": {
                 "type": "object",
                 "properties": {
                   "id": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Status ID: active, pending_deletion, deletion_in_progress or relocation_pending_approval"
                   },
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Status label, such as active or pending deletion"
                   }
                 },
                 "required": [
@@ -143513,7 +143917,8 @@
                 "description": "Organization status"
               },
               "name": {
-                "type": "string"
+                "type": "string",
+                "description": "Organization name, or its slug when it has no name"
               },
               "dateCreated": {
                 "type": "string",
@@ -143549,10 +143954,12 @@
                 "type": "object",
                 "properties": {
                   "organizationUrl": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Base URL of the organization"
                   },
                   "regionUrl": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Base URL of the API for the organization's region"
                   }
                 },
                 "required": [
@@ -143574,7 +143981,8 @@
                 "description": "Whether members can create projects"
               },
               "allowSuperuserAccess": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether Sentry superusers can access the organization"
               }
             },
             "required": [
