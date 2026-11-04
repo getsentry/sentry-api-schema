@@ -8,6 +8,11 @@ describe("validator descriptions", () => {
     expect(v.getDescription(vDeployResponse.entries.id)).toEqual(expect.any(String));
   });
 
+  test("nullable fields keep their description inside the nullable wrapper", () => {
+    expect(v.getDescription(vDeployResponse.entries.name.wrapped)).toEqual(expect.any(String));
+    expect(zDeployResponse.shape.name.unwrap().description).toEqual(expect.any(String));
+  });
+
   test("Valibot top-level schemas stay unpiped for object methods", () => {
     expect("pipe" in vDeployResponse).toBe(false);
     expect(v.partial(vDeployResponse).entries.id.type).toBe("optional");
