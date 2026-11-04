@@ -6473,6 +6473,16 @@
                     "nullable": true,
                     "description": "Permissions that restrict users from editing dashboards"
                   },
+                  "query_priority": {
+                    "enum": [
+                      "normal",
+                      "faster",
+                      null
+                    ],
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The query priority\n\n* `normal`\n* `faster`"
+                  },
                   "is_favorited": {
                     "type": "boolean",
                     "default": false,
@@ -6880,6 +6890,9 @@
                     "prebuiltId": {
                       "type": "integer",
                       "nullable": true
+                    },
+                    "queryPriority": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -6891,6 +6904,7 @@
                     "permissions",
                     "prebuiltId",
                     "projects",
+                    "queryPriority",
                     "title",
                     "widgets"
                   ]
@@ -7004,7 +7018,8 @@
                         "teamsWithEditAccess": []
                       },
                       "isFavorited": false,
-                      "prebuiltId": null
+                      "prebuiltId": null,
+                      "queryPriority": "normal"
                     },
                     "summary": "Create Dashboard"
                   }
@@ -7453,6 +7468,9 @@
                     "prebuiltId": {
                       "type": "integer",
                       "nullable": true
+                    },
+                    "queryPriority": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -7464,6 +7482,7 @@
                     "permissions",
                     "prebuiltId",
                     "projects",
+                    "queryPriority",
                     "title",
                     "widgets"
                   ]
@@ -7577,7 +7596,8 @@
                         "teamsWithEditAccess": []
                       },
                       "isFavorited": false,
-                      "prebuiltId": null
+                      "prebuiltId": null,
+                      "queryPriority": "normal"
                     },
                     "summary": "Dashboard GET response"
                   }
@@ -7942,6 +7962,16 @@
                     ],
                     "nullable": true,
                     "description": "Permissions that restrict users from editing dashboards"
+                  },
+                  "query_priority": {
+                    "enum": [
+                      "normal",
+                      "faster",
+                      null
+                    ],
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The query priority\n\n* `normal`\n* `faster`"
                   }
                 }
               }
@@ -8341,6 +8371,9 @@
                     "prebuiltId": {
                       "type": "integer",
                       "nullable": true
+                    },
+                    "queryPriority": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -8352,6 +8385,7 @@
                     "permissions",
                     "prebuiltId",
                     "projects",
+                    "queryPriority",
                     "title",
                     "widgets"
                   ]
@@ -8465,7 +8499,8 @@
                         "teamsWithEditAccess": []
                       },
                       "isFavorited": false,
-                      "prebuiltId": null
+                      "prebuiltId": null,
+                      "queryPriority": "normal"
                     },
                     "summary": "Dashboard PUT response"
                   }
@@ -55816,11 +55851,11 @@
                                         "type": "string",
                                         "description": "The priority of the opsgenie action",
                                         "enum": [
-                                          "P2",
+                                          "P5",
                                           "P3",
                                           "P4",
-                                          "P5",
-                                          "P1"
+                                          "P1",
+                                          "P2"
                                         ]
                                       }
                                     }
@@ -61141,11 +61176,11 @@
                                         "type": "string",
                                         "description": "The priority of the opsgenie action",
                                         "enum": [
-                                          "P2",
+                                          "P5",
                                           "P3",
                                           "P4",
-                                          "P5",
-                                          "P1"
+                                          "P1",
+                                          "P2"
                                         ]
                                       }
                                     }
@@ -101617,11 +101652,11 @@
                           "type": "string",
                           "description": "The priority of the opsgenie action",
                           "enum": [
-                            "P2",
+                            "P5",
                             "P3",
                             "P4",
-                            "P5",
-                            "P1"
+                            "P1",
+                            "P2"
                           ]
                         }
                       }
@@ -105307,6 +105342,16 @@
             "nullable": true,
             "description": "Permissions that restrict users from editing dashboards"
           },
+          "query_priority": {
+            "enum": [
+              "normal",
+              "faster",
+              null
+            ],
+            "type": "string",
+            "nullable": true,
+            "description": "The query priority\n\n* `normal`\n* `faster`"
+          },
           "is_favorited": {
             "type": "boolean",
             "default": false,
@@ -105890,6 +105935,16 @@
             ],
             "nullable": true,
             "description": "Permissions that restrict users from editing dashboards"
+          },
+          "query_priority": {
+            "enum": [
+              "normal",
+              "faster",
+              null
+            ],
+            "type": "string",
+            "nullable": true,
+            "description": "The query priority\n\n* `normal`\n* `faster`"
           }
         }
       },
@@ -106273,6 +106328,9 @@
           "prebuiltId": {
             "type": "integer",
             "nullable": true
+          },
+          "queryPriority": {
+            "type": "string"
           }
         },
         "required": [
@@ -106284,6 +106342,7 @@
           "permissions",
           "prebuiltId",
           "projects",
+          "queryPriority",
           "title",
           "widgets"
         ]
@@ -143964,11 +144023,11 @@
                     "type": "string",
                     "description": "The priority of the opsgenie action",
                     "enum": [
-                      "P2",
+                      "P5",
                       "P3",
                       "P4",
-                      "P5",
-                      "P1"
+                      "P1",
+                      "P2"
                     ]
                   }
                 }
@@ -147791,11 +147850,11 @@
                                 "type": "string",
                                 "description": "The priority of the opsgenie action",
                                 "enum": [
-                                  "P2",
+                                  "P5",
                                   "P3",
                                   "P4",
-                                  "P5",
-                                  "P1"
+                                  "P1",
+                                  "P2"
                                 ]
                               }
                             }
