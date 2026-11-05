@@ -93,6 +93,47 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
+describe("credential selection", () => {
+  it("passes the request URL and its org scope to the credential provider", async () => {
+    const { fetch } = scriptedFetch([Response.json([])]);
+    const current = vi.fn(() => credential);
+
+    await transport(fetch, { credentials: { current } }).request(
+      `${URL_BASE}/projects/acme/web/events/`,
+    );
+
+    expect(current).toHaveBeenCalledWith({
+      url: `${URL_BASE}/projects/acme/web/events/`,
+      scope: { organization: "acme", project: "web" },
+    });
+  });
+
+  it("omits the scope for an unscoped path", async () => {
+    const { fetch } = scriptedFetch([Response.json({})]);
+    const current = vi.fn(() => credential);
+
+    await transport(fetch, { credentials: { current } }).request(
+      `${URL_BASE}/users/me/`,
+    );
+
+    expect(current).toHaveBeenCalledWith({ url: `${URL_BASE}/users/me/` });
+  });
+
+  it("sends the credential the provider picked for the org", async () => {
+    const { fetch, sent } = scriptedFetch([Response.json([])]);
+    const other: TransportCredential = { token: "token-b", identity: "id-b" };
+
+    await transport(fetch, {
+      credentials: {
+        current: ({ scope }) =>
+          scope?.organization === "acme" ? other : credential,
+      },
+    }).request(ISSUES_URL);
+
+    expect(sent[0]?.headers.get("Authorization")).toBe("Bearer token-b");
+  });
+});
+
 describe("retried statuses", () => {
   it("returns a deterministic 5xx without retrying", async () => {
     const { fetch, sent } = scriptedFetch([new Response("", { status: 501 })]);
