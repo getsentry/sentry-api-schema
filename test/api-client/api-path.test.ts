@@ -4,6 +4,7 @@ import {
   apiPath,
   buildSentryApiUrl,
   encodeApiPathSegment,
+  parseApiPathScope,
   withQuery,
 } from "../../src/api-client/api-path.ts";
 
@@ -162,5 +163,51 @@ describe("buildSentryApiUrl", () => {
     expect(buildSentryApiUrl("https://sentry.io", "issues/a%2Fb/")).toBe(
       "https://sentry.io/api/0/issues/a%2Fb/",
     );
+  });
+});
+
+describe("parseApiPathScope", () => {
+  it.each([
+    ["organizations/acme/issues/", { organization: "acme" }],
+    ["/api/0/organizations/acme/", { organization: "acme" }],
+    [
+      "organizations/acme/projects/web/keys/",
+      { organization: "acme", project: "web" },
+    ],
+    [
+      "projects/acme/web/events/?query=a",
+      { organization: "acme", project: "web" },
+    ],
+    ["projects/acme/", { organization: "acme" }],
+    ["teams/acme/backend/members/", { organization: "acme" }],
+    ["organizations/123/issues/", { organization: "123" }],
+    [
+      "https://us.sentry.io/api/0/projects/acme/web/",
+      { organization: "acme", project: "web" },
+    ],
+    [
+      "https://self-hosted.example/sentry/api/0/organizations/acme/",
+      { organization: "acme" },
+    ],
+  ])("reads the scope of %s", (input, expected) => {
+    expect(parseApiPathScope(input)).toEqual(expected);
+  });
+
+  it.each([
+    "organizations/",
+    "users/me/",
+    "issues/123/",
+    "organizations/{organization_id_or_slug}/issues/",
+    "organizations/a%2Fb/",
+    "organizations/../users/",
+    "https://sentry.io/organizations/acme/",
+  ])("finds no scope in %s", (input) => {
+    expect(parseApiPathScope(input)).toBeUndefined();
+  });
+
+  it("ignores a project segment that is not an identifier", () => {
+    expect(
+      parseApiPathScope("organizations/acme/projects/{project_id_or_slug}/"),
+    ).toEqual({ organization: "acme" });
   });
 });

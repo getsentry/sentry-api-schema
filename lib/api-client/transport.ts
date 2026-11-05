@@ -17,6 +17,7 @@ import {
   type RetryPolicy,
   sleep,
 } from "./retry.js";
+import { type ApiPathScope, parseApiPathScope } from "./api-path.js";
 import { sentryBearerHeader } from "./auth-token.js";
 import type { CacheLookup } from "./response-cache/policy.js";
 
@@ -29,9 +30,24 @@ export type TransportCredential = {
   identity: string;
 };
 
+/** The request a credential is chosen for; see {@link CredentialProvider.current}. */
+export type CredentialRequest = {
+  url: string;
+  /**
+   * The organization, and project when present, the URL path targets
+   * ({@link parseApiPathScope}). Absent for unscoped paths.
+   */
+  scope?: ApiPathScope;
+};
+
 export type CredentialProvider<C extends TransportCredential> = {
-  /** The credential for a new request, before any refresh. Cache lookups use it. */
-  current(): C | Promise<C>;
+  /**
+   * The credential for a new request, before any refresh. Cache lookups use
+   * it. A host with several logins can use `request.scope` to pick the one
+   * that can reach the organization. The URL is already built, so the
+   * credential must be valid for its origin.
+   */
+  current(request: CredentialRequest): C | Promise<C>;
   /** Called after a cache miss, before the first attempt, to refresh ahead of expiry. */
   prepare?(credential: C): Promise<C>;
   /** After a 401: the refreshed credential, or undefined when it cannot refresh. */
@@ -707,7 +723,7 @@ export function createApiTransport<C extends TransportCredential>(
       const startTime = performance.now();
       const elapsed = () => (performance.now() - startTime).toFixed(0);
       const credential = credentials
-        ? await credentials.current()
+        ? await credentials.current(credentialRequest(url))
         : (ANONYMOUS as C);
       // A cached response has no validated origin, so discovery always
       // goes to the network.
@@ -753,6 +769,11 @@ export function createApiTransport<C extends TransportCredential>(
   }
 
   return { request };
+}
+
+function credentialRequest(url: string): CredentialRequest {
+  const scope = parseApiPathScope(url);
+  return scope ? { url, scope } : { url };
 }
 
 /**
