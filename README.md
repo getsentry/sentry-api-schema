@@ -176,6 +176,29 @@ const sentry = createSentryClient(
 const { data, error } = await sentry.listOrganizations();
 ```
 
+### Routing requests by organization
+
+Set `resolveBaseUrl` to pick each request's base URL from its path before the
+URL is built, such as the region that serves the organization. It receives the
+configured `baseUrl` (`''` when unset), the path and query that follow it, and
+the organization and project the path targets (`parseApiPathScope` from
+`@sentry/api/client`; absent for unscoped paths). Its result replaces `baseUrl`
+for that request only; trailing slashes are removed.
+
+```ts
+const sentry = createSentryClient({
+  baseUrl: "https://sentry.io",
+  resolveBaseUrl: async ({ baseUrl, scope }) =>
+    scope ? await regionUrlFor(scope.organization) : baseUrl,
+});
+// Sent to the organization's region, such as https://us.sentry.io.
+await sentry.listOrganizationIssues({ path: { organization_id_or_slug: "acme" } });
+```
+
+It runs once per request, including `prepareRequest`, after `requestValidator`
+and before request interceptors. A per-call `resolveBaseUrl` replaces the
+configured one. A throw rejects the request unchanged, before `fetch` is called.
+
 ### Preparing a raw request
 
 Use `sentry.client.prepareRequest` when a consumer needs to inspect a request
