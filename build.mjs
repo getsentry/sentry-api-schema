@@ -83,6 +83,7 @@ cpSync("lib/api-client", "src/api-client", { recursive: true });
 // Keep the pinned Fetch generator's runtime and types aligned with our contract.
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-response-contract.mjs"))}`, { stdio: "inherit" });
 execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-request-preparation.mjs"))}`, { stdio: "inherit" });
+execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-base-url-resolver.mjs"))}`, { stdio: "inherit" });
 
 // 3. Generate operation helpers and the bound client from the SDK output.
 //    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
@@ -120,7 +121,7 @@ appendFileSync(
     "export * from './pagination.gen.ts';",
     "export { createSentryClient } from './sentry-client.gen.ts';",
     "export type { SentryClient } from './sentry-client.gen.ts';",
-    "export type { Config } from './client/index.ts';",
+    "export type { BaseUrlRequest, BaseUrlResolver, Config } from './client/index.ts';",
     "",
   ].join("\n"),
 );
