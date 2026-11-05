@@ -21086,24 +21086,28 @@
                         ]
                       },
                       "owners": {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string"
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "owner": {
+                              "type": "string"
+                            },
+                            "date_added": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
                           },
-                          "owner": {
-                            "type": "string"
-                          },
-                          "date_added": {
-                            "type": "string",
-                            "format": "date-time"
-                          }
+                          "required": [
+                            "date_added",
+                            "owner",
+                            "type"
+                          ]
                         },
-                        "required": [
-                          "date_added",
-                          "owner",
-                          "type"
-                        ]
+                        "nullable": true
                       },
                       "integrationIssues": {
                         "type": "array",
@@ -21325,11 +21329,18 @@
                         },
                         "priority": "medium",
                         "priorityLockedAt": null,
-                        "owners": {
-                          "type": "user",
-                          "owner": "1",
-                          "date_added": "2018-11-06T21:19:55Z"
-                        },
+                        "owners": [
+                          {
+                            "type": "ownershipRule",
+                            "owner": "user:1",
+                            "date_added": "2018-11-06T21:19:55Z"
+                          },
+                          {
+                            "type": "suspectCommit",
+                            "owner": "team:2",
+                            "date_added": "2018-11-06T21:19:55Z"
+                          }
+                        ],
                         "platform": "python",
                         "lifetime": {
                           "count": "150",
@@ -93792,7 +93803,7 @@
     "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/": {
       "get": {
         "operationId": "getOrganizationIssue",
-        "description": "Return details on an individual issue, including its basic stats, comment\nand user-report counts, and a summary of the latest event.",
+        "description": "Return details on an individual issue, including its basic stats, comment count, and\nuser-report count.",
         "summary": "Retrieve an Issue",
         "parameters": [
           {
@@ -132479,24 +132490,28 @@
               ]
             },
             "owners": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "owner": {
+                    "type": "string"
+                  },
+                  "date_added": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
                 },
-                "owner": {
-                  "type": "string"
-                },
-                "date_added": {
-                  "type": "string",
-                  "format": "date-time"
-                }
+                "required": [
+                  "date_added",
+                  "owner",
+                  "type"
+                ]
               },
-              "required": [
-                "date_added",
-                "owner",
-                "type"
-              ]
+              "nullable": true
             },
             "integrationIssues": {
               "type": "array",
