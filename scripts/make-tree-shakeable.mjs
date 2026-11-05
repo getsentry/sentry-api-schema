@@ -12,16 +12,10 @@
  *
  * Each step fails closed so generator upgrades cannot silently undo it.
  */
-import { readFileSync, writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import ts from "typescript";
+import { replaceOnce, update } from "../lib/generated-source.mjs";
 
 const PURE = "/* @__PURE__ */ ";
-
-function update(name, transform) {
-  const path = fileURLToPath(new URL(`../src/${name}`, import.meta.url));
-  writeFileSync(path, transform(readFileSync(path, "utf8"), name));
-}
 
 function rootIdentifier(expression) {
   while (
@@ -87,16 +81,15 @@ function annotateSchemaCalls(namespace) {
   };
 }
 
-update("valibot.gen.ts", annotateSchemaCalls("v"));
-update("zod.gen.ts", annotateSchemaCalls("z"));
+export function emit() {
+  update("valibot.gen.ts", annotateSchemaCalls("v"));
+  update("zod.gen.ts", annotateSchemaCalls("z"));
 
-update("client.gen.ts", source => {
-  const replacements = [
-    [
+  update("client.gen.ts", source => {
+    source = replaceOnce(source,
       "import { type Client, type ClientOptions, type Config, createClient, createConfig } from './client';",
-      "import { type ClientOptions, type Config, createClient, createConfig, type PreparedClient } from './client';",
-    ],
-    [
+      "import { type ClientOptions, type Config, createClient, createConfig, type PreparedClient } from './client';");
+    return replaceOnce(source,
       "export const client: Client = createClient(createConfig<ClientOptions2>());",
       `let defaultClient: PreparedClient | undefined;
 
@@ -106,14 +99,6 @@ update("client.gen.ts", source => {
  */
 export const client: PreparedClient = ${PURE}new Proxy({} as PreparedClient, {
   get: (_target, key) => Reflect.get((defaultClient ??= createClient(createConfig<ClientOptions2>())), key),
-});`,
-    ],
-  ];
-  for (const [before, after] of replacements) {
-    if (source.split(before).length !== 2) {
-      throw new Error(`client.gen.ts changed: expected one match: ${before}`);
-    }
-    source = source.replace(before, () => after);
-  }
-  return source;
-});
+});`);
+  });
+}

@@ -1,23 +1,11 @@
 /** Let hosts pick each request's base URL from its path before the Fetch client builds the URL. */
-import { readFileSync, writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { replaceOnce, update } from "../lib/generated-source.mjs";
 
-function replaceOnce(source, before, after) {
-  if (source.split(before).length !== 2) {
-    throw new Error(`Fetch generator changed: expected one match: ${before}`);
-  }
-  return source.replace(before, () => after);
-}
-
-function update(name, transform) {
-  const path = fileURLToPath(new URL(`../src/${name}`, import.meta.url));
-  writeFileSync(path, transform(readFileSync(path, "utf8")));
-}
-
-update("client/types.gen.ts", source => {
-  source = replaceOnce(source,
-    "import type { Middleware } from './utils.gen';",
-    `import type { Middleware } from './utils.gen';
+export function emit() {
+  update("client/types.gen.ts", source => {
+    source = replaceOnce(source,
+      "import type { Middleware } from './utils.gen';",
+      `import type { Middleware } from './utils.gen';
 import type { ApiPathScope } from '../api-client/api-path-scope';
 
 /** The request a base URL is picked for; see {@link Config.resolveBaseUrl}. */
@@ -35,11 +23,11 @@ export type BaseUrlRequest = {
 
 /** Picks the base URL for one request; see {@link Config.resolveBaseUrl}. */
 export type BaseUrlResolver = (request: BaseUrlRequest) => string | Promise<string>;`);
-  return replaceOnce(source,
-    `  fetch?: typeof fetch;
+    return replaceOnce(source,
+      `  fetch?: typeof fetch;
   /**
    * Please don't use the Fetch client`,
-    `  fetch?: typeof fetch;
+      `  fetch?: typeof fetch;
   /**
    * Pick the base URL for each request, before its URL is built, such as the
    * region that serves the organization the path targets. Called once per
@@ -49,16 +37,16 @@ export type BaseUrlResolver = (request: BaseUrlRequest) => string | Promise<stri
   resolveBaseUrl?: BaseUrlResolver;
   /**
    * Please don't use the Fetch client`);
-});
+  });
 
-update("client/client.gen.ts", source => {
-  source = replaceOnce(source,
-    "import type { Client, Config, RequestOptions, ResolvedRequestOptions } from './types.gen';",
-    `import { parseApiPathScope } from '../api-client/api-path-scope';
+  update("client/client.gen.ts", source => {
+    source = replaceOnce(source,
+      "import type { Client, Config, RequestOptions, ResolvedRequestOptions } from './types.gen';",
+      `import { parseApiPathScope } from '../api-client/api-path-scope';
 import type { BaseUrlResolver, Client, Config, RequestOptions, ResolvedRequestOptions } from './types.gen';`);
-  source = replaceOnce(source,
-    "export const createClient = (config: Config = {}): PreparedClient => {",
-    `/** The base URL \`resolve\` picks for a request to \`url\`, without trailing slashes. */
+    source = replaceOnce(source,
+      "export const createClient = (config: Config = {}): PreparedClient => {",
+      `/** The base URL \`resolve\` picks for a request to \`url\`, without trailing slashes. */
 const resolveBaseUrl = async (
   resolve: BaseUrlResolver,
   baseUrl: string,
@@ -74,9 +62,9 @@ const resolveBaseUrl = async (
 };
 
 export const createClient = (config: Config = {}): PreparedClient => {`);
-  return replaceOnce(source,
-    "    const url = buildUrl(resolvedOpts);\n",
-    `    if (resolvedOpts.resolveBaseUrl) {
+    return replaceOnce(source,
+      "    const url = buildUrl(resolvedOpts);\n",
+      `    if (resolvedOpts.resolveBaseUrl) {
       resolvedOpts.baseUrl = await resolveBaseUrl(
         resolvedOpts.resolveBaseUrl,
         (resolvedOpts.baseUrl as string | undefined) ?? '',
@@ -85,9 +73,10 @@ export const createClient = (config: Config = {}): PreparedClient => {`);
     }
     const url = buildUrl(resolvedOpts);
 `);
-});
+  });
 
-update("client/index.ts", source => replaceOnce(source,
-  "export type {\n  Client,",
-  "export type {\n  BaseUrlRequest,\n  BaseUrlResolver,\n  Client,",
-));
+  update("client/index.ts", source => replaceOnce(source,
+    "export type {\n  Client,",
+    "export type {\n  BaseUrlRequest,\n  BaseUrlResolver,\n  Client,",
+  ));
+}
