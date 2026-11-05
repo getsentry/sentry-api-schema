@@ -1,3 +1,9 @@
+## 1.29.1
+
+### Internal Changes
+
+- Run the build steps in one process by @BYK with @sentry-junior in [#131](https://github.com/getsentry/sentry-api-schema/pull/131)
+
 ## 1.29.0
 
 ### New Features
