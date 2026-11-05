@@ -1,12 +1,8 @@
 import { createClient } from "@hey-api/openapi-ts";
 import { build } from "esbuild";
-import { cpSync, appendFileSync, writeFileSync } from "node:fs";
+import { cpSync, appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
 import { normalizeSpec } from "./lib/normalize-spec.mjs";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /**
  * Hey API attaches descriptions only to typed schemas, not to unions, so an
@@ -54,7 +50,7 @@ const validatorOptions = {
 //     of the source spec. The source spec is never modified.
 //     OperationIds that are already identifiers (no spaces) are left untouched —
 //     those were set intentionally via @extend_schema(operation_id=...).
-normalizeSpec("./openapi-derefed.json", "./openapi-normalized.json");
+const normalizedSpec = normalizeSpec("./openapi-derefed.json", "./openapi-normalized.json");
 
 // 1. Generate TypeScript client from OpenAPI spec, including optional
 //    Valibot and Zod schemas.
@@ -80,31 +76,38 @@ cpSync("lib/browser-client.ts", "src/browser-client.ts");
 cpSync("lib/source-analysis.ts", "src/source-analysis.ts");
 cpSync("lib/api-client", "src/api-client", { recursive: true });
 
-// Keep the pinned Fetch generator's runtime and types aligned with our contract.
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-response-contract.mjs"))}`, { stdio: "inherit" });
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-request-preparation.mjs"))}`, { stdio: "inherit" });
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-base-url-resolver.mjs"))}`, { stdio: "inherit" });
-
-// 3. Generate operation helpers and the bound client from the SDK output.
-//    This post-processor inspects src/sdk.gen.ts and openapi-derefed.json,
-//    detects every operation that accepts a `cursor` query parameter, and
-//    emits typed fetchPage / paginateAll / paginateUpTo wrappers for each.
-//    Done as a post-processor (not a Hey API plugin) because the plugin API
-//    is documented as in-development and unstable.
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-pagination.mjs"))}`, { stdio: "inherit" });
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-error-results.mjs"))}`, { stdio: "inherit" });
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-query-enum-types.mjs"))}`, { stdio: "inherit" });
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "constrain-throw-options.mjs"))}`, { stdio: "inherit" });
-// Client-side query defaults (lib/query-defaults.mjs) go into the operations
-// themselves, so bound methods and generated wrappers inherit them.
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "apply-query-defaults.mjs"))}`, { stdio: "inherit" });
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-client.mjs"))}`, { stdio: "inherit" });
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "generate-operations.mjs"))}`, { stdio: "inherit" });
-// Use Valibot's description action for the descriptions, which getDescription reads.
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "describe-valibot-schemas.mjs"))}`, { stdio: "inherit" });
-// Annotate schema constructors as pure and defer the default client so bundlers
-// can drop unused exports and importing the package does no eager work.
-execSync(`node ${JSON.stringify(join(__dirname, "scripts", "make-tree-shakeable.mjs"))}`, { stdio: "inherit" });
+// 3. Patch the generated output and generate the rest from it, in this order,
+//    in this process. Each step is a module in scripts/ whose `emit` does the
+//    work; they share the parsed specs and lib/generated-source.mjs.
+//    The generators are post-processors, not Hey API plugins, because the
+//    plugin API is documented as in-development and unstable.
+const sourceSpec = JSON.parse(readFileSync("./openapi-derefed.json", "utf8"));
+const steps = [
+  // Keep the pinned Fetch generator's runtime and types aligned with our contract.
+  "generate-response-contract",
+  "generate-request-preparation",
+  "generate-base-url-resolver",
+  // Typed fetchPage / paginateAll / paginateUpTo wrappers for every operation
+  // that accepts a `cursor` query parameter.
+  "generate-pagination",
+  "generate-error-results",
+  "generate-query-enum-types",
+  "constrain-throw-options",
+  // Client-side query defaults (lib/query-defaults.mjs) go into the operations
+  // themselves, so bound methods and generated wrappers inherit them.
+  "apply-query-defaults",
+  "generate-client",
+  "generate-operations",
+  // Use Valibot's description action for the descriptions, which getDescription reads.
+  "describe-valibot-schemas",
+  // Annotate schema constructors as pure and defer the default client so bundlers
+  // can drop unused exports and importing the package does no eager work.
+  "make-tree-shakeable",
+];
+for (const name of steps) {
+  const { emit } = await import(`./scripts/${name}.mjs`);
+  emit({ normalizedSpec, sourceSpec });
+}
 
 // 4. Append re-exports to the generated index.ts so the pagination
 //    utilities and the per-operation wrappers are part of the public API.

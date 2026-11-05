@@ -2,27 +2,12 @@
  * Adapt the pinned Fetch generator to the public SDK's fields/error contract.
  * Each replacement fails closed so generator upgrades cannot silently discard it.
  */
-import { readFileSync, writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { replaceOnce, update } from "../lib/generated-source.mjs";
 
-function replaceOnce(source, before, after) {
-  const matches = typeof before === "string"
-    ? source.split(before).length - 1
-    : [...source.matchAll(new RegExp(before.source, "g"))].length;
-  if (matches !== 1) {
-    throw new Error(`Fetch generator changed: expected one match, got ${matches}: ${before}`);
-  }
-  return source.replace(before, () => after);
-}
-
-function update(name, transform) {
-  const path = fileURLToPath(new URL(`../src/client/${name}.gen.ts`, import.meta.url));
-  writeFileSync(path, transform(readFileSync(path, "utf8")));
-}
-
-update("client", source => {
-  source = replaceOnce(source, "import { createSseClient }", "import { SentryApiError } from '../sentry-errors';\n\nimport { createSseClient }");
-  source = replaceOnce(source, "export const createClient = (config: Config = {}): Client => {", `// Reject unsupported configuration instead of changing its meaning at runtime.
+export function emit() {
+  update("client/client.gen.ts", source => {
+    source = replaceOnce(source, "import { createSseClient }", "import { SentryApiError } from '../sentry-errors';\n\nimport { createSseClient }");
+    source = replaceOnce(source, "export const createClient = (config: Config = {}): Client => {", `// Reject unsupported configuration instead of changing its meaning at runtime.
 const assertFields = (config: { responseStyle?: unknown }): void => {
   if (config.responseStyle !== undefined && config.responseStyle !== 'fields') {
     throw new TypeError('@sentry/api only supports responseStyle: "fields". Read result.data instead.');
@@ -31,21 +16,21 @@ const assertFields = (config: { responseStyle?: unknown }): void => {
 
 export const createClient = (config: Config = {}): Client => {
   assertFields(config);`);
-  source = replaceOnce(source, "  const setConfig = (config: Config): Config => {", "  const setConfig = (config: Config): Config => {\n    assertFields(config);");
-  source = replaceOnce(source, "TResponseStyle extends 'data' | 'fields' = 'fields'", "TResponseStyle extends 'fields' = 'fields'");
-  source = replaceOnce(source, "    options: RequestOptions<TData, TResponseStyle, ThrowOnError, Url>,\n  ) => {", "    options: RequestOptions<TData, TResponseStyle, ThrowOnError, Url>,\n  ) => {\n    assertFields(options);");
+    source = replaceOnce(source, "  const setConfig = (config: Config): Config => {", "  const setConfig = (config: Config): Config => {\n    assertFields(config);");
+    source = replaceOnce(source, "TResponseStyle extends 'data' | 'fields' = 'fields'", "TResponseStyle extends 'fields' = 'fields'");
+    source = replaceOnce(source, "    options: RequestOptions<TData, TResponseStyle, ThrowOnError, Url>,\n  ) => {", "    options: RequestOptions<TData, TResponseStyle, ThrowOnError, Url>,\n  ) => {\n    assertFields(options);");
 
-  // 0.97 catches preparation, interceptors and decoding as well as fetch. Keep
-  // our existing contract: only dispatch failures enter the network-error path.
-  const requestPattern = /  const request: Client\['request'\] = async \(options\) => \{[\s\S]*?\n  \};/;
-  const request = source.match(requestPattern)?.[0];
-  const body = request?.match(/    try \{\n([\s\S]*?)\n    \} catch \(error\) \{/)?.[1];
-  if (!body) throw new Error("Fetch generator changed: request try/catch not found");
-  source = replaceOnce(source, requestPattern,
-    "  // The public Client signature applies operation-specific data and throw types.\n  const request = async (options: RequestOptions) => {\n"
-    + body.replace(/^  /gm, "") + "\n  };");
-  source = replaceOnce(source, "    request = new Request(url, requestInit);", "    let request = new Request(url, requestInit);");
-  source = replaceOnce(source, "    response = await _fetch(request);", `    let response: Response;
+    // 0.97 catches preparation, interceptors and decoding as well as fetch. Keep
+    // our existing contract: only dispatch failures enter the network-error path.
+    const requestPattern = /  const request: Client\['request'\] = async \(options\) => \{[\s\S]*?\n  \};/;
+    const request = source.match(requestPattern)?.[0];
+    const body = request?.match(/    try \{\n([\s\S]*?)\n    \} catch \(error\) \{/)?.[1];
+    if (!body) throw new Error("Fetch generator changed: request try/catch not found");
+    source = replaceOnce(source, requestPattern,
+      "  // The public Client signature applies operation-specific data and throw types.\n  const request = async (options: RequestOptions) => {\n"
+      + body.replace(/^  /gm, "") + "\n  };");
+    source = replaceOnce(source, "    request = new Request(url, requestInit);", "    let request = new Request(url, requestInit);");
+    source = replaceOnce(source, "    response = await _fetch(request);", `    let response: Response;
     try {
       // Check the final intercepted Request, preserving the fetch-error contract.
       request.signal.throwIfAborted();
@@ -58,25 +43,25 @@ export const createClient = (config: Config = {}): Client => {
       if (opts.throwOnError) throw finalError;
       return { error: finalError, request, response: undefined };
     }`);
-  source = replaceOnce(source, `        return opts.responseStyle === 'data'
+    source = replaceOnce(source, `        return opts.responseStyle === 'data'
           ? emptyData
           : {
               data: emptyData,
               ...result,
             };`, `        return { data: emptyData, ...result };`);
-  source = replaceOnce(source, `          return opts.responseStyle === 'data'
+    source = replaceOnce(source, `          return opts.responseStyle === 'data'
             ? response.body
             : {
                 data: response.body,
                 ...result,
               };`, `          return { data: response.body, ...result };`);
-  source = replaceOnce(source, `      return opts.responseStyle === 'data'
+    source = replaceOnce(source, `      return opts.responseStyle === 'data'
         ? data
         : {
             data,
             ...result,
           };`, `      return { data, ...result };`);
-  source = replaceOnce(source, `    let jsonError: unknown;
+    source = replaceOnce(source, `    let jsonError: unknown;
 
     try {
       jsonError = JSON.parse(textError);
@@ -101,19 +86,19 @@ export const createClient = (config: Config = {}): Client => {
     }
     if (opts.throwOnError) throw finalError;
     return { error: finalError, ...result };`);
-  return source;
-});
+    return source;
+  });
 
-update("types", source => {
-  source = replaceOnce(source, "import type { Auth }", "import type { SdkResult } from '../sentry-errors';\n\nimport type { Auth }");
-  source = replaceOnce(source, "export type ResponseStyle = 'data' | 'fields';", "export type ResponseStyle = 'fields';");
-  source = replaceOnce(source, "Should we return only data or multiple fields (data, error, response, etc.)?", "Responses always include fields (data or error, request, response).");
-  // The stream and its onSseEvent callback must share the caller's data type.
-  source = replaceOnce(source,
-    "options: Omit<RequestOptions<never, TResponseStyle, ThrowOnError>, 'method'>,",
-    "options: Omit<RequestOptions<TData, TResponseStyle, ThrowOnError>, 'method'>,",
-  );
-  return replaceOnce(source, /export type RequestResult<[\s\S]*?(?=\nexport interface ClientOptions)/, `export type RequestResult<
+  update("client/types.gen.ts", source => {
+    source = replaceOnce(source, "import type { Auth }", "import type { SdkResult } from '../sentry-errors';\n\nimport type { Auth }");
+    source = replaceOnce(source, "export type ResponseStyle = 'data' | 'fields';", "export type ResponseStyle = 'fields';");
+    source = replaceOnce(source, "Should we return only data or multiple fields (data, error, response, etc.)?", "Responses always include fields (data or error, request, response).");
+    // The stream and its onSseEvent callback must share the caller's data type.
+    source = replaceOnce(source,
+      "options: Omit<RequestOptions<never, TResponseStyle, ThrowOnError>, 'method'>,",
+      "options: Omit<RequestOptions<TData, TResponseStyle, ThrowOnError>, 'method'>,",
+    );
+    return replaceOnce(source, /export type RequestResult<[\s\S]*?(?=\nexport interface ClientOptions)/, `export type RequestResult<
   TData = unknown,
   TError = unknown,
   ThrowOnError extends boolean = boolean,
@@ -126,9 +111,10 @@ update("types", source => {
     }
   : SdkResult<TData extends Record<string, unknown> ? TData[keyof TData] : TData>>;
 `);
-});
+  });
 
-update("utils", source => replaceOnce(source,
-  "  /** request may be undefined, because error may be from building the request object itself */\n  request: Req | undefined,",
-  "  request: Req,",
-));
+  update("client/utils.gen.ts", source => replaceOnce(source,
+    "  /** request may be undefined, because error may be from building the request object itself */\n  request: Req | undefined,",
+    "  request: Req,",
+  ));
+}

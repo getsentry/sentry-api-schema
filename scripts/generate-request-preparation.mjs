@@ -1,35 +1,23 @@
 /** Expose the pinned Fetch client's own preparation without dispatching a request. */
-import { readFileSync, writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { replaceOnce, update } from "../lib/generated-source.mjs";
 
-function replaceOnce(source, before, after) {
-  if (source.split(before).length !== 2) {
-    throw new Error(`Fetch generator changed: expected one match: ${before}`);
-  }
-  return source.replace(before, () => after);
-}
-
-function update(name, transform) {
-  const path = fileURLToPath(new URL(`../src/${name}`, import.meta.url));
-  writeFileSync(path, transform(readFileSync(path, "utf8")));
-}
-
-update("client/client.gen.ts", source => {
-  source = replaceOnce(source,
-    "export const createClient = (config: Config = {}): Client => {",
-    `/** The concrete SDK transport adds preparation without requiring it from custom Clients. */
+export function emit() {
+  update("client/client.gen.ts", source => {
+    source = replaceOnce(source,
+      "export const createClient = (config: Config = {}): Client => {",
+      `/** The concrete SDK transport adds preparation without requiring it from custom Clients. */
 export type PreparedClient = Client & {
   /** Prepare a native Request using configured auth, serializers and request interceptors, without calling fetch. */
   prepareRequest(options: RequestOptions & Pick<Required<RequestOptions>, 'method'>): Promise<Request>;
 };
 
 export const createClient = (config: Config = {}): PreparedClient => {`);
-  source = replaceOnce(source,
-    "  // The public Client signature applies operation-specific data and throw types.\n  const request = async (options: RequestOptions) => {",
-    "  const prepare = async (options: RequestOptions) => {");
-  source = replaceOnce(source,
-    "    // fetch must be assigned here, otherwise it would throw the error:",
-    `    return { request, opts };
+    source = replaceOnce(source,
+      "  // The public Client signature applies operation-specific data and throw types.\n  const request = async (options: RequestOptions) => {",
+      "  const prepare = async (options: RequestOptions) => {");
+    source = replaceOnce(source,
+      "    // fetch must be assigned here, otherwise it would throw the error:",
+      `    return { request, opts };
   };
 
   const prepareRequest = async (options: RequestOptions): Promise<Request> =>
@@ -40,23 +28,23 @@ export const createClient = (config: Config = {}): PreparedClient => {`);
     const { request, opts } = await prepare(options);
 
     // fetch must be assigned here, otherwise it would throw the error:`);
-  source = replaceOnce(source, "    request,\n    setConfig,", "    request,\n    prepareRequest,\n    setConfig,");
-  return replaceOnce(source, "  } as Client;", "  } as PreparedClient;");
-});
+    source = replaceOnce(source, "    request,\n    setConfig,", "    request,\n    prepareRequest,\n    setConfig,");
+    return replaceOnce(source, "  } as Client;", "  } as PreparedClient;");
+  });
 
-update("client/index.ts", source => replaceOnce(source,
-  "export { createClient } from './client.gen';",
-  "export { createClient } from './client.gen';\nexport type { PreparedClient } from './client.gen';",
-));
+  update("client/index.ts", source => replaceOnce(source,
+    "export { createClient } from './client.gen';",
+    "export { createClient } from './client.gen';\nexport type { PreparedClient } from './client.gen';",
+  ));
 
-// Raw endpoints can already contain a query. Overlay explicitly serialized keys
-// without re-encoding unrelated values or a custom serializer's output.
-update("core/utils.gen.ts", source => replaceOnce(source,
-  `  if (search) {
+  // Raw endpoints can already contain a query. Overlay explicitly serialized keys
+  // without re-encoding unrelated values or a custom serializer's output.
+  update("core/utils.gen.ts", source => replaceOnce(source,
+    `  if (search) {
     url += \`?\${search}\`;
   }
   return url;`,
-  `  url = url.split('#', 1)[0]!;
+    `  url = url.split('#', 1)[0]!;
   const queryIndex = url.indexOf('?');
   const pathname = queryIndex === -1 ? url : url.slice(0, queryIndex);
   const existing = queryIndex === -1 ? '' : url.slice(queryIndex + 1);
@@ -71,4 +59,5 @@ update("core/utils.gen.ts", source => replaceOnce(source,
   });
   const combined = [...retained, search].filter(Boolean).join('&');
   return pathname + (combined ? \`?\${combined}\` : '');`,
-));
+  ));
+}
