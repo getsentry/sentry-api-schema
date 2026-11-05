@@ -1,3 +1,9 @@
+## 1.26.0
+
+### New Features
+
+- (client) Pass the request's org scope to CredentialProvider.current by @BYK with @sentry-junior in [#129](https://github.com/getsentry/sentry-api-schema/pull/129)
+
 ## 1.25.0
 
 ### Schema Updates
