@@ -1,3 +1,9 @@
+## 1.29.0
+
+### New Features
+
+- (client) Pick each request's base URL from its path with resolveBaseUrl by @BYK with @sentry-junior in [#130](https://github.com/getsentry/sentry-api-schema/pull/130)
+
 ## 1.28.0
 
 ### Schema Updates
