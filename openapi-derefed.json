@@ -22200,16 +22200,20 @@
                             "integrationId",
                             "provider"
                           ]
-                        }
+                        },
+                        "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
                       },
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Organization member ID"
                       },
                       "email": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Email address of the member's user, or the invited email address if they have no account yet"
                       },
                       "name": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Display name of the member's user, or their email address if they have no account yet"
                       },
                       "user": {
                         "type": "object",
@@ -22466,28 +22470,35 @@
                           "name",
                           "username"
                         ],
-                        "nullable": true
+                        "nullable": true,
+                        "description": "The member's user. Null for invited members without an account, or if the user can't be found"
                       },
                       "orgRole": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "ID of the member's organization role"
                       },
                       "pending": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
                       },
                       "expired": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "Whether the member's invite has expired"
                       },
                       "flags": {
                         "type": "object",
                         "properties": {
                           "idp:provisioned": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
                           },
                           "idp:role-restricted": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member's organization role is set by the identity provider through SCIM"
                           },
                           "sso:linked": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member has linked their account to the organization's SSO provider"
                           },
                           "sso:invalid": {
                             "type": "boolean"
@@ -22496,7 +22507,8 @@
                             "type": "boolean"
                           },
                           "partnership:restricted": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
                           }
                         },
                         "required": [
@@ -22506,19 +22518,23 @@
                           "partnership:restricted",
                           "sso:invalid",
                           "sso:linked"
-                        ]
+                        ],
+                        "description": "Member flags"
                       },
                       "dateCreated": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "description": "When the member was added or invited"
                       },
                       "inviteStatus": {
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
                       },
                       "inviterName": {
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "Name of the user who invited the member, or null"
                       }
                     },
                     "required": [
@@ -22772,16 +22788,20 @@
                           "integrationId",
                           "provider"
                         ]
-                      }
+                      },
+                      "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
                     },
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization member ID"
                     },
                     "email": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Email address of the member's user, or the invited email address if they have no account yet"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Display name of the member's user, or their email address if they have no account yet"
                     },
                     "user": {
                       "type": "object",
@@ -23038,28 +23058,35 @@
                         "name",
                         "username"
                       ],
-                      "nullable": true
+                      "nullable": true,
+                      "description": "The member's user. Null for invited members without an account, or if the user can't be found"
                     },
                     "orgRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "ID of the member's organization role"
                     },
                     "pending": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
                     },
                     "expired": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the member's invite has expired"
                     },
                     "flags": {
                       "type": "object",
                       "properties": {
                         "idp:provisioned": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
                         },
                         "idp:role-restricted": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member's organization role is set by the identity provider through SCIM"
                         },
                         "sso:linked": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member has linked their account to the organization's SSO provider"
                         },
                         "sso:invalid": {
                           "type": "boolean"
@@ -23068,7 +23095,8 @@
                           "type": "boolean"
                         },
                         "partnership:restricted": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
                         }
                       },
                       "required": [
@@ -23078,19 +23106,23 @@
                         "partnership:restricted",
                         "sso:invalid",
                         "sso:linked"
-                      ]
+                      ],
+                      "description": "Member flags"
                     },
                     "dateCreated": {
                       "type": "string",
-                      "format": "date-time"
+                      "format": "date-time",
+                      "description": "When the member was added or invited"
                     },
                     "inviteStatus": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
                     },
                     "inviterName": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Name of the user who invited the member, or null"
                     }
                   },
                   "required": [
@@ -23258,22 +23290,28 @@
                           "integrationId",
                           "provider"
                         ]
-                      }
+                      },
+                      "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
                     },
                     "role": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Deprecated. Use orgRole"
                     },
                     "roleName": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Deprecated. Name of the member's organization role"
                     },
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization member ID"
                     },
                     "email": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Email address of the member's user, or the invited email address if they have no account yet"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Display name of the member's user, or their email address if they have no account yet"
                     },
                     "user": {
                       "type": "object",
@@ -23530,28 +23568,35 @@
                         "name",
                         "username"
                       ],
-                      "nullable": true
+                      "nullable": true,
+                      "description": "The member's user. Null for invited members without an account, or if the user can't be found"
                     },
                     "orgRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "ID of the member's organization role"
                     },
                     "pending": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
                     },
                     "expired": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the member's invite has expired"
                     },
                     "flags": {
                       "type": "object",
                       "properties": {
                         "idp:provisioned": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
                         },
                         "idp:role-restricted": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member's organization role is set by the identity provider through SCIM"
                         },
                         "sso:linked": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member has linked their account to the organization's SSO provider"
                         },
                         "sso:invalid": {
                           "type": "boolean"
@@ -23560,7 +23605,8 @@
                           "type": "boolean"
                         },
                         "partnership:restricted": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
                         }
                       },
                       "required": [
@@ -23570,25 +23616,30 @@
                         "partnership:restricted",
                         "sso:invalid",
                         "sso:linked"
-                      ]
+                      ],
+                      "description": "Member flags"
                     },
                     "dateCreated": {
                       "type": "string",
-                      "format": "date-time"
+                      "format": "date-time",
+                      "description": "When the member was added or invited"
                     },
                     "inviteStatus": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
                     },
                     "inviterName": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Name of the user who invited the member, or null"
                     },
                     "teams": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Deprecated. Slugs of the active teams the member belongs to. Use teamRoles"
                     },
                     "teamRoles": {
                       "type": "array",
@@ -23596,25 +23647,29 @@
                         "type": "object",
                         "properties": {
                           "teamSlug": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Team slug"
                           },
                           "role": {
                             "type": "string",
-                            "nullable": true
+                            "nullable": true,
+                            "description": "ID of the member's team role, or null if the member has the minimum team role from their organization role"
                           }
                         },
                         "required": [
                           "role",
                           "teamSlug"
                         ]
-                      }
+                      },
+                      "description": "Active teams the member belongs to, with the member's role in each"
                     },
                     "invite_link": {
                       "type": "string",
                       "nullable": true
                     },
                     "isOnlyOwner": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the member is the only owner of the organization"
                     },
                     "orgRoleList": {
                       "type": "array",
@@ -23682,7 +23737,8 @@
                           "name",
                           "scopes"
                         ]
-                      }
+                      },
+                      "description": "Organization roles, with whether the requesting user can assign each one"
                     },
                     "teamRoleList": {
                       "type": "array",
@@ -23741,7 +23797,8 @@
                           "name",
                           "scopes"
                         ]
-                      }
+                      },
+                      "description": "Team roles available in the organization"
                     }
                   },
                   "required": [
@@ -24148,22 +24205,28 @@
                           "integrationId",
                           "provider"
                         ]
-                      }
+                      },
+                      "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
                     },
                     "role": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Deprecated. Use orgRole"
                     },
                     "roleName": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Deprecated. Name of the member's organization role"
                     },
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization member ID"
                     },
                     "email": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Email address of the member's user, or the invited email address if they have no account yet"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Display name of the member's user, or their email address if they have no account yet"
                     },
                     "user": {
                       "type": "object",
@@ -24420,28 +24483,35 @@
                         "name",
                         "username"
                       ],
-                      "nullable": true
+                      "nullable": true,
+                      "description": "The member's user. Null for invited members without an account, or if the user can't be found"
                     },
                     "orgRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "ID of the member's organization role"
                     },
                     "pending": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
                     },
                     "expired": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the member's invite has expired"
                     },
                     "flags": {
                       "type": "object",
                       "properties": {
                         "idp:provisioned": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
                         },
                         "idp:role-restricted": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member's organization role is set by the identity provider through SCIM"
                         },
                         "sso:linked": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member has linked their account to the organization's SSO provider"
                         },
                         "sso:invalid": {
                           "type": "boolean"
@@ -24450,7 +24520,8 @@
                           "type": "boolean"
                         },
                         "partnership:restricted": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
                         }
                       },
                       "required": [
@@ -24460,25 +24531,30 @@
                         "partnership:restricted",
                         "sso:invalid",
                         "sso:linked"
-                      ]
+                      ],
+                      "description": "Member flags"
                     },
                     "dateCreated": {
                       "type": "string",
-                      "format": "date-time"
+                      "format": "date-time",
+                      "description": "When the member was added or invited"
                     },
                     "inviteStatus": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
                     },
                     "inviterName": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Name of the user who invited the member, or null"
                     },
                     "teams": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "Deprecated. Slugs of the active teams the member belongs to. Use teamRoles"
                     },
                     "teamRoles": {
                       "type": "array",
@@ -24486,25 +24562,29 @@
                         "type": "object",
                         "properties": {
                           "teamSlug": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Team slug"
                           },
                           "role": {
                             "type": "string",
-                            "nullable": true
+                            "nullable": true,
+                            "description": "ID of the member's team role, or null if the member has the minimum team role from their organization role"
                           }
                         },
                         "required": [
                           "role",
                           "teamSlug"
                         ]
-                      }
+                      },
+                      "description": "Active teams the member belongs to, with the member's role in each"
                     },
                     "invite_link": {
                       "type": "string",
                       "nullable": true
                     },
                     "isOnlyOwner": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the member is the only owner of the organization"
                     },
                     "orgRoleList": {
                       "type": "array",
@@ -24572,7 +24652,8 @@
                           "name",
                           "scopes"
                         ]
-                      }
+                      },
+                      "description": "Organization roles, with whether the requesting user can assign each one"
                     },
                     "teamRoleList": {
                       "type": "array",
@@ -24631,7 +24712,8 @@
                           "name",
                           "scopes"
                         ]
-                      }
+                      },
+                      "description": "Team roles available in the organization"
                     }
                   },
                   "required": [
@@ -25267,14 +25349,16 @@
                   "type": "object",
                   "properties": {
                     "isActive": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the team membership is active. An inactive membership removes the team from the member's default list, but the member can rejoin without a request"
                     },
                     "teamRole": {
                       "enum": [
                         "contributor",
                         "admin"
                       ],
-                      "type": "string"
+                      "type": "string",
+                      "description": "ID of the member's team role"
                     }
                   },
                   "required": [
@@ -44934,7 +45018,8 @@
                             "type": "object",
                             "properties": {
                               "resourceType": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "SCIM resource type, such as User or Group"
                               }
                             },
                             "required": [
@@ -45097,7 +45182,8 @@
                       "type": "object",
                       "properties": {
                         "resourceType": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "SCIM resource type, such as User or Group"
                         }
                       },
                       "required": [
@@ -45233,7 +45319,8 @@
                       "type": "object",
                       "properties": {
                         "resourceType": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "SCIM resource type, such as User or Group"
                         }
                       },
                       "required": [
@@ -46247,34 +46334,41 @@
                         "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
                         "properties": {
                           "active": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Always true when included. Sentry doesn't use this field, but SCIM expects it"
                           },
                           "schemas": {
                             "type": "array",
                             "items": {
                               "type": "string"
-                            }
+                            },
+                            "description": "SCIM schema URIs of the resource"
                           },
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Organization member ID"
                           },
                           "userName": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Email address of the member"
                           },
                           "name": {
                             "type": "object",
                             "properties": {
                               "givenName": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Given name. Always N/A, because Sentry doesn't store it"
                               },
                               "familyName": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Family name. Always N/A, because Sentry doesn't store it"
                               }
                             },
                             "required": [
                               "familyName",
                               "givenName"
-                            ]
+                            ],
+                            "description": "Name of the member"
                           },
                           "emails": {
                             "type": "array",
@@ -46282,13 +46376,16 @@
                               "type": "object",
                               "properties": {
                                 "primary": {
-                                  "type": "boolean"
+                                  "type": "boolean",
+                                  "description": "Whether this is the primary email address. Always true"
                                 },
                                 "value": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "Email address"
                                 },
                                 "type": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "Email type. Always work"
                                 }
                               },
                               "required": [
@@ -46296,21 +46393,25 @@
                                 "type",
                                 "value"
                               ]
-                            }
+                            },
+                            "description": "Email addresses of the member"
                           },
                           "meta": {
                             "type": "object",
                             "properties": {
                               "resourceType": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "SCIM resource type, such as User or Group"
                               }
                             },
                             "required": [
                               "resourceType"
-                            ]
+                            ],
+                            "description": "SCIM resource metadata"
                           },
                           "sentryOrgRole": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "ID of the member's organization role"
                           }
                         },
                         "required": [
@@ -46455,34 +46556,41 @@
                   "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
                   "properties": {
                     "active": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Always true when included. Sentry doesn't use this field, but SCIM expects it"
                     },
                     "schemas": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "SCIM schema URIs of the resource"
                     },
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization member ID"
                     },
                     "userName": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Email address of the member"
                     },
                     "name": {
                       "type": "object",
                       "properties": {
                         "givenName": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Given name. Always N/A, because Sentry doesn't store it"
                         },
                         "familyName": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Family name. Always N/A, because Sentry doesn't store it"
                         }
                       },
                       "required": [
                         "familyName",
                         "givenName"
-                      ]
+                      ],
+                      "description": "Name of the member"
                     },
                     "emails": {
                       "type": "array",
@@ -46490,13 +46598,16 @@
                         "type": "object",
                         "properties": {
                           "primary": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether this is the primary email address. Always true"
                           },
                           "value": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Email address"
                           },
                           "type": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Email type. Always work"
                           }
                         },
                         "required": [
@@ -46504,21 +46615,25 @@
                           "type",
                           "value"
                         ]
-                      }
+                      },
+                      "description": "Email addresses of the member"
                     },
                     "meta": {
                       "type": "object",
                       "properties": {
                         "resourceType": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "SCIM resource type, such as User or Group"
                         }
                       },
                       "required": [
                         "resourceType"
-                      ]
+                      ],
+                      "description": "SCIM resource metadata"
                     },
                     "sentryOrgRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "ID of the member's organization role"
                     }
                   },
                   "required": [
@@ -46625,34 +46740,41 @@
                   "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
                   "properties": {
                     "active": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Always true when included. Sentry doesn't use this field, but SCIM expects it"
                     },
                     "schemas": {
                       "type": "array",
                       "items": {
                         "type": "string"
-                      }
+                      },
+                      "description": "SCIM schema URIs of the resource"
                     },
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Organization member ID"
                     },
                     "userName": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Email address of the member"
                     },
                     "name": {
                       "type": "object",
                       "properties": {
                         "givenName": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Given name. Always N/A, because Sentry doesn't store it"
                         },
                         "familyName": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Family name. Always N/A, because Sentry doesn't store it"
                         }
                       },
                       "required": [
                         "familyName",
                         "givenName"
-                      ]
+                      ],
+                      "description": "Name of the member"
                     },
                     "emails": {
                       "type": "array",
@@ -46660,13 +46782,16 @@
                         "type": "object",
                         "properties": {
                           "primary": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether this is the primary email address. Always true"
                           },
                           "value": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Email address"
                           },
                           "type": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Email type. Always work"
                           }
                         },
                         "required": [
@@ -46674,21 +46799,25 @@
                           "type",
                           "value"
                         ]
-                      }
+                      },
+                      "description": "Email addresses of the member"
                     },
                     "meta": {
                       "type": "object",
                       "properties": {
                         "resourceType": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "SCIM resource type, such as User or Group"
                         }
                       },
                       "required": [
                         "resourceType"
-                      ]
+                      ],
+                      "description": "SCIM resource metadata"
                     },
                     "sentryOrgRole": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "ID of the member's organization role"
                     }
                   },
                   "required": [
@@ -74183,16 +74312,20 @@
                             "integrationId",
                             "provider"
                           ]
-                        }
+                        },
+                        "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
                       },
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Organization member ID"
                       },
                       "email": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Email address of the member's user, or the invited email address if they have no account yet"
                       },
                       "name": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Display name of the member's user, or their email address if they have no account yet"
                       },
                       "user": {
                         "type": "object",
@@ -74449,28 +74582,35 @@
                           "name",
                           "username"
                         ],
-                        "nullable": true
+                        "nullable": true,
+                        "description": "The member's user. Null for invited members without an account, or if the user can't be found"
                       },
                       "orgRole": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "ID of the member's organization role"
                       },
                       "pending": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
                       },
                       "expired": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "Whether the member's invite has expired"
                       },
                       "flags": {
                         "type": "object",
                         "properties": {
                           "idp:provisioned": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
                           },
                           "idp:role-restricted": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member's organization role is set by the identity provider through SCIM"
                           },
                           "sso:linked": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member has linked their account to the organization's SSO provider"
                           },
                           "sso:invalid": {
                             "type": "boolean"
@@ -74479,7 +74619,8 @@
                             "type": "boolean"
                           },
                           "partnership:restricted": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
                           }
                         },
                         "required": [
@@ -74489,19 +74630,23 @@
                           "partnership:restricted",
                           "sso:invalid",
                           "sso:linked"
-                        ]
+                        ],
+                        "description": "Member flags"
                       },
                       "dateCreated": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "description": "When the member was added or invited"
                       },
                       "inviteStatus": {
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
                       },
                       "inviterName": {
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "Name of the user who invited the member, or null"
                       }
                     },
                     "required": [
@@ -90023,22 +90168,28 @@
                             "integrationId",
                             "provider"
                           ]
-                        }
+                        },
+                        "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
                       },
                       "role": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Deprecated. Use orgRole"
                       },
                       "roleName": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Deprecated. Name of the member's organization role"
                       },
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Organization member ID"
                       },
                       "email": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Email address of the member's user, or the invited email address if they have no account yet"
                       },
                       "name": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Display name of the member's user, or their email address if they have no account yet"
                       },
                       "user": {
                         "type": "object",
@@ -90294,28 +90445,35 @@
                           "lastLogin",
                           "name",
                           "username"
-                        ]
+                        ],
+                        "description": "The member's user"
                       },
                       "orgRole": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "ID of the member's organization role"
                       },
                       "pending": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
                       },
                       "expired": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "Whether the member's invite has expired"
                       },
                       "flags": {
                         "type": "object",
                         "properties": {
                           "idp:provisioned": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
                           },
                           "idp:role-restricted": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member's organization role is set by the identity provider through SCIM"
                           },
                           "sso:linked": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member has linked their account to the organization's SSO provider"
                           },
                           "sso:invalid": {
                             "type": "boolean"
@@ -90324,7 +90482,8 @@
                             "type": "boolean"
                           },
                           "partnership:restricted": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
                           }
                         },
                         "required": [
@@ -90334,26 +90493,32 @@
                           "partnership:restricted",
                           "sso:invalid",
                           "sso:linked"
-                        ]
+                        ],
+                        "description": "Member flags"
                       },
                       "dateCreated": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "description": "When the member was added or invited"
                       },
                       "inviteStatus": {
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
                       },
                       "inviterName": {
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "Name of the user who invited the member, or null"
                       },
                       "teamRole": {
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "description": "ID of the member's team role, or null if the member has the minimum team role from their organization role"
                       },
                       "teamSlug": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Slug of the team"
                       }
                     },
                     "required": [
@@ -121676,404 +121841,28 @@
                   "integrationId",
                   "provider"
                 ]
-              }
+              },
+              "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
             },
             "role": {
-              "type": "string"
+              "type": "string",
+              "description": "Deprecated. Use orgRole"
             },
             "roleName": {
-              "type": "string"
+              "type": "string",
+              "description": "Deprecated. Name of the member's organization role"
             },
             "id": {
-              "type": "string"
+              "type": "string",
+              "description": "Organization member ID"
             },
             "email": {
-              "type": "string"
+              "type": "string",
+              "description": "Email address of the member's user, or the invited email address if they have no account yet"
             },
             "name": {
-              "type": "string"
-            },
-            "user": {
-              "type": "object",
-              "properties": {
-                "identities": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "SSO identity ID"
-                      },
-                      "name": {
-                        "type": "string",
-                        "description": "User's identifier at the auth provider"
-                      },
-                      "organization": {
-                        "type": "object",
-                        "properties": {
-                          "slug": {
-                            "type": "string",
-                            "description": "Organization slug"
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "Organization name"
-                          }
-                        },
-                        "required": [
-                          "name",
-                          "slug"
-                        ],
-                        "description": "Organization the auth provider belongs to"
-                      },
-                      "provider": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "Auth provider key, such as google or saml2"
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "Display name of the auth provider"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name"
-                        ],
-                        "description": "Auth provider of the identity"
-                      },
-                      "dateVerified": {
-                        "type": "string",
-                        "format": "date-time",
-                        "description": "When the identity was last verified by signing in through the auth provider"
-                      },
-                      "dateSynced": {
-                        "type": "string",
-                        "format": "date-time",
-                        "description": "When the identity was last synced from the auth provider"
-                      }
-                    },
-                    "required": [
-                      "dateSynced",
-                      "dateVerified",
-                      "id",
-                      "name",
-                      "organization",
-                      "provider"
-                    ]
-                  },
-                  "description": "SSO identities of the user. Only included for the requesting user, unless the request has active superuser or staff access"
-                },
-                "avatar": {
-                  "type": "object",
-                  "properties": {
-                    "avatarType": {
-                      "type": "string",
-                      "description": "Avatar type, such as letter_avatar, upload or gravatar"
-                    },
-                    "avatarUuid": {
-                      "type": "string",
-                      "nullable": true,
-                      "description": "ID of the uploaded avatar image, or null"
-                    },
-                    "avatarUrl": {
-                      "type": "string",
-                      "nullable": true,
-                      "description": "URL of the avatar image, or null if none is set"
-                    }
-                  },
-                  "description": "User avatar"
-                },
-                "authenticators": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "Authenticator ID"
-                      },
-                      "type": {
-                        "type": "string",
-                        "description": "Authenticator type, such as totp, sms, u2f or recovery"
-                      },
-                      "name": {
-                        "type": "string",
-                        "description": "Display name of the authenticator type"
-                      },
-                      "dateCreated": {
-                        "type": "string",
-                        "format": "date-time",
-                        "description": "When the authenticator was added"
-                      },
-                      "dateUsed": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true,
-                        "description": "When the authenticator was last used, or null"
-                      }
-                    },
-                    "required": [
-                      "dateCreated",
-                      "dateUsed",
-                      "id",
-                      "name",
-                      "type"
-                    ]
-                  },
-                  "description": "Two-factor authenticators of the user, without backup methods such as recovery codes"
-                },
-                "canReset2fa": {
-                  "type": "boolean",
-                  "description": "Whether the organization can reset the user's two-factor authentication. True only if the user is a member of exactly one active organization"
-                },
-                "id": {
-                  "type": "string",
-                  "description": "User ID"
-                },
-                "name": {
-                  "type": "string",
-                  "description": "Display name: the user's name, or their email or username if no name is set"
-                },
-                "username": {
-                  "type": "string",
-                  "description": "Username"
-                },
-                "email": {
-                  "type": "string",
-                  "description": "Primary email address"
-                },
-                "avatarUrl": {
-                  "type": "string",
-                  "description": "Gravatar URL for the primary email address"
-                },
-                "isActive": {
-                  "type": "boolean",
-                  "description": "Whether the account is active"
-                },
-                "isSuspended": {
-                  "type": "boolean",
-                  "description": "Whether the account is suspended. Suspended users can't sign in"
-                },
-                "hasPasswordAuth": {
-                  "type": "boolean",
-                  "description": "Whether the user has a password set"
-                },
-                "isManaged": {
-                  "type": "boolean",
-                  "description": "Whether the account is managed, which stops the user from changing their username, password and similar details"
-                },
-                "dateJoined": {
-                  "type": "string",
-                  "format": "date-time",
-                  "description": "When the account was created"
-                },
-                "lastLogin": {
-                  "type": "string",
-                  "format": "date-time",
-                  "nullable": true,
-                  "description": "When the user last signed in, or null"
-                },
-                "has2fa": {
-                  "type": "boolean",
-                  "description": "Whether the user has two-factor authentication enabled"
-                },
-                "lastActive": {
-                  "type": "string",
-                  "format": "date-time",
-                  "nullable": true,
-                  "description": "When the user was last active, or null"
-                },
-                "isSuperuser": {
-                  "type": "boolean",
-                  "description": "Whether the user is a superuser"
-                },
-                "isStaff": {
-                  "type": "boolean",
-                  "description": "Whether the user has staff status"
-                },
-                "experiments": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "description": "Deprecated. Always an empty object"
-                },
-                "emails": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "Email ID"
-                      },
-                      "email": {
-                        "type": "string",
-                        "description": "Email address"
-                      },
-                      "is_verified": {
-                        "type": "boolean",
-                        "description": "Whether the email address is verified"
-                      }
-                    },
-                    "required": [
-                      "email",
-                      "id",
-                      "is_verified"
-                    ]
-                  },
-                  "description": "Email addresses of the user. Only included for the requesting user or superusers; empty otherwise"
-                }
-              },
-              "required": [
-                "avatarUrl",
-                "dateJoined",
-                "email",
-                "emails",
-                "experiments",
-                "has2fa",
-                "hasPasswordAuth",
-                "id",
-                "isActive",
-                "isManaged",
-                "isStaff",
-                "isSuperuser",
-                "isSuspended",
-                "lastActive",
-                "lastLogin",
-                "name",
-                "username"
-              ]
-            },
-            "orgRole": {
-              "type": "string"
-            },
-            "pending": {
-              "type": "boolean"
-            },
-            "expired": {
-              "type": "boolean"
-            },
-            "flags": {
-              "type": "object",
-              "properties": {
-                "idp:provisioned": {
-                  "type": "boolean"
-                },
-                "idp:role-restricted": {
-                  "type": "boolean"
-                },
-                "sso:linked": {
-                  "type": "boolean"
-                },
-                "sso:invalid": {
-                  "type": "boolean"
-                },
-                "member-limit:restricted": {
-                  "type": "boolean"
-                },
-                "partnership:restricted": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "idp:provisioned",
-                "idp:role-restricted",
-                "member-limit:restricted",
-                "partnership:restricted",
-                "sso:invalid",
-                "sso:linked"
-              ]
-            },
-            "dateCreated": {
               "type": "string",
-              "format": "date-time"
-            },
-            "inviteStatus": {
-              "type": "string",
-              "nullable": true
-            },
-            "inviterName": {
-              "type": "string",
-              "nullable": true
-            },
-            "teamRole": {
-              "type": "string",
-              "nullable": true
-            },
-            "teamSlug": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "dateCreated",
-            "email",
-            "expired",
-            "flags",
-            "id",
-            "inviteStatus",
-            "inviterName",
-            "name",
-            "orgRole",
-            "pending",
-            "teamRole",
-            "teamSlug",
-            "user"
-          ]
-        }
-      },
-      "ListOrgMembersResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "externalUsers": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "externalId": {
-                    "type": "string"
-                  },
-                  "userId": {
-                    "type": "string"
-                  },
-                  "teamId": {
-                    "type": "string"
-                  },
-                  "id": {
-                    "type": "string"
-                  },
-                  "provider": {
-                    "type": "string"
-                  },
-                  "externalName": {
-                    "type": "string"
-                  },
-                  "integrationId": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "externalName",
-                  "id",
-                  "integrationId",
-                  "provider"
-                ]
-              }
-            },
-            "id": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
+              "description": "Display name of the member's user, or their email address if they have no account yet"
             },
             "user": {
               "type": "object",
@@ -122330,28 +122119,34 @@
                 "name",
                 "username"
               ],
-              "nullable": true
+              "description": "The member's user"
             },
             "orgRole": {
-              "type": "string"
+              "type": "string",
+              "description": "ID of the member's organization role"
             },
             "pending": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
             },
             "expired": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Whether the member's invite has expired"
             },
             "flags": {
               "type": "object",
               "properties": {
                 "idp:provisioned": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
                 },
                 "idp:role-restricted": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether the member's organization role is set by the identity provider through SCIM"
                 },
                 "sso:linked": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether the member has linked their account to the organization's SSO provider"
                 },
                 "sso:invalid": {
                   "type": "boolean"
@@ -122360,7 +122155,8 @@
                   "type": "boolean"
                 },
                 "partnership:restricted": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
                 }
               },
               "required": [
@@ -122370,19 +122166,424 @@
                 "partnership:restricted",
                 "sso:invalid",
                 "sso:linked"
-              ]
+              ],
+              "description": "Member flags"
             },
             "dateCreated": {
               "type": "string",
-              "format": "date-time"
+              "format": "date-time",
+              "description": "When the member was added or invited"
             },
             "inviteStatus": {
               "type": "string",
-              "nullable": true
+              "nullable": true,
+              "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
             },
             "inviterName": {
               "type": "string",
-              "nullable": true
+              "nullable": true,
+              "description": "Name of the user who invited the member, or null"
+            },
+            "teamRole": {
+              "type": "string",
+              "nullable": true,
+              "description": "ID of the member's team role, or null if the member has the minimum team role from their organization role"
+            },
+            "teamSlug": {
+              "type": "string",
+              "description": "Slug of the team"
+            }
+          },
+          "required": [
+            "dateCreated",
+            "email",
+            "expired",
+            "flags",
+            "id",
+            "inviteStatus",
+            "inviterName",
+            "name",
+            "orgRole",
+            "pending",
+            "teamRole",
+            "teamSlug",
+            "user"
+          ]
+        }
+      },
+      "ListOrgMembersResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "externalUsers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "externalId": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "string"
+                  },
+                  "teamId": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "externalName": {
+                    "type": "string"
+                  },
+                  "integrationId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "externalName",
+                  "id",
+                  "integrationId",
+                  "provider"
+                ]
+              },
+              "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
+            },
+            "id": {
+              "type": "string",
+              "description": "Organization member ID"
+            },
+            "email": {
+              "type": "string",
+              "description": "Email address of the member's user, or the invited email address if they have no account yet"
+            },
+            "name": {
+              "type": "string",
+              "description": "Display name of the member's user, or their email address if they have no account yet"
+            },
+            "user": {
+              "type": "object",
+              "properties": {
+                "identities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "SSO identity ID"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "User's identifier at the auth provider"
+                      },
+                      "organization": {
+                        "type": "object",
+                        "properties": {
+                          "slug": {
+                            "type": "string",
+                            "description": "Organization slug"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Organization name"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "slug"
+                        ],
+                        "description": "Organization the auth provider belongs to"
+                      },
+                      "provider": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Auth provider key, such as google or saml2"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Display name of the auth provider"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ],
+                        "description": "Auth provider of the identity"
+                      },
+                      "dateVerified": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "When the identity was last verified by signing in through the auth provider"
+                      },
+                      "dateSynced": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "When the identity was last synced from the auth provider"
+                      }
+                    },
+                    "required": [
+                      "dateSynced",
+                      "dateVerified",
+                      "id",
+                      "name",
+                      "organization",
+                      "provider"
+                    ]
+                  },
+                  "description": "SSO identities of the user. Only included for the requesting user, unless the request has active superuser or staff access"
+                },
+                "avatar": {
+                  "type": "object",
+                  "properties": {
+                    "avatarType": {
+                      "type": "string",
+                      "description": "Avatar type, such as letter_avatar, upload or gravatar"
+                    },
+                    "avatarUuid": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "ID of the uploaded avatar image, or null"
+                    },
+                    "avatarUrl": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "URL of the avatar image, or null if none is set"
+                    }
+                  },
+                  "description": "User avatar"
+                },
+                "authenticators": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Authenticator ID"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Authenticator type, such as totp, sms, u2f or recovery"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Display name of the authenticator type"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "When the authenticator was added"
+                      },
+                      "dateUsed": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true,
+                        "description": "When the authenticator was last used, or null"
+                      }
+                    },
+                    "required": [
+                      "dateCreated",
+                      "dateUsed",
+                      "id",
+                      "name",
+                      "type"
+                    ]
+                  },
+                  "description": "Two-factor authenticators of the user, without backup methods such as recovery codes"
+                },
+                "canReset2fa": {
+                  "type": "boolean",
+                  "description": "Whether the organization can reset the user's two-factor authentication. True only if the user is a member of exactly one active organization"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "User ID"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Display name: the user's name, or their email or username if no name is set"
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Primary email address"
+                },
+                "avatarUrl": {
+                  "type": "string",
+                  "description": "Gravatar URL for the primary email address"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "description": "Whether the account is active"
+                },
+                "isSuspended": {
+                  "type": "boolean",
+                  "description": "Whether the account is suspended. Suspended users can't sign in"
+                },
+                "hasPasswordAuth": {
+                  "type": "boolean",
+                  "description": "Whether the user has a password set"
+                },
+                "isManaged": {
+                  "type": "boolean",
+                  "description": "Whether the account is managed, which stops the user from changing their username, password and similar details"
+                },
+                "dateJoined": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "When the account was created"
+                },
+                "lastLogin": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true,
+                  "description": "When the user last signed in, or null"
+                },
+                "has2fa": {
+                  "type": "boolean",
+                  "description": "Whether the user has two-factor authentication enabled"
+                },
+                "lastActive": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true,
+                  "description": "When the user was last active, or null"
+                },
+                "isSuperuser": {
+                  "type": "boolean",
+                  "description": "Whether the user is a superuser"
+                },
+                "isStaff": {
+                  "type": "boolean",
+                  "description": "Whether the user has staff status"
+                },
+                "experiments": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Deprecated. Always an empty object"
+                },
+                "emails": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Email ID"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "Email address"
+                      },
+                      "is_verified": {
+                        "type": "boolean",
+                        "description": "Whether the email address is verified"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "id",
+                      "is_verified"
+                    ]
+                  },
+                  "description": "Email addresses of the user. Only included for the requesting user or superusers; empty otherwise"
+                }
+              },
+              "required": [
+                "avatarUrl",
+                "dateJoined",
+                "email",
+                "emails",
+                "experiments",
+                "has2fa",
+                "hasPasswordAuth",
+                "id",
+                "isActive",
+                "isManaged",
+                "isStaff",
+                "isSuperuser",
+                "isSuspended",
+                "lastActive",
+                "lastLogin",
+                "name",
+                "username"
+              ],
+              "nullable": true,
+              "description": "The member's user. Null for invited members without an account, or if the user can't be found"
+            },
+            "orgRole": {
+              "type": "string",
+              "description": "ID of the member's organization role"
+            },
+            "pending": {
+              "type": "boolean",
+              "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
+            },
+            "expired": {
+              "type": "boolean",
+              "description": "Whether the member's invite has expired"
+            },
+            "flags": {
+              "type": "object",
+              "properties": {
+                "idp:provisioned": {
+                  "type": "boolean",
+                  "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
+                },
+                "idp:role-restricted": {
+                  "type": "boolean",
+                  "description": "Whether the member's organization role is set by the identity provider through SCIM"
+                },
+                "sso:linked": {
+                  "type": "boolean",
+                  "description": "Whether the member has linked their account to the organization's SSO provider"
+                },
+                "sso:invalid": {
+                  "type": "boolean"
+                },
+                "member-limit:restricted": {
+                  "type": "boolean"
+                },
+                "partnership:restricted": {
+                  "type": "boolean",
+                  "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
+                }
+              },
+              "required": [
+                "idp:provisioned",
+                "idp:role-restricted",
+                "member-limit:restricted",
+                "partnership:restricted",
+                "sso:invalid",
+                "sso:linked"
+              ],
+              "description": "Member flags"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time",
+              "description": "When the member was added or invited"
+            },
+            "inviteStatus": {
+              "type": "string",
+              "nullable": true,
+              "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
+            },
+            "inviterName": {
+              "type": "string",
+              "nullable": true,
+              "description": "Name of the user who invited the member, or null"
             }
           },
           "required": [
@@ -123529,16 +123730,20 @@
                   "integrationId",
                   "provider"
                 ]
-              }
+              },
+              "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
             },
             "id": {
-              "type": "string"
+              "type": "string",
+              "description": "Organization member ID"
             },
             "email": {
-              "type": "string"
+              "type": "string",
+              "description": "Email address of the member's user, or the invited email address if they have no account yet"
             },
             "name": {
-              "type": "string"
+              "type": "string",
+              "description": "Display name of the member's user, or their email address if they have no account yet"
             },
             "user": {
               "type": "object",
@@ -123795,28 +124000,35 @@
                 "name",
                 "username"
               ],
-              "nullable": true
+              "nullable": true,
+              "description": "The member's user. Null for invited members without an account, or if the user can't be found"
             },
             "orgRole": {
-              "type": "string"
+              "type": "string",
+              "description": "ID of the member's organization role"
             },
             "pending": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
             },
             "expired": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Whether the member's invite has expired"
             },
             "flags": {
               "type": "object",
               "properties": {
                 "idp:provisioned": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
                 },
                 "idp:role-restricted": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether the member's organization role is set by the identity provider through SCIM"
                 },
                 "sso:linked": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether the member has linked their account to the organization's SSO provider"
                 },
                 "sso:invalid": {
                   "type": "boolean"
@@ -123825,7 +124037,8 @@
                   "type": "boolean"
                 },
                 "partnership:restricted": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
                 }
               },
               "required": [
@@ -123835,19 +124048,23 @@
                 "partnership:restricted",
                 "sso:invalid",
                 "sso:linked"
-              ]
+              ],
+              "description": "Member flags"
             },
             "dateCreated": {
               "type": "string",
-              "format": "date-time"
+              "format": "date-time",
+              "description": "When the member was added or invited"
             },
             "inviteStatus": {
               "type": "string",
-              "nullable": true
+              "nullable": true,
+              "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
             },
             "inviterName": {
               "type": "string",
-              "nullable": true
+              "nullable": true,
+              "description": "Name of the user who invited the member, or null"
             }
           },
           "required": [
@@ -133363,16 +133580,20 @@
                 "integrationId",
                 "provider"
               ]
-            }
+            },
+            "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization member ID"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "Email address of the member's user, or the invited email address if they have no account yet"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Display name of the member's user, or their email address if they have no account yet"
           },
           "user": {
             "type": "object",
@@ -133629,28 +133850,35 @@
               "name",
               "username"
             ],
-            "nullable": true
+            "nullable": true,
+            "description": "The member's user. Null for invited members without an account, or if the user can't be found"
           },
           "orgRole": {
-            "type": "string"
+            "type": "string",
+            "description": "ID of the member's organization role"
           },
           "pending": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
           },
           "expired": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the member's invite has expired"
           },
           "flags": {
             "type": "object",
             "properties": {
               "idp:provisioned": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
               },
               "idp:role-restricted": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether the member's organization role is set by the identity provider through SCIM"
               },
               "sso:linked": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether the member has linked their account to the organization's SSO provider"
               },
               "sso:invalid": {
                 "type": "boolean"
@@ -133659,7 +133887,8 @@
                 "type": "boolean"
               },
               "partnership:restricted": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
               }
             },
             "required": [
@@ -133669,19 +133898,23 @@
               "partnership:restricted",
               "sso:invalid",
               "sso:linked"
-            ]
+            ],
+            "description": "Member flags"
           },
           "dateCreated": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "When the member was added or invited"
           },
           "inviteStatus": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
           },
           "inviterName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Name of the user who invited the member, or null"
           }
         },
         "required": [
@@ -133770,34 +134003,41 @@
         "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
         "properties": {
           "active": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Always true when included. Sentry doesn't use this field, but SCIM expects it"
           },
           "schemas": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "SCIM schema URIs of the resource"
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization member ID"
           },
           "userName": {
-            "type": "string"
+            "type": "string",
+            "description": "Email address of the member"
           },
           "name": {
             "type": "object",
             "properties": {
               "givenName": {
-                "type": "string"
+                "type": "string",
+                "description": "Given name. Always N/A, because Sentry doesn't store it"
               },
               "familyName": {
-                "type": "string"
+                "type": "string",
+                "description": "Family name. Always N/A, because Sentry doesn't store it"
               }
             },
             "required": [
               "familyName",
               "givenName"
-            ]
+            ],
+            "description": "Name of the member"
           },
           "emails": {
             "type": "array",
@@ -133805,13 +134045,16 @@
               "type": "object",
               "properties": {
                 "primary": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Whether this is the primary email address. Always true"
                 },
                 "value": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Email address"
                 },
                 "type": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Email type. Always work"
                 }
               },
               "required": [
@@ -133819,21 +134062,25 @@
                 "type",
                 "value"
               ]
-            }
+            },
+            "description": "Email addresses of the member"
           },
           "meta": {
             "type": "object",
             "properties": {
               "resourceType": {
-                "type": "string"
+                "type": "string",
+                "description": "SCIM resource type, such as User or Group"
               }
             },
             "required": [
               "resourceType"
-            ]
+            ],
+            "description": "SCIM resource metadata"
           },
           "sentryOrgRole": {
-            "type": "string"
+            "type": "string",
+            "description": "ID of the member's organization role"
           }
         },
         "required": [
@@ -133864,14 +134111,16 @@
         "type": "object",
         "properties": {
           "isActive": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the team membership is active. An inactive membership removes the team from the member's default list, but the member can rejoin without a request"
           },
           "teamRole": {
             "enum": [
               "contributor",
               "admin"
             ],
-            "type": "string"
+            "type": "string",
+            "description": "ID of the member's team role"
           }
         },
         "required": [
@@ -133915,22 +134164,28 @@
                 "integrationId",
                 "provider"
               ]
-            }
+            },
+            "description": "Users in external providers, such as Slack or GitHub, linked to the member's user. Included only when requested"
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "Deprecated. Use orgRole"
           },
           "roleName": {
-            "type": "string"
+            "type": "string",
+            "description": "Deprecated. Name of the member's organization role"
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Organization member ID"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "Email address of the member's user, or the invited email address if they have no account yet"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Display name of the member's user, or their email address if they have no account yet"
           },
           "user": {
             "type": "object",
@@ -134187,28 +134442,35 @@
               "name",
               "username"
             ],
-            "nullable": true
+            "nullable": true,
+            "description": "The member's user. Null for invited members without an account, or if the user can't be found"
           },
           "orgRole": {
-            "type": "string"
+            "type": "string",
+            "description": "ID of the member's organization role"
           },
           "pending": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the member has no user account linked yet, as with an invite that hasn't been accepted"
           },
           "expired": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the member's invite has expired"
           },
           "flags": {
             "type": "object",
             "properties": {
               "idp:provisioned": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether the member is provisioned and managed through the organization's identity provider (SCIM)"
               },
               "idp:role-restricted": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether the member's organization role is set by the identity provider through SCIM"
               },
               "sso:linked": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether the member has linked their account to the organization's SSO provider"
               },
               "sso:invalid": {
                 "type": "boolean"
@@ -134217,7 +134479,8 @@
                 "type": "boolean"
               },
               "partnership:restricted": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether the member is managed by an active partnership and can't be changed until it ends"
               }
             },
             "required": [
@@ -134227,25 +134490,30 @@
               "partnership:restricted",
               "sso:invalid",
               "sso:linked"
-            ]
+            ],
+            "description": "Member flags"
           },
           "dateCreated": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "When the member was added or invited"
           },
           "inviteStatus": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Invite status: approved, requested_to_be_invited or requested_to_join"
           },
           "inviterName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Name of the user who invited the member, or null"
           },
           "teams": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Deprecated. Slugs of the active teams the member belongs to. Use teamRoles"
           },
           "teamRoles": {
             "type": "array",
@@ -134253,25 +134521,29 @@
               "type": "object",
               "properties": {
                 "teamSlug": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Team slug"
                 },
                 "role": {
                   "type": "string",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "ID of the member's team role, or null if the member has the minimum team role from their organization role"
                 }
               },
               "required": [
                 "role",
                 "teamSlug"
               ]
-            }
+            },
+            "description": "Active teams the member belongs to, with the member's role in each"
           },
           "invite_link": {
             "type": "string",
             "nullable": true
           },
           "isOnlyOwner": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the member is the only owner of the organization"
           },
           "orgRoleList": {
             "type": "array",
@@ -134339,7 +134611,8 @@
                 "name",
                 "scopes"
               ]
-            }
+            },
+            "description": "Organization roles, with whether the requesting user can assign each one"
           },
           "teamRoleList": {
             "type": "array",
@@ -134398,7 +134671,8 @@
                 "name",
                 "scopes"
               ]
-            }
+            },
+            "description": "Team roles available in the organization"
           }
         },
         "required": [
@@ -142138,34 +142412,41 @@
               "description": "Conforming to the SCIM RFC, this represents a Sentry Org Member\nas a SCIM user object.",
               "properties": {
                 "active": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Always true when included. Sentry doesn't use this field, but SCIM expects it"
                 },
                 "schemas": {
                   "type": "array",
                   "items": {
                     "type": "string"
-                  }
+                  },
+                  "description": "SCIM schema URIs of the resource"
                 },
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Organization member ID"
                 },
                 "userName": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Email address of the member"
                 },
                 "name": {
                   "type": "object",
                   "properties": {
                     "givenName": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Given name. Always N/A, because Sentry doesn't store it"
                     },
                     "familyName": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Family name. Always N/A, because Sentry doesn't store it"
                     }
                   },
                   "required": [
                     "familyName",
                     "givenName"
-                  ]
+                  ],
+                  "description": "Name of the member"
                 },
                 "emails": {
                   "type": "array",
@@ -142173,13 +142454,16 @@
                     "type": "object",
                     "properties": {
                       "primary": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "Whether this is the primary email address. Always true"
                       },
                       "value": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Email address"
                       },
                       "type": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Email type. Always work"
                       }
                     },
                     "required": [
@@ -142187,21 +142471,25 @@
                       "type",
                       "value"
                     ]
-                  }
+                  },
+                  "description": "Email addresses of the member"
                 },
                 "meta": {
                   "type": "object",
                   "properties": {
                     "resourceType": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "SCIM resource type, such as User or Group"
                     }
                   },
                   "required": [
                     "resourceType"
-                  ]
+                  ],
+                  "description": "SCIM resource metadata"
                 },
                 "sentryOrgRole": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "ID of the member's organization role"
                 }
               },
               "required": [
@@ -142266,7 +142554,8 @@
                   "type": "object",
                   "properties": {
                     "resourceType": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "SCIM resource type, such as User or Group"
                     }
                   },
                   "required": [
@@ -146853,7 +147142,8 @@
             "type": "object",
             "properties": {
               "resourceType": {
-                "type": "string"
+                "type": "string",
+                "description": "SCIM resource type, such as User or Group"
               }
             },
             "required": [
