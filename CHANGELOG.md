@@ -1,3 +1,9 @@
+## 1.29.2
+
+### Internal Changes
+
+- Parallelize Hey API and declaration emit, make edit linear by @BYK with @sentry-junior in [#132](https://github.com/getsentry/sentry-api-schema/pull/132)
+
 ## 1.29.1
 
 ### Internal Changes
