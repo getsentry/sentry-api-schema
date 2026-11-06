@@ -321,10 +321,11 @@ describe("individual PUTs", () => {
   it("percent-encodes key segments in the object URL", async () => {
     const fetch = mockFetch().mockResolvedValue(new Response(null, { status: 200 }));
 
-    await putObjects(config, [upload("1/a b%?#/r\u00e9", new Uint8Array(LARGE))], { fetch });
+    await putObjects(config, [upload("1/a b%?#^\\c/r\u00e9", new Uint8Array(LARGE))], { fetch });
 
     const [url] = fetch.mock.calls[0] as [string];
-    expect(url).toBe(`${OBJECTS_URL}/1/a%20b%25%3F%23/r%C3%A9`);
+    expect(url).toBe(`${OBJECTS_URL}/1/a%20b%25%3F%23%5E%5Cc/r%C3%A9`);
+    expect(new URL(url).pathname).toMatch(/\/1\/a%20b%25%3F%23%5E%5Cc\/r%C3%A9$/);
   });
 
   it("omits the auth header without a token", async () => {

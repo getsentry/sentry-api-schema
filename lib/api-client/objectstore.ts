@@ -163,10 +163,11 @@ function encodeHeaderValue(value: string): string {
 /**
  * Escape one key segment for an object URL, matching the Rust client, which
  * pushes each `/`-separated part of the key with the `url` crate's
- * path-segment encode set.
+ * `SPECIAL_PATH_SEGMENT` encode set (http(s) URLs). That set includes `\`,
+ * which those URLs would otherwise parse as `/`.
  */
 function encodePathSegment(segment: string): string {
-  return percentEncode(segment, ' "#%<>?`{}');
+  return percentEncode(segment, ' "#%<>?^`{}\\');
 }
 
 /** Auth headers for an objectstore request, if a token is configured. */
