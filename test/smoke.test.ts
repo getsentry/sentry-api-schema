@@ -83,7 +83,7 @@ describe("parseSentryLinkHeader", () => {
 });
 
 describe("runtime validator entry points", () => {
-  const response = { run_id: 42, sentry_run_id: "run-42" };
+  const response = { run_id: 42, sentry_run_id: "run-42", feature_id: "autofix" };
 
   test("preserves composite request schemas across generator upgrades", () => {
     const request = { path: { organization_id_or_slug: "example", project_id_or_slug: "project" } };
