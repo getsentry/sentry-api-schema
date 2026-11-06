@@ -232,6 +232,30 @@ describe("putObjects", () => {
     expect(uploads.every((u) => u.reads === 1)).toBe(true);
   });
 
+  it("reads one upload at a time within a batch", async () => {
+    let reading = 0;
+    let maxReading = 0;
+    const uploads = Array.from({ length: 50 }, (_, i): ObjectUpload => ({
+      key: `k${i}`,
+      size: 1,
+      read: async () => {
+        reading += 1;
+        maxReading = Math.max(maxReading, reading);
+        await new Promise((resolve) => setTimeout(resolve, 1));
+        reading -= 1;
+        return new Uint8Array([i]);
+      },
+    }));
+    const fetch = mockFetch().mockResolvedValue(
+      batchResponse(uploads.map((_, index) => ({ index, status: "201 Created" }))),
+    );
+
+    await putObjects(config, uploads, { fetch });
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(maxReading).toBe(1);
+  });
+
   it("throws when an insert in the batch fails", async () => {
     const fetch = mockFetch().mockResolvedValue(
       batchResponse([{ index: 0, status: "500 Internal Server Error" }]),
@@ -255,6 +279,15 @@ describe("individual PUTs", () => {
     const headers = init.headers as Record<string, string>;
     expect(headers["x-os-auth"]).toBe("Bearer jwt-token");
     expect(headers["x-sn-expiration"]).toBe("ttl:30d");
+  });
+
+  it("percent-encodes key segments in the object URL", async () => {
+    const fetch = mockFetch().mockResolvedValue(new Response(null, { status: 200 }));
+
+    await putObjects(config, [upload("1/a b%?#/r\u00e9", new Uint8Array(LARGE))], { fetch });
+
+    const [url] = fetch.mock.calls[0] as [string];
+    expect(url).toBe(`${OBJECTS_URL}/1/a%20b%25%3F%23/r%C3%A9`);
   });
 
   it("omits the auth header without a token", async () => {

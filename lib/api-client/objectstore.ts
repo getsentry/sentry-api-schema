@@ -129,7 +129,8 @@ function scopeSegment(scopes: [string, string][]): string {
  */
 function buildObjectUrl(config: ObjectstoreConfig, key: string): string {
   const base = config.url.replace(TRAILING_SLASHES, "");
-  return `${base}/v1/objects/${config.usecase}/${scopeSegment(config.scopes)}/${key}`;
+  const path = key.split("/").map(encodePathSegment).join("/");
+  return `${base}/v1/objects/${config.usecase}/${scopeSegment(config.scopes)}/${path}`;
 }
 
 /** Build the batch endpoint URL for the configured usecase + scope. */
@@ -138,20 +139,34 @@ function buildBatchUrl(config: ObjectstoreConfig): string {
   return `${base}/v1/objects:batch/${config.usecase}/${scopeSegment(config.scopes)}/`;
 }
 
-/**
- * Escape a value for an Objectstore header, matching `encode_header_value` in
- * `objectstore-types`: percent-encode control bytes, DEL, `%`, and non-ASCII.
- */
-function encodeHeaderValue(value: string): string {
+/** Percent-encode the UTF-8 bytes of `value` that are controls, DEL, non-ASCII, or in `reserved`. */
+function percentEncode(value: string, reserved: string): string {
   let out = "";
   for (const byte of encoder.encode(value)) {
-    if (byte < 0x20 || byte >= 0x7f || byte === 0x25) {
+    if (byte < 0x20 || byte >= 0x7f || reserved.includes(String.fromCharCode(byte))) {
       out += `%${byte.toString(16).toUpperCase().padStart(2, "0")}`;
     } else {
       out += String.fromCharCode(byte);
     }
   }
   return out;
+}
+
+/**
+ * Escape a value for an Objectstore header, matching `encode_header_value` in
+ * `objectstore-types`: percent-encode control bytes, DEL, `%`, and non-ASCII.
+ */
+function encodeHeaderValue(value: string): string {
+  return percentEncode(value, "%");
+}
+
+/**
+ * Escape one key segment for an object URL, matching the Rust client, which
+ * pushes each `/`-separated part of the key with the `url` crate's
+ * path-segment encode set.
+ */
+function encodePathSegment(segment: string): string {
+  return percentEncode(segment, ' "#%<>?`{}');
 }
 
 /** Auth headers for an objectstore request, if a token is configured. */
@@ -480,15 +495,12 @@ export async function putObjects(
   await Promise.all([
     ...groupBatches(batchable).map((batch) =>
       batchLimit(async () => {
-        const operations = await Promise.all(
-          batch.map(
-            async (upload): Promise<BatchOperation> => ({
-              kind: "insert",
-              key: upload.key,
-              body: await upload.read(),
-            }),
-          ),
-        );
+        // Read one upload at a time, so batches in flight hold at most
+        // BATCH_CONCURRENCY files open, not up to MAX_BATCH_OPS each.
+        const operations: BatchOperation[] = [];
+        for (const upload of batch) {
+          operations.push({ kind: "insert", key: upload.key, body: await upload.read() });
+        }
         const results = await sendBatch(config, operations, options);
         results.forEach((result, i) => {
           if (result.status >= 400) {
