@@ -99826,9 +99826,14 @@
                     "sentry_run_id": {
                       "type": "string",
                       "nullable": true
+                    },
+                    "feature_id": {
+                      "type": "string",
+                      "description": "\"autofix_single_run\" for a single-run Autofix run, otherwise \"autofix\""
                     }
                   },
                   "required": [
+                    "feature_id",
                     "run_id",
                     "sentry_run_id"
                   ]
@@ -99837,7 +99842,8 @@
                   "SuccessfulAutofixCreation": {
                     "value": {
                       "run_id": 12345,
-                      "sentry_run_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+                      "sentry_run_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "feature_id": "autofix"
                     },
                     "summary": "Successful Autofix Creation"
                   }
@@ -108544,9 +108550,14 @@
           "sentry_run_id": {
             "type": "string",
             "nullable": true
+          },
+          "feature_id": {
+            "type": "string",
+            "description": "\"autofix_single_run\" for a single-run Autofix run, otherwise \"autofix\""
           }
         },
         "required": [
+          "feature_id",
           "run_id",
           "sentry_run_id"
         ]
