@@ -33,6 +33,7 @@ import { zAutofixPostResponse } from "../src/zod";
 const valibotResponse: InferOutput<typeof vAutofixPostResponse> = {
   run_id: 1,
   sentry_run_id: null,
+  feature_id: "autofix",
 };
 const zodResponse: z.infer<typeof zAutofixPostResponse> = valibotResponse;
 void zodResponse;
