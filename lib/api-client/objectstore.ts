@@ -21,7 +21,7 @@
  * {@link ObjectUpload.read} and may inject `fetch` (e.g. for custom CAs).
  */
 
-import pLimit from "p-limit";
+import pLimit, { type LimitFunction } from "p-limit";
 import { ApiError } from "./errors.js";
 
 /** Header carrying the Objectstore bearer token. */
@@ -414,6 +414,29 @@ function chunk<T>(items: T[], size: number): T[][] {
 }
 
 /**
+ * Wrap `task` so that its failure clears every queue in `limits` before the
+ * limiter can start the next task: after the first error, no new request
+ * starts and no further upload is read. Cleared tasks never settle, which is
+ * fine: the caller's `Promise.all` has already rejected with the first error,
+ * and pending promises hold no timers or handles.
+ */
+function stopOnFailure(
+  limits: LimitFunction[],
+  task: () => Promise<void>,
+): () => Promise<void> {
+  return async () => {
+    try {
+      await task();
+    } catch (error) {
+      for (const limit of limits) {
+        limit.clearQueue();
+      }
+      throw error;
+    }
+  };
+}
+
+/**
  * Find which keys already exist, using batched HEAD operations (one request
  * per {@link MAX_BATCH_OPS} keys, up to {@link BATCH_CONCURRENCY} at once).
  *
@@ -429,7 +452,7 @@ export async function findExistingObjects(
   const limit = pLimit(BATCH_CONCURRENCY);
   await Promise.all(
     chunk(keys, MAX_BATCH_OPS).map((batch) =>
-      limit(async () => {
+      limit(stopOnFailure([limit], async () => {
         const results = await sendBatch(
           config,
           batch.map((key) => ({ kind: "head", key })),
@@ -445,7 +468,7 @@ export async function findExistingObjects(
           }
           existing.add(key);
         });
-      }),
+      })),
     ),
   );
   return existing;
@@ -492,9 +515,10 @@ export async function putObjects(
 
   const batchLimit = pLimit(BATCH_CONCURRENCY);
   const individualLimit = pLimit(INDIVIDUAL_CONCURRENCY);
+  const limits = [batchLimit, individualLimit];
   await Promise.all([
     ...groupBatches(batchable).map((batch) =>
-      batchLimit(async () => {
+      batchLimit(stopOnFailure(limits, async () => {
         // Read one upload at a time, so batches in flight hold at most
         // BATCH_CONCURRENCY files open, not up to MAX_BATCH_OPS each.
         const operations: BatchOperation[] = [];
@@ -508,12 +532,12 @@ export async function putObjects(
             throwOperationError(config, "Objectstore upload failed", key, result);
           }
         });
-      }),
+      })),
     ),
     ...individual.map((upload) =>
-      individualLimit(async () => {
+      individualLimit(stopOnFailure(limits, async () => {
         await putObject(config, upload.key, await upload.read(), options);
-      }),
+      })),
     ),
   ]);
 }

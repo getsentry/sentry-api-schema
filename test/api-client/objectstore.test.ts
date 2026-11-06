@@ -135,6 +135,25 @@ describe("findExistingObjects", () => {
     expect(maxInFlight).toBe(3);
   });
 
+  it("starts no queued batch after one fails", async () => {
+    // Five batches, four in flight: the first fails before the others finish.
+    const fetch = mockFetch().mockImplementation(async (_url, init) => {
+      const call = fetch.mock.calls.length;
+      const count = (await sentParts(init as RequestInit)).length;
+      if (call === 1) {
+        return new Response(null, { status: 429 });
+      }
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      return batchResponse(Array.from({ length: count }, (_, index) => ({ index, status: "200 OK" })));
+    });
+    const keys = Array.from({ length: 5000 }, (_, i) => `k${i}`);
+
+    await expect(findExistingObjects(config, keys, { fetch })).rejects.toThrow(ObjectstoreError);
+    await new Promise((resolve) => setTimeout(resolve, 30));
+
+    expect(fetch).toHaveBeenCalledTimes(4);
+  });
+
   it("throws on a per-operation error other than 404", async () => {
     const fetch = mockFetch().mockResolvedValue(
       batchResponse([
@@ -254,6 +273,24 @@ describe("putObjects", () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(maxReading).toBe(1);
+  });
+
+  it("starts and reads no queued upload after one fails", async () => {
+    // Six large uploads, five PUTs in flight: the first fails before the others finish.
+    const fetch = mockFetch().mockImplementation(async () => {
+      if (fetch.mock.calls.length === 1) {
+        return new Response(null, { status: 429 });
+      }
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      return new Response(null, { status: 201 });
+    });
+    const uploads = Array.from({ length: 6 }, (_, i) => upload(`k${i}`, new Uint8Array(LARGE)));
+
+    await expect(putObjects(config, uploads, { fetch })).rejects.toThrow(ObjectstoreError);
+    await new Promise((resolve) => setTimeout(resolve, 30));
+
+    expect(fetch).toHaveBeenCalledTimes(5);
+    expect(uploads[5]?.reads).toBe(0);
   });
 
   it("throws when an insert in the batch fails", async () => {
