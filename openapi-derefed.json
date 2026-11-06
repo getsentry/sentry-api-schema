@@ -21503,6 +21503,73 @@
                             "type": "string",
                             "format": "date-time",
                             "nullable": true
+                          },
+                          "impact": {
+                            "type": "object",
+                            "properties": {
+                              "score": {
+                                "type": "number",
+                                "format": "double",
+                                "nullable": true,
+                                "description": "Estimated per-occurrence impact on the end user's capability from 0 to 100"
+                              },
+                              "level": {
+                                "enum": [
+                                  "super_low",
+                                  "low",
+                                  "moderate",
+                                  "high",
+                                  "super_high",
+                                  null
+                                ],
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Impact level derived from the assessment score"
+                              },
+                              "description": {
+                                "type": "string",
+                                "description": "Human-readable description of the capability affected by the issue"
+                              },
+                              "citations": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "reference": {
+                                      "type": "string",
+                                      "description": "Stable identifier for the evidence supporting this claim"
+                                    },
+                                    "claim": {
+                                      "type": "string",
+                                      "description": "Concise explanation of what the cited evidence establishes"
+                                    },
+                                    "source": {
+                                      "type": "string",
+                                      "description": "The category of evidence cited, such as an event, trace, replay, or log"
+                                    }
+                                  },
+                                  "required": [
+                                    "claim",
+                                    "reference",
+                                    "source"
+                                  ]
+                                },
+                                "description": "Evidence-backed claims supporting the impact assessment"
+                              },
+                              "sourceEventId": {
+                                "type": "string",
+                                "description": "ID of the issue event used to generate the impact assessment"
+                              }
+                            },
+                            "required": [
+                              "citations",
+                              "description",
+                              "level",
+                              "score",
+                              "sourceEventId"
+                            ],
+                            "nullable": true,
+                            "description": "The issue's impact assessment, or null when no assessment is available"
                           }
                         },
                         "required": [
@@ -49569,6 +49636,73 @@
                               "type": "string",
                               "format": "date-time",
                               "nullable": true
+                            },
+                            "impact": {
+                              "type": "object",
+                              "properties": {
+                                "score": {
+                                  "type": "number",
+                                  "format": "double",
+                                  "nullable": true,
+                                  "description": "Estimated per-occurrence impact on the end user's capability from 0 to 100"
+                                },
+                                "level": {
+                                  "enum": [
+                                    "super_low",
+                                    "low",
+                                    "moderate",
+                                    "high",
+                                    "super_high",
+                                    null
+                                  ],
+                                  "type": "string",
+                                  "nullable": true,
+                                  "description": "Impact level derived from the assessment score"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "description": "Human-readable description of the capability affected by the issue"
+                                },
+                                "citations": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "reference": {
+                                        "type": "string",
+                                        "description": "Stable identifier for the evidence supporting this claim"
+                                      },
+                                      "claim": {
+                                        "type": "string",
+                                        "description": "Concise explanation of what the cited evidence establishes"
+                                      },
+                                      "source": {
+                                        "type": "string",
+                                        "description": "The category of evidence cited, such as an event, trace, replay, or log"
+                                      }
+                                    },
+                                    "required": [
+                                      "claim",
+                                      "reference",
+                                      "source"
+                                    ]
+                                  },
+                                  "description": "Evidence-backed claims supporting the impact assessment"
+                                },
+                                "sourceEventId": {
+                                  "type": "string",
+                                  "description": "ID of the issue event used to generate the impact assessment"
+                                }
+                              },
+                              "required": [
+                                "citations",
+                                "description",
+                                "level",
+                                "score",
+                                "sourceEventId"
+                              ],
+                              "nullable": true,
+                              "description": "The issue's impact assessment, or null when no assessment is available"
                             }
                           },
                           "required": [
@@ -97196,6 +97330,73 @@
                           "type": "string",
                           "format": "date-time",
                           "nullable": true
+                        },
+                        "impact": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "number",
+                              "format": "double",
+                              "nullable": true,
+                              "description": "Estimated per-occurrence impact on the end user's capability from 0 to 100"
+                            },
+                            "level": {
+                              "enum": [
+                                "super_low",
+                                "low",
+                                "moderate",
+                                "high",
+                                "super_high",
+                                null
+                              ],
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Impact level derived from the assessment score"
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "Human-readable description of the capability affected by the issue"
+                            },
+                            "citations": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "reference": {
+                                    "type": "string",
+                                    "description": "Stable identifier for the evidence supporting this claim"
+                                  },
+                                  "claim": {
+                                    "type": "string",
+                                    "description": "Concise explanation of what the cited evidence establishes"
+                                  },
+                                  "source": {
+                                    "type": "string",
+                                    "description": "The category of evidence cited, such as an event, trace, replay, or log"
+                                  }
+                                },
+                                "required": [
+                                  "claim",
+                                  "reference",
+                                  "source"
+                                ]
+                              },
+                              "description": "Evidence-backed claims supporting the impact assessment"
+                            },
+                            "sourceEventId": {
+                              "type": "string",
+                              "description": "ID of the issue event used to generate the impact assessment"
+                            }
+                          },
+                          "required": [
+                            "citations",
+                            "description",
+                            "level",
+                            "score",
+                            "sourceEventId"
+                          ],
+                          "nullable": true,
+                          "description": "The issue's impact assessment, or null when no assessment is available"
                         }
                       },
                       "required": [
@@ -98453,6 +98654,73 @@
                           "type": "string",
                           "format": "date-time",
                           "nullable": true
+                        },
+                        "impact": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "number",
+                              "format": "double",
+                              "nullable": true,
+                              "description": "Estimated per-occurrence impact on the end user's capability from 0 to 100"
+                            },
+                            "level": {
+                              "enum": [
+                                "super_low",
+                                "low",
+                                "moderate",
+                                "high",
+                                "super_high",
+                                null
+                              ],
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Impact level derived from the assessment score"
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "Human-readable description of the capability affected by the issue"
+                            },
+                            "citations": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "reference": {
+                                    "type": "string",
+                                    "description": "Stable identifier for the evidence supporting this claim"
+                                  },
+                                  "claim": {
+                                    "type": "string",
+                                    "description": "Concise explanation of what the cited evidence establishes"
+                                  },
+                                  "source": {
+                                    "type": "string",
+                                    "description": "The category of evidence cited, such as an event, trace, replay, or log"
+                                  }
+                                },
+                                "required": [
+                                  "claim",
+                                  "reference",
+                                  "source"
+                                ]
+                              },
+                              "description": "Evidence-backed claims supporting the impact assessment"
+                            },
+                            "sourceEventId": {
+                              "type": "string",
+                              "description": "ID of the issue event used to generate the impact assessment"
+                            }
+                          },
+                          "required": [
+                            "citations",
+                            "description",
+                            "level",
+                            "score",
+                            "sourceEventId"
+                          ],
+                          "nullable": true,
+                          "description": "The issue's impact assessment, or null when no assessment is available"
                         }
                       },
                       "required": [
@@ -120278,6 +120546,73 @@
                 "type": "string",
                 "format": "date-time",
                 "nullable": true
+              },
+              "impact": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "format": "double",
+                    "nullable": true,
+                    "description": "Estimated per-occurrence impact on the end user's capability from 0 to 100"
+                  },
+                  "level": {
+                    "enum": [
+                      "super_low",
+                      "low",
+                      "moderate",
+                      "high",
+                      "super_high",
+                      null
+                    ],
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Impact level derived from the assessment score"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Human-readable description of the capability affected by the issue"
+                  },
+                  "citations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string",
+                          "description": "Stable identifier for the evidence supporting this claim"
+                        },
+                        "claim": {
+                          "type": "string",
+                          "description": "Concise explanation of what the cited evidence establishes"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The category of evidence cited, such as an event, trace, replay, or log"
+                        }
+                      },
+                      "required": [
+                        "claim",
+                        "reference",
+                        "source"
+                      ]
+                    },
+                    "description": "Evidence-backed claims supporting the impact assessment"
+                  },
+                  "sourceEventId": {
+                    "type": "string",
+                    "description": "ID of the issue event used to generate the impact assessment"
+                  }
+                },
+                "required": [
+                  "citations",
+                  "description",
+                  "level",
+                  "score",
+                  "sourceEventId"
+                ],
+                "nullable": true,
+                "description": "The issue's impact assessment, or null when no assessment is available"
               }
             },
             "required": [
@@ -122372,6 +122707,73 @@
                 "type": "string",
                 "format": "date-time",
                 "nullable": true
+              },
+              "impact": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "format": "double",
+                    "nullable": true,
+                    "description": "Estimated per-occurrence impact on the end user's capability from 0 to 100"
+                  },
+                  "level": {
+                    "enum": [
+                      "super_low",
+                      "low",
+                      "moderate",
+                      "high",
+                      "super_high",
+                      null
+                    ],
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Impact level derived from the assessment score"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Human-readable description of the capability affected by the issue"
+                  },
+                  "citations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string",
+                          "description": "Stable identifier for the evidence supporting this claim"
+                        },
+                        "claim": {
+                          "type": "string",
+                          "description": "Concise explanation of what the cited evidence establishes"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The category of evidence cited, such as an event, trace, replay, or log"
+                        }
+                      },
+                      "required": [
+                        "claim",
+                        "reference",
+                        "source"
+                      ]
+                    },
+                    "description": "Evidence-backed claims supporting the impact assessment"
+                  },
+                  "sourceEventId": {
+                    "type": "string",
+                    "description": "ID of the issue event used to generate the impact assessment"
+                  }
+                },
+                "required": [
+                  "citations",
+                  "description",
+                  "level",
+                  "score",
+                  "sourceEventId"
+                ],
+                "nullable": true,
+                "description": "The issue's impact assessment, or null when no assessment is available"
               }
             },
             "required": [
@@ -137803,6 +138205,73 @@
                   "type": "string",
                   "format": "date-time",
                   "nullable": true
+                },
+                "impact": {
+                  "type": "object",
+                  "properties": {
+                    "score": {
+                      "type": "number",
+                      "format": "double",
+                      "nullable": true,
+                      "description": "Estimated per-occurrence impact on the end user's capability from 0 to 100"
+                    },
+                    "level": {
+                      "enum": [
+                        "super_low",
+                        "low",
+                        "moderate",
+                        "high",
+                        "super_high",
+                        null
+                      ],
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Impact level derived from the assessment score"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Human-readable description of the capability affected by the issue"
+                    },
+                    "citations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "reference": {
+                            "type": "string",
+                            "description": "Stable identifier for the evidence supporting this claim"
+                          },
+                          "claim": {
+                            "type": "string",
+                            "description": "Concise explanation of what the cited evidence establishes"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The category of evidence cited, such as an event, trace, replay, or log"
+                          }
+                        },
+                        "required": [
+                          "claim",
+                          "reference",
+                          "source"
+                        ]
+                      },
+                      "description": "Evidence-backed claims supporting the impact assessment"
+                    },
+                    "sourceEventId": {
+                      "type": "string",
+                      "description": "ID of the issue event used to generate the impact assessment"
+                    }
+                  },
+                  "required": [
+                    "citations",
+                    "description",
+                    "level",
+                    "score",
+                    "sourceEventId"
+                  ],
+                  "nullable": true,
+                  "description": "The issue's impact assessment, or null when no assessment is available"
                 }
               },
               "required": [
@@ -149422,6 +149891,73 @@
                     "type": "string",
                     "format": "date-time",
                     "nullable": true
+                  },
+                  "impact": {
+                    "type": "object",
+                    "properties": {
+                      "score": {
+                        "type": "number",
+                        "format": "double",
+                        "nullable": true,
+                        "description": "Estimated per-occurrence impact on the end user's capability from 0 to 100"
+                      },
+                      "level": {
+                        "enum": [
+                          "super_low",
+                          "low",
+                          "moderate",
+                          "high",
+                          "super_high",
+                          null
+                        ],
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Impact level derived from the assessment score"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Human-readable description of the capability affected by the issue"
+                      },
+                      "citations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "reference": {
+                              "type": "string",
+                              "description": "Stable identifier for the evidence supporting this claim"
+                            },
+                            "claim": {
+                              "type": "string",
+                              "description": "Concise explanation of what the cited evidence establishes"
+                            },
+                            "source": {
+                              "type": "string",
+                              "description": "The category of evidence cited, such as an event, trace, replay, or log"
+                            }
+                          },
+                          "required": [
+                            "claim",
+                            "reference",
+                            "source"
+                          ]
+                        },
+                        "description": "Evidence-backed claims supporting the impact assessment"
+                      },
+                      "sourceEventId": {
+                        "type": "string",
+                        "description": "ID of the issue event used to generate the impact assessment"
+                      }
+                    },
+                    "required": [
+                      "citations",
+                      "description",
+                      "level",
+                      "score",
+                      "sourceEventId"
+                    ],
+                    "nullable": true,
+                    "description": "The issue's impact assessment, or null when no assessment is available"
                   }
                 },
                 "required": [
