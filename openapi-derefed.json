@@ -3204,18 +3204,6 @@
               "type": "integer"
             },
             "description": "Number of spans to return per page. Defaults to 100; maximum is 1,000."
-          },
-          {
-            "in": "query",
-            "name": "view",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "timeline",
-                "transcript"
-              ]
-            },
-            "description": "Defaults to timeline (paginated raw spans). Transcript returns paginated normalized messages; requires feature access. Transcript timestamps and durations are seconds."
           }
         ],
         "tags": [
@@ -3235,667 +3223,269 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
-                    {
-                      "type": "object",
-                      "description": "Span page plus conversation-level metadata.",
-                      "properties": {
-                        "conversationId": {
-                          "type": "string",
-                          "description": "ID of the conversation"
-                        },
-                        "title": {
-                          "type": "string",
-                          "nullable": true,
-                          "description": "Stored title of the conversation. Null when it has none yet"
-                        },
-                        "projects": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "integer",
-                                "description": "ID of the project"
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "Name of the project"
-                              },
-                              "slug": {
-                                "type": "string",
-                                "description": "Slug of the project"
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "name",
-                              "slug"
-                            ]
-                          },
-                          "description": "Projects the conversation's spans belong to"
-                        },
-                        "webUrl": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "URL of the conversation in Sentry"
-                        },
-                        "spans": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "additionalProperties": {}
-                          },
-                          "description": "Spans recorded for the conversation, in start-time order"
-                        },
-                        "stats": {
-                          "type": "object",
-                          "properties": {
-                            "endTimestamp": {
-                              "type": "integer",
-                              "description": "When the conversation's last AI span happened, as a Unix timestamp in milliseconds"
-                            },
-                            "errors": {
-                              "type": "integer",
-                              "description": "Number of spans whose status isn't ok, cancelled or unknown"
-                            },
-                            "generationDuration": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Total duration of the conversation's LLM calls in milliseconds"
-                            },
-                            "inputTokens": {
-                              "type": "integer",
-                              "description": "Number of input tokens used by LLM calls"
-                            },
-                            "llmCalls": {
-                              "type": "integer",
-                              "description": "Number of LLM calls"
-                            },
-                            "outputTokens": {
-                              "type": "integer",
-                              "description": "Number of output tokens used by LLM calls"
-                            },
-                            "startTimestamp": {
-                              "type": "integer",
-                              "description": "When the conversation's first AI span happened, as a Unix timestamp in milliseconds"
-                            },
-                            "toolCalls": {
-                              "type": "integer",
-                              "description": "Number of tool calls"
-                            },
-                            "toolErrors": {
-                              "type": "integer",
-                              "description": "Number of failed tool calls"
-                            },
-                            "toolNames": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              },
-                              "description": "Names of the tools called, sorted"
-                            },
-                            "totalCost": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Total cost of LLM calls"
-                            },
-                            "totalTokens": {
-                              "type": "integer",
-                              "description": "Total number of tokens used by LLM calls"
-                            },
-                            "cacheReadTokens": {
-                              "type": "integer",
-                              "description": "Number of input tokens read from the cache"
-                            },
-                            "cacheWriteTokens": {
-                              "type": "integer",
-                              "description": "Number of input tokens written to the cache"
-                            },
-                            "errorToolNames": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              },
-                              "description": "Names of the tools used by spans with errors"
-                            },
-                            "reasoningTokens": {
-                              "type": "integer",
-                              "description": "Number of reasoning tokens"
-                            },
-                            "cacheReadCost": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Cost of cache-read tokens"
-                            },
-                            "cacheWriteCost": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Cost of cache-write tokens"
-                            },
-                            "reasoningCost": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Cost of reasoning tokens"
-                            },
-                            "usageByModel": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "model": {
-                                    "type": "string",
-                                    "nullable": true,
-                                    "description": "Name of the model"
-                                  },
-                                  "llmCalls": {
-                                    "type": "integer",
-                                    "description": "Number of LLM calls to the model"
-                                  },
-                                  "inputTokens": {
-                                    "type": "integer",
-                                    "description": "Number of input tokens, including cache-read and cache-write tokens"
-                                  },
-                                  "outputTokens": {
-                                    "type": "integer",
-                                    "description": "Number of output tokens"
-                                  },
-                                  "totalTokens": {
-                                    "type": "integer",
-                                    "description": "Total number of tokens"
-                                  },
-                                  "cacheReadTokens": {
-                                    "type": "integer",
-                                    "description": "Number of input tokens read from the cache"
-                                  },
-                                  "cacheWriteTokens": {
-                                    "type": "integer",
-                                    "description": "Number of input tokens written to the cache"
-                                  },
-                                  "reasoningTokens": {
-                                    "type": "integer",
-                                    "description": "Number of reasoning tokens"
-                                  },
-                                  "inputCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of input tokens, including cache-read and cache-write costs"
-                                  },
-                                  "outputCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of output tokens, including reasoning cost"
-                                  },
-                                  "cacheReadCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of cache-read tokens"
-                                  },
-                                  "cacheWriteCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of cache-write tokens"
-                                  },
-                                  "reasoningCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of reasoning tokens"
-                                  },
-                                  "totalCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Total cost"
-                                  }
-                                },
-                                "required": [
-                                  "cacheReadCost",
-                                  "cacheReadTokens",
-                                  "cacheWriteCost",
-                                  "cacheWriteTokens",
-                                  "inputCost",
-                                  "inputTokens",
-                                  "llmCalls",
-                                  "model",
-                                  "outputCost",
-                                  "outputTokens",
-                                  "reasoningCost",
-                                  "reasoningTokens",
-                                  "totalCost",
-                                  "totalTokens"
-                                ]
-                              },
-                              "description": "Token usage and cost per model"
-                            }
-                          },
-                          "required": [
-                            "cacheReadCost",
-                            "cacheReadTokens",
-                            "cacheWriteCost",
-                            "cacheWriteTokens",
-                            "endTimestamp",
-                            "errorToolNames",
-                            "errors",
-                            "generationDuration",
-                            "inputTokens",
-                            "llmCalls",
-                            "outputTokens",
-                            "reasoningCost",
-                            "reasoningTokens",
-                            "startTimestamp",
-                            "toolCalls",
-                            "toolErrors",
-                            "toolNames",
-                            "totalCost",
-                            "totalTokens",
-                            "usageByModel"
-                          ],
-                          "nullable": true,
-                          "description": "Aggregate stats for the conversation. Only returned on the first page"
-                        }
-                      },
-                      "required": [
-                        "conversationId",
-                        "projects",
-                        "spans",
-                        "stats",
-                        "title",
-                        "webUrl"
-                      ]
+                  "type": "object",
+                  "description": "Span page plus conversation-level metadata.",
+                  "properties": {
+                    "conversationId": {
+                      "type": "string",
+                      "description": "ID of the conversation"
                     },
-                    {
+                    "title": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Stored title of the conversation. Null when it has none yet"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "ID of the project"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the project"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "description": "Slug of the project"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug"
+                        ]
+                      },
+                      "description": "Projects the conversation's spans belong to"
+                    },
+                    "webUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL of the conversation in Sentry"
+                    },
+                    "spans": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "description": "Spans recorded for the conversation, in start-time order"
+                    },
+                    "stats": {
                       "type": "object",
                       "properties": {
-                        "conversationId": {
-                          "type": "string",
-                          "description": "ID of the conversation"
-                        },
-                        "title": {
-                          "type": "string",
-                          "nullable": true,
-                          "description": "Stored title of the conversation. Null when it has none yet"
-                        },
-                        "projects": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "integer",
-                                "description": "ID of the project"
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "Name of the project"
-                              },
-                              "slug": {
-                                "type": "string",
-                                "description": "Slug of the project"
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "name",
-                              "slug"
-                            ]
-                          },
-                          "description": "Projects the conversation's spans belong to"
-                        },
-                        "webUrl": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "URL of the conversation in Sentry"
-                        },
-                        "stats": {
-                          "type": "object",
-                          "properties": {
-                            "endTimestamp": {
-                              "type": "integer",
-                              "description": "When the conversation's last AI span happened, as a Unix timestamp in milliseconds"
-                            },
-                            "errors": {
-                              "type": "integer",
-                              "description": "Number of spans whose status isn't ok, cancelled or unknown"
-                            },
-                            "generationDuration": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Total duration of the conversation's LLM calls in milliseconds"
-                            },
-                            "inputTokens": {
-                              "type": "integer",
-                              "description": "Number of input tokens used by LLM calls"
-                            },
-                            "llmCalls": {
-                              "type": "integer",
-                              "description": "Number of LLM calls"
-                            },
-                            "outputTokens": {
-                              "type": "integer",
-                              "description": "Number of output tokens used by LLM calls"
-                            },
-                            "startTimestamp": {
-                              "type": "integer",
-                              "description": "When the conversation's first AI span happened, as a Unix timestamp in milliseconds"
-                            },
-                            "toolCalls": {
-                              "type": "integer",
-                              "description": "Number of tool calls"
-                            },
-                            "toolErrors": {
-                              "type": "integer",
-                              "description": "Number of failed tool calls"
-                            },
-                            "toolNames": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              },
-                              "description": "Names of the tools called, sorted"
-                            },
-                            "totalCost": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Total cost of LLM calls"
-                            },
-                            "totalTokens": {
-                              "type": "integer",
-                              "description": "Total number of tokens used by LLM calls"
-                            },
-                            "cacheReadTokens": {
-                              "type": "integer",
-                              "description": "Number of input tokens read from the cache"
-                            },
-                            "cacheWriteTokens": {
-                              "type": "integer",
-                              "description": "Number of input tokens written to the cache"
-                            },
-                            "errorToolNames": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              },
-                              "description": "Names of the tools used by spans with errors"
-                            },
-                            "reasoningTokens": {
-                              "type": "integer",
-                              "description": "Number of reasoning tokens"
-                            },
-                            "cacheReadCost": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Cost of cache-read tokens"
-                            },
-                            "cacheWriteCost": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Cost of cache-write tokens"
-                            },
-                            "reasoningCost": {
-                              "type": "number",
-                              "format": "double",
-                              "description": "Cost of reasoning tokens"
-                            },
-                            "usageByModel": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "model": {
-                                    "type": "string",
-                                    "nullable": true,
-                                    "description": "Name of the model"
-                                  },
-                                  "llmCalls": {
-                                    "type": "integer",
-                                    "description": "Number of LLM calls to the model"
-                                  },
-                                  "inputTokens": {
-                                    "type": "integer",
-                                    "description": "Number of input tokens, including cache-read and cache-write tokens"
-                                  },
-                                  "outputTokens": {
-                                    "type": "integer",
-                                    "description": "Number of output tokens"
-                                  },
-                                  "totalTokens": {
-                                    "type": "integer",
-                                    "description": "Total number of tokens"
-                                  },
-                                  "cacheReadTokens": {
-                                    "type": "integer",
-                                    "description": "Number of input tokens read from the cache"
-                                  },
-                                  "cacheWriteTokens": {
-                                    "type": "integer",
-                                    "description": "Number of input tokens written to the cache"
-                                  },
-                                  "reasoningTokens": {
-                                    "type": "integer",
-                                    "description": "Number of reasoning tokens"
-                                  },
-                                  "inputCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of input tokens, including cache-read and cache-write costs"
-                                  },
-                                  "outputCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of output tokens, including reasoning cost"
-                                  },
-                                  "cacheReadCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of cache-read tokens"
-                                  },
-                                  "cacheWriteCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of cache-write tokens"
-                                  },
-                                  "reasoningCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Cost of reasoning tokens"
-                                  },
-                                  "totalCost": {
-                                    "type": "number",
-                                    "format": "double",
-                                    "description": "Total cost"
-                                  }
-                                },
-                                "required": [
-                                  "cacheReadCost",
-                                  "cacheReadTokens",
-                                  "cacheWriteCost",
-                                  "cacheWriteTokens",
-                                  "inputCost",
-                                  "inputTokens",
-                                  "llmCalls",
-                                  "model",
-                                  "outputCost",
-                                  "outputTokens",
-                                  "reasoningCost",
-                                  "reasoningTokens",
-                                  "totalCost",
-                                  "totalTokens"
-                                ]
-                              },
-                              "description": "Token usage and cost per model"
-                            }
-                          },
-                          "required": [
-                            "cacheReadCost",
-                            "cacheReadTokens",
-                            "cacheWriteCost",
-                            "cacheWriteTokens",
-                            "endTimestamp",
-                            "errorToolNames",
-                            "errors",
-                            "generationDuration",
-                            "inputTokens",
-                            "llmCalls",
-                            "outputTokens",
-                            "reasoningCost",
-                            "reasoningTokens",
-                            "startTimestamp",
-                            "toolCalls",
-                            "toolErrors",
-                            "toolNames",
-                            "totalCost",
-                            "totalTokens",
-                            "usageByModel"
-                          ],
-                          "nullable": true,
-                          "description": "Aggregate stats for the conversation. Only returned on the first page"
-                        },
-                        "transcript": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "ID of the message"
-                              },
-                              "role": {
-                                "enum": [
-                                  "user",
-                                  "assistant",
-                                  "embedding",
-                                  "evaluation",
-                                  "memory"
-                                ],
-                                "type": "string",
-                                "description": "Role of the message: user, assistant, embedding, evaluation or memory"
-                              },
-                              "content": {
-                                "type": "string",
-                                "description": "Content of the message"
-                              },
-                              "timestamp": {
-                                "type": "number",
-                                "format": "double",
-                                "description": "When the message was recorded, as a Unix timestamp in seconds"
-                              },
-                              "nodeId": {
-                                "type": "string",
-                                "description": "ID of the span the message comes from"
-                              },
-                              "traceId": {
-                                "type": "string",
-                                "description": "ID of the trace the message comes from"
-                              },
-                              "projectId": {
-                                "type": "string",
-                                "description": "ID of the project the message comes from"
-                              },
-                              "userEmail": {
-                                "type": "string",
-                                "description": "Email of the user who sent the message"
-                              },
-                              "reasoning": {
-                                "type": "string",
-                                "description": "Reasoning the model recorded for the message"
-                              },
-                              "agentName": {
-                                "type": "string",
-                                "description": "Name of the agent that produced the message"
-                              },
-                              "modelName": {
-                                "type": "string",
-                                "description": "Name of the model that produced the message"
-                              },
-                              "duration": {
-                                "type": "number",
-                                "format": "double",
-                                "description": "Duration of the span that produced the message in seconds"
-                              },
-                              "toolCalls": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "name": {
-                                      "type": "string",
-                                      "description": "Name of the tool"
-                                    },
-                                    "nodeId": {
-                                      "type": "string",
-                                      "description": "ID of the tool call's span"
-                                    },
-                                    "hasError": {
-                                      "type": "boolean",
-                                      "description": "Whether the tool call failed"
-                                    },
-                                    "duration": {
-                                      "type": "number",
-                                      "format": "double",
-                                      "description": "Duration of the tool call in seconds"
-                                    }
-                                  },
-                                  "required": [
-                                    "hasError",
-                                    "name",
-                                    "nodeId"
-                                  ]
-                                },
-                                "description": "Tool calls the message made"
-                              },
-                              "embeddingInput": {
-                                "type": "string",
-                                "description": "Input of the embedding call"
-                              },
-                              "embeddingTokens": {
-                                "type": "number",
-                                "format": "double",
-                                "description": "Number of tokens the embedding call used"
-                              },
-                              "embeddingHasError": {
-                                "type": "boolean",
-                                "description": "Whether the embedding call failed"
-                              },
-                              "evaluation": {
-                                "type": "object",
-                                "additionalProperties": {},
-                                "description": "Evaluation result recorded by the provider"
-                              },
-                              "memory": {
-                                "type": "object",
-                                "additionalProperties": {},
-                                "description": "Memory operation recorded by the provider"
-                              }
-                            },
-                            "required": [
-                              "content",
-                              "id",
-                              "nodeId",
-                              "role",
-                              "timestamp"
-                            ]
-                          },
-                          "description": "Messages in the conversation, built from its spans"
-                        },
-                        "complete": {
-                          "type": "boolean",
-                          "description": "Whether this page holds the rest of the transcript"
-                        },
-                        "sourceSpanCount": {
+                        "endTimestamp": {
                           "type": "integer",
-                          "description": "Number of spans this page of the transcript was built from"
+                          "description": "When the conversation's last AI span happened, as a Unix timestamp in milliseconds"
+                        },
+                        "errors": {
+                          "type": "integer",
+                          "description": "Number of spans whose status isn't ok, cancelled or unknown"
+                        },
+                        "generationDuration": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "Total duration of the conversation's LLM calls in milliseconds"
+                        },
+                        "inputTokens": {
+                          "type": "integer",
+                          "description": "Number of input tokens used by LLM calls"
+                        },
+                        "llmCalls": {
+                          "type": "integer",
+                          "description": "Number of LLM calls"
+                        },
+                        "outputTokens": {
+                          "type": "integer",
+                          "description": "Number of output tokens used by LLM calls"
+                        },
+                        "startTimestamp": {
+                          "type": "integer",
+                          "description": "When the conversation's first AI span happened, as a Unix timestamp in milliseconds"
+                        },
+                        "toolCalls": {
+                          "type": "integer",
+                          "description": "Number of tool calls"
+                        },
+                        "toolErrors": {
+                          "type": "integer",
+                          "description": "Number of failed tool calls"
+                        },
+                        "toolNames": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Names of the tools called, sorted"
+                        },
+                        "totalCost": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "Total cost of LLM calls"
+                        },
+                        "totalTokens": {
+                          "type": "integer",
+                          "description": "Total number of tokens used by LLM calls"
+                        },
+                        "cacheReadTokens": {
+                          "type": "integer",
+                          "description": "Number of input tokens read from the cache"
+                        },
+                        "cacheWriteTokens": {
+                          "type": "integer",
+                          "description": "Number of input tokens written to the cache"
+                        },
+                        "errorToolNames": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Names of the tools used by spans with errors"
+                        },
+                        "reasoningTokens": {
+                          "type": "integer",
+                          "description": "Number of reasoning tokens"
+                        },
+                        "cacheReadCost": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "Cost of cache-read tokens"
+                        },
+                        "cacheWriteCost": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "Cost of cache-write tokens"
+                        },
+                        "reasoningCost": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "Cost of reasoning tokens"
+                        },
+                        "usageByModel": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "model": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Name of the model"
+                              },
+                              "llmCalls": {
+                                "type": "integer",
+                                "description": "Number of LLM calls to the model"
+                              },
+                              "inputTokens": {
+                                "type": "integer",
+                                "description": "Number of input tokens, including cache-read and cache-write tokens"
+                              },
+                              "outputTokens": {
+                                "type": "integer",
+                                "description": "Number of output tokens"
+                              },
+                              "totalTokens": {
+                                "type": "integer",
+                                "description": "Total number of tokens"
+                              },
+                              "cacheReadTokens": {
+                                "type": "integer",
+                                "description": "Number of input tokens read from the cache"
+                              },
+                              "cacheWriteTokens": {
+                                "type": "integer",
+                                "description": "Number of input tokens written to the cache"
+                              },
+                              "reasoningTokens": {
+                                "type": "integer",
+                                "description": "Number of reasoning tokens"
+                              },
+                              "inputCost": {
+                                "type": "number",
+                                "format": "double",
+                                "description": "Cost of input tokens, including cache-read and cache-write costs"
+                              },
+                              "outputCost": {
+                                "type": "number",
+                                "format": "double",
+                                "description": "Cost of output tokens, including reasoning cost"
+                              },
+                              "cacheReadCost": {
+                                "type": "number",
+                                "format": "double",
+                                "description": "Cost of cache-read tokens"
+                              },
+                              "cacheWriteCost": {
+                                "type": "number",
+                                "format": "double",
+                                "description": "Cost of cache-write tokens"
+                              },
+                              "reasoningCost": {
+                                "type": "number",
+                                "format": "double",
+                                "description": "Cost of reasoning tokens"
+                              },
+                              "totalCost": {
+                                "type": "number",
+                                "format": "double",
+                                "description": "Total cost"
+                              }
+                            },
+                            "required": [
+                              "cacheReadCost",
+                              "cacheReadTokens",
+                              "cacheWriteCost",
+                              "cacheWriteTokens",
+                              "inputCost",
+                              "inputTokens",
+                              "llmCalls",
+                              "model",
+                              "outputCost",
+                              "outputTokens",
+                              "reasoningCost",
+                              "reasoningTokens",
+                              "totalCost",
+                              "totalTokens"
+                            ]
+                          },
+                          "description": "Token usage and cost per model"
                         }
                       },
                       "required": [
-                        "complete",
-                        "conversationId",
-                        "projects",
-                        "sourceSpanCount",
-                        "stats",
-                        "title",
-                        "transcript",
-                        "webUrl"
-                      ]
+                        "cacheReadCost",
+                        "cacheReadTokens",
+                        "cacheWriteCost",
+                        "cacheWriteTokens",
+                        "endTimestamp",
+                        "errorToolNames",
+                        "errors",
+                        "generationDuration",
+                        "inputTokens",
+                        "llmCalls",
+                        "outputTokens",
+                        "reasoningCost",
+                        "reasoningTokens",
+                        "startTimestamp",
+                        "toolCalls",
+                        "toolErrors",
+                        "toolNames",
+                        "totalCost",
+                        "totalTokens",
+                        "usageByModel"
+                      ],
+                      "nullable": true,
+                      "description": "Aggregate stats for the conversation. Only returned on the first page"
                     }
+                  },
+                  "required": [
+                    "conversationId",
+                    "projects",
+                    "spans",
+                    "stats",
+                    "title",
+                    "webUrl"
                   ]
                 },
                 "examples": {
@@ -3981,43 +3571,6 @@
                       ]
                     },
                     "summary": "Return an AI conversation"
-                  },
-                  "ReturnANormalizedAIConversationTranscript": {
-                    "value": {
-                      "conversationId": "conversation-1",
-                      "title": "Greeting",
-                      "projects": [
-                        {
-                          "id": 1,
-                          "name": "Example Agent",
-                          "slug": "example-agent"
-                        }
-                      ],
-                      "webUrl": "https://sentry.io/organizations/org-slug/explore/agents/conversations/conversation-1/?project=1",
-                      "stats": null,
-                      "complete": true,
-                      "sourceSpanCount": 1,
-                      "transcript": [
-                        {
-                          "id": "user-a1b2c3d4e5f67890",
-                          "role": "user",
-                          "content": "Hello",
-                          "timestamp": 1743465600,
-                          "nodeId": "a1b2c3d4e5f67890",
-                          "userEmail": ""
-                        },
-                        {
-                          "id": "assistant-a1b2c3d4e5f67890",
-                          "role": "assistant",
-                          "content": "Hi",
-                          "timestamp": 1743465601.25,
-                          "nodeId": "a1b2c3d4e5f67890",
-                          "duration": 1.25
-                        }
-                      ]
-                    },
-                    "summary": "Return a normalized AI conversation transcript",
-                    "description": "Request view=transcript with feature access. Raw spans remain available through view=timeline."
                   }
                 }
               }
@@ -148168,667 +147721,269 @@
         ]
       },
       "RetrieveOrganizationAIConversationResponse": {
-        "anyOf": [
-          {
-            "type": "object",
-            "description": "Span page plus conversation-level metadata.",
-            "properties": {
-              "conversationId": {
-                "type": "string",
-                "description": "ID of the conversation"
-              },
-              "title": {
-                "type": "string",
-                "nullable": true,
-                "description": "Stored title of the conversation. Null when it has none yet"
-              },
-              "projects": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer",
-                      "description": "ID of the project"
-                    },
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the project"
-                    },
-                    "slug": {
-                      "type": "string",
-                      "description": "Slug of the project"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "slug"
-                  ]
-                },
-                "description": "Projects the conversation's spans belong to"
-              },
-              "webUrl": {
-                "type": "string",
-                "format": "uri",
-                "description": "URL of the conversation in Sentry"
-              },
-              "spans": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "additionalProperties": {}
-                },
-                "description": "Spans recorded for the conversation, in start-time order"
-              },
-              "stats": {
-                "type": "object",
-                "properties": {
-                  "endTimestamp": {
-                    "type": "integer",
-                    "description": "When the conversation's last AI span happened, as a Unix timestamp in milliseconds"
-                  },
-                  "errors": {
-                    "type": "integer",
-                    "description": "Number of spans whose status isn't ok, cancelled or unknown"
-                  },
-                  "generationDuration": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Total duration of the conversation's LLM calls in milliseconds"
-                  },
-                  "inputTokens": {
-                    "type": "integer",
-                    "description": "Number of input tokens used by LLM calls"
-                  },
-                  "llmCalls": {
-                    "type": "integer",
-                    "description": "Number of LLM calls"
-                  },
-                  "outputTokens": {
-                    "type": "integer",
-                    "description": "Number of output tokens used by LLM calls"
-                  },
-                  "startTimestamp": {
-                    "type": "integer",
-                    "description": "When the conversation's first AI span happened, as a Unix timestamp in milliseconds"
-                  },
-                  "toolCalls": {
-                    "type": "integer",
-                    "description": "Number of tool calls"
-                  },
-                  "toolErrors": {
-                    "type": "integer",
-                    "description": "Number of failed tool calls"
-                  },
-                  "toolNames": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "Names of the tools called, sorted"
-                  },
-                  "totalCost": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Total cost of LLM calls"
-                  },
-                  "totalTokens": {
-                    "type": "integer",
-                    "description": "Total number of tokens used by LLM calls"
-                  },
-                  "cacheReadTokens": {
-                    "type": "integer",
-                    "description": "Number of input tokens read from the cache"
-                  },
-                  "cacheWriteTokens": {
-                    "type": "integer",
-                    "description": "Number of input tokens written to the cache"
-                  },
-                  "errorToolNames": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "Names of the tools used by spans with errors"
-                  },
-                  "reasoningTokens": {
-                    "type": "integer",
-                    "description": "Number of reasoning tokens"
-                  },
-                  "cacheReadCost": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Cost of cache-read tokens"
-                  },
-                  "cacheWriteCost": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Cost of cache-write tokens"
-                  },
-                  "reasoningCost": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Cost of reasoning tokens"
-                  },
-                  "usageByModel": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "model": {
-                          "type": "string",
-                          "nullable": true,
-                          "description": "Name of the model"
-                        },
-                        "llmCalls": {
-                          "type": "integer",
-                          "description": "Number of LLM calls to the model"
-                        },
-                        "inputTokens": {
-                          "type": "integer",
-                          "description": "Number of input tokens, including cache-read and cache-write tokens"
-                        },
-                        "outputTokens": {
-                          "type": "integer",
-                          "description": "Number of output tokens"
-                        },
-                        "totalTokens": {
-                          "type": "integer",
-                          "description": "Total number of tokens"
-                        },
-                        "cacheReadTokens": {
-                          "type": "integer",
-                          "description": "Number of input tokens read from the cache"
-                        },
-                        "cacheWriteTokens": {
-                          "type": "integer",
-                          "description": "Number of input tokens written to the cache"
-                        },
-                        "reasoningTokens": {
-                          "type": "integer",
-                          "description": "Number of reasoning tokens"
-                        },
-                        "inputCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of input tokens, including cache-read and cache-write costs"
-                        },
-                        "outputCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of output tokens, including reasoning cost"
-                        },
-                        "cacheReadCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of cache-read tokens"
-                        },
-                        "cacheWriteCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of cache-write tokens"
-                        },
-                        "reasoningCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of reasoning tokens"
-                        },
-                        "totalCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Total cost"
-                        }
-                      },
-                      "required": [
-                        "cacheReadCost",
-                        "cacheReadTokens",
-                        "cacheWriteCost",
-                        "cacheWriteTokens",
-                        "inputCost",
-                        "inputTokens",
-                        "llmCalls",
-                        "model",
-                        "outputCost",
-                        "outputTokens",
-                        "reasoningCost",
-                        "reasoningTokens",
-                        "totalCost",
-                        "totalTokens"
-                      ]
-                    },
-                    "description": "Token usage and cost per model"
-                  }
-                },
-                "required": [
-                  "cacheReadCost",
-                  "cacheReadTokens",
-                  "cacheWriteCost",
-                  "cacheWriteTokens",
-                  "endTimestamp",
-                  "errorToolNames",
-                  "errors",
-                  "generationDuration",
-                  "inputTokens",
-                  "llmCalls",
-                  "outputTokens",
-                  "reasoningCost",
-                  "reasoningTokens",
-                  "startTimestamp",
-                  "toolCalls",
-                  "toolErrors",
-                  "toolNames",
-                  "totalCost",
-                  "totalTokens",
-                  "usageByModel"
-                ],
-                "nullable": true,
-                "description": "Aggregate stats for the conversation. Only returned on the first page"
-              }
-            },
-            "required": [
-              "conversationId",
-              "projects",
-              "spans",
-              "stats",
-              "title",
-              "webUrl"
-            ]
+        "type": "object",
+        "description": "Span page plus conversation-level metadata.",
+        "properties": {
+          "conversationId": {
+            "type": "string",
+            "description": "ID of the conversation"
           },
-          {
+          "title": {
+            "type": "string",
+            "nullable": true,
+            "description": "Stored title of the conversation. Null when it has none yet"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "ID of the project"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the project"
+                },
+                "slug": {
+                  "type": "string",
+                  "description": "Slug of the project"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "slug"
+              ]
+            },
+            "description": "Projects the conversation's spans belong to"
+          },
+          "webUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the conversation in Sentry"
+          },
+          "spans": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "Spans recorded for the conversation, in start-time order"
+          },
+          "stats": {
             "type": "object",
             "properties": {
-              "conversationId": {
-                "type": "string",
-                "description": "ID of the conversation"
-              },
-              "title": {
-                "type": "string",
-                "nullable": true,
-                "description": "Stored title of the conversation. Null when it has none yet"
-              },
-              "projects": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer",
-                      "description": "ID of the project"
-                    },
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the project"
-                    },
-                    "slug": {
-                      "type": "string",
-                      "description": "Slug of the project"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "slug"
-                  ]
-                },
-                "description": "Projects the conversation's spans belong to"
-              },
-              "webUrl": {
-                "type": "string",
-                "format": "uri",
-                "description": "URL of the conversation in Sentry"
-              },
-              "stats": {
-                "type": "object",
-                "properties": {
-                  "endTimestamp": {
-                    "type": "integer",
-                    "description": "When the conversation's last AI span happened, as a Unix timestamp in milliseconds"
-                  },
-                  "errors": {
-                    "type": "integer",
-                    "description": "Number of spans whose status isn't ok, cancelled or unknown"
-                  },
-                  "generationDuration": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Total duration of the conversation's LLM calls in milliseconds"
-                  },
-                  "inputTokens": {
-                    "type": "integer",
-                    "description": "Number of input tokens used by LLM calls"
-                  },
-                  "llmCalls": {
-                    "type": "integer",
-                    "description": "Number of LLM calls"
-                  },
-                  "outputTokens": {
-                    "type": "integer",
-                    "description": "Number of output tokens used by LLM calls"
-                  },
-                  "startTimestamp": {
-                    "type": "integer",
-                    "description": "When the conversation's first AI span happened, as a Unix timestamp in milliseconds"
-                  },
-                  "toolCalls": {
-                    "type": "integer",
-                    "description": "Number of tool calls"
-                  },
-                  "toolErrors": {
-                    "type": "integer",
-                    "description": "Number of failed tool calls"
-                  },
-                  "toolNames": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "Names of the tools called, sorted"
-                  },
-                  "totalCost": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Total cost of LLM calls"
-                  },
-                  "totalTokens": {
-                    "type": "integer",
-                    "description": "Total number of tokens used by LLM calls"
-                  },
-                  "cacheReadTokens": {
-                    "type": "integer",
-                    "description": "Number of input tokens read from the cache"
-                  },
-                  "cacheWriteTokens": {
-                    "type": "integer",
-                    "description": "Number of input tokens written to the cache"
-                  },
-                  "errorToolNames": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "Names of the tools used by spans with errors"
-                  },
-                  "reasoningTokens": {
-                    "type": "integer",
-                    "description": "Number of reasoning tokens"
-                  },
-                  "cacheReadCost": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Cost of cache-read tokens"
-                  },
-                  "cacheWriteCost": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Cost of cache-write tokens"
-                  },
-                  "reasoningCost": {
-                    "type": "number",
-                    "format": "double",
-                    "description": "Cost of reasoning tokens"
-                  },
-                  "usageByModel": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "model": {
-                          "type": "string",
-                          "nullable": true,
-                          "description": "Name of the model"
-                        },
-                        "llmCalls": {
-                          "type": "integer",
-                          "description": "Number of LLM calls to the model"
-                        },
-                        "inputTokens": {
-                          "type": "integer",
-                          "description": "Number of input tokens, including cache-read and cache-write tokens"
-                        },
-                        "outputTokens": {
-                          "type": "integer",
-                          "description": "Number of output tokens"
-                        },
-                        "totalTokens": {
-                          "type": "integer",
-                          "description": "Total number of tokens"
-                        },
-                        "cacheReadTokens": {
-                          "type": "integer",
-                          "description": "Number of input tokens read from the cache"
-                        },
-                        "cacheWriteTokens": {
-                          "type": "integer",
-                          "description": "Number of input tokens written to the cache"
-                        },
-                        "reasoningTokens": {
-                          "type": "integer",
-                          "description": "Number of reasoning tokens"
-                        },
-                        "inputCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of input tokens, including cache-read and cache-write costs"
-                        },
-                        "outputCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of output tokens, including reasoning cost"
-                        },
-                        "cacheReadCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of cache-read tokens"
-                        },
-                        "cacheWriteCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of cache-write tokens"
-                        },
-                        "reasoningCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Cost of reasoning tokens"
-                        },
-                        "totalCost": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "Total cost"
-                        }
-                      },
-                      "required": [
-                        "cacheReadCost",
-                        "cacheReadTokens",
-                        "cacheWriteCost",
-                        "cacheWriteTokens",
-                        "inputCost",
-                        "inputTokens",
-                        "llmCalls",
-                        "model",
-                        "outputCost",
-                        "outputTokens",
-                        "reasoningCost",
-                        "reasoningTokens",
-                        "totalCost",
-                        "totalTokens"
-                      ]
-                    },
-                    "description": "Token usage and cost per model"
-                  }
-                },
-                "required": [
-                  "cacheReadCost",
-                  "cacheReadTokens",
-                  "cacheWriteCost",
-                  "cacheWriteTokens",
-                  "endTimestamp",
-                  "errorToolNames",
-                  "errors",
-                  "generationDuration",
-                  "inputTokens",
-                  "llmCalls",
-                  "outputTokens",
-                  "reasoningCost",
-                  "reasoningTokens",
-                  "startTimestamp",
-                  "toolCalls",
-                  "toolErrors",
-                  "toolNames",
-                  "totalCost",
-                  "totalTokens",
-                  "usageByModel"
-                ],
-                "nullable": true,
-                "description": "Aggregate stats for the conversation. Only returned on the first page"
-              },
-              "transcript": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "description": "ID of the message"
-                    },
-                    "role": {
-                      "enum": [
-                        "user",
-                        "assistant",
-                        "embedding",
-                        "evaluation",
-                        "memory"
-                      ],
-                      "type": "string",
-                      "description": "Role of the message: user, assistant, embedding, evaluation or memory"
-                    },
-                    "content": {
-                      "type": "string",
-                      "description": "Content of the message"
-                    },
-                    "timestamp": {
-                      "type": "number",
-                      "format": "double",
-                      "description": "When the message was recorded, as a Unix timestamp in seconds"
-                    },
-                    "nodeId": {
-                      "type": "string",
-                      "description": "ID of the span the message comes from"
-                    },
-                    "traceId": {
-                      "type": "string",
-                      "description": "ID of the trace the message comes from"
-                    },
-                    "projectId": {
-                      "type": "string",
-                      "description": "ID of the project the message comes from"
-                    },
-                    "userEmail": {
-                      "type": "string",
-                      "description": "Email of the user who sent the message"
-                    },
-                    "reasoning": {
-                      "type": "string",
-                      "description": "Reasoning the model recorded for the message"
-                    },
-                    "agentName": {
-                      "type": "string",
-                      "description": "Name of the agent that produced the message"
-                    },
-                    "modelName": {
-                      "type": "string",
-                      "description": "Name of the model that produced the message"
-                    },
-                    "duration": {
-                      "type": "number",
-                      "format": "double",
-                      "description": "Duration of the span that produced the message in seconds"
-                    },
-                    "toolCalls": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "description": "Name of the tool"
-                          },
-                          "nodeId": {
-                            "type": "string",
-                            "description": "ID of the tool call's span"
-                          },
-                          "hasError": {
-                            "type": "boolean",
-                            "description": "Whether the tool call failed"
-                          },
-                          "duration": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "Duration of the tool call in seconds"
-                          }
-                        },
-                        "required": [
-                          "hasError",
-                          "name",
-                          "nodeId"
-                        ]
-                      },
-                      "description": "Tool calls the message made"
-                    },
-                    "embeddingInput": {
-                      "type": "string",
-                      "description": "Input of the embedding call"
-                    },
-                    "embeddingTokens": {
-                      "type": "number",
-                      "format": "double",
-                      "description": "Number of tokens the embedding call used"
-                    },
-                    "embeddingHasError": {
-                      "type": "boolean",
-                      "description": "Whether the embedding call failed"
-                    },
-                    "evaluation": {
-                      "type": "object",
-                      "additionalProperties": {},
-                      "description": "Evaluation result recorded by the provider"
-                    },
-                    "memory": {
-                      "type": "object",
-                      "additionalProperties": {},
-                      "description": "Memory operation recorded by the provider"
-                    }
-                  },
-                  "required": [
-                    "content",
-                    "id",
-                    "nodeId",
-                    "role",
-                    "timestamp"
-                  ]
-                },
-                "description": "Messages in the conversation, built from its spans"
-              },
-              "complete": {
-                "type": "boolean",
-                "description": "Whether this page holds the rest of the transcript"
-              },
-              "sourceSpanCount": {
+              "endTimestamp": {
                 "type": "integer",
-                "description": "Number of spans this page of the transcript was built from"
+                "description": "When the conversation's last AI span happened, as a Unix timestamp in milliseconds"
+              },
+              "errors": {
+                "type": "integer",
+                "description": "Number of spans whose status isn't ok, cancelled or unknown"
+              },
+              "generationDuration": {
+                "type": "number",
+                "format": "double",
+                "description": "Total duration of the conversation's LLM calls in milliseconds"
+              },
+              "inputTokens": {
+                "type": "integer",
+                "description": "Number of input tokens used by LLM calls"
+              },
+              "llmCalls": {
+                "type": "integer",
+                "description": "Number of LLM calls"
+              },
+              "outputTokens": {
+                "type": "integer",
+                "description": "Number of output tokens used by LLM calls"
+              },
+              "startTimestamp": {
+                "type": "integer",
+                "description": "When the conversation's first AI span happened, as a Unix timestamp in milliseconds"
+              },
+              "toolCalls": {
+                "type": "integer",
+                "description": "Number of tool calls"
+              },
+              "toolErrors": {
+                "type": "integer",
+                "description": "Number of failed tool calls"
+              },
+              "toolNames": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Names of the tools called, sorted"
+              },
+              "totalCost": {
+                "type": "number",
+                "format": "double",
+                "description": "Total cost of LLM calls"
+              },
+              "totalTokens": {
+                "type": "integer",
+                "description": "Total number of tokens used by LLM calls"
+              },
+              "cacheReadTokens": {
+                "type": "integer",
+                "description": "Number of input tokens read from the cache"
+              },
+              "cacheWriteTokens": {
+                "type": "integer",
+                "description": "Number of input tokens written to the cache"
+              },
+              "errorToolNames": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Names of the tools used by spans with errors"
+              },
+              "reasoningTokens": {
+                "type": "integer",
+                "description": "Number of reasoning tokens"
+              },
+              "cacheReadCost": {
+                "type": "number",
+                "format": "double",
+                "description": "Cost of cache-read tokens"
+              },
+              "cacheWriteCost": {
+                "type": "number",
+                "format": "double",
+                "description": "Cost of cache-write tokens"
+              },
+              "reasoningCost": {
+                "type": "number",
+                "format": "double",
+                "description": "Cost of reasoning tokens"
+              },
+              "usageByModel": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "model": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Name of the model"
+                    },
+                    "llmCalls": {
+                      "type": "integer",
+                      "description": "Number of LLM calls to the model"
+                    },
+                    "inputTokens": {
+                      "type": "integer",
+                      "description": "Number of input tokens, including cache-read and cache-write tokens"
+                    },
+                    "outputTokens": {
+                      "type": "integer",
+                      "description": "Number of output tokens"
+                    },
+                    "totalTokens": {
+                      "type": "integer",
+                      "description": "Total number of tokens"
+                    },
+                    "cacheReadTokens": {
+                      "type": "integer",
+                      "description": "Number of input tokens read from the cache"
+                    },
+                    "cacheWriteTokens": {
+                      "type": "integer",
+                      "description": "Number of input tokens written to the cache"
+                    },
+                    "reasoningTokens": {
+                      "type": "integer",
+                      "description": "Number of reasoning tokens"
+                    },
+                    "inputCost": {
+                      "type": "number",
+                      "format": "double",
+                      "description": "Cost of input tokens, including cache-read and cache-write costs"
+                    },
+                    "outputCost": {
+                      "type": "number",
+                      "format": "double",
+                      "description": "Cost of output tokens, including reasoning cost"
+                    },
+                    "cacheReadCost": {
+                      "type": "number",
+                      "format": "double",
+                      "description": "Cost of cache-read tokens"
+                    },
+                    "cacheWriteCost": {
+                      "type": "number",
+                      "format": "double",
+                      "description": "Cost of cache-write tokens"
+                    },
+                    "reasoningCost": {
+                      "type": "number",
+                      "format": "double",
+                      "description": "Cost of reasoning tokens"
+                    },
+                    "totalCost": {
+                      "type": "number",
+                      "format": "double",
+                      "description": "Total cost"
+                    }
+                  },
+                  "required": [
+                    "cacheReadCost",
+                    "cacheReadTokens",
+                    "cacheWriteCost",
+                    "cacheWriteTokens",
+                    "inputCost",
+                    "inputTokens",
+                    "llmCalls",
+                    "model",
+                    "outputCost",
+                    "outputTokens",
+                    "reasoningCost",
+                    "reasoningTokens",
+                    "totalCost",
+                    "totalTokens"
+                  ]
+                },
+                "description": "Token usage and cost per model"
               }
             },
             "required": [
-              "complete",
-              "conversationId",
-              "projects",
-              "sourceSpanCount",
-              "stats",
-              "title",
-              "transcript",
-              "webUrl"
-            ]
+              "cacheReadCost",
+              "cacheReadTokens",
+              "cacheWriteCost",
+              "cacheWriteTokens",
+              "endTimestamp",
+              "errorToolNames",
+              "errors",
+              "generationDuration",
+              "inputTokens",
+              "llmCalls",
+              "outputTokens",
+              "reasoningCost",
+              "reasoningTokens",
+              "startTimestamp",
+              "toolCalls",
+              "toolErrors",
+              "toolNames",
+              "totalCost",
+              "totalTokens",
+              "usageByModel"
+            ],
+            "nullable": true,
+            "description": "Aggregate stats for the conversation. Only returned on the first page"
           }
+        },
+        "required": [
+          "conversationId",
+          "projects",
+          "spans",
+          "stats",
+          "title",
+          "webUrl"
         ]
       },
       "SCIMListResourceTypesResponse": {
