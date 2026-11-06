@@ -279,6 +279,25 @@ Your transport must honor the signal while a request is in flight. The SDK canno
 
 Cancellation follows the [error handling contract](#error-handling): before dispatch the SDK uses `signal.reason`; during fetch it preserves the transport's rejection, which may differ by runtime. By default this is returned as `{ error, request, response: undefined }`, or thrown with `throwOnError: true`. Error interceptors can intentionally map it. Cancellation during response body reading rejects unchanged, even in fields mode. There is no SDK-specific cancellation error class.
 
+### Uploading files to Objectstore
+
+`@sentry/api/client` exports an Objectstore client for the service that upload-options endpoints such as `snapshots/upload-options/` return. `findExistingObjects` checks keys with batched HEAD requests; `putObjects` sends uploads up to 1 MB in batched multipart requests and PUTs larger ones individually. Batches hold up to 1000 operations and 25 MB, with up to 4 in flight, so large uploads stay under the per-request rate limit of the Sentry proxy. The client uses only web-standard APIs: the host supplies each file's bytes and may supply `fetch`.
+
+```ts
+import { findExistingObjects, putObjects } from "@sentry/api/client";
+
+const existing = await findExistingObjects(objectstore, keys, { fetch });
+await putObjects(
+  objectstore,
+  files
+    .filter((file) => !existing.has(file.key))
+    .map((file) => ({ key: file.key, size: file.size, read: () => readFile(file.path) })),
+  { fetch },
+);
+```
+
+Failures throw `ObjectstoreError`, an `ApiError` with the failing object or request `url`.
+
 ## Runtime validation
 
 The root `@sentry/api` entry has no runtime dependencies. It provides the API client and pure TypeScript types without installing a validation library.
