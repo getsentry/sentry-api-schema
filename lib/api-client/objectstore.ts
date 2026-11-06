@@ -21,6 +21,7 @@
  * {@link ObjectUpload.read} and may inject `fetch` (e.g. for custom CAs).
  */
 
+import pLimit from "p-limit";
 import { ApiError } from "./errors.js";
 
 /** Header carrying the Objectstore bearer token. */
@@ -398,27 +399,6 @@ function chunk<T>(items: T[], size: number): T[][] {
 }
 
 /**
- * Run `tasks` with at most `limit` in flight. Rejects with the first failure;
- * tasks that have not started by then are skipped.
- */
-async function runLimited(tasks: (() => Promise<void>)[], limit: number): Promise<void> {
-  let next = 0;
-  let failed = false;
-  const worker = async () => {
-    while (!failed && next < tasks.length) {
-      const task = tasks[next++] as () => Promise<void>;
-      try {
-        await task();
-      } catch (error) {
-        failed = true;
-        throw error;
-      }
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(limit, tasks.length) }, worker));
-}
-
-/**
  * Find which keys already exist, using batched HEAD operations (one request
  * per {@link MAX_BATCH_OPS} keys, up to {@link BATCH_CONCURRENCY} at once).
  *
@@ -431,25 +411,27 @@ export async function findExistingObjects(
   options?: ObjectstoreOptions,
 ): Promise<Set<string>> {
   const existing = new Set<string>();
-  await runLimited(
-    chunk(keys, MAX_BATCH_OPS).map((batch) => async () => {
-      const results = await sendBatch(
-        config,
-        batch.map((key) => ({ kind: "head", key })),
-        options,
-      );
-      results.forEach((result, i) => {
-        const key = batch[i] as string;
-        if (result.status === 404) {
-          return;
-        }
-        if (result.status >= 400) {
-          throwOperationError(config, "Objectstore HEAD failed", key, result);
-        }
-        existing.add(key);
-      });
-    }),
-    BATCH_CONCURRENCY,
+  const limit = pLimit(BATCH_CONCURRENCY);
+  await Promise.all(
+    chunk(keys, MAX_BATCH_OPS).map((batch) =>
+      limit(async () => {
+        const results = await sendBatch(
+          config,
+          batch.map((key) => ({ kind: "head", key })),
+          options,
+        );
+        results.forEach((result, i) => {
+          const key = batch[i] as string;
+          if (result.status === 404) {
+            return;
+          }
+          if (result.status >= 400) {
+            throwOperationError(config, "Objectstore HEAD failed", key, result);
+          }
+          existing.add(key);
+        });
+      }),
+    ),
   );
   return existing;
 }
@@ -493,9 +475,11 @@ export async function putObjects(
   const batchable = uploads.filter((u) => u.size <= MAX_BATCH_PART_SIZE);
   const individual = uploads.filter((u) => u.size > MAX_BATCH_PART_SIZE);
 
+  const batchLimit = pLimit(BATCH_CONCURRENCY);
+  const individualLimit = pLimit(INDIVIDUAL_CONCURRENCY);
   await Promise.all([
-    runLimited(
-      groupBatches(batchable).map((batch) => async () => {
+    ...groupBatches(batchable).map((batch) =>
+      batchLimit(async () => {
         const operations = await Promise.all(
           batch.map(
             async (upload): Promise<BatchOperation> => ({
@@ -513,13 +497,11 @@ export async function putObjects(
           }
         });
       }),
-      BATCH_CONCURRENCY,
     ),
-    runLimited(
-      individual.map((upload) => async () => {
+    ...individual.map((upload) =>
+      individualLimit(async () => {
         await putObject(config, upload.key, await upload.read(), options);
       }),
-      INDIVIDUAL_CONCURRENCY,
     ),
   ]);
 }

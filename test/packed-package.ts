@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,11 +20,12 @@ export function installPackedPackage(prefix: string): string {
   const installed = join(directory, "node_modules", "@sentry", "api");
   mkdirSync(installed, { recursive: true });
   execFileSync("tar", ["-xzf", join(directory, packed[0]!.filename), "-C", installed, "--strip-components=1"]);
-  symlinkSync(
-    join(packageRoot, "node_modules", "http-cache-semantics"),
-    join(directory, "node_modules", "http-cache-semantics"),
-    "dir",
-  );
+  const { dependencies } = JSON.parse(readFileSync(join(packageRoot, "package.json"), "utf8")) as {
+    dependencies: Record<string, string>;
+  };
+  for (const name of Object.keys(dependencies)) {
+    symlinkSync(join(packageRoot, "node_modules", name), join(directory, "node_modules", name), "dir");
+  }
   writeFileSync(join(directory, "package.json"), JSON.stringify({ type: "module" }));
   return directory;
 }
