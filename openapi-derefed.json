@@ -8958,6 +8958,834 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/revisions/": {
+      "get": {
+        "operationId": "listOrganizationDashboardRevisions",
+        "description": "Return the revision history of an organization's custom dashboard, newest first.\n\nEach edit or restore of the dashboard records a revision holding the dashboard as it\nwas just before the change. Only the 10 most recent revisions are kept. Pass a\nrevision's `id` to the restore endpoint to roll the dashboard back to it.",
+        "summary": "List a Custom Dashboard's Revisions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "dashboard_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the dashboard you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          }
+        ],
+        "tags": [
+          "Dashboards"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "ID of the revision"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "Title of the dashboard in this revision"
+                      },
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "When the revision was recorded (ISO 8601)"
+                      },
+                      "createdBy": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "ID of the user"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Display name of the user"
+                          },
+                          "email": {
+                            "type": "string",
+                            "description": "Primary email address of the user"
+                          },
+                          "avatarType": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Avatar type, such as letter_avatar, upload or gravatar"
+                          },
+                          "avatarUrl": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "URL of the avatar image, or null if none is set"
+                          }
+                        },
+                        "required": [
+                          "avatarType",
+                          "avatarUrl",
+                          "email",
+                          "id",
+                          "name"
+                        ],
+                        "nullable": true,
+                        "description": "User whose change recorded the revision, or null if there is no such user or it was deleted"
+                      },
+                      "source": {
+                        "type": "string",
+                        "description": "Change that recorded the revision, which holds the dashboard as it was just before that change: edit (a dashboard edit), edit-with-agent (an edit the client marked as made by an AI agent) or pre-restore (a restore of another revision)"
+                      }
+                    },
+                    "required": [
+                      "createdBy",
+                      "dateCreated",
+                      "id",
+                      "source",
+                      "title"
+                    ]
+                  }
+                },
+                "examples": {
+                  "ListDashboardRevisions": {
+                    "value": [
+                      {
+                        "id": "2",
+                        "title": "Dashboard",
+                        "dateCreated": "2024-07-17T09:12:44.104915Z",
+                        "createdBy": {
+                          "id": "1",
+                          "name": "Admin",
+                          "email": "admin@sentry.io",
+                          "avatarType": "letter_avatar",
+                          "avatarUrl": null
+                        },
+                        "source": "pre-restore"
+                      },
+                      {
+                        "id": "1",
+                        "title": "Dashboard",
+                        "dateCreated": "2024-07-16T15:36:46.048343Z",
+                        "createdBy": {
+                          "id": "1",
+                          "name": "Admin",
+                          "email": "admin@sentry.io",
+                          "avatarType": "letter_avatar",
+                          "avatarUrl": null
+                        },
+                        "source": "edit"
+                      }
+                    ],
+                    "summary": "List dashboard revisions"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/revisions/{revision_id}/restore/": {
+      "post": {
+        "operationId": "restoreOrganizationDashboardRevision",
+        "description": "Restore an organization's custom dashboard to the state saved in one of its revisions,\nreplacing its title, widgets and saved settings such as filters, and return the restored\ndashboard.\n\nThe dashboard's current state is first recorded as a new revision with the source\n`pre-restore`, so a restore can itself be undone. Restoring again records another\nrevision, so retrying a restore is not idempotent. The requesting user needs edit\naccess to the dashboard. Returns 400 if the revision can no longer be restored, for\nexample because its snapshot format is unsupported or it fails validation, and 409 if\nanother dashboard already uses the revision's title.",
+        "summary": "Restore a Custom Dashboard Revision",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "dashboard_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the dashboard you'd like to retrieve.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "revision_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the dashboard revision, from the dashboard's revision list.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Dashboards"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "environment": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Saved environment filter for the dashboard"
+                    },
+                    "period": {
+                      "type": "string",
+                      "description": "Saved relative time range, such as 24h"
+                    },
+                    "utc": {
+                      "type": "string",
+                      "description": "Whether the saved time range is shown in UTC"
+                    },
+                    "expired": {
+                      "type": "boolean",
+                      "description": "Whether the saved start time was outside data retention and was moved forward"
+                    },
+                    "start": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Saved start of the time range (ISO 8601)"
+                    },
+                    "end": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Saved end of the time range (ISO 8601)"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the dashboard"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Title of the dashboard"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "When the dashboard was created (ISO 8601)"
+                    },
+                    "createdBy": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "nullable": true,
+                      "description": "User who created the dashboard"
+                    },
+                    "widgets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "ID of the widget"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Title of the widget"
+                          },
+                          "description": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Description of the widget"
+                          },
+                          "displayType": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "How the widget is displayed, such as line, area, bar, table or big_number"
+                          },
+                          "thresholds": {
+                            "type": "object",
+                            "properties": {
+                              "preferredPolarity": {
+                                "type": "string",
+                                "description": "Whether higher (+) or lower (-) values are better. Empty when unset"
+                              },
+                              "timeWindow": {
+                                "type": "string",
+                                "description": "Time window the thresholds apply to, as a stats period such as 5m, 1h or 1d"
+                              },
+                              "max_values": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "integer"
+                                },
+                                "description": "Threshold maximums, keyed max1 and max2"
+                              },
+                              "unit": {
+                                "type": "string",
+                                "description": "Unit of the threshold values"
+                              }
+                            },
+                            "required": [
+                              "max_values",
+                              "unit"
+                            ],
+                            "nullable": true,
+                            "description": "Thresholds that color the widget's values"
+                          },
+                          "interval": {
+                            "type": "string",
+                            "description": "Time interval for the widget's series, such as 5m"
+                          },
+                          "dateCreated": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When the widget was created (ISO 8601)"
+                          },
+                          "dashboardId": {
+                            "type": "string",
+                            "description": "ID of the dashboard the widget belongs to"
+                          },
+                          "queries": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "ID of the widget query"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "description": "Name of the query, used as the series name"
+                                },
+                                "fields": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "Fields the query selects"
+                                },
+                                "aggregates": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "Aggregate functions the query computes"
+                                },
+                                "transformations": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "description": "Transformations applied to aggregates, keyed by the aggregate's index"
+                                },
+                                "columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "Columns the query groups by"
+                                },
+                                "fieldAliases": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "Aliases shown in place of field names in table headers"
+                                },
+                                "conditions": {
+                                  "type": "string",
+                                  "description": "Search query that filters the data"
+                                },
+                                "orderby": {
+                                  "type": "string",
+                                  "description": "Field the results are sorted by"
+                                },
+                                "widgetId": {
+                                  "type": "string",
+                                  "description": "ID of the widget the query belongs to"
+                                },
+                                "onDemand": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "enabled": {
+                                        "type": "boolean",
+                                        "description": "Whether on-demand metric extraction is enabled for the query"
+                                      },
+                                      "extractionState": {
+                                        "type": "string",
+                                        "description": "On-demand extraction state, such as enabled:enrolled or disabled:high-cardinality"
+                                      },
+                                      "dashboardWidgetQueryId": {
+                                        "type": "integer",
+                                        "description": "ID of the widget query"
+                                      }
+                                    },
+                                    "required": [
+                                      "dashboardWidgetQueryId",
+                                      "enabled",
+                                      "extractionState"
+                                    ]
+                                  },
+                                  "description": "On-demand metric extraction settings for the query"
+                                },
+                                "isHidden": {
+                                  "type": "boolean",
+                                  "description": "Whether the query is hidden from the UI"
+                                },
+                                "selectedAggregate": {
+                                  "type": "integer",
+                                  "nullable": true,
+                                  "description": "Index of the aggregate shown by Big Number widgets"
+                                },
+                                "linkedDashboards": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "field": {
+                                        "type": "string",
+                                        "description": "Field that links to the dashboard"
+                                      },
+                                      "dashboardId": {
+                                        "type": "integer",
+                                        "description": "ID of the linked dashboard"
+                                      }
+                                    },
+                                    "required": [
+                                      "dashboardId",
+                                      "field"
+                                    ]
+                                  },
+                                  "description": "Dashboards linked from fields in the query's results"
+                                }
+                              },
+                              "required": [
+                                "aggregates",
+                                "columns",
+                                "conditions",
+                                "fieldAliases",
+                                "fields",
+                                "id",
+                                "isHidden",
+                                "linkedDashboards",
+                                "name",
+                                "onDemand",
+                                "orderby",
+                                "selectedAggregate",
+                                "transformations",
+                                "widgetId"
+                              ]
+                            },
+                            "description": "Queries that provide the widget's data"
+                          },
+                          "limit": {
+                            "type": "integer",
+                            "nullable": true,
+                            "description": "Maximum number of series or rows the widget shows"
+                          },
+                          "widgetType": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Dataset the widget queries, such as error-events, spans, logs or issue"
+                          },
+                          "layout": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer"
+                            },
+                            "nullable": true,
+                            "description": "Position and size of the widget on the dashboard grid"
+                          },
+                          "axisRange": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Y-axis range: auto or dataMin"
+                          },
+                          "legendType": {
+                            "enum": [
+                              "default",
+                              "breakdown",
+                              null
+                            ],
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Legend style: default or breakdown"
+                          },
+                          "datasetSource": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Whether the widget's dataset was chosen by the user or inferred"
+                          },
+                          "exploreUrls": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true,
+                            "description": "Explore URLs for each query, for widgets that query transactions"
+                          },
+                          "changedReason": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "orderby": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "nullable": true,
+                                  "description": "Sort orders that were dropped when the widget was migrated from transactions to spans"
+                                },
+                                "equations": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "anyOf": [
+                                        {
+                                          "type": "string"
+                                        },
+                                        {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "nullable": true,
+                                  "description": "Equations that were dropped when the widget was migrated from transactions to spans"
+                                },
+                                "selected_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "Columns that were dropped when the widget was migrated from transactions to spans"
+                                }
+                              },
+                              "required": [
+                                "equations",
+                                "orderby",
+                                "selected_columns"
+                              ]
+                            },
+                            "nullable": true,
+                            "description": "Parts of each query that were dropped when the widget was migrated from transactions to spans"
+                          }
+                        },
+                        "required": [
+                          "axisRange",
+                          "changedReason",
+                          "dashboardId",
+                          "datasetSource",
+                          "dateCreated",
+                          "description",
+                          "displayType",
+                          "id",
+                          "interval",
+                          "layout",
+                          "legendType",
+                          "limit",
+                          "queries",
+                          "thresholds",
+                          "title",
+                          "widgetType"
+                        ]
+                      },
+                      "description": "Widgets on the dashboard"
+                    },
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "description": "Saved project filter for the dashboard. [-1] means all projects"
+                    },
+                    "filters": {
+                      "type": "object",
+                      "properties": {
+                        "release": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Saved release filter"
+                        },
+                        "releaseId": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Saved release ID filter"
+                        },
+                        "globalFilter": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "description": "Saved global filters applied to every widget"
+                        }
+                      },
+                      "description": "Saved release and global filters for the dashboard"
+                    },
+                    "permissions": {
+                      "type": "object",
+                      "properties": {
+                        "isEditableByEveryone": {
+                          "type": "boolean",
+                          "description": "Whether everyone in the organization can edit the dashboard"
+                        },
+                        "teamsWithEditAccess": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          },
+                          "description": "IDs of the teams that can edit the dashboard"
+                        }
+                      },
+                      "required": [
+                        "isEditableByEveryone",
+                        "teamsWithEditAccess"
+                      ],
+                      "nullable": true,
+                      "description": "Edit permissions for the dashboard"
+                    },
+                    "isFavorited": {
+                      "type": "boolean",
+                      "description": "Whether the requesting user favorited the dashboard"
+                    },
+                    "prebuiltId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "description": "ID of the prebuilt dashboard this dashboard comes from"
+                    },
+                    "queryPriority": {
+                      "type": "string",
+                      "description": "Query priority for the dashboard: normal or faster"
+                    }
+                  },
+                  "required": [
+                    "createdBy",
+                    "dateCreated",
+                    "filters",
+                    "id",
+                    "isFavorited",
+                    "permissions",
+                    "prebuiltId",
+                    "projects",
+                    "queryPriority",
+                    "title",
+                    "widgets"
+                  ]
+                },
+                "examples": {
+                  "RestoreADashboardRevision": {
+                    "value": {
+                      "id": "1",
+                      "title": "Dashboard",
+                      "dateCreated": "2024-06-20T14:38:03.498574Z",
+                      "createdBy": {
+                        "id": "1",
+                        "name": "Admin",
+                        "username": "admin",
+                        "email": "admin@sentry.io",
+                        "avatarUrl": "www.example.com",
+                        "isActive": true,
+                        "isSuspended": false,
+                        "hasPasswordAuth": true,
+                        "isManaged": false,
+                        "dateJoined": "2021-10-25T17:07:33.190596Z",
+                        "lastLogin": "2024-07-16T15:28:39.261659Z",
+                        "has2fa": true,
+                        "lastActive": "2024-07-16T20:45:49.364197Z",
+                        "isSuperuser": false,
+                        "isStaff": false,
+                        "experiments": {},
+                        "emails": [
+                          {
+                            "id": "1",
+                            "email": "admin@sentry.io",
+                            "is_verified": true
+                          }
+                        ],
+                        "avatar": {
+                          "avatarType": "letter_avatar",
+                          "avatarUuid": null,
+                          "avatarUrl": "www.example.com"
+                        }
+                      },
+                      "widgets": [
+                        {
+                          "id": "658714",
+                          "title": "Custom Widget",
+                          "description": null,
+                          "displayType": "table",
+                          "thresholds": null,
+                          "interval": "5m",
+                          "dateCreated": "2024-07-16T15:36:46.048343Z",
+                          "dashboardId": "1",
+                          "datasetSource": "user",
+                          "queries": [
+                            {
+                              "id": "1",
+                              "name": "",
+                              "fields": [
+                                "avg(transaction.duration)",
+                                "transaction"
+                              ],
+                              "aggregates": [
+                                "avg(transaction.duration)"
+                              ],
+                              "transformations": {},
+                              "columns": [
+                                "transaction"
+                              ],
+                              "fieldAliases": [
+                                "",
+                                ""
+                              ],
+                              "conditions": "",
+                              "orderby": "-avg(transaction.duration)",
+                              "widgetId": "1",
+                              "onDemand": [
+                                {
+                                  "enabled": false,
+                                  "extractionState": "disabled:not-applicable",
+                                  "dashboardWidgetQueryId": 1
+                                }
+                              ],
+                              "isHidden": false,
+                              "selectedAggregate": null,
+                              "linkedDashboards": []
+                            }
+                          ],
+                          "limit": null,
+                          "widgetType": "transaction-like",
+                          "layout": {
+                            "w": 2,
+                            "y": 0,
+                            "h": 2,
+                            "minH": 2,
+                            "x": 0
+                          },
+                          "exploreUrls": null,
+                          "changedReason": null,
+                          "axisRange": null,
+                          "legendType": "default"
+                        }
+                      ],
+                      "projects": [
+                        1
+                      ],
+                      "filters": {},
+                      "environment": [
+                        "alpha"
+                      ],
+                      "period": "7d",
+                      "permissions": {
+                        "isEditableByEveryone": true,
+                        "teamsWithEditAccess": []
+                      },
+                      "isFavorited": false,
+                      "prebuiltId": null,
+                      "queryPriority": "normal"
+                    },
+                    "summary": "Restore a dashboard revision"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        }
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/detectors/": {
       "get": {
         "operationId": "listOrganizationDetectors",
@@ -54525,6 +55353,295 @@
               }
             },
             "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        }
+      }
+    },
+    "/api/0/organizations/{organization_id_or_slug}/trace-logs/": {
+      "get": {
+        "operationId": "listOrganizationTraceLogs",
+        "description": "List the logs belonging to one or more traces, or to a replay, across all projects\nin the organization the caller can access. A trace can span many projects, so the\n`project` filter is ignored.",
+        "summary": "List Logs for Traces or a Replay",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "traceId",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "The 32-character ID of a trace to list logs for. Can be repeated. At least one `traceId` or a `replayId` is required."
+          },
+          {
+            "in": "query",
+            "name": "replayId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The 32-character ID of a replay to list logs for. Logs matching either a `traceId` or the `replayId` are returned."
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Additional [search query](https://docs.sentry.io/concepts/search/) to filter the logs."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Columns to sort by, prefixed with `-` for descending. Must be one of `id`, `project.id`, `trace`, `severity_number`, `severity`, `timestamp`, `timestamp_precise`, `message`. Defaults to `-timestamp` then `-timestamp_precise`."
+          },
+          {
+            "in": "query",
+            "name": "timestamp",
+            "schema": {
+              "type": "string"
+            },
+            "description": "An ISO 8601 timestamp of an event in the trace. When passed, the query is narrowed to a window around this time, which is faster than searching the full time range."
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of logs to return per page, up to 9999."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "x-learn-more": "https://docs.sentry.io/api/pagination/"
+          }
+        ],
+        "tags": [
+          "Explore"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:admin",
+              "org:read",
+              "org:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "The ID of the log"
+                          },
+                          "project.id": {
+                            "type": "integer",
+                            "description": "The ID of the project the log belongs to"
+                          },
+                          "trace": {
+                            "type": "string",
+                            "description": "The ID of the trace the log belongs to"
+                          },
+                          "severity_number": {
+                            "type": "integer",
+                            "description": "The OpenTelemetry severity number of the log, from 1 to 24, or 0 if unset"
+                          },
+                          "severity": {
+                            "type": "string",
+                            "description": "The severity text of the log, such as `info` or `error`"
+                          },
+                          "timestamp": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When the log was recorded"
+                          },
+                          "timestamp_precise": {
+                            "type": "integer",
+                            "description": "When the log was recorded, in nanoseconds since the Unix epoch"
+                          },
+                          "message": {
+                            "type": "string",
+                            "description": "The body of the log"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "message",
+                          "project.id",
+                          "severity",
+                          "severity_number",
+                          "timestamp",
+                          "timestamp_precise",
+                          "trace"
+                        ]
+                      },
+                      "description": "The logs, sorted by the `sort` parameter"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "description": "Type of each returned field, keyed by field name"
+                        },
+                        "full_scan": {
+                          "type": "boolean",
+                          "description": "Whether the query scanned the full data set rather than a downsampled sample"
+                        },
+                        "bytes_scanned": {
+                          "type": "integer",
+                          "nullable": true,
+                          "description": "Number of bytes the query scanned, or null if it wasn't reported"
+                        },
+                        "routingHint": {
+                          "type": "string",
+                          "description": "Opaque routing hint of the query. Pass it unchanged as routing_hint when fetching the details of a log"
+                        }
+                      },
+                      "required": [
+                        "fields"
+                      ],
+                      "description": "Metadata about the query and its fields"
+                    },
+                    "confidence": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "enum": [
+                            "low",
+                            "high",
+                            null
+                          ],
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "description": "Sampling confidence of each row in `data`, keyed by field. Logs are not aggregated, so each entry is an empty object"
+                    }
+                  },
+                  "required": [
+                    "confidence",
+                    "data",
+                    "meta"
+                  ]
+                },
+                "examples": {
+                  "ListTheLogsInATrace": {
+                    "value": {
+                      "data": [
+                        {
+                          "id": "99083e5c2ee246be1242ee264d20fd58",
+                          "project.id": 4505281256090153,
+                          "trace": "a9f3c1e2b4d5467890abcdef12345678",
+                          "severity_number": 9,
+                          "severity": "INFO",
+                          "timestamp": "2026-09-01T12:00:00+00:00",
+                          "timestamp_precise": 1756728000123000000,
+                          "message": "Payment processed"
+                        }
+                      ],
+                      "meta": {
+                        "fields": {
+                          "id": "string",
+                          "project.id": "string",
+                          "trace": "string",
+                          "severity_number": "integer",
+                          "severity": "string",
+                          "timestamp": "string",
+                          "timestamp_precise": "number",
+                          "message": "string"
+                        },
+                        "full_scan": true,
+                        "bytes_scanned": 255,
+                        "routingHint": "eyJ2IjogMSwgInRpZXIiOiAxfQ=="
+                      },
+                      "confidence": [
+                        {}
+                      ]
+                    },
+                    "summary": "List the logs in a trace"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -115412,6 +116529,74 @@
           "is_editable_by_everyone"
         ]
       },
+      "DashboardRevisionListResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "ID of the revision"
+            },
+            "title": {
+              "type": "string",
+              "description": "Title of the dashboard in this revision"
+            },
+            "dateCreated": {
+              "type": "string",
+              "format": "date-time",
+              "description": "When the revision was recorded (ISO 8601)"
+            },
+            "createdBy": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "ID of the user"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Display name of the user"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Primary email address of the user"
+                },
+                "avatarType": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "Avatar type, such as letter_avatar, upload or gravatar"
+                },
+                "avatarUrl": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "URL of the avatar image, or null if none is set"
+                }
+              },
+              "required": [
+                "avatarType",
+                "avatarUrl",
+                "email",
+                "id",
+                "name"
+              ],
+              "nullable": true,
+              "description": "User whose change recorded the revision, or null if there is no such user or it was deleted"
+            },
+            "source": {
+              "type": "string",
+              "description": "Change that recorded the revision, which holds the dashboard as it was just before that change: edit (a dashboard edit), edit-with-agent (an edit the client marked as made by an AI agent) or pre-restore (a restore of another revision)"
+            }
+          },
+          "required": [
+            "createdBy",
+            "dateCreated",
+            "id",
+            "source",
+            "title"
+          ]
+        }
+      },
       "DashboardWidget": {
         "type": "object",
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
@@ -157545,6 +158730,113 @@
         },
         "required": [
           "data"
+        ]
+      },
+      "TraceLogsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The ID of the log"
+                },
+                "project.id": {
+                  "type": "integer",
+                  "description": "The ID of the project the log belongs to"
+                },
+                "trace": {
+                  "type": "string",
+                  "description": "The ID of the trace the log belongs to"
+                },
+                "severity_number": {
+                  "type": "integer",
+                  "description": "The OpenTelemetry severity number of the log, from 1 to 24, or 0 if unset"
+                },
+                "severity": {
+                  "type": "string",
+                  "description": "The severity text of the log, such as `info` or `error`"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "When the log was recorded"
+                },
+                "timestamp_precise": {
+                  "type": "integer",
+                  "description": "When the log was recorded, in nanoseconds since the Unix epoch"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "The body of the log"
+                }
+              },
+              "required": [
+                "id",
+                "message",
+                "project.id",
+                "severity",
+                "severity_number",
+                "timestamp",
+                "timestamp_precise",
+                "trace"
+              ]
+            },
+            "description": "The logs, sorted by the `sort` parameter"
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "fields": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Type of each returned field, keyed by field name"
+              },
+              "full_scan": {
+                "type": "boolean",
+                "description": "Whether the query scanned the full data set rather than a downsampled sample"
+              },
+              "bytes_scanned": {
+                "type": "integer",
+                "nullable": true,
+                "description": "Number of bytes the query scanned, or null if it wasn't reported"
+              },
+              "routingHint": {
+                "type": "string",
+                "description": "Opaque routing hint of the query. Pass it unchanged as routing_hint when fetching the details of a log"
+              }
+            },
+            "required": [
+              "fields"
+            ],
+            "description": "Metadata about the query and its fields"
+          },
+          "confidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "enum": [
+                  "low",
+                  "high",
+                  null
+                ],
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "description": "Sampling confidence of each row in `data`, keyed by field. Logs are not aggregated, so each entry is an empty object"
+          }
+        },
+        "required": [
+          "confidence",
+          "data",
+          "meta"
         ]
       },
       "UpdateClientKey": {
