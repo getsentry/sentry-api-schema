@@ -34802,6 +34802,174 @@
         }
       }
     },
+    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/archive/": {
+      "get": {
+        "operationId": "getOrganizationPreprodSnapshotArchiveStatus",
+        "description": "**Experimental:** This API is under active development and may change.\n\nCheck whether the zip archive of a snapshot's images is ready to download.\n\nStart building the archive with a POST to this endpoint. Returns 404 when the\nsnapshot doesn't exist, the requester can't access its project, or it has no image\nmanifest.",
+        "summary": "Retrieve a Snapshot Archive's Status",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "snapshot_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the snapshot.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:read",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ready": {
+                      "type": "boolean",
+                      "description": "Whether the archive of the snapshot's images is built and ready"
+                    }
+                  },
+                  "required": [
+                    "ready"
+                  ]
+                },
+                "examples": {
+                  "ArchiveReady": {
+                    "value": {
+                      "ready": true
+                    },
+                    "summary": "Archive ready"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        },
+        "x-sentry-experimental": true
+      },
+      "post": {
+        "operationId": "startOrganizationPreprodSnapshotArchive",
+        "description": "**Experimental:** This API is under active development and may change.\n\nStart building a zip archive of a snapshot's images and its manifest.\n\nThe archive is built in the background, and the requesting user gets an email with\na download link when it's ready. Poll the GET method of this endpoint to see when it's\nready. Each request starts another build and sends another email.\n\nReturns 404 when the snapshot doesn't exist, the requester can't access its project,\nor it has no image manifest, and 503 when the build couldn't be queued.",
+        "summary": "Build a Snapshot Archive",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "snapshot_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the snapshot.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Snapshots"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "description": "Message saying that the archive is being built"
+                    }
+                  },
+                  "required": [
+                    "detail"
+                  ]
+                },
+                "examples": {
+                  "ArchiveBuildStarted": {
+                    "value": {
+                      "detail": "Building your snapshot archive — we'll email you a download link when it's ready."
+                    },
+                    "summary": "Archive build started"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/images/{image_identifier}/": {
       "get": {
         "operationId": "getOrganizationPreprodArtifactSnapshotImage",
@@ -78635,6 +78803,206 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/preprodartifacts/assemble/": {
+      "post": {
+        "operationId": "assembleProjectPreprodArtifact",
+        "description": "Assemble previously uploaded chunks into a mobile build, such as an APK, AAB or\nXCArchive, and queue it for size analysis.\n\nUpload the build file's chunks with the chunk upload endpoint first. If chunks are\nmissing, the response has the state `not_found` and lists them in\n`missingChunks`: upload them and send the request again. Once all chunks are there,\nthe build is created, the response has the state `created`, and `artifactUrl` links\nto the build in Sentry.\n\nDon't resend a request that succeeded: each successful request creates a build.\nEmpty strings in optional fields count as not set. The VCS fields `head_sha`,\n`head_repo_name` and `provider` must be set together. `provider` must be one of\n`github`, `github_enterprise`, `gitlab`, `bitbucket` or `bitbucket_server`.",
+        "summary": "Assemble a Mobile Build",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "Mobile Builds"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "checksum": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{40}$",
+                    "description": "SHA-1 checksum of the whole build file."
+                  },
+                  "chunks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{40}$"
+                    },
+                    "description": "SHA-1 checksums of the file's chunks, in order. Upload missing chunks with the chunk upload endpoint first."
+                  },
+                  "build_configuration": {
+                    "type": "string",
+                    "description": "Name of the build configuration, such as `Release` or `Debug`."
+                  },
+                  "release_notes": {
+                    "type": "string",
+                    "description": "Release notes to show with the build."
+                  },
+                  "install_groups": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255
+                    },
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "uniqueItems": true,
+                    "description": "Install groups that can install the build."
+                  },
+                  "head_sha": {
+                    "type": "string",
+                    "pattern": "^(|[0-9a-f]{40})$",
+                    "description": "SHA of the commit the build was made from."
+                  },
+                  "base_sha": {
+                    "type": "string",
+                    "pattern": "^(|[0-9a-f]{40})$",
+                    "description": "SHA of the commit to compare against, such as the merge base of a pull request. Requires `head_sha`."
+                  },
+                  "provider": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "VCS provider of the repository, such as `github`."
+                  },
+                  "head_repo_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Name of the repository the build was made from, such as `owner/repo`."
+                  },
+                  "base_repo_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Name of the repository of the base commit, such as `owner/repo`."
+                  },
+                  "head_ref": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "pattern": "^(?:(?!/)(?!.*/$)(?!.*\\.$)(?!.*//)(?!.*\\.\\.)(?!(?:.*/)?\\.)(?!.*\\.lock(?:/|$))(?!.*@\\{)(?!@$)[^\\x00-\\x20\\x7f~^:?*\\[\\\\]+)?$",
+                    "description": "Branch or ref the build was made from, such as `feature/xyz`."
+                  },
+                  "base_ref": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "pattern": "^(?:(?!/)(?!.*/$)(?!.*\\.$)(?!.*//)(?!.*\\.\\.)(?!(?:.*/)?\\.)(?!.*\\.lock(?:/|$))(?!.*@\\{)(?!@$)[^\\x00-\\x20\\x7f~^:?*\\[\\\\]+)?$",
+                    "description": "Branch or ref of the base commit, such as `main`."
+                  },
+                  "pr_number": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Number of the pull request the build belongs to."
+                  }
+                },
+                "required": [
+                  "checksum",
+                  "chunks"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth_token": [
+              "org:ci",
+              "project:admin",
+              "project:releases",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "type": "string",
+                      "description": "State of the build file: not_found if chunks are missing or none were sent, created once the build is queued for assembly"
+                    },
+                    "missingChunks": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Checksums of the chunks the server doesn't have yet"
+                    },
+                    "artifactUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL of the build in Sentry. Only set when the state is created"
+                    }
+                  },
+                  "required": [
+                    "missingChunks",
+                    "state"
+                  ]
+                },
+                "examples": {
+                  "BuildCreated": {
+                    "value": {
+                      "state": "created",
+                      "missingChunks": [],
+                      "artifactUrl": "https://org-slug.sentry.io/preprod/size/123/"
+                    },
+                    "summary": "Build created"
+                  },
+                  "ChunksMissing": {
+                    "value": {
+                      "state": "not_found",
+                      "missingChunks": [
+                        "5b1e9c6d0f2a4e8b7c3d1a9f0e6b2c4d8a7f3e1b"
+                      ]
+                    },
+                    "summary": "Chunks missing"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        }
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/": {
       "get": {
         "operationId": "listProjectFilters",
@@ -85053,7 +85421,7 @@
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/": {
       "post": {
         "operationId": "uploadProjectPreprodArtifactSnapshot",
-        "description": "Upload a new snapshot with image metadata.\n\nThe request body is a JSON object containing `app_id` (required),\n`images` (required, a mapping of filenames to image metadata objects),\nand optional VCS fields (`head_sha`, `base_sha`, `provider`,\n`head_repo_name`, `head_ref`, `base_repo_name`, `base_ref`, `pr_number`).\n\nWhen VCS info with a `base_sha` is provided and a matching base snapshot\nexists, a comparison is automatically triggered.\n\nThis endpoint requires a bearer token with `project:write` access.",
+        "description": "Upload a new snapshot with image metadata.\n\nThe request body is a JSON object containing `app_id` (required),\n`images` (required, a mapping of filenames to image metadata objects),\nand optional VCS fields (`head_sha`, `base_sha`, `provider`,\n`head_repo_name`, `head_ref`, `base_repo_name`, `base_ref`, `pr_number`).\n\nThe body can be compressed with zstd: send it with the header\n`Content-Encoding: zstd`. It can be up to 256 MiB after decompression.\n\nWhen VCS info with a `base_sha` is provided and a matching base snapshot\nexists, a comparison is automatically triggered.\n\nThis endpoint requires a bearer token with `project:write` access.",
         "summary": "Upload a Snapshot",
         "parameters": [
           {
@@ -85078,6 +85446,169 @@
         "tags": [
           "Snapshots"
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "app_id": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "ID of the app the snapshot belongs to, such as `com.example.app`."
+                  },
+                  "images": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "content_hash": {
+                          "type": "string",
+                          "description": "Hash of the uploaded image file, which identifies the image."
+                        },
+                        "display_name": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Name to show for the image."
+                        },
+                        "group": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Group to show the image in, such as a device name."
+                        },
+                        "width": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "description": "Width in pixels."
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "description": "Height in pixels."
+                        },
+                        "diff_threshold": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1,
+                          "exclusiveMaximum": true,
+                          "nullable": true,
+                          "description": "Overrides the snapshot's `diff_threshold` for this image."
+                        },
+                        "description": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Description of the image."
+                        },
+                        "tags": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          ],
+                          "nullable": true,
+                          "description": "Tags of the image, as an object of names to values or a list of names."
+                        },
+                        "canvas_theme": {
+                          "type": "string",
+                          "enum": [
+                            "light",
+                            "dark",
+                            null
+                          ],
+                          "nullable": true,
+                          "description": "Theme the image was rendered in. Other values count as not set."
+                        }
+                      },
+                      "required": [
+                        "content_hash",
+                        "width",
+                        "height"
+                      ],
+                      "additionalProperties": true
+                    },
+                    "maxProperties": 100000,
+                    "description": "Metadata of the snapshot's images, keyed by image file name."
+                  },
+                  "diff_threshold": {
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMaximum": true,
+                    "description": "Fraction of changed pixels, from 0 up to but not including 1, above which an image counts as changed. Images can override it.",
+                    "maximum": 1
+                  },
+                  "selective": {
+                    "type": "boolean",
+                    "description": "Whether the snapshot holds only some of the app's images. Requires `base_sha`."
+                  },
+                  "all_image_file_names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100000,
+                    "description": "File names of all the app's images, including the ones a selective snapshot leaves out. Requires `selective`, and must include every key of `images`."
+                  },
+                  "head_sha": {
+                    "type": "string",
+                    "pattern": "^(|[0-9a-f]{40})$",
+                    "description": "SHA of the commit the build was made from."
+                  },
+                  "base_sha": {
+                    "type": "string",
+                    "pattern": "^(|[0-9a-f]{40})$",
+                    "description": "SHA of the commit to compare against, such as the merge base of a pull request. Requires `head_sha`."
+                  },
+                  "provider": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "VCS provider of the repository, such as `github`."
+                  },
+                  "head_repo_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Name of the repository the build was made from, such as `owner/repo`."
+                  },
+                  "base_repo_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Name of the repository of the base commit, such as `owner/repo`."
+                  },
+                  "head_ref": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "pattern": "^(?:(?!/)(?!.*/$)(?!.*\\.$)(?!.*//)(?!.*\\.\\.)(?!(?:.*/)?\\.)(?!.*\\.lock(?:/|$))(?!.*@\\{)(?!@$)[^\\x00-\\x20\\x7f~^:?*\\[\\\\]+)?$",
+                    "description": "Branch or ref the build was made from, such as `feature/xyz`."
+                  },
+                  "base_ref": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "pattern": "^(?:(?!/)(?!.*/$)(?!.*\\.$)(?!.*//)(?!.*\\.\\.)(?!(?:.*/)?\\.)(?!.*\\.lock(?:/|$))(?!.*@\\{)(?!@$)[^\\x00-\\x20\\x7f~^:?*\\[\\\\]+)?$",
+                    "description": "Branch or ref of the base commit, such as `main`."
+                  },
+                  "pr_number": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Number of the pull request the build belongs to."
+                  }
+                },
+                "required": [
+                  "app_id",
+                  "images"
+                ],
+                "additionalProperties": true
+              }
+            }
+          }
+        },
         "security": [
           {
             "auth_token": [
@@ -150548,6 +151079,31 @@
           "webUrl"
         ]
       },
+      "PreprodArtifactAssembleResponse": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "description": "State of the build file: not_found if chunks are missing or none were sent, created once the build is queued for assembly"
+          },
+          "missingChunks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Checksums of the chunks the server doesn't have yet"
+          },
+          "artifactUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the build in Sentry. Only set when the state is created"
+          }
+        },
+        "required": [
+          "missingChunks",
+          "state"
+        ]
+      },
       "PreviousReleaseWithCommitsResponse": {
         "anyOf": [
           {
@@ -159567,6 +160123,30 @@
           "provider",
           "repository",
           "sha"
+        ]
+      },
+      "SnapshotArchiveBuildResponse": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "Message saying that the archive is being built"
+          }
+        },
+        "required": [
+          "detail"
+        ]
+      },
+      "SnapshotArchiveStatusResponse": {
+        "type": "object",
+        "properties": {
+          "ready": {
+            "type": "boolean",
+            "description": "Whether the archive of the snapshot's images is built and ready"
+          }
+        },
+        "required": [
+          "ready"
         ]
       },
       "SnapshotCreateResponse": {
