@@ -70,6 +70,7 @@ describe("operation discovery", () => {
         { name: "field", required: false, type: "array", enum: ["id", "timestamp"] },
       ],
       deprecated: false,
+      experimental: false,
       idempotent: true,
     }]);
 
@@ -116,6 +117,32 @@ describe("operation discovery", () => {
     expect(Object.fromEntries(catalog.map(operation => [operation.functionName, operation.idempotent]))).toEqual({
       assemble: true, createThing: false, updateThing: false, deleteThing: false,
     });
+  });
+
+  test("marks operations experimental only when Sentry declares it", async () => {
+    const response = { responses: { "200": { description: "OK" } } };
+    const { catalog } = await generate({
+      ...fixture(),
+      paths: {
+        "/api/0/things/": {
+          get: { operationId: "listThings", ...response, "x-sentry-experimental": true },
+          post: { operationId: "createThing", ...response },
+        },
+      },
+    });
+    expect(Object.fromEntries(catalog.map(operation => [operation.functionName, operation.experimental]))).toEqual({
+      listThings: true, createThing: false,
+    });
+  });
+
+  test("flags the same released operations that the SDK documents as experimental", () => {
+    const experimental = operations.filter(operation => operation.experimental);
+    expect(experimental.length).toBeGreaterThan(0);
+    // Sentry's schema build adds this note to every operation it marks with x-sentry-experimental.
+    const documented = operations.filter(operation => operation.description.startsWith("**Experimental:**"));
+    expect(experimental.map(operation => operation.functionName)).toEqual(documented.map(operation => operation.functionName));
+    const source = readFileSync(new URL("../src/sdk.gen.ts", import.meta.url), "utf8");
+    expect(source.match(/\*\*Experimental:\*\*/g)).toHaveLength(experimental.length);
   });
 
   test("ships one catalog entry for every actual standalone SDK export", () => {
