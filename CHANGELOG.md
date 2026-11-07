@@ -1,3 +1,9 @@
+## 1.48.0
+
+### New Features
+
+- (operations) Expose experimental flag in operation catalog by @BYK with @sentry-junior in [#135](https://github.com/getsentry/sentry-api-schema/pull/135)
+
 ## 1.47.0
 
 ### Schema Updates
