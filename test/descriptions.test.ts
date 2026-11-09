@@ -1,7 +1,7 @@
 import * as v from "valibot";
 import { describe, expect, test } from "vitest";
-import { vDeployResponse } from "../src/valibot";
-import { zDeployResponse } from "../src/zod";
+import { vDeployResponse, vUpdateOrganizationDetectorResponse } from "../src/valibot";
+import { zDeployResponse, zUpdateOrganizationDetectorResponse } from "../src/zod";
 
 describe("validator descriptions", () => {
   test("Valibot fields carry their OpenAPI description as a description action", () => {
@@ -11,6 +11,11 @@ describe("validator descriptions", () => {
   test("nullable fields keep their description inside the nullable wrapper", () => {
     expect(v.getDescription(vDeployResponse.entries.name.wrapped)).toEqual(expect.any(String));
     expect(zDeployResponse.shape.name.unwrap().description).toEqual(expect.any(String));
+  });
+
+  test("union fields carry the description of the union itself", () => {
+    expect(v.getDescription(vUpdateOrganizationDetectorResponse.entries.config)).toEqual(expect.any(String));
+    expect(zUpdateOrganizationDetectorResponse.shape.config.description).toEqual(expect.any(String));
   });
 
   test("Valibot top-level schemas stay unpiped for object methods", () => {
