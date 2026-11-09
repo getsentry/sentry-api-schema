@@ -1,7 +1,13 @@
 name: Release
 
 on:
-  push:
+  # Release only commits whose Build passed on main, so a broken build cannot
+  # cut a release branch whose CI then fails.
+  workflow_run:
+    workflows:
+      - Build
+    types:
+      - completed
     branches:
       - main
 
@@ -28,18 +34,21 @@ jobs:
   release:
     runs-on: ubuntu-latest
     name: Release a new version
-    # Craft merges release branches by SHA, producing "Merge commit '...'".
+    # Only commits whose Build passed on main, pushed to this repository.
+    # Release merges run too: preflight releases the commits that landed while
+    # that release was pending, and does nothing when there are none.
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (
-        !startsWith(github.event.head_commit.message, 'Merge branch ''release/') &&
-        !(github.actor == 'sentry-release-bot[bot]' &&
-          startsWith(github.event.head_commit.message, 'Merge commit '))
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_repository.full_name == github.repository
       )
-    # Apply concurrency after the guard so skipped merges cannot cancel a release.
+    # Apply concurrency after the guard so skipped runs cannot take the queue.
+    # Never cancel a running release: it may have pushed its branch already.
     concurrency:
       group: release
-      cancel-in-progress: true
+      cancel-in-progress: false
     steps:
       - name: Get auth token
         id: token
@@ -52,13 +61,28 @@ jobs:
         with:
           token: ${{ steps.token.outputs.token }}
           fetch-depth: 0
+          # The commit whose Build passed. Manual runs use the ref they were
+          # dispatched on.
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      # Craft prepares from the current branch and expects the default branch,
+      # so put a local main on the commit that Build checked.
+      - name: Put main on the built commit
+        if: github.event_name == 'workflow_run'
+        run: git checkout -B main
 
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
 
+      - name: Check what to release
+        id: preflight
+        if: github.event_name == 'workflow_run'
+        run: .github/scripts/release-preflight.sh
+
       - name: Prepare release
+        if: github.event_name == 'workflow_dispatch' || steps.preflight.outputs.proceed == 'true'
         uses: getsentry/craft@2e29b0819113d334c15da3d8cac2138cb9dc111a # 3.9.0
         env:
           GITHUB_TOKEN: ${{ steps.token.outputs.token }}
