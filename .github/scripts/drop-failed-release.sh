@@ -14,7 +14,16 @@
 set -eu
 
 ref="refs/heads/$BRANCH"
-git push --force-with-lease="$ref:$SHA" origin ":$ref"
+if ! git push --force-with-lease="$ref:$SHA" origin ":$ref"; then
+  # The lease fails when the branch is already gone (a rerun) or has moved on.
+  # Either way there is nothing to drop. Any other failure is a real one.
+  current=$(git ls-remote origin "$ref")
+  case "$current" in
+    "$SHA"*) exit 1 ;;
+  esac
+  printf '::notice::%s no longer points at %s. Nothing to drop.\n' "$BRANCH" "$SHA"
+  exit 0
+fi
 
 # Craft files publish requests in <owner>/publish by default. Closing one is
 # tidying up: an open request whose branch is gone cannot publish anything.
