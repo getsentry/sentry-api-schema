@@ -1,3 +1,9 @@
+## 1.58.0
+
+### Bug Fixes
+
+- (validators) Keep the field description of single-member allOf fields by @BYK with @sentry-junior in [#142](https://github.com/getsentry/sentry-api-schema/pull/142)
+
 ## 1.57.0
 
 ### Bug Fixes
