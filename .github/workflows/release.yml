@@ -35,16 +35,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Release a new version
     # Only commits whose Build passed on main, pushed to this repository.
-    # Craft merges release branches by SHA, producing "Merge commit '...'".
+    # Release merges run too: preflight releases the commits that landed while
+    # that release was pending, and does nothing when there are none.
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (
         github.event.workflow_run.conclusion == 'success' &&
         github.event.workflow_run.event == 'push' &&
-        github.event.workflow_run.head_repository.full_name == github.repository &&
-        !startsWith(github.event.workflow_run.head_commit.message, 'Merge branch ''release/') &&
-        !(github.event.workflow_run.actor.login == 'sentry-release-bot[bot]' &&
-          startsWith(github.event.workflow_run.head_commit.message, 'Merge commit '))
+        github.event.workflow_run.head_repository.full_name == github.repository
       )
     # Apply concurrency after the guard so skipped runs cannot take the queue.
     # Never cancel a running release: it may have pushed its branch already.

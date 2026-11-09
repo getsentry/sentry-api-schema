@@ -9,8 +9,8 @@
 #   RELEASE_TRIGGER  github.event_name. "workflow_run" means an automatic
 #                    release of HEAD after its Build passed; manual releases
 #                    skip the checks that only make sense for those.
-#   GH_TOKEN      Token that can delete release branches here and read, comment
-#                 on, and close issues in the publish repository.
+#   GH_TOKEN         Token that can delete release branches here and read,
+#                    comment on, and close issues in the publish repository.
 # GITHUB_OUTPUT, GITHUB_REPOSITORY, GITHUB_REPOSITORY_OWNER, GITHUB_RUN_ID and
 # GITHUB_SERVER_URL come from GitHub Actions.
 set -eu
@@ -20,16 +20,33 @@ remote=origin
 publish_repo="$GITHUB_REPOSITORY_OWNER/publish"
 run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 head=$(git rev-parse HEAD)
+newline='
+'
 
 if [ "$RELEASE_TRIGGER" = workflow_run ]; then
-  # Builds can finish out of order. A newer commit's release may already
-  # include this one.
-  released_in=$(git tag --contains HEAD)
-  if [ -n "$released_in" ]; then
-    printf '::notice::%s is already released. Nothing to do.\n' "$head"
+  # Craft picks the next version from the latest tag in HEAD's history. If a
+  # newer release exists outside it, HEAD predates that release's merge into
+  # main (Builds can finish out of order, and a release is tagged before it is
+  # merged). The Release run for that merge covers this commit instead.
+  base=$(git describe --tags --abbrev=0)
+  tags=$(git tag --sort=-version:refname)
+  newest=${tags%%"$newline"*}
+  if [ "$newest" != "$base" ]; then
+    printf '::notice::Release %s is not in the history of %s yet. The Release run after its merge into main releases whatever is left.\n' "$newest" "$head"
     printf 'proceed=false\n' >>"$GITHUB_OUTPUT"
     exit 0
   fi
+
+  # Release merges and the release commits they bring in are part of $base.
+  # Anything else is unreleased, including commits that landed while the
+  # previous release was pending.
+  unreleased=$(git rev-list --no-merges --count "$base..HEAD")
+  if [ "$unreleased" -eq 0 ]; then
+    printf '::notice::Nothing to release: no commits since %s.\n' "$base"
+    printf 'proceed=false\n' >>"$GITHUB_OUTPUT"
+    exit 0
+  fi
+  printf '%s commit(s) since %s to release.\n' "$unreleased" "$base"
 fi
 
 package=$(jq -er .name package.json)
@@ -97,9 +114,10 @@ $branches
 EOF
 
 if [ "$RELEASE_TRIGGER" = workflow_run ] && [ -n "$pending" ]; then
-  # Craft would refuse with "release branch already exists". The daily
-  # staleness check reports this commit if it stays unreleased.
-  printf '::notice::Release%s is still pending. A later release will include %s.\n' "$pending" "$head"
+  # Craft would refuse with "release branch already exists". Merging the
+  # pending release into main triggers Build and then Release again, and that
+  # run releases this commit.
+  printf '::notice::Release%s is still pending. The Release run after its merge into main will release %s.\n' "$pending" "$head"
   printf 'proceed=false\n' >>"$GITHUB_OUTPUT"
   exit 0
 fi
