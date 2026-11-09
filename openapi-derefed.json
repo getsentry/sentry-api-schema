@@ -8379,20 +8379,24 @@
                       "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                       "properties": {
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "ID of an existing widget. Omit it to create a new widget."
                         },
                         "title": {
                           "type": "string",
+                          "description": "Title of the widget.",
                           "maxLength": 255
                         },
                         "description": {
                           "type": "string",
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Description of the widget."
                         },
                         "thresholds": {
                           "type": "object",
                           "additionalProperties": {},
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Thresholds that color the widget's values."
                         },
                         "display_type": {
                           "enum": [
@@ -8411,10 +8415,11 @@
                             "heatmap"
                           ],
                           "type": "string",
-                          "description": "* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
+                          "description": "How the widget is displayed, such as line, area, bar, table or big_number.\n\n* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
                         },
                         "interval": {
                           "type": "string",
+                          "description": "Time interval for the widget's series, such as 5m.",
                           "maxLength": 10
                         },
                         "queries": {
@@ -8514,7 +8519,8 @@
                                 "nullable": true
                               }
                             }
-                          }
+                          },
+                          "description": "Queries that provide the widget's data."
                         },
                         "widget_type": {
                           "enum": [
@@ -8530,13 +8536,14 @@
                             null
                           ],
                           "type": "string",
-                          "description": "* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`",
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Dataset the widget queries, such as error-events, spans, logs or issue.\n\n* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`"
                         },
                         "limit": {
                           "type": "integer",
                           "minimum": 1,
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Maximum number of series or rows the widget shows."
                         },
                         "layout": {
                           "allOf": [
@@ -8584,8 +8591,8 @@
                             null
                           ],
                           "type": "string",
-                          "description": "* `auto`\n* `dataMin`",
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Y-axis range: auto or dataMin.\n\n* `auto`\n* `dataMin`"
                         },
                         "legend_type": {
                           "enum": [
@@ -8594,8 +8601,8 @@
                             null
                           ],
                           "type": "string",
-                          "description": "* `default`\n* `breakdown`",
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Legend style: default or breakdown.\n\n* `default`\n* `breakdown`"
                         }
                       }
                     },
@@ -10589,20 +10596,24 @@
                       "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
                       "properties": {
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "ID of an existing widget. Omit it to create a new widget."
                         },
                         "title": {
                           "type": "string",
+                          "description": "Title of the widget.",
                           "maxLength": 255
                         },
                         "description": {
                           "type": "string",
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Description of the widget."
                         },
                         "thresholds": {
                           "type": "object",
                           "additionalProperties": {},
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Thresholds that color the widget's values."
                         },
                         "display_type": {
                           "enum": [
@@ -10621,10 +10632,11 @@
                             "heatmap"
                           ],
                           "type": "string",
-                          "description": "* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
+                          "description": "How the widget is displayed, such as line, area, bar, table or big_number.\n\n* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
                         },
                         "interval": {
                           "type": "string",
+                          "description": "Time interval for the widget's series, such as 5m.",
                           "maxLength": 10
                         },
                         "queries": {
@@ -10724,7 +10736,8 @@
                                 "nullable": true
                               }
                             }
-                          }
+                          },
+                          "description": "Queries that provide the widget's data."
                         },
                         "widget_type": {
                           "enum": [
@@ -10740,13 +10753,14 @@
                             null
                           ],
                           "type": "string",
-                          "description": "* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`",
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Dataset the widget queries, such as error-events, spans, logs or issue.\n\n* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`"
                         },
                         "limit": {
                           "type": "integer",
                           "minimum": 1,
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Maximum number of series or rows the widget shows."
                         },
                         "layout": {
                           "allOf": [
@@ -10791,7 +10805,8 @@
                               ]
                             }
                           ],
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Position and size of the widget on the dashboard grid."
                         },
                         "axis_range": {
                           "enum": [
@@ -10800,8 +10815,8 @@
                             null
                           ],
                           "type": "string",
-                          "description": "* `auto`\n* `dataMin`",
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Y-axis range: auto or dataMin.\n\n* `auto`\n* `dataMin`"
                         },
                         "legend_type": {
                           "enum": [
@@ -10810,8 +10825,8 @@
                             null
                           ],
                           "type": "string",
-                          "description": "* `default`\n* `breakdown`",
-                          "nullable": true
+                          "nullable": true,
+                          "description": "Legend style: default or breakdown.\n\n* `default`\n* `breakdown`"
                         }
                       }
                     },
@@ -208853,20 +208868,24 @@
               "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
               "properties": {
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "ID of an existing widget. Omit it to create a new widget."
                 },
                 "title": {
                   "type": "string",
+                  "description": "Title of the widget.",
                   "maxLength": 255
                 },
                 "description": {
                   "type": "string",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Description of the widget."
                 },
                 "thresholds": {
                   "type": "object",
                   "additionalProperties": {},
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Thresholds that color the widget's values."
                 },
                 "display_type": {
                   "enum": [
@@ -208885,10 +208904,11 @@
                     "heatmap"
                   ],
                   "type": "string",
-                  "description": "* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
+                  "description": "How the widget is displayed, such as line, area, bar, table or big_number.\n\n* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
                 },
                 "interval": {
                   "type": "string",
+                  "description": "Time interval for the widget's series, such as 5m.",
                   "maxLength": 10
                 },
                 "queries": {
@@ -208988,7 +209008,8 @@
                         "nullable": true
                       }
                     }
-                  }
+                  },
+                  "description": "Queries that provide the widget's data."
                 },
                 "widget_type": {
                   "enum": [
@@ -209004,13 +209025,14 @@
                     null
                   ],
                   "type": "string",
-                  "description": "* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Dataset the widget queries, such as error-events, spans, logs or issue.\n\n* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`"
                 },
                 "limit": {
                   "type": "integer",
                   "minimum": 1,
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Maximum number of series or rows the widget shows."
                 },
                 "layout": {
                   "allOf": [
@@ -209058,8 +209080,8 @@
                     null
                   ],
                   "type": "string",
-                  "description": "* `auto`\n* `dataMin`",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Y-axis range: auto or dataMin.\n\n* `auto`\n* `dataMin`"
                 },
                 "legend_type": {
                   "enum": [
@@ -209068,8 +209090,8 @@
                     null
                   ],
                   "type": "string",
-                  "description": "* `default`\n* `breakdown`",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Legend style: default or breakdown.\n\n* `default`\n* `breakdown`"
                 }
               }
             },
@@ -209167,20 +209189,24 @@
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "ID of an existing widget. Omit it to create a new widget."
           },
           "title": {
             "type": "string",
+            "description": "Title of the widget.",
             "maxLength": 255
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Description of the widget."
           },
           "thresholds": {
             "type": "object",
             "additionalProperties": {},
-            "nullable": true
+            "nullable": true,
+            "description": "Thresholds that color the widget's values."
           },
           "display_type": {
             "enum": [
@@ -209199,10 +209225,11 @@
               "heatmap"
             ],
             "type": "string",
-            "description": "* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
+            "description": "How the widget is displayed, such as line, area, bar, table or big_number.\n\n* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
           },
           "interval": {
             "type": "string",
+            "description": "Time interval for the widget's series, such as 5m.",
             "maxLength": 10
           },
           "queries": {
@@ -209302,7 +209329,8 @@
                   "nullable": true
                 }
               }
-            }
+            },
+            "description": "Queries that provide the widget's data."
           },
           "widget_type": {
             "enum": [
@@ -209318,13 +209346,14 @@
               null
             ],
             "type": "string",
-            "description": "* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`",
-            "nullable": true
+            "nullable": true,
+            "description": "Dataset the widget queries, such as error-events, spans, logs or issue.\n\n* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`"
           },
           "limit": {
             "type": "integer",
             "minimum": 1,
-            "nullable": true
+            "nullable": true,
+            "description": "Maximum number of series or rows the widget shows."
           },
           "layout": {
             "allOf": [
@@ -209372,8 +209401,8 @@
               null
             ],
             "type": "string",
-            "description": "* `auto`\n* `dataMin`",
-            "nullable": true
+            "nullable": true,
+            "description": "Y-axis range: auto or dataMin.\n\n* `auto`\n* `dataMin`"
           },
           "legend_type": {
             "enum": [
@@ -209382,8 +209411,8 @@
               null
             ],
             "type": "string",
-            "description": "* `default`\n* `breakdown`",
-            "nullable": true
+            "nullable": true,
+            "description": "Legend style: default or breakdown.\n\n* `default`\n* `breakdown`"
           }
         }
       },
@@ -209441,20 +209470,24 @@
               "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
               "properties": {
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "ID of an existing widget. Omit it to create a new widget."
                 },
                 "title": {
                   "type": "string",
+                  "description": "Title of the widget.",
                   "maxLength": 255
                 },
                 "description": {
                   "type": "string",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Description of the widget."
                 },
                 "thresholds": {
                   "type": "object",
                   "additionalProperties": {},
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Thresholds that color the widget's values."
                 },
                 "display_type": {
                   "enum": [
@@ -209473,10 +209506,11 @@
                     "heatmap"
                   ],
                   "type": "string",
-                  "description": "* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
+                  "description": "How the widget is displayed, such as line, area, bar, table or big_number.\n\n* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
                 },
                 "interval": {
                   "type": "string",
+                  "description": "Time interval for the widget's series, such as 5m.",
                   "maxLength": 10
                 },
                 "queries": {
@@ -209576,7 +209610,8 @@
                         "nullable": true
                       }
                     }
-                  }
+                  },
+                  "description": "Queries that provide the widget's data."
                 },
                 "widget_type": {
                   "enum": [
@@ -209592,13 +209627,14 @@
                     null
                   ],
                   "type": "string",
-                  "description": "* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Dataset the widget queries, such as error-events, spans, logs or issue.\n\n* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`"
                 },
                 "limit": {
                   "type": "integer",
                   "minimum": 1,
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Maximum number of series or rows the widget shows."
                 },
                 "layout": {
                   "allOf": [
@@ -209643,7 +209679,8 @@
                       ]
                     }
                   ],
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Position and size of the widget on the dashboard grid."
                 },
                 "axis_range": {
                   "enum": [
@@ -209652,8 +209689,8 @@
                     null
                   ],
                   "type": "string",
-                  "description": "* `auto`\n* `dataMin`",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Y-axis range: auto or dataMin.\n\n* `auto`\n* `dataMin`"
                 },
                 "legend_type": {
                   "enum": [
@@ -209662,8 +209699,8 @@
                     null
                   ],
                   "type": "string",
-                  "description": "* `default`\n* `breakdown`",
-                  "nullable": true
+                  "nullable": true,
+                  "description": "Legend style: default or breakdown.\n\n* `default`\n* `breakdown`"
                 }
               }
             },
@@ -211042,20 +211079,24 @@
         "description": "Allows parameters to be defined in snake case, but passed as camel case.\n\nErrors are output in camel case.",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "ID of an existing widget. Omit it to create a new widget."
           },
           "title": {
             "type": "string",
+            "description": "Title of the widget.",
             "maxLength": 255
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "Description of the widget."
           },
           "thresholds": {
             "type": "object",
             "additionalProperties": {},
-            "nullable": true
+            "nullable": true,
+            "description": "Thresholds that color the widget's values."
           },
           "display_type": {
             "enum": [
@@ -211074,10 +211115,11 @@
               "heatmap"
             ],
             "type": "string",
-            "description": "* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
+            "description": "How the widget is displayed, such as line, area, bar, table or big_number.\n\n* `line`\n* `area`\n* `bar`\n* `table`\n* `big_number`\n* `details`\n* `categorical_bar`\n* `wheel`\n* `rage_and_dead_clicks`\n* `server_tree`\n* `text`\n* `agents_traces_table`\n* `heatmap`"
           },
           "interval": {
             "type": "string",
+            "description": "Time interval for the widget's series, such as 5m.",
             "maxLength": 10
           },
           "queries": {
@@ -211177,7 +211219,8 @@
                   "nullable": true
                 }
               }
-            }
+            },
+            "description": "Queries that provide the widget's data."
           },
           "widget_type": {
             "enum": [
@@ -211193,13 +211236,14 @@
               null
             ],
             "type": "string",
-            "description": "* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`",
-            "nullable": true
+            "nullable": true,
+            "description": "Dataset the widget queries, such as error-events, spans, logs or issue.\n\n* `discover`\n* `issue`\n* `metrics`\n* `error-events`\n* `transaction-like`\n* `spans`\n* `logs`\n* `tracemetrics`\n* `preprod-app-size`"
           },
           "limit": {
             "type": "integer",
             "minimum": 1,
-            "nullable": true
+            "nullable": true,
+            "description": "Maximum number of series or rows the widget shows."
           },
           "layout": {
             "allOf": [
@@ -211244,7 +211288,8 @@
                 ]
               }
             ],
-            "nullable": true
+            "nullable": true,
+            "description": "Position and size of the widget on the dashboard grid."
           },
           "axis_range": {
             "enum": [
@@ -211253,8 +211298,8 @@
               null
             ],
             "type": "string",
-            "description": "* `auto`\n* `dataMin`",
-            "nullable": true
+            "nullable": true,
+            "description": "Y-axis range: auto or dataMin.\n\n* `auto`\n* `dataMin`"
           },
           "legend_type": {
             "enum": [
@@ -211263,8 +211308,8 @@
               null
             ],
             "type": "string",
-            "description": "* `default`\n* `breakdown`",
-            "nullable": true
+            "nullable": true,
+            "description": "Legend style: default or breakdown.\n\n* `default`\n* `breakdown`"
           }
         }
       },
