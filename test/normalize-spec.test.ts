@@ -442,4 +442,20 @@ describe("normalizeSpec int64 formats", () => {
     unlinkSync(input);
     unlinkSync(output);
   });
+
+  it("drops every uint64 format", () => {
+    const schemas = {
+      unbounded: { type: "integer", format: "uint64", minimum: 0 },
+      int32: { type: "integer", format: "int32", minimum: 0 },
+    };
+    const input = join(tmpdir(), `test-spec-${Date.now()}.json`);
+    writeFileSync(input, JSON.stringify({ paths: {}, components: { schemas } }));
+    const output = join(tmpdir(), `out-${Date.now()}.json`);
+    normalizeSpec(input, output);
+    const result = JSON.parse(readFileSync(output, "utf8")).components.schemas;
+    expect(result.unbounded).toEqual({ type: "integer", minimum: 0 });
+    expect(result.int32.format).toBe("int32");
+    unlinkSync(input);
+    unlinkSync(output);
+  });
 });
