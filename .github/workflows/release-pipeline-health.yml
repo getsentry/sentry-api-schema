@@ -15,12 +15,14 @@ on:
   workflow_dispatch:
 
 permissions:
+  # Read the steps of a Release run, to tell a prepared release from a skip.
+  actions: read
   contents: read
   issues: write
 
 jobs:
   # Build and Release on main and release branches: report failures, and close
-  # the issue once a Release succeeds.
+  # the issue once a Release run prepares a release.
   report-run:
     name: Report ${{ github.event.workflow_run.name }} result
     if: >-
@@ -54,7 +56,8 @@ jobs:
       - name: Close the issue
         if: github.event.workflow_run.conclusion == 'success'
         env:
-          MESSAGE: ${{ env.RUN_LINK }} succeeded on `${{ github.event.workflow_run.head_branch }}` at ${{ env.COMMIT_LINK }}.
+          MESSAGE: ${{ env.RUN_LINK }} prepared a release from `${{ github.event.workflow_run.head_branch }}` at ${{ env.COMMIT_LINK }}.
+          RUN_ID: ${{ github.event.workflow_run.id }}
         run: .github/scripts/pipeline-issue.sh resolve
 
   # A release branch whose Build failed can never publish, and craft refuses to
