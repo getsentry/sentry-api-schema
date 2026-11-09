@@ -91099,6 +91099,20 @@
           },
           {
             "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "alert"
+                ]
+              }
+            },
+            "description": "The type of workflow you'd like to query. If not specified, all types are returned."
+          },
+          {
+            "in": "query",
             "name": "project",
             "schema": {
               "type": "array",
@@ -91158,30 +91172,34 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "description": "Alert ID"
+                        "description": "Workflow ID"
                       },
                       "name": {
                         "type": "string",
-                        "description": "Alert name"
+                        "description": "Workflow name"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Type of the workflow, such as alert"
                       },
                       "organizationId": {
                         "type": "string",
-                        "description": "ID of the organization the alert belongs to"
+                        "description": "ID of the organization the workflow belongs to"
                       },
                       "createdBy": {
                         "type": "string",
                         "nullable": true,
-                        "description": "ID of the user who created the alert"
+                        "description": "ID of the user who created the workflow"
                       },
                       "dateCreated": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "When the alert was created (ISO 8601)"
+                        "description": "When the workflow was created (ISO 8601)"
                       },
                       "dateUpdated": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "When the alert was last updated (ISO 8601)"
+                        "description": "When the workflow was last updated (ISO 8601)"
                       },
                       "triggers": {
                         "type": "object",
@@ -93027,7 +93045,7 @@
                           }
                         },
                         "nullable": true,
-                        "description": "Conditions on which the alert triggers"
+                        "description": "Conditions on which the workflow triggers"
                       },
                       "actionFilters": {
                         "type": "array",
@@ -94881,7 +94899,7 @@
                       "environment": {
                         "type": "string",
                         "nullable": true,
-                        "description": "Name of the environment the alert is limited to. Null for all environments"
+                        "description": "Name of the environment the workflow is limited to. Null for all environments"
                       },
                       "config": {
                         "type": "object",
@@ -94893,7 +94911,7 @@
                             "minimum": 0
                           }
                         },
-                        "description": "Configuration of the alert, such as frequency in minutes"
+                        "description": "Configuration of the workflow, such as frequency in minutes"
                       },
                       "detectorIds": {
                         "type": "array",
@@ -94901,22 +94919,22 @@
                           "type": "string"
                         },
                         "nullable": true,
-                        "description": "IDs of the monitors connected to the alert"
+                        "description": "IDs of the monitors connected to the workflow"
                       },
                       "enabled": {
                         "type": "boolean",
-                        "description": "Whether the alert is enabled"
+                        "description": "Whether the workflow is enabled"
                       },
                       "lastTriggered": {
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "description": "When the alert last fired (ISO 8601)"
+                        "description": "When the workflow last fired (ISO 8601)"
                       },
                       "owner": {
                         "type": "string",
                         "nullable": true,
-                        "description": "Team or user that owns the alert, such as user:123 or team:456"
+                        "description": "Team or user that owns the workflow, such as user:123 or team:456"
                       }
                     },
                     "required": [
@@ -94933,7 +94951,8 @@
                       "name",
                       "organizationId",
                       "owner",
-                      "triggers"
+                      "triggers",
+                      "type"
                     ]
                   }
                 },
@@ -94943,6 +94962,7 @@
                       {
                         "id": "123",
                         "name": "Send a notification for high priority issues",
+                        "type": "alert",
                         "organizationId": "1",
                         "createdBy": null,
                         "dateCreated": "2025-03-18T20:48:55.495059Z",
@@ -95003,6 +95023,7 @@
                       {
                         "id": "456",
                         "name": "Notify team #example-team",
+                        "type": "alert",
                         "organizationId": "1",
                         "createdBy": "34567",
                         "dateCreated": "2026-01-15T23:46:39.594915Z",
@@ -95058,6 +95079,7 @@
                       {
                         "id": "789",
                         "name": "Notify Jane Doe",
+                        "type": "alert",
                         "organizationId": "1",
                         "createdBy": "2345",
                         "dateCreated": "2026-01-15T23:46:39.594915Z",
@@ -99035,30 +99057,34 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "Alert ID"
+                      "description": "Workflow ID"
                     },
                     "name": {
                       "type": "string",
-                      "description": "Alert name"
+                      "description": "Workflow name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Type of the workflow, such as alert"
                     },
                     "organizationId": {
                       "type": "string",
-                      "description": "ID of the organization the alert belongs to"
+                      "description": "ID of the organization the workflow belongs to"
                     },
                     "createdBy": {
                       "type": "string",
                       "nullable": true,
-                      "description": "ID of the user who created the alert"
+                      "description": "ID of the user who created the workflow"
                     },
                     "dateCreated": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "When the alert was created (ISO 8601)"
+                      "description": "When the workflow was created (ISO 8601)"
                     },
                     "dateUpdated": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "When the alert was last updated (ISO 8601)"
+                      "description": "When the workflow was last updated (ISO 8601)"
                     },
                     "triggers": {
                       "type": "object",
@@ -100904,7 +100930,7 @@
                         }
                       },
                       "nullable": true,
-                      "description": "Conditions on which the alert triggers"
+                      "description": "Conditions on which the workflow triggers"
                     },
                     "actionFilters": {
                       "type": "array",
@@ -102758,7 +102784,7 @@
                     "environment": {
                       "type": "string",
                       "nullable": true,
-                      "description": "Name of the environment the alert is limited to. Null for all environments"
+                      "description": "Name of the environment the workflow is limited to. Null for all environments"
                     },
                     "config": {
                       "type": "object",
@@ -102770,7 +102796,7 @@
                           "minimum": 0
                         }
                       },
-                      "description": "Configuration of the alert, such as frequency in minutes"
+                      "description": "Configuration of the workflow, such as frequency in minutes"
                     },
                     "detectorIds": {
                       "type": "array",
@@ -102778,22 +102804,22 @@
                         "type": "string"
                       },
                       "nullable": true,
-                      "description": "IDs of the monitors connected to the alert"
+                      "description": "IDs of the monitors connected to the workflow"
                     },
                     "enabled": {
                       "type": "boolean",
-                      "description": "Whether the alert is enabled"
+                      "description": "Whether the workflow is enabled"
                     },
                     "lastTriggered": {
                       "type": "string",
                       "format": "date-time",
                       "nullable": true,
-                      "description": "When the alert last fired (ISO 8601)"
+                      "description": "When the workflow last fired (ISO 8601)"
                     },
                     "owner": {
                       "type": "string",
                       "nullable": true,
-                      "description": "Team or user that owns the alert, such as user:123 or team:456"
+                      "description": "Team or user that owns the workflow, such as user:123 or team:456"
                     }
                   },
                   "required": [
@@ -102810,7 +102836,8 @@
                     "name",
                     "organizationId",
                     "owner",
-                    "triggers"
+                    "triggers",
+                    "type"
                   ]
                 },
                 "examples": {
@@ -102818,6 +102845,7 @@
                     "value": {
                       "id": "1234567",
                       "name": "Notify Jane Doe",
+                      "type": "alert",
                       "organizationId": "1",
                       "createdBy": "2345",
                       "dateCreated": "2026-01-13T21:21:15.975384Z",
@@ -103016,30 +103044,34 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "description": "Alert ID"
+                        "description": "Workflow ID"
                       },
                       "name": {
                         "type": "string",
-                        "description": "Alert name"
+                        "description": "Workflow name"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Type of the workflow, such as alert"
                       },
                       "organizationId": {
                         "type": "string",
-                        "description": "ID of the organization the alert belongs to"
+                        "description": "ID of the organization the workflow belongs to"
                       },
                       "createdBy": {
                         "type": "string",
                         "nullable": true,
-                        "description": "ID of the user who created the alert"
+                        "description": "ID of the user who created the workflow"
                       },
                       "dateCreated": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "When the alert was created (ISO 8601)"
+                        "description": "When the workflow was created (ISO 8601)"
                       },
                       "dateUpdated": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "When the alert was last updated (ISO 8601)"
+                        "description": "When the workflow was last updated (ISO 8601)"
                       },
                       "triggers": {
                         "type": "object",
@@ -104885,7 +104917,7 @@
                           }
                         },
                         "nullable": true,
-                        "description": "Conditions on which the alert triggers"
+                        "description": "Conditions on which the workflow triggers"
                       },
                       "actionFilters": {
                         "type": "array",
@@ -106739,7 +106771,7 @@
                       "environment": {
                         "type": "string",
                         "nullable": true,
-                        "description": "Name of the environment the alert is limited to. Null for all environments"
+                        "description": "Name of the environment the workflow is limited to. Null for all environments"
                       },
                       "config": {
                         "type": "object",
@@ -106751,7 +106783,7 @@
                             "minimum": 0
                           }
                         },
-                        "description": "Configuration of the alert, such as frequency in minutes"
+                        "description": "Configuration of the workflow, such as frequency in minutes"
                       },
                       "detectorIds": {
                         "type": "array",
@@ -106759,22 +106791,22 @@
                           "type": "string"
                         },
                         "nullable": true,
-                        "description": "IDs of the monitors connected to the alert"
+                        "description": "IDs of the monitors connected to the workflow"
                       },
                       "enabled": {
                         "type": "boolean",
-                        "description": "Whether the alert is enabled"
+                        "description": "Whether the workflow is enabled"
                       },
                       "lastTriggered": {
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "description": "When the alert last fired (ISO 8601)"
+                        "description": "When the workflow last fired (ISO 8601)"
                       },
                       "owner": {
                         "type": "string",
                         "nullable": true,
-                        "description": "Team or user that owns the alert, such as user:123 or team:456"
+                        "description": "Team or user that owns the workflow, such as user:123 or team:456"
                       }
                     },
                     "required": [
@@ -106791,7 +106823,8 @@
                       "name",
                       "organizationId",
                       "owner",
-                      "triggers"
+                      "triggers",
+                      "type"
                     ]
                   }
                 },
@@ -106801,6 +106834,7 @@
                       {
                         "id": "123",
                         "name": "Send a notification for high priority issues",
+                        "type": "alert",
                         "organizationId": "1",
                         "createdBy": null,
                         "dateCreated": "2025-03-18T20:48:55.495059Z",
@@ -106861,6 +106895,7 @@
                       {
                         "id": "456",
                         "name": "Notify team #example-team",
+                        "type": "alert",
                         "organizationId": "1",
                         "createdBy": "34567",
                         "dateCreated": "2026-01-15T23:46:39.594915Z",
@@ -106916,6 +106951,7 @@
                       {
                         "id": "789",
                         "name": "Notify Jane Doe",
+                        "type": "alert",
                         "organizationId": "1",
                         "createdBy": "2345",
                         "dateCreated": "2026-01-15T23:46:39.594915Z",
@@ -107140,30 +107176,34 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "Alert ID"
+                      "description": "Workflow ID"
                     },
                     "name": {
                       "type": "string",
-                      "description": "Alert name"
+                      "description": "Workflow name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Type of the workflow, such as alert"
                     },
                     "organizationId": {
                       "type": "string",
-                      "description": "ID of the organization the alert belongs to"
+                      "description": "ID of the organization the workflow belongs to"
                     },
                     "createdBy": {
                       "type": "string",
                       "nullable": true,
-                      "description": "ID of the user who created the alert"
+                      "description": "ID of the user who created the workflow"
                     },
                     "dateCreated": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "When the alert was created (ISO 8601)"
+                      "description": "When the workflow was created (ISO 8601)"
                     },
                     "dateUpdated": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "When the alert was last updated (ISO 8601)"
+                      "description": "When the workflow was last updated (ISO 8601)"
                     },
                     "triggers": {
                       "type": "object",
@@ -109009,7 +109049,7 @@
                         }
                       },
                       "nullable": true,
-                      "description": "Conditions on which the alert triggers"
+                      "description": "Conditions on which the workflow triggers"
                     },
                     "actionFilters": {
                       "type": "array",
@@ -110863,7 +110903,7 @@
                     "environment": {
                       "type": "string",
                       "nullable": true,
-                      "description": "Name of the environment the alert is limited to. Null for all environments"
+                      "description": "Name of the environment the workflow is limited to. Null for all environments"
                     },
                     "config": {
                       "type": "object",
@@ -110875,7 +110915,7 @@
                           "minimum": 0
                         }
                       },
-                      "description": "Configuration of the alert, such as frequency in minutes"
+                      "description": "Configuration of the workflow, such as frequency in minutes"
                     },
                     "detectorIds": {
                       "type": "array",
@@ -110883,22 +110923,22 @@
                         "type": "string"
                       },
                       "nullable": true,
-                      "description": "IDs of the monitors connected to the alert"
+                      "description": "IDs of the monitors connected to the workflow"
                     },
                     "enabled": {
                       "type": "boolean",
-                      "description": "Whether the alert is enabled"
+                      "description": "Whether the workflow is enabled"
                     },
                     "lastTriggered": {
                       "type": "string",
                       "format": "date-time",
                       "nullable": true,
-                      "description": "When the alert last fired (ISO 8601)"
+                      "description": "When the workflow last fired (ISO 8601)"
                     },
                     "owner": {
                       "type": "string",
                       "nullable": true,
-                      "description": "Team or user that owns the alert, such as user:123 or team:456"
+                      "description": "Team or user that owns the workflow, such as user:123 or team:456"
                     }
                   },
                   "required": [
@@ -110915,7 +110955,8 @@
                     "name",
                     "organizationId",
                     "owner",
-                    "triggers"
+                    "triggers",
+                    "type"
                   ]
                 },
                 "examples": {
@@ -110923,6 +110964,7 @@
                     "value": {
                       "id": "6789123",
                       "name": "My Alert",
+                      "type": "alert",
                       "organizationId": "1",
                       "createdBy": "1234567",
                       "dateCreated": "2026-01-14T20:08:32.273220Z",
@@ -114925,30 +114967,34 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "Alert ID"
+                      "description": "Workflow ID"
                     },
                     "name": {
                       "type": "string",
-                      "description": "Alert name"
+                      "description": "Workflow name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Type of the workflow, such as alert"
                     },
                     "organizationId": {
                       "type": "string",
-                      "description": "ID of the organization the alert belongs to"
+                      "description": "ID of the organization the workflow belongs to"
                     },
                     "createdBy": {
                       "type": "string",
                       "nullable": true,
-                      "description": "ID of the user who created the alert"
+                      "description": "ID of the user who created the workflow"
                     },
                     "dateCreated": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "When the alert was created (ISO 8601)"
+                      "description": "When the workflow was created (ISO 8601)"
                     },
                     "dateUpdated": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "When the alert was last updated (ISO 8601)"
+                      "description": "When the workflow was last updated (ISO 8601)"
                     },
                     "triggers": {
                       "type": "object",
@@ -116794,7 +116840,7 @@
                         }
                       },
                       "nullable": true,
-                      "description": "Conditions on which the alert triggers"
+                      "description": "Conditions on which the workflow triggers"
                     },
                     "actionFilters": {
                       "type": "array",
@@ -118648,7 +118694,7 @@
                     "environment": {
                       "type": "string",
                       "nullable": true,
-                      "description": "Name of the environment the alert is limited to. Null for all environments"
+                      "description": "Name of the environment the workflow is limited to. Null for all environments"
                     },
                     "config": {
                       "type": "object",
@@ -118660,7 +118706,7 @@
                           "minimum": 0
                         }
                       },
-                      "description": "Configuration of the alert, such as frequency in minutes"
+                      "description": "Configuration of the workflow, such as frequency in minutes"
                     },
                     "detectorIds": {
                       "type": "array",
@@ -118668,22 +118714,22 @@
                         "type": "string"
                       },
                       "nullable": true,
-                      "description": "IDs of the monitors connected to the alert"
+                      "description": "IDs of the monitors connected to the workflow"
                     },
                     "enabled": {
                       "type": "boolean",
-                      "description": "Whether the alert is enabled"
+                      "description": "Whether the workflow is enabled"
                     },
                     "lastTriggered": {
                       "type": "string",
                       "format": "date-time",
                       "nullable": true,
-                      "description": "When the alert last fired (ISO 8601)"
+                      "description": "When the workflow last fired (ISO 8601)"
                     },
                     "owner": {
                       "type": "string",
                       "nullable": true,
-                      "description": "Team or user that owns the alert, such as user:123 or team:456"
+                      "description": "Team or user that owns the workflow, such as user:123 or team:456"
                     }
                   },
                   "required": [
@@ -118700,7 +118746,8 @@
                     "name",
                     "organizationId",
                     "owner",
-                    "triggers"
+                    "triggers",
+                    "type"
                   ]
                 },
                 "examples": {
@@ -118708,6 +118755,7 @@
                     "value": {
                       "id": "1234567",
                       "name": "My Updated Alert",
+                      "type": "alert",
                       "organizationId": "1",
                       "createdBy": "23456",
                       "dateCreated": "2026-01-14T20:08:32.273220Z",
@@ -277905,30 +277953,34 @@
           "properties": {
             "id": {
               "type": "string",
-              "description": "Alert ID"
+              "description": "Workflow ID"
             },
             "name": {
               "type": "string",
-              "description": "Alert name"
+              "description": "Workflow name"
+            },
+            "type": {
+              "type": "string",
+              "description": "Type of the workflow, such as alert"
             },
             "organizationId": {
               "type": "string",
-              "description": "ID of the organization the alert belongs to"
+              "description": "ID of the organization the workflow belongs to"
             },
             "createdBy": {
               "type": "string",
               "nullable": true,
-              "description": "ID of the user who created the alert"
+              "description": "ID of the user who created the workflow"
             },
             "dateCreated": {
               "type": "string",
               "format": "date-time",
-              "description": "When the alert was created (ISO 8601)"
+              "description": "When the workflow was created (ISO 8601)"
             },
             "dateUpdated": {
               "type": "string",
               "format": "date-time",
-              "description": "When the alert was last updated (ISO 8601)"
+              "description": "When the workflow was last updated (ISO 8601)"
             },
             "triggers": {
               "type": "object",
@@ -279774,7 +279826,7 @@
                 }
               },
               "nullable": true,
-              "description": "Conditions on which the alert triggers"
+              "description": "Conditions on which the workflow triggers"
             },
             "actionFilters": {
               "type": "array",
@@ -281628,7 +281680,7 @@
             "environment": {
               "type": "string",
               "nullable": true,
-              "description": "Name of the environment the alert is limited to. Null for all environments"
+              "description": "Name of the environment the workflow is limited to. Null for all environments"
             },
             "config": {
               "type": "object",
@@ -281640,7 +281692,7 @@
                   "minimum": 0
                 }
               },
-              "description": "Configuration of the alert, such as frequency in minutes"
+              "description": "Configuration of the workflow, such as frequency in minutes"
             },
             "detectorIds": {
               "type": "array",
@@ -281648,22 +281700,22 @@
                 "type": "string"
               },
               "nullable": true,
-              "description": "IDs of the monitors connected to the alert"
+              "description": "IDs of the monitors connected to the workflow"
             },
             "enabled": {
               "type": "boolean",
-              "description": "Whether the alert is enabled"
+              "description": "Whether the workflow is enabled"
             },
             "lastTriggered": {
               "type": "string",
               "format": "date-time",
               "nullable": true,
-              "description": "When the alert last fired (ISO 8601)"
+              "description": "When the workflow last fired (ISO 8601)"
             },
             "owner": {
               "type": "string",
               "nullable": true,
-              "description": "Team or user that owns the alert, such as user:123 or team:456"
+              "description": "Team or user that owns the workflow, such as user:123 or team:456"
             }
           },
           "required": [
@@ -281680,7 +281732,8 @@
             "name",
             "organizationId",
             "owner",
-            "triggers"
+            "triggers",
+            "type"
           ]
         }
       },
@@ -315005,30 +315058,34 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Alert ID"
+            "description": "Workflow ID"
           },
           "name": {
             "type": "string",
-            "description": "Alert name"
+            "description": "Workflow name"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the workflow, such as alert"
           },
           "organizationId": {
             "type": "string",
-            "description": "ID of the organization the alert belongs to"
+            "description": "ID of the organization the workflow belongs to"
           },
           "createdBy": {
             "type": "string",
             "nullable": true,
-            "description": "ID of the user who created the alert"
+            "description": "ID of the user who created the workflow"
           },
           "dateCreated": {
             "type": "string",
             "format": "date-time",
-            "description": "When the alert was created (ISO 8601)"
+            "description": "When the workflow was created (ISO 8601)"
           },
           "dateUpdated": {
             "type": "string",
             "format": "date-time",
-            "description": "When the alert was last updated (ISO 8601)"
+            "description": "When the workflow was last updated (ISO 8601)"
           },
           "triggers": {
             "type": "object",
@@ -316874,7 +316931,7 @@
               }
             },
             "nullable": true,
-            "description": "Conditions on which the alert triggers"
+            "description": "Conditions on which the workflow triggers"
           },
           "actionFilters": {
             "type": "array",
@@ -318728,7 +318785,7 @@
           "environment": {
             "type": "string",
             "nullable": true,
-            "description": "Name of the environment the alert is limited to. Null for all environments"
+            "description": "Name of the environment the workflow is limited to. Null for all environments"
           },
           "config": {
             "type": "object",
@@ -318740,7 +318797,7 @@
                 "minimum": 0
               }
             },
-            "description": "Configuration of the alert, such as frequency in minutes"
+            "description": "Configuration of the workflow, such as frequency in minutes"
           },
           "detectorIds": {
             "type": "array",
@@ -318748,22 +318805,22 @@
               "type": "string"
             },
             "nullable": true,
-            "description": "IDs of the monitors connected to the alert"
+            "description": "IDs of the monitors connected to the workflow"
           },
           "enabled": {
             "type": "boolean",
-            "description": "Whether the alert is enabled"
+            "description": "Whether the workflow is enabled"
           },
           "lastTriggered": {
             "type": "string",
             "format": "date-time",
             "nullable": true,
-            "description": "When the alert last fired (ISO 8601)"
+            "description": "When the workflow last fired (ISO 8601)"
           },
           "owner": {
             "type": "string",
             "nullable": true,
-            "description": "Team or user that owns the alert, such as user:123 or team:456"
+            "description": "Team or user that owns the workflow, such as user:123 or team:456"
           }
         },
         "required": [
@@ -318780,7 +318837,8 @@
           "name",
           "organizationId",
           "owner",
-          "triggers"
+          "triggers",
+          "type"
         ]
       },
       "WorkflowAction": {
