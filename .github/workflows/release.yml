@@ -78,13 +78,11 @@ jobs:
 
       - name: Check what to release
         id: preflight
-        env:
-          GH_TOKEN: ${{ steps.token.outputs.token }}
-          RELEASE_TRIGGER: ${{ github.event_name }}
+        if: github.event_name == 'workflow_run'
         run: .github/scripts/release-preflight.sh
 
       - name: Prepare release
-        if: steps.preflight.outputs.proceed == 'true'
+        if: github.event_name == 'workflow_dispatch' || steps.preflight.outputs.proceed == 'true'
         uses: getsentry/craft@2e29b0819113d334c15da3d8cac2138cb9dc111a # 3.9.0
         env:
           GITHUB_TOKEN: ${{ steps.token.outputs.token }}

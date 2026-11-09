@@ -9,6 +9,7 @@ on:
       - completed
     branches:
       - main
+      - release/**
   schedule:
     - cron: "23 8 * * *"
   workflow_dispatch:
@@ -17,14 +18,9 @@ permissions:
   contents: read
   issues: write
 
-# One writer at a time, so two failures cannot open two issues.
-concurrency:
-  group: release-pipeline-health
-  cancel-in-progress: false
-
 jobs:
-  # Build and Release on main: report failures, and close the issue once a
-  # Release succeeds.
+  # Build and Release on main and release branches: report failures, and close
+  # the issue once a Release succeeds.
   report-run:
     name: Report ${{ github.event.workflow_run.name }} result
     if: >-
@@ -35,6 +31,12 @@ jobs:
         github.event.workflow_run.conclusion == 'failure' ||
         (github.event.workflow_run.name == 'Release' && github.event.workflow_run.conclusion == 'success')
       )
+    # One issue writer at a time, so two failures cannot open two issues. Only
+    # the issue writers share this group: a queued run replaces the one waiting
+    # before it, and that must never drop a failed release.
+    concurrency:
+      group: release-pipeline-issue
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
@@ -46,20 +48,55 @@ jobs:
       - name: Report the failure
         if: github.event.workflow_run.conclusion == 'failure'
         env:
-          MESSAGE: ${{ env.RUN_LINK }} failed on `main` at ${{ env.COMMIT_LINK }}.
+          MESSAGE: ${{ env.RUN_LINK }} failed on `${{ github.event.workflow_run.head_branch }}` at ${{ env.COMMIT_LINK }}.
         run: .github/scripts/pipeline-issue.sh report
 
       - name: Close the issue
         if: github.event.workflow_run.conclusion == 'success'
         env:
-          MESSAGE: ${{ env.RUN_LINK }} succeeded on `main` at ${{ env.COMMIT_LINK }}.
+          MESSAGE: ${{ env.RUN_LINK }} succeeded on `${{ github.event.workflow_run.head_branch }}` at ${{ env.COMMIT_LINK }}.
         run: .github/scripts/pipeline-issue.sh resolve
+
+  # A release branch whose Build failed can never publish, and craft refuses to
+  # cut that version again while the branch exists. Drop it so the next push
+  # to main releases again.
+  drop-failed-release:
+    name: Drop the failed release
+    if: >-
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.name == 'Build' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.conclusion == 'failure' &&
+      startsWith(github.event.workflow_run.head_branch, 'release/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get auth token
+        id: token
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
+        with:
+          app-id: ${{ vars.SENTRY_RELEASE_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.SENTRY_RELEASE_BOT_PRIVATE_KEY }}
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          token: ${{ steps.token.outputs.token }}
+
+      - run: .github/scripts/drop-failed-release.sh
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
 
   # Catch releases that are stuck without a failing run, such as a release
   # branch that never merged.
   check-staleness:
     name: Check for a stuck release
     if: github.event_name != 'workflow_run'
+    concurrency:
+      group: release-pipeline-issue
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
