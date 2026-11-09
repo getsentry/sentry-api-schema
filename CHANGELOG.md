@@ -1,3 +1,9 @@
+## 1.53.1
+
+### Internal Changes
+
+- Track release pipeline failures and stuck releases in an issue by @BYK with @sentry-junior in [#138](https://github.com/getsentry/sentry-api-schema/pull/138)
+
 ## 1.53.0
 
 ### Schema Updates
