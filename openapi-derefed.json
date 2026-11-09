@@ -149638,6 +149638,507 @@
         }
       }
     },
+    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/trace-items/{item_id}/": {
+      "get": {
+        "operationId": "retrieveProjectTraceItem",
+        "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve a span, log or other trace item of a project, with all of its attributes.\n\nPass the `meta.routingHint` of the events response that listed the item as\n`routing_hint`, unchanged. An invalid hint returns 400.",
+        "summary": "Retrieve a Trace Item",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "project_id_or_slug",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID or slug of the project the resource belongs to. Project slugs are unique within each organization.",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "item_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The hexadecimal ID of the item: the 16-character span ID for a span, or the 32-character item ID for other item types",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "trace_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The 32-character ID of the trace the item belongs to",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "item_type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "attachments",
+                "logs",
+                "occurrences",
+                "preprod",
+                "processing_errors",
+                "profile_functions",
+                "spans",
+                "tracemetrics",
+                "uptime_results"
+              ]
+            },
+            "description": "The type of the item",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "routing_hint",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The opaque `meta.routingHint` of the events response that contained the item. Pass it unchanged to look the item up in the same storage. When it's omitted or empty, the default storage is used"
+          },
+          {
+            "in": "query",
+            "name": "timestamp",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "When the item happened, as an ISO 8601 timestamp or Unix seconds. The lookup is narrowed to a few minutes around it, which makes it faster"
+          },
+          {
+            "in": "query",
+            "name": "statsPeriod",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The period of time for the query, will override the start & end parameters, a number followed by one of:\n- `d` for days\n- `h` for hours\n- `m` for minutes\n- `s` for seconds\n- `w` for weeks\n\nFor example, `24h`, to mean query data starting from 24 hours ago to now."
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The start of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The end of the period of time for the query, expected in ISO-8601 format. For example, `2001-12-14T12:34:56.7890`."
+          }
+        ],
+        "tags": [
+          "Explore"
+        ],
+        "security": [
+          {
+            "auth_token": [
+              "project:admin",
+              "project:read",
+              "project:write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "itemId": {
+                      "type": "string",
+                      "description": "The ID of the item. For a span, this is the 16-character span ID"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "description": "When the item happened, as an RFC 3339 UTC timestamp ending in `Z`"
+                    },
+                    "attributes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "The public name of the attribute, such as `severity`. A custom number or boolean attribute is named `tags[<name>,number]` or `tags[<name>,boolean]`"
+                          },
+                          "rawName": {
+                            "type": "string",
+                            "description": "The name the attribute is stored under"
+                          },
+                          "type": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "str",
+                                  "int",
+                                  "float",
+                                  "bool"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "enum": [
+                                  "array"
+                                ],
+                                "type": "string"
+                              }
+                            ],
+                            "description": "The type of the attribute value: `str`, `int`, `float`, `bool` or `array`"
+                          },
+                          "value": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "array",
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "type": "number",
+                                      "format": "double"
+                                    },
+                                    {
+                                      "type": "boolean"
+                                    },
+                                    {
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              }
+                            ],
+                            "description": "The attribute value. An `int` value is a string, so 64-bit integers keep their precision. An `array` value is a list of values of one type"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      },
+                      "description": "The attributes of the item, sorted by type and then by name"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "description": "Any JSON value",
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "additionalProperties": true,
+                            "nullable": true
+                          },
+                          {
+                            "type": "array",
+                            "items": {}
+                          },
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "boolean"
+                          }
+                        ]
+                      },
+                      "description": "Processing metadata, keyed by attribute name, for attributes that were changed during ingestion, such as a value that was trimmed for length"
+                    },
+                    "links": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "itemId": {
+                            "type": "string",
+                            "description": "The ID of the linked span"
+                          },
+                          "traceId": {
+                            "type": "string",
+                            "description": "The ID of the trace the linked span belongs to"
+                          },
+                          "sampled": {
+                            "type": "boolean",
+                            "description": "Whether the linked span was sampled"
+                          },
+                          "attributes": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "description": "The name of the link attribute, such as `sentry.link.type`"
+                                },
+                                "value": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "number",
+                                      "format": "double"
+                                    },
+                                    {
+                                      "type": "boolean"
+                                    }
+                                  ],
+                                  "description": "The link attribute value"
+                                },
+                                "type": {
+                                  "enum": [
+                                    "str",
+                                    "int",
+                                    "float",
+                                    "bool"
+                                  ],
+                                  "type": "string",
+                                  "description": "The type of the link attribute value"
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "type",
+                                "value"
+                              ]
+                            },
+                            "description": "The attributes of the link. Attributes with values that aren't a string, number or boolean are left out"
+                          }
+                        },
+                        "required": [
+                          "itemId",
+                          "traceId"
+                        ]
+                      },
+                      "nullable": true,
+                      "description": "The span links of the item, or null if it has none"
+                    },
+                    "event": {
+                      "type": "object",
+                      "properties": {
+                        "contexts": {
+                          "description": "The contexts of the event the item came from",
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": true,
+                              "nullable": true
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        },
+                        "extra": {
+                          "description": "The extra data of the event the item came from",
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": true,
+                              "nullable": true
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        },
+                        "breadcrumbs": {
+                          "description": "The breadcrumbs of the event the item came from. Breadcrumb timestamps are ISO 8601 strings",
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": true,
+                              "nullable": true
+                            },
+                            {
+                              "type": "array",
+                              "items": {}
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        }
+                      },
+                      "description": "Fields of the event the item came from that are stored with it. Only present when at least one of them is"
+                    }
+                  },
+                  "required": [
+                    "attributes",
+                    "itemId",
+                    "links",
+                    "meta",
+                    "timestamp"
+                  ]
+                },
+                "examples": {
+                  "RetrieveASpan": {
+                    "value": {
+                      "itemId": "8873a98879faf06d",
+                      "timestamp": "2025-01-01T12:00:00Z",
+                      "attributes": [
+                        {
+                          "name": "is_transaction",
+                          "type": "bool",
+                          "value": true
+                        },
+                        {
+                          "name": "span.duration",
+                          "type": "float",
+                          "value": 132.5
+                        },
+                        {
+                          "name": "project_id",
+                          "type": "int",
+                          "value": "4505281256090153"
+                        },
+                        {
+                          "name": "span.op",
+                          "type": "str",
+                          "value": "http.server"
+                        },
+                        {
+                          "name": "transaction",
+                          "type": "str",
+                          "value": "GET /api/checkout/"
+                        }
+                      ],
+                      "meta": {},
+                      "links": [
+                        {
+                          "itemId": "e3c58cb0bd2d4c89",
+                          "traceId": "d099bf9ad5a143cf8f83a98081d0ed3b",
+                          "sampled": true,
+                          "attributes": [
+                            {
+                              "name": "sentry.link.type",
+                              "value": "previous_trace",
+                              "type": "str"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "summary": "Retrieve a span"
+                  },
+                  "RetrieveALog": {
+                    "value": {
+                      "itemId": "0197fb2a5c5e7d72a8a3a6c94e8f2b1d",
+                      "timestamp": "2025-01-01T12:00:00Z",
+                      "attributes": [
+                        {
+                          "name": "severity_number",
+                          "type": "int",
+                          "value": "9"
+                        },
+                        {
+                          "name": "message",
+                          "type": "str",
+                          "value": "Payment processed for order 1234..."
+                        },
+                        {
+                          "name": "severity",
+                          "type": "str",
+                          "value": "info"
+                        },
+                        {
+                          "name": "trace",
+                          "type": "str",
+                          "value": "d099bf9ad5a143cf8f83a98081d0ed3b"
+                        }
+                      ],
+                      "meta": {
+                        "message": {
+                          "length": 300,
+                          "reason": "value too long"
+                        }
+                      },
+                      "links": null
+                    },
+                    "summary": "Retrieve a log"
+                  }
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-sentry-routing": {
+          "silo": "cell",
+          "organizationParameter": "organization_id_or_slug"
+        },
+        "x-sentry-experimental": true
+      }
+    },
     "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/user-feedback/": {
       "get": {
         "operationId": "List a Project's User Feedback",
@@ -314847,6 +315348,274 @@
           "id",
           "meta",
           "schemas"
+        ]
+      },
+      "TraceItemDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "description": "The ID of the item. For a span, this is the 16-character span ID"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "When the item happened, as an RFC 3339 UTC timestamp ending in `Z`"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The public name of the attribute, such as `severity`. A custom number or boolean attribute is named `tags[<name>,number]` or `tags[<name>,boolean]`"
+                },
+                "rawName": {
+                  "type": "string",
+                  "description": "The name the attribute is stored under"
+                },
+                "type": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "str",
+                        "int",
+                        "float",
+                        "bool"
+                      ],
+                      "type": "string"
+                    },
+                    {
+                      "enum": [
+                        "array"
+                      ],
+                      "type": "string"
+                    }
+                  ],
+                  "description": "The type of the attribute value: `str`, `int`, `float`, `bool` or `array`"
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          {
+                            "type": "boolean"
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "description": "The attribute value. An `int` value is a string, so 64-bit integers keep their precision. An `array` value is a list of values of one type"
+                }
+              },
+              "required": [
+                "name",
+                "type",
+                "value"
+              ]
+            },
+            "description": "The attributes of the item, sorted by type and then by name"
+          },
+          "meta": {
+            "type": "object",
+            "additionalProperties": {
+              "description": "Any JSON value",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "nullable": true
+                },
+                {
+                  "type": "array",
+                  "items": {}
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "description": "Processing metadata, keyed by attribute name, for attributes that were changed during ingestion, such as a value that was trimmed for length"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "type": "string",
+                  "description": "The ID of the linked span"
+                },
+                "traceId": {
+                  "type": "string",
+                  "description": "The ID of the trace the linked span belongs to"
+                },
+                "sampled": {
+                  "type": "boolean",
+                  "description": "Whether the linked span was sampled"
+                },
+                "attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the link attribute, such as `sentry.link.type`"
+                      },
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "integer"
+                          },
+                          {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          {
+                            "type": "boolean"
+                          }
+                        ],
+                        "description": "The link attribute value"
+                      },
+                      "type": {
+                        "enum": [
+                          "str",
+                          "int",
+                          "float",
+                          "bool"
+                        ],
+                        "type": "string",
+                        "description": "The type of the link attribute value"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "type",
+                      "value"
+                    ]
+                  },
+                  "description": "The attributes of the link. Attributes with values that aren't a string, number or boolean are left out"
+                }
+              },
+              "required": [
+                "itemId",
+                "traceId"
+              ]
+            },
+            "nullable": true,
+            "description": "The span links of the item, or null if it has none"
+          },
+          "event": {
+            "type": "object",
+            "properties": {
+              "contexts": {
+                "description": "The contexts of the event the item came from",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "nullable": true
+                  },
+                  {
+                    "type": "array",
+                    "items": {}
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "extra": {
+                "description": "The extra data of the event the item came from",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "nullable": true
+                  },
+                  {
+                    "type": "array",
+                    "items": {}
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "breadcrumbs": {
+                "description": "The breadcrumbs of the event the item came from. Breadcrumb timestamps are ISO 8601 strings",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "nullable": true
+                  },
+                  {
+                    "type": "array",
+                    "items": {}
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              }
+            },
+            "description": "Fields of the event the item came from that are stored with it. Only present when at least one of them is"
+          }
+        },
+        "required": [
+          "attributes",
+          "itemId",
+          "links",
+          "meta",
+          "timestamp"
         ]
       },
       "TraceItemStatsResponse": {
