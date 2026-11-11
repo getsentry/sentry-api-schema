@@ -33502,7 +33502,7 @@
     "/api/0/organizations/{organization_id_or_slug}/eventids/{event_id}/": {
       "get": {
         "operationId": "resolveOrganizationEventId",
-        "description": "This resolves an event ID to the project slug and internal issue ID and internal event ID.",
+        "description": "Resolve an event ID to its project slug, issue ID, and event details. Only projects the\ncaller can access are searched.",
         "summary": "Resolve an Event ID",
         "parameters": [
           {
@@ -35784,6 +35784,15 @@
               }
             },
             "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
