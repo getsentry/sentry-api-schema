@@ -1,3 +1,9 @@
+## 1.83.0
+
+### New Features
+
+- (api-client) Carry the scopes a 403 insufficient_scope challenge accepts by @BYK with @sentry-junior in [#146](https://github.com/getsentry/sentry-api-schema/pull/146)
+
 ## 1.82.0
 
 ### Schema Updates
