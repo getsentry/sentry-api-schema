@@ -177949,6 +177949,395 @@
                                 "type": "string",
                                 "description": "Type of the activity, which decides the shape of data",
                                 "enum": [
+                                  "seer_stopped"
+                                ]
+                              },
+                              "data": {
+                                "type": "object",
+                                "properties": {
+                                  "run_id": {
+                                    "nullable": true,
+                                    "type": "integer",
+                                    "description": "ID of the Seer run"
+                                  },
+                                  "reason": {
+                                    "nullable": true,
+                                    "description": "Why Seer stopped instead of fixing the issue",
+                                    "type": "string"
+                                  },
+                                  "suggestion": {
+                                    "nullable": true,
+                                    "description": "What Seer suggests doing instead",
+                                    "type": "string"
+                                  }
+                                },
+                                "description": "Details of the activity, which depend on type"
+                              },
+                              "dateCreated": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "When the activity happened (ISO 8601)"
+                              },
+                              "source": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Where the action came from, such as web, api or mcp:<client>"
+                              }
+                            },
+                            "required": [
+                              "commentId",
+                              "data",
+                              "dateCreated",
+                              "id",
+                              "sentry_app",
+                              "type",
+                              "user"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "description": "Matches the envelope of ActivitySerializer.serialize(). In an issue's activity feed, the\nAPI schema is the union in activity_response_schemas, which pins `data` down for each\n`type`.",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "ID of the activity, or 0 for a first-seen item built from the issue"
+                              },
+                              "commentId": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "ID to pass to the notes endpoints for a comment, otherwise null"
+                              },
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "identities": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "SSO identity ID"
+                                        },
+                                        "name": {
+                                          "type": "string",
+                                          "description": "User's identifier at the auth provider"
+                                        },
+                                        "organization": {
+                                          "type": "object",
+                                          "properties": {
+                                            "slug": {
+                                              "type": "string",
+                                              "description": "Organization slug"
+                                            },
+                                            "name": {
+                                              "type": "string",
+                                              "description": "Organization name"
+                                            }
+                                          },
+                                          "required": [
+                                            "name",
+                                            "slug"
+                                          ],
+                                          "description": "Organization the auth provider belongs to"
+                                        },
+                                        "provider": {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": "string",
+                                              "description": "Auth provider key, such as google or saml2"
+                                            },
+                                            "name": {
+                                              "type": "string",
+                                              "description": "Display name of the auth provider"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "name"
+                                          ],
+                                          "description": "Auth provider of the identity"
+                                        },
+                                        "dateVerified": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "description": "When the identity was last verified by signing in through the auth provider"
+                                        },
+                                        "dateSynced": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "description": "When the identity was last synced from the auth provider"
+                                        }
+                                      },
+                                      "required": [
+                                        "dateSynced",
+                                        "dateVerified",
+                                        "id",
+                                        "name",
+                                        "organization",
+                                        "provider"
+                                      ]
+                                    },
+                                    "description": "SSO identities of the user. Only included for the requesting user, unless the request has active superuser or staff access"
+                                  },
+                                  "avatar": {
+                                    "type": "object",
+                                    "properties": {
+                                      "avatarType": {
+                                        "enum": [
+                                          "letter_avatar",
+                                          "upload",
+                                          "gravatar"
+                                        ],
+                                        "type": "string",
+                                        "description": "Avatar type"
+                                      },
+                                      "avatarUuid": {
+                                        "type": "string",
+                                        "pattern": "^[0-9a-f]{32}$",
+                                        "nullable": true,
+                                        "description": "ID of the uploaded avatar image, or null"
+                                      },
+                                      "avatarUrl": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "URL of the avatar image, or null if none is set"
+                                      }
+                                    },
+                                    "description": "User avatar"
+                                  },
+                                  "authenticators": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "Authenticator ID"
+                                        },
+                                        "type": {
+                                          "type": "string",
+                                          "description": "Authenticator type, such as totp, sms, u2f or recovery"
+                                        },
+                                        "name": {
+                                          "type": "string",
+                                          "description": "Display name of the authenticator type"
+                                        },
+                                        "dateCreated": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "description": "When the authenticator was added"
+                                        },
+                                        "dateUsed": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "nullable": true,
+                                          "description": "When the authenticator was last used, or null"
+                                        }
+                                      },
+                                      "required": [
+                                        "dateCreated",
+                                        "dateUsed",
+                                        "id",
+                                        "name",
+                                        "type"
+                                      ]
+                                    },
+                                    "description": "Two-factor authenticators of the user, without backup methods such as recovery codes"
+                                  },
+                                  "canReset2fa": {
+                                    "type": "boolean",
+                                    "description": "Whether the organization can reset the user's two-factor authentication. True only if the user is a member of exactly one active organization"
+                                  },
+                                  "id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9]+$",
+                                    "description": "User ID"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Display name: the user's name, or their email or username if no name is set"
+                                  },
+                                  "username": {
+                                    "type": "string",
+                                    "description": "Username"
+                                  },
+                                  "email": {
+                                    "type": "string",
+                                    "description": "Primary email address"
+                                  },
+                                  "avatarUrl": {
+                                    "type": "string",
+                                    "description": "Gravatar URL for the primary email address"
+                                  },
+                                  "isActive": {
+                                    "type": "boolean",
+                                    "description": "Whether the account is active"
+                                  },
+                                  "isSuspended": {
+                                    "type": "boolean",
+                                    "description": "Whether the account is suspended. Suspended users can't sign in"
+                                  },
+                                  "hasPasswordAuth": {
+                                    "type": "boolean",
+                                    "description": "Whether the user has a password set"
+                                  },
+                                  "isManaged": {
+                                    "type": "boolean",
+                                    "description": "Whether the account is managed, which stops the user from changing their username, password and similar details"
+                                  },
+                                  "dateJoined": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "When the account was created"
+                                  },
+                                  "lastLogin": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": true,
+                                    "description": "When the user last signed in, or null"
+                                  },
+                                  "has2fa": {
+                                    "type": "boolean",
+                                    "description": "Whether the user has two-factor authentication enabled"
+                                  },
+                                  "lastActive": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": true,
+                                    "description": "When the user was last active, or null"
+                                  },
+                                  "isSuperuser": {
+                                    "type": "boolean",
+                                    "description": "Whether the user is a superuser"
+                                  },
+                                  "isStaff": {
+                                    "type": "boolean",
+                                    "description": "Whether the user has staff status"
+                                  },
+                                  "experiments": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string"
+                                    },
+                                    "description": "Deprecated. Always an empty object"
+                                  },
+                                  "emails": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "Email ID"
+                                        },
+                                        "email": {
+                                          "type": "string",
+                                          "description": "Email address"
+                                        },
+                                        "is_verified": {
+                                          "type": "boolean",
+                                          "description": "Whether the email address is verified"
+                                        }
+                                      },
+                                      "required": [
+                                        "email",
+                                        "id",
+                                        "is_verified"
+                                      ]
+                                    },
+                                    "description": "Email addresses of the user. Only included for the requesting user or superusers; empty otherwise"
+                                  }
+                                },
+                                "required": [
+                                  "avatarUrl",
+                                  "dateJoined",
+                                  "email",
+                                  "emails",
+                                  "experiments",
+                                  "has2fa",
+                                  "hasPasswordAuth",
+                                  "id",
+                                  "isActive",
+                                  "isManaged",
+                                  "isStaff",
+                                  "isSuperuser",
+                                  "isSuspended",
+                                  "lastActive",
+                                  "lastLogin",
+                                  "name",
+                                  "username"
+                                ],
+                                "nullable": true,
+                                "description": "User who acted, or null for Sentry, an integration or a Sentry App"
+                              },
+                              "sentry_app": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "ID of the Sentry App"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Name of the Sentry App"
+                                  },
+                                  "slug": {
+                                    "type": "string",
+                                    "description": "Slug of the Sentry App"
+                                  },
+                                  "avatars": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "avatarType": {
+                                          "type": "string",
+                                          "description": "Avatar type: `default` or `upload`"
+                                        },
+                                        "avatarUuid": {
+                                          "type": "string",
+                                          "description": "Unique identifier of the uploaded avatar file, or an empty string if none is set"
+                                        },
+                                        "avatarUrl": {
+                                          "type": "string",
+                                          "format": "uri",
+                                          "description": "Absolute URL of the avatar image"
+                                        },
+                                        "color": {
+                                          "type": "boolean",
+                                          "description": "Whether this is the color logo (`true`) or the simple icon (`false`)"
+                                        },
+                                        "photoType": {
+                                          "type": "string",
+                                          "description": "Kind of image: `logo` for the color logo or `icon` for the simple icon"
+                                        }
+                                      },
+                                      "required": [
+                                        "avatarType",
+                                        "avatarUrl",
+                                        "avatarUuid",
+                                        "color",
+                                        "photoType"
+                                      ]
+                                    },
+                                    "description": "Avatars of the Sentry App"
+                                  }
+                                },
+                                "required": [
+                                  "avatars",
+                                  "id",
+                                  "name",
+                                  "slug"
+                                ],
+                                "nullable": true,
+                                "description": "Sentry App that acted, if one did"
+                              },
+                              "type": {
+                                "type": "string",
+                                "description": "Type of the activity, which decides the shape of data",
+                                "enum": [
                                   "set_escalating"
                                 ]
                               },
@@ -243416,6 +243805,395 @@
                           "nullable": true,
                           "type": "integer",
                           "description": "ID of the Seer run"
+                        }
+                      },
+                      "description": "Details of the activity, which depend on type"
+                    },
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "When the activity happened (ISO 8601)"
+                    },
+                    "source": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Where the action came from, such as web, api or mcp:<client>"
+                    }
+                  },
+                  "required": [
+                    "commentId",
+                    "data",
+                    "dateCreated",
+                    "id",
+                    "sentry_app",
+                    "type",
+                    "user"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "description": "Matches the envelope of ActivitySerializer.serialize(). In an issue's activity feed, the\nAPI schema is the union in activity_response_schemas, which pins `data` down for each\n`type`.",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the activity, or 0 for a first-seen item built from the issue"
+                    },
+                    "commentId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "ID to pass to the notes endpoints for a comment, otherwise null"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "SSO identity ID"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "User's identifier at the auth provider"
+                              },
+                              "organization": {
+                                "type": "object",
+                                "properties": {
+                                  "slug": {
+                                    "type": "string",
+                                    "description": "Organization slug"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Organization name"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "slug"
+                                ],
+                                "description": "Organization the auth provider belongs to"
+                              },
+                              "provider": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Auth provider key, such as google or saml2"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Display name of the auth provider"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ],
+                                "description": "Auth provider of the identity"
+                              },
+                              "dateVerified": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "When the identity was last verified by signing in through the auth provider"
+                              },
+                              "dateSynced": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "When the identity was last synced from the auth provider"
+                              }
+                            },
+                            "required": [
+                              "dateSynced",
+                              "dateVerified",
+                              "id",
+                              "name",
+                              "organization",
+                              "provider"
+                            ]
+                          },
+                          "description": "SSO identities of the user. Only included for the requesting user, unless the request has active superuser or staff access"
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "avatarType": {
+                              "enum": [
+                                "letter_avatar",
+                                "upload",
+                                "gravatar"
+                              ],
+                              "type": "string",
+                              "description": "Avatar type"
+                            },
+                            "avatarUuid": {
+                              "type": "string",
+                              "pattern": "^[0-9a-f]{32}$",
+                              "nullable": true,
+                              "description": "ID of the uploaded avatar image, or null"
+                            },
+                            "avatarUrl": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "URL of the avatar image, or null if none is set"
+                            }
+                          },
+                          "description": "User avatar"
+                        },
+                        "authenticators": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "Authenticator ID"
+                              },
+                              "type": {
+                                "type": "string",
+                                "description": "Authenticator type, such as totp, sms, u2f or recovery"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "Display name of the authenticator type"
+                              },
+                              "dateCreated": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "When the authenticator was added"
+                              },
+                              "dateUsed": {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true,
+                                "description": "When the authenticator was last used, or null"
+                              }
+                            },
+                            "required": [
+                              "dateCreated",
+                              "dateUsed",
+                              "id",
+                              "name",
+                              "type"
+                            ]
+                          },
+                          "description": "Two-factor authenticators of the user, without backup methods such as recovery codes"
+                        },
+                        "canReset2fa": {
+                          "type": "boolean",
+                          "description": "Whether the organization can reset the user's two-factor authentication. True only if the user is a member of exactly one active organization"
+                        },
+                        "id": {
+                          "type": "string",
+                          "pattern": "^[0-9]+$",
+                          "description": "User ID"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Display name: the user's name, or their email or username if no name is set"
+                        },
+                        "username": {
+                          "type": "string",
+                          "description": "Username"
+                        },
+                        "email": {
+                          "type": "string",
+                          "description": "Primary email address"
+                        },
+                        "avatarUrl": {
+                          "type": "string",
+                          "description": "Gravatar URL for the primary email address"
+                        },
+                        "isActive": {
+                          "type": "boolean",
+                          "description": "Whether the account is active"
+                        },
+                        "isSuspended": {
+                          "type": "boolean",
+                          "description": "Whether the account is suspended. Suspended users can't sign in"
+                        },
+                        "hasPasswordAuth": {
+                          "type": "boolean",
+                          "description": "Whether the user has a password set"
+                        },
+                        "isManaged": {
+                          "type": "boolean",
+                          "description": "Whether the account is managed, which stops the user from changing their username, password and similar details"
+                        },
+                        "dateJoined": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "When the account was created"
+                        },
+                        "lastLogin": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true,
+                          "description": "When the user last signed in, or null"
+                        },
+                        "has2fa": {
+                          "type": "boolean",
+                          "description": "Whether the user has two-factor authentication enabled"
+                        },
+                        "lastActive": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true,
+                          "description": "When the user was last active, or null"
+                        },
+                        "isSuperuser": {
+                          "type": "boolean",
+                          "description": "Whether the user is a superuser"
+                        },
+                        "isStaff": {
+                          "type": "boolean",
+                          "description": "Whether the user has staff status"
+                        },
+                        "experiments": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "description": "Deprecated. Always an empty object"
+                        },
+                        "emails": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "Email ID"
+                              },
+                              "email": {
+                                "type": "string",
+                                "description": "Email address"
+                              },
+                              "is_verified": {
+                                "type": "boolean",
+                                "description": "Whether the email address is verified"
+                              }
+                            },
+                            "required": [
+                              "email",
+                              "id",
+                              "is_verified"
+                            ]
+                          },
+                          "description": "Email addresses of the user. Only included for the requesting user or superusers; empty otherwise"
+                        }
+                      },
+                      "required": [
+                        "avatarUrl",
+                        "dateJoined",
+                        "email",
+                        "emails",
+                        "experiments",
+                        "has2fa",
+                        "hasPasswordAuth",
+                        "id",
+                        "isActive",
+                        "isManaged",
+                        "isStaff",
+                        "isSuperuser",
+                        "isSuspended",
+                        "lastActive",
+                        "lastLogin",
+                        "name",
+                        "username"
+                      ],
+                      "nullable": true,
+                      "description": "User who acted, or null for Sentry, an integration or a Sentry App"
+                    },
+                    "sentry_app": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID of the Sentry App"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the Sentry App"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "description": "Slug of the Sentry App"
+                        },
+                        "avatars": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "avatarType": {
+                                "type": "string",
+                                "description": "Avatar type: `default` or `upload`"
+                              },
+                              "avatarUuid": {
+                                "type": "string",
+                                "description": "Unique identifier of the uploaded avatar file, or an empty string if none is set"
+                              },
+                              "avatarUrl": {
+                                "type": "string",
+                                "format": "uri",
+                                "description": "Absolute URL of the avatar image"
+                              },
+                              "color": {
+                                "type": "boolean",
+                                "description": "Whether this is the color logo (`true`) or the simple icon (`false`)"
+                              },
+                              "photoType": {
+                                "type": "string",
+                                "description": "Kind of image: `logo` for the color logo or `icon` for the simple icon"
+                              }
+                            },
+                            "required": [
+                              "avatarType",
+                              "avatarUrl",
+                              "avatarUuid",
+                              "color",
+                              "photoType"
+                            ]
+                          },
+                          "description": "Avatars of the Sentry App"
+                        }
+                      },
+                      "required": [
+                        "avatars",
+                        "id",
+                        "name",
+                        "slug"
+                      ],
+                      "nullable": true,
+                      "description": "Sentry App that acted, if one did"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Type of the activity, which decides the shape of data",
+                      "enum": [
+                        "seer_stopped"
+                      ]
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "run_id": {
+                          "nullable": true,
+                          "type": "integer",
+                          "description": "ID of the Seer run"
+                        },
+                        "reason": {
+                          "nullable": true,
+                          "description": "Why Seer stopped instead of fixing the issue",
+                          "type": "string"
+                        },
+                        "suggestion": {
+                          "nullable": true,
+                          "description": "What Seer suggests doing instead",
+                          "type": "string"
                         }
                       },
                       "description": "Details of the activity, which depend on type"
