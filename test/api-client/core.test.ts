@@ -7,6 +7,7 @@ import {
 } from "../../src/api-client/core.ts";
 import {
   ApiNotFoundError,
+  ApiPermissionError,
   ApiRateLimitError,
   ApiServerError,
   ApiValidationError,
@@ -125,6 +126,28 @@ describe("createApiClientCore request", () => {
 
     expect(error).toBeInstanceOf(ApiRateLimitError);
     expect(error).toMatchObject({ retryAfterMs: 3000 });
+  });
+
+  it("carries an insufficient_scope 403's accepted scopes on the error", async () => {
+    const { core } = setup(async () =>
+      jsonResponse(
+        { detail: "You do not have permission to perform this action." },
+        {
+          status: 403,
+          headers: {
+            "WWW-Authenticate":
+              'Bearer error="insufficient_scope", scope="event:write event:admin seer:write"',
+          },
+        },
+      ),
+    );
+
+    const error = await core.request(ORIGIN, "/x/").catch((e: unknown) => e);
+
+    expect(error).toBeInstanceOf(ApiPermissionError);
+    expect(error).toMatchObject({
+      acceptedScopes: ["event:write", "event:admin", "seer:write"],
+    });
   });
 
   it("reports an HTML error page as a server error and logs it", async () => {

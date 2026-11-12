@@ -145,7 +145,7 @@ function errorFromResponse(
   body: ErrorResponseBody,
   logExtra: Record<string, unknown>,
 ): ApiError {
-  const { retryAfterMs } = body;
+  const { retryAfterMs, acceptedScopes } = body;
   const errorText = body.text ?? "";
   const bodyPreview =
     errorText.length > 256 ? `${errorText.slice(0, 253)}…` : errorText;
@@ -163,6 +163,7 @@ function errorFromResponse(
         errorText,
         undefined,
         retryAfterMs,
+        acceptedScopes,
       );
     }
     logger.warn("Failed to parse JSON error response", {
@@ -178,6 +179,7 @@ function errorFromResponse(
         body.detail,
         body.json,
         retryAfterMs,
+        acceptedScopes,
       );
     }
     logger.warn("Failed to parse validated API error response", {
@@ -193,6 +195,7 @@ function errorFromResponse(
     errorText,
     undefined,
     retryAfterMs,
+    acceptedScopes,
   );
 }
 
