@@ -27,7 +27,9 @@
  * query-param variant cached under that path).
  */
 
-const API_V0_SEGMENT = "/api/0/";
+import { API_PREFIX } from "../api-path-scope.js";
+
+const API_V0_SEGMENT = `${API_PREFIX}/`;
 const TRAILING_SLASH_RE = /\/$/;
 
 /**
@@ -80,7 +82,7 @@ const CROSS_ENDPOINT_RULES: CrossEndpointRule[] = [
   {
     match: /^organizations\/[^/]+\/issues\/([^/]+)\/?$/,
     extraAbsolute: ([, issueId], { apiBaseUrl }) => [
-      `${apiBaseUrl.replace(TRAILING_SLASH_RE, "")}/api/0/issues/${issueId}/`,
+      `${apiBaseUrl.replace(TRAILING_SLASH_RE, "")}${API_V0_SEGMENT}issues/${issueId}/`,
     ],
   },
 ];

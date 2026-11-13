@@ -14,7 +14,7 @@ import {
   parseSentryLinkHeader,
   type SentryClient,
 } from "@sentry/api";
-import { buildSentryApiUrl } from "./api-path.js";
+import { API_PREFIX, buildSentryApiUrl } from "./api-path.js";
 import {
   type ApiError,
   ApiValidationError,
@@ -104,8 +104,6 @@ const NETWORK_ERROR_MESSAGES: Record<string, string> = {
   ETIMEDOUT: "Connection timed out. Check network connectivity.",
   ECONNRESET: "Connection reset. Try again in a moment.",
 };
-
-const API_PREFIX = "/api/0";
 
 /** Network failures that mean the host is wrong or unreachable. */
 const CONFIGURATION_ERROR_CODES = new Set([

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { createClient } from "@hey-api/openapi-ts";
+import { API_PREFIX } from "@sentry/api/client";
 import { operations } from "@sentry/api/operations";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -150,5 +151,10 @@ describe("operation discovery", () => {
     const original = JSON.parse(readFileSync(new URL("../openapi-derefed.json", import.meta.url), "utf8"));
     const source = readFileSync(new URL("../src/sdk.gen.ts", import.meta.url), "utf8");
     expect(operations).toEqual(extractOperations(original, source));
+  });
+
+  test("starts every path in Sentry's spec with the exported API prefix", () => {
+    const original = JSON.parse(readFileSync(new URL("../openapi-derefed.json", import.meta.url), "utf8"));
+    expect(Object.keys(original.paths).filter(path => !path.startsWith(`${API_PREFIX}/`))).toEqual([]);
   });
 });

@@ -3,6 +3,14 @@
  * the generated client can use it without pulling in `@sentry/api/client`.
  */
 
+/**
+ * The path every Sentry API operation starts with, as the OpenAPI spec
+ * spells it. A self-hosted install may serve it under a path prefix.
+ */
+export const API_PREFIX = "/api/0";
+
+const [API_SEGMENT, VERSION_SEGMENT] = API_PREFIX.slice(1).split("/");
+
 /** The organization, and project when present, an API path targets. */
 export type ApiPathScope = { organization: string; project?: string };
 
@@ -16,7 +24,7 @@ function isApiPathIdentifier(segment: string | undefined): segment is string {
   return segment !== undefined && API_PATH_IDENTIFIER.test(segment);
 }
 
-/** Path segments after `/api/0/`, or undefined for a URL outside the API. */
+/** Path segments after {@link API_PREFIX}, or undefined for a URL outside the API. */
 function apiPathSegments(urlOrPath: string): string[] | undefined {
   const isUrl = URL.canParse(urlOrPath);
   const path = isUrl
@@ -24,7 +32,10 @@ function apiPathSegments(urlOrPath: string): string[] | undefined {
     : (urlOrPath.split(/[?#]/, 1)[0] ?? "");
   const segments = path.split("/").filter((segment) => segment.length > 0);
   for (let index = 0; index < segments.length - 1; index += 1) {
-    if (segments[index] === "api" && segments[index + 1] === "0") {
+    if (
+      segments[index] === API_SEGMENT &&
+      segments[index + 1] === VERSION_SEGMENT
+    ) {
       return segments.slice(index + 2);
     }
   }

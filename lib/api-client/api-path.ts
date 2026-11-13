@@ -1,6 +1,11 @@
+import { API_PREFIX } from "./api-path-scope.js";
 import { UserInputError } from "./errors.js";
 
-export { type ApiPathScope, parseApiPathScope } from "./api-path-scope.js";
+export {
+  API_PREFIX,
+  type ApiPathScope,
+  parseApiPathScope,
+} from "./api-path-scope.js";
 
 /**
  * Encode one Sentry API path identifier without letting it become a URL path.
@@ -26,7 +31,7 @@ export function buildSentryApiUrl(baseUrl: string, endpoint: string): string {
   while (end > 0 && baseUrl.charAt(end - 1) === "/") {
     end -= 1;
   }
-  return `${baseUrl.slice(0, end)}/api/0/${path}`;
+  return `${baseUrl.slice(0, end)}${API_PREFIX}/${path}`;
 }
 
 /**
