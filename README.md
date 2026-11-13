@@ -54,7 +54,7 @@ Each `createSentryClient` call creates an independent transport configuration. T
 
 Supply the base URL and authentication appropriate for your deployment. See Sentry's [API authentication documentation](https://docs.sentry.io/api/auth/).
 
-The base URL is the Sentry origin, such as `https://sentry.io` or a self-hosted `https://sentry.example.com`. Operation paths are relative to the API base path, which the client adds after the origin. It comes from the server URL in Sentry's OpenAPI spec and is exported as `API_BASE_PATH` (`"/api/0"`) from `@sentry/api`, `@sentry/api/client`, and `@sentry/api/operations`. Raw requests take the same relative paths, such as `sentry.client.get({ url: "/organizations/" })`.
+The base URL is the Sentry origin, such as `https://sentry.io` or a self-hosted `https://sentry.example.com`. Operation paths are relative to the API base path, which the client adds after the origin. It comes from the server URL in Sentry's OpenAPI spec and is exported as `API_BASE_PATH` from `@sentry/api`, `@sentry/api/client`, and `@sentry/api/operations`. Raw requests take the same relative paths, such as `sentry.client.get({ url: "/organizations/" })`.
 
 ### Standalone operations
 
@@ -150,7 +150,7 @@ for (const operation of operations) {
 }
 ```
 
-Operation paths are relative to `API_BASE_PATH` (`/api/0`), as in the client and `@sentry/api/operations`, and server overrides keep only their origin. A page shows an operation's full path as `${API_BASE_PATH}${operation.path}`.
+Operation paths are relative to `API_BASE_PATH`, which comes from the spec's server URL, as in the client and `@sentry/api/operations`. Server overrides keep only their origin. A page shows an operation's full path as `${API_BASE_PATH}${operation.path}`.
 
 `tags` lists the categories, with their sidebar names and descriptions. Each `ApiDocsOperation` has the original `operationId`, summary and description as the spec writes them, tags, deprecated and experimental flags, server overrides, security requirements, path and query parameters with their schemas, the request body's first content type with its schema and example, and every response with its schema and examples. The data comes from the same spec as the client in each release, so it is about 3.7 MB; import it only where you render the reference. Its shape follows semver: a breaking change to it is a major release.
 
