@@ -152,7 +152,7 @@ describe("API reference data", () => {
 
     test("covers every tag and operation the spec documents", () => {
       expect(tags.map(tag => tag.name)).toEqual(spec.tags.map((tag: { name: string }) => tag.name));
-      expect(operations.map(operation => `${operation.method} ${API_BASE_PATH}${operation.path}`)).toEqual(
+      expect(operations.map(operation => `${operation.method} ${operation.path}`)).toEqual(
         sourceOperations.map(({ path, method }) => `${method.toUpperCase()} ${path}`),
       );
     });
