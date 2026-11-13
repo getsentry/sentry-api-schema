@@ -1,3 +1,9 @@
+## 2.0.0
+
+### Breaking Changes
+
+- (api-client) Read the API base path from the spec's server URL by @BYK with @sentry-junior in [#148](https://github.com/getsentry/sentry-api-schema/pull/148)
+
 ## 1.83.0
 
 ### New Features
