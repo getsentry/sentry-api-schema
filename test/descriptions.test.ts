@@ -22,7 +22,7 @@ describe("validator descriptions", () => {
   });
 
   test("fields that wrap one schema in allOf keep their own description", () => {
-    const description = spec.paths["/api/0/organizations/{organization_id_or_slug}/dashboards/"]
+    const description = spec.paths["/organizations/{organization_id_or_slug}/dashboards/"]
       .post.requestBody.content["application/json"].schema.properties.permissions.description;
     expect(description).toEqual(expect.any(String));
     expect(v.getDescription(vCreateOrganizationDashboardData.entries.body.entries.permissions.wrapped)).toBe(description);
