@@ -48,10 +48,10 @@ describe("resolveBaseUrl", () => {
 
     const project = await sentry.client.prepareRequest({
       method: "GET",
-      url: "/api/0/projects/{org}/{project}/",
+      url: "/projects/{org}/{project}/",
       path: { org: "acme", project: "web" },
     });
-    const unscoped = await sentry.client.prepareRequest({ method: "GET", url: "/api/0/organizations/" });
+    const unscoped = await sentry.client.prepareRequest({ method: "GET", url: "/organizations/" });
 
     expect(seen.map(request => request.scope)).toEqual([{ organization: "acme", project: "web" }, undefined]);
     expect("scope" in seen[1]!).toBe(false);
@@ -70,7 +70,7 @@ describe("resolveBaseUrl", () => {
 
     const request = await sentry.client.prepareRequest({
       method: "POST",
-      url: "/api/0/organizations/acme/releases/?existing=1",
+      url: "/organizations/acme/releases/?existing=1",
       body: { version: "1.0.0" },
     });
 

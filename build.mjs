@@ -1,11 +1,13 @@
 import { build } from "esbuild";
 import { cpSync, appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { emitDeclarations } from "./lib/emit-declarations.mjs";
+import { splitApiBasePath } from "./lib/api-base-path.mjs";
 import { generateClient } from "./lib/hey-api.mjs";
 import { normalizeSpec } from "./lib/normalize-spec.mjs";
 
 // 0.5 Normalize verbose English sentence operationIds to short REST-conventional
-//     identifiers (e.g. "List Your Organizations" → "listOrganizations").
+//     identifiers (e.g. "List Your Organizations" → "listOrganizations"), and
+//     make every path relative to the API base path in the server URL.
 //     Writes a temporary openapi-normalized.json that the generator reads instead
 //     of the source spec. The source spec is never modified.
 //     OperationIds that are already identifiers (no spaces) are left untouched —
@@ -29,7 +31,10 @@ cpSync("lib/api-client", "src/api-client", { recursive: true });
 //    The generators are post-processors, not Hey API plugins, because the
 //    plugin API is documented as in-development and unstable.
 const sourceSpec = JSON.parse(readFileSync("./openapi-derefed.json", "utf8"));
+const apiBasePath = splitApiBasePath(sourceSpec);
 const steps = [
+  // Export the base path, and send every operation under it.
+  "generate-api-base-path",
   // Keep the pinned Fetch generator's runtime and types aligned with our contract.
   "generate-response-contract",
   "generate-request-preparation",
@@ -53,7 +58,7 @@ const steps = [
 ];
 for (const name of steps) {
   const { emit } = await import(`./scripts/${name}.mjs`);
-  emit({ normalizedSpec, sourceSpec });
+  emit({ normalizedSpec, sourceSpec, apiBasePath });
 }
 
 // 4. Append re-exports to the generated index.ts so the pagination
@@ -62,6 +67,7 @@ appendFileSync(
   "src/index.ts",
   [
     "",
+    "export { API_BASE_PATH } from './api-base-path.gen.ts';",
     "export { callWithTypedErrors, narrowError, SentryApiError } from './sentry-errors.ts';",
     "export type { DocumentedSentryApiError, NarrowedResult, SentryApiResultError, SentryApiTransportError, SdkResult, UndocumentedSentryApiError } from './sentry-errors.ts';",
     "export { parseSentryLinkHeader, unwrapResult, unwrapPaginatedResult, fetchPage, paginateAll, paginateUpTo, consumePage } from './sentry-pagination.ts';",
