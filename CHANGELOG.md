@@ -1,3 +1,9 @@
+## 2.0.1
+
+### Bug Fixes
+
+- (api) Keep per_page stable when listPage walks offset cursors by @BYK with @sentry-junior in [#149](https://github.com/getsentry/sentry-api-schema/pull/149)
+
 ## 2.0.0
 
 ### Breaking Changes
