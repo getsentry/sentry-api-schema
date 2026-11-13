@@ -191282,11 +191282,76 @@
           "401": {
             "description": "Unauthorized"
           },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "description": "Why the organization can't run Seer"
+                    },
+                    "code": {
+                      "enum": [
+                        "seer_out_of_credits",
+                        "seer_out_of_quota"
+                      ],
+                      "type": "string",
+                      "description": "`seer_out_of_credits` when the organization has no Seer credits left, `seer_out_of_quota` when it has no Seer budget"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "detail"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
           "403": {
             "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "description": "Why the step can't run"
+                    },
+                    "code": {
+                      "enum": [
+                        "scm_integration_required",
+                        "repos_not_linked",
+                        "run_in_flight"
+                      ],
+                      "type": "string",
+                      "description": "Set when a client can act on the conflict. `scm_integration_required` and `repos_not_linked` mean the organization or project must finish Seer setup before a new run can start. `run_in_flight` means a step is already running for the run in `run_id`, so poll it instead of retrying"
+                    },
+                    "run_id": {
+                      "type": "integer",
+                      "description": "ID of the run in Seer. Set with `run_in_flight`"
+                    },
+                    "sentry_run_id": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "ID of the run in Sentry. Set with `run_in_flight`, null for legacy runs"
+                    }
+                  },
+                  "required": [
+                    "detail"
+                  ]
+                }
+              }
+            },
+            "description": ""
           }
         },
         "x-sentry-routing": {
@@ -206246,6 +206311,57 @@
             "state"
           ]
         }
+      },
+      "AutofixConflictResponse": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "Why the step can't run"
+          },
+          "code": {
+            "enum": [
+              "scm_integration_required",
+              "repos_not_linked",
+              "run_in_flight"
+            ],
+            "type": "string",
+            "description": "Set when a client can act on the conflict. `scm_integration_required` and `repos_not_linked` mean the organization or project must finish Seer setup before a new run can start. `run_in_flight` means a step is already running for the run in `run_id`, so poll it instead of retrying"
+          },
+          "run_id": {
+            "type": "integer",
+            "description": "ID of the run in Seer. Set with `run_in_flight`"
+          },
+          "sentry_run_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID of the run in Sentry. Set with `run_in_flight`, null for legacy runs"
+          }
+        },
+        "required": [
+          "detail"
+        ]
+      },
+      "AutofixPaymentRequiredResponse": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "Why the organization can't run Seer"
+          },
+          "code": {
+            "enum": [
+              "seer_out_of_credits",
+              "seer_out_of_quota"
+            ],
+            "type": "string",
+            "description": "`seer_out_of_credits` when the organization has no Seer credits left, `seer_out_of_quota` when it has no Seer budget"
+          }
+        },
+        "required": [
+          "code",
+          "detail"
+        ]
       },
       "AutofixPostResponse": {
         "type": "object",
