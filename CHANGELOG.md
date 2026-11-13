@@ -1,3 +1,9 @@
+## 2.3.1
+
+### Internal Changes
+
+- Remove the Cascade to sentry-docs workflow by @sentry-junior in [#154](https://github.com/getsentry/sentry-api-schema/pull/154)
+
 ## 2.3.0
 
 ### Schema Updates
