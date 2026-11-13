@@ -7,3 +7,7 @@ For long-term knowledge entries managed by [lore](https://github.com/BYK/loreai)
 ## Toolchain
 
 Use pnpm and Node.js (22.13 or later); do not add Bun-only APIs or tooling. Run `pnpm build` before `pnpm typecheck` and `pnpm test`: both read the generated `src/` and `dist/` output.
+
+## URLs
+
+Parse URLs with `URL` (`new URL`, `URL.canParse`), never with regular expressions. `test/url-parsing.test.ts` fails on any regex that matches a scheme separator (`://`).

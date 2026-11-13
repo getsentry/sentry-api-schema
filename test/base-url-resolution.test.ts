@@ -31,8 +31,9 @@ describe("resolveBaseUrl", () => {
       scope: { organization: "acme" },
     }]);
     expect(urls).toHaveLength(1);
-    expect(urls[0]).toMatch(/^https:\/\/us\.sentry\.io\/api\/0\/organizations\/acme\/issues\/\?/);
-    expect(new URL(urls[0]!).searchParams.get("query")).toBe("is:unresolved");
+    const url = new URL(urls[0]!);
+    expect(`${url.origin}${url.pathname}`).toBe("https://us.sentry.io/api/0/organizations/acme/issues/");
+    expect(url.searchParams.get("query")).toBe("is:unresolved");
   });
 
   test("passes the project scope and omits scope for unscoped paths", async () => {
