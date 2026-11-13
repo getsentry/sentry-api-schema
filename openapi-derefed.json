@@ -14,7 +14,7 @@
     }
   },
   "paths": {
-    "/api/0/": {
+    "/": {
       "get": {
         "operationId": "retrieveApiIndex",
         "description": "Return the API version, the scopes of the token that authenticated the request,\nand the authenticated user. Use it to check which scopes a token has.\n\nAuthentication is optional. `auth` is null unless the request uses a token or API\nkey. `user` is null for anonymous requests and for credentials that don't belong\nto a user, such as API keys and organization auth tokens.",
@@ -465,7 +465,7 @@
         }
       }
     },
-    "/api/0/organizations/": {
+    "/organizations/": {
       "get": {
         "operationId": "listOrganizations",
         "description": "Return a list of organizations available to the authenticated session in a region.\nThis is particularly useful for requests with a user bound context. For API key-based requests this will only return the organization that belongs to the key.",
@@ -799,7 +799,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/": {
+    "/organizations/{organization_id_or_slug}/": {
       "get": {
         "operationId": "getOrganization",
         "description": "Return details on an individual organization, including various details\nsuch as membership access and teams.",
@@ -3326,7 +3326,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/agents/conversations/": {
+    "/organizations/{organization_id_or_slug}/agents/conversations/": {
       "get": {
         "operationId": "listOrganizationAIConversations",
         "description": "**Experimental:** This API is under active development and may change.\n\nReturn AI conversations ordered by latest span time.\n\n`query` uses Sentry search syntax.\n\n**Span filters**\n\n- Description: `\"payment failed\"`; status: `span.status:[error,internal_error]`.\n- Operation: `gen_ai.operation.type:tool`; tool: `gen_ai.tool.name:get_weather`.\n- Duration: `span.duration:>2s`; ID: `gen_ai.conversation.id:\"session:123\"`\n  or `conversation.conversationId:\"session:123\"`.\n\n**Conversation filters**\n\n- Calls: `conversation.llmCalls` or `conversation.messages`, and\n  `conversation.toolCalls`; failures: `conversation.errors` and\n  `conversation.toolErrors`.\n- Usage: `conversation.inputTokens`, `conversation.outputTokens`,\n  `conversation.totalTokens`, and `conversation.totalCost`.\n- Timespan: `conversation.timeSpan` measures elapsed time between first and last AI spans;\n  `conversation.generationDuration` sums LLM call durations. Both use milliseconds.\n\nUse numeric comparisons such as `conversation.toolCalls:>2`. Queries return\nconversations, not spans. Each `AND` condition may match a different span.\nReturned totals include all AI spans in selected project, environment, and time\nfilters, not only matching spans.\n\nNegation means no span matches, including when an attribute is absent. Payloads\nare searchable only when recorded and not scrubbed. Payload failure text does\nnot mark a span as failed; set `span.status:error` for reliable failure search.\n\nConversations are searchable for the last 30 days. Ranges that reach further back,\nincluding a `statsPeriod` longer than 30 days, return a 400.",
@@ -3745,7 +3745,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/agents/conversations/{conversation_id}/": {
+    "/organizations/{organization_id_or_slug}/agents/conversations/{conversation_id}/": {
       "get": {
         "operationId": "retrieveOrganizationAIConversation",
         "description": "**Experimental:** This API is under active development and may change.\n\nReturn spans recorded for one AI conversation in start-time order.\n\nMessage, tool, and response attributes contain their recorded string values.\n`stats.errors` counts spans whose status is not `ok`, `cancelled`, or `unknown`.\n`stats.errorToolNames` lists tools used by those spans.\n`stats.inputTokens` includes cache-read and cache-write tokens. In `stats.usageByModel`,\n`inputCost` includes cache-read and cache-write costs, and `outputCost` includes\nreasoning cost. These cost breakdowns are not added to `totalCost`.\nStats are returned on the first page only. Without an explicit range, Sentry widens\nthe search to the last 30 days. Ranges that reach further back, including a\n`statsPeriod` longer than 30 days, return a 400. A missing conversation returns an\nempty `spans` list.",
@@ -4234,7 +4234,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/artifactbundle/assemble/": {
+    "/organizations/{organization_id_or_slug}/artifactbundle/assemble/": {
       "post": {
         "operationId": "assembleOrganizationArtifactBundle",
         "description": "**Experimental:** This API is under active development and may change.\n\nAssemble previously uploaded chunks into an artifact bundle, such as source maps, and\nstore its debug IDs.\n\nThe response reports the bundle's `state`. If chunks are missing, upload them and send\nthe request again. Repeat the request to poll until the state is `ok` or `error`.\nResending an identical request is safe: a bundle that is already assembling or\nassembled reports its state instead of starting a new job.",
@@ -4363,7 +4363,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/available-actions/": {
+    "/organizations/{organization_id_or_slug}/available-actions/": {
       "get": {
         "operationId": "fetchOrganizationAvailableActions",
         "description": "**Experimental:** This API is under active development and may change.\n\nReturns a list of available actions for a given org",
@@ -5238,7 +5238,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/chunk-upload/": {
+    "/organizations/{organization_id_or_slug}/chunk-upload/": {
       "get": {
         "operationId": "getOrganizationChunkUploadOptions",
         "description": "**Experimental:** This API is under active development and may change.\n\nReturn the URL and limits to use when uploading file chunks, such as the chunk size,\nthe number of chunks per request, and the supported compression.",
@@ -5426,7 +5426,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/code-mappings/": {
+    "/organizations/{organization_id_or_slug}/code-mappings/": {
       "get": {
         "operationId": "listOrganizationCodeMappings",
         "description": "Return repository path mappings for projects the user can access.",
@@ -6053,7 +6053,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/code-mappings/{config_id}/": {
+    "/organizations/{organization_id_or_slug}/code-mappings/{config_id}/": {
       "put": {
         "operationId": "updateOrganizationCodeMapping",
         "description": "Update the repository, project, or path settings for a code mapping.",
@@ -6434,7 +6434,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/code-mappings/bulk/": {
+    "/organizations/{organization_id_or_slug}/code-mappings/bulk/": {
       "post": {
         "operationId": "bulkUpsertOrganizationCodeMappings",
         "description": "Create or update multiple repository path mappings for a project. Mappings with matching project, stack root, and source root are updated.",
@@ -6684,7 +6684,7 @@
         "x-sentry-idempotent": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/codeowners-associations/": {
+    "/organizations/{organization_id_or_slug}/codeowners-associations/": {
       "get": {
         "operationId": "listOrganizationCodeownersAssociations",
         "description": "Return CODEOWNERS associations for projects the authenticated user is a member of. Specify `project` to filter the results.",
@@ -6823,7 +6823,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/config/integrations/": {
+    "/organizations/{organization_id_or_slug}/config/integrations/": {
       "get": {
         "operationId": "getOrganizationConfigIntegrations",
         "description": "Get integration provider information about all available integrations for an organization.",
@@ -7669,7 +7669,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/dashboards/": {
+    "/organizations/{organization_id_or_slug}/dashboards/": {
       "get": {
         "operationId": "listOrganizationDashboards",
         "description": "Retrieve a list of custom dashboards that are associated with the given organization.",
@@ -9612,7 +9612,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/": {
+    "/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/": {
       "get": {
         "operationId": "getOrganizationDashboard",
         "description": "Return details about an organization's custom dashboard.",
@@ -11876,7 +11876,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/revisions/": {
+    "/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/revisions/": {
       "get": {
         "operationId": "listOrganizationDashboardRevisions",
         "description": "Return the revision history of an organization's custom dashboard, newest first.\n\nEach edit or restore of the dashboard records a revision holding the dashboard as it\nwas just before the change. Only the 10 most recent revisions are kept. Pass a\nrevision's `id` to the restore endpoint to roll the dashboard back to it.",
@@ -12053,7 +12053,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/revisions/{revision_id}/restore/": {
+    "/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/revisions/{revision_id}/restore/": {
       "post": {
         "operationId": "restoreOrganizationDashboardRevision",
         "description": "Restore an organization's custom dashboard to the state saved in one of its revisions,\nreplacing its title, widgets and saved settings such as filters, and return the restored\ndashboard.\n\nThe dashboard's current state is first recorded as a new revision with the source\n`pre-restore`, so a restore can itself be undone. Restoring again records another\nrevision, so retrying a restore is not idempotent. The requesting user needs edit\naccess to the dashboard. Returns 400 if the revision can no longer be restored, for\nexample because its snapshot format is unsupported or it fails validation, and 409 if\nanother dashboard already uses the revision's title.",
@@ -13003,7 +13003,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/detectors/": {
+    "/organizations/{organization_id_or_slug}/detectors/": {
       "get": {
         "operationId": "listOrganizationDetectors",
         "description": "List an Organization's Monitors",
@@ -20594,7 +20594,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/": {
+    "/organizations/{organization_id_or_slug}/detectors/{detector_id}/": {
       "get": {
         "operationId": "getOrganizationDetector",
         "description": "Return details on an individual monitor",
@@ -29581,7 +29581,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/discover/saved/": {
+    "/organizations/{organization_id_or_slug}/discover/saved/": {
       "get": {
         "operationId": "listOrganizationDiscoverSavedQueries",
         "description": "Retrieve a list of saved queries that are associated with the given organization.",
@@ -31437,7 +31437,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/": {
+    "/organizations/{organization_id_or_slug}/discover/saved/{query_id}/": {
       "get": {
         "operationId": "getOrganizationDiscoverSavedQuery",
         "description": "Retrieve a saved query.",
@@ -33267,7 +33267,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/dsn-lookup/": {
+    "/organizations/{organization_id_or_slug}/dsn-lookup/": {
       "get": {
         "operationId": "resolveOrganizationDsn",
         "description": "Return the project and client key that a DSN belongs to. Only the DSN's public key\nis used: the host and project ID in the DSN are ignored.\n\nReturns 400 when `dsn` is missing. Returns 404 when the DSN has no public key, or\nwhen it doesn't match an active client key of an active project in this\norganization that you can access.",
@@ -33392,7 +33392,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/environments/": {
+    "/organizations/{organization_id_or_slug}/environments/": {
       "get": {
         "operationId": "listOrganizationEnvironments",
         "description": "Lists an organization's environments.",
@@ -33492,7 +33492,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/eventids/{event_id}/": {
+    "/organizations/{organization_id_or_slug}/eventids/{event_id}/": {
       "get": {
         "operationId": "resolveOrganizationEventId",
         "description": "Resolve an event ID to its project slug, issue ID, and event details. Only projects the\ncaller can access are searched.",
@@ -35797,7 +35797,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/events/": {
+    "/organizations/{organization_id_or_slug}/events/": {
       "get": {
         "operationId": "listOrganizationEvents",
         "description": "Retrieves explore data for a given organization.\n\n**Note**: This endpoint is intended to get a table of results, and is not for doing a full export of data sent to\nSentry.\n\nThe `field` query parameter determines what fields will be selected in the `data` and `meta` keys of the endpoint response.\n- The `data` key contains a list of results row by row that match the `query` made\n- The `meta` key contains information about the response, including the unit or type of the fields requested\n- EAP table results may include `meta.routingHint`. Pass this opaque value unchanged as\n  `routing_hint` when fetching item details for a row in this response. It identifies how\n  the table query was routed and is omitted when no hint is available.",
@@ -36122,7 +36122,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/events-dropped/": {
+    "/organizations/{organization_id_or_slug}/events-dropped/": {
       "get": {
         "operationId": "listOrganizationEventsDropped",
         "description": "**Experimental:** This API is under active development and may change.\n\nReturn the events Sentry received but dropped (rate limited, filtered,\ninvalid, abuse, client discarded, cardinality limited) bucketed over the\nrequested interval, alongside the accepted volume per bucket so a caller\ncan compute the dropped share.\n\nSelect the dropped-data type with ``dataset`` and the bucket size with\n``interval``. Optionally scope the dropped side to one classification with\n``outcome`` (top-level) and/or ``reason`` (sub-classification within an\noutcome); the accepted volume is always returned in full.",
@@ -36479,7 +36479,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/events-timeseries/": {
+    "/organizations/{organization_id_or_slug}/events-timeseries/": {
       "get": {
         "operationId": "listOrganizationEventsTimeseries",
         "description": "Retrieves explore data for a given organization as a timeseries.\n\nThis endpoint can return timeseries for either 1 or many axis, and results grouped to the top events depending\non the parameters passed\n\n**Note**: For queries extending past `30d`, spanning billions of rows, or running on projects with low\nsample rates, the aggregation `yAxis=count_unique()` and filters on high-cardinality\nfields (such as `query=user.id:bc`) will not return accurate results. Use these queries for rough\nestimation only.",
@@ -37047,7 +37047,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/external-users/": {
+    "/organizations/{organization_id_or_slug}/external-users/": {
       "post": {
         "operationId": "createOrganizationExternalUser",
         "description": "Link a user from an external provider to a Sentry user.",
@@ -37262,7 +37262,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/": {
+    "/organizations/{organization_id_or_slug}/external-users/{external_user_id}/": {
       "put": {
         "operationId": "updateOrganizationExternalUser",
         "description": "Update a user in an external provider that is currently linked to a Sentry user.",
@@ -37480,7 +37480,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/flags/logs/": {
+    "/organizations/{organization_id_or_slug}/flags/logs/": {
       "get": {
         "operationId": "listOrganizationFlagLogs",
         "description": "Return a paginated list of feature flag changes (creations, updates and deletions)\nrecorded for an organization within the requested time range.",
@@ -37733,7 +37733,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/flags/logs/{flag_log_id}/": {
+    "/organizations/{organization_id_or_slug}/flags/logs/{flag_log_id}/": {
       "get": {
         "operationId": "retrieveOrganizationFlagLog",
         "description": "Return a single feature flag change recorded for an organization.",
@@ -37892,7 +37892,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/forwarding/": {
+    "/organizations/{organization_id_or_slug}/forwarding/": {
       "get": {
         "operationId": "listOrganizationForwarding",
         "description": "Returns a list of data forwarders for an organization.",
@@ -38485,7 +38485,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/": {
+    "/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/": {
       "put": {
         "operationId": "updateOrganizationForwarding",
         "description": "Updates a data forwarder for an organization or update a project-specific override.\nUpdates to the data forwarder's configuration require `org:write` permissions, and the entire\nconfiguration to be provided, including the `project_ids` field.\n\nTo configure project-specific overrides, specify only the following fields:\n\n  - 'project_id': The ID of the project to create/modify the override for.\n  - 'overrides': Follows the same format as `config` but all provider fields are optional, since only specified fields are overridden.\n  - 'is_enabled': To enable/disable the forwarder for events on the specific project.\n\nOverrides can be performed with `project:write` permissions on the project being modified.",
@@ -38827,7 +38827,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/group-search-views/": {
+    "/organizations/{organization_id_or_slug}/group-search-views/": {
       "get": {
         "operationId": "listOrganizationIssueViews",
         "description": "Return the current organization member's issue views, with starred views first. Set\n`createdBy=others` to list organization-visible views created by other members instead.",
@@ -39832,7 +39832,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/integrations/": {
+    "/organizations/{organization_id_or_slug}/integrations/": {
       "get": {
         "operationId": "listOrganizationIntegrations",
         "description": "Lists all the available Integrations for an Organization.",
@@ -40240,7 +40240,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/": {
+    "/organizations/{organization_id_or_slug}/integrations/{integration_id}/": {
       "get": {
         "operationId": "getOrganizationIntegration",
         "description": "OrganizationIntegrationBaseEndpoints expect both Integration and\nOrganizationIntegration DB entries to exist for a given organization and\nintegration_id.",
@@ -40663,7 +40663,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/channel-validate/": {
+    "/organizations/{organization_id_or_slug}/integrations/{integration_id}/channel-validate/": {
       "get": {
         "operationId": "validateOrganizationIntegrationChannel",
         "description": "**Experimental:** This API is under active development and may change.\n\nValidate whether a channel exists for the given integration.",
@@ -40751,7 +40751,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/channels/": {
+    "/organizations/{organization_id_or_slug}/integrations/{integration_id}/channels/": {
       "get": {
         "operationId": "listOrganizationIntegrationChannels",
         "description": "**Experimental:** This API is under active development and may change.\n\nList all messaging channels for an integration.",
@@ -40857,7 +40857,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/repos/": {
+    "/organizations/{organization_id_or_slug}/integrations/{integration_id}/repos/": {
       "get": {
         "operationId": "listOrganizationIntegrationRepositories",
         "description": "**Experimental:** This API is under active development and may change.\n\nGet the list of repositories available in an integration\n````````````````````````````````````````````````````````\n\nGets all repositories that an integration makes available,\nand indicates whether or not you can search repositories\nby name.\n\n:qparam string search: Name fragment to search repositories by.\n:qparam bool installableOnly: If true, return only repositories that can be installed.\n                              If false or not provided, return all repositories.\n:qparam bool accessibleOnly: If true, only return repositories that the integration\n                             installation has access to, filtering locally instead of\n                             using the provider's search API which may return results\n                             beyond the installation's scope.",
@@ -40999,7 +40999,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/": {
+    "/organizations/{organization_id_or_slug}/issues/": {
       "get": {
         "operationId": "listOrganizationIssues",
         "description": "Return a list of issues for an organization. All parameters are supplied as query string parameters. A default query of `is:unresolved` is applied. To return all results, use an empty query value (i.e. ``?query=`). ",
@@ -43236,7 +43236,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/members/": {
+    "/organizations/{organization_id_or_slug}/members/": {
       "get": {
         "operationId": "listOrganizationMembers",
         "description": "List all organization members.\n\nResponse includes pending invites that are approved by organization owners or managers but waiting to be accepted by the invitee.",
@@ -44381,7 +44381,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/": {
+    "/organizations/{organization_id_or_slug}/members/{member_id}/": {
       "get": {
         "operationId": "getOrganizationMember",
         "description": "Retrieve an organization member's details.\n\nResponse will be a pending invite if it has been approved by organization owners or managers but is waiting to be accepted by the invitee.",
@@ -46269,7 +46269,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/": {
+    "/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/": {
       "post": {
         "operationId": "addOrganizationMemberTeam",
         "description": "This request can return various success codes depending on the context of the team:\n- **`201`**: The member has been successfully added.\n- **`202`**: The member needs permission to join the team and an access request\nhas been generated.\n- **`204`**: The member is already on the team.\n\nIf the team is provisioned through an identity provider, the member cannot join the\nteam through Sentry.\n\nNote the permission scopes vary depending on the organization setting `\"Open Membership\"`\nand the type of authorization token. The following table outlines the accepted scopes.\n<table style=\"width: 100%;\">\n<thead>\n    <tr>\n    <th style=\"width: 33%;\"></th>\n    <th colspan=\"2\" style=\"text-align: center; font-weight: bold; width: 33%;\">Open Membership</th>\n    </tr>\n</thead>\n<tbody>\n    <tr>\n    <td style=\"width: 34%;\"></td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">On</td>\n    <td style=\"text-align: center; font-weight: bold; width: 33%;\">Off</td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/account/auth-tokens/#internal-integrations\">Internal Integration Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; team:write</strong></li>\n        </ul>\n    </td>\n    </tr>\n    <tr>\n    <td style=\"text-align: center; font-weight: bold; vertical-align: middle;\"><a\n    href=\"https://docs.sentry.io/account/auth-tokens/#user-auth-tokens\">User Auth Token</a></td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read</strong></li>\n        </ul>\n    </td>\n    <td style=\"text-align: left; width: 33%;\">\n        <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read*</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:write</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&bull; org:read +</strong></li>\n        <li><strong style=\"color: #9c5f99;\">&nbsp; &nbsp;team:write**</strong></li>\n        </ul>\n    </td>\n    </tr>\n</tbody>\n</table>\n\n\n*Organization members are restricted to this scope. When sending a request, it will always\nreturn a 202 and request an invite to the team.\n\n\n\\*\\*Team Admins must have both **`org:read`** and **`team:write`** scopes in their user\nauthorization token to add members to their teams.",
@@ -46804,7 +46804,7 @@
         "x-sentry-idempotent": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/monitors/": {
+    "/organizations/{organization_id_or_slug}/monitors/": {
       "get": {
         "operationId": "listOrganizationMonitors",
         "description": "Lists monitors, including nested monitor environments. May be filtered to a project or environment.",
@@ -48806,7 +48806,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/": {
+    "/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/": {
       "get": {
         "operationId": "getOrganizationMonitor",
         "description": "Retrieves details for a monitor.",
@@ -50850,7 +50850,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/checkins/": {
+    "/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/checkins/": {
       "get": {
         "operationId": "listOrganizationMonitorCheckins",
         "description": "Retrieve a list of check-ins for a monitor",
@@ -51095,7 +51095,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/notifications/actions/": {
+    "/organizations/{organization_id_or_slug}/notifications/actions/": {
       "get": {
         "operationId": "listOrganizationNotificationsActions",
         "description": "Returns all Spike Protection Notification Actions for an organization.\n\nNotification Actions notify a set of members when an action has been triggered through a notification service such as Slack or Sentry.\nFor example, organization owners and managers can receive an email when a spike occurs.\n\nYou can use the `project` query parameter with project IDs or slugs to filter for certain projects.\nA legacy project slug query parameter is also supported and takes priority if both are present.",
@@ -51451,7 +51451,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/": {
+    "/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/": {
       "get": {
         "operationId": "getOrganizationNotificationsAction",
         "description": "Returns a serialized Spike Protection Notification Action object.\n\nNotification Actions notify a set of members when an action has been triggered through a notification service such as Slack or Sentry.\nFor example, organization owners and managers can receive an email when a spike occurs.",
@@ -51825,7 +51825,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/org-auth-tokens/": {
+    "/organizations/{organization_id_or_slug}/org-auth-tokens/": {
       "get": {
         "operationId": "listOrganizationAuthTokens",
         "description": "Return an organization's active org auth tokens, most recently used first, with\ntokens that were never used last. The list is not paginated.\n\nThe response never includes a token's value, only its last four characters. The full\ntoken is returned once, by the request that creates it.\n\nOrg auth tokens can be managed from a signed-in session, or with an OAuth application\ntoken that has the `org:tokens` scope in addition to one of the scopes listed here.\nPersonal auth tokens, org auth tokens and integration tokens can't call this endpoint\nand get a 403.",
@@ -52104,7 +52104,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/org-auth-tokens/{token_id}/": {
+    "/organizations/{organization_id_or_slug}/org-auth-tokens/{token_id}/": {
       "delete": {
         "operationId": "deleteOrganizationAuthToken",
         "description": "Revoke an organization's org auth token, so it can no longer authenticate requests.\nThe revocation is recorded in the organization's audit log. Revoking a token that\nwas already revoked returns 404.\n\nOrg auth tokens can be managed from a signed-in session, or with an OAuth application\ntoken that has the `org:tokens` scope in addition to one of the scopes listed here.\nPersonal auth tokens, org auth tokens and integration tokens can't call this endpoint\nand get a 403.",
@@ -52157,7 +52157,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/install-details/": {
+    "/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/install-details/": {
       "get": {
         "operationId": "getOrganizationPreprodArtifactInstallDetails",
         "description": "Retrieve install info for a given artifact.\n\nReturns distribution and installation details for a specific preprod artifact,\nincluding whether the artifact is installable, the install URL, download count,\nand iOS-specific code signing information.",
@@ -52550,7 +52550,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/size-analysis/": {
+    "/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/size-analysis/": {
       "get": {
         "operationId": "getOrganizationPreprodArtifactSizeAnalysis",
         "description": "Retrieve size analysis results for a given artifact.\n\nReturns size metrics including download size, install size, and optional insights.\nWhen a base artifact exists (either from commit comparison or via the `baseArtifactId` parameter),\ncomparison data showing size differences is included.\n\nThe response `state` field indicates the analysis status:\n- `PENDING`: Analysis has not started yet.\n- `PROCESSING`: Analysis is currently running.\n- `FAILED` / `NOT_RAN`: Analysis did not complete; `errorCode` and `errorMessage` are included.\n- `COMPLETED`: Analysis finished successfully with full size data.",
@@ -54435,7 +54435,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/": {
+    "/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/": {
       "get": {
         "operationId": "getOrganizationPreprodArtifactSnapshot",
         "description": "Retrieve full details for a snapshot, including categorized image lists\nand comparison status.\n\nWhen a comparison exists (`comparison_type` is `diff`), images are\ncategorized into `changed`, `added`, `removed`, `renamed`, `unchanged`,\n`errored`, and `skipped` lists with counts, and the top-level `images`\narray is empty because those images are already present in the\ncategorized lists. For `solo` and `waiting_for_base` snapshots the\ncategorized lists are empty and `images` is the only populated source.\n`image_count` is accurate in all modes.\n\nUse `compact_metadata=1` to strip image objects down to `display_name`,\n`image_file_name`, `group`, and `description` only.\n\nThis endpoint requires a bearer token with `project:read` access.",
@@ -55399,7 +55399,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/archive/": {
+    "/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/archive/": {
       "get": {
         "operationId": "getOrganizationPreprodSnapshotArchiveStatus",
         "description": "**Experimental:** This API is under active development and may change.\n\nCheck whether the zip archive of a snapshot's images is ready to download.\n\nStart building the archive with a POST to this endpoint. Returns 404 when the\nsnapshot doesn't exist, the requester can't access its project, or it has no image\nmanifest.",
@@ -55567,7 +55567,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/images/{image_identifier}/": {
+    "/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/images/{image_identifier}/": {
       "get": {
         "operationId": "getOrganizationPreprodArtifactSnapshotImage",
         "description": "Retrieve detailed information for a single image within a snapshot.\n\nThe `image_identifier` can be either the image filename or its content\nhash. The response includes head and base image metadata, comparison\nstatus, diff image URL, diff percentage, and previous filename for\nrenames.\n\nThis endpoint uses a flat response format with nullable fields designed\nfor LLM/MCP consumers.\n\nThis endpoint requires a bearer token with `project:read` access.",
@@ -55860,7 +55860,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/latest-base/": {
+    "/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/latest-base/": {
       "get": {
         "operationId": "getOrganizationPreprodArtifactSnapshotLatestBase",
         "description": "Retrieve the most recent base snapshot for a given app.\n\nA base snapshot is one uploaded without a `base_sha` (i.e., a snapshot\nfrom a base branch like `main`). Use the optional `branch` and `project`\nparameters to narrow the search.\n\nThe response includes the full image list with download URLs. Use\n`compact_metadata=1` to reduce image metadata.\n\nThis endpoint requires a bearer token with `project:read` access.",
@@ -56114,7 +56114,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/profiling/chunks/": {
+    "/organizations/{organization_id_or_slug}/profiling/chunks/": {
       "get": {
         "operationId": "listOrganizationProfilingChunks",
         "description": "Retrieve continuous profiling data for a profiler over a time range.\n\nExactly one project must be specified via the `project` query parameter.\n\nRequires continuous profiling to be enabled for the organization.",
@@ -56274,7 +56274,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/profiling/flamegraph/": {
+    "/organizations/{organization_id_or_slug}/profiling/flamegraph/": {
       "get": {
         "operationId": "getOrganizationProfilingFlamegraph",
         "description": "Retrieve an aggregated flamegraph for the organization, built from the\nrequested data source (transactions, profiles, functions, or spans).\n\nPass `expand=metrics` to include aggregated function metrics in the response.\n\nRequires profiling to be enabled for the organization.",
@@ -56571,7 +56571,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/project-keys/": {
+    "/organizations/{organization_id_or_slug}/project-keys/": {
       "get": {
         "operationId": "listOrganizationProjectKeys",
         "description": "Return a list of client keys (DSNs) for all projects in an organization.\n\nThis paginated endpoint lists client keys across all projects in an organization. Each key includes the project ID\nto identify which project it belongs to.\n\nQuery Parameters:\n- team: Filter by team slug or ID to get keys only for that team's projects\n- status: Filter by 'active' or 'inactive' to get keys with specific status",
@@ -56982,7 +56982,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/projects/": {
+    "/organizations/{organization_id_or_slug}/projects/": {
       "get": {
         "operationId": "listOrganizationProjects",
         "description": "Return a list of projects bound to a organization.",
@@ -57994,7 +57994,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/projects/{project_id_or_slug}/detectors/": {
+    "/organizations/{organization_id_or_slug}/projects/{project_id_or_slug}/detectors/": {
       "post": {
         "operationId": "createOrganizationProjectDetector",
         "description": "Create a Monitor for a project",
@@ -63095,7 +63095,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/relay_usage/": {
+    "/organizations/{organization_id_or_slug}/relay_usage/": {
       "get": {
         "operationId": "listOrganizationRelayUsage",
         "description": "Return a list of trusted relays bound to an organization.",
@@ -63193,7 +63193,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/release-threshold-statuses/": {
+    "/organizations/{organization_id_or_slug}/release-threshold-statuses/": {
       "get": {
         "operationId": "listOrganizationReleaseThresholdStatuses",
         "description": "**Experimental:** This API is under active development and may change.\n\nList all derived statuses of releases that fall within the provided start/end datetimes.\n\nConstructs a response key'd off \\{`release_version`\\}-\\{`project_slug`\\} that lists thresholds with their status for *specified* projects.\nEach returned enriched threshold will contain the full serialized `release_threshold` instance as well as it's derived health statuses.",
@@ -63823,7 +63823,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/": {
+    "/organizations/{organization_id_or_slug}/releases/": {
       "get": {
         "operationId": "listOrganizationReleases",
         "description": "Return a list of releases for a given organization, sorted by most recent.",
@@ -67961,7 +67961,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/": {
+    "/organizations/{organization_id_or_slug}/releases/{version}/": {
       "get": {
         "operationId": "getOrganizationRelease",
         "description": "Return details on an individual release.",
@@ -72636,7 +72636,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/commits/": {
+    "/organizations/{organization_id_or_slug}/releases/{version}/commits/": {
       "get": {
         "operationId": "listOrganizationReleaseCommits",
         "description": "Retrieve a list of commits for a given release.",
@@ -73622,7 +73622,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/deploys/": {
+    "/organizations/{organization_id_or_slug}/releases/{version}/deploys/": {
       "get": {
         "operationId": "listOrganizationReleaseDeploys",
         "description": "Returns a list of deploys based on the organization, version, and project.",
@@ -73882,7 +73882,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/": {
+    "/organizations/{organization_id_or_slug}/releases/{version}/files/": {
       "get": {
         "operationId": "listOrganizationReleaseFiles",
         "description": "Retrieve a list of files for a given release.",
@@ -74210,7 +74210,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/": {
+    "/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/": {
       "get": {
         "operationId": "getOrganizationReleaseFile",
         "description": "Return metadata for an individual file within a release. Does not return the file\ncontents unless `download` is set.",
@@ -74574,7 +74574,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/previous-with-commits/": {
+    "/organizations/{organization_id_or_slug}/releases/{version}/previous-with-commits/": {
       "get": {
         "operationId": "getOrganizationPreviousReleaseWithCommits",
         "description": "Return the most recent release with commits that was released at or before the given\nrelease, in the same projects. The given release is returned when it has commits\nitself. Pass `project` to narrow the search to some of the release's projects.\n\nReturns an empty object when there's no such release, or when none of the requested\nprojects are accessible. `firstEvent` and `lastEvent` are always null.",
@@ -76576,7 +76576,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/replay-count/": {
+    "/organizations/{organization_id_or_slug}/replay-count/": {
       "get": {
         "operationId": "getOrganizationReplayCount",
         "description": "Return a count of replays for a list of issue or transaction IDs.\n\nThe `query` parameter is required. It is a search query that includes exactly one of `issue.id`, `transaction`, or `replay_id` (string or list of strings).",
@@ -76743,7 +76743,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/replay-selectors/": {
+    "/organizations/{organization_id_or_slug}/replay-selectors/": {
       "get": {
         "operationId": "listOrganizationReplaySelectors",
         "description": "Return a list of selectors for a given organization.",
@@ -77030,7 +77030,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/replays/": {
+    "/organizations/{organization_id_or_slug}/replays/": {
       "get": {
         "operationId": "listOrganizationReplays",
         "description": "Return a list of replays belonging to an organization.",
@@ -77715,7 +77715,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/replays/{replay_id}/": {
+    "/organizations/{organization_id_or_slug}/replays/{replay_id}/": {
       "get": {
         "operationId": "getOrganizationReplay",
         "description": "Return details on an individual replay.",
@@ -78408,7 +78408,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/repos/": {
+    "/organizations/{organization_id_or_slug}/repos/": {
       "get": {
         "operationId": "listOrganizationRepos",
         "description": "Return a list of version control repositories for a given organization.",
@@ -78616,7 +78616,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/repos/{repo_id}/commits/": {
+    "/organizations/{organization_id_or_slug}/repos/{repo_id}/commits/": {
       "get": {
         "operationId": "listOrganizationRepoCommits",
         "description": "List a Repository's Commits",
@@ -79546,7 +79546,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/repos/settings/": {
+    "/organizations/{organization_id_or_slug}/repos/settings/": {
       "put": {
         "operationId": "updateOrganizationRepositorySettings",
         "description": "Update code review settings for one or more repositories in the organization. Provide at least one of `enabledCodeReview` or `codeReviewTriggers`.",
@@ -79725,7 +79725,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups": {
+    "/organizations/{organization_id_or_slug}/scim/v2/Groups": {
       "get": {
         "operationId": "listOrganizationScimV2Groups",
         "description": "Returns a paginated list of teams bound to a organization with a SCIM Groups GET Request.\n\nNote that the members field will only contain up to 10,000 members.",
@@ -80082,7 +80082,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}": {
+    "/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}": {
       "get": {
         "operationId": "getOrganizationScimV2Group",
         "description": "Query an individual team with a SCIM Group GET Request.\n- Note that the members field will only contain up to 10000 members.",
@@ -80371,7 +80371,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/scim/v2/ResourceTypes": {
+    "/organizations/{organization_id_or_slug}/scim/v2/ResourceTypes": {
       "get": {
         "operationId": "listOrganizationScimV2ResourceTypes",
         "description": "List the resource types available via SCIM: User (organization\nmembers) and Group (teams). Pagination parameters are ignored per\nRFC 7644 section 4; both resource types are always returned.",
@@ -80560,7 +80560,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/scim/v2/ResourceTypes/{resource_type_name}": {
+    "/organizations/{organization_id_or_slug}/scim/v2/ResourceTypes/{resource_type_name}": {
       "get": {
         "operationId": "getOrganizationScimV2ResourceType",
         "description": "Return a single SCIM resource type by name (`User` or `Group`).",
@@ -80699,7 +80699,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/scim/v2/Schemas/{schema_uri}": {
+    "/organizations/{organization_id_or_slug}/scim/v2/Schemas/{schema_uri}": {
       "get": {
         "operationId": "getOrganizationScimV2Schema",
         "description": "Return a single SCIM schema definition by its URI. Sentry supports the\ncore User and Group schemas.",
@@ -81016,7 +81016,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/scim/v2/ServiceProviderConfig": {
+    "/organizations/{organization_id_or_slug}/scim/v2/ServiceProviderConfig": {
       "get": {
         "operationId": "getOrganizationScimV2ServiceProviderConfig",
         "description": "Return the SCIM Service Provider Configuration, which describes the\nSCIM 2.0 protocol features Sentry supports (RFC 7643 section 5).",
@@ -81288,7 +81288,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users": {
+    "/organizations/{organization_id_or_slug}/scim/v2/Users": {
       "get": {
         "operationId": "listOrganizationScimV2Users",
         "description": "Returns a paginated list of members bound to a organization with a SCIM Users GET Request.",
@@ -81750,7 +81750,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}": {
+    "/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}": {
       "get": {
         "operationId": "getOrganizationScimV2User",
         "description": "Query an individual organization member with a SCIM User GET Request.\n- The `name` object will contain fields `firstName` and `lastName` with the values of `N/A`.\nSentry's SCIM API does not currently support these fields but returns them for compatibility purposes.",
@@ -82084,7 +82084,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/sentry-app-components/": {
+    "/organizations/{organization_id_or_slug}/sentry-app-components/": {
       "get": {
         "operationId": "listOrganizationSentryAppComponents",
         "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve prepared UI components for installed custom integrations, including issue-link forms.\n\nAPI clients can use `filter=issue-link` to create or link an external issue through\nan app such as Linear. The `uri` values in `schema` are paths on the app's own server.\nClients never call them directly; Sentry calls the app on their behalf:\n\n- To load a select field's choices, pass the field's `uri` to\n  `GET /sentry-app-installations/{installationUuid}/external-requests/`.\n- To create or link the issue, send the form values with the `uri` from\n  `schema.create` or `schema.link` to\n  `POST /sentry-app-installations/{installationUuid}/external-issue-actions/`.",
@@ -83532,7 +83532,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/sentry-apps/": {
+    "/organizations/{organization_id_or_slug}/sentry-apps/": {
       "get": {
         "operationId": "listOrganizationSentryApps",
         "description": "Retrieve the custom integrations for an organization",
@@ -83875,7 +83875,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/sessions/": {
+    "/organizations/{organization_id_or_slug}/sessions/": {
       "get": {
         "operationId": "getOrganizationSessions",
         "description": "Returns a time series of release health session statistics for projects bound to an organization.\n\nThe interval and date range are subject to certain restrictions and rounding rules.\n\nThe date range is rounded to align with the interval, and is rounded to at least one\nhour. The interval can at most be one day and at least one hour currently. It has to cleanly\ndivide one day, for rounding reasons.\n\nBecause of technical limitations, this endpoint returns\nat most 10000 data points. For example, if you select a 90 day window grouped by releases,\nyou will see at most `floor(10k / (90 + 1)) = 109` releases. To get more results, reduce the\n`statsPeriod`.",
@@ -84187,7 +84187,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/shortids/{issue_id}/": {
+    "/organizations/{organization_id_or_slug}/shortids/{issue_id}/": {
       "get": {
         "operationId": "resolveOrganizationShortId",
         "description": "Resolve a short ID to the project slug and group details.",
@@ -85231,7 +85231,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/starred-service-spans/": {
+    "/organizations/{organization_id_or_slug}/starred-service-spans/": {
       "post": {
         "operationId": "starOrganizationServiceSpan",
         "description": "**Experimental:** This API is under active development and may change.\n\nStar a service span for the requesting user. Span queries expose this as the\n`is_starred_transaction` field. Returns `403` if the user has already starred\nthe service span.",
@@ -85375,7 +85375,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/stats-summary/": {
+    "/organizations/{organization_id_or_slug}/stats-summary/": {
       "get": {
         "operationId": "getOrganizationStatsSummary",
         "description": "Query summarized event counts by project for your Organization. Also see https://docs.sentry.io/api/organizations/retrieve-event-counts-for-an-organization-v2/ for reference.",
@@ -85659,7 +85659,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/stats_v2/": {
+    "/organizations/{organization_id_or_slug}/stats_v2/": {
       "get": {
         "operationId": "listOrganizationStatsV2",
         "description": "Query event counts for your Organization.\nSelect a field, define a date range, and group or filter by columns.",
@@ -85930,7 +85930,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/tags/": {
+    "/organizations/{organization_id_or_slug}/tags/": {
       "get": {
         "operationId": "listOrganizationTags",
         "description": "Return a list of tag keys for the given organization.",
@@ -86196,7 +86196,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/teams/": {
+    "/organizations/{organization_id_or_slug}/teams/": {
       "get": {
         "operationId": "listOrganizationTeams",
         "description": "Returns a list of teams bound to a organization.",
@@ -87878,7 +87878,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/trace-items/attributes/": {
+    "/organizations/{organization_id_or_slug}/trace-items/attributes/": {
       "get": {
         "operationId": "listOrganizationTraceItemAttributes",
         "description": "List the attribute keys available on a given trace item dataset (spans, logs,\ntrace metrics, etc.), with optional substring and structured filtering.\n\nPass `expand=context` (experimental) to include each attribute's metadata:\na brief description, examples, and deprecation details.",
@@ -88226,7 +88226,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/trace-items/metrics/": {
+    "/organizations/{organization_id_or_slug}/trace-items/metrics/": {
       "get": {
         "operationId": "listOrganizationTraceMetrics",
         "description": "**Experimental:** This API is under active development and may change.\n\nList trace metrics (name, type, unit, count, last seen) with optional context.",
@@ -88475,7 +88475,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/trace-items/stats/": {
+    "/organizations/{organization_id_or_slug}/trace-items/stats/": {
       "get": {
         "operationId": "Retrieve Trace Item Statistics",
         "description": "Compute statistics, such as attribute value distributions, over the trace\nitems (spans or occurrences) matching the given query within the requested\ntime range.",
@@ -88738,7 +88738,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/trace-logs/": {
+    "/organizations/{organization_id_or_slug}/trace-logs/": {
       "get": {
         "operationId": "listOrganizationTraceLogs",
         "description": "List the logs belonging to one or more traces, or to a replay, across all projects\nin the organization the caller can access. A trace can span many projects, so the\n`project` filter is ignored.",
@@ -89027,7 +89027,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/trace-meta/{trace_id}/": {
+    "/organizations/{organization_id_or_slug}/trace-meta/{trace_id}/": {
       "get": {
         "operationId": "getOrganizationTraceMeta",
         "description": "Retrieve aggregate metadata for a single trace, including counts of spans,\nerrors, performance issues, logs, and metrics, along with per-span-operation\nand per-transaction child-count breakdowns.",
@@ -89233,7 +89233,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/trace/{trace_id}/": {
+    "/organizations/{organization_id_or_slug}/trace/{trace_id}/": {
       "get": {
         "operationId": "getOrganizationTrace",
         "description": "Retrieve the spans, errors, and (optionally) uptime checks that make up a single trace.\n\nThe response is a list of top-level events; each item may have nested `children`, `errors`,\nand `occurrences` arrays representing related items. Top-level entries are spans by default\nand may also be uptime checks when `include_uptime=1` is passed.",
@@ -90327,7 +90327,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/user-teams/": {
+    "/organizations/{organization_id_or_slug}/user-teams/": {
       "get": {
         "operationId": "listOrganizationUserTeams",
         "description": "Returns a list of teams the user has access to in the specified organization.\nNote that this endpoint is restricted to [user auth tokens](https://docs.sentry.io/account/auth-tokens/#user-auth-tokens).",
@@ -91215,7 +91215,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/workflows/": {
+    "/organizations/{organization_id_or_slug}/workflows/": {
       "get": {
         "operationId": "listOrganizationWorkflows",
         "description": "Returns a list of alerts for a given organization",
@@ -107300,7 +107300,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/": {
+    "/organizations/{organization_id_or_slug}/workflows/{workflow_id}/": {
       "get": {
         "operationId": "getOrganizationWorkflow",
         "description": "Returns an alert.",
@@ -119088,7 +119088,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/": {
       "get": {
         "operationId": "getProject",
         "description": "Return details on an individual project.",
@@ -121775,7 +121775,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/code-mapping-prefixes/stack/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/code-mapping-prefixes/stack/": {
       "get": {
         "operationId": "listStackCodeMappingPrefixes",
         "description": "Return ranked directory prefixes from stack traces and existing mappings to help configure a code mapping.",
@@ -121865,7 +121865,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/codeowners/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/codeowners/": {
       "get": {
         "operationId": "listProjectCodeOwners",
         "description": "Return the CODEOWNERS configurations for a project.",
@@ -122919,7 +122919,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/codeowners/{codeowners_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/codeowners/{codeowners_id}/": {
       "get": {
         "operationId": "retrieveProjectCodeOwners",
         "description": "Return a single CODEOWNERS configuration.",
@@ -124028,7 +124028,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/custom-inbound-filters/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/custom-inbound-filters/": {
       "get": {
         "operationId": "List a Project's Custom Inbound Filters",
         "description": "**Experimental:** This API is under active development and may change.\n\nList the custom inbound filters configured for a project.",
@@ -124566,7 +124566,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/custom-inbound-filters/{filter_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/custom-inbound-filters/{filter_id}/": {
       "get": {
         "operationId": "Retrieve a Custom Inbound Filter",
         "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve a single custom inbound filter.",
@@ -125181,7 +125181,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/": {
       "get": {
         "operationId": "listProjectEnvironments",
         "description": "Lists a project's environments.",
@@ -125435,7 +125435,7 @@
         "x-sentry-idempotent": true
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/{environment}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/{environment}/": {
       "get": {
         "operationId": "getProjectEnvironment",
         "description": "Return details on a project environment.",
@@ -125661,7 +125661,7 @@
         "x-sentry-idempotent": true
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/events/": {
       "get": {
         "operationId": "listProjectEvents",
         "description": "Return a list of events bound to a project.",
@@ -126103,7 +126103,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/": {
       "get": {
         "operationId": "getProjectEvent",
         "description": "Return details on an individual event.",
@@ -130670,7 +130670,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/": {
       "get": {
         "operationId": "listProjectEventAttachments",
         "description": "Retrieve a list of attachments uploaded for a given event.\n\nRequires the `event-attachments` organization feature.",
@@ -130854,7 +130854,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/{attachment_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/{attachment_id}/": {
       "get": {
         "operationId": "getProjectEventAttachment",
         "description": "Retrieve metadata for a single attachment on an event, or download its\ncontents by passing the `download` query parameter.\n\nRequires the `event-attachments` organization feature.",
@@ -131019,7 +131019,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/source-map-debug/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/source-map-debug/": {
       "get": {
         "operationId": "getProjectEventSourceMapDebug",
         "description": "Return a list of source map errors for a given event.",
@@ -131512,7 +131512,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/difs/assemble/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/files/difs/assemble/": {
       "post": {
         "operationId": "assembleProjectDebugFiles",
         "description": "**Experimental:** This API is under active development and may change.\n\nAssemble previously uploaded chunks into debug information files.\n\nThe response reports each file's `state`, keyed by the same checksums. If chunks are\nmissing, upload them and send the request again. Repeat the request to poll until the\nstate is `ok` or `error`. Resending an identical request is safe: a file that is\nalready assembling or assembled reports its state instead of starting a new job.",
@@ -131730,7 +131730,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/dsyms/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/files/dsyms/": {
       "get": {
         "operationId": "listProjectDebugFiles",
         "description": "Retrieve a list of debug information files for a given project.",
@@ -131974,7 +131974,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/preprodartifacts/assemble/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/files/preprodartifacts/assemble/": {
       "post": {
         "operationId": "assembleProjectPreprodArtifact",
         "description": "Assemble previously uploaded chunks into a mobile build, such as an APK, AAB or\nXCArchive, and queue it for size analysis.\n\nUpload the build file's chunks with the chunk upload endpoint first. If chunks are\nmissing, the response has the state `not_found` and lists them in\n`missingChunks`: upload them and send the request again. Once all chunks are there,\nthe build is created, the response has the state `created`, and `artifactUrl` links\nto the build in Sentry.\n\nDon't resend a request that succeeded: each successful request creates a build.\nEmpty strings in optional fields count as not set. The VCS fields `head_sha`,\n`head_repo_name` and `provider` must be set together. `provider` must be one of\n`github`, `github_enterprise`, `gitlab`, `bitbucket` or `bitbucket_server`.",
@@ -132174,7 +132174,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/": {
       "get": {
         "operationId": "listProjectFilters",
         "description": "Retrieve a list of filters for a given project.\n`active` will be either a boolean or a list for the legacy browser filters.",
@@ -132295,7 +132295,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/{filter_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/{filter_id}/": {
       "put": {
         "operationId": "updateProjectFilter",
         "description": "Update various inbound data filters for a project.",
@@ -132402,7 +132402,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/": {
       "get": {
         "operationId": "listProjectKeys",
         "description": "Return a list of client keys bound to a project.",
@@ -133181,7 +133181,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/": {
       "get": {
         "operationId": "getProjectKey",
         "description": "Return a client key bound to a project.",
@@ -133991,7 +133991,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/members/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/members/": {
       "get": {
         "operationId": "listProjectMembers",
         "description": "Returns a list of active organization members that belong to any team assigned to the project.",
@@ -134537,7 +134537,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/": {
       "get": {
         "operationId": "getProjectMonitor",
         "description": "Retrieves details for a monitor.",
@@ -136597,7 +136597,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/checkins/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/checkins/": {
       "get": {
         "operationId": "listProjectMonitorCheckins",
         "description": "Retrieve a list of check-ins for a monitor",
@@ -136841,7 +136841,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/ownership/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/ownership/": {
       "get": {
         "operationId": "getProjectOwnership",
         "description": "Returns details on a project's ownership configuration.",
@@ -137330,7 +137330,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/size-analysis/status-check-rules/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/size-analysis/status-check-rules/": {
       "get": {
         "operationId": "getProjectPreprodSizeAnalysisStatusCheckRules",
         "description": "Retrieve the current Size Analysis status check rules configured for a project.\n\nUse this endpoint after receiving a `size_analysis.completed` webhook when you\nwant external CI to evaluate the same Size Analysis status check thresholds that\nSentry uses. The endpoint returns the current project configuration, not a\nhistorical snapshot from when the webhook was emitted.\n\nThe response includes whether status check enforcement is enabled and the\nnormalized rule list Sentry uses when evaluating Size Analysis thresholds.\n\nThis endpoint requires a bearer token with `project:read` access. Project\ndistribution tokens are not supported.\n\nResponse notes:\n\n- `enabled: false` means status-check enforcement is disabled for the project.\n- `rules: []` means there are no configured thresholds to evaluate.\n- `value` is returned as a string. For `absolute` and `absolute_diff`\n  measurements it is a byte value; for `relative_diff` it is a percentage.\n- `filterQuery` is the original configured filter string.\n- `filters` is the machine-readable version of `filterQuery`.\n- `filters: []` means the rule has no filters and applies to all builds.\n- `filters: null` means the saved filter query could not be parsed; Sentry's\n  status check trigger treats that rule as non-matching.\n\nRule evaluation semantics:\n\n- Threshold comparisons are strict: a rule triggers only when the computed value\n  is greater than the configured threshold, not greater than or equal to it.\n- `absolute_diff` and `relative_diff` require a matching base metric/build.\n- `relative_diff` does not trigger when the base size is zero.\n- `artifactType` identifies the artifact scope the rule evaluates.\n  `main_artifact`, `watch_artifact`, `android_dynamic_feature_artifact`,\n  and `app_clip_artifact` target their matching artifact metric.\n  `all_artifacts` evaluates all available artifact metrics.\n- Rule filters support the keys `app_id`, `git_head_ref`,\n  `build_configuration_name`, and `platform_name`.\n- Filter objects are combined with AND. Multiple `conditions` inside one\n  filter object are combined with OR.\n- Each condition uses `values`; single-value operators still return a\n  one-item array.\n- Values in `filters` are decoded literal values for exact/simple operators,\n  not query syntax. For example, `app_id:\\*com` in `filterQuery` becomes\n  `values: [\"*com\"]` with `operator: \"equals\"`.\n- The same key can appear in more than one filter object when positive and\n  negative conditions both exist; those filter objects are still combined with\n  AND.\n- Supported filter operators are `equals`, `notEquals`, `in`, `notIn`,\n  `contains`, `notContains`, `startsWith`, `notStartsWith`, `endsWith`,\n  `notEndsWith`, `matches`, and `notMatches`.\n- `matches` and `notMatches` values use Sentry wildcard pattern syntax, not\n  regular expressions. `*` matches zero or more characters, escaped `\\*`\n  matches a literal asterisk, and a pattern without `*` is an exact match.\n- `in` and `notIn` are evaluated as one condition against all values, matching\n  Sentry's status check trigger behavior.\n- A rule applies only when the build metadata matches all filters. If a\n  referenced metadata key is missing, the filter does not match, even for\n  negated operators.",
@@ -137574,7 +137574,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/size-analysis/status-checks/skip/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/size-analysis/status-checks/skip/": {
       "post": {
         "operationId": "createProjectPreprodSizeAnalysisSkippedStatusCheck",
         "description": "Create a neutral status check for a commit that intentionally skips an artifact upload.\n\nThe repository must be connected to the project's organization through an active repository\nintegration.\nThe same Sentry auth token configured for build uploads can also be used for this endpoint.",
@@ -137674,7 +137674,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-check-rules/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-check-rules/": {
       "get": {
         "operationId": "getProjectPreprodSnapshotStatusCheckRules",
         "description": "Retrieve the current Snapshot status check rules configured for a project.\n\nUse this endpoint when external CI needs to evaluate the same Snapshot\nchange-type rules that Sentry uses. The endpoint returns the current\nproject configuration, not a historical snapshot from when a build was\nprocessed.\n\nThe response includes whether status check enforcement is enabled and the\nSnapshot change types that fail the status check.\n\nThis endpoint requires a bearer token with `project:read` access. Project\ndistribution tokens are not supported.\n\nResponse notes:\n\n- `enabled: false` means status-check enforcement is disabled for the project.\n- `rules` contains one boolean per Snapshot change type.\n- `failOnAdded`, `failOnRemoved`, `failOnChanged`, and `failOnRenamed`\n  indicate which unapproved change types fail the status check.",
@@ -137787,7 +137787,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-checks/skip/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-checks/skip/": {
       "post": {
         "operationId": "createProjectPreprodSnapshotSkippedStatusCheck",
         "description": "Create a neutral status check for a commit that intentionally skips an artifact upload.\n\nThe repository must be connected to the project's organization through an active repository\nintegration.\nThe same Sentry auth token configured for build uploads can also be used for this endpoint.",
@@ -137887,7 +137887,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/build-distribution/latest/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/build-distribution/latest/": {
       "get": {
         "operationId": "getProjectInstallableBuildLatest",
         "description": "Get the latest installable build for a project.\n\nReturns the latest installable build matching filter criteria.\nWhen buildVersion is provided, also returns the current build and\nwhether an update is available.",
@@ -138699,7 +138699,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/": {
       "post": {
         "operationId": "uploadProjectPreprodArtifactSnapshot",
         "description": "Upload a new snapshot with image metadata.\n\nThe request body is a JSON object containing `app_id` (required),\n`images` (required, a mapping of filenames to image metadata objects),\nand optional VCS fields (`head_sha`, `base_sha`, `provider`,\n`head_repo_name`, `head_ref`, `base_repo_name`, `base_ref`, `pr_number`).\n\nThe body can be compressed with zstd: send it with the header\n`Content-Encoding: zstd`. It can be up to 256 MiB after decompression.\n\nWhen VCS info with a `base_sha` is provided and a matching base snapshot\nexists, a comparison is automatically triggered.\n\nThis endpoint requires a bearer token with `project:write` access.",
@@ -138960,7 +138960,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/profiling/profiles/{profile_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/profiling/profiles/{profile_id}/": {
       "get": {
         "operationId": "getProjectProfilingProfile",
         "description": "Retrieve a single profile by its ID.\n\nThe response includes the profile's metadata, its sampled stack data, and the\nassociated release, when one is found.\n\nRequires profiling to be enabled for the organization.",
@@ -139137,7 +139137,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/": {
       "get": {
         "operationId": "listProjectReleases",
         "description": "Retrieve a list of releases for a given project.",
@@ -141144,7 +141144,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/commits/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/commits/": {
       "get": {
         "operationId": "listProjectReleaseCommits",
         "description": "Retrieve a list of commits for a given release.",
@@ -142139,7 +142139,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/": {
       "get": {
         "operationId": "listProjectReleaseFiles",
         "description": "Retrieve a list of files for a given release.",
@@ -142485,7 +142485,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/": {
       "get": {
         "operationId": "getProjectReleaseFile",
         "description": "Return metadata for an individual file within a release. Does not return the file\ncontents unless `download` is set.",
@@ -142876,7 +142876,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/completion/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/completion/": {
       "get": {
         "operationId": "getProjectReleaseSetupCompletion",
         "description": "Return the project's release-setup progress for these steps:\n\n- `tag`: The project has an issue with a recorded first release.\n- `repo`: The organization has at least one repository.\n- `commit`: At least one of the project's 1,000 most recent releases (by release ID) has an associated commit.\n- `deploy`: At least one of the project's releases has a deploy.\n\nResults are cached for one hour when a step is complete and one minute otherwise.",
@@ -142965,7 +142965,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/": {
       "delete": {
         "operationId": "deleteProjectReplay",
         "description": "Delete a replay.",
@@ -143025,7 +143025,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/clicks/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/clicks/": {
       "get": {
         "operationId": "listProjectReplayClicks",
         "description": "Retrieve a collection of RRWeb DOM node-ids and the timestamp they were clicked.",
@@ -143176,7 +143176,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/": {
       "get": {
         "operationId": "listProjectReplayRecordingSegments",
         "description": "Return a collection of replay recording segments.",
@@ -143326,7 +143326,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/{segment_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/{segment_id}/": {
       "get": {
         "operationId": "getProjectReplayRecordingSegment",
         "description": "Return a replay recording segment.",
@@ -143456,7 +143456,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/viewed-by/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/viewed-by/": {
       "get": {
         "operationId": "listProjectReplayViewedBy",
         "description": "Return a list of users who have viewed a replay.",
@@ -143742,7 +143742,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/": {
       "get": {
         "operationId": "listProjectReplayDeletionJobs",
         "description": "Retrieve a collection of replay delete jobs.",
@@ -144076,7 +144076,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/{job_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/{job_id}/": {
       "get": {
         "operationId": "getProjectReplayDeletionJob",
         "description": "Fetch a replay delete job instance.",
@@ -144230,7 +144230,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/repo/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/repo/": {
       "get": {
         "operationId": "listProjectRepositories",
         "description": "List all repositories linked to a project.\n\nPass `?includeMappingCount=1` to include the number of code path mappings\nper repository. Omitting it keeps the query cheaper for callers that\nonly need the list of connections.",
@@ -144454,7 +144454,7 @@
         "x-sentry-idempotent": true
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/seer/repos/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/seer/repos/": {
       "get": {
         "operationId": "listProjectSeerRepositories",
         "description": "**Experimental:** This API is under active development and may change.\n\nList repositories connected to Seer for the project.",
@@ -144912,7 +144912,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stacktrace-link/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/stacktrace-link/": {
       "get": {
         "operationId": "getProjectStacktraceLink",
         "description": "Resolve a stack trace filename to its linked source file using the project's code mappings and connected source code integrations.",
@@ -145538,7 +145538,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stats/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/stats/": {
       "get": {
         "operationId": "listProjectStats",
         "description": "Return a set of points representing a normalized timestamp and the number of\nevents seen in the period.\n\nQuery ranges are limited to Sentry's configured time-series resolutions.\nThis endpoint may change in the future without notice.",
@@ -145758,7 +145758,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/": {
       "get": {
         "operationId": "listProjectSymbolSources",
         "description": "List custom symbol sources configured for a project.",
@@ -148452,7 +148452,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/": {
       "get": {
         "operationId": "listProjectTeams",
         "description": "Return a list of teams that have access to this project.",
@@ -148688,7 +148688,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/": {
       "post": {
         "operationId": "addProjectTeam",
         "description": "Give a team access to a project.",
@@ -149675,7 +149675,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/trace-items/{item_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/trace-items/{item_id}/": {
       "get": {
         "operationId": "retrieveProjectTraceItem",
         "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve a span, log or other trace item of a project, with all of its attributes.\n\nPass the `meta.routingHint` of the events response that listed the item as\n`routing_hint`, unchanged. An invalid hint returns 400.",
@@ -150176,7 +150176,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/user-feedback/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/user-feedback/": {
       "get": {
         "operationId": "List a Project's User Feedback",
         "description": "Return a list of user feedback items within this project.\n\n*This list does not include submissions from the [User Feedback Widget](https://docs.sentry.io/product/user-feedback/#user-feedback-widget). This is because it is based on an older format called User Reports - read more [here](https://develop.sentry.dev/application/feedback-architecture/#user-reports). To return a list of user feedback items from the widget, please use the [issue API](https://docs.sentry.io/api/events/list-a-projects-issues/) with the filter `issue.category:feedback`.*",
@@ -152359,7 +152359,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/users/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/users/": {
       "get": {
         "operationId": "listProjectUsers",
         "description": "Return a list of users seen within this project.",
@@ -152540,7 +152540,7 @@
         }
       }
     },
-    "/api/0/seer/models/": {
+    "/seer/models/": {
       "get": {
         "operationId": "listSeerModels",
         "description": "Get list of actively used LLM model names from Seer.\n\nReturns the list of AI models that are currently used in production in Seer.\nThis endpoint does not require authentication and can be used to discover which models Seer uses.\n\nRequests to this endpoint should use the region-specific domain\neg. `us.sentry.io` or `de.sentry.io`",
@@ -152583,12 +152583,12 @@
         },
         "servers": [
           {
-            "url": "https://{region}.sentry.io"
+            "url": "https://{region}.sentry.io/api/0"
           }
         ]
       }
     },
-    "/api/0/sentry-app-installations/{uuid}/external-issue-actions/": {
+    "/sentry-app-installations/{uuid}/external-issue-actions/": {
       "post": {
         "operationId": "executeSentryAppInstallationExternalIssueAction",
         "description": "**Experimental:** This API is under active development and may change.\n\nInvoke the installed app's issue-link callback and store the returned association.\nSubmit the app-specific form fields alongside `groupId`, `action`, and `uri`.\nThe installation UUID, form fields, and `uri` come from the organization's\n`issue-link` Sentry App components.\n\nFor `action=link`, the optional `expectedExternalIssueUrl` query parameter\nrequires an exact canonical `webUrl` match. An existing matching link is\nreturned with HTTP 200 without calling the App; a different link\nreturns 409. The callback must also return this URL before a new link is\nsaved. Callback effects cannot be rolled back if its response conflicts.\nA new association returns HTTP 201. Omitting the parameter preserves the\nApp's existing replacement behavior and HTTP 200 response.",
@@ -152760,7 +152760,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/sentry-app-installations/{uuid}/external-requests/": {
+    "/sentry-app-installations/{uuid}/external-requests/": {
       "get": {
         "operationId": "getSentryAppInstallationExternalRequestOptions",
         "description": "**Experimental:** This API is under active development and may change.\n\nRequest select options from the installed app. Each choice contains its value followed by its label.",
@@ -152874,7 +152874,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/sentry-apps/{sentry_app_id_or_slug}/": {
+    "/sentry-apps/{sentry_app_id_or_slug}/": {
       "get": {
         "operationId": "getSentryApp",
         "description": "Retrieve a custom integration.",
@@ -153639,7 +153639,7 @@
         }
       }
     },
-    "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/": {
+    "/teams/{organization_id_or_slug}/{team_id_or_slug}/": {
       "get": {
         "operationId": "getTeam",
         "description": "Return details on an individual team.",
@@ -155235,7 +155235,7 @@
         }
       }
     },
-    "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/": {
+    "/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/": {
       "post": {
         "operationId": "createTeamExternalTeam",
         "description": "Link a team from an external provider to a Sentry team.",
@@ -155455,7 +155455,7 @@
         }
       }
     },
-    "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/": {
+    "/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/": {
       "put": {
         "operationId": "updateTeamExternalTeam",
         "description": "Update a team in an external provider that is currently linked to a Sentry team.",
@@ -155685,7 +155685,7 @@
         }
       }
     },
-    "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/": {
+    "/teams/{organization_id_or_slug}/{team_id_or_slug}/members/": {
       "get": {
         "operationId": "listTeamMembers",
         "description": "List all members on a team.\n\nThe response will not include members with pending invites.",
@@ -156241,7 +156241,7 @@
         }
       }
     },
-    "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/projects/": {
+    "/teams/{organization_id_or_slug}/{team_id_or_slug}/projects/": {
       "get": {
         "operationId": "listTeamProjects",
         "description": "Return a list of projects bound to a team.",
@@ -157271,7 +157271,7 @@
         }
       }
     },
-    "/api/0/users/{user_id}/": {
+    "/users/{user_id}/": {
       "get": {
         "operationId": "retrieveUserDetails",
         "description": "Return the authenticated user's account details, including email addresses,\ntwo-factor authenticators, SSO identities and preferences. Use `me` as the\n`user_id`.\n\nAny personal auth token or OAuth application token can call this endpoint for its\nown user, and no scope is required. Tokens can't read other users: requesting\nanother user's ID returns 403. Org auth tokens and integration tokens have no user\nand can't call it.",
@@ -157709,7 +157709,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/tags/{key}/values/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/tags/{key}/values/": {
       "get": {
         "tags": [
           "Projects"
@@ -157800,7 +157800,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/": {
       "get": {
         "tags": [
           "Projects"
@@ -158056,7 +158056,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/": {
       "get": {
         "tags": [
           "Projects"
@@ -158379,7 +158379,7 @@
         }
       }
     },
-    "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/": {
+    "/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/": {
       "get": {
         "tags": [
           "Events"
@@ -159309,7 +159309,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/commitfiles/": {
+    "/organizations/{organization_id_or_slug}/releases/{version}/commitfiles/": {
       "get": {
         "tags": [
           "Releases"
@@ -159360,7 +159360,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/sentry-app-installations/": {
+    "/organizations/{organization_id_or_slug}/sentry-app-installations/": {
       "get": {
         "tags": [
           "Integration"
@@ -159489,7 +159489,7 @@
         }
       }
     },
-    "/api/0/sentry-app-installations/{uuid}/external-issues/": {
+    "/sentry-app-installations/{uuid}/external-issues/": {
       "post": {
         "tags": [
           "Integration"
@@ -159613,7 +159613,7 @@
         }
       }
     },
-    "/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/": {
+    "/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/": {
       "delete": {
         "tags": [
           "Integration"
@@ -159667,7 +159667,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/spike-protections/": {
+    "/organizations/{organization_id_or_slug}/spike-protections/": {
       "post": {
         "tags": [
           "Projects"
@@ -159799,7 +159799,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/": {
       "get": {
         "operationId": "getOrganizationIssue",
         "description": "Return details on an individual issue, including its basic stats, comment count, and\nuser-report count.",
@@ -190845,7 +190845,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/autofix/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/autofix/": {
       "get": {
         "operationId": "getOrganizationIssueAutofixState",
         "description": "**Experimental:** This API is under active development and may change.\n\nRetrieve the current detailed state of an issue fix process for a specific issue including:\n\n- Current status\n- Steps performed and their outcomes\n- Repository information and permissions\n- Root Cause Analysis\n- Proposed Solution\n- Generated code changes",
@@ -191295,7 +191295,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/events/": {
       "get": {
         "operationId": "listOrganizationIssueEvents",
         "description": "Return a list of events bound to an issue.",
@@ -191767,7 +191767,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/{event_id}/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/events/{event_id}/": {
       "get": {
         "operationId": "getOrganizationIssueEvent",
         "description": "Retrieves the details of an issue event.",
@@ -196377,7 +196377,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/external-issues/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/external-issues/": {
       "get": {
         "operationId": "listOrganizationIssueExternalIssues",
         "description": "Retrieve custom integration issue links for the given Sentry issue",
@@ -196488,7 +196488,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/external-issues/{external_issue_id}/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/external-issues/{external_issue_id}/": {
       "delete": {
         "operationId": "deleteOrganizationIssueExternalIssue",
         "description": "**Experimental:** This API is under active development and may change.\n\nRemove a custom integration's association with a Sentry issue. The external issue is not deleted.",
@@ -196558,7 +196558,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/": {
       "get": {
         "operationId": "listOrganizationIssueHashes",
         "description": "List the hashes that make up an issue. Each hash represents a grouping\nsignature used to aggregate individual events into this issue.",
@@ -199235,7 +199235,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/": {
       "get": {
         "operationId": "listOrganizationIssueIntegrations",
         "description": "**Experimental:** This API is under active development and may change.\n\nList the organization's issue-tracker integrations and the external issues\nlinked to this Sentry issue through each integration. The external issue's\n`id` is the Sentry link identifier used by the unlink endpoint.",
@@ -199589,7 +199589,7 @@
         "x-sentry-experimental": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/": {
       "get": {
         "operationId": "Retrieve an Integration's Issue Config for an Issue",
         "description": "Retrieve the form fields needed to either link an existing external issue\n(such as a Jira ticket or GitHub issue) to a Sentry issue, or create a new\none. The returned `linkIssueConfig`/`createIssueConfig` describes the fields\nto submit back to this endpoint via `PUT`/`POST` respectively.",
@@ -200705,7 +200705,7 @@
         "x-sentry-idempotent": true
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/": {
       "get": {
         "operationId": "getOrganizationIssueTag",
         "description": "Return a list of values associated with this key for an issue. When paginated can return at most 1000 values.",
@@ -200899,7 +200899,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/values/": {
+    "/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/values/": {
       "get": {
         "operationId": "listOrganizationIssueTagValues",
         "description": "Returns a list of values associated with this key for an issue.\nReturns at most 1000 values when paginated.",
@@ -201088,7 +201088,7 @@
         }
       }
     },
-    "/api/0/organizations/{organization_id_or_slug}/shared/issues/{share_id}/": {
+    "/organizations/{organization_id_or_slug}/shared/issues/{share_id}/": {
       "get": {
         "operationId": "getOrganizationSharedIssue",
         "description": "Return an issue that was shared with a public link. This endpoint doesn't need\nauthentication: the share ID grants access.\n\nThe response holds less than the issue details endpoint, and its latest event\nleaves out the user, tags, contexts, SDK, extra data, processing errors and\nbreadcrumbs.\n\nReturns 404 when the share ID doesn't exist, when the issue belongs to another\norganization, or when the organization turned off issue sharing.",
@@ -327143,7 +327143,7 @@
   },
   "servers": [
     {
-      "url": "https://{region}.sentry.io",
+      "url": "https://{region}.sentry.io/api/0",
       "variables": {
         "region": {
           "default": "us",
