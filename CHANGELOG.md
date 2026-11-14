@@ -1,3 +1,9 @@
+## 2.3.2
+
+### Internal Changes
+
+- Dispatch the sentry-docs @sentry/api bump on each release by @sentry-junior in [#155](https://github.com/getsentry/sentry-api-schema/pull/155)
+
 ## 2.3.1
 
 ### Internal Changes
