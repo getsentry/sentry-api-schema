@@ -1,5 +1,11 @@
 # @sentry/api
 
+> [!IMPORTANT]
+> `@sentry/api` has moved to getsentry/sentry, under
+> [`static/packages/api`](https://github.com/getsentry/sentry/tree/master/static/packages/api),
+> and releases from there as `api@x.y.z`. Open new issues and changes in
+> [getsentry/sentry](https://github.com/getsentry/sentry).
+
 The official, auto-generated TypeScript client for Sentry's public REST API.
 
 [![npm](https://img.shields.io/npm/v/@sentry/api.svg)](https://www.npmjs.com/package/@sentry/api)
